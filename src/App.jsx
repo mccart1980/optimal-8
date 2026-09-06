@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import "./storage.js"; // installs window.storage (localStorage-backed)
 
 /* ================================================================
-   OPTIMAL 6 — THE FIGHTER BUILD · companion app
+   OPTIMAL 8 — THE FIGHTER BUILD · companion app
    The phase colour drives the screen: BUILD moss, FORCE oxide,
    VELOCITY brass, TAPER/TEST cobalt. Durability work is violet.
    ================================================================ */
@@ -30,6 +31,27 @@ const mno = { fontFamily: "'IBM Plex Mono', 'Roboto Mono', monospace" };
 /* ---------- storage ---------- */
 async function load(k, f) { try { const r = await window.storage.get(k); return r ? JSON.parse(r.value) : f; } catch { return f; } }
 async function save(k, v) { try { await window.storage.set(k, JSON.stringify(v)); } catch (e) { console.error(e); } }
+
+/* ---------- file backup (Web Share where available, download otherwise) ---------- */
+const backupName = () => "optimal-8-backup-" + new Date().toISOString().slice(0, 10) + ".json";
+async function shareOrDownload(text) {
+  const name = backupName();
+  try {
+    if (typeof navigator !== "undefined" && navigator.canShare && typeof File === "function") {
+      const file = new File([text], name, { type: "application/json" });
+      if (navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: "Optimal 8 backup" }); return "shared"; }
+    }
+  } catch (e) { if (e && e.name === "AbortError") return "cancelled"; }
+  try {
+    const url = URL.createObjectURL(new Blob([text], { type: "application/json" }));
+    const a = document.createElement("a"); a.href = url; a.download = name; a.rel = "noopener";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => { try { URL.revokeObjectURL(url); } catch (e) {} }, 5000);
+    return "downloaded";
+  } catch (e) { return "failed"; }
+}
+const readTextFile = (file) => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result || "")); r.onerror = () => rej(r.error); r.readAsText(file); });
+
 const buzz = (m) => { try { if (navigator.vibrate) navigator.vibrate(m); } catch (e) {} };
 const mmss = (s) => { const a = Math.abs(Math.round(s)), m = Math.floor(a / 60), x = a % 60; return (s < 0 ? "-" : "") + m + ":" + (x < 10 ? "0" : "") + x; };
 const r25 = (n) => Math.round(n / 2.5) * 2.5;
@@ -58,7 +80,7 @@ const PH = {
   taper: { n: "TAPER", long: "TAPER & TEST", ac: C.cobalt, vl: "≤10%",
     note: "Volume −40% then −60%. Intensity held. A deload drops intensity to restore you; a taper drops volume and keeps intensity, because fatigue sheds faster than fitness. Sprints and jumps stay in both weeks — reduce their volume, never their intent. Saturday of week 16 is test day." },
   hell: { n: "HELL WEEK", long: "HELL WEEK", ac: C.oxide, vl: "—",
-    note: "You've just tapered for two weeks — the freshest you'll be all cycle, the only sensible place for a maximal test battery. No Optimal 6 volume. One flagship test per day, drawn from the cards each morning. Run it from the IRON tab." },
+    note: "You've just tapered for two weeks — the freshest you'll be all cycle, the only sensible place for a maximal test battery. No Optimal 8 volume. One flagship test per day, drawn from the cards each morning. Run it from the IRON tab." },
   reload: { n: "RELOAD", long: "RELOAD", ac: C.moss, vl: "—",
     note: "Sets −40%, intensity ~70%. Light movement, full food. The adaptation happens now, not during the testing. Sprints and jumps stay in at reduced volume. Then straight into week 1 of the next macrocycle." },
 };
@@ -94,7 +116,7 @@ wk(10, { sc: "2 × 4 @ 65% — deload", sets: 2, reps: 4, pct: 65, cr: 1, spr: 3
   eng: ["vo2", "lac", "rz", "vo2"][i], sim: [{ rest: 60 }, { rest: 45 }, { rest: 60 }, { rest: 60, tested: 1 }][i], upperC: 1, lowerLead: 1, bw: i + 1 }));
 wk(15, { sc: "2 × 2 @ 85%", sets: 2, reps: 2, pct: 85, cr: 2, spr: 3, acc: 2, nor: [2, 4], tb: tbB("2 × 2 @ 85%", 2, 2, 85), pp: tbB("2 × 2 @ 85%", 2, 2, 85), vec: 2, jump: "DEPTH", js: [2, 5], bound: "cont", eng: "rz3", sim: { rounds: 3, rest: 60 }, tp: 1 });
 wk(16, { sc: "1 × 2 @ 85%", sets: 1, reps: 2, pct: 85, bsc: "2 × 2 @ 85%", bsets: 2, cr: 1, spr: 3, acc: 1, nor: null, tb: tbB("1 × 2 @ 80%", 1, 2, 80), pp: null, vec: 2, jump: "DEPTH", js: [2, 3], bound: "cont", z2wed: 20, z2sun: 30, eng: "easy15", sim: SIMB[5], throw: [3, 3], tp: 1, test: 1 });
-wk(17, { sc: "NO OPTIMAL 6 VOLUME", hell: 1, eng: null, sim: SIMB[5] });
+wk(17, { sc: "NO OPTIMAL 8 VOLUME", hell: 1, eng: null, sim: SIMB[5] });
 wk(18, { sc: "2 × 5 @ 70% — reload", sets: 2, reps: 5, pct: 70, cr: 1, spr: 3, sprPct: 90, acc: 2, nor: [2, 3], tb: tbB("2 × 3 @ 65%", 2, 3, 65), pp: tbB("2 × 3 @ 65%", 2, 3, 65), vec: 2, js: [2, 4], eng: "easy", sim: SIMB[5], dl: 1, sled: 3, reload: 1 });
 const ENG2 = { 1: "lac", 2: "rz", 3: "vo2", 4: "lac", 5: "easy", 6: "lac", 7: "rz", 8: "vo2", 9: "lac", 10: "easy", 11: "lac", 12: "rz", 13: "vo2", 14: "lac", 15: "easy", 16: null, 17: null, 18: "easy" };
 const pqB = (sc, pct, sets, reps, fast) => ({ sc, pct, sets: sets || 3, reps: reps || 3, fast: !!fast });
@@ -135,18 +157,18 @@ const PROTO = {
     i: [["Side-lying external rotation", "12/side"], ["Prone T raise", "×10"], ["Face pull", "×15"], ["Scapular wall slide", "×10"]] },
   MOB: { n: "Daily mobility", s: "8 min · every session", c: C.violet, note: "Thoracic first, always.",
     i: [["Foam-roller thoracic extension", "×8"], ["Open book", "6/side · 3s hold"], ["90/90 switch", "×5 each"], ["Loaded deep-squat hold", "90s"]] },
-  NECK: { n: "Neck — stiffness", s: "10 min · Thu and Fri", c: C.violet,
+  NECK: { n: "Neck — stiffness", s: "10 min · Wed and Thu", c: C.violet,
     note: "Stronger, stiffer necks produce lower head accelerations on impact — supported. Whether that reduces concussion is not established. A cheap bet on a sound mechanism. It is not armour and it changes nothing about what you take in sparring.",
     i: [["4-direction isometric hold", "3 × 10s maximal — flexion, extension, each side. Own hand or band."], ["Rapid brace", "3 × 6/direction — relaxed to maximal in under a second, hold 2s"], ["Perturbation isometric", "3 × 20s — band anchored, brace neutral, pulse it from varying angles with your own hand. The head does not move."], ["Head-neck catch", "2 × 6/direction — band pulls the head into range, you stop it in the last third"]] },
-  HANDS: { n: "Hands", s: "5 min · Tue and Sat", c: C.violet,
+  HANDS: { n: "Hands", s: "5 min · Tue and Sun", c: C.violet,
     note: "The most common injury in boxing is a wrist collapsing out of neutral under compression; the extensors take that load and nobody trains them. No roller, no holds — your job does your grip. Flagged: no trial shows this prevents boxing hand injury; the mechanism is sound and the cost is five minutes.",
     i: [["Knuckle push-up isometric hold", "3 × 20s — wrist stacked straight. Mat first, firmer surface as it holds."], ["Band wrist extension", "2 × 15"]] },
   VEC: { n: "The four punch vectors", s: "rest 45s between exercises · 90s between rounds", c: C.brass,
     note: "Straights rely on linear force; hooks on rotational and lateral force. Different physical problems — training one does not train the other. Ball 3–5 kg: if it isn't flying, it's too heavy. Both sides equally.",
     i: [["Med-ball rotational shot-put", "4/side — THE STRAIGHT RIGHT. Rear-hip driven, horizontal. Some from a lower stance for the body shot."], ["Med-ball downward diagonal throw", "4/side — THE OVERHAND RIGHT. High outside the shoulder, drive down and across, release toward the opposite hip. Rear foot pivots; trunk rotates and side-bends."], ["Med-ball hook throw", "4/side — THE LEAD HOOK. Bent arm, horizontal, off a lead-leg pivot."], ["Landmine rotational punch", "5/side — THE LOADED STRAIGHT. Hips before shoulders. Punch it away, never press it."]] },
-  FULL: { n: "Full mobility", s: "20 min · Sunday", c: C.violet, note: "Thoracic first, always.",
+  FULL: { n: "Full mobility", s: "20 min · Friday", c: C.violet, note: "Thoracic first, always.",
     i: [["THORACIC", ""], ["Foam-roller extension", "×8"], ["Open book", "8/side"], ["Thread the needle", "8/side"], ["Quadruped rotation", "8/side"], ["HIPS", ""], ["90/90 switch + hold", "×5 each · 30s/side"], ["Couch stretch", "90s/side"], ["Frog", "90s"], ["Loaded deep-squat hold", "90s"], ["SHOULDERS", ""], ["Passive hang", "45s"], ["Wall slides", "×12"], ["Band pull-apart", "×20"], ["Band ER", "×15/arm"]] },
-  AMP: { n: "Athletic movement prep", s: "8 min · Sunday", c: C.cobalt, note: "",
+  AMP: { n: "Athletic movement prep", s: "8 min", c: C.cobalt, note: "",
     i: [["Forward / backward / lateral crawl", "2 lengths each"], ["Supported hip airplane", "6/side"], ["Cossack squat", "8/side"], ["Barefoot single-leg balance", "30s/leg"]] },
 };
 
@@ -851,7 +873,7 @@ function Session(props) {
   if (rx.hell) return (
     <Card ac={C.oxide}>
       <Eye c={C.oxide}>Week 17 · Hell Week</Eye>
-      <div style={Object.assign({}, dsp, { fontSize: 24, fontWeight: 800, letterSpacing: 1.2, color: C.chalk })}>NO OPTIMAL 6 VOLUME</div>
+      <div style={Object.assign({}, dsp, { fontSize: 24, fontWeight: 800, letterSpacing: 1.2, color: C.chalk })}>NO OPTIMAL 8 VOLUME</div>
       <Note c={C.chalk}>This week replaces the program; it doesn't stack on top. One flagship test per day, drawn from the cards each morning. Day 6 last.</Note>
       <Btn on={goIron} c={C.oxide} fill s={{ width: "100%", marginTop: 12 }}>GO TO HELL WEEK</Btn>
     </Card>);
@@ -1079,7 +1101,7 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
 
       <Card ac={C.brass}>
         <Eye c={C.brass}>What this week actually is</Eye>
-        {rx.hell ? <Note c={C.chalk}>Hell Week. Six flagship tests, one a day. No Optimal 6 volume — the IRON tab runs this week.</Note> : (
+        {rx.hell ? <Note c={C.chalk}>Hell Week. Six flagship tests, one a day. No Optimal 8 volume — the IRON tab runs this week.</Note> : (
           <div>
             <Row k="Squat" val={rx.sc} />
             <Row k="Bench" val={rx.upperC ? "Upper circuit · 4 × 2 @ 85%" : (rx.bsc || rx.sc)} />
@@ -1295,6 +1317,7 @@ function PlanView() {
    ================================================================ */
 function Settings({ st, setSt, current, L, exportData, importData, close }) {
   const [io, setIo] = useState(""); const [showIo, setShowIo] = useState(false); const [confirm, setConfirm] = useState(false);
+  const [msg, setMsg] = useState(""); const fileRef = useRef(null);
   const upd = (patch) => setSt(Object.assign({}, st, patch));
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(16,20,22,.94)", zIndex: 95, overflowY: "auto" }} onClick={close}>
@@ -1309,7 +1332,7 @@ function Settings({ st, setSt, current, L, exportData, importData, close }) {
         <Note>Today reads as <span style={{ color: C.brass }}>macro {current.macro} · week {current.week}</span>. If that's wrong, open the WEEK tab, find the right week and tap "make this the current week".</Note>
         <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
         <Eye>Cycle</Eye>
-        {[["iron", "Iron Mind weeks 17–18 (Hell Week + reload) after each cycle", "18-week cycle. Off = straight from test day into week 1 (16 weeks)."],
+        {[["iron", "Iron Mind weeks 17–18 (Hell Week + Reload)", "On = 18-week cycle. Off = 16 weeks, straight from test day into week 1 of the next cycle."],
           ["sound", "Bell sounds on the timers", "Round bells and 3-2-1 pips. Vibration stays on either way."],
           ["autoRest", "Auto rest clock", "Confirming a set starts that exercise's rest countdown by itself."]].map((x) => (
           <div key={x[0]} onClick={() => upd({ [x[0]]: !st[x[0]] })} style={{ display: "flex", gap: 10, alignItems: "center", padding: "10px 0", borderBottom: "1px solid " + C.line, cursor: "pointer" }}>
@@ -1323,9 +1346,20 @@ function Settings({ st, setSt, current, L, exportData, importData, close }) {
         <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
         <Eye>Backup</Eye>
         <div style={{ display: "flex", gap: 6 }}>
-          <Btn small c={C.cobalt} s={{ flex: 1 }} on={async () => { setIo(await exportData()); setShowIo(true); }}>EXPORT</Btn>
-          <Btn small c={C.cobalt} s={{ flex: 1 }} on={() => setShowIo(true)}>IMPORT</Btn>
+          <Btn small c={C.cobalt} s={{ flex: 1 }} on={async () => { setMsg(""); setIo(await exportData()); setShowIo(true); }}>EXPORT</Btn>
+          <Btn small c={C.cobalt} s={{ flex: 1 }} on={() => { setMsg(""); setShowIo(true); }}>IMPORT</Btn>
         </div>
+        <div style={{ display: "flex", gap: 6, marginTop: 6 }}>
+          <Btn small c={C.cobalt} s={{ flex: 1 }} on={async () => { setMsg("");
+            const r = await shareOrDownload(await exportData());
+            setMsg(r === "shared" ? "Backup sent." : r === "downloaded" ? "Backup file saved." : r === "cancelled" ? "Cancelled." : "Couldn't make the file — use EXPORT and paste the text somewhere safe."); }}>EXPORT TO FILE</Btn>
+          <Btn small c={C.cobalt} s={{ flex: 1 }} on={() => { setMsg(""); if (fileRef.current) fileRef.current.click(); }}>IMPORT FROM FILE</Btn>
+        </div>
+        <input ref={fileRef} type="file" accept="application/json,.json" style={{ display: "none" }} aria-hidden="true" tabIndex={-1}
+          onChange={async (e) => { const f = e.target.files && e.target.files[0]; e.target.value = ""; if (!f) return;
+            try { const txt = await readTextFile(f); JSON.parse(txt); importData(txt); } catch (err) { setMsg("That file isn't an Optimal 8 backup."); } }} />
+        <Note>EXPORT TO FILE saves a .json backup you can keep in Files or send to yourself. IMPORT FROM FILE loads one back in.</Note>
+        {msg ? <Note c={C.brass}>{msg}</Note> : null}
         {showIo ? <div style={{ marginTop: 8 }}>
           <textarea value={io} onChange={(e) => setIo(e.target.value)} placeholder="Paste a backup here, then tap load"
             style={Object.assign({}, mno, { width: "100%", minHeight: 90, background: C.ink, border: "1px solid " + C.line, borderRadius: 4, color: C.chalk, fontSize: 10, padding: 8 })} />
@@ -1342,7 +1376,7 @@ function Settings({ st, setSt, current, L, exportData, importData, close }) {
 }
 
 /* ================================================================
-   IRON — the Forge (weekly benchmark) and Hell Week, re-placed for Optimal 6
+   IRON — the Forge (weekly benchmark) and Hell Week, re-placed for Optimal 8
    ================================================================ */
 const FORGE = [
   { w: 1, dom: "GRIP", test: "Farmer's hold (50% BW/hand) + dead hang", mins: 15, max: 10, fit: "ok",
@@ -1513,7 +1547,7 @@ const HWCOMP = [["Completed all six days, none skipped or shortened", 4], ["No m
 const HWRANK = [[48, "RECRUIT", C.ash, "You have your baseline. That's the entire point of attempt one."], [72, "SOLDIER", C.moss, "Solid general capacity, clear weak links to attack."], [90, "WARRIOR", C.cobalt, "Genuinely strong across the board."], [108, "PRAETORIAN", C.brass, "Elite for a non-professional athlete."], [121, "KOKORO", C.oxide, "You didn't need this document."]];
 const RETBAND = [[80, 1], [85, 2], [90, 3], [95, 4]];
 const HWRULES = [
-  "One flagship test per day. No extra training. This replaces the program — no Optimal 6 volume in week 17.",
+  "One flagship test per day. No extra training. This replaces the program — no Optimal 8 volume in week 17.",
   "Full sleep every night. You're testing load tolerance, not sleep debt.",
   "No music, no headphones, all week. No distraction to hide behind.",
   "★ Draw the day's test each morning. Six cards, shuffled, Day 6 always last. Better if someone else holds them.",
@@ -1695,7 +1729,7 @@ function HellWeek({ current, maxes, bw, hwLog, setHwLog, L }) {
    APP SHELL
    ================================================================ */
 const KEYS = { st: "o8s-settings", done: "o8s-done", log: "o8s-log", maxes: "o8s-maxes", maxHist: "o8s-maxhist", body: "o8s-body", ready: "o8s-ready", spar: "o8s-spar", swap: "o8s-swap", box: "o8s-box", notes: "o8s-notes", forge: "o8s-forge", fweek: "o8s-fweek", hw: "o8s-hw" };
-const DEF_ST = () => ({ start: defaultStart(), macroBase: 1, iron: true, sound: true, autoRest: true });
+const DEF_ST = () => ({ start: defaultStart(), macroBase: 1, iron: false, sound: true, autoRest: true });
 
 export default function App() {
   const [st, setStRaw] = useState(DEF_ST());
