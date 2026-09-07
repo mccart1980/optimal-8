@@ -587,7 +587,7 @@ function TimerDock({ T }) {
   const col = t.done ? C.moss : cur.t === "w" ? C.oxide : C.cobalt;
   const frac = t.done ? 1 : 1 - t.left / (cur.s || 1);
   return (
-    <div style={{ position: "fixed", left: 0, right: 0, bottom: 58, zIndex: 70, background: C.slab, borderTop: "1px solid " + C.line, padding: "0 0 2px" }}>
+    <div style={{ position: "fixed", left: 0, right: 0, bottom: "calc(58px + env(safe-area-inset-bottom))", zIndex: 70, background: C.slab, borderTop: "1px solid " + C.line, padding: "0 0 2px" }}>
       <div style={{ height: 4, background: C.ink }}><div style={{ width: (frac * 100) + "%", height: "100%", background: col, transition: "width .2s linear" }} /></div>
       <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 10px", maxWidth: 640, margin: "0 auto" }}>
         <div onClick={() => T.setOpen(true)} style={{ flex: 1, minWidth: 0, cursor: "pointer" }}>
@@ -608,10 +608,10 @@ function TimerFull({ T }) {
   const total = t.steps.reduce((a, x) => a + x.s, 0), elapsed = t.steps.slice(0, t.i).reduce((a, x) => a + x.s, 0) + (t.done ? 0 : (cur.s - t.left));
   const nxt = t.steps[t.i + 1];
   return (
-    <div style={{ position: "fixed", inset: 0, background: C.ink, zIndex: 100, display: "flex", flexDirection: "column", padding: 16 }}>
+    <div style={{ position: "fixed", inset: 0, background: C.ink, zIndex: 100, display: "flex", flexDirection: "column", padding: 16, paddingTop: "calc(16px + env(safe-area-inset-top))", paddingBottom: "calc(16px + env(safe-area-inset-bottom))" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <span style={Object.assign({}, mno, { fontSize: 10, color: C.ash, letterSpacing: 1.4 })}>{t.title}</span>
-        <Btn on={() => T.setOpen(false)} c={C.ash} small>MINIMISE</Btn>
+        <Btn on={() => T.setOpen(false)} c={C.ash} small s={{ minWidth: 44, minHeight: 44 }}>MINIMISE</Btn>
       </div>
       <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
         <div style={Object.assign({}, dsp, { fontSize: 22, fontWeight: 700, letterSpacing: 1.6, color: col, marginBottom: 8, animation: t.run && cur.t === "w" ? "pulse 1.4s infinite" : "none", padding: "0 10px" })}>{t.done ? "COMPLETE" : cur.l}</div>
@@ -640,7 +640,7 @@ function Plates({ kg, bar, onClose }) {
   const perSide = (kg - b) / 2; const out = []; let rem = perSide;
   if (perSide > 0) P.forEach((p) => { const n = Math.floor(rem / p + 1e-9); if (n > 0) { out.push([p, n]); rem = +(rem - n * p).toFixed(3); } });
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(16,20,22,.94)", zIndex: 110, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }} onClick={onClose}>
+    <div style={{ position: "fixed", inset: 0, background: "rgba(16,20,22,.94)", zIndex: 110, display: "flex", alignItems: "center", justifyContent: "center", padding: 20, paddingTop: "calc(20px + env(safe-area-inset-top))", paddingBottom: "calc(20px + env(safe-area-inset-bottom))" }} onClick={onClose}>
       <div style={{ background: C.card, border: "1px solid " + C.brass, borderRadius: 8, padding: 20, maxWidth: 340, width: "100%" }} onClick={(e) => e.stopPropagation()}>
         <Eye c={C.brass}>Plates per side</Eye>
         <div style={Object.assign({}, mno, { fontSize: 42, fontWeight: 700, color: C.chalk, margin: "2px 0 10px" })}>{kg}<span style={{ fontSize: 17, color: C.ash }}> kg</span></div>
@@ -834,10 +834,10 @@ function ProtoSheet({ id, close }) {
   const p = PROTO[id]; if (!p) return null;
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(16,20,22,.9)", zIndex: 90, display: "flex", alignItems: "flex-end" }} onClick={close}>
-      <div className="rise" onClick={(e) => e.stopPropagation()} style={{ background: C.card, borderTop: "3px solid " + p.c, borderRadius: "12px 12px 0 0", width: "100%", maxWidth: 640, margin: "0 auto", maxHeight: "86vh", overflowY: "auto", padding: 16 }}>
+      <div className="rise" onClick={(e) => e.stopPropagation()} style={{ background: C.card, borderTop: "3px solid " + p.c, borderRadius: "12px 12px 0 0", width: "100%", maxWidth: 640, margin: "0 auto", maxHeight: "86vh", overflowY: "auto", padding: 16, paddingBottom: "calc(16px + env(safe-area-inset-bottom))" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
           <div><Eye c={p.c} s={{ marginBottom: 2 }}>Protocol</Eye><div style={Object.assign({}, dsp, { fontSize: 24, fontWeight: 800, letterSpacing: 1, color: C.chalk })}>{p.n}</div><div style={Object.assign({}, mno, { fontSize: 10, color: C.ash, marginTop: 3 })}>{p.s.toUpperCase()}</div></div>
-          <Btn on={close} c={C.ash} small>CLOSE</Btn>
+          <Btn on={close} c={C.ash} small s={{ minWidth: 44, minHeight: 44 }}>CLOSE</Btn>
         </div>
         <div style={{ marginTop: 12 }}>
           {p.i.map((it, i) => it[1] ? (
@@ -988,10 +988,10 @@ function Flow(props) {
   const mark = () => { const cur = done[dk] || []; const n = Object.assign({}, done); const was = cur.indexOf(b.L) >= 0; n[dk] = was ? cur.filter((x) => x !== b.L) : cur.concat([b.L]); setDone(n); buzz(30); if (!was && i < real.length - 1) setTimeout(() => setI(i + 1), 180); };
   return (
     <div style={{ position: "fixed", inset: 0, background: C.ink, zIndex: 60, display: "flex", flexDirection: "column" }}>
-      <div style={{ padding: "10px 14px 8px", borderBottom: "1px solid " + C.line, background: C.slab }}>
+      <div style={{ padding: "10px 14px 8px", paddingTop: "calc(10px + env(safe-area-inset-top))", borderBottom: "1px solid " + C.line, background: C.slab }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span style={Object.assign({}, mno, { fontSize: 10, color: C.ash, letterSpacing: 1.2 })}>{own.n} · WK {week} · {dl.length}/{real.length} DONE</span>
-          <Btn on={close} c={C.ash} small>EXIT</Btn>
+          <Btn on={close} c={C.ash} small s={{ minWidth: 44, minHeight: 44 }}>EXIT</Btn>
         </div>
         <div style={{ display: "flex", gap: 3, marginTop: 9 }}>
           {real.map((x, k) => <div key={x.L} onClick={() => setI(k)} style={{ flex: 1, height: 6, borderRadius: 3, cursor: "pointer", background: dl.indexOf(x.L) >= 0 ? C.moss : k === i ? own.ac : C.line }} />)}
@@ -1003,7 +1003,7 @@ function Flow(props) {
         <BlockBody {...props} b={b} rx={rx} ready={effReady} />
         {b.tr ? <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, marginTop: 14, textAlign: "center", letterSpacing: 1 })}>↓ {b.tr} MIN TRANSITION ↓</div> : null}
       </div>
-      <div style={{ display: "flex", gap: 8, padding: "8px 12px", borderTop: "1px solid " + C.line, background: C.slab, height: 58 }}>
+      <div style={{ display: "flex", gap: 8, padding: "8px 12px", paddingBottom: "calc(8px + env(safe-area-inset-bottom))", borderTop: "1px solid " + C.line, background: C.slab, minHeight: 58 }}>
         <Btn on={() => setI(Math.max(0, i - 1))} c={C.ash} dis={i === 0} s={{ flex: 1, padding: "8px 0", minHeight: 40 }}>◀</Btn>
         <Btn on={mark} c={isDone ? C.line : C.moss} fill={!isDone} s={{ flex: 3, color: isDone ? C.ash : C.ink, fontSize: 15, padding: "8px 0", minHeight: 40 }}>{isDone ? "UNDO" : i === real.length - 1 ? "DONE — FINISH" : "DONE — NEXT"}</Btn>
         <Btn on={() => setI(Math.min(real.length - 1, i + 1))} c={C.ash} dis={i === real.length - 1} s={{ flex: 1, padding: "8px 0", minHeight: 40 }}>▶</Btn>
@@ -1321,10 +1321,10 @@ function Settings({ st, setSt, current, L, exportData, importData, close }) {
   const upd = (patch) => setSt(Object.assign({}, st, patch));
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(16,20,22,.94)", zIndex: 95, overflowY: "auto" }} onClick={close}>
-      <div className="rise" onClick={(e) => e.stopPropagation()} style={{ background: C.card, maxWidth: 640, margin: "24px auto", borderRadius: 8, border: "1px solid " + C.line, padding: 16 }}>
+      <div className="rise" onClick={(e) => e.stopPropagation()} style={{ background: C.card, maxWidth: 640, margin: "24px auto", marginTop: "calc(24px + env(safe-area-inset-top))", marginBottom: "calc(24px + env(safe-area-inset-bottom))", borderRadius: 8, border: "1px solid " + C.line, padding: 16 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
           <span style={Object.assign({}, dsp, { fontSize: 20, fontWeight: 800, letterSpacing: 1.4, color: C.chalk })}>SETTINGS</span>
-          <Btn on={close} c={C.ash} small>CLOSE</Btn>
+          <Btn on={close} c={C.ash} small s={{ minWidth: 44, minHeight: 44 }}>CLOSE</Btn>
         </div>
         <Eye>Schedule</Eye>
         <Lab>Monday of week 1, macrocycle {st.macroBase}</Lab>
@@ -1859,13 +1859,13 @@ export default function App() {
       {showSettings ? <Settings st={st} setSt={setSt} current={current} L={L} exportData={exportData} importData={importData} close={() => setShowSettings(false)} /> : null}
       {flow ? <Flow {...sessProps} close={() => setFlow(false)} /> : null}
 
-      <div style={{ borderBottom: "1px solid " + C.line, background: C.slab, position: "sticky", top: 0, zIndex: 30 }}>
+      <div style={{ borderBottom: "1px solid " + C.line, background: C.slab, position: "sticky", top: 0, zIndex: 30, paddingTop: "env(safe-area-inset-top)" }}>
         <div style={{ borderTop: "3px solid " + P.ac }} />
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 13px", maxWidth: 640, margin: "0 auto" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 13px", paddingLeft: "max(13px, env(safe-area-inset-left))", paddingRight: "max(13px, env(safe-area-inset-right))", maxWidth: 640, margin: "0 auto" }}>
           <span style={Object.assign({}, dsp, { fontSize: 19, fontWeight: 800, letterSpacing: 2, color: C.chalk })}>OPTIMAL<span style={{ color: P.ac }}>·</span>8<span style={{ fontSize: 12, color: C.ash, letterSpacing: 1 }}> SINGLES</span></span>
           <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Chip c={P.ac}>M{current.macro} · WK {current.week} · {P.n}</Chip>
-            <button onClick={() => setShowSettings(true)} aria-label="Settings" style={Object.assign({}, mno, { background: "transparent", border: "1px solid " + C.line, color: C.ash, borderRadius: 4, width: 32, height: 32, cursor: "pointer", fontSize: 14 })}>⚙</button>
+            <button onClick={() => setShowSettings(true)} aria-label="Settings" style={Object.assign({}, mno, { background: "transparent", border: "1px solid " + C.line, color: C.ash, borderRadius: 4, width: 44, height: 44, cursor: "pointer", fontSize: 16 })}>⚙</button>
           </span>
         </div>
         {tab === "today" ? (
@@ -1909,7 +1909,7 @@ export default function App() {
       </div>
 
       <TimerDock T={T} />
-      <div style={{ position: "fixed", left: 0, right: 0, bottom: 0, zIndex: 50, background: C.slab, borderTop: "1px solid " + C.line }}>
+      <div style={{ position: "fixed", left: 0, right: 0, bottom: 0, zIndex: 50, background: C.slab, borderTop: "1px solid " + C.line, paddingBottom: "env(safe-area-inset-bottom)" }}>
         <div style={{ display: "flex", maxWidth: 640, margin: "0 auto" }}>
           {TABS.map((x) => <button key={x[0]} onClick={() => { setTab(x[0]); setProto(null); }}
             style={Object.assign({}, dsp, { flex: 1, fontSize: 11, fontWeight: 700, letterSpacing: .8, background: "transparent", border: "none", borderTop: "2px solid " + (tab === x[0] ? P.ac : "transparent"), color: tab === x[0] ? C.chalk : C.ash, padding: "12px 2px 14px", cursor: "pointer", minHeight: 50 })}>{x[1]}</button>)}
