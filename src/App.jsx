@@ -72,11 +72,11 @@ const fmtDate = (s) => { try { return parseISO(s).toLocaleDateString("en-GB", { 
    ================================================================ */
 const PH = {
   b1: { n: "BUILD", long: "BLOCK 1 · BUILD", ac: C.moss, vl: "25–30%",
-    note: "Highest muscle-work volume — 4 sets on Wednesday. Loaded drop jumps. Both easy-cardio sessions at full length. Jump circuit at 2 rounds, punch throws at 3, Nordics ramping up. This block grows you because it has the most sets." },
+    note: "The most volume in the cycle — four sets of rows, three of split squats. Loaded drop jumps. Friday’s ride at its full 55 minutes. Jump circuit at 2 rounds, punch throws at 3, Nordics ramping up. Week 1 finds your trap bar and push press numbers." },
   b2: { n: "FORCE", long: "BLOCK 2 · FORCE", ac: C.oxide, vl: "15–20%",
-    note: "Muscle work drops to 3 sets, the bar gets heavier. No isometric add-ons in this version. Friday's easy ride drops to 40 min. Week 9's single is a direction check, not your real number — you're carrying fatigue." },
+    note: "Accessories drop to 3 sets and the bar gets heavier: the rests on the main lifts go to 2½ minutes for the heavy triples. Friday's easy ride drops to 45 min. Week 9's single is a direction check, not your real number — you're carrying fatigue." },
   b3: { n: "VELOCITY", long: "BLOCK 3 · VELOCITY", ac: C.brass, vl: "10–15%",
-    note: "Everything gets faster. The jump circuit leads Saturday at 4 rounds with the band-assisted jump; the squat drops to 2×2 @ 88% behind it. Monday becomes the bench + throws circuit. Depth jumps replace loaded drop jumps, side bounds go continuous, punch throws to 4 rounds, trap bar and push press to fast 3×3s at 80%. Speed fades fastest once you stop — so it's trained hardest right before the test." },
+    note: "Everything gets faster. The jump circuit leads Saturday at 4 rounds with the band-assisted jump; the squat drops to 2×2 @ 88% behind it. Monday's bench and bench throws merge into one circuit. Depth jumps replace loaded drop jumps, side bounds go continuous, punch throws to 4 rounds, trap bar and push press to fast 3×3s at 80%, and Wednesday's pause squat becomes a speed squat. Speed fades fastest once you stop — so it's trained hardest right before the test." },
   taper: { n: "TAPER", long: "TAPER & TEST", ac: C.cobalt, vl: "≤10%",
     note: "Volume −40% then −60%. Intensity held. A deload drops intensity to restore you; a taper drops volume and keeps intensity, because fatigue sheds faster than fitness. Sprints and jumps stay in both weeks — reduce their volume, never their intent. Saturday of week 16 is test day." },
   hell: { n: "HELL WEEK", long: "HELL WEEK", ac: C.oxide, vl: "—",
@@ -147,282 +147,250 @@ function steps(kind, o) {
 
 /* ---------- protocols (written once, referenced by name) ---------- */
 const PROTO = {
-  SH: { n: "Shoulder prep", s: "8 min", c: C.cobalt, note: "Finishes with the bench ramp so the first working set is already warm.",
-    i: [["90/90 breathing", "×5"], ["Band pull-apart", "×20"], ["Band external rotation", "×15/arm"], ["Scapular wall slide", "×10"], ["BENCH RAMP", ""], ["Bar", "×10"], ["40%", "×5"], ["60%", "×3"], ["75%", "×2"]] },
-  HIP: { n: "Hip prep", s: "12 min · build-ups included", c: C.cobalt, note: "Never sprint cold. The three build-ups are the sprint warm-up; the squat ramp comes after them.",
-    i: [["90/90 switches", "×5 each way"], ["Hip airplane", "×5/side"], ["Cossack squat", "×6/side"], ["Leg swings", "×10 each"], ["Pogo hops", "2 × 20"], ["SPRINT BUILD-UPS", ""], ["20m @ 60%", "×1"], ["20m @ 75%", "×1"], ["20m @ 90%", "×1"], ["SQUAT RAMP", ""], ["40%", "×3"], ["60%", "×2"], ["75%", "×1"]] },
-  GEN: { n: "General prep", s: "6 min", c: C.cobalt, note: "Wednesday adds trap bar warm-up sets. Sunday adds broad jump 3×2, med-ball chest pass 3×3 and bike sprint 10s ×3.",
-    i: [["Easy bike", "3 min"], ["Band pull-apart", "×20"], ["Goblet squat", "×8"], ["Push-up", "×10"], ["90/90 switch", "×5"]] },
-  CUFF: { n: "Cuff protocol", s: "8 min · 2 rounds, rest 45s", c: C.violet, note: "Monday adds the band deceleration catch — the only thing in the week that trains the cuff to brake a fast limb, which it does on every right hand.",
-    i: [["Side-lying external rotation", "12/side"], ["Prone T raise", "×10"], ["Face pull", "×15"], ["Scapular wall slide", "×10"]] },
-  MOB: { n: "Daily mobility", s: "8 min · every session", c: C.violet, note: "Thoracic first, always.",
-    i: [["Foam-roller thoracic extension", "×8"], ["Open book", "6/side · 3s hold"], ["90/90 switch", "×5 each"], ["Loaded deep-squat hold", "90s"]] },
-  NECK: { n: "Neck — stiffness", s: "10 min · Wed and Thu", c: C.violet,
-    note: "Stronger, stiffer necks produce lower head accelerations on impact — supported. Whether that reduces concussion is not established. A cheap bet on a sound mechanism. It is not armour and it changes nothing about what you take in sparring.",
-    i: [["4-direction isometric hold", "3 × 10s maximal — flexion, extension, each side. Own hand or band."], ["Rapid brace", "3 × 6/direction — relaxed to maximal in under a second, hold 2s"], ["Perturbation isometric", "3 × 20s — band anchored, brace neutral, pulse it from varying angles with your own hand. The head does not move."], ["Head-neck catch", "2 × 6/direction — band pulls the head into range, you stop it in the last third"]] },
+  SH: { n: "Warm-up · shoulders", s: "8 min · Mon", c: C.cobalt, note: "The bench ramp is part of the warm-up — rest about a minute between those sets, so the first working set is already warm.",
+    i: [["Back on the floor, feet on a bench", "5 breaths — in 4s, out 8s"], ["Band pull-apart", "×20 — arms straight, pull until it touches your chest"], ["Band external rotation", "×15/arm — elbow pinned to the ribs"], ["Wall slide", "×10 — forearms never leave the wall"], ["BENCH RAMP", ""], ["Bar", "×10"], ["40%", "×5"], ["60%", "×3"], ["75%", "×2"]] },
+  HIP: { n: "Warm-up · hips + build-ups", s: "12 min · Sat", c: C.cobalt, note: "Never sprint cold. The three build-ups are the sprint warm-up; the squat ramp comes after them.",
+    i: [["90/90 switches", "×5 each way"], ["Hip airplane", "×5/side"], ["Cossack squat", "×6/side"], ["Leg swings", "×10 each — forward-back, then side-to-side"], ["Pogo hops", "2 × 20"], ["SPRINT BUILD-UPS", ""], ["20m @ 60%", "×1"], ["20m @ 75%", "×1"], ["20m @ 90%", "×1"], ["SQUAT RAMP", ""], ["40%", "×3"], ["60%", "×2"], ["75%", "×1"]] },
+  GEN: { n: "Warm-up", s: "6 min · Tue, Wed, Thu · Sun 10 min", c: C.cobalt, note: "Wednesday adds the trap bar and squat warm-up sets. Sunday adds broad jumps, chest passes, bike sprints and three easy practice throws of each throw.",
+    i: [["Easy bike", "3 min"], ["Band pull-apart", "×20"], ["Goblet squat", "×8"], ["Push-up", "×10"], ["90/90 hip switch", "×5 each way"], ["Pogo hops", "×20"]] },
+  CUFF: { n: "Shoulder circuit + band catch", s: "8 min · Mon · 2 rounds, rest 45s", c: C.violet, note: "Every right hand you throw, this muscle group has to brake your arm. This is the only place it gets trained to.",
+    i: [["Side-lying external rotation", "12/side — top elbow glued to the ribs"], ["Prone T raise", "×10 — face down on an incline bench, thumbs up"], ["Face pull", "×15 — elbows high, squeeze the back of the shoulders"], ["Wall slide", "×10"], ["BAND DECELERATION CATCH", ""], ["Punch out fast, brake the return", "2 × 8/arm — stop it dead in the last third"]] },
+  NECK: { n: "Neck", s: "10 min · Wed and Thu", c: C.violet,
+    note: "A stronger, stiffer neck measurably reduces how much your head accelerates when hit. Whether that prevents concussion is not proven. Cheap bet, sound mechanism — and it is not armour: it changes nothing about what you take in sparring.",
+    i: [["4-direction holds", "3 × 10s each — palm hard against the forehead and push, the head never moves. Then the back of the head, then each side."], ["Rapid tense", "3 × 6/direction — band resting light pressure on your head, snap from fully relaxed to fully braced in under a second, hold 2s, relax"], ["Perturbation hold", "3 × 20s — band anchored to the rack, brace neutral, tug it in small random pulses from different angles. The head does not move."], ["Catch", "2 × 6/direction — let the band start to pull your head toward the anchor, then stop it dead in the last third"]] },
   HANDS: { n: "Hands", s: "5 min · Tue and Sun", c: C.violet,
-    note: "The most common injury in boxing is a wrist collapsing out of neutral under compression; the extensors take that load and nobody trains them. No roller, no holds — your job does your grip. Flagged: no trial shows this prevents boxing hand injury; the mechanism is sound and the cost is five minutes.",
-    i: [["Knuckle push-up isometric hold", "3 × 20s — wrist stacked straight. Mat first, firmer surface as it holds."], ["Band wrist extension", "2 × 15"]] },
-  VEC: { n: "The four punch vectors", s: "rest 45s between exercises · 90s between rounds", c: C.brass,
-    note: "Straights rely on linear force; hooks on rotational and lateral force. Different physical problems — training one does not train the other. Ball 3–5 kg: if it isn't flying, it's too heavy. Both sides equally.",
-    i: [["Med-ball rotational shot-put", "4/side — THE STRAIGHT RIGHT. Rear-hip driven, horizontal. Some from a lower stance for the body shot."], ["Med-ball downward diagonal throw", "4/side — THE OVERHAND RIGHT. High outside the shoulder, drive down and across, release toward the opposite hip. Rear foot pivots; trunk rotates and side-bends."], ["Med-ball hook throw", "4/side — THE LEAD HOOK. Bent arm, horizontal, off a lead-leg pivot."], ["Landmine rotational punch", "5/side — THE LOADED STRAIGHT. Hips before shoulders. Punch it away, never press it."]] },
-  FULL: { n: "Full mobility", s: "20 min · Friday", c: C.violet, note: "Thoracic first, always.",
-    i: [["THORACIC", ""], ["Foam-roller extension", "×8"], ["Open book", "8/side"], ["Thread the needle", "8/side"], ["Quadruped rotation", "8/side"], ["HIPS", ""], ["90/90 switch + hold", "×5 each · 30s/side"], ["Couch stretch", "90s/side"], ["Frog", "90s"], ["Loaded deep-squat hold", "90s"], ["SHOULDERS", ""], ["Passive hang", "45s"], ["Wall slides", "×12"], ["Band pull-apart", "×20"], ["Band ER", "×15/arm"]] },
-  AMP: { n: "Athletic movement prep", s: "8 min", c: C.cobalt, note: "",
-    i: [["Forward / backward / lateral crawl", "2 lengths each"], ["Supported hip airplane", "6/side"], ["Cossack squat", "8/side"], ["Barefoot single-leg balance", "30s/leg"]] },
+    note: "The most common boxing injury is a wrist folding under impact. Five minutes of insurance. Your job covers your grip — no grip work in here.",
+    i: [["Knuckle hold", "3 × 20s — push-up position on your fists on a mat, wrist dead straight so forearm and knuckles make one line. Firmer surface over the weeks only if the wrist stays straight."], ["Band wrist extension", "2 × 15 — forearm on your knee, palm down, lift the knuckles toward you"]] },
+  CALF: { n: "Seated calf raise", s: "4 min · Tue", c: C.violet,
+    note: "It must be seated (knee bent) — that's the muscle that keeps you on your toes in round six; the jumps and sprints already cover the other calf muscle. Moved here from Saturday: a low-cost lift in a low-cost slot.",
+    i: [["Seated calf raise", "3 × 15 · rest 60s — up on the balls of the feet, pause, down slow"]] },
+  SPLIT: { n: "Split squat, rear foot elevated", s: "8 min · Thu", c: C.violet,
+    note: "Moved here from Saturday: 24 hours after the heavy lower morning, 48 before Saturday's sprints, and before the bike so the reps are clean.",
+    i: [["Rear-foot-elevated split squat", "3 × 6–8 each leg · rest 75s (easy weeks and weeks 15–16: 2 sets)"], ["Weak side first", "same weight on both legs — the weaker leg sets the load"], ["Loading", "start at a weight you could do 10 with; add when 8 is clean"]] },
+  VEC: { n: "The four punch throws", s: "rest 45s between exercises · 90s between rounds", c: C.brass,
+    note: "Straight punches are built on forward drive; hooks on rotation. They're different physical problems, so all four get trained. Ball 3–5 kg: if it isn't flying, it's too heavy. Both sides equally.",
+    i: [["Rotational shot-put", "4/side — YOUR STRAIGHT RIGHT. Ball at the shoulder, side-on to a wall. Drive off the back hip, flat and hard. A few from a lower crouch for the body shot."], ["Downward diagonal throw", "4/side — YOUR OVERHAND RIGHT. Ball high outside the shoulder, drive it down and across toward the opposite hip. Back foot pivots, trunk turns AND side-bends."], ["Hook throw", "4/side — YOUR LEAD HOOK. Ball at chest height in bent arms, pivot hard off the lead leg and sling it sideways into the wall."], ["Landmine punch", "5/side — YOUR LOADED STRAIGHT. Drive the hips and PUNCH it up and away — never a slow press. Catch it, go again."]] },
+  HOME: { n: "The home block", s: "8 min · every evening (Friday 20)", c: C.violet,
+    note: "This is the mobility that used to close every gym session. It moved home so the gym time is all training. It does the same job at 8pm that it did at 4am; the only thing that changes is whether you do it. Kit: a foam roller, a light band, and something to hold at your chest — a kettlebell, a dumbbell, a bag of sugar. If you skip it: nothing shows this week. By week 6 the hips tighten, squat depth goes, the sprints get shorter and the pause squat starts to hurt.",
+    i: [["THE FOUR MOVES, EVERY EVENING", ""],
+      ["Foam roller across the mid-back", "×8 — hands behind head, arch back over it, moving the roller up a notch each time"],
+      ["Open book", "6/side · hold 3s — on your side, knees bent, open the top arm to the far side, chest follows, knees stay down"],
+      ["90/90 hip switches", "×5 each way — swivel the knees over without using your hands"],
+      ["Deep squat hold", "90s — a weight at your chest, sit in the very bottom of a squat"],
+      ["FRIDAY EVENING · THE FULL STRETCH · 20 MIN — replaces the four moves", ""],
+      ["UPPER BACK FIRST, ALWAYS", ""],
+      ["Foam roller arch-backs", "×8"], ["Open book", "×8/side"], ["Thread the needle", "×8/side — on all fours, slide one arm under the other, shoulder toward the floor"], ["Quadruped rotation", "×8/side — hand behind head, rotate the elbow to the ceiling"],
+      ["HIPS", ""],
+      ["90/90 switches + hold", "×5 each · 30s/side"], ["Couch stretch", "90s/side — back foot up on the sofa, knee on a cushion, squeeze the glute, stand tall"], ["Frog", "90s — knees wide, rock the hips back"], ["Deep squat hold with a weight", "90s"],
+      ["SHOULDERS", ""],
+      ["Hang from a bar or doorframe", "45s — skip if you haven't one"], ["Wall slides", "×12"], ["Band pull-apart", "×20"], ["Band external rotation", "×15/arm"]] },
 };
+const HOMELINE = "HOME · tonight: mobility 8 min (Friday: the full stretch, 20 min)";
 
 /* ================================================================
-   SESSIONS — the seven cards. Anything week-dependent is a function of rx.
+   SESSIONS — the seven pages, in running order, exactly as written.
    item: { n, s, cue, id, k: "wr" (sets) | "out" (one output) | "chk" (tick) | "txt", u, mk, pct, sets, reps, bwp }
    ================================================================ */
 const v = (x, rx) => (typeof x === "function" ? x(rx) : x);
-const m3 = (rx) => Math.min(3, rx.acc);
+const heavy79 = (rx) => rx.w >= 7 && rx.w <= 9;
+const friMin = (rx) => (rx.w === 16 ? 30 : rx.z2wed === 20 ? 45 : 55);
+const engTimer = (key) => (rx) => { const e = rx[key];
+  return e === "vo2" ? { kind: "vo2", title: "VO2MAX" } : e === "lac" ? { kind: "lac", title: "LACTATE" } : e === "rz" ? { kind: "rz", opt: { rounds: 5 }, title: "RED ZONE" }
+    : e === "rz3" ? { kind: "rz", opt: { rounds: 3 }, title: "RED ZONE" } : e === "easy" ? { kind: "z2", opt: { min: 20, label: "EASY ZONE 2" }, title: "EASY" } : { kind: "z2", opt: { min: 15, label: "EASY FLUSH" }, title: "EASY" }; };
+const engMin = (key) => (rx) => (rx[key] === "easy" || rx[key] === "easy15" ? 20 : 24);
+
 const S = {
-  mon: { n: "MONDAY", t: "Upper Force", m: (rx) => (rx.iso ? 74 : 70), ac: C.oxide, box: 1,
-    intro: "Boxing tonight. Nothing touches your legs. Nothing goes to failure.", b: [
-    { L: "A", n: "Shoulder prep", m: 8, p: "SH" },
-    { L: "B", n: "Bench Throw (Smith)", m: 12, star: 1, hard: 1, hide: (rx) => !!rx.upperC, rest: "Rest 2:00", rt: 120,
-      items: [{ n: "Bench throw", s: (rx) => rx.throw[0] + " × " + rx.throw[1] + " @ 30–45%", cue: "Release the bar at the top, catch, reset. Find the load where the bar flies highest — that is your optimum power load; stay there.", id: "throw", k: "wr", mk: "bench", pct: [30, 45], sets: (rx) => rx.throw[0], reps: (rx) => rx.throw[1] }],
-      w: "Stop the instant a rep is visibly lower.", why: "The lift most closely associated with punch velocity. A normal bench decelerates through its last third to protect the elbows; release removes the brake.",
-      note: "No Smith machine: explosive med-ball chest pass 5×5 with a 4–6 kg ball, or plyo push-ups 5×4.", tr: 2 },
-    { L: "B2", n: "Explosive Punch Press", m: 4, hide: (rx) => !rx.iso, tag: "BLOCK 2 ONLY", rest: "15s between reps · 2:00 between sets", timer: () => ({ kind: "iso", title: "ISO PUNCH" }),
-      items: [{ n: "Explosive punch press", s: "3 sets × 3 × 3s", cue: "Landmine bar wedged against a rack upright so it cannot move, or the heel of your hand on a wall. Stance, rear hand at full punch extension. From relaxed: maximal effort as fast as you physically can, hold 3s, relax.", id: "isopunch", k: "chk" }],
-      why: "Rate of force development through the exact chain — rear foot, hip, trunk, fist. Flagged: sound mechanism, no boxing trial, four minutes." },
-    { L: "C", n: (rx) => (rx.upperC ? "Upper Circuit — Bench + Throws" : "Flat Bench"), m: 12, star: (rx) => !!rx.upperC, hard: 1, mainLift: "bench", rt: 150,
-      rest: (rx) => (rx.upperC ? "20s between elements · rest 2:30 between rounds" : "Rest 2:30"),
-      timer: (rx) => (rx.upperC ? { kind: "contrast", opt: { rounds: 4, rest: 150, items: ["BENCH — 2 @ 85%", "BENCH THROW ×3", "PLYO PUSH-UP ×3"] }, title: "UPPER CIRCUIT" } : null),
+  /* ---------------- MONDAY ---------------- */
+  mon: { n: "MONDAY", t: "Upper Strength + Power Dose", m: 57, ac: C.oxide, box: 1,
+    intro: "Upper strength and the first of the week's three power doses. Nothing is taken to failure.", b: [
+    { L: "A", n: "Warm-up", m: 8, p: "SH" },
+    { L: "B", n: "Bench Throw (Smith)", m: 11, star: 1, hard: 1, hide: (rx) => !!rx.upperC, rest: "Rest 2:00", rt: 120,
+      items: [{ n: "Bench throw", s: (rx) => rx.throw[0] + " × " + rx.throw[1] + " @ ~⅓ of bench max", cue: "On a Smith machine, bar light. Lower to your chest, then press so hard the bar leaves your hands at the top. Catch it, reset, repeat. The right weight is whatever flies highest — adjust until it does.", id: "throw", k: "wr", mk: "bench", pct: [30, 45], sets: (rx) => rx.throw[0], reps: (rx) => rx.throw[1] }],
+      w: "Stop the set the instant a throw is visibly lower than the last.",
+      why: "This is your punch-speed lift. A normal bench decelerates through its last third to protect the elbows; releasing the bar removes the brake. In weeks 11–14 it merges into the circuit below.",
+      note: "No Smith machine? Throw a 4–6 kg medicine ball off your chest at a wall, 5 × 5, as hard as you can.", tr: 2 },
+    { L: "C", n: "Power dose — box jumps", m: 5, star: 1, hard: 1, hide: (rx) => !!rx.test, rest: "Rest 60–90s", rt: 75,
+      items: [{ n: "Box jump", s: "3 × 3", cue: "A box at knee-to-hip height. Quick dip, jump as high as you can, land soft on top, step down. Three perfect jumps, never three tired ones.", id: "boxjump", k: "chk" }],
+      why: "Explosiveness responds to how often the nervous system is asked, not how much. Five minutes, three mornings a week." },
+    { L: "D", n: (rx) => (rx.upperC ? "Upper Circuit — Bench + Throws" : "Bench Press"), m: 10, star: (rx) => !!rx.upperC, hard: 1, mainLift: "bench", fb: "bench",
+      pres: (rx) => ({ sc: rx.upperC ? "4 rounds · 2 @ 85%" : rx.maxBe ? rx.sets + " × " + rx.reps + " @ " + rx.pct + "%" : (rx.bsc || rx.sc), pct: rx.upperC ? 85 : rx.pct }),
+      rest: (rx) => (rx.upperC ? "20s between elements · rest 2:30 between rounds" : heavy79(rx) ? "Rest 2:30" : "Rest 2:00"),
+      rt: (rx) => (rx.upperC || heavy79(rx) ? 150 : 120),
+      timer: (rx) => (rx.upperC ? { kind: "contrast", opt: { rounds: 4, rest: 150, items: ["BENCH — 2 @ 85%", "BENCH THROW ×3", "CLAP PUSH-UP ×3"] }, title: "UPPER CIRCUIT" } : null),
       items: (rx) => (rx.upperC
-        ? [{ n: "Bench", s: "2 @ 85% · 4 rounds", cue: "Potentiates.", id: "bench", k: "wr", mk: "bench", pct: 85, sets: 4, reps: 2 }, { n: "Bench throw", s: "×3", cue: "Expresses.", id: "uc_throw", k: "chk" }, { n: "Plyo push-up", s: "×3", cue: "Overspeed.", id: "uc_plyo", k: "chk" }]
-        : [{ n: "Flat bench", s: rx.bsc || rx.sc, id: "bench", k: "wr", mk: "bench", pct: rx.pct, sets: rx.bsets || rx.sets, reps: rx.reps }]),
-      w: "Pins at chest height. No collars, ever. Max singles happen on Sunday, fresh — never here.",
-      why: (rx) => (rx.upperC ? "The same potentiation logic as Saturday, applied to the punch-velocity lift, in the block built for velocity." : "Upper-body maximal force, which tracks punch impact in elite amateurs."), tr: 2 },
-    { L: "D", n: "Weighted Chin-Up", m: 8, rest: "Rest 2:00", rt: 120, items: [{ n: "Weighted chin-up — wide, pronated", s: "3 × 5", cue: "Dead-hang start, controlled lowering, no swing.", id: "chin", k: "wr", sets: 3, reps: 5 }],
-      why: "Lat and upper-back strength — the retraction side of every punch, and the tissue that holds the shoulder together under a thousand punches a week.", tr: 1 },
-    { L: "E", n: "Chest-Supported Row", m: 7, rest: "Rest 90s", rt: 90, items: (rx) => [{ n: "Chest-supported row", s: (rx.acc <= 2 ? 3 : 4) + " × 8", cue: "Chest fixed, elbows past the body, pause one second at the top, lower slow. Four sets so your pulling matches your pressing.", id: "csrow", k: "wr", sets: rx.acc <= 2 ? 3 : 4, reps: 8 }],
-      why: "Horizontal pulling to balance the pressing volume; scapular control under load.", tr: 1 },
-    { L: "F", n: "Cuff + Deceleration Catch", m: 8, p: "CUFF", items: [{ n: "Band deceleration catch", s: "2 × 8/side", cue: "Light band. The arm punches out; you stop the return under control in the last third. Fast out, hard stop.", id: "catch", k: "chk" }],
-      why: "The only thing in the week that trains the cuff to brake a fast limb, which it does on every right hand." },
-    { L: "M", n: "Mobility", m: 8, p: "MOB" }] },
+        ? [{ n: "Bench", s: "2 @ 85% · 4 rounds", cue: "Heavy wakes the system up.", id: "bench", k: "wr", mk: "bench", pct: 85, sets: 4, reps: 2 }, { n: "Bench throw", s: "×3", cue: "Fast uses it.", id: "uc_throw", k: "chk" }, { n: "Clap push-up", s: "×3", cue: "Overspeed.", id: "uc_plyo", k: "chk" }]
+        : [{ n: "Bench press", s: rx.maxBe ? rx.sets + " × " + rx.reps + " @ " + rx.pct + "%" : (rx.bsc || rx.sc), cue: "Pins at chest height, no collars. Controlled down, drive up hard. If a rep grinds, that set is over.", id: "bench", k: "wr", mk: "bench", pct: rx.pct, sets: rx.bsets || rx.sets, reps: rx.reps }]),
+      w: "Pins at chest height. No collars, ever. Bench max singles happen on Sunday, fresh, first thing — never here.",
+      note: (rx) => (rx.upperC ? "Weeks 11–14: steps 2 and 4 merge into one circuit, 4 rounds — 2 bench reps @ 85% → rest 20s → 3 bench throws → rest 20s → 3 clap push-ups → rest 2½ min."
+        : rx.maxBe ? "Max-single week: the bench max is Sunday morning, first thing. Today is the back-off work." : ""),
+      why: "Upper-body maximal force, which tracks punch impact in elite amateurs.", tr: 2 },
+    { L: "E", n: "Weighted Chin-Up", m: 6, rest: "Rest 90s", rt: 90,
+      items: [{ n: "Weighted chin-up", s: "3 × 5", cue: "Wide grip, palms away (switch to a neutral grip if wide ever bothers your shoulders), weight on a belt or a dumbbell between your feet. Dead hang, chin over the bar, lower under control, no swinging. Add weight when all three sets are clean.", id: "chin", k: "wr", sets: 3, reps: 5 }],
+      why: "Pulling strength protects the shoulders that throw a thousand punches a week.", tr: 1 },
+    { L: "F", n: "Chest-Supported Row", m: 7, rest: "Rest 75s", rt: 75,
+      items: (rx) => [{ n: "Chest-supported row", s: (rx.acc <= 2 ? 3 : 4) + " × 8", cue: "Lie chest-down on an incline bench with dumbbells. Row until your elbows pass your body, pause one second at the top, lower slow.", id: "csrow", k: "wr", sets: rx.acc <= 2 ? 3 : 4, reps: 8 }],
+      why: "Four sets so your pulling matches your pressing. A boxer's shoulders live or die on that balance.", tr: 1 },
+    { L: "G", n: "Shoulder Circuit + Band Catch", m: 8, p: "CUFF",
+      items: [{ n: "Circuit + band deceleration catch", s: "2 rounds · then 2 × 8/arm", id: "catch", k: "chk" }],
+      why: "Every right hand you throw, this muscle group has to brake your arm. This is the only place it gets trained to." }] },
 
-  tue: { n: "TUESDAY", t: "Engine · Hands", m: 45, ac: C.cobalt, box: 1,
-    intro: "Boxing tonight. Technical work is low metabolic cost, so hard conditioning here is affordable — and your legs had yesterday off and only pull, not sprint, tomorrow.", b: [
-    { L: "A", n: "General prep", m: 6, p: "GEN" },
-    { L: "B", n: (rx) => (ENG[rx.eng] ? ENG[rx.eng].n : "Conditioning"), m: 24, star: 1, hard: 1, eng: 1, hide: (rx) => !rx.eng,
-      timer: (rx) => { const e = rx.eng; return e === "vo2" ? { kind: "vo2", title: "VO2MAX" } : e === "lac" ? { kind: "lac", title: "LACTATE" } : e === "rz" ? { kind: "rz", opt: { rounds: 5 }, title: "RED ZONE" } : e === "rz3" ? { kind: "rz", opt: { rounds: 3 }, title: "RED ZONE" } : e === "easy" ? { kind: "z2", opt: { min: 20, label: "EASY ZONE 2" }, title: "EASY" } : { kind: "z2", opt: { min: 15, label: "EASY FLUSH" }, title: "EASY" }; },
-      items: [{ n: "Output", s: "log it", id: "cond", k: "out", u: "output / peak HR" }], note: "Bike or SkiErg. Same modality every cycle so the numbers compare." },
-    { L: "C", n: "Hands", m: 5, p: "HANDS", timer: () => ({ kind: "hold", opt: { sets: 3, secs: 20, rest: 30, label: "KNUCKLE HOLD" }, title: "HANDS" }), items: [{ n: "Knuckle hold + wrist extension", s: "3 × 20s · 2 × 15", id: "hands", k: "chk" }] },
-    { L: "M", n: "Mobility", m: 8, p: "MOB" }] },
+  /* ---------------- TUESDAY ---------------- */
+  tue: { n: "TUESDAY", t: "Jumps · Engine 1 · Hands · Trunk · Calf", m: (rx) => (rx.test ? 32 : rx.eng === "easy" ? 52 : 56), ac: C.cobalt, box: 1,
+    intro: "Power dose first, fresh, then the first of the week's two engine sessions. Your legs had yesterday off.", b: [
+    { L: "A", n: "Warm-up", m: 6, p: "GEN" },
+    { L: "B", n: "Power dose — jumps", m: 8, star: 1, hard: 1, hide: (rx) => !!rx.test, rest: "Rest 90s", rt: 90,
+      items: [{ n: "Broad jump", s: "3 × 2", cue: "Two-foot jump forward for distance, stick the landing dead still.", id: "broad", k: "chk" },
+        { n: "Trap bar jump", s: (rx) => (rx.cal ? "3 × 3 — empty bar (week 1)" : "3 × 3 @ 20% of trap bar max"), cue: "Stand inside the bar, jump with it, land soft.", id: "tbjump2", k: "chk" }],
+      why: "The second of three weekly power doses. Fresh legs, before the bike — never after." },
+    { L: "C", n: (rx) => (ENG[rx.eng] ? ENG[rx.eng].n : "Bike session"), m: engMin("eng"), star: 1, hard: 1, eng: 1, hide: (rx) => !rx.eng, timer: engTimer("eng"),
+      items: [{ n: "Output", s: "write it down", id: "cond", k: "out", u: "output / peak HR" }],
+      note: "Bike or SkiErg — pick one and keep it all 16 weeks so your numbers compare." },
+    { L: "D", n: "Hands", m: 5, p: "HANDS", timer: () => ({ kind: "hold", opt: { sets: 3, secs: 20, rest: 30, label: "KNUCKLE HOLD" }, title: "HANDS" }),
+      items: [{ n: "Knuckle hold + wrist extension", s: "3 × 20s · 2 × 15", id: "hands", k: "chk" }] },
+    { L: "E", n: "Trunk", m: 9, hide: (rx) => !!rx.test, rest: "Rest 45s between exercises", rt: 45,
+      items: [{ n: "Pallof press", s: "3 × 10/side · 2s hold", cue: "Band at chest height, anchored beside you. Press your hands straight out and hold two seconds without letting it twist you. Your trunk is what turns leg drive into hand speed, and it has to be stiff to transmit it.", id: "pallof", k: "wr", sets: 3, reps: "10/side" },
+        { n: "Ab wheel rollout", s: "3 × 8–12", cue: "Knees down, roll out only as far as your lower back stays flat, pull back.", id: "abwheel", k: "wr", sets: 3, reps: "8–12" },
+        { n: "Copenhagen plank", s: "2 × 30s/side", cue: "Side plank with your top foot up on a bench, bottom leg lifted off the floor. Groin strength — the muscles you pivot off.", id: "copen", k: "chk" }] },
+    { L: "F", n: "Seated Calf Raise", m: 4, p: "CALF", hide: (rx) => !!rx.test, rest: "Rest 60s", rt: 60,
+      items: [{ n: "Seated calf raise", s: "3 × 15", cue: "Seated machine, or a barbell padded across your knees. Up on the balls of the feet, pause, down slow.", id: "soleus", k: "wr", sets: 3, reps: 15 }],
+      why: "It must be seated — that's the muscle that keeps you on your toes in round six. The jumps and sprints already cover the other one." }] },
 
-  wed: { n: "WEDNESDAY", t: "Zone 2 · ★ Lower Force & Power", m: (rx) => rx.z2wed + 103, ac: C.oxide, pm: 1,
-    intro: "Free evening. Fresh, fed, no shift ahead. The session that must not be compromised.", b: [
-    { sp: (rx) => "AM · ZONE 2 · " + rx.z2wed + " MIN" },
-    { L: "Z", n: "Zone 2 — bike", m: (rx) => rx.z2wed, timer: (rx) => ({ kind: "z2", opt: { min: rx.z2wed }, title: "ZONE 2" }),
-      items: [{ n: "Bike", s: (rx) => rx.z2wed + " min · conversation pace · nasal", cue: "Continuous. Nasal breathing at a conversational pace is the governor — if you can't speak a full sentence, slow down. No warm-up beyond riding into it. Fasted is fine.", id: "wedz2", k: "out", u: "distance / avg HR" }],
-      why: "Stroke volume and the aerobic base. Bike, not run — running costs more tissue and interferes more with tonight." },
-    { sp: () => "★ PM · LOWER FORCE & POWER · 100 MIN" },
-    { L: "A", n: "Hip prep", m: 12, p: "HIP", note: "Build-ups included. Never sprint cold." },
-    { L: "B", n: "Flying Sprints", m: 12, star: 1, hard: 1, rest: "Rest 2:30–3:00 — full recovery", rt: 165,
-      items: [{ n: "Flying sprint 20m", s: (rx) => rx.spr + " × 20m" + (rx.sprPct < 100 ? " @ 90%" : ""), cue: "10–15m rolling approach, then true max velocity.", id: "sprint", k: "out", u: "best time (s)" }],
-      rxLine: (rx) => rx.spr + " × 20m" + (rx.sprPct < 100 ? " @ 90%" : " · max velocity"),
-      w: "Never chase a time on a yellow day.", why: "Max-velocity running is the highest rate-of-force-development activity available to you, and high-speed exposure is itself the best protection against hamstring injury.",
-      note: "Treadmill, in order of preference: curved / self-powered → outdoors → incline 8–12% at 12–15 km/h for 8–10s → flat motorised, safety clipped.", tr: 2 },
-    { L: "C", n: (rx) => (rx.jump === "AEL" ? "Loaded Drop Jump" : "Depth Jump"), m: 10, hard: 1, rest: "Rest 2:00", rt: 120,
-      items: [{ n: (rx) => (rx.jump === "AEL" ? "Loaded drop jump" : "Depth jump"), s: (rx) => rx.js[0] + " × " + rx.js[1] + (rx.jump === "AEL" ? " · DBs 20–30% BW" : " · 30–40 cm box"),
-        cue: (rx) => (rx.jump === "AEL" ? "Descend into a quarter squat under load → release the dumbbells at the bottom → jump maximally unloaded. Hex dumbbells, clear floor." : "Step off, minimal ground contact, maximal rebound."), id: "jump", k: "out", u: "height / quality", bwp: (rx) => (rx.jump === "AEL" ? [10, 15] : null), bwl: "per hand" }],
-      rxLine: (rx) => rx.js[0] + " × " + rx.js[1], w: "Stop the set the moment jump height drops.",
-      why: (rx) => (rx.jump === "AEL" ? "You cannot eccentrically overload a jump with bodyweight; this does, at lower joint cost than a higher box." : "Reactive strength, concentrated before the peak."), tr: 2 },
-    { L: "D", n: "Lateral Bound", m: 5, rest: "Rest 90s", rt: 90, items: [{ n: (rx) => (rx.bound === "stick" ? "Lateral bound to stick" : "Lateral bound — continuous rebound"), s: "3 × 4/side", cue: (rx) => (rx.bound === "stick" ? "Land single-leg, hold two seconds." : "No stick — rebound straight into the next bound."), id: "latbound", k: "chk" }],
-      why: "Your only reactive frontal-plane work — the push-off that cuts the ring.", tr: 2 },
-    { L: "E", n: "Back Squat", m: 14, star: 1, hard: 1, mainLift: "squat", rest: "Rest 3:00", rt: 180,
-      items: [{ n: "Back squat", s: (rx) => rx.sc, id: "squat", k: "wr", mk: "squat", pct: (rx) => rx.pct, sets: (rx) => rx.sets, reps: (rx) => rx.reps }],
-      w: "Pins set — just below your bottom position on every set over 80%.", why: "Lower-body maximal strength is the strongest single predictor of punch force in trained boxers.", tr: 3 },
-    { L: "F", n: "The Jump Circuit", m: 18, star: 1, hard: 1, rt: 165, rest: (rx) => "20s between elements · rest 2:30–3:00 between rounds",
-      timer: (rx) => ({ kind: "contrast", opt: { rounds: rx.cr, rest: 165, items: ["BACK SQUAT — 2 @ " + rx.cpct + "%", "BOX JUMP ×3", "TRAP BAR JUMP ×3"].concat(rx.ph === "b3" ? ["ASSISTED JUMP ×3"] : []) }, title: "JUMP CIRCUIT" }),
-      items: (rx) => [{ n: "Back squat", s: "2 @ " + rx.cpct + "%", cue: "Potentiates.", id: "csq", k: "wr", mk: "squat", pct: rx.cpct, sets: rx.cr, reps: 2 },
-        { n: "Box jump", s: "×3", cue: "Expresses.", id: "cbox", k: "chk" },
-        { n: "Trap bar jump", s: rx.cal ? "×3 — empty bar (week 1)" : "3 @ 20% TB 1RM", cue: "Bridges.", id: "ctbj", k: "wr", mk: rx.cal ? null : "tbdl", pct: 20, sets: rx.cr, reps: 3 }]
-        .concat(rx.ph === "b3" ? [{ n: "Band-assisted jump", s: "×3", cue: "Overspeed. Heavy band over the rack, under the arms.", id: "cassist", k: "chk" }] : []),
-      rxLine: (rx) => rx.cr + " round" + (rx.cr > 1 ? "s" : "") + " · squat 2 @ " + rx.cpct + "%",
-      w: "Terminate the round when jump height drops.", why: "If round 2 jumps as high as round 1, shorten the rest; if it doesn't, it was too short — that read beats any table.",
-      note: (rx) => (rx.maxSq ? "Max-single week: 2 rounds." : rx.lowerLead ? "Block 3: this leads the session, ahead of the squat." : ""), tr: 2 },
-    { L: "G", n: "Split Squat — rear foot elevated", m: 8, hide: (rx) => !!rx.test, rest: "Rest 90s", rt: 90, rxLine: (rx) => (rx.acc <= 2 ? 2 : 3) + " × 6–8 each leg", items: (rx) => [{ n: "Rear-foot-elevated split squat", s: (rx.acc <= 2 ? 2 : 3) + " × 6–8 each leg", cue: "Back foot up on a bench behind you, dumbbells in your hands. Straight down until the back knee nearly touches, drive up through the front heel. Same weight both legs — the weaker leg sets the load. Weak side first.", id: "rfess", k: "wr", sets: rx.acc <= 2 ? 2 : 3, reps: "6–8/leg" }],
-      why: "Every other loaded leg lift is on two legs. Boxing isn't — the rear-leg drive and the pivot are one foot, and two-legged lifting lets the strong side hide the weak one. This is where it gets found and fixed.", tr: 1 },
-    { L: "H", n: "Seated Calf Raise", m: 4, hide: (rx) => !!rx.test, rest: "Rest 60s", rt: 60, items: [{ n: "Seated calf raise", s: "3 × 15", cue: "Knee bent — soleus, not gastroc.", id: "soleus", k: "wr", sets: 3, reps: 15 }],
-      why: "Jumps and sprints cover the gastrocnemius. Nothing else covers the muscle that keeps you on the balls of your feet in round six." },
-    { L: "M", n: "Mobility", m: 8, p: "MOB" }] },
-
-  thu: { n: "THURSDAY", t: "Neck · Trunk · Cuff", m: 42, ac: C.violet, box: 1,
-    intro: "Boxing tonight. The morning after your heaviest session, so this is the lightest thing in the week by design. Zero systemic cost. If you feel it at 7pm, you did it wrong.", b: [
-    { L: "A", n: "General prep", m: 6, p: "GEN" },
-    { L: "B", n: "Neck — stiffness", m: 10, p: "NECK", items: [{ n: "Neck protocol", s: "4 movements", id: "neck", k: "chk" }] },
-    { L: "C", n: "Trunk", m: 10, hide: (rx) => !!rx.test, rest: "Rest 60s", rt: 60,
-      items: [{ n: "Pallof press", s: "3 × 10/side · 2s hold", cue: "Anti-rotation — the trunk is the link that turns leg drive into hand speed.", id: "pallof", k: "wr", sets: 3, reps: "10/side" },
-        { n: "Ab wheel rollout", s: "3 × 8–12", cue: "Stop before the back arches.", id: "abwheel", k: "wr", sets: 3, reps: "8–12" },
-        { n: "Copenhagen plank", s: "2 × 30s/side", cue: "Adductor strength — cut groin injuries by ~40% in field-sport trials, and it is the plane you pivot in.", id: "copen", k: "chk" }] },
-    { L: "D", n: "Cuff protocol", m: 8, p: "CUFF", items: [{ n: "Cuff protocol", s: "2 rounds", id: "cuff", k: "chk" }] },
-    { L: "M", n: "Mobility", m: 8, p: "MOB" }] },
-
-  fri: { n: "FRIDAY", t: "★ Punch Vectors & Posterior Chain", m: (rx) => (rx.iso ? 86 : 76), ac: C.brass, pm: 1,
-    intro: "Second free evening. Throws first, while you are fresh — throw quality is the whole point and throw quality dies with fatigue.", b: [
-    { L: "A", n: "General prep + sub-max throws", m: 10, p: "GEN", note: "Three sub-maximal throws of each pattern before the first round." },
-    { L: "B", n: "The Four Punch Throws", m: 16, star: 1, p: "VEC", rest: "45s between exercises · 90s between rounds", rt: 45, timer: (rx) => ({ kind: "vec", opt: { rounds: rx.vec }, title: "PUNCH THROWS" }),
-      items: [{ n: "Med-ball rotational shot-put", s: "4/side — the straight right", cue: "Ball at the shoulder, side-on to the wall. Drive off the back hip and put it into the wall flat and hard, like the punch. A few from a lower crouch for the body shot.", id: "mbshot", k: "out", u: "best distance (m)" },
-        { n: "Med-ball downward diagonal", s: "4/side — the overhand right", cue: "Ball high outside the shoulder. Drive it down and across, releasing toward the opposite hip. Back foot pivots, trunk turns and side-bends.", id: "mbdiag", k: "out", u: "best distance (m)" },
-        { n: "Med-ball hook throw", s: "4/side — the lead hook", cue: "Chest height, bent arms. Pivot hard off the lead leg and sling it sideways into the wall.", id: "mbhook", k: "chk" },
-        { n: "Landmine rotational punch", s: "5/side — the loaded straight", cue: "Bar end at the shoulder, in your stance. Drive the hips and punch it up and away — never press it.", id: "lmpunch", k: "wr", sets: (rx) => rx.vec, reps: "5/side" }],
-      rxLine: (rx) => rx.vec + " rounds", why: "Straights rely on linear force; hooks on rotational and lateral force. Different physical problems — training one does not train the other.", tr: 2 },
-    { L: "C", n: "Trap Bar Deadlift", m: 12, hard: 1, mainLift: "tbdl", calib: "tbdl", rest: "Rest 2:30", rt: 150,
-      items: [{ n: "Trap bar deadlift", s: (rx) => rx.tb.sc, cue: "Fast concentric, no grinding, neutral spine.", id: "tbdl", k: "wr", mk: "tbdl", pct: (rx) => rx.tb.pct, sets: (rx) => rx.tb.sets, reps: (rx) => rx.tb.reps }],
-      why: "Maximal force in the mid-thigh position — the position of rear-leg drive — and the safest heavy pull you can do alone.", tr: 2 },
-    { L: "D", n: "Posterior Chain", m: 12, hide: (rx) => !rx.nor, rest: "RDL rest 90s · Nordic rest 2:00", rt: 120,
-      items: [{ n: "Romanian deadlift", s: "3 × 6", cue: "Hinge strength and hamstring length under load.", id: "rdl", k: "wr", sets: 3, reps: 6 },
-        { n: "Nordic curl", s: (rx) => rx.nor[0] + " × " + rx.nor[1] + " — ramped", cue: "Heels anchored. Stop the set when the low back rounds, not at the rep count.", id: "nordic", k: "wr", sets: (rx) => rx.nor[0], reps: (rx) => rx.nor[1] }],
-      rxLine: (rx) => "RDL 3 × 6 · Nordic " + rx.nor[0] + " × " + rx.nor[1], why: "Eccentric hamstring strength is the best-evidenced injury-prevention exercise in sport science, and you sprint on Wednesday.", tr: 2 },
-    { L: "E", n: "Explosive Rack Pull", m: 8, hide: (rx) => !rx.iso, tag: "BLOCK 2 ONLY", rest: "15s between reps · 2:00 between sets", timer: () => ({ kind: "iso", title: "ISO PULL" }),
-      items: [{ n: "Explosive rack pull", s: "3 sets × 3 × 3s", cue: "Bar pinned at mid-thigh. From a dead stop: zero to maximal effort as violently as you can, hold 3s. Do not ramp.", id: "imtp", k: "chk" }],
-      why: "Rate of force development in the leg-drive position. Gains arrive in the first weeks and flatten — six weeks, then out. Its best use is the test.", tr: 1 },
-    { L: "F", n: "Neck — stiffness", m: 10, p: "NECK", hide: (rx) => !!rx.test, items: [{ n: "Neck protocol", s: "as Thursday", id: "neck2", k: "chk" }] },
-    { L: "M", n: "Mobility", m: 8, p: "MOB" }] },
-
-  sat: { n: "SATURDAY", t: "★ Sled · Push Press · Fight Sim · Physique", m: 115, ac: C.oxide,
-    intro: "No shift, no boxing. The only day you can afford length. Neural work first, the sim while you can still hit properly, the size last.", b: [
-    { L: "A", n: "General prep + ballistic add-ons", m: 10, p: "GEN", note: "Broad jump 3×2 · med-ball chest pass 3×3 · bike sprint 10s ×3." },
+  /* ---------------- WEDNESDAY ---------------- */
+  wed: { n: "WEDNESDAY", t: "Sled · Trap Bar · Pause Squat · RDL · Neck", m: (rx) => (rx.pq ? 55 : 45), ac: C.oxide, box: 1,
+    intro: "The heavy lower morning. Sled first while the nervous system is freshest, then the pulls, then the second squat exposure. Nothing to failure. The hamstring work that leaves you sore is on Sunday, not here.", b: [
+    { L: "A", n: "Warm-up", m: 6, p: "GEN", note: "Then trap bar warm-up sets (bar × 5 · 50% × 3 · 65% × 2) and squat warm-up sets (40% × 3 · 60% × 2)." },
     { L: "B", n: "Heavy Sled Sprints", m: 16, star: 1, hard: 1, rest: "Rest 2:30–3:00", rt: 165,
-      items: [{ n: "Heavy sled sprint 20m", s: (rx) => rx.sled + " × 20m @ 40–60% BW on the sled", cue: "~45° lean, drive through the whole foot, push the ground backwards.", id: "sled", k: "out", u: "load (kg) · time (s)", bwp: [40, 60], bwl: "on the sled" }],
-      rxLine: (rx) => rx.sled + " × 20m", w: "Calibrate by time — each 20m in 5–7 seconds. Slower and it's a strength exercise; faster and it isn't loaded enough.", why: "Horizontal force production. Forward pressure with resistance on it.", tr: 3 },
-    { L: "C", n: (rx) => (rx.maxBe ? "Bench Max Single" : "Push Press"), m: 10, star: (rx) => !!rx.maxBe, hard: 1, mainLift: (rx) => (rx.maxBe ? "bench" : "pp"), calib: "pp", hide: (rx) => !rx.pp && !rx.maxBe, rest: "Rest 2:30", rt: 150,
-      items: (rx) => (rx.maxBe ? [{ n: "Flat bench — max single", s: "pins · no collars · fresh", id: "benchmax", k: "chk" }]
-        : [{ n: "Push press", s: rx.pp.sc, cue: "Violent leg drive, aggressive lockout.", id: "pushpress", k: "wr", mk: "pp", pct: rx.pp.pct, sets: rx.pp.sets, reps: rx.pp.reps }]),
-      why: (rx) => (rx.maxBe ? "Bench max singles happen here — Saturday, FIRST, before the sled, with pins — never at 3am. Add the bench warm-up sets (bar × 10, 40% × 5, 60% × 3) before the ramp. The new number sets the next block's percentages." : "Force sent from the legs through a braced trunk to the hands — the punch's sequence with a bar — and the heaviest load your traps and delts see all week."), tr: 2 },
-    { L: "D", n: "Fight Simulation", m: 24, star: 1, sim: 1, hard: 1, hide: (rx) => !!rx.sim.skip,
+      items: [{ n: "Heavy sled sprint 20m", s: (rx) => rx.sled + " × 20m @ 40–60% of bodyweight", cue: "Lean into it at about 45°, and sprint 20 metres driving the ground backwards through your whole foot.", id: "sled", k: "out", u: "load (kg) · time (s)", bwp: [40, 60], bwl: "on the sled" }],
+      rxLine: (rx) => rx.sled + " × 20m", w: "Get the load right by the clock: each 20m run should take 5–7 seconds. Faster — add weight. Slower — take some off.",
+      why: "This is forward pressure — your fighting style with resistance on it. First in the session, before the lifts, while the nervous system is freshest.", tr: 3 },
+    { L: "C", n: "Trap Bar Deadlift", m: 12, hard: 1, mainLift: "tbdl", calib: "tbdl", fb: "tbdl",
+      rest: (rx) => (heavy79(rx) ? "Rest 2:30" : "Rest 2:00"), rt: (rx) => (heavy79(rx) ? 150 : 120),
+      items: [{ n: "Trap bar deadlift", s: (rx) => rx.tb.sc, cue: "Stand inside the bar, grip the handles, flat back, drive the floor away FAST. No grinding, no slow reps — set the bar down and end the set if speed drops.", id: "tbdl", k: "wr", mk: "tbdl", pct: (rx) => rx.tb.pct, sets: (rx) => rx.tb.sets, reps: (rx) => rx.tb.reps }],
+      why: "At 3am this is the one heavy lift allowed: nothing passes over your body, and a rep that isn't there gets set down, not fought.", tr: 2 },
+    { L: "D", n: (rx) => (rx.pq && rx.pq.fast ? "Speed Squat" : "Pause Squat"), m: 10, hard: 1, mainLift: "squat", pres: (rx) => ({ sc: rx.pq.sc, pct: rx.pq.pct }), hide: (rx) => !rx.pq, rest: "Rest 2:00", rt: 120,
+      items: (rx) => [{ n: rx.pq.fast ? "Speed squat" : "Pause squat", s: rx.pq.sc, cue: rx.pq.fast ? "No pause. Every rep as fast as you can move it. Pins set." : "Bar on your back, sit to just below parallel and hold there, dead still, for a full two seconds — then drive up hard. Pins set.", id: "pausesq", k: "wr", mk: "squat", pct: rx.pq.pct, sets: rx.pq.sets, reps: rx.pq.reps }],
+      rxLine: (rx) => rx.pq.sc, w: "Pins set. Skipped on max-single weeks (4, 9) and in week 16.",
+      why: "The second squat exposure — submaximal, paused, from the position rear-leg drive starts in. Saturday owns the heavy squat; this is at a weight you own.", tr: 2 },
+    { L: "E", n: "Romanian Deadlift", m: 6, rest: "Rest 75s", rt: 75, rxLine: () => "3 × 6",
+      items: [{ n: "Romanian deadlift", s: "3 × 6", cue: "Bar at your hips, soft knees, push your hips back until the bar reaches mid-shin with a flat back, stand back up by driving the hips through. Start around 60% of your trap bar max and add 2.5–5 kg a week while every rep still moves at the same speed.", id: "rdl", k: "wr", sets: 3, reps: 6 }],
+      why: "Hamstring strength without the soreness. The eccentric work that does leave you sore — the Nordics — is last on Sunday." },
+    { L: "F", n: "Neck — holds only", m: 5, p: "NECK",
+      items: [{ n: "4-direction holds", s: "3 × 10s each direction", id: "neck2", k: "chk" }],
+      why: "Second dose of the week, holds only. Thursday carries the full block." }] },
+
+  /* ---------------- THURSDAY ---------------- */
+  thu: { n: "THURSDAY", t: "Throws + Landmine · Split Squat · Engine 2 · Neck", m: (rx) => (rx.test ? 16 : rx.eng2 === "easy" ? 52 : 56), ac: C.cobalt, box: 1,
+    intro: "The third power dose, the only single-leg lift, the second engine session and the full neck block. (Week 16: warm-up and neck only.)", b: [
+    { L: "A", n: "Warm-up", m: 6, p: "GEN", note: "Same as Tuesday." },
+    { L: "B", n: "Power dose — throws + landmine", m: 8, star: 1, hard: 1, hide: (rx) => !!rx.test, rest: "45s between sets", rt: 45,
+      items: [{ n: "Rotational shot-put", s: "2 × 3/side", cue: "Medicine ball, 3–5 kg, at the shoulder, side-on to the wall, drive off the back hip. Flat and hard, like the punch.", id: "shot2", k: "chk" },
+        { n: "Landmine punch", s: "2 × 5/side", cue: "One end of a barbell in a corner or landmine sleeve, the other end at your shoulder, in your stance. Drive the hips and punch it up and away — never press it. Bar speed is the metric; add weight only when it still snaps.", id: "lm2", k: "wr", sets: 2, reps: "5/side" }],
+      why: "The third weekly power dose: the unloaded ballistic and the loaded punch pattern, three days before Sunday's full session." },
+    { L: "C", n: "Split Squat — rear foot elevated", m: 8, p: "SPLIT", hide: (rx) => !!rx.test, rest: "Rest 75s", rt: 75,
+      rxLine: (rx) => (rx.acc <= 2 ? 2 : 3) + " × 6–8 each leg",
+      items: (rx) => [{ n: "Rear-foot-elevated split squat", s: (rx.acc <= 2 ? 2 : 3) + " × 6–8 each leg", cue: "Back foot up on a bench behind you, front foot far enough forward that your shin stays near vertical, a dumbbell in each hand. Sink straight down until the back knee nearly touches the floor, drive up through the front heel. Weak side first, same weight on both legs.", id: "rfess", k: "wr", sets: rx.acc <= 2 ? 2 : 3, reps: "6–8/leg" }],
+      why: "Every other loaded leg lift in the week is on two legs. Boxing isn't — the rear-leg drive and the pivot are one foot, and two-legged lifting lets your strong side hide the weak one. This is where the weak side gets found and fixed.", tr: 1 },
+    { L: "D", n: (rx) => (ENG[rx.eng2] ? ENG[rx.eng2].n : "Bike session"), m: engMin("eng2"), star: 1, hard: 1, eng: 1, engKey: "eng2", hide: (rx) => !rx.eng2, timer: engTimer("eng2"),
+      items: [{ n: "Output", s: "write it down", id: "cond2", k: "out", u: "output / peak HR" }],
+      note: "The same four session types as Tuesday. Thursday always runs a different quality, so each quality is trained twice every three weeks. Same bike, same rules." },
+    { L: "E", n: "Neck", m: 10, p: "NECK", items: [{ n: "The full neck block", s: "4 movements", id: "neck", k: "chk" }] }] },
+
+  /* ---------------- FRIDAY ---------------- */
+  fri: { n: "FRIDAY", t: "Easy Bike", m: friMin, ac: C.moss, box: 1,
+    intro: "Tomorrow is the biggest session of the week. Today's only job is arriving there fresh with the engine fed. Nothing hard, nothing heavy, nothing fast.", b: [
+    { L: "A", n: "Easy bike", m: friMin, star: 1, timer: (rx) => ({ kind: "z2", opt: { min: friMin(rx), label: "EASY BIKE" }, title: "EASY BIKE" }),
+      items: (rx) => [{ n: "Easy bike", s: friMin(rx) + " min · conversation pace · nasal", cue: "Steady spin at a pace where you could hold a conversation, breathing through your nose. If you can't speak a full sentence, slow down. Roughly 65–75% of the peak heart rate from your 20-minute test. No warm-up needed — ride into it. Fine on an empty stomach. Bike, not running — running beats your legs up before tomorrow.", id: "friz2", k: "out", u: "distance / avg HR" }],
+      rxLine: (rx) => friMin(rx) + " min (weeks 6–10: 45 · week 16: 30)",
+      why: "Boring on purpose. The aerobic base under two interval sessions and the fight rounds — and it keeps tomorrow's legs fresh by being easy." }] },
+
+  /* ---------------- SATURDAY ---------------- */
+  sat: { n: "SATURDAY", t: "★ The Leg & Power Session", m: (rx) => (rx.lowerLead ? 94 : rx.pp && rx.pp.sc ? 90 : 85), ac: C.oxide, free: 1, box: 1,
+    intro: "No shift, fed and fresh. This is the session that matters most all week, on the one day nothing can compromise it. Fuel it like the fuel plan's big day: porridge 6:30, shake 7:45, start 8:15.", b: [
+    { L: "A", n: "Warm-up", m: 12, p: "HIP", note: "Build-ups included. Never sprint cold." },
+    { L: "B", n: "Flying Sprints", m: 14, star: 1, hard: 1, rest: "Rest 2:30–3:00 — full recovery", rt: 165,
+      items: [{ n: "Flying sprint 20m", s: (rx) => rx.spr + " × 20m" + (rx.sprPct < 100 ? " @ 90%" : ""), cue: "Jog-build for 10–15m, then 20 metres absolutely flat out. Walk back, full rest — this is a speed session, not cardio. Time them if you can.", id: "sprint", k: "out", u: "best time (s)" }],
+      rxLine: (rx) => rx.spr + " × 20m" + (rx.sprPct < 100 ? " @ 90%" : " · flat out"),
+      w: "On a yellow day: 3 runs at 90%, never max.",
+      why: "Sprinting flat-out is the single most explosive thing you can do, and regular top-speed running is also the best protection your hamstrings can get.",
+      note: "Treadmill options, best first: curved self-powered → outdoors → treadmill on an 8–12% incline at 12–15 km/h for 8–10 seconds, safety clip on.", tr: 2 },
+    { L: "C", n: (rx) => (rx.jump === "AEL" ? "Loaded Drop Jumps" : "Depth Jumps"), m: 12, hard: 1, rest: "Rest 2:00", rt: 120,
+      items: [{ n: (rx) => (rx.jump === "AEL" ? "Loaded drop jump" : "Depth jump"), s: (rx) => rx.js[0] + " × " + rx.js[1] + (rx.jump === "AEL" ? " · hex DBs 8–12 kg each" : " · 30–40 cm box"),
+        cue: (rx) => (rx.jump === "AEL" ? "Hold a hex dumbbell in each hand. Dip fast into a quarter squat — at the bottom, let both dumbbells go — and jump straight up as high as you can, empty-handed. Land soft on clear floor, step away from the dumbbells, reset." : "Step off a 30–40 cm box, and the instant your feet touch, jump as high as you can. Shortest possible time on the floor."), id: "jump", k: "out", u: "height / quality" }],
+      rxLine: (rx) => rx.js[0] + " × " + rx.js[1], w: "Stop the set the moment a jump is lower than the last.",
+      why: (rx) => (rx.jump === "AEL" ? "You cannot eccentrically overload a jump with bodyweight; this does, at lower joint cost than a higher box." : "Weeks 11–14: reactive strength, concentrated before the peak."), tr: 2 },
+    { L: "D", n: "Side Bounds", m: 7, rest: "Rest 90s", rt: 90,
+      items: [{ n: (rx) => (rx.bound === "stick" ? "Side bound — stick the landing" : "Side bound — continuous"), s: "3 × 4/side",
+        cue: (rx) => (rx.bound === "stick" ? "Stand on one leg, jump sideways as far as you can, land on the other leg and stick the landing dead still for 2 seconds." : "Weeks 11–14: no stick — bounce straight back the other way."), id: "latbound", k: "chk" }],
+      why: "The sideways push-off is how you cut the ring off. Nothing else in the week trains it.", tr: 2 },
+    { L: "E", n: "Back Squat", m: 15, star: 1, hard: 1, mainLift: "squat", maxUI: 1, fb: "squat",
+      rest: (rx) => (heavy79(rx) ? "Rest 3:00" : "Rest 2:30"), rt: (rx) => (heavy79(rx) ? 180 : 150),
+      items: [{ n: "Back squat", s: (rx) => rx.sc, cue: "Bar on your back, break at the hips and knees together, sit to just below parallel, drive up hard. Every rep fast on the way up; a grinding rep ends the set.", id: "squat", k: "wr", mk: "squat", pct: (rx) => rx.pct, sets: (rx) => rx.sets, reps: (rx) => rx.reps }],
+      w: "Pins set — just below your lowest position on every set over 80%.",
+      why: "Lower-body maximal strength is the strongest single predictor of punch force in trained boxers.", tr: 3 },
+    { L: "F", n: "The Jump Circuit", m: (rx) => (rx.lowerLead ? 22 : 18), star: 1, hard: 1, rt: 165, rest: "20s between elements · rest 2:30–3:00 between rounds",
+      timer: (rx) => ({ kind: "contrast", opt: { rounds: rx.cr, rest: 165, items: ["BACK SQUAT — 2 @ " + rx.cpct + "%", "BOX JUMP ×3", "TRAP BAR JUMP ×3"].concat(rx.ph === "b3" ? ["ASSISTED JUMP ×3"] : []) }, title: "JUMP CIRCUIT" }),
+      items: (rx) => [{ n: "Back squat", s: "2 @ " + rx.cpct + "%", cue: "Wakes the nervous system up.", id: "csq", k: "wr", mk: "squat", pct: rx.cpct, sets: rx.cr, reps: 2 },
+        { n: "Box jump", s: "×3", cue: "Knee-to-hip-height box, land soft, step down.", id: "cbox", k: "chk" },
+        { n: "Trap bar jump", s: rx.cal ? "×3 — empty bar (week 1)" : "3 @ 20% of trap bar max", cue: "Stand inside the bar, jump with it, land soft.", id: "ctbj", k: "wr", mk: rx.cal ? null : "tbdl", pct: 20, sets: rx.cr, reps: 3 }]
+        .concat(rx.ph === "b3" ? [{ n: "Band-assisted jump", s: "×3", cue: "Loop a heavy band over the top of the rack, tuck it under your armpits so it pulls you upward, and jump — it makes you faster than you are.", id: "cassist", k: "chk" }] : []),
+      rxLine: (rx) => rx.cr + " round" + (rx.cr > 1 ? "s" : "") + " · squat 2 @ " + rx.cpct + "%",
+      w: "End the round the moment jump height drops.",
+      why: "If round 2 jumps as high as round 1, the rest can be a bit shorter; if it doesn't, it was too short.",
+      note: (rx) => (rx.lowerLead ? "Weeks 11–14: this circuit moves to the FRONT — before the squat, while you're freshest." : ""), tr: 2 },
+    { L: "G", n: "Push Press", m: 10, hard: 1, mainLift: "pp", calib: "pp", fb: "pp", hide: (rx) => !rx.pp || !rx.pp.sc, rest: "Rest 2:00", rt: 120,
+      items: (rx) => [{ n: "Push press", s: rx.pp.sc, cue: "Bar on the front of your shoulders. Quick shallow knee dip, then drive the bar overhead with your LEGS and punch it to lockout. Down under control.", id: "pushpress", k: "wr", mk: "pp", pct: rx.pp.pct, sets: rx.pp.sets, reps: rx.pp.reps }],
+      why: "Legs → braced trunk → hands. The same route a punch takes, and the heaviest thing your shoulders and traps see all week — which is why the traps and shoulders don't need a size block.",
+      note: "Weeks 4 and 9: skipped. The squat max is enough maximal work for one day." }] },
+
+  /* ---------------- SUNDAY ---------------- */
+  sun: { n: "SUNDAY", t: "★ Punch Throws · Fight Rounds · Core · Nordics", m: (rx) => (rx.test ? 40 : rx.maxBe ? 82 : rx.sim.skip ? 46 : 70), ac: C.brass, free: 1, box: 1,
+    intro: "Second free morning. Punches, rounds, core and hands, and the week's hamstring work last, with two leg-free days behind it. No pressing today on purpose so Monday's bench gets 42 hours. (Week 16: the warm-up, the 20-minute test and the weekly check. Nothing else.)", b: [
+    { L: "A", n: "Warm-up", m: 10, p: "GEN", note: "Plus: broad jumps 3 × 2 · med-ball chest passes 3 × 3 as hard as you can · 3 × 10-second bike sprints with a minute between · then three EASY practice throws of each of the four throws." },
+    { L: "B", n: "Bench Max Single", m: 12, star: 1, hard: 1, hide: (rx) => !rx.maxBe, mainLift: "bench", maxUI: 1, rest: "Rest 2:30–3:00", rt: 165,
+      items: [{ n: "Bench — max single", s: "pins · no collars · first, straight after the warm-up", id: "benchmax", k: "chk" }],
+      why: "Weeks 4 and 9 only, and it happens here — Sunday, first thing, fresh, with pins. Bench warm-up sets (bar × 10, 40% × 5, 60% × 3) before the ramp. Write the new max down.", tr: 2 },
+    { L: "C", n: "The Four Punch Throws", m: 16, star: 1, p: "VEC", hide: (rx) => !!rx.test, rest: "45s between exercises · 90s between rounds", rt: 45,
+      timer: (rx) => ({ kind: "vec", opt: { rounds: rx.vec }, title: "PUNCH THROWS" }),
+      items: [{ n: "Med-ball rotational shot-put", s: "4/side — your straight right", cue: "Ball at your shoulder, boxing stance side-on to a wall. Drive off the back hip and put the ball into the wall as hard as you can, flat and hard like a punch. A few from a lower crouch for the body-shot version.", id: "mbshot", k: "out", u: "best distance (m)" },
+        { n: "Med-ball downward diagonal", s: "4/side — your overhand right", cue: "Ball high outside your shoulder. Drive it down and across your body, letting go toward the opposite hip. Back foot pivots, trunk turns AND side-bends, exactly like the punch.", id: "mbdiag", k: "out", u: "best distance (m)" },
+        { n: "Med-ball hook throw", s: "4/side — your lead hook", cue: "Ball held at chest height in bent arms. Pivot hard off the lead leg and sling it sideways into the wall.", id: "mbhook", k: "chk" },
+        { n: "Landmine punch", s: "5/side — your loaded straight", cue: "Bar end at your shoulder, in your stance. Drive the hips and PUNCH it up and away — never a slow press. Catch it, go again.", id: "lmpunch", k: "wr", sets: (rx) => rx.vec, reps: "5/side" }],
+      rxLine: (rx) => rx.vec + " rounds",
+      why: "Straight punches are built on forward drive; hooks on rotation. They're different physical problems, so all four get trained. Medicine ball 3–5 kg — if it isn't flying, it's too heavy.", tr: 2 },
+    { L: "D", n: "Fight Simulation", m: 24, star: 1, sim: 1, hard: 1, hide: (rx) => !!rx.sim.skip || rx.w === 1 || !!rx.test,
       timer: (rx) => ({ kind: "sim", opt: { rounds: rx.sim.rounds || 6, rest: rx.sim.rest, max3: rx.sim.max3 }, title: "FIGHT SIM" }),
-      items: [{ n: "Minute 1", s: "SkiErg", k: "txt" }, { n: "Minute 2", s: "Assault bike", k: "txt" }, { n: "Minute 3", s: "Landmine punches (odd rounds) / med-ball slams (even). Bag if the gym has one — hard and clean.", k: "txt" },
-        { n: "Round 1 output", s: "log it", id: "fs_rd1", k: "out", u: "SkiErg m / bike cal" }, { n: "Round 6 output", s: "log it", id: "fs_rd6", k: "out", u: "SkiErg m / bike cal" }],
-      rxLine: (rx) => (rx.sim.rounds || 6) + " × 3 min · rest " + rx.sim.rest + "s" + (rx.sim.tested ? " · TESTED" : rx.sim.max3 ? " · minute 3 maximal" : ""),
-      rules: ["Relaxed jaw, shoulders down. A round finished with the traps by your ears doesn't pass, whatever the output.", "Nasal breathing in rounds 1–3 is a pacing tool, not a score. Mouth open when you need it; the round still counts."],
-      why: "Nothing else you own trains the competitive pattern — three-minute rounds, incomplete recovery, output held across six. Structure stays fixed every round; drop-off only means something if round 1 and round 6 are the same work.", tr: 3 },
-    { L: "E", n: "Delts, Traps & Lats", m: 18, rest: "Rest 90–120s", rt: 105, rxLine: (rx) => rx.acc + " sets",
-      items: (rx) => [{ n: "Lean-away cable lateral raise", s: rx.acc + " × 12–15", cue: "BFR if you own cuffs: 30/15/15/15, 30s rest, cuff stays on.", id: "leanlat", k: "wr", sets: rx.acc, reps: "12–15" },
-        { n: "Bent-over rear delt fly", s: m3(rx) + " × 15–20", id: "bentfly", k: "wr", sets: m3(rx), reps: "15–20" },
-        { n: "Trap bar shrug", s: rx.acc + " × 8–12", cue: "1–2s pause at the top, never roll. Your only shrug.", id: "tbshrug", k: "wr", sets: rx.acc, reps: "8–12" },
-        { n: "Wide-grip lat pulldown", s: m3(rx) + " × 10–12", cue: "Elbows down, full stretch.", id: "pulldown", k: "wr", sets: m3(rx), reps: "10–12" }], tr: 2 },
-    { L: "F", n: "Chest & Arms", m: 10, rest: "Rest 90–120s · 1–2 reps short of failure", rt: 105,
-      items: (rx) => [{ n: "Weighted dip", s: (rx.acc <= 2 ? 2 : 4) + " × 6–10", cue: "Full range, weight on a belt. Your chest and triceps pressing base, in one exercise.", id: "dip", k: "wr", sets: rx.acc <= 2 ? 2 : 4, reps: "6–10" }, { n: "Curl — EZ-bar or dumbbell", s: m3(rx) + " × 8–12", cue: "Elbows still, full stretch at the bottom, no swing. The only direct arm work in the week.", id: "curl", k: "wr", sets: m3(rx), reps: "8–12" }],
-      why: "Dips keep the pressing base; the incline press was the sixth pressing pattern in a week that needs five. The curl builds the arm, not the punch — five minutes, and biceps get less indirect work than anything else on you.", tr: 1 },
-    { L: "G", n: "Loaded Trunk & Hands", m: 8, rest: "Rest 60s", rt: 60, items: [{ n: "Weighted hanging leg raise", s: "3 × 8–12", id: "hlr", k: "wr", sets: 3, reps: "8–12" }, { n: "Side plank reach-through", s: "2 × 10/side", id: "sprt", k: "chk" }, { n: "Hands block", s: "knuckle hold 3 × 20s · band wrist extension 2 × 15", id: "hands2", k: "chk" }] },
-    { L: "M", n: "Mobility", m: 8, p: "MOB" }] },
+      items: [{ n: "Minute 1", s: "SkiErg", k: "txt" }, { n: "Minute 2", s: "Assault bike", k: "txt" }, { n: "Minute 3", s: "Landmine punches (odd rounds) or med-ball slams (even). Bag work if your gym has one — hard and technically clean.", k: "txt" },
+        { n: "Round 1 output", s: "scored weeks 4, 9 and 14", id: "fs_rd1", k: "out", u: "SkiErg m / bike cal" }, { n: "Round 6 output", s: "round 6 ÷ round 1 is your fade", id: "fs_rd6", k: "out", u: "SkiErg m / bike cal" }],
+      rxLine: (rx) => (rx.sim.rounds || 6) + " × 3 min · rest " + rx.sim.rest + "s" + (rx.sim.tested ? " · SCORED" : rx.sim.max3 ? " · minute 3 flat out" : ""),
+      rules: ["Relaxed jaw, shoulders down. Finish a round with your traps by your ears and that round doesn't count, whatever the number says.", "Nose-breathe through rounds 1–3 as a pacing tool, not a test. Mouth open whenever you need it; the round still counts."],
+      why: "Three-minute rounds, never enough rest, holding output across six — nothing else you own trains the actual shape of a fight. The whole game is getting the fade toward 100%.", tr: 3 },
+    { L: "E", n: "20-Minute Bike Test", m: 25, star: 1, hard: 1, hide: (rx) => !(rx.w === 1 || rx.w === 16), timer: () => ({ kind: "z2", opt: { min: 20, label: "20-MIN TEST" }, title: "20-MIN TEST" }),
+      items: [{ n: "20 minutes, maximum distance", s: "same bike or SkiErg every time", cue: "5 easy minutes, then 20 minutes for the most distance you can. No pacing plan — go and find out. Write down two numbers: the distance, and the highest heart rate you saw. That peak is your practical maximum; from now on every easy ride sits around 65–75% of it.", id: "bike20", k: "out", u: "distance (m)" },
+        { n: "Peak heart rate", s: "highest you saw", id: "bike20hr", k: "out", u: "bpm" }],
+      rxLine: () => "20 min max distance — the engine test",
+      why: "Replaces the fight rounds in weeks 1 and 16. Week 1 is the baseline; week 16 is the verdict.", tr: 2 },
+    { L: "F", n: "Core + Hands", m: 8, hide: (rx) => !!rx.test, rest: "Rest 60s", rt: 60,
+      items: [{ n: "Hanging leg raise", s: "3 × 8–12", cue: "Hang from a bar, dumbbell between your feet if needed, lift the legs to hip height or above, no swinging.", id: "hlr", k: "wr", sets: 3, reps: "8–12" },
+        { n: "Side plank reach-through", s: "2 × 10/side", cue: "In a side plank, thread your top arm under your body, then rotate open to the ceiling.", id: "sprt", k: "chk" },
+        { n: "Hands", s: "knuckle hold 3 × 20s · band wrist extension 2 × 15", cue: "As Tuesday.", id: "hands2", k: "chk" }] },
+    { L: "G", n: "Nordic Curls", m: 8, hide: (rx) => !rx.nor || !!rx.test, rest: "Rest 2:00", rt: 120,
+      rxLine: (rx) => rx.nor[0] + " × " + rx.nor[1] + " — ramped",
+      items: [{ n: "Nordic curl", s: (rx) => rx.nor[0] + " × " + rx.nor[1] + " — ramped", cue: "Kneel with your heels anchored under something solid. Keeping your body straight from knees to head, lower yourself forward as SLOWLY as you can, catch yourself with your hands, push back up. Stop the set the moment your lower back rounds — not at the rep count.", id: "nordic", k: "wr", sets: (rx) => rx.nor[0], reps: (rx) => rx.nor[1] }],
+      why: "Last block of the last day, on purpose: the hardest hamstring work of the week, followed by two leg-free days, so the soreness is gone before it can cost you a sprint." },
+    { L: "H", n: "Weekly Check", m: 2, review: 1,
+      items: [{ n: "Bodyweight", s: "kg", id: "wr_bw", k: "out", u: "kg" }, { n: "Resting heart rate", s: "bpm", id: "wr_rhr", k: "out", u: "bpm" }, { n: "HRV average", s: "if you measure it", id: "wr_hrv", k: "out", u: "ms" },
+        { n: "Hips", s: "0–10", id: "wr_hip", k: "out", u: "0–10" }, { n: "Shoulders", s: "0–10", id: "wr_sh", k: "out", u: "0–10" }, { n: "Wrists", s: "0–10", id: "wr_wr", k: "out", u: "0–10" },
+        { n: "Boxing nights your hands felt slow", s: "count", id: "wr_slow", k: "out", u: "nights" }, { n: "Energy", s: "1–10", id: "wr_en", k: "out", u: "1–10" },
+        { n: "Home evenings done", s: "0–7", id: "wr_home", k: "out", u: "0–7" }],
+      note: "Two slow-hands nights, or three yellows in one week = next week is an easy week, whatever the plan says. Every 4–6 weeks: tape — arms, shoulders, waist." }] },
 
-  sun: { n: "SUNDAY", t: "Aerobic Base · Full Mobility", m: (rx) => rx.z2sun + 28, ac: C.moss, free: 1, b: [
-    { L: "A", n: "Athletic movement prep", m: 8, p: "AMP" },
-    { L: "B", n: (rx) => (rx.w === 1 || rx.w === 16 ? "20-Minute Bike Test" : "Zone 2"), m: (rx) => (rx.w === 1 || rx.w === 16 ? 25 : rx.z2sun), star: 1, hard: (rx) => rx.w === 1 || rx.w === 16, timer: (rx) => (rx.w === 1 || rx.w === 16 ? { kind: "z2", opt: { min: 20 }, title: "20-MIN TEST" } : { kind: "z2", opt: { min: rx.z2sun }, title: "ZONE 2" }),
-      items: (rx) => (rx.w === 1 || rx.w === 16
-        ? [{ n: "20 minutes, maximum distance", s: "same bike or SkiErg every time", cue: "5 easy minutes first. Then 20 minutes for the most distance you can — no pacing plan, go and find out. Write the distance AND the highest heart rate you saw: that peak is your practical max, and every easy ride is 65–75% of it from now on.", id: "bike20", k: "out", u: "distance (m)" }, { n: "Peak heart rate", s: "highest you saw", id: "bike20hr", k: "out", u: "bpm" }]
-        : [{ n: "Bike / SkiErg / run", s: rx.z2sun + " min · conversation pace · nasal", cue: "Continuous, conversational — if you can't speak a full sentence, slow down. Roughly 65–75% of the peak heart rate from your 20-minute test. Bike or SkiErg by default. If you run anywhere, run here — a full day either side, nothing explosive within 24 hours.", id: "sunz2", k: "out", u: "distance / avg HR" }]),
-      rxLine: (rx) => (rx.w === 1 || rx.w === 16 ? "20 min max distance — the engine test" : rx.z2sun + " min"), why: (rx) => (rx.w === 1 || rx.w === 16 ? "The one number that measures the engine everything else claims to build. Week 1 is the baseline; week 16 is the verdict." : "The least glamorous session you own and the one most responsible for round six.") },
-    { L: "C", n: "Full mobility", m: 20, p: "FULL", items: [{ n: "Full mobility", s: "thoracic · hips · shoulders", id: "fullmob", k: "chk" }] },
-    { L: "D", n: "Weekly review", m: 0, review: 1,
-      items: [{ n: "Bodyweight", s: "kg", id: "wr_bw", k: "out", u: "kg" }, { n: "Resting HR", s: "bpm", id: "wr_rhr", k: "out", u: "bpm" }, { n: "HRV average", s: "if you measure it", id: "wr_hrv", k: "out", u: "ms" },
-        { n: "Hip", s: "0–10", id: "wr_hip", k: "out", u: "0–10" }, { n: "Shoulder", s: "0–10", id: "wr_sh", k: "out", u: "0–10" }, { n: "Wrist / hand", s: "0–10", id: "wr_wr", k: "out", u: "0–10" }, { n: "Energy", s: "1–10", id: "wr_en", k: "out", u: "1–10" }] }] },
+  /* ---------------- THE LIGHT SESSION ---------------- */
+  light: { n: "LIGHT SESSION", t: "After head contact", m: 30, ac: C.violet,
+    intro: "The morning after any sparring: Tuesday's warm-up, Thursday's neck block, Monday's shoulder circuit — about 30 minutes, or nothing. No heavy lifting, no sprinting, no jumping for 24 hours after head contact. Any headache, fogginess or light sensitivity: do nothing, and tell your coach.", b: [
+    { L: "A", n: "Warm-up", m: 6, p: "GEN" },
+    { L: "B", n: "Neck", m: 10, p: "NECK", items: [{ n: "The full neck block", s: "4 movements", id: "neck", k: "chk" }] },
+    { L: "C", n: "Shoulder Circuit + Band Catch", m: 8, p: "CUFF", items: [{ n: "Circuit + band deceleration catch", s: "2 rounds · then 2 × 8/arm", id: "catch", k: "chk" }] }] },
 };
-
-
-
-/* ================================================================
-   OPTIMAL 8 — THE FULL BUILD
-   Two evening sessions (Mon upper, Wed lower) at the hour you're
-   strongest. Mornings: engine, power doses, easy riding, size.
-   ================================================================ */
-(function buildO8() {
-  const snap = {}; ["mon", "tue", "wed", "thu", "fri", "sat", "sun"].forEach((d) => { snap[d] = S[d].b.slice(); });
-  const get = (day, L) => { const x = snap[day].find((y) => y.L === L); if (!x) throw new Error("missing block " + day + " " + L); return x; };
-  const z2fri = (rx) => (rx.w === 16 ? 30 : rx.z2wed === 20 ? 40 : 50);
-  const W = (L) => get("wed", L), F = (L) => get("fri", L), SA = (L) => get("sat", L), SU = (L) => get("sun", L), TH = (L) => get("thu", L), MO = (L) => get("mon", L), TU = (L) => get("tue", L);
-  const MOB = { L: "M", n: "Mobility", m: 8, p: "MOB" };
-  const MOB5 = { L: "M2", n: "Mobility", m: 5, p: "MOB" };
-  /* power doses */
-  const boxJumps = { L: "B3", n: "Power dose — box jumps", m: 5, star: 1, hard: 1, hide: (rx) => !!rx.test, rest: "Rest 60–90s", rt: 75,
-    items: [{ n: "Box jump", s: "3 × 3", cue: "Knee-to-hip-height box. Quick dip, jump as high as you can, land soft on top, step down. Three perfect jumps, never three tired ones.", id: "boxjump", k: "chk" }],
-    why: "Explosiveness responds to how often the nervous system is asked, not how much. Five minutes, three mornings a week." };
-  const tueJumps = { L: "J", n: "Power dose — jumps", m: 8, star: 1, hard: 1, hide: (rx) => !!rx.test, rest: "Rest 90s", rt: 90,
-    items: [{ n: "Broad jump", s: "3 × 2", cue: "Two feet, forward for distance, stick the landing dead still.", id: "broad", k: "chk" }, { n: "Trap bar jump", s: "3 × 3 @ 20% of trap bar max", cue: "Stand inside the bar, jump with it, land soft. Week 1: empty bar.", id: "tbjump2", k: "chk" }],
-    why: "Fresh legs, before the bike — never after." };
-  const thuThrows = { L: "T2", n: "Power dose — throws + landmine", m: 8, star: 1, hard: 1, hide: (rx) => !!rx.test, rest: "45s between sets", rt: 45,
-    items: [{ n: "Rotational shot-put", s: "2 × 3/side", cue: "Ball at the shoulder, side-on to the wall, drive off the back hip. Flat and hard, like the punch.", id: "shot2", k: "chk" }, { n: "Landmine punch", s: "2 × 5/side", cue: "Bar end at the shoulder, in your stance. Drive the hips and punch it up and away — never press it. Bar speed is the metric; add weight only when it still snaps.", id: "lm2", k: "wr", sets: 2, reps: "5/side" }],
-    why: "The unloaded ballistic and the loaded punch pattern, three days before Sunday's full session. The landmine is the only loaded rotational punch you own — twice a week for that reason." };
-  /* engine */
-  const engine2 = Object.assign({}, TU("B"), { L: "E2", engKey: "eng2", n: (rx) => (ENG[rx.eng2] ? ENG[rx.eng2].n : "Conditioning"), hide: (rx) => !rx.eng2,
-    timer: (rx) => TU("B").timer(Object.assign({}, rx, { eng: rx.eng2 })), items: [{ n: "Output", s: "log it", id: "cond2", k: "out", u: "output / peak HR" }],
-    note: "The second engine session — a different quality from Tuesday's, so each is trained twice every three weeks." });
-  const wedRide = Object.assign({}, W("Z"), { L: "Z", n: "Easy bike — fasted", items: (rx) => [{ n: "Bike", s: rx.z2wed + " min · conversation pace · nasal", cue: "Continuous, conversational — if you can't speak a full sentence, slow down. Roughly 65–75% of the peak heart rate from your 20-minute test. Fasted is fine.", id: "wedz2", k: "out", u: "distance / avg HR" }],
-    why: "Aerobic base on a morning that would otherwise be empty. Tonight is the heavy lower session; this costs it nothing." });
-  const thuRide = { L: "Z", n: "Easy bike · 20 min", m: 20, star: 1, timer: () => ({ kind: "z2", opt: { min: 20 }, title: "ZONE 2" }),
-    items: [{ n: "Bike", s: "20 min · conversation pace · nasal", cue: "Easy. Legs squatted last night — this flushes them, it doesn't test them.", id: "thuz2", k: "out", u: "distance / avg HR" }],
-    why: "Nine hours after the heavy lower session, the only leg work that helps is easy riding." };
-  const friRide = Object.assign({}, W("Z"), { L: "Z", n: "Easy bike — fasted", m: (rx) => z2fri(rx), star: 1, timer: (rx) => ({ kind: "z2", opt: { min: z2fri(rx) }, title: "ZONE 2" }),
-    items: (rx) => [{ n: "Bike", s: z2fri(rx) + " min · conversation pace · nasal", cue: "Continuous. Nasal breathing at a conversational pace is the governor. Roughly 65–75% of the peak heart rate from your 20-minute test. Ride into it, no warm-up. Fasted is fine.", id: "friz2", k: "out", u: "distance / avg HR" }],
-    rxLine: (rx) => z2fri(rx) + " min", why: "The base under two interval sessions and the fight rounds — and it keeps tomorrow's legs fresh by being easy." });
-  const stretch = Object.assign({}, SU("C"), { L: "F" });
-  /* strength pieces */
-  const trapBar = Object.assign({}, F("C"), { L: "B", m: 14, why: "Maximal force in the rear-leg-drive position, and the safest heavy pull there is — nothing over your body, and a rep that isn't there gets set down. That is why it's the one heavy lift allowed at 3am." });
-  const pauseSquat = { L: "Q", n: (rx) => (rx.pq && rx.pq.fast ? "Speed Squat" : "Pause Squat"), m: 12, hard: 1, mainLift: "squat", pres: (rx) => ({ sc: rx.pq.sc, pct: rx.pq.pct }), hide: (rx) => !rx.pq, rest: "Rest 2:30", rt: 150,
-    items: (rx) => [{ n: rx.pq.fast ? "Speed squat" : "Pause squat", s: rx.pq.sc, cue: rx.pq.fast ? "No pause. Every rep as fast as you can move it — bar speed is the metric. Pins set." : "Two-second pause in the hole, dead still, then drive up hard. Pins set.", id: "pausesq", k: "wr", mk: "squat", pct: rx.pq.pct, sets: rx.pq.sets, reps: rx.pq.reps }],
-    rxLine: (rx) => rx.pq.sc, w: "Pins set. Saturday owns the heavy squat; this is the second exposure, at a weight you own. Skipped on max-single weeks.",
-    why: "The second squat exposure — submaximal, paused, from the position rear-leg drive starts in." };
-  const rdl = Object.assign({}, F("D"), { L: "C", n: "Romanian Deadlift", m: 6, hide: undefined, rest: "Rest 90s", rt: 90, rxLine: () => "3 × 6",
-    items: [{ n: "Romanian deadlift", s: "3 × 6", cue: "Hinge strength and hamstring length under load. Start around 60% of your trap bar max and add 2.5–5 kg a week while every rep still moves at the same speed.", id: "rdl", k: "wr", sets: 3, reps: 6 }],
-    why: "Hamstring strength without the soreness — the eccentric work that leaves you sore goes last on Sunday." });
-  const sledWed = Object.assign({}, SA("B"), { L: "S", m: 14, why: "Horizontal force production — forward pressure with resistance on it. First in the session, while the nervous system is freshest." });
-  const neckHolds = Object.assign({}, F("F"), { L: "E", n: "Neck — holds", m: 5, items: [{ n: "4-direction holds", s: "3 × 10s each direction", id: "neck2", k: "chk" }], why: "Second dose of the week, holds only. Thursday carries the full block." });
-  /* physique */
-  const sizeA = Object.assign({}, SA("E"), { L: "D", n: "Upper Size A — delts, traps, lats", why: "The first of two weekly size exposures. Twice a week is the difference between maintaining a look and building one." });
-  const sizeB = { L: "U", n: "Upper Size B — shoulders, traps, arms", m: 14, hide: (rx) => !!rx.test, rest: "Rest 90s", rt: 90, rxLine: (rx) => (rx.acc <= 2 ? 2 : 3) + " sets",
-    items: (rx) => { const s = rx.acc <= 2 ? 2 : 3; return [
-      { n: "Lean-away lateral raise", s: s + " × 12–15", cue: "Hold the rack, lean away, raise to shoulder height.", id: "lat2", k: "wr", sets: s, reps: "12–15" },
-      { n: "Face pull", s: s + " × 15", cue: "Rope on a high cable, elbows high, squeeze the back of the shoulders.", id: "facepull", k: "wr", sets: s, reps: 15 },
-      { n: "Trap bar shrug", s: s + " × 8–12", cue: "Pause 1–2s at the top, never roll.", id: "shrug2", k: "wr", sets: s, reps: "8–12" },
-      { n: "EZ-bar or hammer curl", s: s + " × 8–12", cue: "Elbows still, full stretch, no swing. No triceps today — Monday's bench needs them.", id: "curl2", k: "wr", sets: s, reps: "8–12" }]; },
-    why: "The second size exposure: shoulders and traps again, arms again. Biceps only — triceps rest for Monday's bench." };
-  const chestArms = Object.assign({}, SA("F"), { L: "J", hide: (rx) => !!rx.test, why: "Last on Saturday, 42 hours before Monday's bench. Dips keep the pressing base; the curl builds the arm." });
-  /* Sunday pieces */
-  const benchMax = Object.assign({}, SA("C"), { L: "X", n: "Bench Max Single", m: 12, star: 1, hard: 1, hide: (rx) => !rx.maxBe, mainLift: "bench", calib: null, rest: "Rest 2:30–3:00", rt: 165,
-    items: () => [{ n: "Flat bench — max single", s: "pins · no collars · FIRST, before the throws", id: "benchmax", k: "chk" }],
-    why: "Bench max singles happen here — Sunday, first thing, fresh, with pins. Add the bench warm-up sets (bar × 10, 40% × 5, 60% × 3) before the ramp. The new number sets the next block's percentages." });
-  const pushPress = Object.assign({}, SA("C"), { L: "P", n: "Push Press", m: 10, star: 0, hard: 1, hide: (rx) => !rx.pp, mainLift: "pp", calib: "pp",
-    items: (rx) => [{ n: "Push press", s: rx.pp.sc, cue: "Violent leg drive, aggressive lockout.", id: "pushpress", k: "wr", mk: "pp", pct: rx.pp.pct, sets: rx.pp.sets, reps: rx.pp.reps }],
-    why: "Force sent from the legs through a braced trunk to the hands. On max-single weeks it's skipped: the squat max is enough neural work for one day." });
-  const sunPrep = Object.assign({}, SA("A"), { note: "Broad jump 3×2 · med-ball chest pass 3×3 · bike sprint 10s ×3 · then three easy practice throws of each throw." });
-  const throws = Object.assign({}, F("B"), { L: "T", hide: (rx) => !!rx.test });
-  const sim = Object.assign({}, SA("D"), { hide: (rx) => !!rx.sim.skip || rx.w === 1 || !!rx.test });
-  const bike20 = { L: "W", n: "20-Minute Bike Test", m: 25, star: 1, hard: 1, hide: (rx) => !(rx.w === 1 || rx.w === 16), timer: () => ({ kind: "z2", opt: { min: 20, label: "20-MIN TEST" }, title: "20-MIN TEST" }),
-    items: [{ n: "20 minutes, maximum distance", s: "same bike or SkiErg every time", cue: "5 easy minutes first. Then 20 minutes for the most distance you can — no pacing plan, go and find out. Write the distance AND the highest heart rate you saw: that peak is your practical max, and every easy ride is 65–75% of it from now on.", id: "bike20", k: "out", u: "distance (m)" }, { n: "Peak heart rate", s: "highest you saw", id: "bike20hr", k: "out", u: "bpm" }],
-    rxLine: () => "20 min max distance — the engine test", why: "Replaces the fight rounds in week 1 and week 16. Week 1 is the baseline; week 16 is the verdict." };
-  const trunkHands = Object.assign({}, SA("G"), { hide: (rx) => !!rx.test });
-  const nordic = Object.assign({}, F("D"), { L: "N", n: "Nordic Curls", m: 8, hide: (rx) => !rx.nor || !!rx.test, rest: "Rest 2:00", rt: 120, rxLine: (rx) => "Nordic " + rx.nor[0] + " × " + rx.nor[1] + " — ramped",
-    items: [{ n: "Nordic curl", s: (rx) => rx.nor[0] + " × " + rx.nor[1] + " — ramped", cue: "Heels anchored. As slow as you can on the way down, hands catch you, push back up. Stop the set when the low back rounds, not at the rep count.", id: "nordic", k: "wr", sets: (rx) => rx.nor[0], reps: (rx) => rx.nor[1] }],
-    why: "Last block of the last day on purpose: the hardest hamstring work of the week, then three days before the next heavy lower session. The trials that proved Nordics did them at the end of sessions too." });
-  const review = Object.assign({}, SU("D"), { L: "R" });
-
-  S.mon = Object.assign({}, S.mon, { box: 0, t: "Upper Strength + Power Dose", m: 70, intro: "Upper strength and the first power dose of the week. Nothing here is taken to failure.", b: [MO("A"), MO("B"), boxJumps, MO("C"), MO("D"), MO("E"), MO("F"), MOB] });
-  S.tue = Object.assign({}, S.tue, { box: 0, t: "Jumps · Engine 1 · Hands · Trunk", m: 61, intro: "Power dose first, fresh, then the first of two engine sessions, then the trunk block — anti-rotation stiffness is what lets hip rotation reach the fist.", b: [TU("A"), tueJumps, TU("B"), TU("C"), Object.assign({}, TH("C"), { L: "K" }), MOB] });
-  S.wed = { n: "WEDNESDAY", t: "★ Sled · Trap Bar · Pause Squat", m: 67, ac: C.oxide,
-    intro: "The heavy lower morning. Sled first while the nervous system is freshest, then the pulls, then the second squat exposure. Nothing to failure; the trap bar is the only maximal-ish lift at 3am and it's the safest one there is.",
-    b: [Object.assign({}, TU("A"), { note: "Then trap bar warm-up sets: bar × 5 · 50% × 3 · 65% × 2, and squat warm-up sets 40% × 3 · 60% × 2." }), sledWed, trapBar, pauseSquat, rdl, neckHolds, MOB] };
-  S.thu = { n: "THURSDAY", t: "Throws · Engine 2 · Upper Size · Neck", m: 74, ac: C.cobalt,
-    intro: "The third power dose, the second engine session, the first size block and the full neck block. Twenty-four hours after the heavy lower morning — enough.",
-    b: [TU("A"), thuThrows, engine2, sizeA, Object.assign({}, TH("B"), { L: "N" }), MOB] };
-  S.fri = { n: "FRIDAY", t: "Easy Engine · Full Stretch", m: (rx) => z2fri(rx) + 20, ac: C.moss,
-    intro: "Tomorrow is the biggest session of the week. Today's only job is arriving there fresh with the engine fed. Nothing hard, nothing heavy, nothing fast.", b: [friRide, stretch] };
-  S.sat = { n: "SATURDAY", t: "★ Legs & Power", m: (rx) => (rx.pp ? 117 : 107), ac: C.oxide, free: 1,
-    intro: "No shift, fed and fresh. The session that matters most all week. Fuel it like the fuel plan's big day: porridge 6:30, shake 7:45, start 8:15.",
-    b: [W("A"), W("B"), W("C"), W("D"), W("E"), W("F"), pushPress, W("G"), W("H"), chestArms, MOB] };
-  S.sun = { n: "SUNDAY", t: "★ Throws · Fight Rounds · Size · Nordics", m: (rx) => (rx.test ? 60 : rx.maxBe ? 100 : 88), ac: C.brass, free: 1,
-    intro: "Second free morning. Punches, rounds, the second size block, and the week's hamstring work last with two leg-free days behind it. Week 16: warm-up, the 20-minute test, stretch, nothing else.",
-    b: [sunPrep, benchMax, throws, sim, bike20, sizeB, trunkHands, nordic, MOB, review] };
-  S.light = { n: "LIGHT SESSION", t: "After head contact", m: 32, ac: C.violet,
-    intro: "Nothing maximal, no sprints, no jumps within 24 hours of head contact. Warm-up, neck, cuff, mobility. Heavy work resumes tomorrow.",
-    b: [TU("A"), Object.assign({}, TH("B"), { L: "N" }), TH("D"), MOB] };
-})();
 
 /* blocks visible for a day in a given week, in the order they are performed */
 function blocksFor(day, rx) {
@@ -449,78 +417,117 @@ const TESTS = [
 /* ---------- reference (PLAN tab) ---------- */
 const PLAN = [
   ["THE PREMISE", C.brass, [
-    ["Your coach owns skill. This owns everything else: maximal strength, ballistic power, punch-vector power, alactic speed, the engine, and the tissue that keeps you training.", 1],
-    ["Every line has a job it does better than anything that could replace it. ~9¼h at peak volume, ~7h in deload and taper weeks. Mornings only: power microdosed three mornings a week, two engine sessions, a second lower exposure, physique twice, the trunk block, the landmine twice.", 0],
-    ["1 · Three power doses a week — Monday box jumps, Tuesday jumps, Thursday throws — because explosiveness responds to frequency of stimulus, not volume.", 1],
-    ["2 · The weekend carries the two big days, fed and fresh. Wednesday is the heavy lower morning — sled, trap bar, the second squat exposure. Thursday is the second engine session and the first size block, 24 hours after the lower morning. Friday is easy so Saturday isn't. Nordics go last on Sunday with two leg-free days behind them.", 1],
-    ["3 · Nothing your job already gives you: no carries, no grip work, one shrug.", 0],
-    ["4 · Nothing your coach gives you better: no guard drills, no retraction bands, no bag 'conditioning'.", 0],
-    ["5 · Every load is a percentage of a number you have measured. Trap bar and push press are calibrated in week 1.", 1],
-    ["6 · Neural work is judged by output — jump height, throw distance, bar speed — never by rep count. The set ends when the output drops.", 1],
+    ["The fighter's build. Weekdays at 3am, under an hour. Saturday 90 minutes. Sunday 70. Mobility at home. Nothing in the gym that doesn't make you a better fighter.", 1],
+    ["Your coach owns boxing. This owns everything else: maximal strength, punching power, speed, the engine, and the tissue that keeps you training. Boxing runs separately.", 0],
+    ["Power is dosed three mornings a week — Monday box jumps, Tuesday jumps, Thursday throws — because explosiveness responds to how often the nervous system is asked, not how much.", 1],
+    ["The engine is built twice, the squat gets a second exposure, the trunk is braced, the landmine appears twice.", 0],
+    ["About 7¼ hours in the gym at peak, an hour and a quarter at home. Easy weeks: about 5½ in the gym.", 0],
+    ["Every barbell weight is a percentage of a number you have measured. You already know squat and bench; trap bar (Wednesday) and push press (Saturday) are found in week 1 — hard triple × 1.08 = your max. Round to the nearest 2.5 kg.", 1],
+    ["Every explosive set ends the moment the output drops — jump height, throw distance, bar speed. Rep counts are ceilings, not targets.", 1],
   ]],
-  ["TRAINING ALONE", C.oxide, [
-    ["SQUAT — pins just below your bottom position on every set over 80%. No pins = no max single; cap at a 3RM.", 1],
-    ["BENCH — pins at chest height. No collars, ever. Max singles happen on Sunday, fresh, twice a macrocycle and on test day. Never at 3am.", 1],
-    ["TRAP BAR at 3am — the one heavy lift allowed at that hour: nothing over your body, and a rep you're not sure of gets set down, not fought.", 1],
-    ["NORDICS — heels anchored (GHD, nordic bench, loaded bar across the ankles, or under a rack upright). Stop when the low back rounds.", 0],
-    ["AEL DROP JUMP — hex dumbbells, released straight down, clear floor.", 0],
-    ["If you are not certain you will complete the rep, you don't start it.", 1],
+  ["THE WEEK", C.moss, [
+    ["MONDAY · 3am · upper strength + box-jump power dose — warm-up, bench throws, box jumps, bench, chins, rows, shoulder circuit + band catch. ~57 min.", 1],
+    ["TUESDAY · 3am · jumps, engine session 1, hands, trunk, seated calf raise. ~56 min.", 1],
+    ["WEDNESDAY · 3am · sled, trap bar, pause squat, RDL, neck holds. The heavy lower morning. ~55 min.", 1],
+    ["THURSDAY · 3am · throws + landmine, split squat, engine session 2, the full neck block. ~56 min.", 1],
+    ["FRIDAY · 3am · the easy bike, and nothing else. 55 min (weeks 6–10: 45 · week 16: 30).", 1],
+    ["SATURDAY · morning · THE LEG & POWER SESSION — warm-up, flying sprints, loaded drop jumps, side bounds, back squat, jump circuit, push press. ~90 min.", 1],
+    ["SUNDAY · morning · the four punch throws, the fight simulation, core + hands, Nordics, the weekly check. ~70 min.", 1],
+    ["EVERY EVENING · at home · mobility 8 min. Friday: the full stretch, 20 min.", 1],
+    ["Each session page is a running order — start at the top, work down, done. Everything you need to run it is on the page.", 0],
+  ]],
+  ["WHAT LEFT, AND WHY", C.oxide, [
+    ["The size blocks — lateral raises, rear-delt flies, shrugs, pulldowns, dips, curls — were 42 minutes a week that built the look, not the fighter. They're gone.", 1],
+    ["The bench, push press, weighted chins, rows, trap bar and throws carry the shoulders, traps and arms from here. Cost to the fighter: nothing. Cost to the look: some direct arm and shoulder volume — the tape will tell you, not the mirror.", 0],
+    ["Mobility moved to the evening at home. It does the same job at 8pm that it did at 4am, and the eight minutes it freed are what keep four weekday sessions under an hour.", 1],
+    ["The split squat left Saturday for Thursday: 24 hours after the heavy lower morning, 48 before Saturday's sprints, and before the bike so the reps stay clean. The seated calf raise left Saturday for the end of Tuesday.", 0],
+    ["The warm-ups did not move. They are what makes sprinting, jumping and lifting at 3am survivable, and they are not mobility.", 0],
+    ["Nothing else went: every sprint, jump, throw, lift, round and durability drill is still here, at the same numbers.", 1],
+  ]],
+  ["THE FAST-BAR RULE", C.brass, [
+    ["On the four main lifts — squat, bench, trap bar, push press — after your last work set, ask one question: did the last rep move as fast as the first? The app asks it for you.", 1],
+    ["Yes → raise that lift's max by 2.5% for next week. Squat and trap bar round to the nearest 5 kg; bench and push press to 2.5 kg. Once per lift per week, no more.", 1],
+    ["A percentage of a number measured weeks ago goes stale fast when you're getting stronger quickly. The grind rule can only ever take weight off; this is the other half. It keeps the loading honest between measurements.", 0],
+    ["The grind rule still runs the other way: a grinding rep ends the set, and two grinding sets on one lift in a week means take 2.5% back off.", 1],
+    ["Max-single weeks and test day replace the number outright, not by 2.5%.", 1],
+    ["If a lift hits the fast-bar rule three weeks running, expect the week-4 or week-9 max to come in well above 102% — take the second attempt.", 0],
+  ]],
+  ["RESTS", C.cobalt, [
+    ["Main lifts — 2 minutes. 2½ on the heavy triples in weeks 7–9 and on max days. Saturday's back squat sits at 2½, and 3 in weeks 7–9.", 1],
+    ["Accessories — 75–90 seconds: chins 90s, rows 75s, RDL 75s, split squat 75s.", 1],
+    ["Speed, jumps, sprints and throws keep their full rests. Those are trained by quality, and a short rest turns them into conditioning.", 1],
+    ["If a strength set feels flat after 2 minutes, take 2½. The number on the page is the default, not a stopwatch you fail.", 0],
+    ["Recovery is not the limit in this build; time is.", 0],
+  ]],
+  ["THE DAILY CHECK — BEFORE EVERY SESSION", C.moss, [
+    ["Ask four things: is my resting heart rate up? Do I feel unusually sore? Flat and unmotivated? Sleep quality worse than normal for me?", 1],
+    ["0–1 yes = GREEN. Train as written.", 1],
+    ["2–3 yes = YELLOW. Take 7% off every barbell weight. Sprints become 3 runs at 90% effort, never flat out. Skip the last section of the session.", 1],
+    ["Ill, injured, or 3 yellow days in a row = RED. No heavy lifts, no sprints, no jumps. Warm-up, neck and shoulder work, then home. Mobility at home as normal.", 1],
+    ["Two slow-hands nights at boxing, or three yellows in one week = next week is an easy week, whatever the plan says.", 0],
+  ]],
+  ["THE HEAD-CONTACT RULE", C.oxide, [
+    ["The morning after any sparring you do the LIGHT SESSION — Tuesday's warm-up, Thursday's neck block, Monday's shoulder circuit, about 30 minutes — or nothing.", 1],
+    ["No heavy lifting, no sprinting, no jumping for 24 hours after head contact. The app swaps it in with one tap.", 1],
+    ["Any headache, fogginess or light sensitivity: do nothing, and tell your coach.", 1],
+    ["Sparred the night before Wednesday? The heavy lower morning becomes the light session and the heavy work waits a week.", 0],
+  ]],
+  ["TRAINING ALONE — NON-NEGOTIABLE", C.oxide, [
+    ["SQUAT — safety pins in the rack, set just below your lowest position, on every set over 80%. No pins in the gym = no max singles; stop at a heavy 3.", 1],
+    ["BENCH — pins at chest height, and never clamp collars on the bar; if you get stuck you tip the plates off. Bench max singles only happen on Sundays, fresh, first thing.", 1],
+    ["TRAP BAR at 3am — the one heavy lift allowed at that hour. Nothing passes over your body, and a rep you're not sure of gets set down, not fought.", 1],
+    ["NORDICS — heels anchored under something solid. Stop the set the moment your lower back rounds.", 0],
+    ["DROP JUMPS — rubber hex dumbbells, dropped straight down, land on clear floor.", 0],
+    ["If you are not certain you'll make the rep, you don't start it.", 1],
   ]],
   ["THE MACROCYCLE", C.cobalt, [
-    ["Weeks 1–5 BUILD · 4×6 @ 75% → 4×5 @ 78% → 4×5 @ 80% → max single then 2×3 @ 85% → deload 2×5 @ 65%. Contrast 2 rounds. Accessories 4 sets.", 1],
-    ["Weeks 6–10 FORCE · 4×4 @ 82% → 4×3 @ 85% → 4×3 @ 87% → max single then 2×2 @ 88% → deload 2×4 @ 65%. Contrast 3 rounds. Explosive isometrics weeks 6–8. Accessories 3.", 1],
-    ["Weeks 11–14 VELOCITY · circuits lead Monday and Saturday, squat 2×2 @ 88% after. 4 rounds with the assisted jump. Depth jumps. Vectors 4 rounds. Trap bar and push press 3×3 @ 80%, bar speed the metric.", 1],
-    ["Weeks 15–16 TAPER · volume −40% then −60%, intensity held. Saturday of week 16 is test day.", 1],
-    ["Max singles: weeks 4 and 9 and test day. Nowhere else. The residual table describes how long a quality survives once you stop training it; heavy doubles and triples every week are maximal-strength training, so nothing decays between week 9 and week 16.", 0],
-    ["Sprints build 3 → 4 → 5 across the first three weeks of every block. Nordics ramp 2×3 → 2×4 → 3×4 → 3×5 across Block 1.", 0],
-    ["Deload weeks: main lifts as the table, contrast 1 round, sprints 3 × 20m at 90%, jumps 2 sets, accessories 2 sets, Tuesday 20 easy minutes, no fight sim. Neck, trunk, cuff, hands and mobility unchanged.", 0],
+    ["Weeks 1–5 BUILD · squat and bench 4×6 @ 75% → 4×5 @ 78% → 4×5 @ 80% → max single then 2×3 @ 85% → easy week 2×5 @ 65%. Jump circuit 2 rounds, punch throws 3, rows 4 sets.", 1],
+    ["Weeks 6–10 FORCE · 4×4 @ 82% → 4×3 @ 85% → 4×3 @ 87% → max single then 2×2 @ 88% → easy week 2×4 @ 65%. Jump circuit 3 rounds, accessories 3 sets, rests 2½ on the triples.", 1],
+    ["Weeks 11–14 VELOCITY · squat 2×2 @ 88% done fast, behind a 4-round jump circuit that now leads Saturday. Depth jumps, continuous side bounds, speed squat on Wednesday, bench and bench throws merged into one circuit on Monday, punch throws 4 rounds.", 1],
+    ["Weeks 15–16 TAPER · volume down, intensity held. Saturday of week 16 is test day; Sunday is the 20-minute bike test.", 1],
+    ["Weeks 5 and 10 are easy weeks. Sled runs 5 a week (week 1: 4 · easy weeks 3). Sprints build 3 → 4 → 5 across the first three weeks of a block; Nordics ramp 2×3 → 2×4 → 3×4 → 3×5 across the first month.", 0],
+    ["Max singles: weeks 4 and 9 and test day. The squat max is Saturday; the bench max is Sunday morning, first thing, and the push press is skipped that Saturday.", 1],
   ]],
-  ["THE VELOCITY RULE", C.brass, [
-    ["Stop the set when the bar slows, not when it gets hard. You can only run what you can measure.", 1],
-    ["BUILD (25–30% velocity loss) — run it by eye. A 25–30% drop is a visibly grinding rep. Rep ranges are ceilings.", 0],
-    ["FORCE (15–20%) — you cannot see this. Fixed reps at fixed percentages with a hard cap. Cut the set if a rep is obviously slower.", 0],
-    ["VELOCITY (10–15%) — you definitely cannot see this. 2×2 @ 88%, 3×3 @ 80%. No extra reps, no 'it felt good'.", 0],
-    ["All ballistics — stop the moment output drops: jump height, throw distance, bar flight. This you can see.", 1],
+  ["THE ENGINE", C.cobalt, [
+    ["Two engine sessions a week — Tuesday and Thursday — and they always run different qualities, so each is trained twice every three weeks.", 1],
+    ["4-MINUTE INTERVALS · 4 rounds of 4 minutes hard (you could speak 2–3 words) with 3 easy minutes between. The single best session there is for building your engine.", 0],
+    ["40-SECOND REPEATS · 40 seconds flat out, 80 easy. Three, then 5 full minutes, then three more. The last three are horrible — that burning is what the late rounds of a fight feel like.", 0],
+    ["30-SECOND ALL-OUTS · 30 seconds at absolute maximum, then 3 FULL minutes of rest, 5 rounds. Cutting the rest short turns it into a different, wrong session.", 0],
+    ["Bike or SkiErg — pick one and keep it all 16 weeks so your numbers compare. Write down your output.", 1],
+    ["YOUR ENGINE NUMBER · Sunday of week 1 and Sunday of week 16 replace the fight rounds with a 20-minute bike test. It gives you the only measurement of the engine this program builds, and your peak heart rate — the number every easy ride is paced off, at 65–75%.", 1],
+    ["THE FIGHT SIM · six 3-minute rounds, minute 1 SkiErg, minute 2 assault bike, minute 3 landmine punches or slams (bag if the gym has one). Round 6 ÷ round 1 is your fade — scored in weeks 4, 9 and 14. The whole game is getting it toward 100%.", 0],
   ]],
-  ["AUTOREGULATION", C.moss, [
-    ["GREEN — train as written.", 1],
-    ["YELLOW — two or more of: elevated resting HR, HRV below weekly average, unusual soreness, low motivation → cut top-set intensity 5–10%, drop the last accessory block. Sprints become 3 × 20m at 90%, never max.", 1],
-    ["RED — illness, an injury signal, or three yellow days running → no max effort, no sprints, no jumps.", 0],
-    ["THE BOXING RULE — if you show up Mon, Tue or Thu and your hands are slow, that morning was too much. Cut it; don't push through.", 1],
-    ["THE SPARRING RULE — any evening you spar, the next morning is the light session (warm-up, neck, cuff, mobility) or nothing. Nothing maximal, no sprints, no jumps within 24 hours of head contact. Any symptom — headache, fog, light sensitivity — nothing at all, and your coach knows.", 1],
-    ["EARLY DELOAD — any two in one week: three yellow days · HRV average down two weeks running · resting HR +7 bpm · bar speed down on the same load two sessions running · a manageable joint becomes painful · a hand or wrist that hurts on the bag.", 0],
+  ["THE HOME BLOCK", C.violet, [
+    ["Eight minutes, every evening: foam roller across the mid-back ×8 · open book 6/side · 90/90 hip switches ×5 each way · deep squat hold 90s.", 1],
+    ["Friday evening instead: the full stretch, 20 minutes — upper back first, then hips, then shoulders.", 1],
+    ["Kit: a foam roller, a light band, and something to hold at your chest.", 0],
+    ["If you skip it, nothing shows this week. By week 6 the hips tighten, squat depth goes, the sprints get shorter and the pause squat starts to hurt. The weekly check asks how many evenings you did it, so you'll see it coming.", 0],
   ]],
   ["TEST DAY — SATURDAY OF WEEK 16", C.cobalt, [
-    ["Most neural first. Full recovery between everything. Fight-sim drop-off is tested in weeks 4, 9 and 14, not here.", 1],
-    ["1 Flying sprint 20m (phone video or timing gate) · 2 Depth jump rebound (slow-mo flight time — height in cm ≈ 123 × flight time² in seconds) · 3 Diagonal throw · 4 Shot-put · 5 Back squat max single · 6 Flat bench max single · 7 Trap bar hard 3RM × 1.08 (mid-thigh pull peak force only if a force plate exists) · 8 Tape and bodyweight · 9 SUNDAY: the 20-minute bike test, and your peak heart rate.", 0],
-    ["Targets per macrocycle: squat, bench, pull +3–6% · throws +3–5% · sprint −1–3% time · depth jump +3–5% · fight-sim drop-off −1–3 points. Three macrocycles a year ≈ 10–18% annually, measured fresh.", 1],
+    ["Fresh after two easy weeks. Most explosive first, full recovery between everything.", 1],
+    ["1 Flying 20m sprint, 3 attempts · 2 Depth jump, best rebound (height in cm ≈ 123 × flight time²) · 3 Diagonal throw · 4 Shot-put · 5 Back squat max single, pins · 6 Bench max single, pins, no collars · 7 Trap bar heavy 3RM × 1.08 · 8 Tape and bodyweight · 9 Sunday: the 20-minute bike test.", 0],
+    ["Targets each 16 weeks: lifts +3–6% · throws and jump +3–5% · sprint 1–3% faster · 20-minute distance +3–5% · fight-sim fade 1–3 points better.", 1],
+    ["If the fast-bar rule fired most weeks, the lifts will beat that range — the targets are floors, not ceilings. Then 3–4 easy days, and week 1 starts again off the new numbers.", 0],
   ]],
   ["FUEL", C.violet, [
-    ["No weight class: +300–500 kcal above maintenance, protein 2.0–2.2 g/kg (160–180 g) across 4–5 feeds. Making weight: maintenance → controlled deficit, 2.2–2.4 g/kg.", 1],
-    ["3am sessions — Monday, Tuesday and Wednesday carry the neural work: the 3:10 shake before, the porridge after. Friday's ride is fine fasted. Saturday and Sunday eat like the fuel plan's big day.", 0],
-    ["Weekend sessions — porridge 6:30, shake 7:45, start 8:15, the big feed within the hour after.", 0],
-    ["Creatine monohydrate 5 g/day — the most consistently proven supplement for strength and power. Beta-alanine 3.2 g/day, optional, four weeks and up.", 1],
-    ["Waist is the feedback loop. If bodyweight drifts down while the sessions stay the same, the answer is food, not a change to the program. At 5'8\" and 78–82 kg you already carry real mass — more raises punch force and moves you up a class if you ever compete. That's a decision, not a side effect.", 0],
+    ["The fuel plan does not change. The 3:10 shake before every hard morning, Monday to Thursday.", 1],
+    ["Friday's ride is fasted, and Friday's 5pm carb feed loads Saturday; Tuesday's 5pm feed loads Wednesday's trap bar.", 0],
+    ["Saturday and Sunday eat like the fuel plan's big day: porridge 6:30, shake 7:45, session 8:15, the big feed within the hour after you finish.", 0],
+    ["Total training time is about an hour and three-quarters a week lower than the Singles version. Do not cut calories on that assumption — the tape decides.", 1],
+    ["Creatine 5 g every day. Omega-3 daily. Vitamin D through the winter.", 0],
   ]],
-  ["WHAT BELONGS TO YOUR COACH", C.brass, [
-    ["EFFECTIVE MASS — how much of you couples into the target at impact. Trained on the bag with attention to the stiffening at contact. The Block 2 isometric punch is the nearest a rack gets.", 1],
-    ["SNAP AND RETRACTION — a skill, trained on pads where the feedback is instant.", 0],
-    ["GUARD UNDER FATIGUE — round five with the hands up only appears when someone is trying to hit you.", 0],
+  ["WHAT YOUR COACH OWNS", C.brass, [
+    ["Hitting hard on contact — the split-second stiffening of fist, arm and trunk at impact that makes two men with the same squat punch differently. Built on the bag.", 1],
+    ["Snap and retraction — pads, where the feedback is instant.", 0],
+    ["Keeping your guard up when gassed — it only shows up when someone's trying to hit you.", 0],
   ]],
-  ["WHAT CHANGED FROM OPTIMAL 5", C.oxide, [
-    ["Tuesday and Thursday mornings swapped — Thursday's intervals sat the morning after the heaviest session; four hard sessions were stacked into 72 hours.", 1],
-    ["Bench follows the block scheme; it had been frozen at 3×3 @ 82–87% for 16 weeks.", 0],
-    ["Max singles 4 → 2 per lift plus the test. Bench singles moved to Sunday, first thing.", 1],
-    ["Front squat out of the contrast, back squat in. Trap bar and push press calibrated in week 1 — every load is now a percentage of a measured number.", 0],
-    ["Push press ahead of the fight sim. Sprint build-ups added. Nordics ramped. Contrast rounds 2 → 3 → 4, full four-element version in Block 3, upper contrast in Block 3.", 0],
-    ["Explosive isometric punch in Block 2, flagged as unproven. BFR arms, wrist roller, heavy holds, cable fly cut. Sparring rule added. Fight-sim breathing rule is a tool, not a score. Times are wall-clock.", 0],
-  ]],
-  ["THE EVIDENCE", C.cobalt, [
-    ["Bench-throw and jump-squat power and half-squat strength are highly associated with punch impact in elite amateurs (Loturco et al., 2016). Lower-body maximal isometric strength predicts punch force better than RFD or power (Dunn et al., 2022).", 0],
-    ["Effective mass separates punchers of equal strength (Lenetsky et al., 2013). Professional boxing preparation converges on heavy strength, ballistic and plyometric work, punch-specific throws and round-length intervals (Ruddock et al., 2016).", 0],
-    ["4 × 4 min @ 90–95% HRmax raises VO2max more than moderate continuous work (Helgerud et al., 2007). Nordic training cuts hamstring injury roughly in half; the trials ramped over a month (Petersen 2011; van der Horst 2015). Copenhagen adductor work cut groin problems ~41% (Harøy 2019).", 0],
-    ["Interference is greatest with running, longer sessions and higher frequencies (Wilson et al., 2012). Neck strength is associated with lower head acceleration (Collins et al., 2014). Explosive isometrics improve RFD within weeks then plateau (Tillin & Folland 2014; Balshaw 2016). Creatine and beta-alanine: ISSN position stands.", 0],
-    ["Four things carry this, and none are exercises: the budget, the placement, stopping the set when it slows, and week 16.", 1],
+  ["THE THINKING", C.cobalt, [
+    ["What this version is: Optimal 8 Singles with the aesthetics taken out, the mobility taken home, the weekday sessions capped under an hour, the weekend sessions cut to what the fighter needs, shorter strength rests, and one new rule.", 1],
+    ["Why the rests are shorter: two minutes between strength sets is enough for triples and fives at these percentages, and 75–90 seconds is enough for rows and split squats. Speed, jumps, sprints and throws keep every second, because the moment those get tired they stop training what they're for.", 0],
+    ["Placement, unchanged: the two sessions that decide this program sit on the weekend, fed and fresh. Wednesday is the heavy lower morning, 72 hours from Saturday. Friday is easy so Saturday isn't. The Nordics go last on Sunday with two leg-free days behind them.", 0],
+    ["Saturday is 90 minutes now, not 120, and gives up nothing the fighter uses: sprints, reactive jumps, side bounds, heavy squat, the full jump circuit and the push press are all there, all fresh, in the same order.", 1],
+    ["The evidence: leg strength drives punch force (Loturco 2016; Dunn 2022). Throw speed drives punch speed. The engine is mostly aerobic with brutal spikes — easy volume, 4-minute intervals (Helgerud 2007), 40-second repeats for the late-round burn, the fight sim for the shape of a fight. Durability is cheap and targeted: neck, hands, Nordics, Copenhagen planks, cuff work.", 0],
+    ["Stop the set when it slows. Speed of movement is the quality being trained; grinding reps train grinding.", 1],
   ]],
 ];
 
@@ -706,8 +713,8 @@ function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, ope
   const patch = (id, f, val) => { const k = key(id); setE(id, Object.assign({}, log[k], { [f]: val })); };
   const calc = (mk, pct) => { const m = num(maxes[mk]); if (!m || pct == null) return null; const adj = yellow ? 0.93 : 1;
     const lo = Array.isArray(pct) ? pct[0] : pct, hi = Array.isArray(pct) ? pct[1] : pct; const a = r25(m * lo / 100 * adj), z = r25(m * hi / 100 * adj); return a === z ? [a] : [a, z]; };
-  const mainLift = v(b.mainLift, rx), items = v(b.items, rx), timer = b.timer ? b.timer(rx) : null, rest = v(b.rest, rx);
-  const isMaxWeek = mainLift && ((mainLift === "squat" && rx.maxSq) || (mainLift === "bench" && rx.maxBe));
+  const mainLift = v(b.mainLift, rx), items = v(b.items, rx), timer = b.timer ? b.timer(rx) : null, rest = v(b.rest, rx), rt = v(b.rt, rx);
+  const isMaxWeek = mainLift && !!b.maxUI && ((mainLift === "squat" && rx.maxSq) || (mainLift === "bench" && rx.maxBe));
   const needsCal = b.calib && ((rx.cal && rx[b.calib === "tbdl" ? "tb" : "pp"] && rx[b.calib === "tbdl" ? "tb" : "pp"].cal) || !num(maxes[b.calib]));
   const [calIn, setCalIn] = useState(""); const [maxIn, setMaxIn] = useState("");
   const mainMax = mainLift ? num(maxes[mainLift]) : null;
@@ -731,14 +738,14 @@ function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, ope
           {yellow && !isMaxWeek ? <div style={Object.assign({}, mno, { fontSize: 9.5, color: C.brass, marginTop: 6 })}>YELLOW DAY — loads reduced 7%</div> : null}
           {isMaxWeek ? (
             <div style={{ marginTop: 8 }}>
-              <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.oxide, fontWeight: 600 })}>★ MAX SINGLE — one of two this macrocycle. Pins set. {mainLift === "bench" ? "Fresh, Saturday, no collars." : "After the sprints and jumps, before the contrast."}</div>
+              <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.oxide, fontWeight: 600 })}>★ MAX SINGLE — one of two this macrocycle. Pins set. {mainLift === "bench" ? "Sunday morning, first thing, fresh. No collars." : "After the sprints and the jumps, before the jump circuit."}</div>
               {mainMax ? <div style={{ marginTop: 8 }}>
                 <Lab>Ramp from {mainMax} kg</Lab>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
                   {RAMP.map((r) => <span key={r[0]} style={Object.assign({}, mno, { fontSize: 11, color: C.chalk, border: "1px solid " + C.line, borderRadius: 3, padding: "4px 7px" })}>{r25(mainMax * r[0] / 100)} × {r[1]}</span>)}
-                  <span style={Object.assign({}, mno, { fontSize: 11, color: C.ink, background: C.brass, borderRadius: 3, padding: "4px 7px", fontWeight: 700 })}>{r25(mainMax * 1.0)}–{r25(mainMax * 1.03)} × 1</span>
+                  <span style={Object.assign({}, mno, { fontSize: 11, color: C.ink, background: C.brass, borderRadius: 3, padding: "4px 7px", fontWeight: 700 })}>{r25(mainMax * 1.0)}–{r25(mainMax * 1.02)} × 1</span>
                 </div>
-                <Note>One clean attempt. A second only if the first flew. If you are not certain you will complete the rep, you don't start it.</Note>
+                <Note>One attempt at 100–102%. A second only if the first flew up, or if the fast-bar rule has been firing for three weeks. If you are not certain you will complete the rep, you don't start it.</Note>
               </div> : <Note c={C.ash} s={{ fontStyle: "italic" }}>No max on file — enter one in TRACK, or log today's single below and it becomes the max.</Note>}
               <div style={{ display: "flex", gap: 8, alignItems: "flex-end", marginTop: 10 }}>
                 <div style={{ flex: 1 }}><Lab>Today's single (kg)</Lab><Fld v={maxIn} on={setMaxIn} ph="kg" /></div>
@@ -781,7 +788,7 @@ function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, ope
             : <Eye key={pj} c={C.brass} s={{ margin: "9px 0 3px", fontSize: 8.5 }}>{pi[0]}</Eye>)}
           {PROTO[b.p].note ? <Note s={{ fontStyle: "italic", fontSize: 11.5 }}>{PROTO[b.p].note}</Note> : null}
         </div>) : null}
-      {rest ? <div onClick={() => b.rt && startRest(b.rt)} style={Object.assign({}, mno, { fontSize: 10.5, color: C.brass, marginBottom: 11, letterSpacing: .6, cursor: b.rt ? "pointer" : "default", border: "1px dashed " + (b.rt ? C.brass : "transparent"), borderRadius: 4, padding: b.rt ? "8px 10px" : 0 })}>{rest.toUpperCase()}{b.rt ? "  ▶ TIME IT" : ""}</div> : null}
+      {rest ? <div onClick={() => rt && startRest(rt)} style={Object.assign({}, mno, { fontSize: 10.5, color: C.brass, marginBottom: 11, letterSpacing: .6, cursor: rt ? "pointer" : "default", border: "1px dashed " + (rt ? C.brass : "transparent"), borderRadius: 4, padding: rt ? "8px 10px" : 0 })}>{rest.toUpperCase()}{rt ? "  ▶ TIME IT" : ""}</div> : null}
 
       {items && !(red && b.hard) ? items.map((it, j) => {
         const id = it.id, k = it.k, cur = id ? (log[key(id)] || {}) : {};
@@ -799,13 +806,37 @@ function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, ope
             {bwLine(it) ? <div style={Object.assign({}, mno, { fontSize: 11, color: C.brass, marginTop: 4 })}>{bwLine(it)}</div> : null}
             {cue ? <Note s={{ marginTop: 3 }}>{cue}</Note> : null}
             {id && k === "wr" ? <SetLogger sets={v(it.sets, rx)} reps={v(it.reps, rx)} autoKg={auto ? auto[0] : null} cur={cur} onChange={(e) => setE(id, e)}
-              onSetDone={() => { if (autoRest && b.rt) startRest(b.rt); }} prevSets={setsSummary(pw)} prevLabel={"LAST WEEK"} prevMacro={pm && setsSummary(pm) ? "M" + (macro - 1) + " SAME WEEK: " + setsSummary(pm) : null} /> : null}
+              onSetDone={() => { if (autoRest && rt) startRest(rt); }} prevSets={setsSummary(pw)} prevLabel={"LAST WEEK"} prevMacro={pm && setsSummary(pm) ? "M" + (macro - 1) + " SAME WEEK: " + setsSummary(pm) : null} /> : null}
             {id && k === "out" ? <div style={{ marginTop: 8 }}><Lab>{it.u || "output"}</Lab><Fld v={cur.w} on={(val) => patch(id, "w", val)} ph="—" a="left" />
               {pw && pw.w ? <div style={Object.assign({}, mno, { fontSize: 9, color: C.brass, marginTop: 5 })}>LAST WEEK: {pw.w}</div> : null}
               {pm && pm.w ? <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, marginTop: 3 })}>M{macro - 1} SAME WEEK: {pm.w}</div> : null}</div> : null}
             {id && k === "chk" ? <button onClick={() => patch(id, "ok", !cur.ok)} style={Object.assign({}, dsp, { marginTop: 8, width: "100%", minHeight: 40, fontSize: 13, fontWeight: 700, letterSpacing: 1, borderRadius: 5, cursor: "pointer", background: cur.ok ? C.moss : "transparent", color: cur.ok ? C.ink : C.ash, border: "1px solid " + (cur.ok ? C.moss : C.line) })}>{cur.ok ? "✓ DONE" : "MARK DONE"}</button> : null}
           </div>);
       }) : null}
+
+      {b.fb && !isMaxWeek && !rx.test && !(b.fb === "bench" && rx.maxBe) && !(b.fb === "squat" && rx.maxSq) ? (() => {
+        const lift = b.fb, ans = log[key("fb_" + lift)] || {}, cm = num(maxes[lift]);
+        const it = (items || []).find((x) => x.mk === lift && x.k === "wr");
+        const nsets = it ? Math.max(1, Number(v(it.sets, rx)) || 1) : 0;
+        const e2 = it && it.id ? log[key(it.id)] : null;
+        const lastDone = !!(e2 && e2.sets && e2.sets[nsets - 1] && e2.sets[nsets - 1].ok);
+        if (!lastDone && !ans.a) return null;
+        const step = lift === "squat" || lift === "tbdl" ? 5 : 2.5;
+        const next = cm ? Math.round(cm * 1.025 / step) * step : null;
+        const lname = (MAXES.find((x) => x[0] === lift) || [, lift])[1];
+        return (
+          <div style={{ background: C.ink, border: "1px solid " + C.brass, borderRadius: 5, padding: 12, margin: "11px 0" }}>
+            <Eye c={C.brass} s={{ marginBottom: 6 }}>The fast-bar rule · once per lift per week</Eye>
+            <div style={Object.assign({}, bdy, { fontSize: 16, fontWeight: 700, color: C.chalk })}>Last rep as fast as the first?</div>
+            {ans.a === "y" ? <Note c={C.moss} bold>Yes — {lname} max {ans.from} → {ans.kg} kg for next week. It's in TRACK; change it there if that's wrong.</Note>
+              : !cm ? <Note c={C.ash} s={{ fontStyle: "italic" }}>Enter your {lname} max in TRACK first.</Note>
+              : <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+                  <Btn on={() => { setE("fb_" + lift, { a: "y", kg: next, from: cm }); onSetMax(lift, next, "fast-bar rule · wk " + week); }} c={C.brass} fill s={{ flex: 2 }}>YES · {cm} → {next} KG</Btn>
+                  <Btn on={() => setE("fb_" + lift, { a: "n" })} c={C.ash} fill={ans.a === "n"} s={{ flex: 1 }}>NO</Btn>
+                </div>}
+            {ans.a === "y" ? null : <Note>Yes raises this lift's max by 2.5% for next week, rounded to {step} kg, once per lift per week. The grind rule runs the other way: two grinding sets on one lift in a week and you take 2.5% back off.</Note>}
+          </div>);
+      })() : null}
 
       {b.review && weekStats ? (
         <div style={{ background: C.ink, border: "1px solid " + C.moss, borderRadius: 5, padding: "11px 12px", marginBottom: 11 }}>
@@ -901,17 +932,17 @@ function Session(props) {
           <div style={{ display: "flex", gap: 6, marginTop: 8, flexWrap: "wrap" }}>
             <Chip c={P.ac}>M{macro} · WK {week} · {P.n}</Chip>
             {own.free ? <Chip c={C.moss}>Free day</Chip> : <Chip c={C.brass}>3am session</Chip>}
-            {rx.maxSq && day === "wed" ? <Chip c={C.oxide}>Squat max single</Chip> : null}
-            {rx.maxBe && day === "sat" ? <Chip c={C.oxide}>Bench max single</Chip> : null}
-            {rx.dl ? <Chip c={C.moss}>Deload</Chip> : null}{rx.tp ? <Chip c={C.cobalt}>Taper</Chip> : null}{rx.cal && (day === "fri" || day === "sat") ? <Chip c={C.brass}>Calibration</Chip> : null}
+            {rx.maxSq && day === "sat" ? <Chip c={C.oxide}>Squat max single</Chip> : null}
+            {rx.maxBe && day === "sun" ? <Chip c={C.oxide}>Bench max single</Chip> : null}
+            {rx.dl ? <Chip c={C.moss}>Deload</Chip> : null}{rx.tp ? <Chip c={C.cobalt}>Taper</Chip> : null}{rx.cal && (day === "wed" || day === "sat") ? <Chip c={C.brass}>Calibration</Chip> : null}
           </div>
-          {sess.intro ? <Note c={own.box ? C.cobalt : C.ash}>{swapped ? "You sparred last night. Nothing maximal, no sprints, no jumps within 24 hours of head contact. Heavy work resumes tomorrow." : sess.intro}</Note> : null}
+          {sess.intro ? <Note c={C.ash}>{sess.intro}</Note> : null}
         </div>
 
         {sparPrev ? (
           <div style={{ background: C.ink, borderTop: "1px solid " + C.oxide, borderBottom: "1px solid " + C.oxide, padding: "11px 14px" }}>
             <Eye c={C.oxide} s={{ marginBottom: 4 }}>The sparring rule</Eye>
-            <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, lineHeight: 1.5 })}>You sparred last night. The morning is the light session or nothing. Any symptom — headache, fog, light sensitivity — nothing at all, and your coach knows.</div>
+            <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, lineHeight: 1.5 })}>You sparred last night. The morning is the light session — Tuesday's warm-up, Thursday's neck block, Monday's shoulder circuit, about 30 minutes — or nothing. Any headache, fogginess or light sensitivity: do nothing at all, and tell your coach.</div>
             <div style={{ display: "flex", gap: 6, marginTop: 10 }}>
               <Btn on={() => setSwapped(!swapped)} c={C.oxide} fill={!swapped} small s={{ flex: 1 }}>{swapped ? "BACK TO THE PLAN" : "USE THE LIGHT SESSION"}</Btn>
             </div>
@@ -965,6 +996,16 @@ function Session(props) {
           </Card>);
       })}
 
+      <Card ac={C.violet} s={{ padding: 0 }}>
+        <button onClick={() => openProto("HOME")} style={{ display: "flex", width: "100%", alignItems: "center", gap: 11, textAlign: "left", background: "transparent", border: "none", padding: "12px 13px", cursor: "pointer" }}>
+          <span style={{ flex: 1, minWidth: 0 }}>
+            <div style={Object.assign({}, bdy, { fontSize: 13.5, fontWeight: 600, color: C.chalk, lineHeight: 1.4 })}>{HOMELINE}</div>
+            <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, marginTop: 3, letterSpacing: 1 })}>TAP FOR THE HOME BLOCK</div>
+          </span>
+          <span style={Object.assign({}, mno, { fontSize: 13, color: C.violet, flexShrink: 0 })}>▸</span>
+        </button>
+      </Card>
+
       <Card>
         <Eye>Session notes</Eye>
         <textarea value={note || ""} onChange={(e) => setNote(e.target.value)} placeholder="How it went. What slowed. What hurt. Hands at 7pm."
@@ -978,7 +1019,7 @@ function Session(props) {
    ================================================================ */
 function Flow(props) {
   const { macro, week, day, done, setDone, swapped, sparPrev, ready, close } = props;
-  const rx = rxFor(week), srcDay = swapped ? "thu" : day, own = S[day];
+  const rx = rxFor(week), srcDay = swapped ? "light" : day, own = S[day];
   const real = realBlocks(srcDay, rx);
   const dk = dayKey(macro, week, day), dl = done[dk] || [];
   const [i, setI] = useState(() => { const f = real.findIndex((x) => dl.indexOf(x.L) < 0); return f < 0 ? 0 : f; });
@@ -1103,24 +1144,24 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
         <Eye c={C.brass}>What this week actually is</Eye>
         {rx.hell ? <Note c={C.chalk}>Hell Week. Six flagship tests, one a day. No Optimal 8 volume — the IRON tab runs this week.</Note> : (
           <div>
-            <Row k="Squat" val={rx.sc} />
-            <Row k="Bench" val={rx.upperC ? "Upper circuit · 4 × 2 @ 85%" : (rx.bsc || rx.sc)} />
+            <Row k="Squat (Sat)" val={rx.sc} />
+            <Row k="Bench (Mon)" val={rx.upperC ? "Upper circuit · 4 × 2 @ 85%" : rx.maxBe ? rx.sets + " × " + rx.reps + " @ " + rx.pct + "% · max is Sunday" : (rx.bsc || rx.sc)} />
             <Row k="Jump circuit" val={rx.cr + " round" + (rx.cr > 1 ? "s" : "") + " · 2 @ " + rx.cpct + "%" + (rx.ph === "b3" ? " · +assisted jump" : "")} />
             <Row k="Sprints" val={rx.spr + " × 20m" + (rx.sprPct < 100 ? " @ 90%" : "")} />
-            <Row k="Jumps" val={(rx.jump === "AEL" ? "AEL drop jump " : "Depth jump ") + rx.js[0] + " × " + rx.js[1]} />
+            <Row k="Jumps (Sat)" val={(rx.jump === "AEL" ? "Loaded drop jump " : "Depth jump ") + rx.js[0] + " × " + rx.js[1]} />
             <Row k="Trap bar" val={rx.tb.sc} />
-            <Row k="Push press" val={rx.pp ? rx.pp.sc : rx.maxBe ? "→ BENCH MAX SINGLE (Sat)" : "—"} />
+            <Row k="Push press" val={rx.pp && rx.pp.sc ? rx.pp.sc : rx.maxBe ? "skipped — squat max day" : "—"} />
             <Row k="Nordics" val={rx.nor ? rx.nor[0] + " × " + rx.nor[1] : "—"} />
             <Row k="Punch throws" val={rx.vec + " rounds"} />
-            <Row k="Accessories" val={rx.acc + " sets"} />
+            <Row k="Rows / split squat" val={(rx.acc <= 2 ? 2 : 3) + "–" + (rx.acc <= 2 ? 3 : 4) + " sets"} />
             <Row k="Tuesday bike" val={ENG[rx.eng] ? ENG[rx.eng].n : "—"} />
             <Row k="Thursday bike" val={ENG[rx.eng2] ? ENG[rx.eng2].n : "—"} />
             <Row k="Pause squat (Wed)" val={rx.pq ? rx.pq.sc : "—"} />
             <Row k="Fight sim" val={rx.sim.skip ? "skip" : (rx.sim.rounds || 6) + " rds · " + rx.sim.rest + "s" + (rx.sim.tested ? " · TESTED" : "")} />
-            <Row k="Easy ride" val={"Fri " + (rx.w === 16 ? 30 : rx.z2wed === 20 ? 40 : 50) + " min"} />
+            <Row k="Easy ride" val={"Fri " + friMin(rx) + " min"} />
             
-            <Row k="Max singles" val={rx.maxSq ? "Squat Wed · Bench Sat" : rx.test ? "TEST DAY" : "none"} />
-            {rx.cal ? <Note c={C.brass} bold>Calibration week: ramp to a 3RM on the trap bar (Fri) and push press (Sat). The app turns them into maxes.</Note> : null}
+            <Row k="Max singles" val={rx.maxSq ? "Squat Sat · Bench Sun" : rx.test ? "TEST DAY" : "none"} />
+            {rx.cal ? <Note c={C.brass} bold>Calibration week: ramp to a 3RM on the trap bar (Wed) and the push press (Sat). The app turns them into maxes.</Note> : null}
             {rx.mid ? <Note c={C.oxide} bold>Mid-check. Not your real numbers — you are fatigued. A direction check.</Note> : null}
             {rx.dl ? <Note c={C.moss} bold>Deload. Sprints and jumps stay in at reduced volume — the 5-day residual doesn't pause.</Note> : null}
           </div>)}
@@ -1259,7 +1300,7 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L 
             {[["Max strength", "Block 2 wasn't heavy enough, or Block 1 didn't build enough. Add a set to the main lifts in weeks 1–4."],
               ["Speed / jump", "Block 3 carried fatigue in. Make week 10's easy week genuinely easy."],
               ["Size", "Not programming. Volume or food."],
-              ["Fight-sim fade", "Aerobic base eroded. Guard the Friday ride and the Thursday spin."],
+              ["Fight-sim fade", "Aerobic base eroded. Guard the Friday ride and both bike sessions."],
               ["Everything", "Recovery, not programming. Take a full week off."]].map((r) => (
               <div key={r[0]} style={{ padding: "8px 0", borderBottom: "1px solid " + C.line }}>
                 <div style={Object.assign({}, bdy, { fontSize: 13, fontWeight: 600, color: C.chalk })}>{r[0]}</div>
@@ -1862,7 +1903,7 @@ export default function App() {
       <div style={{ borderBottom: "1px solid " + C.line, background: C.slab, position: "sticky", top: 0, zIndex: 30, paddingTop: "env(safe-area-inset-top)" }}>
         <div style={{ borderTop: "3px solid " + P.ac }} />
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 13px", paddingLeft: "max(13px, env(safe-area-inset-left))", paddingRight: "max(13px, env(safe-area-inset-right))", maxWidth: 640, margin: "0 auto" }}>
-          <span style={Object.assign({}, dsp, { fontSize: 19, fontWeight: 800, letterSpacing: 2, color: C.chalk })}>OPTIMAL<span style={{ color: P.ac }}>·</span>8<span style={{ fontSize: 12, color: C.ash, letterSpacing: 1 }}> SINGLES</span></span>
+          <span style={Object.assign({}, dsp, { fontSize: 19, fontWeight: 800, letterSpacing: 2, color: C.chalk })}>OPTIMAL<span style={{ color: P.ac }}>·</span>8<span style={{ fontSize: 12, color: C.ash, letterSpacing: 1 }}> FIGHTER</span></span>
           <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Chip c={P.ac}>M{current.macro} · WK {current.week} · {P.n}</Chip>
             <button onClick={() => setShowSettings(true)} aria-label="Settings" style={Object.assign({}, mno, { background: "transparent", border: "1px solid " + C.line, color: C.ash, borderRadius: 4, width: 44, height: 44, cursor: "pointer", fontSize: 16 })}>⚙</button>

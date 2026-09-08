@@ -81,7 +81,7 @@ language. Useful things to say:
 - Whether it's a wording change, a number change, or new behaviour.
 
 For example: *"On the Thursday session, the neck protocol says 10 minutes —
-make it 12"*, or *"Add a warm-up timer to Friday's sled block"*.
+make it 12"*, or *"Add a warm-up timer to Wednesday's sled block"*.
 
 Ask it to **commit and push to main** when it's done. Pushing to `main`
 rebuilds and republishes the site automatically; give it two or three minutes,
