@@ -9,12 +9,17 @@ import {
 import { DocView } from "./mdview.jsx";
 import { IM_KEYS, GATES, dayDone, streakTo } from "./im-data.js";
 import {
+  LINES, lineById, curLevel, ownedDate, levelText, calMode, DEF_CALIS,
+  CALIS_INTRO, CALIS_RULES, SLOW_LAWS, SLOW_WHY, SKILL_BLOCK, MODE_LINE,
+  FRONT_LEVER_LINE, BACK_LEVER_LINE, PLANCHE_LINE, SUNDAY_LEVER,
+} from "./calis.js";
+import {
   IronToday, BreatheView, SitView, HardshipView, IronTrack,
   BreathTool, GuidedTool, SitTool, ColdTimer, HeatTimer, FloorTool,
 } from "./im-ui.jsx";
 
 /* ================================================================
-   OPTIMAL 8 — THE FIGHTER BUILD v1.1 · companion app
+   OPTIMAL 8 — THE FIGHTER BUILD v1.2 · companion app
    The phase colour drives the screen: BUILD moss, FORCE oxide,
    VELOCITY brass, TAPER/TEST cobalt. Durability work is violet.
    Iron Mind v4.2 runs inside it — one app, one day, one streak.
@@ -39,6 +44,17 @@ async function shareOrDownload(text) {
   } catch (e) { return "failed"; }
 }
 const readTextFile = (file) => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result || "")); r.onerror = () => rej(r.error); r.readAsText(file); });
+
+/* v1.2 threaded the calisthenics in, and that moved some block letters on
+   Monday (ring dips) and Tuesday (the pistol line). This remaps the ticks of
+   anything saved before then, so nothing already done lands on the wrong block. */
+const MAP_MON = { E: "F", F: "G", G: "H" }, MAP_TUE = { C: "D", D: "E", E: "F", F: "G", G: "H" };
+function migrateDone(done) {
+  const out = {};
+  Object.keys(done || {}).forEach((k) => { const m = /-mon$/.test(k) ? MAP_MON : /-tue$/.test(k) ? MAP_TUE : null;
+    out[k] = m ? (done[k] || []).map((x) => m[x] || x) : done[k]; });
+  return out;
+}
 
 const defaultStart = () => { const t = new Date(); const dow = (t.getDay() + 6) % 7; const m = mondayOf(t); if (dow >= 5) m.setDate(m.getDate() + 7); return iso(m); };
 
@@ -105,13 +121,13 @@ Object.keys(R).forEach((w) => { R[w].eng2 = ENG2[w] === undefined ? null : ENG2[
    and gets protected. `keep` is the running order for that day.     */
 const MODE = { camp: false, lastTen: false };
 const CAMP = {
-  mon: { keep: ["A", "B", "C", "D", "E", "F", "G"], m: 48, t: "3am · bench throw, box jumps, bench, chins, rows, band catch. Shoulder circuit at home.", note: "The shoulder circuit moves home in camp." },
+  mon: { keep: ["A", "B", "C", "D", "F", "G", "H"], m: 48, t: "3am · bench throw, box jumps, bench, chins, rows, band catch. Shoulder circuit at home.", note: "The shoulder circuit moves home in camp. The rings and the muscle-up line stop: boxing nights leave no room for a fourth pressing exposure." },
   tue: { sleep: 1 },
   wed: { keep: ["A", "B", "C", "D", "E", "F"], m: 55, t: "3am · sled, trap bar, pause squat, RDL, neck holds", note: "The loads are capped at 80% of the week table on any week with sparring." },
   thu: { keep: ["A", "B", "C", "D", "X", "G"], m: 40, t: "3am · throws + landmine, split squat, Spanish squat hold, Achilles hold, neck. No bike.", note: "No bike in camp — boxing does that job better, and stacking them is how you arrive at sparring flat." },
   fri: { sleep: 1 },
   sat: { keep: ["A", "B", "C", "D", "E", "F", "G"], m: 85, t: "The leg & power session, as written", note: "If Sunday is sparring, the jump circuit is cut to one round." },
-  sun: { keep: ["A", "C", "T", "H", "I"], m: 40, t: "Punch throws (2 rounds), trunk, Nordics, weekly check. No fight sim — the ring did it.", note: "The engine gets measured in the ring now, not on a bike." },
+  sun: { keep: ["A", "C", "T", "H", "I"], m: 40, t: "Punch throws (2 rounds), trunk, Nordics, weekly check. No fight sim — the ring did it.", note: "The engine gets measured in the ring now, not on a bike. Calisthenics in camp: the handstand at home stays; the rings, the pistols, the L-sits and the slow lane stop." },
 };
 const CAMP_INTRO = "This program is a base phase: it assumes the evenings are free. The day your coach puts you back on the pads four or five nights a week — and more so the day a fight is booked — half of it becomes a liability, and a program that doesn't say which half isn't finished. This is the switch. Boxing nights: the head-contact rule is the law.";
 const LASTTEN_INTRO = "Week table numbers stop; every lift goes to 2 sets at 70%, fast; no sprints, no depth jumps, no Nordics inside the last seven days; the jump circuit becomes box jumps only. The two power doses stay because they keep the nervous system sharp without costing anything. The last heavy thing you do is nine days out. The fuel plan's \"making weight\" section runs the food.";
@@ -190,13 +206,19 @@ const PROTO = {
     note: "Straight punches are built on forward drive; hooks on rotation. They're different physical problems, so all four get trained. Ball 3–5 kg: if it isn't flying, it's too heavy. Both sides equally.",
     i: [["Rotational shot-put", "4/side — YOUR STRAIGHT RIGHT. Ball at the shoulder, side-on to a wall. Drive off the back hip, flat and hard. A few from a lower crouch for the body shot."], ["Downward diagonal throw", "4/side — YOUR OVERHAND RIGHT. Ball high outside the shoulder, drive it down and across toward the opposite hip. Back foot pivots, trunk turns AND side-bends."], ["Hook throw", "4/side — YOUR LEAD HOOK. Ball at chest height in bent arms, pivot hard off the lead leg and sling it sideways into the wall."], ["Landmine punch", "5/side — YOUR LOADED STRAIGHT. Drive the hips and PUNCH it up and away — never a slow press. Catch it, go again."]] },
   HOME: { n: "The home block", s: "8 min · every evening (Friday 20)", c: C.violet,
-    note: "This is the mobility that used to close every gym session. It moved home so the gym time is all training. It does the same job at 8pm that it did at 4am; the only thing that changes is whether you do it. Kit: a foam roller, a light band, and something to hold at your chest — a kettlebell, a dumbbell, a bag of sugar. If you skip it: nothing shows this week. By week 6 the hips tighten, squat depth goes, the sprints get shorter and the pause squat starts to hurt.",
+    note: "This is the mobility that used to close every gym session. It moved home so the gym time is all training. It does the same job at 8pm that it did at 4am; the only thing that changes is whether you do it. Kit: a foam roller, a light band, and something to hold at your chest — a kettlebell, a dumbbell, a bag of sugar. Balance skills are built by frequency: five minutes of handstand four evenings a week beats an hour of it on one, and the wall in your house is a better teacher than any gym. If you skip it: nothing shows this week. By week 6 the hips tighten, squat depth goes, the sprints get shorter and the pause squat starts to hurt.",
     i: [["THE FOUR MOVES, EVERY EVENING", ""],
       ["Foam roller across the mid-back", "×8 — hands behind head, arch back over it, moving the roller up a notch each time"],
       ["Open book", "6/side · hold 3s — on your side, knees bent, open the top arm to the far side, chest follows, knees stay down"],
       ["90/90 hip switches", "×5 each way — swivel the knees over without using your hands"],
       ["Deep squat hold", "90s — a weight at your chest, sit in the very bottom of a squat"],
-      ["FRIDAY EVENING · THE FULL STRETCH · 20 MIN — replaces the four moves", ""],
+      ["THE SKILL BLOCK · MONDAY TO THURSDAY · 6 MIN — after the mobility, before the sit", ""],
+      ["Wrists first, always", "circles × 10 each way, then palms flat on the floor and rock forward and back × 10"],
+      ["Handstand", "4 min at your level (the Calisthenics section in settings) — the body is one straight line, ribs in, glutes tight, pushing the floor away through the shoulders the whole time"],
+      ["Hollow hold", "2 × 20s — on your back, lower back pressed into the floor, arms overhead, legs straight and lifted, one shallow banana"],
+      ["Arch hold", "2 × 20s — face down, arms and legs lifted. The two shapes every calisthenics skill is made of."],
+      ["Planche leans", "Tuesday and Thursday only, 3 × 15s — a push-up position, then shift the shoulders forward past the wrists as far as they'll go, arms locked, body rigid. Five seconds added per fortnight, never with an elbow that aches."],
+      ["FRIDAY EVENING · THE FULL STRETCH · 20 MIN — replaces the four moves; no skill block on Fridays", ""],
       ["UPPER BACK FIRST, ALWAYS", ""],
       ["Foam roller arch-backs", "×8"], ["Open book", "×8/side"], ["Thread the needle", "×8/side — on all fours, slide one arm under the other, shoulder toward the floor"], ["Quadruped rotation", "×8/side — hand behind head, rotate the elbow to the ceiling"],
       ["HIPS", ""],
@@ -204,7 +226,7 @@ const PROTO = {
       ["SHOULDERS", ""],
       ["Hang from a bar or doorframe", "45s — skip if you haven't one"], ["Wall slides", "×12"], ["Band pull-apart", "×20"], ["Band external rotation", "×15/arm"]] },
 };
-const HOMELINE = "HOME · tonight: mobility 8 min (Friday: the full stretch, 20 min)";
+const HOMELINE = "HOME · tonight: mobility 8 min (Friday: the full stretch, 20 min) · Mon–Thu then the skill block, 6 min: handstand, hollow and arch, planche leans on Tuesday and Thursday";
 
 /* ================================================================
    SESSIONS — the seven pages, in running order, exactly as written.
@@ -222,7 +244,7 @@ const engMin = (key) => (rx) => (rx[key] === "easy" || rx[key] === "easy15" ? 20
 
 const S = {
   /* ---------------- MONDAY ---------------- */
-  mon: { n: "MONDAY", t: "Upper Strength + Power Dose", m: 57, ac: C.oxide, box: 1,
+  mon: { n: "MONDAY", t: "Upper Strength + Power Dose + Rings", m: 64, ac: C.oxide, box: 1,
     intro: "Upper strength and the first of the week's three power doses. Nothing is taken to failure.", b: [
     { L: "A", n: "Warm-up", m: 8, p: "SH" },
     { L: "B", n: "Bench Throw (Smith)", m: 11, star: 1, hard: 1, hide: (rx) => !!rx.upperC, rest: "Rest 2:00", rt: 120,
@@ -245,37 +267,47 @@ const S = {
       note: (rx) => (rx.upperC ? "Weeks 11–14: steps 2 and 4 merge into one circuit, 4 rounds — 2 bench reps @ 85% → rest 20s → 3 bench throws → rest 20s → 3 clap push-ups → rest 2½ min."
         : rx.maxBe ? "Max-single week: the bench max is Sunday morning, first thing. Today is the back-off work." : ""),
       why: "Upper-body maximal force, which tracks punch impact in elite amateurs.", tr: 2 },
-    { L: "E", n: "Weighted Chin-Up", m: 6, rest: "Rest 90s", rt: 90,
-      items: [{ n: "Weighted chin-up", s: "3 × 5", cue: "Wide grip, palms away (switch to a neutral grip if wide ever bothers your shoulders), weight on a belt or a dumbbell between your feet. Dead hang, chin over the bar, lower under control, no swinging. Add weight when all three sets are clean.", id: "chin", k: "wr", sets: 3, reps: 5 }],
-      why: "Pulling strength protects the shoulders that throw a thousand punches a week.", tr: 1 },
-    { L: "F", n: "Chest-Supported Row", m: 7, rest: "Rest 75s", rt: 75,
+    { L: "E", n: "Ring Dips", m: 6, cal: "ringdip", rest: "Rest 90s", rt: 90, rxLine: () => "3 sets at your level",
+      items: [{ n: "Ring dips — at your level", s: "3 sets", cue: "At the level most men start: support yourself at the top of a pair of rings, arms locked, rings still, then lower until your shoulders are level with your elbows and press back up, turning the rings so your palms face forward at the top. If you can't yet, the level below is the bar dip, and below that the support hold.", id: "ringdip", k: "wr", sets: 3, reps: "at your level" }],
+      w: "Elbow pain of any kind is a stop sign, not a challenge.",
+      why: "Pressing is grouped on this morning on purpose — bench throw, bench, dips — so that the rest of the week's shoulders stay fresh for throws and push press. The rings are what make the shoulder bulletproof: every rep is the joint stabilising itself in three directions at once.", tr: 1 },
+    { L: "F", n: "Weighted Chin-Up + The Muscle-Up Line", m: 9, cal: "muscleup", rest: "Rest 90s", rt: 90,
+      rxLine: () => "3 × 5, then 2 sets of the muscle-up line",
+      items: [{ n: "Weighted chin-up", s: "3 × 5", cue: "Wide grip, palms away (switch to a neutral grip if wide ever bothers your shoulders), weight on a belt or a dumbbell between your feet. Dead hang, chin over the bar, lower under control, no swinging. Add weight when all three sets are clean.", id: "chin", k: "wr", sets: 3, reps: 5 },
+        { n: "The muscle-up line — at your level", s: "2 sets, bodyweight", cue: "At the first level that's chest-to-bar pull-ups — explosive, the bar touches the chest, elbows driving down and back — and it climbs through muscle-up negatives to the strict bar muscle-up and the ring muscle-up. It's a skill, not a grind: two crisp sets, never a third.", id: "muscleup", k: "wr", sets: 2, reps: "at your level" }],
+      why: "Pulling strength protects the shoulders that throw a thousand punches a week; the muscle-up is pulling power, the same quality that snaps a hand back.", tr: 1 },
+    { L: "G", n: "Chest-Supported Row", m: 7, rest: "Rest 75s", rt: 75,
       items: (rx) => [{ n: "Chest-supported row", s: (rx.acc <= 2 ? 3 : 4) + " × 8", cue: "Lie chest-down on an incline bench with dumbbells. Row until your elbows pass your body, pause one second at the top, lower slow.", id: "csrow", k: "wr", sets: rx.acc <= 2 ? 3 : 4, reps: 8 }],
       why: "Four sets so your pulling matches your pressing. A boxer's shoulders live or die on that balance.", tr: 1 },
-    { L: "G", n: "Shoulder Circuit + Band Catch", m: 8, p: "CUFF",
+    { L: "H", n: "Shoulder Circuit + Band Catch", m: 8, p: "CUFF",
       items: [{ n: "Circuit + band deceleration catch", s: "2 rounds · then 2 × 8/arm", id: "catch", k: "chk" }],
       why: "Every right hand you throw, this muscle group has to brake your arm. This is the only place it gets trained to." }] },
 
   /* ---------------- TUESDAY ---------------- */
-  tue: { n: "TUESDAY", t: "Jumps · Engine 1 · Hands · Trunk · Achilles", m: (rx) => (rx.test ? 32 : rx.eng === "easy" ? 54 : 58), ac: C.cobalt, box: 1,
+  tue: { n: "TUESDAY", t: "Jumps · Pistols · Engine 1 · Hands · Trunk · Achilles", m: (rx) => (rx.test ? 32 : rx.eng === "easy" ? 59 : 63), ac: C.cobalt, box: 1,
     intro: "Power dose first, fresh, then the first of the week's two engine sessions. Your legs had yesterday off.", b: [
     { L: "A", n: "Warm-up", m: 6, p: "GEN" },
     { L: "B", n: "Power dose — jumps", m: 8, star: 1, hard: 1, hide: (rx) => !!rx.test, rest: "Rest 90s", rt: 90,
       items: [{ n: "Broad jump", s: "3 × 2", cue: "Two-foot jump forward for distance, stick the landing dead still.", id: "broad", k: "chk" },
         { n: "Trap bar jump", s: (rx) => (rx.cal ? "3 × 3 — empty bar (week 1)" : "3 × 3 @ 20% of trap bar max"), cue: "Stand inside the bar, jump with it, land soft.", id: "tbjump2", k: "chk" }],
       why: "The second of three weekly power doses. Fresh legs, before the bike — never after." },
-    { L: "C", n: (rx) => (ENG[rx.eng] ? ENG[rx.eng].n : "Bike session"), m: engMin("eng"), star: 1, hard: 1, eng: 1, hide: (rx) => !rx.eng, timer: engTimer("eng"),
+    { L: "C", n: "The Pistol Line", m: 5, cal: "pistol", hide: (rx) => !!rx.test, rest: "Rest 60s", rt: 60, rxLine: () => "2 sets of 5 per leg at your level",
+      items: [{ n: "The pistol line — at your level", s: "2 × 5 per leg", cue: "At the level most men start: stand on one leg in front of a box or bench, the other leg held straight out in front, sit down to the box under control and stand back up without touching the floor with the free foot. The line climbs through the assisted pistol (fingertips on a post) to the full pistol, then the weighted pistol, with the shrimp squat as a rotation.", id: "pistol", k: "wr", sets: 2, reps: "5/leg" }],
+      w: "Two sets, never to failure, never sore: Saturday's sprints are four days away, Wednesday's heavy lower is tomorrow, and this block is control, not load.",
+      why: "The split squat on Thursday is the loaded single-leg strength. This is the unloaded single-leg skill — balance, ankle, knee tracking, the pivot foot learning to own the whole body." },
+    { L: "D", n: (rx) => (ENG[rx.eng] ? ENG[rx.eng].n : "Bike session"), m: engMin("eng"), star: 1, hard: 1, eng: 1, hide: (rx) => !rx.eng, timer: engTimer("eng"),
       items: [{ n: "Output", s: "write it down", id: "cond", k: "out", u: "output / peak HR" }],
       note: "Bike or SkiErg — pick one and keep it all 16 weeks so your numbers compare." },
-    { L: "D", n: "The 60-Second Settle", m: 1, settle: 1, hide: (rx) => !rx.eng || !!rx.test, timer: () => ({ kind: "settle", title: "THE SETTLE" }), rxLine: () => "60 seconds — log the seconds to land",
+    { L: "E", n: "The 60-Second Settle", m: 1, settle: 1, hide: (rx) => !rx.eng || !!rx.test, timer: () => ({ kind: "settle", title: "THE SETTLE" }), rxLine: () => "60 seconds — log the seconds to land",
       items: [{ n: "Seconds to land on the breath", s: "write it down", id: "settle", k: "out", u: "seconds" }],
       why: "This is the corner between rounds, trained, for nothing, every Tuesday and Thursday." },
-    { L: "E", n: "Hands", m: 5, p: "HANDS", timer: () => ({ kind: "hold", opt: { sets: 3, secs: 20, rest: 30, label: "KNUCKLE HOLD" }, title: "HANDS" }),
+    { L: "F", n: "Hands", m: 5, p: "HANDS", timer: () => ({ kind: "hold", opt: { sets: 3, secs: 20, rest: 30, label: "KNUCKLE HOLD" }, title: "HANDS" }),
       items: [{ n: "Knuckle hold + wrist extension", s: "3 × 20s · 2 × 15", id: "hands", k: "chk" }] },
-    { L: "F", n: "Trunk", m: 9, hide: (rx) => !!rx.test, rest: "Rest 45s between exercises", rt: 45,
+    { L: "G", n: "Trunk", m: 9, hide: (rx) => !!rx.test, rest: "Rest 45s between exercises", rt: 45,
       items: [{ n: "Pallof press", s: "3 × 10/side · 2s hold", cue: "Band at chest height, anchored beside you. Press your hands straight out and hold two seconds without letting it twist you. Your trunk is what turns leg drive into hand speed, and it has to be stiff to transmit it.", id: "pallof", k: "wr", sets: 3, reps: "10/side" },
         { n: "Ab wheel rollout", s: "3 × 8–12", cue: "Knees down, roll out only as far as your lower back stays flat, pull back.", id: "abwheel", k: "wr", sets: 3, reps: "8–12" },
         { n: "Copenhagen plank", s: "2 × 30s/side", cue: "Side plank with your top foot up on a bench, bottom leg lifted off the floor. Groin strength — the muscles you pivot off.", id: "copen", k: "chk" }] },
-    { L: "G", n: "Seated Calf Raise + Achilles Hold", m: 5, p: "CALF", hide: (rx) => !!rx.test, rest: "Rest 60s", rt: 60,
+    { L: "H", n: "Seated Calf Raise + Achilles Hold", m: 5, p: "CALF", hide: (rx) => !!rx.test, rest: "Rest 60s", rt: 60,
       rxLine: () => "3 × 12, then one 45-second hold",
       timer: () => ({ kind: "hold", opt: { sets: 1, secs: 45, label: "ACHILLES HOLD — DEAD STILL" }, title: "ACHILLES HOLD" }),
       items: [{ n: "Seated calf raise", s: "3 × 12", cue: "Seated machine, or a barbell padded across your knees. Up on the balls of the feet, pause, down slow, twelve times.", id: "soleus", k: "wr", sets: 3, reps: 12 },
@@ -283,7 +315,7 @@ const S = {
       why: "The hold is the tendon block, part one. Muscle gets strong in weeks; tendon gets stiff in months, and a heavy still hold is the best-proven way to hurry it. Your Achilles takes every sprint and every depth jump on Saturday. Forty-five seconds a week is the insurance." }] },
 
   /* ---------------- WEDNESDAY ---------------- */
-  wed: { n: "WEDNESDAY", t: "Sled · Trap Bar · Pause Squat · RDL · Neck", m: (rx) => (rx.pq ? 55 : 45), ac: C.oxide, box: 1,
+  wed: { n: "WEDNESDAY", t: "Sled · Trap Bar · Pause Squat · RDL · Neck · Ring Rows", m: (rx) => (rx.pq ? 60 : 50), ac: C.oxide, box: 1,
     intro: "The heavy lower morning. Sled first while the nervous system is freshest, then the pulls, then the second squat exposure. Nothing to failure. The hamstring work that leaves you sore is on Sunday, not here.", b: [
     { L: "A", n: "Warm-up", m: 6, p: "GEN", note: "Then trap bar warm-up sets (bar × 5 · 50% × 3 · 65% × 2) and squat warm-up sets (40% × 3 · 60% × 2)." },
     { L: "B", n: "Heavy Sled Sprints", m: 16, star: 1, hard: 1, rest: "Rest 2:30–3:00", rt: 165,
@@ -306,7 +338,10 @@ const S = {
       why: "Hamstring strength without the soreness. The eccentric work that does leave you sore — the Nordics — is last on Sunday." },
     { L: "F", n: "Neck — holds only", m: 5, p: "NECK",
       items: [{ n: "4-direction holds", s: "3 × 10s each direction", id: "neck2", k: "chk" }],
-      why: "Second dose of the week, holds only. Thursday carries the full block." }] },
+      why: "Second dose of the week, holds only. Thursday carries the full block." },
+    { L: "G", n: "Ring Rows", m: 5, cal: "ringrow", rest: "Rest 60s", rt: 60, rxLine: () => "3 sets at your level",
+      items: [{ n: "Ring rows — at your level", s: "3 sets", cue: "At the level most men start: rings hung at hip height, hang beneath them with your body straight and your heels on the floor, pull the rings to your chest, pause a second, lower slow. The lower the rings, the harder. The line climbs to feet-elevated rows and then archer rows — one arm pulls while the other stays straight and slides out to the side, the first taste of one-arm strength.", id: "ringrow", k: "wr", sets: 3, reps: "at your level" }],
+      why: "Horizontal pulling on the heavy lower morning: light, quick, and it keeps the shoulder honest without adding a gram to the elbow load that Monday already carries." }] },
 
   /* ---------------- THURSDAY ---------------- */
   thu: { n: "THURSDAY", t: "Throws + Landmine · Split Squat + Tendon Hold · Engine 2 · Neck", m: (rx) => (rx.test ? 16 : rx.eng2 === "easy" ? 55 : 59), ac: C.cobalt, box: 1,
@@ -389,7 +424,7 @@ const S = {
       note: "Weeks 4 and 9: skipped. The squat max is enough maximal work for one day." }] },
 
   /* ---------------- SUNDAY ---------------- */
-  sun: { n: "SUNDAY", t: "★ Punch Throws · Fight Rounds · Core · Nordics", m: (rx) => (rx.test ? 40 : rx.maxBe ? 82 : rx.sim.skip ? 46 : 70), ac: C.brass, free: 1, box: 1,
+  sun: { n: "SUNDAY", t: "★ Punch Throws · Fight Rounds · Core + L-Sit · Lever · Nordics", m: (rx) => (rx.test ? 40 : rx.maxBe ? 88 : rx.sim.skip ? 52 : 76), ac: C.brass, free: 1, box: 1,
     intro: "Second free morning. Punches, rounds, core and hands, and the week's hamstring work last, with two leg-free days behind it. No pressing today on purpose so Monday's bench gets 42 hours. (Week 16: the warm-up, the 20-minute test and the weekly check. Nothing else.)", b: [
     { L: "A", n: "Warm-up", m: 10, p: "GEN", note: "Plus: broad jumps 3 × 2 · med-ball chest passes 3 × 3 as hard as you can · 3 × 10-second bike sprints with a minute between · then three EASY practice throws of each of the four throws." },
     { L: "B", n: "Bench Max Single", m: 12, star: 1, hard: 1, hide: (rx) => !rx.maxBe, mainLift: "bench", maxUI: 1, rest: "Rest 2:30–3:00", rt: 165,
@@ -420,10 +455,16 @@ const S = {
       rxLine: () => "3 min — straight off the last round",
       items: [{ n: "Seconds to settle onto the anchor", s: "write it down", cue: "Straight off the last round: sit down, eyes closed, heart at 170-plus, chest heaving — and find the breath at the nostrils. Write down the seconds it took to genuinely settle onto it. On weeks 1 and 16 it follows the bike test instead.", id: "postmax", k: "out", u: "seconds" }],
       why: "This is the corner between rounds, trained; nobody practises it and everybody needs it." },
-    { L: "G", n: "Core + Hands", m: 8, hide: (rx) => !!rx.test, rest: "Rest 60s", rt: 60,
+    { L: "G", n: "Core + L-Sit + Hands", m: 10, cal: "lsit", hide: (rx) => !!rx.test, rest: "Rest 60s", rt: 60,
       items: [{ n: "Hanging leg raise", s: "3 × 8–12", cue: "Hang from a bar, dumbbell between your feet if needed, lift the legs to hip height or above, no swinging.", id: "hlr", k: "wr", sets: 3, reps: "8–12" },
+        { n: "The L-sit line — at your level", s: "3 sets", cue: "At the first level it's the tuck L-sit: sitting between two boxes or on parallettes, press the floor away until your backside lifts and hold with the knees pulled to the chest; the line climbs one leg at a time to the full L-sit and then the floor L-sit. Straight-arm pushing strength and the stiffest trunk position there is.", id: "lsit", k: "wr", sets: 3, reps: "at your level" },
         { n: "Side plank reach-through", s: "2 × 10/side", cue: "In a side plank, thread your top arm under your body, then rotate open to the ceiling.", id: "sprt", k: "chk" },
         { n: "Hands", s: "knuckle hold 3 × 20s · band wrist extension 2 × 15", cue: "As Tuesday.", id: "hands2", k: "chk" }] },
+    { L: "J", n: "The Slow Lane — one lever hold", m: 3, cal: "slowlane", hide: (rx) => !!rx.test || !!rx.dl, rest: "Rest 60s", rt: 60,
+      rxLine: () => "one lever · 3 sets · ten seconds a hold to start",
+      items: [{ n: "The lever hold — at your level", s: "3 sets", cue: SUNDAY_LEVER, id: "lever", k: "wr", sets: 3, reps: "hold" }],
+      w: "The three laws govern this block absolutely: five seconds added per fortnight at most, twelve weeks a level minimum, and any inside-elbow ache buys the lane two weeks off.",
+      why: SLOW_WHY },
     { L: "H", n: "Nordic Curls", m: 8, noTaper: 1, hide: (rx) => !rx.nor || !!rx.test, rest: "Rest 2:00", rt: 120,
       rxLine: (rx) => rx.nor[0] + " × " + rx.nor[1] + " — ramped",
       items: [{ n: "Nordic curl", s: (rx) => rx.nor[0] + " × " + rx.nor[1] + " — ramped", cue: "Kneel with your heels anchored under something solid. Keeping your body straight from knees to head, lower yourself forward as SLOWLY as you can, catch yourself with your hands, push back up. Stop the set the moment your lower back rounds — not at the rep count.", id: "nordic", k: "wr", sets: (rx) => rx.nor[0], reps: (rx) => rx.nor[1] }],
@@ -435,12 +476,12 @@ const S = {
       why: "Camp moves the trunk block to Sunday: Tuesday is a sleep day now, and maximal strength, the power doses, the tendon block, the neck, the Nordics and the trunk are what boxing never covers." },
     { L: "I", n: "Weekly Check", m: 2, review: 1,
       items: [{ n: "Bodyweight", s: "kg", id: "wr_bw", k: "out", u: "kg" }, { n: "Resting heart rate", s: "bpm", id: "wr_rhr", k: "out", u: "bpm" }, { n: "HRV average", s: "if you measure it", id: "wr_hrv", k: "out", u: "ms" },
-        { n: "Hips", s: "0–10", id: "wr_hip", k: "out", u: "0–10" }, { n: "Shoulders", s: "0–10", id: "wr_sh", k: "out", u: "0–10" }, { n: "Wrists", s: "0–10", id: "wr_wr", k: "out", u: "0–10" },
+        { n: "Hips", s: "0–10", id: "wr_hip", k: "out", u: "0–10" }, { n: "Shoulders", s: "0–10", id: "wr_sh", k: "out", u: "0–10" }, { n: "Elbows", s: "0–10", id: "wr_el", k: "out", u: "0–10" }, { n: "Wrists", s: "0–10", id: "wr_wr", k: "out", u: "0–10" },
         { n: "Knees", s: "0–10", id: "wr_kn", k: "out", u: "0–10" }, { n: "Achilles", s: "0–10", id: "wr_ach", k: "out", u: "0–10" },
         { n: "Boxing nights your hands felt slow", s: "count", id: "wr_slow", k: "out", u: "nights" }, { n: "Energy", s: "1–10", id: "wr_en", k: "out", u: "1–10" },
         { n: "Home evenings done", s: "0–7", id: "wr_home", k: "out", u: "0–7" },
         { n: "Hours of sleep, averaged", s: "hours a night", id: "wr_sleep", k: "out", u: "hours" }],
-      note: "Two slow-hands nights, or three yellows in one week = next week is an easy week, whatever the plan says. Every 4–6 weeks: tape — arms, shoulders, waist." }] },
+      note: "Two slow-hands nights, or three yellows in one week = next week is an easy week, whatever the plan says. Shoulders, elbows or wrists at 4 or above out of 10 here, and next week every calisthenics line is holds only. Every 4–6 weeks: tape — arms, shoulders, waist." }] },
 
   /* ---------------- THE LIGHT SESSION ---------------- */
   light: { n: "LIGHT SESSION", t: "After head contact", m: 30, ac: C.violet,
@@ -638,7 +679,45 @@ function SetLogger({ sets, reps, autoKg, cur, onChange, onSetDone, prevSets, pre
 const setsSummary = (e) => { if (!e) return ""; if (e.sets && e.sets.some((s) => s.ok)) { const ok = e.sets.filter((s) => s.ok); const ws = ok.map((s) => s.w); const same = ws.every((x) => x === ws[0]); return same ? ws[0] + " kg × " + ok.map((s) => s.r).join(",") : ok.map((s) => s.w + "×" + s.r).join(" · "); } if (e.w) return e.w + (e.r ? " × " + e.r : ""); return ""; };
 const RAMP = [[50, 5], [65, 3], [75, 2], [85, 1], [92, 1]];
 
-function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, openProto, startTimer, openPlates, onSetMax, autoRest, weekStats }) {
+/* ================================================================
+   CALISTHENICS — the panel a calisthenics block carries: the level
+   you are on, its prescription, its "own it when", and the tick that
+   records the date you owned it.
+   ================================================================ */
+function CalPanel({ line, calis, setCalis, mode, week }) {
+  const L = lineById(line); if (!L) return null;
+  const lev = curLevel(calis, line);
+  const own = ownedDate(calis, line, lev.i);
+  const holds = mode === "holds", camp = mode === "camp";
+  const toggle = () => {
+    const owned = Object.assign({}, calis.owned);
+    const m = Object.assign({}, owned[line]);
+    if (m[lev.i]) delete m[lev.i]; else m[lev.i] = iso(new Date());
+    owned[line] = m; setCalis(Object.assign({}, calis, { owned })); buzz(20);
+  };
+  return (
+    <div style={{ background: C.ink, border: "1px solid " + L.c, borderRadius: 5, padding: 12, marginBottom: 11 }}>
+      <Eye c={L.c} s={{ marginBottom: 4 }}>{L.n} · {L.where}</Eye>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10 }}>
+        <span style={Object.assign({}, dsp, { fontSize: 20, fontWeight: 800, letterSpacing: 1.2, color: C.chalk })}>LEVEL {lev.l}</span>
+        <span style={Object.assign({}, mno, { fontSize: 8.5, color: C.ash, letterSpacing: 1 })}>OF {L.levels.length}</span>
+      </div>
+      <div style={Object.assign({}, bdy, { fontSize: 14, color: C.chalk, lineHeight: 1.5, marginTop: 6, fontWeight: 600 })}>{levelText(line, lev, week)}</div>
+      <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.brass, marginTop: 8, lineHeight: 1.45 })}>
+        <span style={Object.assign({}, mno, { fontSize: 8.5, color: C.ash, letterSpacing: 1.2 })}>OWN IT WHEN · </span>{L.slow ? L.own : lev.own}
+      </div>
+      {MODE_LINE[mode] ? <Note c={C.oxide} bold>{MODE_LINE[mode]}{holds ? (L.hold ? " " + L.hold : " This line does no work this week.") : ""}</Note> : null}
+      {camp ? null : (
+        <button onClick={toggle} aria-label={"Level owned — " + L.n}
+          style={Object.assign({}, dsp, { marginTop: 10, width: "100%", minHeight: 44, fontSize: 13, fontWeight: 700, letterSpacing: 1, borderRadius: 5, cursor: "pointer",
+            background: own ? C.moss : "transparent", color: own ? C.ink : C.ash, border: "1px solid " + (own ? C.moss : C.line) })}>
+          {own ? "✓ LEVEL " + lev.l + " OWNED · " + fmtDate(own) : "LEVEL OWNED — RECORD THE DATE"}
+        </button>)}
+      <Note>{own ? "Owned on the second clean occasion running. Move the level up in settings; the level below is your warm-up." : "You own a level when you hit the top of its target for the prescribed sets on two occasions running. Then, and only then, move up."}</Note>
+    </div>);
+}
+
+function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, openProto, startTimer, openPlates, onSetMax, autoRest, weekStats, calis, setCalis, taper }) {
   const P = PH[rx.ph], yellow = ready === "Y", red = ready === "R";
   const key = (id) => "m" + macro + "w" + week + "-" + day + "-" + id;
   const prevW = (id) => log["m" + macro + "w" + (week - 1) + "-" + day + "-" + id];
@@ -655,6 +734,11 @@ function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, ope
   const fs1 = log[key("fs_rd1")], fs6 = log[key("fs_rd6")];
   const drop = fs1 && fs6 && num(fs1.w) && num(fs6.w) ? (num(fs1.w) - num(fs6.w)) / num(fs1.w) * 100 : null;
   const startRest = (secs) => startTimer({ kind: "rest", opt: { secs }, title: "REST" });
+  /* Weekly check: shoulders, elbows or wrists at 4 or above on Sunday, and
+     next week every calisthenics line is holds only. */
+  const jointFlag = (() => { if (week < 2) return false;
+    return ["wr_sh", "wr_el", "wr_wr"].some((id) => { const e = log["m" + macro + "w" + (week - 1) + "-sun-" + id]; const n = e ? num(e.w) : null; return n != null && n >= 4; }); })();
+  const cmode = b.cal ? calMode(rx, taper, jointFlag) : null;
   const kgLine = (arr) => (arr ? arr.join("–") + " kg" : null);
   const bwLine = (it) => { const p = v(it.bwp, rx); if (!p || !bw) return null; return Math.round(bw * p[0] / 100) + "–" + Math.round(bw * p[1] / 100) + " kg " + (it.bwl || "") + " at " + bw + " kg"; };
   return (
@@ -697,6 +781,8 @@ function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, ope
               </div>
             </div>) : null}
         </div>) : null}
+
+      {b.cal && calis ? <CalPanel line={b.cal} calis={calis} setCalis={setCalis} mode={cmode} week={week} /> : null}
 
       {b.eng && ENG[rx[b.engKey || "eng"]] ? (
         <div style={{ background: C.ink, border: "1px solid " + C.cobalt, borderRadius: 5, padding: "11px 12px", marginBottom: 11 }}>
@@ -849,8 +935,9 @@ function ProtoSheet({ id, close }) {
 /* ================================================================
    SESSION — one day's card: readiness, the spine, the blocks
    ================================================================ */
-function summaryFor(b, rx, calc) {
+function summaryFor(b, rx, calc, calis) {
   if (b.review) return "2 min — write it down";
+  if (b.cal && calis) { const lev = curLevel(calis, b.cal); return "LEVEL " + lev.l + " · " + (b.rxLine ? b.rxLine(rx) : ""); }
   if (b.rxLine) return b.rxLine(rx);
   if (b.eng && ENG[rx[b.engKey || "eng"]]) return ENG[rx[b.engKey || "eng"]].d;
   const its = v(b.items, rx);
@@ -862,7 +949,7 @@ const dayKey = (macro, week, day) => "m" + macro + "w" + week + "-" + day;
 const prevDayKey = (macro, week, day, L) => { const i = DAYS.indexOf(day); if (i > 0) return dayKey(macro, week, DAYS[i - 1]); if (week > 1) return dayKey(macro, week - 1, "sun"); return dayKey(macro - 1, L, "sun"); };
 
 function Session(props) {
-  const { macro, week, day, isCurrent, done, setDone, log, setLog, maxes, bw, ready, setReady, sparPrev, sparThis, setSparThis, swapped, setSwapped, box, setBox, note, setNote, openProto, startTimer, openPlates, onSetMax, autoRest, openFlow, goIron, weekStats, addBody } = props;
+  const { macro, week, day, isCurrent, done, setDone, log, setLog, maxes, bw, ready, setReady, sparPrev, sparThis, setSparThis, swapped, setSwapped, box, setBox, note, setNote, openProto, startTimer, openPlates, onSetMax, autoRest, openFlow, goIron, weekStats, addBody, calis, setCalis, taper } = props;
   const rx = rxFor(week), P = PH[rx.ph];
   const [open, setOpen] = useState(null);
   if (rx.hell) return (
@@ -981,14 +1068,14 @@ function Session(props) {
               <span style={Object.assign({}, mno, { fontSize: 12, fontWeight: 700, width: 30, height: 30, borderRadius: 5, display: "flex", alignItems: "center", justifyContent: "center", background: isDone ? C.moss : C.ink, color: isDone ? C.ink : own.ac, border: "1px solid " + (isDone ? C.moss : C.line), flexShrink: 0 })}>{isDone ? "✓" : b.L}</span>
               <span style={{ flex: 1, minWidth: 0 }}>
                 <div style={Object.assign({}, bdy, { fontSize: 14.5, fontWeight: 600, color: star ? C.brass : C.chalk, lineHeight: 1.25, textDecoration: skip ? "line-through" : "none" })}>{star ? "★ " : ""}{name}</div>
-                <div style={Object.assign({}, mno, { fontSize: 9.5, color: skip ? C.oxide : C.ash, marginTop: 3, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" })}>{skip ? "SKIP — " + (sparPrev && !swapped ? "SPARRING RULE" : "RED DAY") : summaryFor(b, rx, calc)}</div>
+                <div style={Object.assign({}, mno, { fontSize: 9.5, color: skip ? C.oxide : C.ash, marginTop: 3, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" })}>{skip ? "SKIP — " + (sparPrev && !swapped ? "SPARRING RULE" : "RED DAY") : summaryFor(b, rx, calc, calis)}</div>
               </span>
               <span style={Object.assign({}, mno, { fontSize: 9.5, color: C.ash, flexShrink: 0 })}>{v(b.m, rx) ? v(b.m, rx) + "′" : ""}</span>
             </div>
             {isOpen ? (
               <div className="rise" style={{ padding: "0 12px 12px" }}>
                 <div style={{ height: 1, background: C.line, marginBottom: 12 }} />
-                <BlockBody b={b} rx={rx} week={week} macro={macro} day={day} log={log} setLog={setLog} maxes={maxes} bw={bw} ready={effReady} openProto={openProto} startTimer={startTimer} openPlates={openPlates} onSetMax={onSetMax} autoRest={autoRest} weekStats={weekStats} />
+                <BlockBody b={b} rx={rx} week={week} macro={macro} day={day} log={log} setLog={setLog} maxes={maxes} bw={bw} ready={effReady} openProto={openProto} startTimer={startTimer} openPlates={openPlates} onSetMax={onSetMax} autoRest={autoRest} weekStats={weekStats} calis={calis} setCalis={setCalis} taper={taper} />
                 {b.tr ? <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, marginTop: 12, textAlign: "center", letterSpacing: 1 })}>↓ {b.tr} MIN TRANSITION ↓</div> : null}
                 <Btn on={() => mark(b.L)} c={isDone ? C.line : C.moss} fill={!isDone} s={{ width: "100%", marginTop: 12, color: isDone ? C.ash : C.ink }}>{isDone ? "UNDO" : "MARK BLOCK DONE"}</Btn>
               </div>) : null}
@@ -1222,7 +1309,7 @@ function Bars({ data, unit, color }) {
     </div>);
 }
 
-function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L, IM }) {
+function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L, IM, calis, camp }) {
   const [sub, setSub] = useState("numbers");
   const [edit, setEdit] = useState({});
   const [tape, setTape] = useState({});
@@ -1233,8 +1320,8 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
   return (
     <div>
       <div style={{ display: "flex", gap: 5, marginBottom: 12 }}>
-        {[["numbers", "NUMBERS"], ["progress", "PROGRESS"], ["body", "BODY"], ["iron", "IRON MIND"]].map((x) => <button key={x[0]} onClick={() => setSub(x[0])}
-          style={Object.assign({}, dsp, { flex: 1, fontSize: 11, fontWeight: 700, letterSpacing: .8, padding: "11px 2px", borderRadius: 4, cursor: "pointer", minHeight: 44, background: sub === x[0] ? C.brass : "transparent", color: sub === x[0] ? C.ink : C.ash, border: "1px solid " + (sub === x[0] ? C.brass : C.line) })}>{x[1]}</button>)}
+        {[["numbers", "NUMBERS"], ["progress", "PROGRESS"], ["body", "BODY"], ["calis", "CALIS"], ["iron", "IRON MIND"]].map((x) => <button key={x[0]} onClick={() => setSub(x[0])}
+          style={Object.assign({}, dsp, { flex: 1, fontSize: 10, fontWeight: 700, letterSpacing: .5, padding: "11px 1px", borderRadius: 4, cursor: "pointer", minHeight: 44, background: sub === x[0] ? C.brass : "transparent", color: sub === x[0] ? C.ink : C.ash, border: "1px solid " + (sub === x[0] ? C.brass : C.line) })}>{x[1]}</button>)}
       </div>
 
       {sub === "numbers" ? (
@@ -1346,6 +1433,33 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
             </Card>))}
         </div>) : null}
 
+      {sub === "calis" ? (
+        <div>
+          <Card ac={C.brass}>
+            <Eye c={C.brass}>Calisthenics — where each line stands</Eye>
+            <Note c={C.chalk} s={{ marginTop: 0 }}>{CALIS_INTRO}</Note>
+            {camp ? <Note c={C.oxide} bold>{MODE_LINE.camp}</Note> : null}
+          </Card>
+          {LINES.map((ln) => { const lev = curLevel(calis, ln.id); const own = ownedDate(calis, ln.id, lev.i);
+            const hist = (calis && calis.owned && calis.owned[ln.id]) || {};
+            return (
+              <Card key={ln.id} ac={ln.c}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10 }}>
+                  <span style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1.1, color: C.chalk })}>{ln.n}</span>
+                  <span style={Object.assign({}, mno, { fontSize: 11, fontWeight: 700, color: ln.c })}>LEVEL {lev.l} / {ln.levels.length}</span>
+                </div>
+                <div style={Object.assign({}, mno, { fontSize: 8.5, color: C.ash, letterSpacing: 1, marginTop: 3 })}>{ln.where.toUpperCase()}</div>
+                <Note c={C.chalk}>{levelText(ln.id, lev, current.week)}</Note>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 10, marginTop: 9, paddingTop: 8, borderTop: "1px solid " + C.line }}>
+                  <span style={Object.assign({}, mno, { fontSize: 8.5, color: C.ash, letterSpacing: 1 })}>OWNED</span>
+                  <span style={Object.assign({}, mno, { fontSize: 10.5, color: own ? C.moss : C.ash })}>{own ? fmtDate(own) : "not yet"}</span>
+                </div>
+                {Object.keys(hist).length ? <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, marginTop: 6 })}>
+                  {Object.keys(hist).sort((a, b) => Number(a) - Number(b)).map((k) => "L" + ln.levels[Number(k)].l + " " + hist[k]).join(" · ")}
+                </div> : null}
+              </Card>); })}
+        </div>) : null}
+
       {sub === "iron" ? <IronTrack IM={IM} /> : null}
     </div>);
 }
@@ -1358,7 +1472,7 @@ function PlanView() {
   return (
     <div>
       <div style={{ display: "flex", gap: 5, marginBottom: 12 }}>
-        {[["fighter", "FIGHTER v1.1", C.oxide], ["iron", "IRON MIND v4.2", C.violet]].map((x) => (
+        {[["fighter", "FIGHTER v1.2", C.oxide], ["iron", "IRON MIND v4.2", C.violet]].map((x) => (
           <button key={x[0]} onClick={() => setDoc(x[0])}
             style={Object.assign({}, dsp, { flex: 1, fontSize: 12, fontWeight: 700, letterSpacing: 1, padding: "11px 0", borderRadius: 4, cursor: "pointer", minHeight: 44, background: doc === x[0] ? x[2] : "transparent", color: doc === x[0] ? C.ink : C.ash, border: "1px solid " + (doc === x[0] ? x[2] : C.line) })}>{x[1]}</button>))}
       </div>
@@ -1380,7 +1494,7 @@ const Toggle = ({ on, set, n, s, c }) => (
     </span>
   </div>);
 
-function Settings({ st, setSt, current, L, exportData, importData, close, IM }) {
+function Settings({ st, setSt, current, L, exportData, importData, close, IM, calis, setCalis }) {
   const [io, setIo] = useState(""); const [showIo, setShowIo] = useState(false); const [confirm, setConfirm] = useState(false);
   const [msg, setMsg] = useState(""); const fileRef = useRef(null);
   const upd = (patch) => setSt(Object.assign({}, st, patch));
@@ -1411,12 +1525,46 @@ function Settings({ st, setSt, current, L, exportData, importData, close, IM }) 
         <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
         <Eye c={C.oxide}>Camp mode — when boxing returns</Eye>
         <Toggle on={!!st.camp} set={() => upd({ camp: !st.camp, lastTen: st.camp ? false : st.lastTen })} c={C.oxide}
-          n="CAMP MODE" s="Swaps the week to the camp table: Monday, Wednesday, Thursday and Saturday keep what boxing never covers, Sunday drops the fight sim, and Tuesday and Friday become sleep days. Four sessions, about four hours." />
+          n="CAMP MODE" s="Swaps the week to the camp table: Monday, Wednesday, Thursday and Saturday keep what boxing never covers, Sunday drops the fight sim, and Tuesday and Friday become sleep days. Four sessions, about four hours. Calisthenics goes to the handstand at home only — the rings, the pistols, the L-sits and the slow lane stop." />
         {st.camp ? <div style={{ paddingLeft: 24 }}>
           <Toggle on={!!st.lastTen} set={() => upd({ lastTen: !st.lastTen })} c={C.oxide}
             n="THE LAST TEN DAYS BEFORE A FIGHT" s="Week table numbers stop; every lift goes to 2 sets at 70%, fast; no sprints, no depth jumps, no Nordics; the jump circuit becomes box jumps only. The two power doses stay. The last heavy thing you do is nine days out." />
         </div> : null}
         {st.camp ? <Note c={C.oxide}>Boxing nights: the head-contact rule is the law. The morning after any sparring is the LIGHT SESSION or nothing.</Note> : null}
+
+        <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
+        <Eye c={C.brass}>Calisthenics — the lines and the levels</Eye>
+        <Note c={C.chalk} s={{ marginTop: 0 }}>{CALIS_INTRO}</Note>
+        {st.camp ? <Note c={C.oxide} bold>{MODE_LINE.camp}</Note> : null}
+        {LINES.map((ln) => { const lev = curLevel(calis, ln.id); const own = ownedDate(calis, ln.id, lev.i);
+          return (
+            <div key={ln.id} style={{ padding: "12px 0", borderBottom: "1px solid " + C.line }}>
+              <Lab>{ln.n} — {ln.where}</Lab>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+                {ln.levels.map((x, i) => (
+                  <button key={i} onClick={() => setCalis(Object.assign({}, calis, { lvl: Object.assign({}, calis.lvl, { [ln.id]: i }) }))}
+                    aria-label={ln.n + " level " + x.l}
+                    style={Object.assign({}, dsp, { minWidth: 44, minHeight: 44, flex: "0 0 auto", padding: "0 12px", fontSize: 14, fontWeight: 700, letterSpacing: 1, borderRadius: 4, cursor: "pointer",
+                      background: lev.i === i ? ln.c : "transparent", color: lev.i === i ? C.ink : C.ash, border: "1px solid " + (lev.i === i ? ln.c : C.line) })}>{x.l}</button>))}
+              </div>
+              <div style={{ background: C.ink, border: "1px solid " + C.line, borderRadius: 5, padding: "10px 11px", marginTop: 9 }}>
+                <div style={Object.assign({}, mno, { fontSize: 8, color: ln.c, letterSpacing: 1.2, marginBottom: 5 })}>LEVEL {lev.l} · WHAT YOU DO</div>
+                <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, lineHeight: 1.45 })}>{levelText(ln.id, lev, current.week)}</div>
+                <div style={Object.assign({}, mno, { fontSize: 8, color: C.ash, letterSpacing: 1.2, margin: "9px 0 5px" })}>OWN IT WHEN</div>
+                <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.brass, lineHeight: 1.45 })}>{ln.slow ? ln.own : lev.own}</div>
+                {own ? <div style={Object.assign({}, mno, { fontSize: 9, color: C.moss, marginTop: 8, letterSpacing: 1 })}>OWNED {fmtDate(own)}</div> : null}
+              </div>
+            </div>); })}
+        <div style={{ background: C.ink, border: "1px solid " + C.line, borderRadius: 5, padding: "10px 11px", marginTop: 12 }}>
+          <div style={Object.assign({}, mno, { fontSize: 8, color: C.brass, letterSpacing: 1.2, marginBottom: 6 })}>THE RULES THAT SIT OVER ALL OF IT</div>
+          {CALIS_RULES.map((r, i) => <div key={i} style={Object.assign({}, bdy, { fontSize: 12, color: C.chalk, lineHeight: 1.45, padding: "4px 0" })}>{r}</div>)}
+          <div style={Object.assign({}, mno, { fontSize: 8, color: C.violet, letterSpacing: 1.2, margin: "10px 0 6px" })}>THE SLOW LANE'S THREE LAWS</div>
+          {SLOW_LAWS.map((r, i) => <div key={i} style={Object.assign({}, bdy, { fontSize: 12, color: C.chalk, lineHeight: 1.45, padding: "4px 0" })}>{r}</div>)}
+          <Note>{SLOW_WHY}</Note>
+          <Note s={{ fontStyle: "italic" }}>{FRONT_LEVER_LINE}</Note>
+          <Note s={{ fontStyle: "italic" }}>{BACK_LEVER_LINE}</Note>
+          <Note s={{ fontStyle: "italic" }}>{PLANCHE_LINE}</Note>
+        </div>
 
         <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
         <Eye c={C.violet}>Iron Mind — the three curricula</Eye>
@@ -1446,7 +1594,7 @@ function Settings({ st, setSt, current, L, exportData, importData, close, IM }) 
           <Note>This one keeps counting when the training program restarts at week 1. Today reads as <span style={{ color: C.violet }}>Iron Mind week {IM.imWeek}</span> — it sets the sit's length at Stage 2, and which of the five tests is this week's.</Note>
         </div>
         <Toggle on={!!st.taper} set={() => upd({ taper: !st.taper })} c={C.oxide}
-          n="Training taper weeks" s="Weeks 15–16 of the training cycle: no maximal hardship sessions. Breath, sits and the daily core continue; the tests pause. Weeks 15 and 16 turn this on by themselves — use the switch for a taper that lands anywhere else." />
+          n="Training taper weeks" s="Weeks 15–16 of the training cycle: no maximal hardship sessions. Breath, sits and the daily core continue; the tests pause, and every calisthenics line goes to holds only — handstand and ring support, nothing to failure, nothing new. Weeks 15 and 16 turn this on by themselves — use the switch for a taper that lands anywhere else." />
 
         <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
         <Eye>Backup</Eye>
@@ -1716,9 +1864,9 @@ function HellWeek({ current, maxes, bw, hwLog, setHwLog, L }) {
 /* ================================================================
    APP SHELL
    ================================================================ */
-const KEYS = { st: "o8s-settings", done: "o8s-done", log: "o8s-log", maxes: "o8s-maxes", maxHist: "o8s-maxhist", body: "o8s-body", ready: "o8s-ready", spar: "o8s-spar", swap: "o8s-swap", box: "o8s-box", notes: "o8s-notes", forge: "o8s-forge", fweek: "o8s-fweek", hw: "o8s-hw" };
+const KEYS = { st: "o8s-settings", done: "o8s-done", log: "o8s-log", maxes: "o8s-maxes", maxHist: "o8s-maxhist", body: "o8s-body", ready: "o8s-ready", spar: "o8s-spar", swap: "o8s-swap", box: "o8s-box", notes: "o8s-notes", forge: "o8s-forge", fweek: "o8s-fweek", hw: "o8s-hw", calis: "o8s-calis" };
 const DEF_ST = () => ({ start: defaultStart(), macroBase: 1, iron: false, sound: true, autoRest: true,
-  medStage: 1, breathStage: 1, hardLevel: 1, sitLen: 30, imStart: null, camp: false, lastTen: false, taper: false, levelStart: null });
+  medStage: 1, breathStage: 1, hardLevel: 1, sitLen: 30, imStart: null, camp: false, lastTen: false, taper: false, levelStart: null, v12: true });
 
 export default function App() {
   const [st, setStRaw] = useState(DEF_ST());
@@ -1744,6 +1892,7 @@ export default function App() {
   const [forge, setForgeRaw] = useState([]);
   const [fweek, setFweekRaw] = useState(1);
   const [hwLog, setHwRaw] = useState([]);
+  const [calis, setCalisRaw] = useState(DEF_CALIS());
   const [imDay, setImDayRaw] = useState({});
   const [imSit, setImSitRaw] = useState([]);
   const [imHard, setImHardRaw] = useState([]);
@@ -1757,6 +1906,7 @@ export default function App() {
   const setReadyMap = mk(setReadyRaw, KEYS.ready), setSparMap = mk(setSparRaw, KEYS.spar), setSwapMap = mk(setSwapRaw, KEYS.swap);
   const setBoxMap = mk(setBoxRaw, KEYS.box), setNotes = mk(setNotesRaw, KEYS.notes);
   const setForge = mk(setForgeRaw, KEYS.forge), setFweek = mk(setFweekRaw, KEYS.fweek), setHwLog = mk(setHwRaw, KEYS.hw);
+  const setCalis = mk(setCalisRaw, KEYS.calis);
   const setImDay = mk(setImDayRaw, IM_KEYS.day), setImSit = mk(setImSitRaw, IM_KEYS.sit);
   const setImHard = mk(setImHardRaw, IM_KEYS.hard), setImWk = mk(setImWkRaw, IM_KEYS.wk);
 
@@ -1785,17 +1935,20 @@ export default function App() {
         if (Object.keys(t).length) { mig.testLog = t; mig.macroBase = mm + 1; } }
       await save("o8s-migrated", true);
     }
-    const st1 = s0 || Object.assign(DEF_ST(), mig.settings || {}, mig.macroBase ? { macroBase: mig.macroBase } : {});
-    setStRaw(st1); if (!s0) save(KEYS.st, st1);
+    let st1 = s0 || Object.assign(DEF_ST(), mig.settings || {}, mig.macroBase ? { macroBase: mig.macroBase } : {});
+    let done0 = await load(KEYS.done, {});
+    if (!st1.v12) { done0 = migrateDone(done0); st1 = Object.assign({}, st1, { v12: true }); save(KEYS.done, done0); }
+    setStRaw(st1); save(KEYS.st, st1);
     const mx = await load(KEYS.maxes, null); setMaxesRaw(mx || mig.maxes || {}); if (!mx && mig.maxes) save(KEYS.maxes, mig.maxes);
     const bd = await load(KEYS.body, null); setBodyRaw(bd || mig.body || []); if (!bd && mig.body) save(KEYS.body, mig.body);
     const fg = await load(KEYS.forge, null); setForgeRaw(fg || mig.forge || []); if (!fg && mig.forge) save(KEYS.forge, mig.forge);
     const fw = await load(KEYS.fweek, null); setFweekRaw(fw || mig.fweek || 1);
     const hw = await load(KEYS.hw, null); setHwRaw(hw || mig.hw || []); if (!hw && mig.hw) save(KEYS.hw, mig.hw);
     const lg = await load(KEYS.log, null); const lg1 = lg || mig.testLog || {}; setLogRaw(lg1); if (!lg && mig.testLog) save(KEYS.log, lg1);
-    setDoneRaw(await load(KEYS.done, {})); setMaxHistRaw(await load(KEYS.maxHist, []));
+    setDoneRaw(done0); setMaxHistRaw(await load(KEYS.maxHist, []));
     setReadyRaw(await load(KEYS.ready, {})); setSparRaw(await load(KEYS.spar, {})); setSwapRaw(await load(KEYS.swap, {}));
     setBoxRaw(await load(KEYS.box, {})); setNotesRaw(await load(KEYS.notes, {}));
+    setCalisRaw(Object.assign(DEF_CALIS(), await load(KEYS.calis, null) || {}));
     setImDayRaw(await load(IM_KEYS.day, {})); setImSitRaw(await load(IM_KEYS.sit, []));
     setImHardRaw(await load(IM_KEYS.hard, [])); setImWkRaw(await load(IM_KEYS.wk, {}));
     setLoaded(true);
@@ -1908,8 +2061,13 @@ export default function App() {
       addHard: (e) => { setImHard([e].concat(imHard)); buzz([60, 40, 60]); },
       open: (t) => setTool(t), floorOpen: () => setTool({ kind: "floor" }),
       goHell: () => { setTab("iron"); setIsub("hell"); },
+      /* the home skill block — Monday to Thursday, after the mobility, before the sit */
+      skill: (() => { const i = DAYS.indexOf(todayKey()); const hs = curLevel(calis, "handstand");
+        return { show: i >= 0 && i <= 3, level: hs.l, what: hs.what, camp: !!st.camp,
+          planche: (i === 1 || i === 3) && !st.camp, plancheText: SKILL_BLOCK.planche,
+          wrists: SKILL_BLOCK.wrists, hollow: SKILL_BLOCK.hollow, why: SKILL_BLOCK.why, n: SKILL_BLOCK.n }; })(),
     };
-  }, [st, imStart, imDay, imSit, imHard, imWk, imWeek, dayIso, weekMonday, hwLog, taperNow]);
+  }, [st, imStart, imDay, imSit, imHard, imWk, imWeek, dayIso, weekMonday, hwLog, taperNow, calis]);
 
   const sessProps = { macro: shown.macro, week: shown.week, day: shown.day, isCurrent: isToday, done, setDone, log, setLog, maxes, bw,
     ready: readyMap[dk] || "", setReady: (val) => setReadyMap(Object.assign({}, readyMap, { [dk]: val })),
@@ -1918,14 +2076,17 @@ export default function App() {
     box: boxMap[dk] || "", setBox: (val) => setBoxMap(Object.assign({}, boxMap, { [dk]: val })),
     note: notes[dk] || "", setNote: (val) => setNotes(Object.assign({}, notes, { [dk]: val })),
     openProto: setProto, startTimer: T.start, openPlates: setPlates, onSetMax, autoRest: st.autoRest,
-    openFlow: () => setFlow(true), goIron: () => { setTab("iron"); setIsub("hell"); }, weekStats, addBody };
+    openFlow: () => setFlow(true), goIron: () => { setTab("iron"); setIsub("hell"); }, weekStats, addBody,
+    calis, setCalis, taper: taperNow };
 
-  const exportData = async () => JSON.stringify({ st, done, log, maxes, maxHist, body, readyMap, sparMap, swapMap, boxMap, notes, forge, fweek, hwLog, imDay, imSit, imHard, imWk });
+  const exportData = async () => JSON.stringify({ st, done, log, maxes, maxHist, body, readyMap, sparMap, swapMap, boxMap, notes, forge, fweek, hwLog, imDay, imSit, imHard, imWk, calis });
   const importData = (s) => { try { const d = JSON.parse(s || "{}");
-    setSt(Object.assign(DEF_ST(), d.st || {})); setDone(d.done || {}); setLog(d.log || {}); setMaxes(d.maxes || {}); setMaxHist(d.maxHist || []); setBody(d.body || []);
+    setSt(Object.assign(DEF_ST(), d.st || {}, { v12: true }));
+    setDone(d.st && d.st.v12 ? (d.done || {}) : migrateDone(d.done || {})); setLog(d.log || {}); setMaxes(d.maxes || {}); setMaxHist(d.maxHist || []); setBody(d.body || []);
     setReadyMap(d.readyMap || {}); setSparMap(d.sparMap || {}); setSwapMap(d.swapMap || {}); setBoxMap(d.boxMap || {}); setNotes(d.notes || {});
     setForge(d.forge || []); setFweek(d.fweek || 1); setHwLog(d.hwLog || []);
-    setImDay(d.imDay || {}); setImSit(d.imSit || []); setImHard(d.imHard || []); setImWk(d.imWk || {}); setShowSettings(false); } catch (e) {} };
+    setImDay(d.imDay || {}); setImSit(d.imSit || []); setImHard(d.imHard || []); setImWk(d.imWk || {});
+    setCalis(Object.assign(DEF_CALIS(), d.calis || {})); setShowSettings(false); } catch (e) {} };
 
   const TABS = [["today", "TODAY"], ["week", "WEEK"], ["track", "TRACK"], ["iron", "IRON"], ["plan", "PLAN"]];
   const P = PH[rxFor(current.week).ph];
@@ -1937,7 +2098,7 @@ export default function App() {
       {T.t ? <TimerFull T={T} /> : null}
       {plates !== null && plates !== undefined ? <Plates kg={plates} onClose={() => setPlates(null)} /> : null}
       {proto ? <ProtoSheet id={proto} close={() => setProto(null)} /> : null}
-      {showSettings ? <Settings st={st} setSt={setSt} current={current} L={L} exportData={exportData} importData={importData} close={() => setShowSettings(false)} IM={IM} /> : null}
+      {showSettings ? <Settings st={st} setSt={setSt} current={current} L={L} exportData={exportData} importData={importData} close={() => setShowSettings(false)} IM={IM} calis={calis} setCalis={setCalis} /> : null}
       {flow ? <Flow {...sessProps} close={() => setFlow(false)} /> : null}
       {tool ? (
         tool.kind === "breath" ? <BreathTool id={tool.id} sound={st.sound} onClose={() => setTool(null)}
@@ -1993,7 +2154,7 @@ export default function App() {
               </div>) : null}
             {tab === "week" ? <WeekView view={vw} setView={setView} current={current} setCurrent={setCurrent} done={done} L={L} weekDoneMap={weekDoneMap}
               openDay={(d) => { setSelDay({ macro: vw.macro, week: vw.week, day: d }); setTab("today"); }} /> : null}
-            {tab === "track" ? <Track current={current} maxes={maxes} onSetMax={onSetMax} maxHist={maxHist} log={log} body={body} addBody={addBody} done={done} L={L} IM={IM} /> : null}
+            {tab === "track" ? <Track current={current} maxes={maxes} onSetMax={onSetMax} maxHist={maxHist} log={log} body={body} addBody={addBody} done={done} L={L} IM={IM} calis={calis} camp={!!st.camp} /> : null}
             {tab === "iron" ? (
               <div>
                 <div style={{ display: "flex", gap: 4, marginBottom: 12 }}>

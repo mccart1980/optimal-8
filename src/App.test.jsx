@@ -1,6 +1,6 @@
 import React from "react";
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { render, screen, waitFor, fireEvent, within } from "@testing-library/react";
+import { render, screen, waitFor, fireEvent, within, cleanup } from "@testing-library/react";
 import App from "./App.jsx";
 
 /* A fixed Wednesday, so "today" is deterministic: the Iron Mind day, the
@@ -42,11 +42,83 @@ describe("Optimal 8", () => {
     fireEvent.click(screen.getByRole("button", { name: "MON" }));
 
     expect(await screen.findByText("MONDAY")).toBeInTheDocument();
-    expect(screen.getByText("Upper Strength + Power Dose")).toBeInTheDocument();
+    expect(screen.getByText("Upper Strength + Power Dose + Rings")).toBeInTheDocument();
     expect(screen.getByText("Bench Press")).toBeInTheDocument();
-    expect(screen.getByText("Weighted Chin-Up")).toBeInTheDocument();
+    expect(screen.getByText("Weighted Chin-Up + The Muscle-Up Line")).toBeInTheDocument();
     // week 1's bench prescription, so this really is week 1 and not just any Monday
     expect(screen.getByText("4 × 6 @ 75%")).toBeInTheDocument();
+  });
+
+  it("renders Monday's ring dips after the bench press, at the level you're on", async () => {
+    await mount();
+    fireEvent.click(screen.getByRole("button", { name: "MON" }));
+
+    const bench = await screen.findByText("Bench Press");
+    const dips = screen.getByText("Ring Dips");
+    const chins = screen.getByText("Weighted Chin-Up + The Muscle-Up Line");
+    // DOCUMENT_POSITION_FOLLOWING === 4: bench → ring dips → chins + muscle-up
+    expect(bench.compareDocumentPosition(dips) & 4).toBeTruthy();
+    expect(dips.compareDocumentPosition(chins) & 4).toBeTruthy();
+
+    // the block carries the level, its prescription and the "own it when"
+    fireEvent.click(dips);
+    expect(await screen.findByText("RING DIPS · Monday")).toBeInTheDocument();
+    expect(screen.getByText("LEVEL 1")).toBeInTheDocument();
+    expect(screen.getByText("Bar dips 3 × 5, chest forward, shoulders down (bench dips 3 × 10 if a bar dip isn't there yet)")).toBeInTheDocument();
+    expect(screen.getByText("3 × 10 bar dips")).toBeInTheDocument();
+
+    // owning the level records today's date
+    fireEvent.click(screen.getByLabelText("Level owned — RING DIPS"));
+    await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-calis")).owned.ringdip["0"]).toBe("2026-09-09"));
+  });
+
+  it("threads the rest of the calisthenics into the week it belongs to", async () => {
+    await mount();
+
+    fireEvent.click(screen.getByRole("button", { name: "TUE" }));
+    const pistol = await screen.findByText("The Pistol Line");
+    const bike = screen.getByText(/4-MINUTE INTERVALS/);
+    expect(pistol.compareDocumentPosition(bike) & 4).toBeTruthy();
+
+    fireEvent.click(screen.getByRole("button", { name: "WED" }));
+    expect(await screen.findByText("Ring Rows")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "SUN" }));
+    expect(await screen.findByText("Core + L-Sit + Hands")).toBeInTheDocument();
+    expect(screen.getByText("The Slow Lane — one lever hold")).toBeInTheDocument();
+  });
+
+  it("takes the lines to holds only in a taper week, and to half sets in an easy week", async () => {
+    await mount({ start: "2026-06-01" });          // week 15 — taper
+    fireEvent.click(screen.getByRole("button", { name: "MON" }));
+    fireEvent.click(await screen.findByText("Ring Dips"));
+    expect(await screen.findByText(/HOLDS ONLY — handstand and ring support/)).toBeInTheDocument();
+
+    cleanup();
+    await mount({ start: "2026-08-10" });          // week 5 — easy week
+    fireEvent.click(screen.getByRole("button", { name: "MON" }));
+    fireEvent.click(await screen.findByText("Ring Dips"));
+    expect(await screen.findByText(/EASY WEEK — every line at half its sets/)).toBeInTheDocument();
+    // and the slow lane is out that week
+    fireEvent.click(screen.getByRole("button", { name: "SUN" }));
+    await waitFor(() => expect(screen.queryByText("The Slow Lane — one lever hold")).not.toBeInTheDocument());
+  });
+
+  it("takes every line to holds only after an elbow at 4 or above on the weekly check", async () => {
+    localStorage.setItem("o8s-log", JSON.stringify({ "m1w1-sun-wr_el": { w: "5" } }));
+    await mount({ start: "2026-08-31" });          // week 2, so last week's check counts
+    fireEvent.click(screen.getByRole("button", { name: "MON" }));
+    fireEvent.click(await screen.findByText("Ring Dips"));
+    expect(await screen.findByText(/HOLDS ONLY — handstand and ring support/)).toBeInTheDocument();
+  });
+
+  it("puts the home skill block on the evening line, Monday to Thursday", async () => {
+    await mount();      // the fixed day is a Wednesday
+
+    expect(await screen.findByText("THE SKILL BLOCK — 6 minutes, Monday to Thursday")).toBeInTheDocument();
+    expect(screen.getByText(/HANDSTAND · LEVEL 1 ·/)).toBeInTheDocument();
+    // planche leans are Tuesday and Thursday only, so not today
+    expect(screen.queryByText(/Planche leans, Tuesday and Thursday only/)).not.toBeInTheDocument();
   });
 
   it("puts week 1 Thursday's split squat and Spanish squat hold before the bike", async () => {
@@ -158,7 +230,9 @@ describe("Optimal 8", () => {
 
     fireEvent.click(screen.getByText("Weekly Check"));
     expect(await screen.findByText("Knees")).toBeInTheDocument();
+    expect(screen.getByText("Elbows")).toBeInTheDocument();
     expect(screen.getByText("Achilles")).toBeInTheDocument();
+    expect(screen.getByText("Home evenings done")).toBeInTheDocument();
     expect(screen.getByText("Hours of sleep, averaged")).toBeInTheDocument();
   });
 
@@ -186,6 +260,12 @@ describe("Optimal 8", () => {
     expect(await screen.findByText("Spanish Squat Hold")).toBeInTheDocument();
     expect(screen.getByText("Achilles Hold")).toBeInTheDocument();
     expect(screen.queryByText(/40-SECOND REPEATS/)).not.toBeInTheDocument();
+
+    // and the calisthenics go to the handstand at home only
+    fireEvent.click(screen.getByRole("button", { name: "MON" }));
+    await waitFor(() => expect(screen.queryByText("Ring Dips")).not.toBeInTheDocument());
+    fireEvent.click(screen.getByRole("button", { name: "WED" }));
+    await waitFor(() => expect(screen.queryByText("Ring Rows")).not.toBeInTheDocument());
   });
 
   it("offers the fast-bar rule after the last bench set and raises the max 2.5%", async () => {
@@ -245,6 +325,11 @@ describe("Optimal 8", () => {
     fireEvent.click(screen.getByRole("button", { name: "TRACK" }));
     fireEvent.click(await screen.findByRole("button", { name: "IRON MIND" }));
     expect(await screen.findByText("Week by week")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "CALIS" }));
+    expect(await screen.findByText("Calisthenics — where each line stands")).toBeInTheDocument();
+    expect(screen.getByText("THE SLOW LANE")).toBeInTheDocument();
+    expect(screen.getAllByText("not yet").length).toBe(7);
 
     fireEvent.click(screen.getByRole("button", { name: "PLAN" }));
     expect(await screen.findByText("CONTENTS")).toBeInTheDocument();

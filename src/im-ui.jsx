@@ -562,6 +562,19 @@ export function IronToday({ IM, part }) {
     <Card ac={C.violet}>
       <SlotHead n="EVENING" s="15–35 MINUTES, AFTER THE MOBILITY BLOCK" c={C.violet} />
       <Tick ok={ok("mobility")} on={() => tick("mobility")} title="The mobility block" sub={isFriday(dayIso) ? "Friday evening: the full stretch, 20 minutes." : "Eight minutes at home, every evening."} c={C.violet} />
+      {IM.skill && IM.skill.show ? (
+        <div>
+          <Tick ok={ok("skill")} on={() => tick("skill")} title="THE SKILL BLOCK — 6 minutes, Monday to Thursday" sub={IM.skill.why} c={C.brass} />
+          <div style={{ paddingLeft: 55, marginTop: 4, marginBottom: 6 }}>
+            <div style={Object.assign({}, bdy, { fontSize: 12, color: C.ash, padding: "3px 0", lineHeight: 1.45 })}>{IM.skill.wrists}</div>
+            <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, padding: "3px 0", lineHeight: 1.45 })}>
+              <span style={Object.assign({}, mno, { fontSize: 9, color: C.brass, letterSpacing: 1 })}>HANDSTAND · LEVEL {IM.skill.level} · </span>{IM.skill.what}
+            </div>
+            <div style={Object.assign({}, bdy, { fontSize: 12, color: C.ash, padding: "3px 0", lineHeight: 1.45 })}>{IM.skill.hollow}</div>
+            {IM.skill.planche ? <div style={Object.assign({}, bdy, { fontSize: 12, color: C.ash, padding: "3px 0", lineHeight: 1.45 })}>{IM.skill.plancheText}</div> : null}
+            {IM.skill.camp ? <div style={Object.assign({}, bdy, { fontSize: 12, color: C.oxide, padding: "3px 0", lineHeight: 1.45, fontWeight: 600 })}>Camp mode: the handstand at home stays; the planche leans and everything else on the calisthenics page stop.</div> : null}
+          </div>
+        </div>) : null}
       <Tick ok={ok("sit")} on={() => tick("sit")} title={"★ THE SIT — " + plan.mins + " minutes"} sub={(MED_STAGE[med] || MED_STAGE[1]).line} c={C.violet}
         right={<OpenBtn on={() => open({ kind: "sit" })} label="Open the sit timer" c={C.violet} />} />
       <div style={{ paddingLeft: 55, marginTop: 4, marginBottom: 6 }}>

@@ -1,6 +1,6 @@
 # Optimal 8
 
-The companion app for the Optimal 8 fighter build (v1.1) with Iron Mind v4.2
+The companion app for the Optimal 8 fighter build (v1.2) with Iron Mind v4.2
 running inside it — a 16-week strength and conditioning cycle, and the mental
 training that attaches to it. One app, one day, one streak. It runs in your
 phone's browser, keeps everything on the phone itself, and works with no signal
@@ -29,8 +29,9 @@ version in the background.
 ## Where your data lives
 
 Everything — your maxes, ticked sessions, notes, body weight, Hell Week scores,
-and the whole Iron Mind side: the day's ticks, your sits, your BOLT and your
-hardship tests — is stored **on your phone**, inside the app. There is no account,
+your calisthenics levels and the dates you owned them, and the whole Iron Mind
+side: the day's ticks, your sits, your BOLT and your hardship tests — is stored
+**on your phone**, inside the app. There is no account,
 no sign-in and no server. Nobody else can see it, and it doesn't sync to
 other devices.
 
@@ -73,13 +74,19 @@ first if there's anything in there you want to keep.
 - **Bell sounds** and **Auto rest clock** — timer behaviour, on by default.
 - **CAMP MODE** — swaps the week to the camp table for when boxing comes back:
   four sessions, Tuesday and Friday asleep, no bike sessions and no fight sim.
-  Underneath it, **the last ten days before a fight** strips the loading right
-  down.
+  Calisthenics goes to the handstand at home only. Underneath it, **the last ten
+  days before a fight** strips the loading right down.
+- **Calisthenics** — the seven lines from the Calisthenics page, each with its
+  levels and its "own it when". Set the level you're on for each line here; the
+  session card for that line then shows the level, its prescription and a
+  "level owned" tick that records the date. TRACK → CALIS shows where every
+  line stands.
 - **Meditation stage, breath stage, hardship level** — the three Iron Mind
   curricula. Each one shows its gate, with a tick against everything the app can
   actually measure for you. Nothing advances by itself; you move it, and only
   when the gate is cleared honestly.
-- **Training taper weeks** — while it's on, the hardship tests pause.
+- **Training taper weeks** — while it's on, the hardship tests pause and every
+  calisthenics line goes to holds only.
 
 ## Asking for changes later
 
@@ -117,6 +124,9 @@ npm run icons   # regenerate the app icons from scripts/generate-icons.mjs
 
 - `src/App.jsx` — the training app: the macrocycle table, the session cards,
   protocols, timers, camp mode and Hell Week.
+- `src/calis.js` — the calisthenics lines as data: every level and every
+  "own it when" from the document's Calisthenics page, plus the rules that
+  govern easy weeks, taper weeks and camp mode.
 - `src/ui.jsx` — the palette, the type and the atoms both halves are built from.
 - `src/im-data.js` — Iron Mind as data: the breath presets, the sit stages, the
   guided timers, the hardship ladder and the gates. Every instruction string in
