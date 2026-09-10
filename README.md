@@ -1,8 +1,10 @@
 # Optimal 8
 
-The companion app for the Optimal 8 fighter build — a 16-week strength and
-conditioning cycle. It runs in your phone's browser, keeps everything on the
-phone itself, and works with no signal once you've added it to your home screen.
+The companion app for the Optimal 8 fighter build (v1.1) with Iron Mind v4.2
+running inside it — a 16-week strength and conditioning cycle, and the mental
+training that attaches to it. One app, one day, one streak. It runs in your
+phone's browser, keeps everything on the phone itself, and works with no signal
+once you've added it to your home screen.
 
 **Address: https://mccart1980.github.io/optimal-8/**
 
@@ -26,8 +28,9 @@ version in the background.
 
 ## Where your data lives
 
-Everything — your maxes, ticked sessions, notes, body weight, Forge and Hell
-Week scores — is stored **on your phone**, inside the app. There is no account,
+Everything — your maxes, ticked sessions, notes, body weight, Hell Week scores,
+and the whole Iron Mind side: the day's ticks, your sits, your BOLT and your
+hardship tests — is stored **on your phone**, inside the app. There is no account,
 no sign-in and no server. Nobody else can see it, and it doesn't sync to
 other devices.
 
@@ -68,6 +71,15 @@ first if there's anything in there you want to keep.
   straight into week 1 again. Turn it on if you want Hell Week and the Reload
   bolted on the end, making it an 18-week cycle.
 - **Bell sounds** and **Auto rest clock** — timer behaviour, on by default.
+- **CAMP MODE** — swaps the week to the camp table for when boxing comes back:
+  four sessions, Tuesday and Friday asleep, no bike sessions and no fight sim.
+  Underneath it, **the last ten days before a fight** strips the loading right
+  down.
+- **Meditation stage, breath stage, hardship level** — the three Iron Mind
+  curricula. Each one shows its gate, with a tick against everything the app can
+  actually measure for you. Nothing advances by itself; you move it, and only
+  when the gate is cleared honestly.
+- **Training taper weeks** — while it's on, the hardship tests pause.
 
 ## Asking for changes later
 
@@ -103,8 +115,17 @@ npm run build   # production build into dist/
 npm run icons   # regenerate the app icons from scripts/generate-icons.mjs
 ```
 
-- `src/App.jsx` — the whole app: the macrocycle table, the seven session
-  cards, protocols, timers, the Forge and Hell Week.
+- `src/App.jsx` — the training app: the macrocycle table, the session cards,
+  protocols, timers, camp mode and Hell Week.
+- `src/ui.jsx` — the palette, the type and the atoms both halves are built from.
+- `src/im-data.js` — Iron Mind as data: the breath presets, the sit stages, the
+  guided timers, the hardship ladder and the gates. Every instruction string in
+  there is the document's own wording.
+- `src/im-ui.jsx` — the Iron Mind screens: the pacer, the sit timer, the cold
+  and heat timers, the five tests, and the day woven into TODAY.
+- `src/mdview.jsx` — renders `optimal8fighter.md` and `iron-mind-v4-2.md` in the
+  PLAN tab, offline, with a table of contents. Those two files are the source of
+  truth; the app imports them directly.
 - `src/storage.js` — a `window.storage` shim (the API the original claude.ai
   artifact used) backed by `localStorage`, keeping the existing `o8s-…` keys.
 - `vite.config.js` — Vite base path `/optimal-8/` plus the PWA manifest and
