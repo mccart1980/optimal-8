@@ -1,6 +1,6 @@
-# OPTIMAL 8 — FIGHTER · v1.1
+# OPTIMAL 8 — FIGHTER · v1.2
 
-**The fighter's build. Four weekday mornings under an hour, Friday asleep, Saturday 90 minutes, Sunday 70. Mobility at home. The mind trained inside the sessions, where it's tested. Nothing in the gym that doesn't make you a better fighter.**
+**The fighter's build. Four weekday mornings of about an hour, Friday asleep, Saturday 90 minutes, Sunday 75. Calisthenics threaded through the week where each piece belongs. Mobility and the handstand at home. The mind trained inside the sessions, where it's tested. Nothing in the gym that doesn't make you a better fighter.**
 
 Your strength and conditioning for 16 weeks. Your coach owns boxing. This owns everything else: maximal strength, punching power, speed, the engine, and the tissue that keeps you training. Power is dosed three mornings a week, the engine is built twice, the squat gets a second exposure, the trunk is braced, the landmine appears twice. Boxing runs separately.
 
@@ -10,6 +10,8 @@ Everything you need to run a session is written on that session's page. No codes
 
 **What changed in v1.1, and why.** Friday's easy ride is gone and Friday is a sleep day — the 3:30 alarm bought 55 minutes of easy spinning and cost 75 minutes of sleep the night before the biggest session of the week; that trade was never worth making. A tendon block is in — two short isometric holds a week — because strength that outruns tendons is the injury that ends a cycle, and the sprints, depth jumps and Nordics are where it would happen. The mental drills that happen inside sessions (round-recovery breathing, the 60-second settle, the silent sled, the post-max sit, the nasal threshold) are now written on the session pages and run from this app, not from a second document. And there is a CAMP MODE page for when boxing returns, because a program that only works while you're not boxing isn't a boxer's program.
 
+**What changed in v1.2.** Calisthenics is in — as pieces placed where they belong, not as a session of its own. Ring dips and the muscle-up line on Monday with the rest of the pressing and pulling; ring rows on Wednesday; the pistol line on Tuesday after the jumps; L-sits and one lever hold on Sunday; the handstand and the hollow at home, four evenings a week, because balance skills are built by frequency, not by one long session. Nothing was dropped to make room, and the weekdays now run to about an hour rather than under it — a few minutes over is the correct price for the shoulders, trunk and single-leg control this adds. Every line has levels and an "own it when" on the Calisthenics page. Friday is still empty.
+
 ---
 
 ## START HERE — HOW TO RUN THIS
@@ -18,16 +20,16 @@ Everything you need to run a session is written on that session's page. No codes
 
 | Day | When | Session | Time |
 |---|---|---|---|
-| Monday | 3am | Upper strength + box-jump power dose | ~57 min |
-| Tuesday | 3am | Jumps + engine session 1 + hands + trunk + Achilles | ~58 min |
-| Wednesday | 3am | Sled, trap bar, pause squat, RDL, neck holds | ~55 min |
+| Monday | 3am | Upper strength + box-jump power dose + ring dips + the muscle-up line | ~64 min |
+| Tuesday | 3am | Jumps + pistol line + engine session 1 + hands + trunk + Achilles | ~63 min |
+| Wednesday | 3am | Sled, trap bar, pause squat, RDL, neck holds, ring rows | ~60 min |
 | Thursday | 3am | Throws + landmine, split squat + tendon hold, engine session 2, neck | ~59 min |
 | Friday | — | SLEEP. No alarm. Full stretch at home in the evening. | — |
 | Saturday | morning | THE LEG & POWER SESSION | ~90 min |
-| Sunday | morning | Punch throws, fight rounds, post-max sit, core, Nordics | ~72 min |
-| Every day | evening, at home | Mobility (Friday: the full stretch) | 8 min (Fri 20) |
+| Sunday | morning | Punch throws, fight rounds, post-max sit, core + L-sit, one lever hold, Nordics | ~76 min |
+| Every day | evening, at home | Mobility (Friday: the full stretch) · Mon–Thu also the skill block: handstand, hollow, planche leans | 8 min (Fri 20) + 6 |
 
-About 6¼ hours in the gym at peak, an hour and a quarter at home. Easy weeks: about 4¾ in the gym. Friday's extra hour of sleep is counted as training, because it is.
+About 6¾ hours in the gym at peak, an hour and a half at home. Easy weeks: about 5 in the gym. Friday's sleep is counted as training, because it is.
 
 **What left, and why.** The size blocks — lateral raises, rear-delt flies, shrugs, pulldowns, dips, curls — were 42 minutes a week that built the look, not the fighter. They're gone. The bench, push press, weighted chins, rows, trap bar and throws carry the shoulders, traps and arms from here. Mobility moved to the evening at home. Nothing else went: every sprint, jump, throw, lift, round and durability drill from the Singles version is still here, at the same numbers.
 
@@ -117,7 +119,7 @@ Sled runs (Wednesday): 5 a week. Week 1: 4. Easy weeks: 3.
 
 ---
 
-## MONDAY · 3AM · UPPER BODY STRENGTH + POWER DOSE · ~57 min
+## MONDAY · 3AM · UPPER BODY STRENGTH + POWER DOSE + RINGS · ~64 min
 
 Upper strength and the first of the week's three power doses. Nothing is taken to failure.
 
@@ -155,19 +157,27 @@ How: pins at chest height, no collars. Controlled down, drive up hard. If a rep 
 
 Weeks 11–14 only, steps 2 and 4 merge into one circuit, 4 rounds: 2 bench reps @ 85% → rest 20s → 3 bench throws → rest 20s → 3 clap push-ups → rest 2½ min. Heavy wakes the system up; fast uses it.
 
-**5 · 0:34 — WEIGHTED CHIN-UPS · 3 sets of 5 · rest 90s · 6 min**
+**5 · 0:34 — RING DIPS · 3 sets at your level (Calisthenics page) · rest 90s · 6 min**
+
+How, at the level most men start: support yourself at the top of a pair of rings, arms locked, rings still, then lower until your shoulders are level with your elbows and press back up, turning the rings so your palms face forward at the top. If you can't yet, the level below is the bar dip, and below that the support hold. Elbow pain of any kind is a stop sign, not a challenge.
+
+Pressing is grouped on this morning on purpose — bench throw, bench, dips — so that the rest of the week's shoulders stay fresh for throws and push press. The rings are what make the shoulder bulletproof: every rep is the joint stabilising itself in three directions at once.
+
+**6 · 0:40 — WEIGHTED CHIN-UPS · 3 sets of 5, then 2 sets of the MUSCLE-UP LINE at your level · rest 90s · 9 min**
 
 How: wide grip, palms away (switch to a neutral grip if wide ever bothers your shoulders), weight on a belt or a dumbbell between your feet. Start from a dead hang, pull chin over the bar, lower under control, no swinging. Add weight when all three sets are clean.
 
-Pulling strength protects the shoulders that throw a thousand punches a week.
+Then the muscle-up line, bodyweight, 2 sets: at the first level that's chest-to-bar pull-ups — explosive, the bar touches the chest, elbows driving down and back — and it climbs through muscle-up negatives to the strict bar muscle-up and the ring muscle-up (Calisthenics page). It's a skill, not a grind: two crisp sets, never a third.
 
-**6 · 0:40 — CHEST-SUPPORTED ROW · 4 sets of 8 (easy weeks 3) · rest 75s · 7 min**
+Pulling strength protects the shoulders that throw a thousand punches a week; the muscle-up is pulling power, the same quality that snaps a hand back.
+
+**7 · 0:49 — CHEST-SUPPORTED ROW · 4 sets of 8 (easy weeks 3) · rest 75s · 7 min**
 
 How: lie chest-down on an incline bench with dumbbells. Row until your elbows pass your body, pause one second at the top, lower slow.
 
 Four sets so your pulling matches your pressing. A boxer's shoulders live or die on that balance.
 
-**7 · 0:47 — SHOULDER CIRCUIT + BAND CATCH · 2 rounds · 8 min**
+**8 · 0:56 — SHOULDER CIRCUIT + BAND CATCH · 2 rounds · 8 min**
 
 Round = the four moves back to back, then rest 45s:
 
@@ -183,11 +193,11 @@ Then BAND DECELERATION CATCH · 2 sets of 8 per arm: hold a light band anchored 
 
 Every right hand you throw, this muscle group has to brake your arm. This is the only place it gets trained to.
 
-**Done · ~0:55–0:57.** Mobility: at home tonight (the home block is on its own page).
+**Done · ~1:04.** Tonight at home: mobility, then the skill block (the home page).
 
 ---
 
-## TUESDAY · 3AM · JUMPS · ENGINE 1 · HANDS · TRUNK · ACHILLES · ~58 min
+## TUESDAY · 3AM · JUMPS · PISTOLS · ENGINE 1 · HANDS · TRUNK · ACHILLES · ~63 min
 
 Power dose first, fresh, then the first of the week's two engine sessions. Your legs had yesterday off.
 
@@ -203,7 +213,13 @@ Trap bar jumps, 3 × 3 — stand inside a trap bar loaded to 20% of your trap ba
 
 The second of three weekly power doses. Fresh legs, before the bike — never after.
 
-**3 · 0:14 — BIKE SESSION · 24 min · check the week table — Tuesday's column**
+**3 · 0:14 — THE PISTOL LINE · 2 sets of 5 per leg at your level · rest 60s · 5 min**
+
+How, at the level most men start: stand on one leg in front of a box or bench, the other leg held straight out in front, sit down to the box under control and stand back up without touching the floor with the free foot. The line climbs through the assisted pistol (fingertips on a post) to the full pistol, then the weighted pistol, with the shrimp squat as a rotation (Calisthenics page). Two sets, never to failure, never sore: Saturday's sprints are four days away, Wednesday's heavy lower is tomorrow, and this block is control, not load.
+
+The split squat on Thursday is the loaded single-leg strength. This is the unloaded single-leg skill — balance, ankle, knee tracking, the pivot foot learning to own the whole body.
+
+**4 · 0:19 — BIKE SESSION · 24 min · check the week table — Tuesday's column**
 
 Bike or SkiErg — pick one and keep it all 16 weeks so your numbers compare. Write down your output.
 
@@ -215,11 +231,11 @@ Bike or SkiErg — pick one and keep it all 16 weeks so your numbers compare. Wr
 
 Easy: 20 minutes at a pace where you could chat. That's it.
 
-**4 · 0:38 — THE 60-SECOND SETTLE · 1 min**
+**5 · 0:43 — THE 60-SECOND SETTLE · 1 min**
 
 Stay on the bike after the last interval. Eyes closed, heart pounding, chest heaving — find the breath at the nostrils and stay on it. Count how many seconds it takes to land there and write it down. This is the corner between rounds, trained, for nothing, every Tuesday and Thursday.
 
-**5 · 0:39 — HANDS · 5 min**
+**6 · 0:44 — HANDS · 5 min**
 
 Knuckle hold, 3 × 20 seconds — push-up position on your fists on a mat, wrist dead straight so forearm and knuckles make one line. Hold. Move to a firmer surface over the weeks only if your wrist stays straight.
 
@@ -227,7 +243,7 @@ Band wrist extension, 2 × 15 — forearm on your knee, palm down, band in the h
 
 The most common boxing injury is a wrist folding under impact. Five minutes of insurance. Your job covers your grip — no grip work in here.
 
-**6 · 0:44 — TRUNK · 9 min · rest 45s between exercises**
+**7 · 0:49 — TRUNK · 9 min · rest 45s between exercises**
 
 Pallof press, 3 × 10 per side — band at chest height, anchored beside you. Press your hands straight out and hold 2 seconds without letting it twist you. Anti-rotation: your trunk is what turns leg drive into hand speed, and it has to be stiff to transmit it.
 
@@ -235,17 +251,17 @@ Ab wheel rollouts, 3 × 8–12 — knees down, roll the wheel out only as far as
 
 Copenhagen plank, 2 × 30 seconds per side — side plank with your top foot up on a bench, bottom leg lifted off the floor. Hold. Groin strength — the muscles you pivot off.
 
-**7 · 0:53 — SEATED CALF RAISE + ACHILLES HOLD · 3 sets of 12, then one 45-second hold · rest 60s · 5 min**
+**8 · 0:58 — SEATED CALF RAISE + ACHILLES HOLD · 3 sets of 12, then one 45-second hold · rest 60s · 5 min**
 
 How: seated machine, or a barbell padded across your knees. Up on the balls of the feet, pause, down slow, twelve times. After the third set, load it as heavy as you can hold dead still and hold the top position for 45 seconds — no bouncing, no sinking. It must be seated (knee bent) — that's the muscle that keeps you on your toes in round six.
 
 The hold is the tendon block, part one. Muscle gets strong in weeks; tendon gets stiff in months, and a heavy still hold is the best-proven way to hurry it. Your Achilles takes every sprint and every depth jump on Saturday. Forty-five seconds a week is the insurance.
 
-**Done · ~0:58.** Mobility at home tonight.
+**Done · ~1:03.** Tonight at home: mobility, then the skill block.
 
 ---
 
-## WEDNESDAY · 3AM · SLED · TRAP BAR · PAUSE SQUAT · RDL · NECK HOLDS · ~55 min
+## WEDNESDAY · 3AM · SLED · TRAP BAR · PAUSE SQUAT · RDL · NECK HOLDS · RING ROWS · ~60 min
 
 The heavy lower morning. Sled first while the nervous system is freshest, then the pulls, then the second squat exposure. Nothing to failure. The hamstring work that leaves you sore is on Sunday, not here. Sparred last night? This becomes the light session, and the heavy work waits a week.
 
@@ -283,7 +299,13 @@ Hamstring strength without the soreness. The eccentric work that does leave you 
 
 **6 · 0:50 — NECK · HOLDS ONLY · 5 min** — the 4-direction holds from Thursday: press your palm hard against your forehead and push your head into it, the head never moves, 3 × 10 seconds; then hand on the back of the head, then each side. Second dose of the week; Thursday carries the full block.
 
-**Done · ~0:55.** Mobility at home tonight.
+**7 · 0:55 — RING ROWS · 3 sets at your level · rest 60s · 5 min**
+
+How, at the level most men start: rings hung at hip height, hang beneath them with your body straight and your heels on the floor, pull the rings to your chest, pause a second, lower slow. The lower the rings, the harder. The line climbs to feet-elevated rows and then archer rows — one arm pulls while the other stays straight and slides out to the side, the first taste of one-arm strength (Calisthenics page).
+
+Horizontal pulling on the heavy lower morning: light, quick, and it keeps the shoulder honest without adding a gram to the elbow load that Monday already carries.
+
+**Done · ~1:00.** Tonight at home: mobility, then the skill block.
 
 ---
 
@@ -333,7 +355,7 @@ Catch, 2 × 6 per direction — let the band start to pull your head toward the 
 
 Straight truth: a stronger, stiffer neck measurably reduces how much your head accelerates when hit. Whether that prevents concussion is not proven. Cheap bet, sound mechanism — and it is not armour: it changes nothing about what you take in sparring.
 
-**Done · ~0:59.** Mobility at home tonight.
+**Done · ~0:59.** Tonight at home: mobility, then the skill block.
 
 ---
 
@@ -425,7 +447,7 @@ Legs → braced trunk → hands. The same route a punch takes, and the heaviest 
 
 ---
 
-## SUNDAY · MORNING · PUNCH THROWS · FIGHT ROUNDS · POST-MAX SIT · CORE · NORDICS · ~72 min
+## SUNDAY · MORNING · PUNCH THROWS · FIGHT ROUNDS · POST-MAX SIT · CORE · LEVER · NORDICS · ~76 min
 
 Second free morning. Punches, rounds, core and hands, and the week's hamstring work last, with two leg-free days behind it. No pressing today on purpose so Monday's bench gets 42 hours. Same fuelling as Saturday. (Week 16: the warm-up, the 20-minute test and the weekly check. Nothing else. Stretch at home.)
 
@@ -469,31 +491,37 @@ Weeks 1 and 16 — THE 20-MINUTE BIKE TEST instead of the fight rounds: 5 easy m
 
 Straight off the last round: sit down, eyes closed, heart at 170-plus, chest heaving — and find the breath at the nostrils. Write down the seconds it took to genuinely settle onto it. This is the corner between rounds, trained; nobody practises it and everybody needs it. On weeks 1 and 16 it follows the bike test instead.
 
-**5 · 0:53 — CORE + HANDS · rest 60s · 8 min**
+**5 · 0:53 — CORE + L-SIT + HANDS · rest 60s · 10 min**
 
 Hanging leg raises, 3 × 8–12 — hang from a bar, dumbbell between your feet if needed, lift legs to hip height or above, no swinging.
+
+The L-sit line, 3 sets at your level — at the first level it's the tuck L-sit: sitting between two boxes or on parallettes, press the floor away until your backside lifts and hold with the knees pulled to the chest; the line climbs one leg at a time to the full L-sit and then the floor L-sit (Calisthenics page). Straight-arm pushing strength and the stiffest trunk position there is.
 
 Side plank reach-through, 2 × 10 per side — in a side plank, thread your top arm under your body, then rotate open to the ceiling.
 
 Hands: knuckle hold 3 × 20s and band wrist extension 2 × 15 (as Tuesday).
 
-**6 · 1:01 — NORDIC CURLS · sets and reps from the week table · rest 2 min · 8 min**
+**6 · 1:03 — THE SLOW LANE · one lever hold · 3 sets · 3 min**
+
+One lever per Sunday, rotating week by week: the tuck front lever (hang from the bar, pull the shoulder blades down, knees to the chest, body horizontal, face up); then skin the cat and the German hang (rotate backward through the arms from a hang until the feet drop toward the floor, and hang there with the shoulders stretched — face down, the start of the back lever); then, at home in the week, the planche leans. Ten seconds a hold to start, and the three laws on the Calisthenics page govern this block absolutely: five seconds added per fortnight at most, twelve weeks a level minimum, and any inside-elbow ache buys the lane two weeks off.
+
+**7 · 1:06 — NORDIC CURLS · sets and reps from the week table · rest 2 min · 8 min**
 
 How: kneel with your heels anchored under something solid (or a partner-less setup: loaded bar over the ankles). Keeping your body straight from knees to head, lower yourself forward as SLOWLY as you can, catch yourself with your hands, push back up. Stop the set the moment your lower back rounds — not at the rep count.
 
 Last block of the last day, on purpose: the hardest hamstring work of the week, followed by two leg-free days, so the soreness is gone before it can cost you a sprint. Strong hamstrings on the way down is the best-proven injury protection in all of sport; the reps ramp up over the first month — follow the table. (Week 16: skip.)
 
-**7 · 1:09 — WEEKLY CHECK · 2 min · write these down**
+**8 · 1:14 — WEEKLY CHECK · 2 min · write these down**
 
-Bodyweight · resting heart rate · how many green / yellow / red days · any joint that's complaining (hips, shoulders, wrists, knees, Achilles 0–10) · how many boxing nights your hands felt slow · energy 1–10 · how many evenings you did the home block · hours of sleep, averaged.
+Bodyweight · resting heart rate · how many green / yellow / red days · any joint that's complaining (hips, shoulders, elbows, wrists, knees, Achilles 0–10) · how many boxing nights your hands felt slow · energy 1–10 · how many evenings you did the home block · hours of sleep, averaged.
 
 Two slow-hands nights, or three yellows in one week = next week is an easy week, whatever the plan says. Every 4–6 weeks: tape — arms, shoulders, waist.
 
-**Done · ~1:11** (weeks 4 and 9: ~1:23). Mobility at home tonight.
+**Done · ~1:16** (weeks 4 and 9: ~1:28). Mobility at home tonight.
 
 ---
 
-## THE HOME BLOCK · EVERY EVENING · 8 min (FRIDAY 20)
+## THE HOME BLOCK · EVERY EVENING · 8 min (FRIDAY 20) + THE SKILL BLOCK · MON–THU · 6 min
 
 This is the mobility that used to close every gym session. It moved home so the gym time is all training. It does the same job at 8pm that it did at 4am; the only thing that changes is whether you do it. Kit: a foam roller, a light band, and something to hold at your chest — a kettlebell, a dumbbell, a bag of sugar.
 
@@ -507,7 +535,17 @@ Open book × 6 per side — lie on your side, knees bent, arms together out fron
 
 Deep squat hold, 90 seconds — hold a weight at your chest and sit in the very bottom of a squat.
 
-**Friday evening: THE FULL STRETCH · 20 min** (replaces the four moves)
+**THE SKILL BLOCK · Monday to Thursday · 6 min · after the mobility, before the sit**
+
+Balance skills are built by frequency. Five minutes of handstand four evenings a week beats an hour of it on one; the wall in your house is a better teacher than any gym. Wrists first, always: circles × 10 each way, then palms flat on the floor and rock forward and back × 10.
+
+Handstand, 4 minutes at your level (Calisthenics page) — at the first level, wall walk-ups: hands on the floor, feet on the wall, walk the hands back toward the wall until the chest is near it, hold ten seconds, walk out. The body is one straight line, ribs in, glutes tight, pushing the floor away through the shoulders the whole time.
+
+Hollow hold, 2 × 20 seconds — on your back, lower back pressed into the floor, arms overhead, legs straight and lifted, one shallow banana. Then arch hold, 2 × 20 seconds — face down, arms and legs lifted. The two shapes every calisthenics skill is made of.
+
+Planche leans, Tuesday and Thursday only, 3 × 15 seconds — a push-up position, then shift the shoulders forward past the wrists as far as they'll go, arms locked, body rigid. The home end of the slow lane: five seconds added per fortnight, never with an elbow that aches.
+
+**Friday evening: THE FULL STRETCH · 20 min** (replaces the four moves; no skill block on Fridays)
 
 Upper back first, always: foam roller arch-backs × 8 → open book × 8 per side → thread the needle × 8 per side (on all fours, slide one arm under the other, shoulder toward the floor) → on all fours, hand behind head, rotate the elbow to the ceiling × 8 per side.
 
@@ -516,6 +554,82 @@ Hips: 90/90 switches × 5 each with a 30-second hold per side → couch stretch 
 Shoulders: hang from a bar or doorframe pull-up bar 45s (skip if you haven't one) → wall slides × 12 → band pull-aparts × 20 → band external rotations × 15 per arm.
 
 **If you skip it:** nothing shows this week. By week 6 the hips tighten, squat depth goes, the sprints get shorter and the pause squat starts to hurt. The weekly check asks how many evenings you did it, so you'll see it coming.
+
+---
+
+## CALISTHENICS — THE LINES AND THE LEVELS
+
+Seven lines, each with levels. **You own a level when you hit the top of its target for the prescribed sets on two occasions running. Then, and only then, move up.** Adding reps at a level always comes before adding difficulty. When you go back to a lower level, that's your warm-up.
+
+**The rules that sit over all of it.** One to two reps in the tank on every set — the grinding lives on Saturday. Easy weeks (5 and 10): every line at half its sets, no slow lane. Taper weeks 15–16: holds only — handstand and ring support — nothing to failure, nothing new. Camp Mode: the handstand at home stays; everything else on this page stops. Weekly check: shoulders, elbows or wrists at 4 or above out of 10 on Sunday, and next week every line is holds only. The slow lane's three laws are absolute.
+
+**HANDSTAND** — home, Mon–Thu
+
+| Level | What you do | Own it when |
+|---|---|---|
+| 1 | Wall walk-ups, 3 × 3, each hold 10 seconds | 3 × 3 clean |
+| 2 | Chest-to-wall hold, toes touching, hands a foot from the wall, 3 × 30 seconds | 3 × 45 seconds |
+| 3 | Back-to-wall kick-ups, pull one heel off and balance, 10 kick-ups; plus chest-to-wall shoulder taps 3 × 6 | 5 seconds of balance on most kick-ups |
+| 4 | Freestanding attempts in open space, 10 kick-ups; then 3 × 30 seconds chest-to-wall | A 10-second freestanding hold three times in a session |
+| 5 | Wall handstand push-up negatives, head to floor over 5 seconds, 3 × 3 (Tuesday and Thursday only); freestanding holds other evenings | 3 × 5 negatives at 5 seconds |
+| 6 | Wall handstand push-ups, 3 × 3–5, full range (Tuesday and Thursday only) | 3 × 8 |
+| 7 | Freestanding handstand push-ups — years, and only with a 60-second freestanding hold | — |
+
+**RING DIPS** — Monday
+
+| Level | What you do | Own it when |
+|---|---|---|
+| 1 | Bar dips 3 × 5, chest forward, shoulders down (bench dips 3 × 10 if a bar dip isn't there yet) | 3 × 10 bar dips |
+| 2 | Ring support hold, 3 × 20 seconds at the top, arms locked, rings still; then bar dips 3 × 8 | 3 × 40 seconds dead still |
+| 3 | Ring dip negatives, 3 × 5, lowering over 5 seconds | 3 × 5 at 5 seconds |
+| 4 | Ring dips, 3 × 5–8, full depth, rings turned out at the top | 3 × 10 |
+| 5 | Weighted ring dips, 3 × 5, +2.5 kg when 3 × 8 is clean | +20 kg for 3 × 5 |
+
+**THE MUSCLE-UP LINE** — Monday, 2 sets after the chins
+
+| Level | What you do | Own it when |
+|---|---|---|
+| 1 | Chest-to-bar pull-ups, 2 × 5, explosive, bar touches the chest | 2 × 8 |
+| 2 | Muscle-up negatives, 2 × 3 — jump to the top, lower through the transition to a dead hang over 5 seconds | 2 × 5 at 5 seconds |
+| 3 | Bar muscle-ups, 2 × 3, a band under the feet for the first weeks | 2 × 5 strict |
+| 4 | Ring muscle-ups, 2 × 3, false grip | 2 × 5 |
+
+**RING ROWS** — Wednesday
+
+| Level | What you do | Own it when |
+|---|---|---|
+| 1 | Ring rows, 3 × 8, body straight, feet on the floor, pause at the chest | 3 × 12 near horizontal |
+| 2 | Feet-elevated ring rows, 3 × 8, rings turned out at the chest | 3 × 12 |
+| 3 | Archer rows, 3 × 5 per side | 3 × 8 per side |
+| 4 | One-arm ring row progressions — the other hand on the rope, then off | 3 × 5 per side |
+
+**THE PISTOL LINE** — Tuesday, 2 sets per leg, light
+
+| Level | What you do | Own it when |
+|---|---|---|
+| 1 | Box pistol, 2 × 5 per leg, lowering the box over the weeks | Clean to a knee-height box |
+| 2 | Assisted pistol, fingertips on a post, full depth, 2 × 5 per leg | 2 × 8 per leg, fingertips only |
+| 3 | Pistol squat, 2 × 5 per leg, heel down, chest up | 2 × 8 per leg |
+| 4 | Weighted pistol, a kettlebell at the chest, 2 × 5 per leg | 2 × 5 with 16 kg |
+| Alt | Shrimp squat, 2 × 5 per leg — hold the back foot behind you, sink until the back knee touches, stand | 2 × 8 per leg |
+
+**THE L-SIT LINE** — Sunday
+
+| Level | What you do | Own it when |
+|---|---|---|
+| 1 | Tuck L-sit, 3 × 10 seconds | 3 × 20 seconds |
+| 2 | One-leg L-sit, 3 × 10 seconds per side | 3 × 20 seconds per side |
+| 3 | L-sit, 3 × 10 seconds, legs straight, toes pointed | 3 × 20 seconds |
+| 4 | L-sit on the floor, 3 × 15 seconds; hanging L raises 3 × 8 | 3 × 30 seconds |
+| 5 | V-sit progressions — months | — |
+
+**THE SLOW LANE** — one lever hold on Sunday; planche leans at home Tuesday and Thursday
+
+Three laws. **One:** add five seconds to a hold every two weeks, maximum. **Two:** twelve weeks minimum at each level, whatever the numbers say. **Three:** any ache on the inside of the elbow or the front of the shoulder, during or the next day, and the slow lane rests for two weeks — no exceptions, no negotiating. Straight-arm work loads the elbow tendons like nothing else, and tendon adapts over months while muscle adapts over weeks; for you, right now, that gap is wider than normal.
+
+Front lever: scapular pulls 3 × 10 → tuck front lever 3 × 10 s → advanced tuck (back flat) → one leg → straddle → full. A two-to-four-year skill.
+Back lever: skin the cat 3 × 3 → German hang 3 × 20 s → tuck back lever 3 × 10 s → one leg → straddle → full. Do not force the German hang; shoulders open over months.
+Planche: leans 3 × 15 s → 3 × 30 s → feet-elevated leans → tuck planche on parallettes 3 × 5 s → advanced tuck → straddle. The longest road in calisthenics. The leans are most of the benefit for a fighter.
 
 ---
 
@@ -557,6 +671,8 @@ This program is a base phase: it assumes the evenings are free. The day your coa
 | Saturday | The leg & power session, as written — sprints, drop jumps, side bounds, squat, jump circuit, push press. If Sunday is sparring, the jump circuit is cut to one round. | ~85 min |
 | Sunday | Punch throws (2 rounds), trunk, Nordics, weekly check. No fight sim — the ring did it. | ~40 min |
 
+Calisthenics in camp: the handstand at home stays; the rings, the pistols, the L-sits and the slow lane stop — boxing nights leave no room for a fourth pressing exposure or a tendon experiment.
+
 Boxing nights: the head-contact rule is the law. The morning after any sparring is the LIGHT SESSION or nothing — no heavy lifts, no sprints, no jumps for 24 hours.
 
 **The last ten days before a fight.** Week table numbers stop; every lift goes to 2 sets at 70%, fast; no sprints, no depth jumps, no Nordics inside the last seven days; the jump circuit becomes box jumps only. The two power doses stay because they keep the nervous system sharp without costing anything. The last heavy thing you do is nine days out. The fuel plan's "making weight" section runs the food.
@@ -586,6 +702,8 @@ Total training time is about three hours a week lower than the Singles version. 
 **What this version is.** Optimal 8 Singles with the aesthetics taken out, the mobility taken home, the weekday sessions capped under an hour, the weekend sessions cut to what the fighter needs, shorter strength rests, and one new rule. Everything that makes you hit harder, move faster, last longer or stay in one piece is unchanged and at the same numbers.
 
 **What changed in v1.1, and the coaching behind it.** Friday became sleep because the ride was the lowest-value session in the week and the alarm was the highest-cost one; a coach who lets a shift worker lose an hour of sleep for a token aerobic dose isn't coaching. The tendon block went in because the strength this program builds will outrun tendon adaptation — that's true for any fast-gaining lifter, and the sprints, depth jumps and Nordics are where the bill would land; two still holds a week, one Achilles, one patellar, is the cheapest insurance in sport. The mental drills that live inside sessions moved onto these pages because a drill you have to look up in a second document at heart rate 170 is a drill you don't do. And Camp Mode exists because the program was only ever the base phase of a boxer's year, and a boxer's program has to know what to do when the boxing comes back.
+
+**Why the calisthenics is threaded, not stacked.** A standalone calisthenics session would have spent the one thing this week protects — an empty Friday before the biggest session — or created a double day on a work day. Threaded, each piece lands where it does most and costs least: pressing with the pressing, pulling with the pulling, the skill at home where frequency is free, the elbow-loading pieces spread across three days instead of spiking on one. Nothing was dropped to make room — the shoulder circuit, the rows, the split squat and the calf work all stay — because dropping proven work to fit new work is how programs get worse while looking busier. The weekday sessions now run to about an hour and a few minutes over; that is the right price, and it's the last minute this week will take.
 
 **What went, and what it cost.** Three size blocks — 42 minutes a week — that never touched the fighter. Chest and triceps still get bench, bench throws and the weeks 11–14 clap circuit; shoulders and traps get push press, trap bar and chins; arms get chins and rows. Cost to the fighter: nothing. Cost to the look: some direct arm and shoulder volume, which the compound lifts cover well enough that the tape, not the mirror, will tell you.
 
