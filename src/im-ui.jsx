@@ -6,6 +6,7 @@ import {
   GOODWILL_LINE, DEATH_LINE, ELEVEN, GUIDED, guidedById, LADDER, CEILING, ARROWS, TESTS5, COLLISION,
   GATES, PROGRESSION, dayDone, sitPlan, testForWeek,
 } from "./im-data.js";
+import { MORNING_FIVE_HOW, isKeepWeek, isTestWeek, rangeTitle, rangeMins, rangeLine } from "./range.js";
 
 /* ================================================================
    BELLS — Web Audio only, no audio files. Vibration where available.
@@ -167,7 +168,7 @@ function useStopwatch() {
 /* ================================================================
    THE TOOLS — each one is a full-screen sheet
    ================================================================ */
-function Sheet({ title, sub, colour, onClose, children }) {
+export function Sheet({ title, sub, colour, onClose, children }) {
   return (
     <div style={{ position: "fixed", inset: 0, background: C.ink, zIndex: 120, overflowY: "auto", padding: 16, paddingTop: "calc(16px + env(safe-area-inset-top))", paddingBottom: "calc(24px + env(safe-area-inset-bottom))" }}>
       <div style={{ maxWidth: 640, margin: "0 auto" }}>
@@ -507,6 +508,7 @@ export function IronToday({ IM, part }) {
   const ok = (k) => !!(rec.ticks && rec.ticks[k]);
   const med = st.medStage || 1, br = st.breathStage || 1, hl = st.hardLevel || 1;
   const BS = BREATH_STAGE[br], L = LADDER[hl], W = WALKING[br];
+  const rw = IM.rangeWeek || 1;
   const plan = sitPlan(med, imWeek, isSunday, st.sitLen);
 
   if (part === "waking") return (
@@ -517,6 +519,11 @@ export function IronToday({ IM, part }) {
       <Tick ok={ok("onething")} on={() => tick("onething")} title="The one thing" sub={ONE_THING_HOW} />
       <div style={{ paddingLeft: 55, marginTop: 6 }}>
         {ONE_THING_Q.map((q, i) => <div key={i} style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, padding: "4px 0", lineHeight: 1.45 })}><span style={Object.assign({}, mno, { fontSize: 9, color: C.moss })}>{i + 1} · </span>{q}</div>)}
+      </div>
+      <Tick ok={ok("morning5")} on={() => tick("morning5")} title="THE MORNING FIVE — 5 minutes of joint circles" sub={MORNING_FIVE_HOW} c={C.moss}
+        right={<OpenBtn on={() => open({ kind: "morning5" })} label="Open the morning five" c={C.moss} />} />
+      <div style={{ paddingLeft: 55, marginTop: 4, marginBottom: 4 }}>
+        <div style={Object.assign({}, mno, { fontSize: 9.5, color: C.ash, padding: "2px 0", lineHeight: 1.5 })}>NECK · SHOULDERS · MID-BACK · HIPS · ANKLES</div>
       </div>
       {isSunday ? <Tick ok={ok("bolt")} on={() => tick("bolt")} title="BOLT score — on waking, before the sighs" sub={presetById("bolt").how} c={C.cobalt}
         right={<OpenBtn on={() => open({ kind: "breath", id: "bolt" })} label="Open the BOLT stopwatch" c={C.cobalt} />} /> : null}
@@ -560,11 +567,21 @@ export function IronToday({ IM, part }) {
 
   if (part === "evening") return (
     <Card ac={C.violet}>
-      <SlotHead n="EVENING" s="15–35 MINUTES, AFTER THE MOBILITY BLOCK" c={C.violet} />
-      <Tick ok={ok("mobility")} on={() => tick("mobility")} title="The mobility block" sub={isFriday(dayIso) ? "Friday evening: the full stretch, 20 minutes." : "Eight minutes at home, every evening."} c={C.violet} />
+      <SlotHead n="EVENING" s={"15–35 MINUTES, AFTER " + rangeTitle(rw)} c={C.violet} />
+      <Tick ok={ok("mobility")} on={() => tick("mobility")} title={"★ " + rangeTitle(rw) + " — " + rangeMins(rw) + " minutes"}
+        sub={rangeLine(rw) + (isFriday(dayIso) ? " Friday evening: RANGE only, no skill block." : "")} c={C.violet}
+        right={<OpenBtn on={() => open({ kind: "range" })} label={"Open the " + (isKeepWeek(rw) ? "keep" : "range") + " timer"} c={C.violet} />} />
+      {isTestWeek(rw) ? (
+        <button onClick={() => open({ kind: "rangetests" })} style={{ display: "flex", width: "100%", gap: 10, alignItems: "center", textAlign: "left", background: "transparent", border: "1px solid " + C.oxide, borderRadius: 5, padding: "9px 11px", margin: "8px 0 2px", cursor: "pointer", minHeight: 44 }}>
+          <span style={{ flex: 1, minWidth: 0 }}>
+            <div style={Object.assign({}, bdy, { fontSize: 13.5, fontWeight: 600, color: C.chalk })}>THE FOUR RANGE TESTS — range week {rw}</div>
+            <div style={Object.assign({}, mno, { fontSize: 8.5, color: C.ash, marginTop: 2, letterSpacing: 1 })}>90/90 SIT · DEEP SQUAT · WALL FLEXION · HANDS BEHIND THE BACK</div>
+          </span>
+          <span style={Object.assign({}, mno, { fontSize: 14, color: C.oxide })}>▸</span>
+        </button>) : null}
       {IM.skill && IM.skill.show ? (
         <div>
-          <Tick ok={ok("skill")} on={() => tick("skill")} title="THE SKILL BLOCK — 6 minutes, Monday to Thursday" sub={IM.skill.why} c={C.brass} />
+          <Tick ok={ok("skill")} on={() => tick("skill")} title={"THE SKILL BLOCK — 6 minutes, Monday to Thursday, after " + rangeTitle(rw)} sub={IM.skill.why} c={C.brass} />
           <div style={{ paddingLeft: 55, marginTop: 4, marginBottom: 6 }}>
             <div style={Object.assign({}, bdy, { fontSize: 12, color: C.ash, padding: "3px 0", lineHeight: 1.45 })}>{IM.skill.wrists}</div>
             <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, padding: "3px 0", lineHeight: 1.45 })}>

@@ -115,7 +115,7 @@ describe("Optimal 8", () => {
   it("puts the home skill block on the evening line, Monday to Thursday", async () => {
     await mount();      // the fixed day is a Wednesday
 
-    expect(await screen.findByText("THE SKILL BLOCK — 6 minutes, Monday to Thursday")).toBeInTheDocument();
+    expect(await screen.findByText("THE SKILL BLOCK — 6 minutes, Monday to Thursday, after RANGE")).toBeInTheDocument();
     expect(screen.getByText(/HANDSTAND · LEVEL 1 ·/)).toBeInTheDocument();
     // planche leans are Tuesday and Thursday only, so not today
     expect(screen.queryByText(/Planche leans, Tuesday and Thursday only/)).not.toBeInTheDocument();
@@ -137,17 +137,113 @@ describe("Optimal 8", () => {
     expect(screen.getByText("The 60-Second Settle")).toBeInTheDocument();
   });
 
-  it("renders Friday as a sleep day with only the evening stretch", async () => {
+  it("renders Friday as a sleep day whose only evening line is RANGE", async () => {
     await mount();
     fireEvent.click(screen.getByRole("button", { name: "FRI" }));
 
     expect(await screen.findByText("SLEEP")).toBeInTheDocument();
     expect(screen.getByText("No session today")).toBeInTheDocument();
     expect(screen.getByText(/not get up at half three/)).toBeInTheDocument();
-    expect(screen.getByText("TONIGHT: THE FULL STRETCH · 20 MIN")).toBeInTheDocument();
+    // v1.4: the full stretch is folded into RANGE, and there is no skill block
+    expect(screen.getByText((_t, el) => el && el.textContent === "TONIGHT: RANGE · 20 MIN")).toBeInTheDocument();
+    expect(screen.getByText(/Friday's extra stretch is folded into it, and there's no skill block/)).toBeInTheDocument();
+    expect(screen.queryByText(/THE FULL STRETCH/)).not.toBeInTheDocument();
     // the ride is gone: no bike block, and nothing to tick off
     expect(screen.queryByText("Easy bike")).not.toBeInTheDocument();
     expect(screen.queryByText("▶ START SESSION")).not.toBeInTheDocument();
+  });
+
+  it("opens Saturday's and Sunday's warm-ups with the Turkish get-up", async () => {
+    await mount();
+    fireEvent.click(screen.getByRole("button", { name: "SAT" }));
+
+    const wu = await screen.findByText("Warm-up — get-ups first");
+    fireEvent.click(wu);
+    // the get-up is the first thing on the protocol sheet, ahead of the hip work
+    const getup = await screen.findByText("TURKISH GET-UP · 2 PER SIDE, LIGHT · 4 MIN");
+    const hips = screen.getByText("THEN THE HIPS");
+    const sprints = screen.getByText("SPRINT BUILD-UPS");
+    // DOCUMENT_POSITION_FOLLOWING === 4
+    expect(getup.compareDocumentPosition(hips) & 4).toBeTruthy();
+    expect(hips.compareDocumentPosition(sprints) & 4).toBeTruthy();
+    expect(screen.getByText(/the whole body agreeing on how to get off the floor/)).toBeInTheDocument();
+
+    cleanup();
+    await mount();
+    fireEvent.click(screen.getByRole("button", { name: "SUN" }));
+    fireEvent.click(await screen.findByText("Warm-up — get-ups first"));
+    expect(await screen.findByText("THEN TUESDAY'S WARM-UP, WITHOUT THE CRAWLS")).toBeInTheDocument();
+    expect(screen.getAllByText("TURKISH GET-UP · 2 PER SIDE, LIGHT · 4 MIN").length).toBeGreaterThan(0);
+  });
+
+  it("opens Tuesday's and Thursday's warm-ups with bear crawls", async () => {
+    await mount();
+    fireEvent.click(screen.getByRole("button", { name: "TUE" }));
+    fireEvent.click(await screen.findByText("Warm-up + bear crawls"));
+    expect(await screen.findByText("THEN BEAR CRAWLS · 2 MIN")).toBeInTheDocument();
+    expect(screen.getByText(/the bridge between the handstand and the get-up/)).toBeInTheDocument();
+
+    // Wednesday's warm-up is unchanged — no crawls there
+    fireEvent.click(screen.getByRole("button", { name: "WED" }));
+    await waitFor(() => expect(screen.queryByText("Warm-up + bear crawls")).not.toBeInTheDocument());
+  });
+
+  it("shows RANGE in the evening on TODAY, with the morning five on waking", async () => {
+    await mount();
+
+    expect(await screen.findByText("THE MORNING FIVE — 5 minutes of joint circles")).toBeInTheDocument();
+    expect(screen.getByText("NECK · SHOULDERS · MID-BACK · HIPS · ANKLES")).toBeInTheDocument();
+
+    const range = screen.getByText("★ RANGE — 20 minutes");
+    expect(range).toBeInTheDocument();
+    expect(screen.getByLabelText("Open the range timer")).toBeInTheDocument();
+    // RANGE comes before the skill block and the sit
+    const skill = screen.getByText("THE SKILL BLOCK — 6 minutes, Monday to Thursday, after RANGE");
+    const sit = screen.getByText("★ THE SIT — 12 minutes");
+    expect(range.compareDocumentPosition(skill) & 4).toBeTruthy();
+    expect(skill.compareDocumentPosition(sit) & 4).toBeTruthy();
+
+    // the timer steps through the document's moves, mid-back first
+    fireEvent.click(screen.getByLabelText("Open the range timer"));
+    expect(await screen.findByText("RANGE")).toBeInTheDocument();
+    expect(screen.getByText(/DOWN-REGULATE — FEET ON A CHAIR/)).toBeInTheDocument();
+    expect(screen.getByText(/NEXT · FOAM ROLLER EXTENSIONS/)).toBeInTheDocument();
+  });
+
+  it("writes the whole home block out behind the session's home line", async () => {
+    await mount();
+    fireEvent.click(screen.getByText(/HOME · tonight: RANGE/));
+
+    expect(await screen.findByText("THE HOME BLOCK")).toBeInTheDocument();
+    expect(screen.getByText("The morning five · on waking, after the sighs and the one thing · 5 min")).toBeInTheDocument();
+    expect(screen.getByText("1 · MID-BACK — FIRST, ALWAYS · 5 min")).toBeInTheDocument();
+    expect(screen.getByText("2 · HIPS · 8 min")).toBeInTheDocument();
+    expect(screen.getByText("3 · SHOULDERS · 6 min")).toBeInTheDocument();
+    expect(screen.getByText(/90\/90 · RIGHT LEG FRONT/)).toBeInTheDocument();
+    expect(screen.getByText(/KETTLEBELL ARM BAR · LEFT/)).toBeInTheDocument();
+  });
+
+  it("switches RANGE to THE KEEP from range week 13", async () => {
+    // week 1 Monday thirteen weeks back puts today in range week 13
+    await mount({ start: "2026-06-15", rangeStart: "2026-06-15" });
+
+    expect(await screen.findByText("★ THE KEEP — 10 minutes")).toBeInTheDocument();
+    expect(screen.queryByText("★ RANGE — 20 minutes")).not.toBeInTheDocument();
+    // week 13 is also a test week
+    expect(screen.getByText("THE FOUR RANGE TESTS — range week 13")).toBeInTheDocument();
+  });
+
+  it("puts the four range tests on the Sunday weekly check in weeks 1, 5, 9 and 13", async () => {
+    await mount();
+    fireEvent.click(screen.getByRole("button", { name: "SUN" }));
+    fireEvent.click(await screen.findByText("Weekly Check"));
+
+    expect(await screen.findByText("The four range tests — weeks 1, 5, 9 and 13")).toBeInTheDocument();
+    fireEvent.click(screen.getByText(/THE FOUR RANGE TESTS · RANGE WEEK 1/));
+
+    expect(await screen.findByText("1. 90/90 sit")).toBeInTheDocument();
+    expect(screen.getByText("3. Wall flexion")).toBeInTheDocument();
+    expect(screen.getByText("Gap — right hand over the shoulder (cm)")).toBeInTheDocument();
   });
 
   it("shows a 12-minute sit on TODAY at meditation stage 1", async () => {
@@ -232,7 +328,7 @@ describe("Optimal 8", () => {
     expect(await screen.findByText("Knees")).toBeInTheDocument();
     expect(screen.getByText("Elbows")).toBeInTheDocument();
     expect(screen.getByText("Achilles")).toBeInTheDocument();
-    expect(screen.getByText("Home evenings done")).toBeInTheDocument();
+    expect(screen.getByText("Evenings you did RANGE")).toBeInTheDocument();
     expect(screen.getByText("Hours of sleep, averaged")).toBeInTheDocument();
   });
 
@@ -330,6 +426,11 @@ describe("Optimal 8", () => {
     expect(await screen.findByText("Calisthenics — where each line stands")).toBeInTheDocument();
     expect(screen.getByText("THE SLOW LANE")).toBeInTheDocument();
     expect(screen.getAllByText("not yet").length).toBe(7);
+
+    fireEvent.click(screen.getByRole("button", { name: "RANGE" }));
+    expect(await screen.findByText("RANGE — the four tests")).toBeInTheDocument();
+    expect(screen.getByText("90/90 sit — Back knee off the floor — right leg front")).toBeInTheDocument();
+    expect(screen.getByText("The yes-or-nos")).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "PLAN" }));
     expect(await screen.findByText("CONTENTS")).toBeInTheDocument();

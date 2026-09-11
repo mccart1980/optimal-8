@@ -17,9 +17,11 @@ import {
   IronToday, BreatheView, SitView, HardshipView, IronTrack,
   BreathTool, GuidedTool, SitTool, ColdTimer, HeatTimer, FloorTool,
 } from "./im-ui.jsx";
+import { isTestWeek, isKeepWeek, rangeTitle, rangeMins, rangeLine, RANGE_INTRO } from "./range.js";
+import { RangeTool, MorningFiveTool, RangeTests, RangeTrack, RangeSheet } from "./range-ui.jsx";
 
 /* ================================================================
-   OPTIMAL 8 — THE FIGHTER BUILD v1.2 · companion app
+   OPTIMAL 8 — THE FIGHTER BUILD v1.4 · companion app
    The phase colour drives the screen: BUILD moss, FORCE oxide,
    VELOCITY brass, TAPER/TEST cobalt. Durability work is violet.
    Iron Mind v4.2 runs inside it — one app, one day, one streak.
@@ -127,9 +129,9 @@ const CAMP = {
   thu: { keep: ["A", "B", "C", "D", "X", "G"], m: 40, t: "3am · throws + landmine, split squat, Spanish squat hold, Achilles hold, neck. No bike.", note: "No bike in camp — boxing does that job better, and stacking them is how you arrive at sparring flat." },
   fri: { sleep: 1 },
   sat: { keep: ["A", "B", "C", "D", "E", "F", "G"], m: 85, t: "The leg & power session, as written", note: "If Sunday is sparring, the jump circuit is cut to one round." },
-  sun: { keep: ["A", "C", "T", "H", "I"], m: 40, t: "Punch throws (2 rounds), trunk, Nordics, weekly check. No fight sim — the ring did it.", note: "The engine gets measured in the ring now, not on a bike. Calisthenics in camp: the handstand at home stays; the rings, the pistols, the L-sits and the slow lane stop." },
+  sun: { keep: ["A", "C", "T", "H", "I"], m: 40, t: "Punch throws (2 rounds), trunk, Nordics, weekly check. No fight sim — the ring did it.", note: "The engine gets measured in the ring now, not on a bike. RANGE and the morning five stay in camp — they're the cheapest injury insurance you own. Calisthenics in camp: the handstand at home stays; the rings, the pistols, the L-sits and the slow lane stop." },
 };
-const CAMP_INTRO = "This program is a base phase: it assumes the evenings are free. The day your coach puts you back on the pads four or five nights a week — and more so the day a fight is booked — half of it becomes a liability, and a program that doesn't say which half isn't finished. This is the switch. Boxing nights: the head-contact rule is the law.";
+const CAMP_INTRO = "This program is a base phase: it assumes the evenings are free. The day your coach puts you back on the pads four or five nights a week — and more so the day a fight is booked — half of it becomes a liability, and a program that doesn't say which half isn't finished. This is the switch. Boxing nights: the head-contact rule is the law. RANGE and the morning five stay in camp — they're the cheapest injury insurance you own.";
 const LASTTEN_INTRO = "Week table numbers stop; every lift goes to 2 sets at 70%, fast; no sprints, no depth jumps, no Nordics inside the last seven days; the jump circuit becomes box jumps only. The two power doses stay because they keep the nervous system sharp without costing anything. The last heavy thing you do is nine days out. The fuel plan's \"making weight\" section runs the food.";
 
 const campRx = (rx) => Object.assign({}, rx, { vec: 2, camp: 1 });
@@ -172,14 +174,33 @@ function steps(kind, o) {
   return S;
 }
 
+/* ---------- v1.4's functional layer, written once ---------- */
+const GETUP_N = "Turkish get-up";
+const GETUP_S = "2 per side, light — lie on your back with a kettlebell pressed up in the right hand, right knee bent, left arm and leg out at 45°. Roll up onto the left elbow, then the left hand; lift the hips high, sweep the left leg back under you to a kneeling position, windmill the trunk upright, stand up — the bell never stops pointing at the ceiling and your eyes never leave it. Then reverse every step to the floor. That's one.";
+const GETUP_LOAD_N = "Loading";
+const GETUP_LOAD = "start with 8–12 kg; 16 is the working weight; 24 is the test";
+const GETUP_WHY = "Slow, and nothing about it is a strength move on a Saturday morning — it's the whole body agreeing on how to get off the floor, and the best shoulder-and-hip integration lift there is.";
+const CRAWL_N = "Bear crawls · 2 min";
+const CRAWL_S = "on hands and feet, knees an inch off the floor and staying there, back flat as a table, opposite hand and foot moving together, small steps. 10 metres forward, 10 metres backward, four times.";
+const CRAWL_WHY = "Loads the shoulder and trunk in a pattern the body hasn't done since you were two, and it's the bridge between the handstand and the get-up.";
+
 /* ---------- protocols (written once, referenced by name) ---------- */
 const PROTO = {
   SH: { n: "Warm-up · shoulders", s: "8 min · Mon", c: C.cobalt, note: "The bench ramp is part of the warm-up — rest about a minute between those sets, so the first working set is already warm.",
     i: [["Back on the floor, feet on a bench", "5 breaths — in 4s, out 8s"], ["Band pull-apart", "×20 — arms straight, pull until it touches your chest"], ["Band external rotation", "×15/arm — elbow pinned to the ribs"], ["Wall slide", "×10 — forearms never leave the wall"], ["BENCH RAMP", ""], ["Bar", "×10"], ["40%", "×5"], ["60%", "×3"], ["75%", "×2"]] },
-  HIP: { n: "Warm-up · hips + build-ups", s: "12 min · Sat", c: C.cobalt, note: "Never sprint cold. The three build-ups are the sprint warm-up; the squat ramp comes after them.",
-    i: [["90/90 switches", "×5 each way"], ["Hip airplane", "×5/side"], ["Cossack squat", "×6/side"], ["Leg swings", "×10 each — forward-back, then side-to-side"], ["Pogo hops", "2 × 20"], ["SPRINT BUILD-UPS", ""], ["20m @ 60%", "×1"], ["20m @ 75%", "×1"], ["20m @ 90%", "×1"], ["SQUAT RAMP", ""], ["40%", "×3"], ["60%", "×2"], ["75%", "×1"]] },
-  GEN: { n: "Warm-up", s: "6 min · Tue, Wed, Thu · Sun 10 min", c: C.cobalt, note: "Wednesday adds the trap bar and squat warm-up sets. Sunday adds broad jumps, chest passes, bike sprints and three easy practice throws of each throw.",
+  HIP: { n: "Warm-up · get-ups, hips + build-ups", s: "16 min · Sat", c: C.cobalt, note: "Never sprint cold. The get-up opens it; the three build-ups are the sprint warm-up; the squat ramp comes after them.",
+    i: [["TURKISH GET-UP · 2 PER SIDE, LIGHT · 4 MIN", ""], [GETUP_N, GETUP_S], [GETUP_LOAD_N, GETUP_LOAD], ["THEN THE HIPS", ""],
+      ["90/90 switches", "×5 each way"], ["Hip airplane", "×5/side"], ["Cossack squat", "×6/side"], ["Leg swings", "×10 each — forward-back, then side-to-side"], ["Pogo hops", "2 × 20"], ["SPRINT BUILD-UPS", ""], ["20m @ 60%", "×1"], ["20m @ 75%", "×1"], ["20m @ 90%", "×1"], ["SQUAT RAMP", ""], ["40%", "×3"], ["60%", "×2"], ["75%", "×1"]] },
+  GEN: { n: "Warm-up", s: "6 min · Wed", c: C.cobalt, note: "Wednesday adds the trap bar and squat warm-up sets (bar × 5 · 50% × 3 · 65% × 2, then 40% × 3 · 60% × 2).",
     i: [["Easy bike", "3 min"], ["Band pull-apart", "×20"], ["Goblet squat", "×8"], ["Push-up", "×10"], ["90/90 hip switch", "×5 each way"], ["Pogo hops", "×20"]] },
+  GEN8: { n: "Warm-up · crawls", s: "8 min · Tue and Thu", c: C.cobalt, note: "Thursday's warm-up is the same as Tuesday's, bear crawls included.",
+    i: [["Easy bike", "3 min"], ["Band pull-apart", "×20"], ["Goblet squat", "×8"], ["Push-up", "×10"], ["90/90 hip switch", "×5 each way"], ["Pogo hops", "×20"],
+      ["THEN BEAR CRAWLS · 2 MIN", ""], [CRAWL_N, CRAWL_S], ["Slow beats fast", "if the hips rock or the knees lift, you've gone too quick"]] },
+  SUNWU: { n: "Warm-up · get-ups + practice throws", s: "14 min · Sun", c: C.cobalt, note: "Turkish get-ups, then Tuesday's warm-up without the crawls, then the power prep and three easy practice throws of each of the four throws.",
+    i: [["TURKISH GET-UP · 2 PER SIDE, LIGHT · 4 MIN", ""], [GETUP_N, GETUP_S], [GETUP_LOAD_N, GETUP_LOAD],
+      ["THEN TUESDAY'S WARM-UP, WITHOUT THE CRAWLS", ""],
+      ["Easy bike", "3 min"], ["Band pull-apart", "×20"], ["Goblet squat", "×8"], ["Push-up", "×10"], ["90/90 hip switch", "×5 each way"], ["Pogo hops", "×20"],
+      ["PLUS", ""], ["Broad jumps", "3 × 2"], ["Med-ball chest passes", "3 × 3 as hard as you can"], ["Bike sprints", "3 × 10 seconds with a minute between"], ["Practice throws", "three EASY throws of each of the four throws"]] },
   CUFF: { n: "Shoulder circuit + band catch", s: "8 min · Mon · 2 rounds, rest 45s", c: C.violet, note: "Every right hand you throw, this muscle group has to brake your arm. This is the only place it gets trained to.",
     i: [["Side-lying external rotation", "12/side — top elbow glued to the ribs"], ["Prone T raise", "×10 — face down on an incline bench, thumbs up"], ["Face pull", "×15 — elbows high, squeeze the back of the shoulders"], ["Wall slide", "×10"], ["BAND DECELERATION CATCH", ""], ["Punch out fast, brake the return", "2 × 8/arm — stop it dead in the last third"]] },
   NECK: { n: "Neck", s: "10 min · Wed and Thu", c: C.violet,
@@ -199,34 +220,37 @@ const PROTO = {
       ["Set-up", "a thick band around the back of both knees, anchored to the rack in front of you at knee height"],
       ["The hold", "lean back into the band so your shins stay vertical, sit into a half squat — thighs around 45° — and hold, dead still, for 30 seconds"],
       ["It should burn above the kneecap", "it should never hurt inside the knee"]] },
-  SPLIT: { n: "Split squat, rear foot elevated", s: "8 min · Thu", c: C.violet,
+  SPLIT: { n: "Split squat, rear foot elevated", s: "7 min · Thu", c: C.violet,
     note: "Moved here from Saturday: 24 hours after the heavy lower morning, 48 before Saturday's sprints, and before the bike so the reps are clean.",
-    i: [["Rear-foot-elevated split squat", "3 × 6–8 each leg · rest 75s (easy weeks and weeks 15–16: 2 sets)"], ["Weak side first", "same weight on both legs — the weaker leg sets the load"], ["Loading", "start at a weight you could do 10 with; add when 8 is clean"]] },
+    i: [["Rear-foot-elevated split squat", "3 × 6–8 each leg · rest 60s (easy weeks and weeks 15–16: 2 sets)"], ["Weak side first", "same weight on both legs — the weaker leg sets the load"], ["Loading", "start at a weight you could do 10 with; add when 8 is clean"]] },
   VEC: { n: "The four punch throws", s: "rest 45s between exercises · 90s between rounds", c: C.brass,
     note: "Straight punches are built on forward drive; hooks on rotation. They're different physical problems, so all four get trained. Ball 3–5 kg: if it isn't flying, it's too heavy. Both sides equally.",
     i: [["Rotational shot-put", "4/side — YOUR STRAIGHT RIGHT. Ball at the shoulder, side-on to a wall. Drive off the back hip, flat and hard. A few from a lower crouch for the body shot."], ["Downward diagonal throw", "4/side — YOUR OVERHAND RIGHT. Ball high outside the shoulder, drive it down and across toward the opposite hip. Back foot pivots, trunk turns AND side-bends."], ["Hook throw", "4/side — YOUR LEAD HOOK. Ball at chest height in bent arms, pivot hard off the lead leg and sling it sideways into the wall."], ["Landmine punch", "5/side — YOUR LOADED STRAIGHT. Drive the hips and PUNCH it up and away — never a slow press. Catch it, go again."]] },
-  HOME: { n: "The home block", s: "8 min · every evening (Friday 20)", c: C.violet,
-    note: "This is the mobility that used to close every gym session. It moved home so the gym time is all training. It does the same job at 8pm that it did at 4am; the only thing that changes is whether you do it. Kit: a foam roller, a light band, and something to hold at your chest — a kettlebell, a dumbbell, a bag of sugar. Balance skills are built by frequency: five minutes of handstand four evenings a week beats an hour of it on one, and the wall in your house is a better teacher than any gym. If you skip it: nothing shows this week. By week 6 the hips tighten, squat depth goes, the sprints get shorter and the pause squat starts to hurt.",
-    i: [["THE FOUR MOVES, EVERY EVENING", ""],
-      ["Foam roller across the mid-back", "×8 — hands behind head, arch back over it, moving the roller up a notch each time"],
-      ["Open book", "6/side · hold 3s — on your side, knees bent, open the top arm to the far side, chest follows, knees stay down"],
-      ["90/90 hip switches", "×5 each way — swivel the knees over without using your hands"],
-      ["Deep squat hold", "90s — a weight at your chest, sit in the very bottom of a squat"],
-      ["THE SKILL BLOCK · MONDAY TO THURSDAY · 6 MIN — after the mobility, before the sit", ""],
+  HOME: { n: "The home block", s: "the morning five · RANGE · the skill block", c: C.violet,
+    note: "Two joints you named as your limiting factor: hips and shoulders. Both are limited first by the mid-back, so it goes first. Eight minutes a night was maintenance; this is change. Twenty minutes every evening for twelve weeks, five on waking, four tests every four weeks so the range is a number, then a ten-minute keep for life. Kit: a foam roller, a light band, a kettlebell or dumbbell (8–16 kg), a doorframe pull-up bar if you can fit one, a sofa and a chair. Balance skills are built by frequency: five minutes of handstand four evenings a week beats an hour of it on one. Tap the RANGE line on TODAY for the guided timer, move by move.",
+    i: [["THE MORNING FIVE · ON WAKING · 5 MIN", ""],
+      ["Controlled joint circles", "the slowest, biggest circle each joint can make under its own power, three each way — ten seconds a circle"],
+      ["Neck · shoulders · mid-back · hips · ankles", "in that order, guided on TODAY"],
+      ["RANGE · EVERY EVENING · 20 MIN · TWELVE WEEKS, THEN THE KEEP", ""],
+      ["0 · Down-regulate", "1 min — on your back, feet on a chair, five slow breaths: in 4, out 8"],
+      ["1 · Mid-back — first, always", "5 min — roller extensions, open book 90s/side, thread the needle, loaded rotation"],
+      ["2 · Hips", "8 min — 90/90 2 min/side with the internal-rotation lift, couch stretch, cossacks, deep squat hold, hip airplanes"],
+      ["3 · Shoulders", "6 min — hang, prayer stretch, sleeper, kettlebell arm bar, wall slides, band external rotations"],
+      ["Three things move range", "long holds with a long exhale · contract-relax, five seconds at a third of your strength, three times · strength at the end of the range"],
+      ["After twelve weeks — THE KEEP", "10 min — roller extensions, open book, the 90/90 with the lift, the couch stretch, the deep squat hold, the hang and the arm bar. Every evening, for good."],
+      ["THE FOUR TESTS · WEEKS 1, 5, 9 AND 13", ""],
+      ["90/90 sit · deep squat · wall flexion · hands behind the back", "on the Sunday weekly check — write the eight numbers down"],
+      ["THE SKILL BLOCK · MONDAY TO THURSDAY · 6 MIN — after RANGE, before the sit", ""],
       ["Wrists first, always", "circles × 10 each way, then palms flat on the floor and rock forward and back × 10"],
       ["Handstand", "4 min at your level (the Calisthenics section in settings) — the body is one straight line, ribs in, glutes tight, pushing the floor away through the shoulders the whole time"],
       ["Hollow hold", "2 × 20s — on your back, lower back pressed into the floor, arms overhead, legs straight and lifted, one shallow banana"],
       ["Arch hold", "2 × 20s — face down, arms and legs lifted. The two shapes every calisthenics skill is made of."],
       ["Planche leans", "Tuesday and Thursday only, 3 × 15s — a push-up position, then shift the shoulders forward past the wrists as far as they'll go, arms locked, body rigid. Five seconds added per fortnight, never with an elbow that aches."],
-      ["FRIDAY EVENING · THE FULL STRETCH · 20 MIN — replaces the four moves; no skill block on Fridays", ""],
-      ["UPPER BACK FIRST, ALWAYS", ""],
-      ["Foam roller arch-backs", "×8"], ["Open book", "×8/side"], ["Thread the needle", "×8/side — on all fours, slide one arm under the other, shoulder toward the floor"], ["Quadruped rotation", "×8/side — hand behind head, rotate the elbow to the ceiling"],
-      ["HIPS", ""],
-      ["90/90 switches + hold", "×5 each · 30s/side"], ["Couch stretch", "90s/side — back foot up on the sofa, knee on a cushion, squeeze the glute, stand tall"], ["Frog", "90s — knees wide, rock the hips back"], ["Deep squat hold with a weight", "90s"],
-      ["SHOULDERS", ""],
-      ["Hang from a bar or doorframe", "45s — skip if you haven't one"], ["Wall slides", "×12"], ["Band pull-apart", "×20"], ["Band external rotation", "×15/arm"]] },
+      ["FRIDAY EVENING", ""],
+      ["RANGE only", "no skill block"],
+      ["If you skip it", "nothing shows this week. By week 6 the hips tighten back to where they were, the internal-rotation lift stops moving, and the tests say so in numbers."]] },
 };
-const HOMELINE = "HOME · tonight: mobility 8 min (Friday: the full stretch, 20 min) · Mon–Thu then the skill block, 6 min: handstand, hollow and arch, planche leans on Tuesday and Thursday";
+const HOMELINE = "HOME · tonight: RANGE, 20 min (from week 13: THE KEEP, 10 min) · Mon–Thu then the skill block, 6 min: handstand, hollow and arch, planche leans on Tuesday and Thursday · and the morning five on waking";
 
 /* ================================================================
    SESSIONS — the seven pages, in running order, exactly as written.
@@ -284,9 +308,11 @@ const S = {
       why: "Every right hand you throw, this muscle group has to brake your arm. This is the only place it gets trained to." }] },
 
   /* ---------------- TUESDAY ---------------- */
-  tue: { n: "TUESDAY", t: "Jumps · Pistols · Engine 1 · Hands · Trunk · Achilles", m: (rx) => (rx.test ? 32 : rx.eng === "easy" ? 59 : 63), ac: C.cobalt, box: 1,
+  tue: { n: "TUESDAY", t: "Crawls · Jumps · Pistols · Engine 1 · Hands · Trunk · Achilles", m: (rx) => (rx.test ? 34 : rx.eng === "easy" ? 61 : 65), ac: C.cobalt, box: 1,
     intro: "Power dose first, fresh, then the first of the week's two engine sessions. Your legs had yesterday off.", b: [
-    { L: "A", n: "Warm-up", m: 6, p: "GEN" },
+    { L: "A", n: "Warm-up + bear crawls", m: 8, p: "GEN8", rxLine: () => "8 min · bike, bands, hips, pogos — then bear crawls, 2 min",
+      items: [{ n: CRAWL_N, s: "10m forward, 10m backward, × 4", cue: CRAWL_S + " Slow beats fast: if the hips rock or the knees lift, you've gone too quick.", id: "crawl", k: "chk" }],
+      why: CRAWL_WHY },
     { L: "B", n: "Power dose — jumps", m: 8, star: 1, hard: 1, hide: (rx) => !!rx.test, rest: "Rest 90s", rt: 90,
       items: [{ n: "Broad jump", s: "3 × 2", cue: "Two-foot jump forward for distance, stick the landing dead still.", id: "broad", k: "chk" },
         { n: "Trap bar jump", s: (rx) => (rx.cal ? "3 × 3 — empty bar (week 1)" : "3 × 3 @ 20% of trap bar max"), cue: "Stand inside the bar, jump with it, land soft.", id: "tbjump2", k: "chk" }],
@@ -344,14 +370,16 @@ const S = {
       why: "Horizontal pulling on the heavy lower morning: light, quick, and it keeps the shoulder honest without adding a gram to the elbow load that Monday already carries." }] },
 
   /* ---------------- THURSDAY ---------------- */
-  thu: { n: "THURSDAY", t: "Throws + Landmine · Split Squat + Tendon Hold · Engine 2 · Neck", m: (rx) => (rx.test ? 16 : rx.eng2 === "easy" ? 55 : 59), ac: C.cobalt, box: 1,
+  thu: { n: "THURSDAY", t: "Crawls · Throws + Landmine · Split Squat + Tendon Hold · Engine 2 · Neck", m: (rx) => (rx.test ? 18 : rx.eng2 === "easy" ? 57 : 61), ac: C.cobalt, box: 1,
     intro: "The third power dose, the only single-leg lift, the second engine session and the full neck block. (Week 16: warm-up and neck only.)", b: [
-    { L: "A", n: "Warm-up", m: 6, p: "GEN", note: "Same as Tuesday." },
+    { L: "A", n: "Warm-up + bear crawls", m: 8, p: "GEN8", note: "Same as Tuesday, bear crawls included.", rxLine: () => "8 min · same as Tuesday, bear crawls included",
+      items: [{ n: CRAWL_N, s: "10m forward, 10m backward, × 4", cue: CRAWL_S + " Slow beats fast: if the hips rock or the knees lift, you've gone too quick.", id: "crawl", k: "chk" }],
+      why: CRAWL_WHY },
     { L: "B", n: "Power dose — throws + landmine", m: 8, star: 1, hard: 1, hide: (rx) => !!rx.test, rest: "45s between sets", rt: 45,
       items: [{ n: "Rotational shot-put", s: "2 × 3/side", cue: "Medicine ball, 3–5 kg, at the shoulder, side-on to the wall, drive off the back hip. Flat and hard, like the punch.", id: "shot2", k: "chk" },
         { n: "Landmine punch", s: "2 × 5/side", cue: "One end of a barbell in a corner or landmine sleeve, the other end at your shoulder, in your stance. Drive the hips and punch it up and away — never press it. Bar speed is the metric; add weight only when it still snaps.", id: "lm2", k: "wr", sets: 2, reps: "5/side" }],
       why: "The third weekly power dose: the unloaded ballistic and the loaded punch pattern, three days before Sunday's full session." },
-    { L: "C", n: "Split Squat — rear foot elevated", m: 8, p: "SPLIT", hide: (rx) => !!rx.test, rest: "Rest 75s", rt: 75,
+    { L: "C", n: "Split Squat — rear foot elevated", m: 7, p: "SPLIT", hide: (rx) => !!rx.test, rest: "Rest 60s", rt: 60,
       rxLine: (rx) => (rx.acc <= 2 ? 2 : 3) + " × 6–8 each leg",
       items: (rx) => [{ n: "Rear-foot-elevated split squat", s: (rx.acc <= 2 ? 2 : 3) + " × 6–8 each leg", cue: "Back foot up on a bench behind you, front foot far enough forward that your shin stays near vertical, a dumbbell in each hand. Sink straight down until the back knee nearly touches the floor, drive up through the front heel. Weak side first, same weight on both legs.", id: "rfess", k: "wr", sets: rx.acc <= 2 ? 2 : 3, reps: "6–8/leg" }],
       why: "Every other loaded leg lift in the week is on two legs. Boxing isn't — the rear-leg drive and the pivot are one foot, and two-legged lifting lets your strong side hide the weak one. This is where the weak side gets found and fixed.", tr: 1 },
@@ -375,16 +403,18 @@ const S = {
     { L: "G", n: "Neck", m: 10, p: "NECK", items: [{ n: "The full neck block", s: "4 movements", id: "neck", k: "chk" }] }] },
 
   /* ---------------- FRIDAY ---------------- */
-  fri: { n: "FRIDAY", t: "SLEEP. No alarm. Full stretch at home in the evening.", m: 0, ac: C.moss, sleep: 1, box: 1,
+  fri: { n: "FRIDAY", t: "SLEEP. No alarm. RANGE at home in the evening.", m: 0, ac: C.moss, sleep: 1, box: 1,
     intro: "No alarm. Tomorrow is the biggest session of the week, and the best thing you can do for it is not get up at half three.",
     sleepWhy: "The Singles version put a 55-minute easy ride here. Straight truth about that ride: fifty-five minutes of easy spinning a week is a token dose of aerobic base — it's either two hours or it's not worth the alarm — and the job you do all day is already hours of low-intensity movement. The two interval sessions, the fight rounds and the sprint warm-ups are what build your engine, and they're untouched. What the Friday alarm actually cost was about seventy-five minutes of sleep on the night before Saturday, every week, for sixteen weeks, and sleep is the one recovery variable in this program that nothing else replaces. So it's gone. Four mornings a week, then a lie-in.",
     sleepFood: "Food: Friday's 5pm carb feed still loads Saturday — that's the most important feed of the week and it doesn't move. There's no fasted ride, so breakfast is the porridge on waking. Everything else as the fuel app says.",
     b: [] },
 
   /* ---------------- SATURDAY ---------------- */
-  sat: { n: "SATURDAY", t: "★ The Leg & Power Session", m: (rx) => (rx.lowerLead ? 94 : rx.pp && rx.pp.sc ? 90 : 85), ac: C.oxide, free: 1, box: 1,
+  sat: { n: "SATURDAY", t: "★ The Leg & Power Session — get-ups open it", m: (rx) => (rx.lowerLead ? 96 : rx.pp && rx.pp.sc ? 94 : 89), ac: C.oxide, free: 1, box: 1,
     intro: "No shift, fed and fresh. This is the session that matters most all week, on the one day nothing can compromise it. Fuel it like the fuel plan's big day: porridge 6:30, shake 7:45, start 8:15.", b: [
-    { L: "A", n: "Warm-up", m: 12, p: "HIP", note: "Build-ups included. Never sprint cold." },
+    { L: "A", n: "Warm-up — get-ups first", m: 16, p: "HIP", note: "Build-ups included. Never sprint cold.", rxLine: () => "16 min · get-ups 2/side, hips, build-ups, squat ramp",
+      items: [{ n: GETUP_N, s: "2 per side, light · 4 min", cue: GETUP_S + " Start with 8–12 kg; 16 is the working weight; 24 is the test.", id: "getup", k: "chk" }],
+      why: GETUP_WHY },
     { L: "B", n: "Flying Sprints", m: 14, star: 1, hard: 1, noTaper: 1, rest: "Rest 2:30–3:00 — full recovery", rt: 165,
       items: [{ n: "Flying sprint 20m", s: (rx) => rx.spr + " × 20m" + (rx.sprPct < 100 ? " @ 90%" : ""), cue: "Jog-build for 10–15m, then 20 metres absolutely flat out. Walk back, full rest — this is a speed session, not cardio. Time them if you can.", id: "sprint", k: "out", u: "best time (s)" }],
       rxLine: (rx) => rx.spr + " × 20m" + (rx.sprPct < 100 ? " @ 90%" : " · flat out"),
@@ -424,9 +454,11 @@ const S = {
       note: "Weeks 4 and 9: skipped. The squat max is enough maximal work for one day." }] },
 
   /* ---------------- SUNDAY ---------------- */
-  sun: { n: "SUNDAY", t: "★ Punch Throws · Fight Rounds · Core + L-Sit · Lever · Nordics", m: (rx) => (rx.test ? 40 : rx.maxBe ? 88 : rx.sim.skip ? 52 : 76), ac: C.brass, free: 1, box: 1,
+  sun: { n: "SUNDAY", t: "★ Get-ups · Punch Throws · Fight Rounds · Core + L-Sit · Lever · Nordics", m: (rx) => (rx.test ? 44 : rx.maxBe ? 92 : rx.sim.skip ? 56 : 80), ac: C.brass, free: 1, box: 1,
     intro: "Second free morning. Punches, rounds, core and hands, and the week's hamstring work last, with two leg-free days behind it. No pressing today on purpose so Monday's bench gets 42 hours. (Week 16: the warm-up, the 20-minute test and the weekly check. Nothing else.)", b: [
-    { L: "A", n: "Warm-up", m: 10, p: "GEN", note: "Plus: broad jumps 3 × 2 · med-ball chest passes 3 × 3 as hard as you can · 3 × 10-second bike sprints with a minute between · then three EASY practice throws of each of the four throws." },
+    { L: "A", n: "Warm-up — get-ups first", m: 14, p: "SUNWU", rxLine: () => "14 min · get-ups 2/side, then Tuesday's warm-up and the practice throws", note: "Turkish get-ups, then Tuesday's warm-up without the crawls, plus: broad jumps 3 × 2 · med-ball chest passes 3 × 3 as hard as you can · 3 × 10-second bike sprints with a minute between · then three EASY practice throws of each of the four throws.",
+      items: [{ n: GETUP_N, s: "2 per side, light (as Saturday)", cue: GETUP_S + " Start with 8–12 kg; 16 is the working weight; 24 is the test.", id: "getup", k: "chk" }],
+      why: GETUP_WHY },
     { L: "B", n: "Bench Max Single", m: 12, star: 1, hard: 1, hide: (rx) => !rx.maxBe, mainLift: "bench", maxUI: 1, rest: "Rest 2:30–3:00", rt: 165,
       items: [{ n: "Bench — max single", s: "pins · no collars · first, straight after the warm-up", id: "benchmax", k: "chk" }],
       why: "Weeks 4 and 9 only, and it happens here — Sunday, first thing, fresh, with pins. Bench warm-up sets (bar × 10, 40% × 5, 60% × 3) before the ramp. Write the new max down.", tr: 2 },
@@ -479,8 +511,9 @@ const S = {
         { n: "Hips", s: "0–10", id: "wr_hip", k: "out", u: "0–10" }, { n: "Shoulders", s: "0–10", id: "wr_sh", k: "out", u: "0–10" }, { n: "Elbows", s: "0–10", id: "wr_el", k: "out", u: "0–10" }, { n: "Wrists", s: "0–10", id: "wr_wr", k: "out", u: "0–10" },
         { n: "Knees", s: "0–10", id: "wr_kn", k: "out", u: "0–10" }, { n: "Achilles", s: "0–10", id: "wr_ach", k: "out", u: "0–10" },
         { n: "Boxing nights your hands felt slow", s: "count", id: "wr_slow", k: "out", u: "nights" }, { n: "Energy", s: "1–10", id: "wr_en", k: "out", u: "1–10" },
-        { n: "Home evenings done", s: "0–7", id: "wr_home", k: "out", u: "0–7" },
+        { n: "Evenings you did RANGE", s: "0–7", id: "wr_home", k: "out", u: "0–7" },
         { n: "Hours of sleep, averaged", s: "hours a night", id: "wr_sleep", k: "out", u: "hours" }],
+      rangeTests: 1,
       note: "Two slow-hands nights, or three yellows in one week = next week is an easy week, whatever the plan says. Shoulders, elbows or wrists at 4 or above out of 10 here, and next week every calisthenics line is holds only. Every 4–6 weeks: tape — arms, shoulders, waist." }] },
 
   /* ---------------- THE LIGHT SESSION ---------------- */
@@ -717,7 +750,7 @@ function CalPanel({ line, calis, setCalis, mode, week }) {
     </div>);
 }
 
-function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, openProto, startTimer, openPlates, onSetMax, autoRest, weekStats, calis, setCalis, taper }) {
+function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, openProto, startTimer, openPlates, onSetMax, autoRest, weekStats, calis, setCalis, taper, rangeWeek, openRangeTests }) {
   const P = PH[rx.ph], yellow = ready === "Y", red = ready === "R";
   const key = (id) => "m" + macro + "w" + week + "-" + day + "-" + id;
   const prevW = (id) => log["m" + macro + "w" + (week - 1) + "-" + day + "-" + id];
@@ -901,6 +934,15 @@ function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, ope
           {weekStats.y >= 3 ? <Note c={C.oxide} bold>Three yellow days — one early-deload trigger. A second in the same week means deload now.</Note> : null}
         </div>) : null}
 
+      {b.rangeTests && openRangeTests ? (
+        <div style={{ background: C.ink, border: "1px solid " + (isTestWeek(rangeWeek) ? C.oxide : C.line), borderRadius: 5, padding: "11px 12px", marginBottom: 11 }}>
+          <Eye c={isTestWeek(rangeWeek) ? C.oxide : C.ash} s={{ marginBottom: 4 }}>The four range tests — weeks 1, 5, 9 and 13</Eye>
+          <div style={Object.assign({}, bdy, { fontSize: 13, color: C.chalk, lineHeight: 1.5 })}>90/90 sit · deep squat · wall flexion · hands behind the back. Write the eight numbers down. If nothing has moved by week 5, the holds aren't long enough or the exhale isn't happening; fix that before adding anything.</div>
+          {isTestWeek(rangeWeek)
+            ? <Btn on={openRangeTests} c={C.oxide} fill s={{ width: "100%", marginTop: 10 }}>▶ THE FOUR RANGE TESTS · RANGE WEEK {rangeWeek}</Btn>
+            : <Note>Not this week — range week {rangeWeek}. The next one is {[1, 5, 9, 13].concat([21, 29, 37, 45]).filter((x) => x > rangeWeek)[0]}.</Note>}
+        </div>) : null}
+
       {b.rules ? <div style={{ background: C.ink, border: "1px solid " + C.oxide, borderRadius: 5, padding: 12, margin: "11px 0" }}><Eye c={C.oxide}>The two rules</Eye>{b.rules.map((r, k) => <div key={k} style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, lineHeight: 1.45, marginBottom: 8 })}>{k + 1}. {r}</div>)}</div> : null}
       {v(b.w, rx) ? <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.oxide, lineHeight: 1.5, marginTop: 9, paddingLeft: 10, borderLeft: "2px solid " + C.oxide, fontWeight: 600 })}>{v(b.w, rx)}</div> : null}
       {v(b.why, rx) ? <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, lineHeight: 1.5, marginTop: 9 })}><span style={Object.assign({}, mno, { fontSize: 8.5, color: C.brass, letterSpacing: 1.2 })}>WHY · </span>{v(b.why, rx)}</div> : null}
@@ -949,7 +991,7 @@ const dayKey = (macro, week, day) => "m" + macro + "w" + week + "-" + day;
 const prevDayKey = (macro, week, day, L) => { const i = DAYS.indexOf(day); if (i > 0) return dayKey(macro, week, DAYS[i - 1]); if (week > 1) return dayKey(macro, week - 1, "sun"); return dayKey(macro - 1, L, "sun"); };
 
 function Session(props) {
-  const { macro, week, day, isCurrent, done, setDone, log, setLog, maxes, bw, ready, setReady, sparPrev, sparThis, setSparThis, swapped, setSwapped, box, setBox, note, setNote, openProto, startTimer, openPlates, onSetMax, autoRest, openFlow, goIron, weekStats, addBody, calis, setCalis, taper } = props;
+  const { macro, week, day, isCurrent, done, setDone, log, setLog, maxes, bw, ready, setReady, sparPrev, sparThis, setSparThis, swapped, setSwapped, box, setBox, note, setNote, openProto, startTimer, openPlates, onSetMax, autoRest, openFlow, goIron, weekStats, addBody, calis, setCalis, taper, rangeWeek, openHome, openRangeTests } = props;
   const rx = rxFor(week), P = PH[rx.ph];
   const [open, setOpen] = useState(null);
   if (rx.hell) return (
@@ -974,10 +1016,10 @@ function Session(props) {
           <div style={Object.assign({}, mno, { fontSize: 9.5, color: C.brass, marginTop: 12, letterSpacing: 1 })}>{isFri ? "FRIDAY'S EXTRA HOUR OF SLEEP IS COUNTED AS TRAINING, BECAUSE IT IS." : "REST IS THE SESSION."}</div>
         </Card>
         <Card ac={C.violet} s={{ padding: 0 }}>
-          <button onClick={() => openProto("HOME")} style={{ display: "flex", width: "100%", alignItems: "center", gap: 11, textAlign: "left", background: "transparent", border: "none", padding: "14px 13px", cursor: "pointer", minHeight: 44 }}>
+          <button onClick={() => (openHome ? openHome() : openProto("HOME"))} style={{ display: "flex", width: "100%", alignItems: "center", gap: 11, textAlign: "left", background: "transparent", border: "none", padding: "14px 13px", cursor: "pointer", minHeight: 44 }}>
             <span style={{ flex: 1, minWidth: 0 }}>
-              <div style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1.3, color: C.chalk })}>{isFri ? "TONIGHT: THE FULL STRETCH · 20 MIN" : "TONIGHT: MOBILITY · 8 MIN"}</div>
-              <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.ash, marginTop: 4, lineHeight: 1.45 })}>{isFri ? "Upper back first, then hips, then shoulders. It replaces the 8-minute mobility on Fridays." : "The four moves, at home, as every evening."}</div>
+              <div style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1.3, color: C.chalk })}>TONIGHT: {rangeTitle(rangeWeek)} · {rangeMins(rangeWeek)} MIN</div>
+              <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.ash, marginTop: 4, lineHeight: 1.45 })}>{rangeLine(rangeWeek)}{isFri ? " Friday's extra stretch is folded into it, and there's no skill block." : ""}</div>
               <div style={Object.assign({}, mno, { fontSize: 9, color: C.violet, marginTop: 5, letterSpacing: 1 })}>TAP FOR THE HOME BLOCK</div>
             </span>
             <span style={Object.assign({}, mno, { fontSize: 13, color: C.violet, flexShrink: 0 })}>▸</span>
@@ -1075,7 +1117,7 @@ function Session(props) {
             {isOpen ? (
               <div className="rise" style={{ padding: "0 12px 12px" }}>
                 <div style={{ height: 1, background: C.line, marginBottom: 12 }} />
-                <BlockBody b={b} rx={rx} week={week} macro={macro} day={day} log={log} setLog={setLog} maxes={maxes} bw={bw} ready={effReady} openProto={openProto} startTimer={startTimer} openPlates={openPlates} onSetMax={onSetMax} autoRest={autoRest} weekStats={weekStats} calis={calis} setCalis={setCalis} taper={taper} />
+                <BlockBody b={b} rx={rx} week={week} macro={macro} day={day} log={log} setLog={setLog} maxes={maxes} bw={bw} ready={effReady} openProto={openProto} startTimer={startTimer} openPlates={openPlates} onSetMax={onSetMax} autoRest={autoRest} weekStats={weekStats} calis={calis} setCalis={setCalis} taper={taper} rangeWeek={rangeWeek} openRangeTests={openRangeTests} />
                 {b.tr ? <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, marginTop: 12, textAlign: "center", letterSpacing: 1 })}>↓ {b.tr} MIN TRANSITION ↓</div> : null}
                 <Btn on={() => mark(b.L)} c={isDone ? C.line : C.moss} fill={!isDone} s={{ width: "100%", marginTop: 12, color: isDone ? C.ash : C.ink }}>{isDone ? "UNDO" : "MARK BLOCK DONE"}</Btn>
               </div>) : null}
@@ -1083,7 +1125,7 @@ function Session(props) {
       })}
 
       <Card ac={C.violet} s={{ padding: 0 }}>
-        <button onClick={() => openProto("HOME")} style={{ display: "flex", width: "100%", alignItems: "center", gap: 11, textAlign: "left", background: "transparent", border: "none", padding: "12px 13px", cursor: "pointer" }}>
+        <button onClick={() => (openHome ? openHome() : openProto("HOME"))} style={{ display: "flex", width: "100%", alignItems: "center", gap: 11, textAlign: "left", background: "transparent", border: "none", padding: "12px 13px", cursor: "pointer", minHeight: 44 }}>
           <span style={{ flex: 1, minWidth: 0 }}>
             <div style={Object.assign({}, bdy, { fontSize: 13.5, fontWeight: 600, color: C.chalk, lineHeight: 1.4 })}>{HOMELINE}</div>
             <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, marginTop: 3, letterSpacing: 1 })}>TAP FOR THE HOME BLOCK</div>
@@ -1309,7 +1351,7 @@ function Bars({ data, unit, color }) {
     </div>);
 }
 
-function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L, IM, calis, camp }) {
+function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L, IM, calis, camp, rangeWeeks, rangeGet }) {
   const [sub, setSub] = useState("numbers");
   const [edit, setEdit] = useState({});
   const [tape, setTape] = useState({});
@@ -1320,8 +1362,8 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
   return (
     <div>
       <div style={{ display: "flex", gap: 5, marginBottom: 12 }}>
-        {[["numbers", "NUMBERS"], ["progress", "PROGRESS"], ["body", "BODY"], ["calis", "CALIS"], ["iron", "IRON MIND"]].map((x) => <button key={x[0]} onClick={() => setSub(x[0])}
-          style={Object.assign({}, dsp, { flex: 1, fontSize: 10, fontWeight: 700, letterSpacing: .5, padding: "11px 1px", borderRadius: 4, cursor: "pointer", minHeight: 44, background: sub === x[0] ? C.brass : "transparent", color: sub === x[0] ? C.ink : C.ash, border: "1px solid " + (sub === x[0] ? C.brass : C.line) })}>{x[1]}</button>)}
+        {[["numbers", "NUMBERS"], ["progress", "PROGRESS"], ["body", "BODY"], ["calis", "CALIS"], ["range", "RANGE"], ["iron", "IRON MIND"]].map((x) => <button key={x[0]} onClick={() => setSub(x[0])}
+          style={Object.assign({}, dsp, { flex: 1, fontSize: 9.5, fontWeight: 700, letterSpacing: .3, padding: "11px 1px", borderRadius: 4, cursor: "pointer", minHeight: 44, background: sub === x[0] ? C.brass : "transparent", color: sub === x[0] ? C.ink : C.ash, border: "1px solid " + (sub === x[0] ? C.brass : C.line) })}>{x[1]}</button>)}
       </div>
 
       {sub === "numbers" ? (
@@ -1460,6 +1502,7 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
               </Card>); })}
         </div>) : null}
 
+      {sub === "range" ? <RangeTrack weeks={rangeWeeks || []} get={rangeGet} /> : null}
       {sub === "iron" ? <IronTrack IM={IM} /> : null}
     </div>);
 }
@@ -1472,7 +1515,7 @@ function PlanView() {
   return (
     <div>
       <div style={{ display: "flex", gap: 5, marginBottom: 12 }}>
-        {[["fighter", "FIGHTER v1.2", C.oxide], ["iron", "IRON MIND v4.2", C.violet]].map((x) => (
+        {[["fighter", "FIGHTER v1.4", C.oxide], ["iron", "IRON MIND v4.2", C.violet]].map((x) => (
           <button key={x[0]} onClick={() => setDoc(x[0])}
             style={Object.assign({}, dsp, { flex: 1, fontSize: 12, fontWeight: 700, letterSpacing: 1, padding: "11px 0", borderRadius: 4, cursor: "pointer", minHeight: 44, background: doc === x[0] ? x[2] : "transparent", color: doc === x[0] ? C.ink : C.ash, border: "1px solid " + (doc === x[0] ? x[2] : C.line) })}>{x[1]}</button>))}
       </div>
@@ -1525,12 +1568,21 @@ function Settings({ st, setSt, current, L, exportData, importData, close, IM, ca
         <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
         <Eye c={C.oxide}>Camp mode — when boxing returns</Eye>
         <Toggle on={!!st.camp} set={() => upd({ camp: !st.camp, lastTen: st.camp ? false : st.lastTen })} c={C.oxide}
-          n="CAMP MODE" s="Swaps the week to the camp table: Monday, Wednesday, Thursday and Saturday keep what boxing never covers, Sunday drops the fight sim, and Tuesday and Friday become sleep days. Four sessions, about four hours. Calisthenics goes to the handstand at home only — the rings, the pistols, the L-sits and the slow lane stop." />
+          n="CAMP MODE" s="Swaps the week to the camp table: Monday, Wednesday, Thursday and Saturday keep what boxing never covers, Sunday drops the fight sim, and Tuesday and Friday become sleep days. Four sessions, about four hours. RANGE and the morning five stay in camp — they're the cheapest injury insurance you own. Calisthenics goes to the handstand at home only — the rings, the pistols, the L-sits and the slow lane stop." />
         {st.camp ? <div style={{ paddingLeft: 24 }}>
           <Toggle on={!!st.lastTen} set={() => upd({ lastTen: !st.lastTen })} c={C.oxide}
             n="THE LAST TEN DAYS BEFORE A FIGHT" s="Week table numbers stop; every lift goes to 2 sets at 70%, fast; no sprints, no depth jumps, no Nordics; the jump circuit becomes box jumps only. The two power doses stay. The last heavy thing you do is nine days out." />
         </div> : null}
         {st.camp ? <Note c={C.oxide}>Boxing nights: the head-contact rule is the law. The morning after any sparring is the LIGHT SESSION or nothing.</Note> : null}
+
+        <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
+        <Eye c={C.violet}>RANGE — the home block</Eye>
+        <Note c={C.chalk} s={{ marginTop: 0 }}>{RANGE_INTRO}</Note>
+        <div style={{ padding: "12px 0", borderBottom: "1px solid " + C.line }}>
+          <Lab>RANGE week 1 began</Lab>
+          <Fld type="date" v={st.rangeStart || st.start} on={(val) => { if (val) upd({ rangeStart: iso(mondayOf(parseISO(val))) }); }} a="left" />
+          <Note>Tonight reads as <span style={{ color: C.violet }}>range week {IM.rangeWeek}</span> — {isKeepWeek(IM.rangeWeek) ? "THE KEEP, ten minutes, every evening for good" : "RANGE, twenty minutes, every evening"}. Twelve weeks of RANGE, then the keep; the four tests on weeks 1, 5, 9 and 13, and every eight weeks after that. This clock keeps counting when the training program restarts at week 1.</Note>
+        </div>
 
         <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
         <Eye c={C.brass}>Calisthenics — the lines and the levels</Eye>
@@ -1866,7 +1918,8 @@ function HellWeek({ current, maxes, bw, hwLog, setHwLog, L }) {
    ================================================================ */
 const KEYS = { st: "o8s-settings", done: "o8s-done", log: "o8s-log", maxes: "o8s-maxes", maxHist: "o8s-maxhist", body: "o8s-body", ready: "o8s-ready", spar: "o8s-spar", swap: "o8s-swap", box: "o8s-box", notes: "o8s-notes", forge: "o8s-forge", fweek: "o8s-fweek", hw: "o8s-hw", calis: "o8s-calis" };
 const DEF_ST = () => ({ start: defaultStart(), macroBase: 1, iron: false, sound: true, autoRest: true,
-  medStage: 1, breathStage: 1, hardLevel: 1, sitLen: 30, imStart: null, camp: false, lastTen: false, taper: false, levelStart: null, v12: true });
+  medStage: 1, breathStage: 1, hardLevel: 1, sitLen: 30, imStart: null, rangeStart: null,
+  camp: false, lastTen: false, taper: false, levelStart: null, v12: true });
 
 export default function App() {
   const [st, setStRaw] = useState(DEF_ST());
@@ -1992,9 +2045,32 @@ export default function App() {
   const dayIso = iso(new Date());
   const weekMonday = iso(mondayOf(new Date()));
   const imStart = st.imStart || st.start;
+  /* RANGE runs on its own twelve-week clock, so it keeps counting when the
+     training program restarts at week 1 and THE KEEP really is for good. */
+  const rangeStart = st.rangeStart || st.start;
+  const rangeWeekOf = useCallback((macro, week) => {
+    const mon = new Date(mondayOf(parseISO(st.start)).getTime() + (((macro - st.macroBase) * L) + (week - 1)) * 604800000);
+    return Math.max(1, Math.floor((mondayOf(mon) - mondayOf(parseISO(rangeStart))) / 604800000) + 1);
+  }, [st.start, st.macroBase, rangeStart, L]);
+  const rangeWeek = rangeWeekOf(current.macro, current.week);
+  const shownRangeWeek = rangeWeekOf(shown.macro, shown.week);
+  /* the test weeks so far, oldest first — what TRACK charts */
+  const rangeTestWeeks = useMemo(() => { const out = [];
+    for (let m = st.macroBase; m <= current.macro; m++) for (let w = 1; w <= L; w++) {
+      const rw = rangeWeekOf(m, w); if (!isTestWeek(rw)) continue;
+      if (m === current.macro && w > current.week) continue;
+      out.push({ key: "m" + m + "w" + w, label: "rw" + rw, rangeWeek: rw });
+    }
+    return out.slice(-8); }, [st.macroBase, current.macro, current.week, L, rangeWeekOf]);
   const imWeek = useMemo(() => Math.max(1, Math.floor((mondayOf(new Date()) - mondayOf(parseISO(imStart))) / 604800000) + 1), [imStart]);
   const imRec = imDay[dayIso] || {};
   const taperNow = !!st.taper || current.week === 15 || current.week === 16;
+
+  /* The four range tests live on the existing log key, one entry per field,
+     so export/import and the "o8s-…" keys are untouched. */
+  const rangeKey = (macro, week) => "m" + macro + "w" + week;
+  const rangeGet = (key, id) => { const e = log[key + "-range-" + id]; return e ? e.w : ""; };
+  const rangePut = (key, id, val) => { const n = Object.assign({}, log); n[key + "-range-" + id] = { w: val }; setLog(n); };
 
   const imTick = (k) => { const cur = imDay[dayIso] || {}; const ticks = Object.assign({}, cur.ticks); ticks[k] = !ticks[k];
     setImDay(Object.assign({}, imDay, { [dayIso]: Object.assign({}, cur, { ticks }) })); buzz(20); };
@@ -2045,7 +2121,7 @@ export default function App() {
     };
 
     return {
-      gateMet, gateShown,
+      gateMet, gateShown, rangeWeek,
       st, dayIso, weekMonday, imWeek, rec: imRec, tick: imTick, taperNow,
       isSunday: todayKey() === "sun",
       sits: imSit, hards: imHard, wks: imWk,
@@ -2059,7 +2135,8 @@ export default function App() {
       silenceFor: (mon) => num((imWk[mon] || {}).silence) || 0,
       addSilence: (m) => setWkField("silence", (num((imWk[weekMonday] || {}).silence) || 0) + m),
       addHard: (e) => { setImHard([e].concat(imHard)); buzz([60, 40, 60]); },
-      open: (t) => setTool(t), floorOpen: () => setTool({ kind: "floor" }),
+      open: (t) => setTool(t.kind === "rangetests" ? { kind: "rangetests", macro: current.macro, week: current.week } : t),
+      floorOpen: () => setTool({ kind: "floor" }),
       goHell: () => { setTab("iron"); setIsub("hell"); },
       /* the home skill block — Monday to Thursday, after the mobility, before the sit */
       skill: (() => { const i = DAYS.indexOf(todayKey()); const hs = curLevel(calis, "handstand");
@@ -2067,7 +2144,7 @@ export default function App() {
           planche: (i === 1 || i === 3) && !st.camp, plancheText: SKILL_BLOCK.planche,
           wrists: SKILL_BLOCK.wrists, hollow: SKILL_BLOCK.hollow, why: SKILL_BLOCK.why, n: SKILL_BLOCK.n }; })(),
     };
-  }, [st, imStart, imDay, imSit, imHard, imWk, imWeek, dayIso, weekMonday, hwLog, taperNow, calis]);
+  }, [st, imStart, imDay, imSit, imHard, imWk, imWeek, dayIso, weekMonday, hwLog, taperNow, calis, rangeWeek]);
 
   const sessProps = { macro: shown.macro, week: shown.week, day: shown.day, isCurrent: isToday, done, setDone, log, setLog, maxes, bw,
     ready: readyMap[dk] || "", setReady: (val) => setReadyMap(Object.assign({}, readyMap, { [dk]: val })),
@@ -2077,7 +2154,9 @@ export default function App() {
     note: notes[dk] || "", setNote: (val) => setNotes(Object.assign({}, notes, { [dk]: val })),
     openProto: setProto, startTimer: T.start, openPlates: setPlates, onSetMax, autoRest: st.autoRest,
     openFlow: () => setFlow(true), goIron: () => { setTab("iron"); setIsub("hell"); }, weekStats, addBody,
-    calis, setCalis, taper: taperNow };
+    calis, setCalis, taper: taperNow,
+    rangeWeek: shownRangeWeek, openHome: () => setTool({ kind: "homeblock" }),
+    openRangeTests: () => setTool({ kind: "rangetests", macro: shown.macro, week: shown.week }) };
 
   const exportData = async () => JSON.stringify({ st, done, log, maxes, maxHist, body, readyMap, sparMap, swapMap, boxMap, notes, forge, fweek, hwLog, imDay, imSit, imHard, imWk, calis });
   const importData = (s) => { try { const d = JSON.parse(s || "{}");
@@ -2112,6 +2191,13 @@ export default function App() {
             onSave={(e) => setWkField("cold", Object.assign({ stamp: String(Date.now()) }, e))} />
         : tool.kind === "heat" ? <HeatTimer sound={st.sound} onClose={() => setTool(null)} />
         : tool.kind === "floor" ? <FloorTool sound={st.sound} onClose={() => setTool(null)} onDone={imFloor} />
+        : tool.kind === "morning5" ? <MorningFiveTool sound={st.sound} onClose={() => setTool(null)} />
+        : tool.kind === "range" ? <RangeTool rangeWeek={rangeWeek} sound={st.sound} onClose={() => setTool(null)} />
+        : tool.kind === "homeblock" ? <RangeSheet rangeWeek={shownRangeWeek} onClose={() => setTool(null)}
+            onOpenRange={() => setTool({ kind: "range" })} onOpenMorning={() => setTool({ kind: "morning5" })} />
+        : tool.kind === "rangetests" ? (() => { const k = rangeKey(tool.macro || current.macro, tool.week || current.week);
+            return <RangeTests week={tool.week || current.week} rangeWeek={rangeWeekOf(tool.macro || current.macro, tool.week || current.week)}
+              get={(id) => rangeGet(k, id)} put={(id, v) => rangePut(k, id, v)} onClose={() => setTool(null)} />; })()
         : null) : null}
 
       <div style={{ borderBottom: "1px solid " + C.line, background: C.slab, position: "sticky", top: 0, zIndex: 30, paddingTop: "env(safe-area-inset-top)" }}>
@@ -2154,7 +2240,8 @@ export default function App() {
               </div>) : null}
             {tab === "week" ? <WeekView view={vw} setView={setView} current={current} setCurrent={setCurrent} done={done} L={L} weekDoneMap={weekDoneMap}
               openDay={(d) => { setSelDay({ macro: vw.macro, week: vw.week, day: d }); setTab("today"); }} /> : null}
-            {tab === "track" ? <Track current={current} maxes={maxes} onSetMax={onSetMax} maxHist={maxHist} log={log} body={body} addBody={addBody} done={done} L={L} IM={IM} calis={calis} camp={!!st.camp} /> : null}
+            {tab === "track" ? <Track current={current} maxes={maxes} onSetMax={onSetMax} maxHist={maxHist} log={log} body={body} addBody={addBody} done={done} L={L} IM={IM} calis={calis} camp={!!st.camp}
+              rangeWeeks={rangeTestWeeks} rangeGet={rangeGet} /> : null}
             {tab === "iron" ? (
               <div>
                 <div style={{ display: "flex", gap: 4, marginBottom: 12 }}>
