@@ -21,7 +21,7 @@ import { isTestWeek, isKeepWeek, rangeTitle, rangeMins, rangeLine, RANGE_INTRO }
 import { RangeTool, MorningFiveTool, RangeTests, RangeTrack, RangeSheet } from "./range-ui.jsx";
 
 /* ================================================================
-   OPTIMAL 8 — THE FIGHTER BUILD v1.4 · companion app
+   OPTIMAL 8 — THE FIGHTER BUILD v1.5 · companion app
    The phase colour drives the screen: BUILD moss, FORCE oxide,
    VELOCITY brass, TAPER/TEST cobalt. Durability work is violet.
    Iron Mind v4.2 runs inside it — one app, one day, one streak.
@@ -80,14 +80,22 @@ const PH = {
 const phaseOf = (w) => (w <= 5 ? "b1" : w <= 10 ? "b2" : w <= 14 ? "b3" : w <= 16 ? "taper" : w === 17 ? "hell" : "reload");
 const bwk = (w) => (w <= 5 ? w : w <= 10 ? w - 5 : w <= 14 ? w - 10 : null);
 
+const BURST_RULE = "Rule: if a burst is visibly weaker than the last, take an extra 20 seconds; if two in a row are, the set is over.";
 const ENG = {
-  vo2: { n: "4-MINUTE INTERVALS", d: "4 × 4 min @ 90–95% HRmax / 3 min easy", why: "The most replicated protocol for raising aerobic power. Boxing is ~75–80% aerobic." },
-  lac: { n: "40-SECOND REPEATS", d: "2 blocks × (3 × 40s max / 80s) · 5 min between blocks", why: "Post-bout lactate in amateurs sits at 10–15 mmol/L. This is the only session that goes there. Rounds 1–2 feel manageable, round 3 burns, the last three are unpleasant. That sensation is the training effect. Don't sandbag the early rounds." },
-  rz: { n: "30-SECOND ALL-OUTS", d: "5 × 30s all-out / 3:00 full recovery", why: "Alactic-glycolytic power and the ability to repeat it. Take the whole 3 minutes or you are training lactate tolerance, which has its own slot." },
-  rz3: { n: "ALL-OUTS · TAPER", d: "3 × 30s all-out / 3:00 full recovery", why: "Sharp and short. Intent held, volume down." },
-  easy: { n: "EASY ZONE 2", d: "20 min conversational", why: "Deload. Nothing else." },
-  easy15: { n: "EASY FLUSH", d: "15 min conversational", why: "Test week. Nothing else." },
+  vo2: { n: "4-MINUTE INTERVALS", d: "4 rounds of 4 minutes HARD (breathing heavily, could speak 2–3 words at most) with 3 easy minutes between", why: "The single best session there is for building your engine. Boxing is ~75–80% aerobic." },
+  lac: { n: "40-SECOND REPEATS", d: "40 seconds absolutely flat out, 80 seconds easy. Do 3, rest 5 full minutes, do 3 more", why: "Rounds 1–2 feel fine, round 3 burns, the last three are horrible. That burning is the point — it's what the late rounds of a fight feel like, and this is the only session that goes there. Don't hold back early to survive the end." },
+  rz: { n: "REPEAT BURSTS", d: "2 sets × 8 bursts of 6–8s at absolute maximum / 40s easy between · 5 full minutes between sets",
+    why: "Eight bursts of 6–8 seconds at absolute maximum, with 40 seconds easy spinning between them; then 5 full minutes easy; then 8 more. Two sets, sixteen bursts. The first three feel like nothing. By the sixth the burst is still there but it costs; by the eighth of the second set the question is whether the burst is still a burst. That's the point — this is a flurry, twenty or thirty seconds apart, for a round, and what decides whether the fourth flurry has anything in it is how fast the muscle refills between them, which is an aerobic job done at flat-out intensity. The one session in the week shaped exactly like the thing you do in a ring.",
+    rule: BURST_RULE },
+  rz3: { n: "REPEAT BURSTS · ONE SET", d: "1 set × 8 bursts of 6–8s at absolute maximum / 40s easy between",
+    why: "Week 15: one set, eight bursts. The shape of a round held, the volume halved. Intent stays; the cost comes off.",
+    rule: BURST_RULE },
+  easy: { n: "EASY", d: "20 minutes at a pace where you could chat. That's it", why: "Deload. Nothing else." },
+  easy15: { n: "EASY FLUSH", d: "15 minutes at a pace where you could chat", why: "Test week. Nothing else." },
 };
+/* The Tuesday page writes out all four session types; Thursday refers back to
+   it. This is that menu, in the document's order. */
+const ENG_MENU = ["vo2", "lac", "rz", "easy"];
 const SIMB = { 1: { rest: 45 }, 2: { rest: 90, max3: 1 }, 3: { rest: 60 }, 4: { rest: 60, tested: 1 }, 5: { skip: 1 } };
 
 const R = {};
@@ -113,8 +121,11 @@ wk(17, { sc: "NO OPTIMAL 8 VOLUME", hell: 1, eng: null, sim: SIMB[5] });
 wk(18, { sc: "2 × 5 @ 70% — reload", sets: 2, reps: 5, pct: 70, cr: 1, spr: 3, sprPct: 90, acc: 2, nor: [2, 3], tb: tbB("2 × 3 @ 65%", 2, 3, 65), pp: tbB("2 × 3 @ 65%", 2, 3, 65), vec: 2, js: [2, 4], eng: "easy", sim: SIMB[5], dl: 1, sled: 3, reload: 1 });
 const ENG2 = { 1: "lac", 2: "rz", 3: "vo2", 4: "lac", 5: "easy", 6: "lac", 7: "rz", 8: "vo2", 9: "lac", 10: "easy", 11: "lac", 12: "rz", 13: "vo2", 14: "lac", 15: "easy", 16: null, 17: null, 18: "easy" };
 const pqB = (sc, pct, sets, reps, fast) => ({ sc, pct, sets: sets || 3, reps: reps || 3, fast: !!fast });
-const PQ = { 1: pqB("3 × 3 @ 75%", 75), 2: pqB("3 × 3 @ 78%", 78), 3: pqB("3 × 3 @ 80%", 80), 4: null, 5: pqB("2 × 3 @ 65% — easy week", 65, 2), 6: pqB("3 × 3 @ 80%", 80), 7: pqB("3 × 3 @ 82%", 82), 8: pqB("3 × 3 @ 84%", 84), 9: null, 10: pqB("2 × 3 @ 65% — easy week", 65, 2),
-  11: pqB("3 × 3 @ 70% — fast", 70, 3, 3, 1), 12: pqB("3 × 3 @ 70% — fast", 70, 3, 3, 1), 13: pqB("3 × 3 @ 70% — fast", 70, 3, 3, 1), 14: pqB("3 × 3 @ 70% — fast", 70, 3, 3, 1), 15: pqB("2 × 2 @ 80%", 80, 2, 2), 16: null, 17: null, 18: pqB("2 × 3 @ 65% — reload", 65, 2) };
+/* v1.5: the pause squat is a percentage of the BACK-SQUAT max, and a two-second
+   pause takes 10–15% off what you can lift — so this column runs 65–75%, easy
+   weeks 60%, and never goes above 75%. The speed squat is unchanged at 70%. */
+const PQ = { 1: pqB("3 × 3 @ 65%", 65), 2: pqB("3 × 3 @ 68%", 68), 3: pqB("3 × 3 @ 70%", 70), 4: null, 5: pqB("2 × 3 @ 60% — easy week", 60, 2), 6: pqB("3 × 3 @ 70%", 70), 7: pqB("3 × 3 @ 72%", 72), 8: pqB("3 × 3 @ 75%", 75), 9: null, 10: pqB("2 × 3 @ 60% — easy week", 60, 2),
+  11: pqB("SPEED 3 × 3 @ 70%", 70, 3, 3, 1), 12: pqB("SPEED 3 × 3 @ 70%", 70, 3, 3, 1), 13: pqB("SPEED 3 × 3 @ 70%", 70, 3, 3, 1), 14: pqB("SPEED 3 × 3 @ 70%", 70, 3, 3, 1), 15: pqB("2 × 2 @ 70%", 70, 2, 2), 16: null, 17: null, 18: pqB("2 × 3 @ 60% — reload", 60, 2) };
 Object.keys(R).forEach((w) => { R[w].eng2 = ENG2[w] === undefined ? null : ENG2[w]; R[w].pq = PQ[w] || null; });
 
 /* ---------------- CAMP MODE — when boxing returns ----------------
@@ -150,13 +161,21 @@ const rxFor = (w) => { let rx = baseRxFor(w); if (MODE.camp) rx = campRx(rx); if
 
 /* ---------- timer step builders ---------- */
 function steps(kind, o) {
-  const S = [], W = (l, s) => S.push({ l, s, t: "w" }), Rs = (l, s) => S.push({ l, s, t: "r" });
+  const S = [], W = (l, s, c) => S.push({ l, s, t: "w", c }), Rs = (l, s, c) => S.push({ l, s, t: "r", c });
   o = o || {};
   if (kind === "sim") { const r = o.rounds || 6, rest = o.rest == null ? 60 : o.rest;
     for (let i = 1; i <= r; i++) { W("RD " + i + " · MIN 1 — SKIERG", 60); W("RD " + i + " · MIN 2 — ASSAULT BIKE", 60); W("RD " + i + " · MIN 3 — " + (i % 2 ? "LANDMINE PUNCHES" : "MED-BALL SLAMS") + (o.max3 ? " · MAXIMAL" : ""), 60); if (i < r && rest > 0) Rs("REST — ROUND-RECOVERY BREATHING · 2 SIGHS, THEN IN 3 OUT 6", rest); } }
   else if (kind === "vo2") { const r = o.short ? 3 : 4; for (let i = 1; i <= r; i++) { W("INTERVAL " + i + " — 90–95% HRMAX", 240); if (i < r) Rs("EASY", 180); } }
   else if (kind === "lac") { for (let b = 1; b <= 2; b++) { const reps = o.short && b === 2 ? 2 : 3; for (let i = 1; i <= reps; i++) { W("BLOCK " + b + " · REP " + i + " — MAX", 40); if (i < reps) Rs("REST", 80); } if (b === 1) Rs("BETWEEN BLOCKS", 300); } }
-  else if (kind === "rz") { const r = (o.rounds || 5) - (o.short ? 1 : 0); for (let i = 1; i <= r; i++) { W("ROUND " + i + " — ALL OUT", 30); if (i < r) Rs("FULL RECOVERY", 180); } }
+  else if (kind === "rz") { /* repeat bursts — the flurry, trained */
+    const sets = o.sets == null ? 2 : o.sets, n = 8 - (o.short ? 1 : 0);
+    for (let st = 1; st <= sets; st++) {
+      for (let i = 1; i <= n; i++) {
+        W("SET " + st + " · BURST " + i + " OF " + n + " — ABSOLUTE MAXIMUM", 7, "6–8 seconds, everything you have.");
+        if (i < n) Rs("EASY SPINNING · " + i + " OF " + n + " DONE", 40, BURST_RULE);
+      }
+      if (st < sets) Rs("5 FULL MINUTES EASY — BETWEEN SETS", 300, "Set " + st + " done. Sit up, nose breathe, let it refill.");
+    } }
   else if (kind === "nasal") { for (let i = 1; i <= 4; i++) W("NOSE ONLY · MIN " + (i * 2 - 1) + "–" + i * 2 + " — RAISE THE PACE", 120); }
   else if (kind === "settle") { W("EYES CLOSED — FIND THE BREATH AT THE NOSTRILS", 60); }
   else if (kind === "postmax") { W("SIT · EYES CLOSED · FIND THE BREATH AT THE NOSTRILS", 180); }
@@ -188,9 +207,9 @@ const CRAWL_WHY = "Loads the shoulder and trunk in a pattern the body hasn't don
 const PROTO = {
   SH: { n: "Warm-up · shoulders", s: "8 min · Mon", c: C.cobalt, note: "The bench ramp is part of the warm-up — rest about a minute between those sets, so the first working set is already warm.",
     i: [["Back on the floor, feet on a bench", "5 breaths — in 4s, out 8s"], ["Band pull-apart", "×20 — arms straight, pull until it touches your chest"], ["Band external rotation", "×15/arm — elbow pinned to the ribs"], ["Wall slide", "×10 — forearms never leave the wall"], ["BENCH RAMP", ""], ["Bar", "×10"], ["40%", "×5"], ["60%", "×3"], ["75%", "×2"]] },
-  HIP: { n: "Warm-up · get-ups, hips + build-ups", s: "16 min · Sat", c: C.cobalt, note: "Never sprint cold. The get-up opens it; the three build-ups are the sprint warm-up; the squat ramp comes after them.",
+  HIP: { n: "Warm-up · get-ups, hips + build-ups", s: "16 min · Sat", c: C.cobalt, note: "Never sprint cold. The get-up opens it; the three build-ups are the sprint warm-up. The squat warm-up sets are not here — they sit inside the squat step, forty minutes later, because forty minutes of sprinting and jumping keeps you warm but it doesn't keep the squat pattern rehearsed.",
     i: [["TURKISH GET-UP · 2 PER SIDE, LIGHT · 4 MIN", ""], [GETUP_N, GETUP_S], [GETUP_LOAD_N, GETUP_LOAD], ["THEN THE HIPS", ""],
-      ["90/90 switches", "×5 each way"], ["Hip airplane", "×5/side"], ["Cossack squat", "×6/side"], ["Leg swings", "×10 each — forward-back, then side-to-side"], ["Pogo hops", "2 × 20"], ["SPRINT BUILD-UPS", ""], ["20m @ 60%", "×1"], ["20m @ 75%", "×1"], ["20m @ 90%", "×1"], ["SQUAT RAMP", ""], ["40%", "×3"], ["60%", "×2"], ["75%", "×1"]] },
+      ["90/90 switches", "×5 each way"], ["Hip airplane", "×5/side"], ["Cossack squat", "×6/side"], ["Leg swings", "×10 each — forward-back, then side-to-side"], ["Pogo hops", "2 × 20"], ["SPRINT BUILD-UPS", ""], ["20m @ 60%", "×1"], ["20m @ 75%", "×1"], ["20m @ 90%", "×1"]] },
   GEN: { n: "Warm-up", s: "6 min · Wed", c: C.cobalt, note: "Wednesday adds the trap bar and squat warm-up sets (bar × 5 · 50% × 3 · 65% × 2, then 40% × 3 · 60% × 2).",
     i: [["Easy bike", "3 min"], ["Band pull-apart", "×20"], ["Goblet squat", "×8"], ["Push-up", "×10"], ["90/90 hip switch", "×5 each way"], ["Pogo hops", "×20"]] },
   GEN8: { n: "Warm-up · crawls", s: "8 min · Tue and Thu", c: C.cobalt, note: "Thursday's warm-up is the same as Tuesday's, bear crawls included.",
@@ -212,8 +231,8 @@ const PROTO = {
   CALF: { n: "Seated calf raise + Achilles hold", s: "5 min · Tue", c: C.violet,
     note: "The hold is the tendon block, part one. Muscle gets strong in weeks; tendon gets stiff in months, and a heavy still hold is the best-proven way to hurry it. Your Achilles takes every sprint and every depth jump on Saturday. Forty-five seconds a week is the insurance.",
     i: [["Seated calf raise", "3 × 12 · rest 60s — up on the balls of the feet, pause, down slow"],
-      ["Achilles hold", "one × 45s — after the third set, load it as heavy as you can hold dead still and hold the top position. No bouncing, no sinking."],
-      ["It must be seated (knee bent)", "that's the muscle that keeps you on your toes in round six"]] },
+      ["Achilles hold — STANDING", "one × 45s — on the edge of a step, both feet, a dumbbell in each hand or a bar on your back, as heavy as you can hold dead still. Rise to the top and hold. Knees straight, no bouncing, no sinking."],
+      ["Straight knee", "that is the position the Achilles takes every sprint and every landing; a seated hold loads a different muscle into the same tendon and does less for it"]] },
   SPAN: { n: "Spanish squat hold", s: "3 min · Thu", c: C.violet,
     note: "The tendon block, part two: the patellar tendon, which takes every depth jump and every box landing. Same logic as the Achilles hold — a heavy, still, painless load is what makes tendon stiff, and stiff tendon is what turns strength into speed without tearing.",
     i: [["Spanish squat hold", "3 × 30s · rest 30s"],
@@ -250,6 +269,16 @@ const PROTO = {
       ["RANGE only", "no skill block"],
       ["If you skip it", "nothing shows this week. By week 6 the hips tighten back to where they were, the internal-rotation lift stops moving, and the tests say so in numbers."]] },
 };
+/* v1.5 — thirty to forty easy nasal minutes on a weekend afternoon: the
+   aerobic base that left with the Friday alarm, put back where it costs no
+   sleep. Once a weekend, either day — so ticking it on one day clears both. */
+const EASY_HOUR = {
+  n: "THE EASY HOUR",
+  s: "Thirty to forty minutes easy, nose only, at a pace you could hold a conversation at — a bike, a walk, a swim, whatever's there. Four-plus hours after the session.",
+  why: "It's active recovery for legs that just sprinted, and it's the aerobic base that left with the Friday alarm, put back where it costs no sleep. Once a weekend, either day.",
+  tag: "30–40 MIN · NOSE ONLY · ONCE A WEEKEND",
+};
+
 const HOMELINE = "HOME · tonight: RANGE, 20 min (from week 13: THE KEEP, 10 min) · Mon–Thu then the skill block, 6 min: handstand, hollow and arch, planche leans on Tuesday and Thursday · and the morning five on waking";
 
 /* ================================================================
@@ -262,13 +291,13 @@ const heavy79 = (rx) => rx.w >= 7 && rx.w <= 9;
    the interval session that follows runs one round short. */
 const nasalWk = (rx) => rx.w === 4 || rx.w === 9 || rx.w === 14;
 const engTimer = (key) => (rx) => { const e = rx[key]; const sh = key === "eng2" && nasalWk(rx) ? 1 : 0;
-  return e === "vo2" ? { kind: "vo2", opt: { short: sh }, title: sh ? "VO2MAX · ONE SHORT" : "VO2MAX" } : e === "lac" ? { kind: "lac", opt: { short: sh }, title: sh ? "LACTATE · ONE SHORT" : "LACTATE" } : e === "rz" ? { kind: "rz", opt: { rounds: 5, short: sh }, title: sh ? "RED ZONE · ONE SHORT" : "RED ZONE" }
-    : e === "rz3" ? { kind: "rz", opt: { rounds: 3 }, title: "RED ZONE" } : e === "easy" ? { kind: "z2", opt: { min: 20, label: "EASY ZONE 2" }, title: "EASY" } : { kind: "z2", opt: { min: 15, label: "EASY FLUSH" }, title: "EASY" }; };
+  return e === "vo2" ? { kind: "vo2", opt: { short: sh }, title: sh ? "VO2MAX · ONE SHORT" : "VO2MAX" } : e === "lac" ? { kind: "lac", opt: { short: sh }, title: sh ? "LACTATE · ONE SHORT" : "LACTATE" } : e === "rz" ? { kind: "rz", opt: { sets: 2, short: sh }, title: sh ? "REPEAT BURSTS · ONE SHORT" : "REPEAT BURSTS" }
+    : e === "rz3" ? { kind: "rz", opt: { sets: 1 }, title: "REPEAT BURSTS · ONE SET" } : e === "easy" ? { kind: "z2", opt: { min: 20, label: "EASY ZONE 2" }, title: "EASY" } : { kind: "z2", opt: { min: 15, label: "EASY FLUSH" }, title: "EASY" }; };
 const engMin = (key) => (rx) => (rx[key] === "easy" || rx[key] === "easy15" ? 20 : 24);
 
 const S = {
   /* ---------------- MONDAY ---------------- */
-  mon: { n: "MONDAY", t: "Upper Strength + Power Dose + Rings", m: 64, ac: C.oxide, box: 1,
+  mon: { n: "MONDAY", t: "Upper Strength + Power Dose + Rings", m: 65, ac: C.oxide, box: 1,
     intro: "Upper strength and the first of the week's three power doses. Nothing is taken to failure.", b: [
     { L: "A", n: "Warm-up", m: 8, p: "SH" },
     { L: "B", n: "Bench Throw (Smith)", m: 11, star: 1, hard: 1, hide: (rx) => !!rx.upperC, rest: "Rest 2:00", rt: 120,
@@ -276,8 +305,11 @@ const S = {
       w: "Stop the set the instant a throw is visibly lower than the last.",
       why: "This is your punch-speed lift. A normal bench decelerates through its last third to protect the elbows; releasing the bar removes the brake. In weeks 11–14 it merges into the circuit below.",
       note: "No Smith machine? Throw a 4–6 kg medicine ball off your chest at a wall, 5 × 5, as hard as you can.", tr: 2 },
-    { L: "C", n: "Power dose — box jumps", m: 5, star: 1, hard: 1, hide: (rx) => !!rx.test, rest: "Rest 60–90s", rt: 75,
-      items: [{ n: "Box jump", s: "3 × 3", cue: "A box at knee-to-hip height. Quick dip, jump as high as you can, land soft on top, step down. Three perfect jumps, never three tired ones.", id: "boxjump", k: "chk" }],
+    { L: "C", n: "Power dose — box jumps", m: 6, star: 1, hard: 1, hide: (rx) => !!rx.test, rest: "Rest 60–90s", rt: 75,
+      rxLine: () => "one minute of legs, then 3 × 3",
+      items: [{ n: "First, one minute of legs", s: "pogo hops × 20 · bodyweight squats × 6 · two easy jumps onto a low step",
+          cue: "The warm-up so far was all shoulders. Pogo hops × 20 — bounce on the balls of the feet, legs almost straight. Bodyweight squats × 6. Then two easy jumps onto a low step.", id: "legprep", k: "chk" },
+        { n: "Box jump", s: "3 × 3", cue: "Choose the box by the landing, not the height — you should land on it in a quarter squat, knees soft, not folded to your chest. The training is the take-off; a higher box only makes you lift your knees faster. Quick dip, jump as high as you can, land soft on top, step down. Three perfect jumps, never three tired ones.", id: "boxjump", k: "chk" }],
       why: "Explosiveness responds to how often the nervous system is asked, not how much. Five minutes, three mornings a week." },
     { L: "D", n: (rx) => (rx.upperC ? "Upper Circuit — Bench + Throws" : "Bench Press"), m: 10, star: (rx) => !!rx.upperC, hard: 1, mainLift: "bench", fb: "bench",
       pres: (rx) => ({ sc: rx.upperC ? "4 rounds · 2 @ 85%" : rx.maxBe ? rx.sets + " × " + rx.reps + " @ " + rx.pct + "%" : (rx.bsc || rx.sc), pct: rx.upperC ? 85 : rx.pct }),
@@ -321,9 +353,9 @@ const S = {
       items: [{ n: "The pistol line — at your level", s: "2 × 5 per leg", cue: "At the level most men start: stand on one leg in front of a box or bench, the other leg held straight out in front, sit down to the box under control and stand back up without touching the floor with the free foot. The line climbs through the assisted pistol (fingertips on a post) to the full pistol, then the weighted pistol, with the shrimp squat as a rotation.", id: "pistol", k: "wr", sets: 2, reps: "5/leg" }],
       w: "Two sets, never to failure, never sore: Saturday's sprints are four days away, Wednesday's heavy lower is tomorrow, and this block is control, not load.",
       why: "The split squat on Thursday is the loaded single-leg strength. This is the unloaded single-leg skill — balance, ankle, knee tracking, the pivot foot learning to own the whole body." },
-    { L: "D", n: (rx) => (ENG[rx.eng] ? ENG[rx.eng].n : "Bike session"), m: engMin("eng"), star: 1, hard: 1, eng: 1, hide: (rx) => !rx.eng, timer: engTimer("eng"),
+    { L: "D", n: (rx) => (ENG[rx.eng] ? ENG[rx.eng].n : "Bike session"), m: engMin("eng"), star: 1, hard: 1, eng: 1, menu: 1, hide: (rx) => !rx.eng, timer: engTimer("eng"),
       items: [{ n: "Output", s: "write it down", id: "cond", k: "out", u: "output / peak HR" }],
-      note: "Bike or SkiErg — pick one and keep it all 16 weeks so your numbers compare." },
+      note: "Bike or SkiErg — pick one and keep it all 16 weeks so your numbers compare. Write down your output." },
     { L: "E", n: "The 60-Second Settle", m: 1, settle: 1, hide: (rx) => !rx.eng || !!rx.test, timer: () => ({ kind: "settle", title: "THE SETTLE" }), rxLine: () => "60 seconds — log the seconds to land",
       items: [{ n: "Seconds to land on the breath", s: "write it down", id: "settle", k: "out", u: "seconds" }],
       why: "This is the corner between rounds, trained, for nothing, every Tuesday and Thursday." },
@@ -335,9 +367,9 @@ const S = {
         { n: "Copenhagen plank", s: "2 × 30s/side", cue: "Side plank with your top foot up on a bench, bottom leg lifted off the floor. Groin strength — the muscles you pivot off.", id: "copen", k: "chk" }] },
     { L: "H", n: "Seated Calf Raise + Achilles Hold", m: 5, p: "CALF", hide: (rx) => !!rx.test, rest: "Rest 60s", rt: 60,
       rxLine: () => "3 × 12, then one 45-second hold",
-      timer: () => ({ kind: "hold", opt: { sets: 1, secs: 45, label: "ACHILLES HOLD — DEAD STILL" }, title: "ACHILLES HOLD" }),
-      items: [{ n: "Seated calf raise", s: "3 × 12", cue: "Seated machine, or a barbell padded across your knees. Up on the balls of the feet, pause, down slow, twelve times.", id: "soleus", k: "wr", sets: 3, reps: 12 },
-        { n: "Achilles hold", s: "one × 45 seconds", cue: "After the third set, load it as heavy as you can hold dead still and hold the top position for 45 seconds — no bouncing, no sinking. It must be seated (knee bent) — that's the muscle that keeps you on your toes in round six.", id: "achilles", k: "chk" }],
+      timer: () => ({ kind: "hold", opt: { sets: 1, secs: 45, label: "ACHILLES HOLD — STANDING, STRAIGHT KNEE" }, title: "ACHILLES HOLD" }),
+      items: [{ n: "Seated calf raise", s: "3 × 12", cue: "Seated machine, or a barbell padded across your knees. Up on the balls of the feet, pause, down slow, twelve times — seated, because the knee-bent position trains the muscle that keeps you on your toes in round six.", id: "soleus", k: "wr", sets: 3, reps: 12 },
+        { n: "Achilles hold — STANDING", s: "one × 45 seconds", cue: "The hold is STANDING: on the edge of a step, both feet, a dumbbell in each hand or a bar on your back, as heavy as you can hold dead still — rise to the top and hold 45 seconds, knees straight, no bouncing, no sinking. Straight knee, because that is the position the Achilles takes every sprint and every landing; a seated hold loads a different muscle into the same tendon and does less for it.", id: "achilles", k: "chk" }],
       why: "The hold is the tendon block, part one. Muscle gets strong in weeks; tendon gets stiff in months, and a heavy still hold is the best-proven way to hurry it. Your Achilles takes every sprint and every depth jump on Saturday. Forty-five seconds a week is the insurance." }] },
 
   /* ---------------- WEDNESDAY ---------------- */
@@ -357,7 +389,8 @@ const S = {
       why: "At 3am this is the one heavy lift allowed: nothing passes over your body, and a rep that isn't there gets set down, not fought.", tr: 2 },
     { L: "D", n: (rx) => (rx.pq && rx.pq.fast ? "Speed Squat" : "Pause Squat"), m: 10, hard: 1, mainLift: "squat", pres: (rx) => ({ sc: rx.pq.sc, pct: rx.pq.pct }), hide: (rx) => !rx.pq, rest: "Rest 2:00", rt: 120,
       items: (rx) => [{ n: rx.pq.fast ? "Speed squat" : "Pause squat", s: rx.pq.sc, cue: rx.pq.fast ? "No pause. Every rep as fast as you can move it. Pins set." : "Bar on your back, sit to just below parallel and hold there, dead still, for a full two seconds — then drive up hard. Pins set.", id: "pausesq", k: "wr", mk: "squat", pct: rx.pq.pct, sets: rx.pq.sets, reps: rx.pq.reps }],
-      rxLine: (rx) => rx.pq.sc, w: "Pins set. Skipped on max-single weeks (4, 9) and in week 16.",
+      rxLine: (rx) => rx.pq.sc, w: (rx) => (rx.pq.fast ? "Pins set. Skipped on max-single weeks (4, 9) and in week 16."
+        : "Pins set. Skipped on max-single weeks (4, 9) and in week 16. This is a percentage of your back-squat max — and a paused triple at 75% is a hard triple, because a two-second pause takes 10–15% off what you can lift. That column never goes above 75%."),
       why: "The second squat exposure — submaximal, paused, from the position rear-leg drive starts in. Saturday owns the heavy squat; this is at a weight you own.", tr: 2 },
     { L: "E", n: "Romanian Deadlift", m: 6, rest: "Rest 75s", rt: 75, rxLine: () => "3 × 6",
       items: [{ n: "Romanian deadlift", s: "3 × 6", cue: "Bar at your hips, soft knees, push your hips back until the bar reaches mid-shin with a flat back, stand back up by driving the hips through. Start around 60% of your trap bar max and add 2.5–5 kg a week while every rep still moves at the same speed.", id: "rdl", k: "wr", sets: 3, reps: 6 }],
@@ -376,7 +409,9 @@ const S = {
       items: [{ n: CRAWL_N, s: "10m forward, 10m backward, × 4", cue: CRAWL_S + " Slow beats fast: if the hips rock or the knees lift, you've gone too quick.", id: "crawl", k: "chk" }],
       why: CRAWL_WHY },
     { L: "B", n: "Power dose — throws + landmine", m: 8, star: 1, hard: 1, hide: (rx) => !!rx.test, rest: "45s between sets", rt: 45,
-      items: [{ n: "Rotational shot-put", s: "2 × 3/side", cue: "Medicine ball, 3–5 kg, at the shoulder, side-on to the wall, drive off the back hip. Flat and hard, like the punch.", id: "shot2", k: "chk" },
+      rxLine: () => "three easy throws first, then 2 × 3/side and 2 × 5/side",
+      items: [{ n: "Three easy throws of each first", s: "at half effort", cue: "Three easy throws of each first, at half effort, exactly as Sunday's warm-up does — a maximal rotational throw is the one movement in the morning nothing in the warm-up has rehearsed.", id: "easythrows", k: "chk" },
+        { n: "Rotational shot-put", s: "2 × 3/side", cue: "Medicine ball, 3–5 kg, at the shoulder, side-on to the wall, drive off the back hip. Flat and hard, like the punch.", id: "shot2", k: "chk" },
         { n: "Landmine punch", s: "2 × 5/side", cue: "One end of a barbell in a corner or landmine sleeve, the other end at your shoulder, in your stance. Drive the hips and punch it up and away — never press it. Bar speed is the metric; add weight only when it still snaps.", id: "lm2", k: "wr", sets: 2, reps: "5/side" }],
       why: "The third weekly power dose: the unloaded ballistic and the loaded punch pattern, three days before Sunday's full session." },
     { L: "C", n: "Split Squat — rear foot elevated", m: 7, p: "SPLIT", hide: (rx) => !!rx.test, rest: "Rest 60s", rt: 60,
@@ -397,8 +432,8 @@ const S = {
       why: "As Tuesday. Stay on the bike, eyes closed, find the breath, log the seconds." },
     { L: "X", n: "Achilles Hold", m: 2, campOnly: 1, p: "CALF",
       rxLine: () => "one × 45 seconds",
-      timer: () => ({ kind: "hold", opt: { sets: 1, secs: 45, label: "ACHILLES HOLD — DEAD STILL" }, title: "ACHILLES HOLD" }),
-      items: [{ n: "Achilles hold", s: "one × 45 seconds", cue: "Seated, knee bent. Load it as heavy as you can hold dead still and hold the top position for 45 seconds — no bouncing, no sinking.", id: "achilles_c", k: "chk" }],
+      timer: () => ({ kind: "hold", opt: { sets: 1, secs: 45, label: "ACHILLES HOLD — STANDING, STRAIGHT KNEE" }, title: "ACHILLES HOLD" }),
+      items: [{ n: "Achilles hold — STANDING", s: "one × 45 seconds", cue: "Standing on the edge of a step, both feet, knees straight. Load it as heavy as you can hold dead still and hold the top position for 45 seconds — no bouncing, no sinking.", id: "achilles_c", k: "chk" }],
       why: "In camp the Achilles hold moves here, off the Tuesday that is now a sleep day. The tendon block does not come out — it is the cheapest insurance in sport." },
     { L: "G", n: "Neck", m: 10, p: "NECK", items: [{ n: "The full neck block", s: "4 movements", id: "neck", k: "chk" }] }] },
 
@@ -406,13 +441,14 @@ const S = {
   fri: { n: "FRIDAY", t: "SLEEP. No alarm. RANGE at home in the evening.", m: 0, ac: C.moss, sleep: 1, box: 1,
     intro: "No alarm. Tomorrow is the biggest session of the week, and the best thing you can do for it is not get up at half three.",
     sleepWhy: "The Singles version put a 55-minute easy ride here. Straight truth about that ride: fifty-five minutes of easy spinning a week is a token dose of aerobic base — it's either two hours or it's not worth the alarm — and the job you do all day is already hours of low-intensity movement. The two interval sessions, the fight rounds and the sprint warm-ups are what build your engine, and they're untouched. What the Friday alarm actually cost was about seventy-five minutes of sleep on the night before Saturday, every week, for sixteen weeks, and sleep is the one recovery variable in this program that nothing else replaces. So it's gone. Four mornings a week, then a lie-in.",
+    safeguard: "The safeguard, written down. The engine rests on the two interval sessions, the rounds, the weekend easy hour, and a physical job. Two numbers arbitrate: the 20-minute bike test and the fight-sim fade. If either has stalled by week 9, twenty easy minutes on the bike straight after Tuesday's intervals is the first thing that comes back — not the Friday alarm.",
     sleepFood: "Food: Friday's 5pm carb feed still loads Saturday — that's the most important feed of the week and it doesn't move. There's no fasted ride, so breakfast is the porridge on waking. Everything else as the fuel app says.",
     b: [] },
 
   /* ---------------- SATURDAY ---------------- */
-  sat: { n: "SATURDAY", t: "★ The Leg & Power Session — get-ups open it", m: (rx) => (rx.lowerLead ? 96 : rx.pp && rx.pp.sc ? 94 : 89), ac: C.oxide, free: 1, box: 1,
+  sat: { n: "SATURDAY", t: "★ The Leg & Power Session — get-ups open it", m: (rx) => (rx.lowerLead ? 98 : rx.pp && rx.pp.sc ? 94 : 91), ac: C.oxide, free: 1, box: 1,
     intro: "No shift, fed and fresh. This is the session that matters most all week, on the one day nothing can compromise it. Fuel it like the fuel plan's big day: porridge 6:30, shake 7:45, start 8:15.", b: [
-    { L: "A", n: "Warm-up — get-ups first", m: 16, p: "HIP", note: "Build-ups included. Never sprint cold.", rxLine: () => "16 min · get-ups 2/side, hips, build-ups, squat ramp",
+    { L: "A", n: "Warm-up — get-ups first", m: 16, p: "HIP", note: "Build-ups included. Never sprint cold. The squat warm-up sets happen inside the squat step, not here.", rxLine: () => "16 min · get-ups 2/side, hips, build-ups",
       items: [{ n: GETUP_N, s: "2 per side, light · 4 min", cue: GETUP_S + " Start with 8–12 kg; 16 is the working weight; 24 is the test.", id: "getup", k: "chk" }],
       why: GETUP_WHY },
     { L: "B", n: "Flying Sprints", m: 14, star: 1, hard: 1, noTaper: 1, rest: "Rest 2:30–3:00 — full recovery", rt: 165,
@@ -430,8 +466,10 @@ const S = {
       items: [{ n: (rx) => (rx.bound === "stick" ? "Side bound — stick the landing" : "Side bound — continuous"), s: "3 × 4/side",
         cue: (rx) => (rx.bound === "stick" ? "Stand on one leg, jump sideways as far as you can, land on the other leg and stick the landing dead still for 2 seconds." : "Weeks 11–14: no stick — bounce straight back the other way."), id: "latbound", k: "chk" }],
       why: "The sideways push-off is how you cut the ring off. Nothing else in the week trains it.", tr: 2 },
-    { L: "E", n: "Back Squat", m: 15, star: 1, hard: 1, mainLift: "squat", maxUI: 1, fb: "squat",
+    { L: "E", n: "Back Squat", m: 17, star: 1, hard: 1, mainLift: "squat", maxUI: 1, fb: "squat",
       rest: (rx) => (heavy79(rx) ? "Rest 3:00" : "Rest 2:30"), rt: (rx) => (heavy79(rx) ? 180 : 150),
+      ramp: { n: "Squat warm-up sets — here, not at the start of the session", pcts: [[40, 3], [60, 2], [75, 1]],
+        why: "Forty minutes of sprinting and jumping keeps you warm; it doesn't keep the squat pattern rehearsed." },
       items: [{ n: "Back squat", s: (rx) => rx.sc, cue: "Bar on your back, break at the hips and knees together, sit to just below parallel, drive up hard. Every rep fast on the way up; a grinding rep ends the set.", id: "squat", k: "wr", mk: "squat", pct: (rx) => rx.pct, sets: (rx) => rx.sets, reps: (rx) => rx.reps }],
       w: "Pins set — just below your lowest position on every set over 80%.",
       why: "Lower-body maximal strength is the strongest single predictor of punch force in trained boxers.", tr: 3 },
@@ -454,8 +492,8 @@ const S = {
       note: "Weeks 4 and 9: skipped. The squat max is enough maximal work for one day." }] },
 
   /* ---------------- SUNDAY ---------------- */
-  sun: { n: "SUNDAY", t: "★ Get-ups · Punch Throws · Fight Rounds · Core + L-Sit · Lever · Nordics", m: (rx) => (rx.test ? 44 : rx.maxBe ? 92 : rx.sim.skip ? 56 : 80), ac: C.brass, free: 1, box: 1,
-    intro: "Second free morning. Punches, rounds, core and hands, and the week's hamstring work last, with two leg-free days behind it. No pressing today on purpose so Monday's bench gets 42 hours. (Week 16: the warm-up, the 20-minute test and the weekly check. Nothing else.)", b: [
+  sun: { n: "SUNDAY", t: "★ Get-ups · Punch Throws · Nordics · Fight Rounds · Post-Max Sit · Core + L-Sit · Lever", m: (rx) => (rx.test ? 44 : rx.maxBe ? 92 : rx.sim.skip ? 56 : 80), ac: C.brass, free: 1, box: 1,
+    intro: "Second free morning. Punches, then the week's hamstring work while the legs are fresh, then rounds, core and hands. No pressing today on purpose so Monday's bench gets 42 hours. Same fuelling as Saturday. (Week 16: the warm-up, the 20-minute test and the weekly check. Nothing else. Stretch at home.)", b: [
     { L: "A", n: "Warm-up — get-ups first", m: 14, p: "SUNWU", rxLine: () => "14 min · get-ups 2/side, then Tuesday's warm-up and the practice throws", note: "Turkish get-ups, then Tuesday's warm-up without the crawls, plus: broad jumps 3 × 2 · med-ball chest passes 3 × 3 as hard as you can · 3 × 10-second bike sprints with a minute between · then three EASY practice throws of each of the four throws.",
       items: [{ n: GETUP_N, s: "2 per side, light (as Saturday)", cue: GETUP_S + " Start with 8–12 kg; 16 is the working weight; 24 is the test.", id: "getup", k: "chk" }],
       why: GETUP_WHY },
@@ -470,6 +508,10 @@ const S = {
         { n: "Landmine punch", s: "5/side — your loaded straight", cue: "Bar end at your shoulder, in your stance. Drive the hips and PUNCH it up and away — never a slow press. Catch it, go again.", id: "lmpunch", k: "wr", sets: (rx) => rx.vec, reps: "5/side" }],
       rxLine: (rx) => rx.vec + " rounds",
       why: "Straight punches are built on forward drive; hooks on rotation. They're different physical problems, so all four get trained. Medicine ball 3–5 kg — if it isn't flying, it's too heavy.", tr: 2 },
+    { L: "H", n: "Nordic Curls", m: 8, noTaper: 1, hide: (rx) => !rx.nor || !!rx.test, rest: "Rest 2:00", rt: 120,
+      rxLine: (rx) => rx.nor[0] + " × " + rx.nor[1] + " — ramped",
+      items: [{ n: "Nordic curl", s: (rx) => rx.nor[0] + " × " + rx.nor[1] + " — ramped", cue: "Kneel with your heels anchored under something solid. Keeping your body straight from knees to head, lower yourself forward as SLOWLY as you can, catch yourself with your hands, push back up. Stop the set the moment your lower back rounds — not at the rep count.", id: "nordic", k: "wr", sets: (rx) => rx.nor[0], reps: (rx) => rx.nor[1] }],
+      why: "Before the rounds, on purpose: the hardest eccentric work of the week goes on fresh hamstrings, not on ones that have just done twenty-four minutes of rounds — a maximal eccentric on a tired muscle is how the protective exercise becomes the injury. The rounds after it are bike, ski and landmine, which don't need a fresh hamstring. And it's still the last day, so the soreness has two leg-easy days to leave before Wednesday. Strong hamstrings on the way down is the best-proven injury protection in all of sport; the reps ramp up over the first month — follow the table. (Week 16: skip.)" },
     { L: "D", n: "Fight Simulation", m: 24, star: 1, sim: 1, hard: 1, hide: (rx) => !!rx.sim.skip || rx.w === 1 || !!rx.test,
       timer: (rx) => ({ kind: "sim", opt: { rounds: rx.sim.rounds || 6, rest: rx.sim.rest, max3: rx.sim.max3 }, title: "FIGHT SIM" }),
       items: [{ n: "Minute 1", s: "SkiErg", k: "txt" }, { n: "Minute 2", s: "Assault bike", k: "txt" }, { n: "Minute 3", s: "Landmine punches (odd rounds) or med-ball slams (even). Bag work if your gym has one — hard and technically clean.", k: "txt" },
@@ -497,10 +539,6 @@ const S = {
       items: [{ n: "The lever hold — at your level", s: "3 sets", cue: SUNDAY_LEVER, id: "lever", k: "wr", sets: 3, reps: "hold" }],
       w: "The three laws govern this block absolutely: five seconds added per fortnight at most, twelve weeks a level minimum, and any inside-elbow ache buys the lane two weeks off.",
       why: SLOW_WHY },
-    { L: "H", n: "Nordic Curls", m: 8, noTaper: 1, hide: (rx) => !rx.nor || !!rx.test, rest: "Rest 2:00", rt: 120,
-      rxLine: (rx) => rx.nor[0] + " × " + rx.nor[1] + " — ramped",
-      items: [{ n: "Nordic curl", s: (rx) => rx.nor[0] + " × " + rx.nor[1] + " — ramped", cue: "Kneel with your heels anchored under something solid. Keeping your body straight from knees to head, lower yourself forward as SLOWLY as you can, catch yourself with your hands, push back up. Stop the set the moment your lower back rounds — not at the rep count.", id: "nordic", k: "wr", sets: (rx) => rx.nor[0], reps: (rx) => rx.nor[1] }],
-      why: "Last block of the last day, on purpose: the hardest hamstring work of the week, followed by two leg-free days, so the soreness is gone before it can cost you a sprint." },
     { L: "T", n: "Trunk", m: 9, campOnly: 1, rest: "Rest 45s between exercises", rt: 45,
       items: [{ n: "Pallof press", s: "3 × 10/side · 2s hold", cue: "Band at chest height, anchored beside you. Press your hands straight out and hold two seconds without letting it twist you.", id: "c_pallof", k: "wr", sets: 3, reps: "10/side" },
         { n: "Ab wheel rollout", s: "3 × 8–12", cue: "Knees down, roll out only as far as your lower back stays flat, pull back.", id: "c_abwheel", k: "wr", sets: 3, reps: "8–12" },
@@ -512,7 +550,8 @@ const S = {
         { n: "Knees", s: "0–10", id: "wr_kn", k: "out", u: "0–10" }, { n: "Achilles", s: "0–10", id: "wr_ach", k: "out", u: "0–10" },
         { n: "Boxing nights your hands felt slow", s: "count", id: "wr_slow", k: "out", u: "nights" }, { n: "Energy", s: "1–10", id: "wr_en", k: "out", u: "1–10" },
         { n: "Evenings you did RANGE", s: "0–7", id: "wr_home", k: "out", u: "0–7" },
-        { n: "Hours of sleep, averaged", s: "hours a night", id: "wr_sleep", k: "out", u: "hours" }],
+        { n: "Hours of sleep, averaged", s: "hours a night", id: "wr_sleep", k: "out", u: "hours" },
+        { n: "Lights-out time, averaged", s: "what time the light went off", id: "wr_lights", k: "out", u: "e.g. 21:30" }],
       rangeTests: 1,
       note: "Two slow-hands nights, or three yellows in one week = next week is an easy week, whatever the plan says. Shoulders, elbows or wrists at 4 or above out of 10 here, and next week every calisthenics line is holds only. Every 4–6 weeks: tape — arms, shoulders, waist." }] },
 
@@ -631,6 +670,7 @@ function TimerFull({ T }) {
       <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
         <div style={Object.assign({}, dsp, { fontSize: 22, fontWeight: 700, letterSpacing: 1.6, color: col, marginBottom: 8, animation: t.run && cur.t === "w" ? "pulse 1.4s infinite" : "none", padding: "0 10px" })}>{t.done ? "COMPLETE" : cur.l}</div>
         <div style={Object.assign({}, mno, { fontSize: 96, fontWeight: 700, color: t.done ? C.moss : C.chalk, lineHeight: 1, letterSpacing: -3 })}>{t.done ? "✓" : mmss(t.left)}</div>
+        {!t.done && cur.c ? <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, marginTop: 12, lineHeight: 1.45, maxWidth: 380, padding: "0 6px" })}>{cur.c}</div> : null}
         <div style={Object.assign({}, mno, { fontSize: 11, color: C.ash, marginTop: 14, letterSpacing: 1.2 })}>{t.done ? mmss(total) + " TOTAL" : "STEP " + (t.i + 1) + " / " + t.steps.length + " · " + mmss(total - elapsed) + " LEFT"}</div>
         <div style={{ display: "flex", gap: 2, width: "100%", maxWidth: 360, marginTop: 18 }}>
           {t.steps.map((s, k) => <div key={k} style={{ flex: Math.max(1, s.s), height: 6, borderRadius: 2, background: k < t.i || t.done ? (s.t === "w" ? C.oxide : C.cobalt) : k === t.i ? col : C.card, opacity: k < t.i || t.done ? .55 : 1 }} />)}
@@ -815,6 +855,16 @@ function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, ope
             </div>) : null}
         </div>) : null}
 
+      {b.ramp ? (
+        <div style={{ background: C.ink, border: "1px solid " + C.cobalt, borderRadius: 5, padding: "11px 12px", marginBottom: 11 }}>
+          <Eye c={C.cobalt} s={{ marginBottom: 6 }}>{b.ramp.n}</Eye>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+            {b.ramp.pcts.map((r) => { const kg = calc(mainLift || "squat", r[0]);
+              return <span key={r[0]} style={Object.assign({}, mno, { fontSize: 11, color: C.chalk, border: "1px solid " + C.line, borderRadius: 3, padding: "4px 7px" })}>{r[0]}% × {r[1]}{kg ? " · " + kg[0] + " kg" : ""}</span>; })}
+          </div>
+          <Note>{b.ramp.why}</Note>
+        </div>) : null}
+
       {b.cal && calis ? <CalPanel line={b.cal} calis={calis} setCalis={setCalis} mode={cmode} week={week} /> : null}
 
       {b.eng && ENG[rx[b.engKey || "eng"]] ? (
@@ -822,6 +872,17 @@ function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, ope
           <Eye c={C.cobalt} s={{ marginBottom: 4 }}>Block week {rx.bw || "—"} · rotation</Eye>
           <div style={Object.assign({}, bdy, { fontSize: 15, fontWeight: 700, color: C.chalk })}>{ENG[rx[b.engKey || "eng"]].d}</div>
           <Note>{ENG[rx[b.engKey || "eng"]].why}</Note>
+          {ENG[rx[b.engKey || "eng"]].rule ? <Note c={C.oxide} bold>{ENG[rx[b.engKey || "eng"]].rule}</Note> : null}
+        </div>) : null}
+      {b.menu ? (
+        <div style={{ background: C.ink, border: "1px solid " + C.line, borderRadius: 5, padding: "11px 12px", marginBottom: 11 }}>
+          <Eye c={C.cobalt} s={{ marginBottom: 6 }}>The four session types</Eye>
+          {ENG_MENU.map((k) => { const e = ENG[k], on = rx[b.engKey || "eng"] === k || (k === "rz" && rx[b.engKey || "eng"] === "rz3") || (k === "easy" && rx[b.engKey || "eng"] === "easy15");
+            return (
+              <div key={k} style={{ padding: "7px 0", borderBottom: "1px solid " + C.line, opacity: on ? 1 : .62 }}>
+                <div style={Object.assign({}, mno, { fontSize: 10.5, fontWeight: 700, letterSpacing: 1, color: on ? C.brass : C.ash })}>{e.n}{on ? " · THIS WEEK" : ""}</div>
+                <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, marginTop: 3, lineHeight: 1.45 })}>{e.d}</div>
+              </div>); })}
         </div>) : null}
       {b.sim ? (
         <div style={{ background: C.ink, border: "1px solid " + C.brass, borderRadius: 5, padding: "11px 12px", marginBottom: 11 }}>
@@ -1012,6 +1073,7 @@ function Session(props) {
           <div style={Object.assign({}, bdy, { fontSize: 15, color: C.chalk, marginTop: 8, fontWeight: 600 })}>{isFri ? "No alarm. Tomorrow is the biggest session of the week, and the best thing you can do for it is not get up at half three." : "No alarm. Camp mode: boxing owns the evenings, so this morning is sleep."}</div>
           <Chip c={C.moss} s={{ marginTop: 12, display: "inline-block" }}>No session today</Chip>
           {isFri ? <Note>{S.fri.sleepWhy}</Note> : <Note>Camp week: four sessions, about four hours. Maximal strength, the power doses, the tendon block, the neck, the Nordics and the trunk are what boxing never covers. Those stay, and they get protected.</Note>}
+          {isFri ? <Note c={C.brass} bold>{S.fri.safeguard}</Note> : null}
           {isFri ? <Note c={C.chalk}>{S.fri.sleepFood}</Note> : null}
           <div style={Object.assign({}, mno, { fontSize: 9.5, color: C.brass, marginTop: 12, letterSpacing: 1 })}>{isFri ? "FRIDAY'S EXTRA HOUR OF SLEEP IS COUNTED AS TRAINING, BECAUSE IT IS." : "REST IS THE SESSION."}</div>
         </Card>
@@ -1123,6 +1185,25 @@ function Session(props) {
               </div>) : null}
           </Card>);
       })}
+
+      {day === "sat" || day === "sun" ? (() => {
+        const ek = "m" + macro + "w" + week + "-easyhour", ev = log[ek] || {}, ok = !!ev.ok;
+        return (
+          <Card ac={ok ? C.moss : C.moss} s={{ padding: 0 }}>
+            <div style={{ padding: "12px 13px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
+                <span style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1.3, color: C.chalk })}>{EASY_HOUR.n}</span>
+                <span style={Object.assign({}, mno, { fontSize: 9, color: C.moss, letterSpacing: 1, textAlign: "right" })}>{EASY_HOUR.tag}</span>
+              </div>
+              <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, marginTop: 5, lineHeight: 1.45 })}>{EASY_HOUR.s}</div>
+              <Note>{EASY_HOUR.why}</Note>
+              <button onClick={() => { const n = Object.assign({}, log); n[ek] = { ok: !ok, d: ok ? null : day }; setLog(n); buzz(20); }}
+                aria-label="The easy hour"
+                style={Object.assign({}, dsp, { marginTop: 10, width: "100%", minHeight: 44, fontSize: 13, fontWeight: 700, letterSpacing: 1, borderRadius: 5, cursor: "pointer", background: ok ? C.moss : "transparent", color: ok ? C.ink : C.ash, border: "1px solid " + (ok ? C.moss : C.line) })}>
+                {ok ? "✓ DONE THIS WEEKEND" + (ev.d && ev.d !== day ? " · " + DSH[ev.d] : "") : "MARK DONE"}
+              </button>
+            </div>
+          </Card>); })() : null}
 
       <Card ac={C.violet} s={{ padding: 0 }}>
         <button onClick={() => (openHome ? openHome() : openProto("HOME"))} style={{ display: "flex", width: "100%", alignItems: "center", gap: 11, textAlign: "left", background: "transparent", border: "none", padding: "12px 13px", cursor: "pointer", minHeight: 44 }}>
@@ -1299,11 +1380,13 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
             <Row k="Rows / split squat" val={(rx.acc <= 2 ? 2 : 3) + "–" + (rx.acc <= 2 ? 3 : 4) + " sets"} />
             <Row k="Tuesday bike" val={ENG[rx.eng] ? ENG[rx.eng].n : "—"} />
             <Row k="Thursday bike" val={ENG[rx.eng2] ? ENG[rx.eng2].n : "—"} />
-            <Row k="Pause squat (Wed)" val={rx.pq ? rx.pq.sc : "—"} />
+            <Row k={rx.pq && rx.pq.fast ? "Speed squat (Wed)" : "Pause squat (Wed)"} val={rx.pq ? rx.pq.sc : "—"} />
             <Row k="Fight sim" val={rx.sim.skip ? "skip" : (rx.sim.rounds || 6) + " rds · " + rx.sim.rest + "s" + (rx.sim.tested ? " · TESTED" : "")} />
             <Row k="Friday" val="Sleep — no alarm" />
+            <Row k="The easy hour" val="30–40 min easy, nose only · Sat or Sun" />
             
             <Row k="Max singles" val={rx.maxSq ? "Squat Sat · Bench Sun" : rx.test ? "TEST DAY" : "none"} />
+            {rx.pq && !rx.pq.fast ? <Note>The pause squat is a percentage of your back-squat max — and a paused triple at 75% is a hard triple, because a two-second pause takes 10–15% off what you can lift. That column never goes above 75%.</Note> : null}
             {rx.cal ? <Note c={C.brass} bold>Calibration week: ramp to a 3RM on the trap bar (Wed) and the push press (Sat). The app turns them into maxes.</Note> : null}
             {rx.mid ? <Note c={C.oxide} bold>Mid-check. Not your real numbers — you are fatigued. A direction check.</Note> : null}
             {rx.dl ? <Note c={C.moss} bold>Deload. Sprints and jumps stay in at reduced volume — the 5-day residual doesn't pause.</Note> : null}
@@ -1515,7 +1598,7 @@ function PlanView() {
   return (
     <div>
       <div style={{ display: "flex", gap: 5, marginBottom: 12 }}>
-        {[["fighter", "FIGHTER v1.4", C.oxide], ["iron", "IRON MIND v4.2", C.violet]].map((x) => (
+        {[["fighter", "FIGHTER v1.5", C.oxide], ["iron", "IRON MIND v4.2", C.violet]].map((x) => (
           <button key={x[0]} onClick={() => setDoc(x[0])}
             style={Object.assign({}, dsp, { flex: 1, fontSize: 12, fontWeight: 700, letterSpacing: 1, padding: "11px 0", borderRadius: 4, cursor: "pointer", minHeight: 44, background: doc === x[0] ? x[2] : "transparent", color: doc === x[0] ? C.ink : C.ash, border: "1px solid " + (doc === x[0] ? x[2] : C.line) })}>{x[1]}</button>))}
       </div>

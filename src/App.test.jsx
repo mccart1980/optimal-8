@@ -16,6 +16,16 @@ function settings(extra) {
     extra || {}));
 }
 
+/* A block header is one element whose whole text is the block's name, with a
+   leading ★ on the starred ones. */
+const headMatch = (name) => (_t, el) => {
+  if (!el || el.children.length) return false;
+  const txt = (el.textContent || "").trim();
+  return txt === name || txt === "\u2605 " + name;
+};
+const head = (name) => screen.getByText(headMatch(name));
+const findHead = (name) => screen.findByText(headMatch(name));
+
 async function mount(extra) {
   localStorage.setItem("o8s-settings", settings(extra));
   render(<App />);
@@ -236,7 +246,7 @@ describe("Optimal 8", () => {
   it("puts the four range tests on the Sunday weekly check in weeks 1, 5, 9 and 13", async () => {
     await mount();
     fireEvent.click(screen.getByRole("button", { name: "SUN" }));
-    fireEvent.click(await screen.findByText("Weekly Check"));
+    fireEvent.click(await findHead("Weekly Check"));
 
     expect(await screen.findByText("The four range tests — weeks 1, 5, 9 and 13")).toBeInTheDocument();
     fireEvent.click(screen.getByText(/THE FOUR RANGE TESTS · RANGE WEEK 1/));
@@ -401,6 +411,161 @@ describe("Optimal 8", () => {
     fireEvent.click(screen.getByLabelText("Tick ★ THE SIT — 12 minutes"));
     await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-imday"))["2026-09-09"].ticks.sit).toBe(true));
     expect(await screen.findByText("YES")).toBeInTheDocument();
+  });
+
+  /* ---------------- v1.5 ---------------- */
+
+  it("runs Sunday in the v1.5 order — the Nordics ahead of the fight simulation", async () => {
+    await mount({ start: "2026-08-31" });          // week 2 — week 1's Sunday is the bike test
+    fireEvent.click(screen.getByRole("button", { name: "SUN" }));
+
+    const throws = await findHead("The Four Punch Throws");
+    const nordics = head("Nordic Curls");
+    const sim = head("Fight Simulation");
+    const postmax = head("The Post-Max Sit");
+    const core = head("Core + L-Sit + Hands");
+    const lever = head("The Slow Lane — one lever hold");
+    const check = head("Weekly Check");
+    // DOCUMENT_POSITION_FOLLOWING === 4
+    expect(throws.compareDocumentPosition(nordics) & 4).toBeTruthy();
+    expect(nordics.compareDocumentPosition(sim) & 4).toBeTruthy();
+    expect(sim.compareDocumentPosition(postmax) & 4).toBeTruthy();
+    expect(postmax.compareDocumentPosition(core) & 4).toBeTruthy();
+    expect(core.compareDocumentPosition(lever) & 4).toBeTruthy();
+    expect(lever.compareDocumentPosition(check) & 4).toBeTruthy();
+
+    fireEvent.click(nordics);
+    expect(await screen.findByText(/the hardest eccentric work of the week goes on fresh hamstrings/)).toBeInTheDocument();
+  });
+
+  it("puts repeat bursts in the Tuesday bike menu, and no 30-second all-outs anywhere", async () => {
+    await mount({ start: "2026-08-24" });          // week 3 — Tuesday is the repeat bursts
+    fireEvent.click(screen.getByRole("button", { name: "TUE" }));
+
+    fireEvent.click(await findHead("REPEAT BURSTS"));
+
+    // the menu writes out all four types, as the Tuesday page does
+    expect(await screen.findByText("The four session types")).toBeInTheDocument();
+    expect(screen.getByText("4-MINUTE INTERVALS")).toBeInTheDocument();
+    expect(screen.getByText("40-SECOND REPEATS")).toBeInTheDocument();
+    expect(screen.getByText("REPEAT BURSTS · THIS WEEK")).toBeInTheDocument();
+    expect(screen.getByText("EASY")).toBeInTheDocument();
+    expect(screen.queryByText(/30-SECOND ALL-OUTS/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/30s all-out/)).not.toBeInTheDocument();
+
+    // the prescription, the weaker-burst rule, and a timer that counts the bursts
+    expect(screen.getAllByText(/8 bursts of 6–8s at absolute maximum/).length).toBeGreaterThan(0);
+    expect(screen.getByText(/if a burst is visibly weaker than the last, take an extra 20 seconds/)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "▶ START REPEAT BURSTS" }));
+    expect(await screen.findByText("SET 1 · BURST 1 OF 8 — ABSOLUTE MAXIMUM")).toBeInTheDocument();
+    expect(screen.getByText("6–8 seconds, everything you have.")).toBeInTheDocument();
+  });
+
+  it("runs week 15's repeat bursts as one set", async () => {
+    await mount({ start: "2026-06-01" });          // week 15
+    fireEvent.click(screen.getByRole("button", { name: "TUE" }));
+    fireEvent.click(await findHead("REPEAT BURSTS · ONE SET"));
+    await waitFor(() => expect(screen.getAllByText(/1 set × 8 bursts of 6–8s at absolute maximum/).length).toBeGreaterThan(0));
+  });
+
+  it("reads week 8's pause squat at 75%, and never above it", async () => {
+    await mount({ start: "2026-07-20" });          // week 8
+    fireEvent.click(screen.getByRole("button", { name: "WED" }));
+
+    expect(await findHead("Pause Squat")).toBeInTheDocument();
+    expect(screen.getAllByText("3 × 3 @ 75%").length).toBeGreaterThan(0);
+
+    fireEvent.click(head("Pause Squat"));
+    expect(await screen.findByText(/That column never goes above 75%/)).toBeInTheDocument();
+
+    // and the easy week sits at 60%
+    cleanup();
+    await mount({ start: "2026-08-10" });          // week 5
+    fireEvent.click(screen.getByRole("button", { name: "WED" }));
+    expect(await findHead("Pause Squat")).toBeInTheDocument();
+    expect(screen.getAllByText("2 × 3 @ 60% — easy week").length).toBeGreaterThan(0);
+  });
+
+  it("warms the legs up before Monday's box jumps and picks the box by the landing", async () => {
+    await mount();
+    fireEvent.click(screen.getByRole("button", { name: "MON" }));
+    fireEvent.click(await findHead("Power dose — box jumps"));
+
+    const prep = await screen.findByText("First, one minute of legs");
+    const jump = screen.getByText("Box jump");
+    expect(prep.compareDocumentPosition(jump) & 4).toBeTruthy();
+    expect(screen.getByText(/the box by the landing, not the height/)).toBeInTheDocument();
+  });
+
+  it("stands the Achilles hold up on a straight knee", async () => {
+    await mount();
+    fireEvent.click(screen.getByRole("button", { name: "TUE" }));
+    fireEvent.click(await findHead("Seated Calf Raise + Achilles Hold"));
+
+    expect(await screen.findByText("Achilles hold — STANDING")).toBeInTheDocument();
+    expect(screen.getByText(/knees straight, no bouncing, no sinking/)).toBeInTheDocument();
+    expect(screen.getByText(/a seated hold loads a different muscle into the same tendon/)).toBeInTheDocument();
+  });
+
+  it("opens Thursday's throws with three easy throws", async () => {
+    await mount();
+    fireEvent.click(screen.getByRole("button", { name: "THU" }));
+    fireEvent.click(await findHead("Power dose — throws + landmine"));
+
+    const easy = await screen.findByText("Three easy throws of each first");
+    const shot = screen.getByText("Rotational shot-put");
+    expect(easy.compareDocumentPosition(shot) & 4).toBeTruthy();
+    expect(screen.getByText(/nothing in the warm-up has rehearsed/)).toBeInTheDocument();
+  });
+
+  it("moves Saturday's squat warm-up sets inside the squat step", async () => {
+    await mount();
+    fireEvent.click(screen.getByRole("button", { name: "SAT" }));
+
+    fireEvent.click(await screen.findByText("Warm-up — get-ups first"));
+    expect(await screen.findByText("SPRINT BUILD-UPS")).toBeInTheDocument();
+    expect(screen.queryByText("SQUAT RAMP")).not.toBeInTheDocument();
+
+    fireEvent.click(head("Back Squat"));
+    expect(await screen.findByText("Squat warm-up sets — here, not at the start of the session")).toBeInTheDocument();
+    expect(screen.getByText(/it doesn't keep the squat pattern rehearsed/)).toBeInTheDocument();
+  });
+
+  it("puts THE EASY HOUR on the weekend, once, ticked from either day", async () => {
+    await mount();
+    fireEvent.click(screen.getByRole("button", { name: "SAT" }));
+    expect(await screen.findByText("THE EASY HOUR")).toBeInTheDocument();
+    expect(screen.getByText("30–40 MIN · NOSE ONLY · ONCE A WEEKEND")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByLabelText("The easy hour"));
+    await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-log"))["m1w1-easyhour"].ok).toBe(true));
+
+    // ticking it on Saturday clears Sunday too
+    fireEvent.click(screen.getByRole("button", { name: "SUN" }));
+    expect(await screen.findByText(/✓ DONE THIS WEEKEND/)).toBeInTheDocument();
+
+    // and it is a weekend item only
+    fireEvent.click(screen.getByRole("button", { name: "WED" }));
+    await waitFor(() => expect(screen.queryByText("THE EASY HOUR")).not.toBeInTheDocument());
+  });
+
+  it("asks for lights-out time on the weekly check", async () => {
+    await mount();
+    fireEvent.click(screen.getByRole("button", { name: "SUN" }));
+    fireEvent.click(await screen.findByText("Weekly Check"));
+
+    expect(await screen.findByText("Lights-out time, averaged")).toBeInTheDocument();
+    expect(screen.getByText("Hours of sleep, averaged")).toBeInTheDocument();
+    expect(screen.getByText("Achilles")).toBeInTheDocument();
+    expect(screen.getByText("Evenings you did RANGE")).toBeInTheDocument();
+  });
+
+  it("writes the engine safeguard on the Friday page", async () => {
+    await mount();
+    fireEvent.click(screen.getByRole("button", { name: "FRI" }));
+    expect(await screen.findByText(/The safeguard, written down/)).toBeInTheDocument();
+    expect(screen.getByText(/twenty easy minutes on the bike straight after Tuesday's intervals is the first thing that comes back/)).toBeInTheDocument();
   });
 
   it("renders the hardship, track and plan pages without falling over", async () => {

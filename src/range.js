@@ -1,7 +1,7 @@
 import { C } from "./ui.jsx";
 
 /* ================================================================
-   RANGE — the home block of Fighter v1.4, as data.
+   RANGE — the home block of Fighter v1.5, as data.
    THE MORNING FIVE on waking, RANGE every evening for twelve weeks,
    then THE KEEP, and the four tests every four weeks. Every
    instruction string below is the document's own wording.

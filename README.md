@@ -1,6 +1,6 @@
 # Optimal 8
 
-The companion app for the Optimal 8 fighter build (v1.4) with Iron Mind v4.2
+The companion app for the Optimal 8 fighter build (v1.5) with Iron Mind v4.2
 running inside it — a 16-week strength and conditioning cycle, the twenty
 minutes of RANGE that runs at home every evening, and the mental training that
 attaches to it. One app, one day, one streak. It runs in your phone's browser,
@@ -94,6 +94,28 @@ first if there's anything in there you want to keep.
   when the gate is cleared honestly.
 - **Training taper weeks** — while it's on, the hardship tests pause and every
   calisthenics line goes to holds only.
+
+## What v1.5 changed
+
+- **The pause squat** now runs 65–75% of your back-squat max (easy weeks 60%),
+  because the old column had you doing paused triples at 84% — near a paused
+  maximum, alone, at 4am. The speed squat in weeks 11–14 is unchanged at 70%.
+- **Repeat bursts** replace the 30-second all-outs: two sets of eight 6–8-second
+  bursts with 40 seconds easy between and five minutes between sets, with a
+  burst counter and the weaker-burst rule on the timer. Week 15 runs one set.
+- **THE EASY HOUR** — 30–40 minutes easy, nose only, once a weekend. It appears
+  on TODAY on Saturday and Sunday; ticking it on either day clears both.
+- **Sunday** now runs warm-up → throws → Nordics → fight simulation → post-max
+  sit → core + L-sit + hands → lever hold → weekly check, so the hardest
+  eccentric work of the week lands on fresh hamstrings.
+- **Monday's box jumps** get a minute of legs in front of them, and the box is
+  chosen by the landing, not the height.
+- **The Achilles hold** is standing, on a straight knee.
+- **Thursday's throws** open with three easy throws, as Sunday's already did.
+- **Saturday's squat warm-up sets** happen inside the squat step, not forty
+  minutes earlier in the warm-up.
+- **The weekly check** adds an averaged lights-out time, and the Friday page
+  carries the engine safeguard.
 
 ## The home block
 
