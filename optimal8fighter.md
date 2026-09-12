@@ -1,4 +1,4 @@
-# OPTIMAL 8 — FIGHTER · v1.4
+# OPTIMAL 8 — FIGHTER · v1.5
 
 **The fighter's build. Four weekday mornings of about an hour, Friday asleep, Saturday 90 minutes, Sunday 75. Calisthenics threaded through the week where each piece belongs. RANGE — twenty minutes of real mobility work — at home every evening, the joint circles every morning. The mind trained inside the sessions, where it's tested. Nothing in the gym that doesn't make you a better fighter.**
 
@@ -14,6 +14,8 @@ Everything you need to run a session is written on that session's page. No codes
 
 **What changed in v1.4.** Three things you asked for. The evening mobility block becomes RANGE — twenty minutes a night for twelve weeks aimed at the two joints you named, hips and shoulders, through the mid-back that limits both, with long holds, contract-relax, and strength at the end of the range, measured by four tests every four weeks; after twelve weeks it drops to a ten-minute keep. Five minutes of controlled joint circles on waking, every day. And the functional pieces: the Turkish get-up opens the Saturday and Sunday warm-ups, bear crawls open Tuesday's and Thursday's. About ten minutes across the week in the gym and fifteen a night at home over what was there. Nothing was removed. (Rests, the fast-bar ceiling and the nasal-test weeks are as they were in v1.2 — your call on those is still open.)
 
+**What changed in v1.5 — after the final examination.** Two engine changes you asked for: the 30-second all-outs are replaced by repeat bursts — the session shaped most like a round, and the one the week was missing — and thirty to forty easy nasal minutes on a weekend afternoon put the aerobic base back where it costs no sleep. Then five things the examination found and I've fixed because they were errors, not preferences: the pause-squat percentages were written against the back-squat max and had you doing paused triples at 84% — near a paused maximum, alone, at 4am — so they're now 65–75%; Monday's box jumps had no lower-body warm-up in front of them, now they do; the Achilles hold is now standing on a straight knee, which is where the Achilles actually lives; the Saturday squat warm-up sets now happen before the squat rather than forty minutes earlier; Thursday's throws get three easy throws first, as Sunday's already did. And one placement change: the Nordics move ahead of the fight simulation, so the hardest eccentric work of the week is done on fresh hamstrings, not after twenty-four minutes of rounds. Everything else the examination recommends is listed in the examination, as decisions for you.
+
 ---
 
 ## START HERE — HOW TO RUN THIS
@@ -22,13 +24,14 @@ Everything you need to run a session is written on that session's page. No codes
 
 | Day | When | Session | Time |
 |---|---|---|---|
-| Monday | 3am | Upper strength + box-jump power dose + ring dips + the muscle-up line | ~64 min |
+| Monday | 3am | Upper strength + box-jump power dose + ring dips + the muscle-up line | ~65 min |
 | Tuesday | 3am | Crawls, jumps + pistol line + engine session 1 + hands + trunk + Achilles | ~65 min |
 | Wednesday | 3am | Sled, trap bar, pause squat, RDL, neck holds, ring rows | ~60 min |
 | Thursday | 3am | Crawls, throws + landmine, split squat + tendon hold, engine session 2, neck | ~61 min |
 | Friday | — | SLEEP. No alarm. Full stretch at home in the evening. | — |
-| Saturday | morning | THE LEG & POWER SESSION (get-ups open it) | ~94 min |
-| Sunday | morning | Get-ups, punch throws, fight rounds, post-max sit, core + L-sit, one lever hold, Nordics | ~80 min |
+| Saturday | morning | THE LEG & POWER SESSION (get-ups open it) | ~96 min |
+| Sunday | morning | Get-ups, punch throws, Nordics, fight rounds, post-max sit, core + L-sit, one lever hold | ~80 min |
+| Sat or Sun | afternoon | THE EASY HOUR — 30–40 min easy, nose only: bike, walk, swim. Active recovery, and the aerobic base. A habit, not a session. | 30–40 min |
 | Every day | on waking · evening, at home | THE MORNING FIVE (joint circles) · RANGE, 20 min, every evening · Mon–Thu also the skill block: handstand, hollow, planche leans | 5 + 20 (+ 6 Mon–Thu) |
 
 About 7 hours in the gym at peak, three hours at home across the week. Easy weeks: about 5 in the gym; the home work never deloads. Friday's sleep is counted as training, because it is.
@@ -67,41 +70,41 @@ After a max-single week or test day, your new number becomes the max, and every 
 
 ## YOUR NUMBERS, WEEK BY WEEK
 
-Squat and bench use the same sets and reps each week. "Max single" means work up to one top lift (there's a step-by-step ramp on the Saturday and Sunday pages).
+Squat and bench use the same sets and reps each week. "Max single" means work up to one top lift (there's a step-by-step ramp on the Saturday and Sunday pages). The pause squat is a percentage of your back-squat max — and a paused triple at 75% is a hard triple, because a two-second pause takes 10–15% off what you can lift. That column never goes above 75%.
 
 | Week | Squat (Sat) & bench (Mon) | Pause squat (Wed) | Trap bar (Wed) | Push press (Sat) |
 |---|---|---|---|---|
-| 1 | 4 × 6 @ 75% | 3 × 3 @ 75% | find your 3RM | find your 3RM |
-| 2 | 4 × 5 @ 78% | 3 × 3 @ 78% | 4 × 3 @ 80% | 4 × 3 @ 82% |
-| 3 | 4 × 5 @ 80% | 3 × 3 @ 80% | 4 × 3 @ 80% | 4 × 3 @ 82% |
+| 1 | 4 × 6 @ 75% | 3 × 3 @ 65% | find your 3RM | find your 3RM |
+| 2 | 4 × 5 @ 78% | 3 × 3 @ 68% | 4 × 3 @ 80% | 4 × 3 @ 82% |
+| 3 | 4 × 5 @ 80% | 3 × 3 @ 70% | 4 × 3 @ 80% | 4 × 3 @ 82% |
 | 4 | MAX SINGLE, then 2 × 3 @ 85% | — | 4 × 3 @ 80% | — (squat max day; bench max is Sunday) |
-| 5 | EASY WEEK · 2 × 5 @ 65% | 2 × 3 @ 65% | 2 × 3 @ 65% | 2 × 3 @ 65% |
-| 6 | 4 × 4 @ 82% | 3 × 3 @ 80% | 4 × 3 @ 85% | 4 × 3 @ 85% |
-| 7 | 4 × 3 @ 85% | 3 × 3 @ 82% | 4 × 3 @ 85% | 4 × 3 @ 85% |
-| 8 | 4 × 3 @ 87% | 3 × 3 @ 84% | 4 × 3 @ 85% | 4 × 3 @ 85% |
+| 5 | EASY WEEK · 2 × 5 @ 65% | 2 × 3 @ 60% | 2 × 3 @ 65% | 2 × 3 @ 65% |
+| 6 | 4 × 4 @ 82% | 3 × 3 @ 70% | 4 × 3 @ 85% | 4 × 3 @ 85% |
+| 7 | 4 × 3 @ 85% | 3 × 3 @ 72% | 4 × 3 @ 85% | 4 × 3 @ 85% |
+| 8 | 4 × 3 @ 87% | 3 × 3 @ 75% | 4 × 3 @ 85% | 4 × 3 @ 85% |
 | 9 | MAX SINGLE, then 2 × 2 @ 88% | — | 3 × 2 @ 88% | — (squat max day; bench max is Sunday) |
-| 10 | EASY WEEK · 2 × 4 @ 65% | 2 × 3 @ 65% | 2 × 3 @ 65% | 2 × 3 @ 65% |
+| 10 | EASY WEEK · 2 × 4 @ 65% | 2 × 3 @ 60% | 2 × 3 @ 65% | 2 × 3 @ 65% |
 | 11–14 | 2 × 2 @ 88%, done fast | SPEED 3 × 3 @ 70% | 3 × 3 @ 80%, fast | 3 × 3 @ 80%, fast |
-| 15 | 2 × 2 @ 85% | 2 × 2 @ 80% | 2 × 2 @ 85% | 2 × 2 @ 85% |
+| 15 | 2 × 2 @ 85% | 2 × 2 @ 70% | 2 × 2 @ 85% | 2 × 2 @ 85% |
 | 16 | 1 × 2 @ 85% (bench 2 × 2) | — | 1 × 2 @ 80% | — |
 
 | Week | Sprints (Sat) | Jump circuit rounds (Sat) | Nordics (Sun) | Tuesday bike | Thursday bike | Fight sim rest (Sun) |
 |---|---|---|---|---|---|---|
 | 1 | 3 × 20m | 2 | 2 × 3 | 4-minute intervals | 40-second repeats | bike test instead |
-| 2 | 4 × 20m | 2 | 2 × 4 | 40-second repeats | 30-second all-outs | 90s, 3rd min flat out |
-| 3 | 5 × 20m | 2 | 3 × 4 | 30-second all-outs | 4-minute intervals | 60s |
+| 2 | 4 × 20m | 2 | 2 × 4 | 40-second repeats | repeat bursts | 90s, 3rd min flat out |
+| 3 | 5 × 20m | 2 | 3 × 4 | repeat bursts | 4-minute intervals | 60s |
 | 4 | 5 × 20m | 2 | 3 × 5 | 4-minute intervals | 40-second repeats | 60s — SCORED |
 | 5 | 3 × 20m @ 90% | 1 | 2 × 3 | 20 min easy | 20 min easy | skip |
 | 6 | 3 × 20m | 3 | 3 × 5 | 4-minute intervals | 40-second repeats | 45s |
-| 7 | 4 × 20m | 3 | 3 × 5 | 40-second repeats | 30-second all-outs | 90s, 3rd min flat out |
-| 8 | 5 × 20m | 3 | 3 × 5 | 30-second all-outs | 4-minute intervals | 60s |
+| 7 | 4 × 20m | 3 | 3 × 5 | 40-second repeats | repeat bursts | 90s, 3rd min flat out |
+| 8 | 5 × 20m | 3 | 3 × 5 | repeat bursts | 4-minute intervals | 60s |
 | 9 | 5 × 20m | 2 | 3 × 5 | 4-minute intervals | 40-second repeats | 60s — SCORED |
 | 10 | 3 × 20m @ 90% | 1 | 2 × 3 | 20 min easy | 20 min easy | skip |
 | 11 | 3 × 20m | 4 | 3 × 5 | 4-minute intervals | 40-second repeats | 60s |
-| 12 | 4 × 20m | 4 | 3 × 5 | 40-second repeats | 30-second all-outs | 45s |
-| 13 | 5 × 20m | 4 | 3 × 5 | 30-second all-outs | 4-minute intervals | 60s |
+| 12 | 4 × 20m | 4 | 3 × 5 | 40-second repeats | repeat bursts | 45s |
+| 13 | 5 × 20m | 4 | 3 × 5 | repeat bursts | 4-minute intervals | 60s |
 | 14 | 5 × 20m | 4 | 3 × 5 | 4-minute intervals | 40-second repeats | 60s — SCORED |
-| 15 | 3 × 20m | 2 | 2 × 4 | 30-second all-outs × 3 | 20 min easy | 3 rounds only |
+| 15 | 3 × 20m | 2 | 2 × 4 | repeat bursts × 1 set | 20 min easy | 3 rounds only |
 | 16 | 3 × 20m (test day) | 1 | — | 15 min easy | — | bike test instead |
 
 Sled runs (Wednesday): 5 a week. Week 1: 4. Easy weeks: 3.
@@ -121,7 +124,7 @@ Sled runs (Wednesday): 5 a week. Week 1: 4. Easy weeks: 3.
 
 ---
 
-## MONDAY · 3AM · UPPER BODY STRENGTH + POWER DOSE + RINGS · ~64 min
+## MONDAY · 3AM · UPPER BODY STRENGTH + POWER DOSE + RINGS · ~65 min
 
 Upper strength and the first of the week's three power doses. Nothing is taken to failure.
 
@@ -147,25 +150,27 @@ No Smith machine? Throw a 4–6 kg medicine ball off your chest at a wall, 5 × 
 
 This is your punch-speed lift. In weeks 11–14 it merges into the circuit below.
 
-**3 · 0:19 — POWER DOSE · BOX JUMPS · 3 sets of 3 · rest 60–90s · 5 min**
+**3 · 0:19 — POWER DOSE · BOX JUMPS · 3 sets of 3 · rest 60–90s · 6 min**
 
-How: a box at knee-to-hip height. Quick dip, jump as high as you can, land soft on top, step down. Three perfect jumps, never three tired ones.
+First, one minute of legs — the warm-up so far was all shoulders: pogo hops × 20 (bounce on the balls of the feet, legs almost straight), bodyweight squats × 6, two easy jumps onto a low step.
+
+How: choose the box by the landing, not the height — you should land on it in a quarter squat, knees soft, not folded to your chest. The training is the take-off; a higher box only makes you lift your knees faster. Quick dip, jump as high as you can, land soft on top, step down. Three perfect jumps, never three tired ones.
 
 Explosiveness responds to how often the nervous system is asked, not how much. Five minutes, three mornings a week.
 
-**4 · 0:24 — BENCH PRESS · sets, reps and % from the week table · rest 2 min (weeks 7–9: 2½) · 10 min**
+**4 · 0:25 — BENCH PRESS · sets, reps and % from the week table · rest 2 min (weeks 7–9: 2½) · 10 min**
 
 How: pins at chest height, no collars. Controlled down, drive up hard. If a rep grinds, that set is over. Last set: fast-bar rule — last rep as fast as the first, add 2.5% to your bench max for next week.
 
 Weeks 11–14 only, steps 2 and 4 merge into one circuit, 4 rounds: 2 bench reps @ 85% → rest 20s → 3 bench throws → rest 20s → 3 clap push-ups → rest 2½ min. Heavy wakes the system up; fast uses it.
 
-**5 · 0:34 — RING DIPS · 3 sets at your level (Calisthenics page) · rest 90s · 6 min**
+**5 · 0:35 — RING DIPS · 3 sets at your level (Calisthenics page) · rest 90s · 6 min**
 
 How, at the level most men start: support yourself at the top of a pair of rings, arms locked, rings still, then lower until your shoulders are level with your elbows and press back up, turning the rings so your palms face forward at the top. If you can't yet, the level below is the bar dip, and below that the support hold. Elbow pain of any kind is a stop sign, not a challenge.
 
 Pressing is grouped on this morning on purpose — bench throw, bench, dips — so that the rest of the week's shoulders stay fresh for throws and push press. The rings are what make the shoulder bulletproof: every rep is the joint stabilising itself in three directions at once.
 
-**6 · 0:40 — WEIGHTED CHIN-UPS · 3 sets of 5, then 2 sets of the MUSCLE-UP LINE at your level · rest 90s · 9 min**
+**6 · 0:41 — WEIGHTED CHIN-UPS · 3 sets of 5, then 2 sets of the MUSCLE-UP LINE at your level · rest 90s · 9 min**
 
 How: wide grip, palms away (switch to a neutral grip if wide ever bothers your shoulders), weight on a belt or a dumbbell between your feet. Start from a dead hang, pull chin over the bar, lower under control, no swinging. Add weight when all three sets are clean.
 
@@ -173,13 +178,13 @@ Then the muscle-up line, bodyweight, 2 sets: at the first level that's chest-to-
 
 Pulling strength protects the shoulders that throw a thousand punches a week; the muscle-up is pulling power, the same quality that snaps a hand back.
 
-**7 · 0:49 — CHEST-SUPPORTED ROW · 4 sets of 8 (easy weeks 3) · rest 75s · 7 min**
+**7 · 0:50 — CHEST-SUPPORTED ROW · 4 sets of 8 (easy weeks 3) · rest 75s · 7 min**
 
 How: lie chest-down on an incline bench with dumbbells. Row until your elbows pass your body, pause one second at the top, lower slow.
 
 Four sets so your pulling matches your pressing. A boxer's shoulders live or die on that balance.
 
-**8 · 0:56 — SHOULDER CIRCUIT + BAND CATCH · 2 rounds · 8 min**
+**8 · 0:57 — SHOULDER CIRCUIT + BAND CATCH · 2 rounds · 8 min**
 
 Round = the four moves back to back, then rest 45s:
 
@@ -195,7 +200,7 @@ Then BAND DECELERATION CATCH · 2 sets of 8 per arm: hold a light band anchored 
 
 Every right hand you throw, this muscle group has to brake your arm. This is the only place it gets trained to.
 
-**Done · ~1:04.** Tonight at home: RANGE, then the skill block (the home page).
+**Done · ~1:05.** Tonight at home: RANGE, then the skill block (the home page).
 
 ---
 
@@ -231,7 +236,7 @@ Bike or SkiErg — pick one and keep it all 16 weeks so your numbers compare. Wr
 
 40-second repeats: 40 seconds absolutely flat out, 80 seconds easy. Do 3, rest 5 full minutes, do 3 more. Rounds 1–2 feel fine, round 3 burns, the last three are horrible. That burning is the point — it's what the late rounds of a fight feel like, and this is the only session that goes there. Don't hold back early to survive the end.
 
-30-second all-outs: 30 seconds at absolute maximum, then 3 FULL minutes of complete rest. 5 rounds. Take every second of the rest — cutting it short turns it into a different (wrong) session.
+Repeat bursts: 8 bursts of 6–8 seconds at absolute maximum, with 40 seconds easy spinning between them; then 5 full minutes easy; then 8 more. Two sets, sixteen bursts. The first three feel like nothing. By the sixth the burst is still there but it costs; by the eighth of the second set the question is whether the burst is still a burst. That's the point — this is a flurry, twenty or thirty seconds apart, for a round, and what decides whether the fourth flurry has anything in it is how fast the muscle refills between them, which is an aerobic job done at flat-out intensity. The one session in the week shaped exactly like the thing you do in a ring. Rule: if a burst is visibly weaker than the last, take an extra 20 seconds; if two in a row are, the set is over.
 
 Easy: 20 minutes at a pace where you could chat. That's it.
 
@@ -257,7 +262,7 @@ Copenhagen plank, 2 × 30 seconds per side — side plank with your top foot up 
 
 **8 · 1:00 — SEATED CALF RAISE + ACHILLES HOLD · 3 sets of 12, then one 45-second hold · rest 60s · 5 min**
 
-How: seated machine, or a barbell padded across your knees. Up on the balls of the feet, pause, down slow, twelve times. After the third set, load it as heavy as you can hold dead still and hold the top position for 45 seconds — no bouncing, no sinking. It must be seated (knee bent) — that's the muscle that keeps you on your toes in round six.
+How: seated machine, or a barbell padded across your knees. Up on the balls of the feet, pause, down slow, twelve times — seated, because the knee-bent position trains the muscle that keeps you on your toes in round six. Then the hold is STANDING: on the edge of a step, both feet, a dumbbell in each hand or a bar on your back, as heavy as you can hold dead still — rise to the top and hold 45 seconds, knees straight, no bouncing, no sinking. Straight knee, because that is the position the Achilles takes every sprint and every landing; a seated hold loads a different muscle into the same tendon and does less for it.
 
 The hold is the tendon block, part one. Muscle gets strong in weeks; tendon gets stiff in months, and a heavy still hold is the best-proven way to hurry it. Your Achilles takes every sprint and every depth jump on Saturday. Forty-five seconds a week is the insurance.
 
@@ -321,6 +326,8 @@ The third power dose, the only single-leg lift, the second engine session and th
 
 **2 · 0:08 — POWER DOSE · THROWS + LANDMINE · 8 min · 45s between sets**
 
+Three easy throws of each first, at half effort, exactly as Sunday's warm-up does — a maximal rotational throw is the one movement in the morning nothing in the warm-up has rehearsed.
+
 Rotational shot-put, 2 × 3 per side — medicine ball, 3–5 kg, at the shoulder, side-on to the wall, drive off the back hip. Flat and hard, like the punch.
 
 Landmine punch, 2 × 5 per side — one end of a barbell in a corner or landmine sleeve, the other end at your shoulder, in your stance. Drive the hips and punch it up and away — never press it. Bar speed is the metric; add weight only when it still snaps.
@@ -371,11 +378,13 @@ The Singles version put a 55-minute easy ride here. Straight truth about that ri
 
 **Tonight, at home: RANGE · 20 min** — the same as every evening (the home page). Friday's extra stretch is folded into it.
 
+**The safeguard, written down.** The engine rests on the two interval sessions, the rounds, the weekend easy hour, and a physical job. Two numbers arbitrate: the 20-minute bike test and the fight-sim fade. If either has stalled by week 9, twenty easy minutes on the bike straight after Tuesday's intervals is the first thing that comes back — not the Friday alarm.
+
 **Food:** Friday's 5pm carb feed still loads Saturday — that's the most important feed of the week and it doesn't move. There's no fasted ride, so breakfast is the porridge on waking. Everything else as the fuel app says.
 
 ---
 
-## SATURDAY · MORNING · THE LEG & POWER SESSION · ~94 min
+## SATURDAY · MORNING · THE LEG & POWER SESSION · ~96 min
 
 (Week 16: skip this page — Saturday of week 16 is TEST DAY, two pages on.)
 
@@ -396,8 +405,6 @@ Leg swings × 10 each — hold the rack, swing one leg forward-and-back, then si
 Pogo hops 2 × 20 — bounce on the balls of your feet, legs almost straight, quick off the floor like a skipping rope without the rope.
 
 Sprint build-ups — never skip these: one 20m run at 60% effort, one at 75%, one at 90%.
-
-Squat warm-up sets: 40% × 3, 60% × 2, 75% × 1.
 
 **2 · 0:16 — FLYING SPRINTS · runs from the week table · rest 2½–3 min between runs · 14 min**
 
@@ -421,13 +428,15 @@ How: stand on one leg, jump sideways as far as you can, land on the other leg an
 
 The sideways push-off is how you cut the ring off. Nothing else in the week trains it.
 
-**5 · 0:49 — BACK SQUAT · sets, reps and % from the week table · rest 2½ min (weeks 7–9: 3) · PINS SET · 15 min**
+**5 · 0:49 — BACK SQUAT · sets, reps and % from the week table · rest 2½ min (weeks 7–9: 3) · PINS SET · 17 min**
+
+Warm-up sets first, here, not at the start of the session: 40% × 3, 60% × 2, 75% × 1. Forty minutes of sprinting and jumping keeps you warm; it doesn't keep the squat pattern rehearsed.
 
 How: bar on your back, break at the hips and knees together, sit to just below parallel, drive up hard. Every rep fast on the way up; a grinding rep ends the set. Last set: fast-bar rule — last rep as fast as the first, add 2.5% to your squat max for next week.
 
 MAX SINGLE — weeks 4 and 9 only (about 20 min). Instead of the normal sets: after your warm-up sets, go 50% × 5 → 65% × 3 → 75% × 2 → 85% × 1 → 92% × 1 → then ONE attempt at 100–102% of your current max. A second attempt only if the first flew up, or if the fast-bar rule has been firing for three weeks. Pins set, no exceptions. Then do the back-off sets from the table at 85% of the NEW number. Write the new max down — every weight for the next month comes off it.
 
-**6 · 1:04 — THE JUMP CIRCUIT · rounds from the week table · 18 min (weeks 11–14: 22)**
+**6 · 1:06 — THE JUMP CIRCUIT · rounds from the week table · 18 min (weeks 11–14: 22)**
 
 One round =
 
@@ -443,19 +452,21 @@ Rest 2½–3 minutes, go again. End the round the moment jump height drops. If r
 
 Weeks 11–14: this circuit moves to the FRONT — do it as step 5, before the squat, while you're freshest. The squat (2 × 2 @ 88%) becomes step 6.
 
-**7 · 1:22 — PUSH PRESS · sets, reps and % from the week table · rest 2 min · 10 min**
+**7 · 1:24 — PUSH PRESS · sets, reps and % from the week table · rest 2 min · 10 min**
 
 How: bar on the front of your shoulders. Quick shallow knee dip, then drive the bar overhead with your LEGS and punch it to lockout. Down under control. Week 1: find your 3RM here, same ramp method as the trap bar. Last set: fast-bar rule. Weeks 4 and 9: skip the push press — the squat max is enough maximal work for one day; the bench max is Sunday morning, first thing.
 
 Legs → braced trunk → hands. The same route a punch takes, and the heaviest thing your shoulders and traps see all week — which is why the traps and shoulders don't need a size block.
 
-**Done · ~1:32** (weeks 4 and 9: ~1:29 · weeks 11–14: ~1:36). RANGE at home tonight.
+**Done · ~1:34** (weeks 4 and 9: ~1:31 · weeks 11–14: ~1:38). RANGE at home tonight.
+
+**This afternoon or tomorrow's: THE EASY HOUR.** Thirty to forty minutes easy, nose only, at a pace you could hold a conversation at — a bike, a walk, a swim, whatever's there. Four-plus hours after the session. It's active recovery for legs that just sprinted, and it's the aerobic base that left with the Friday alarm, put back where it costs no sleep. Once a weekend, either day.
 
 ---
 
-## SUNDAY · MORNING · GET-UPS · PUNCH THROWS · FIGHT ROUNDS · POST-MAX SIT · CORE · LEVER · NORDICS · ~80 min
+## SUNDAY · MORNING · GET-UPS · PUNCH THROWS · NORDICS · FIGHT ROUNDS · POST-MAX SIT · CORE · LEVER · ~80 min
 
-Second free morning. Punches, rounds, core and hands, and the week's hamstring work last, with two leg-free days behind it. No pressing today on purpose so Monday's bench gets 42 hours. Same fuelling as Saturday. (Week 16: the warm-up, the 20-minute test and the weekly check. Nothing else. Stretch at home.)
+Second free morning. Punches, then the week's hamstring work while the legs are fresh, then rounds, core and hands. No pressing today on purpose so Monday's bench gets 42 hours. Same fuelling as Saturday. (Week 16: the warm-up, the 20-minute test and the weekly check. Nothing else. Stretch at home.)
 
 **1 · 0:00 — WARM-UP · 14 min** — Turkish get-ups, 2 per side, light (as Saturday), then Tuesday's warm-up without the crawls, plus: broad jumps 3 × 2 · medicine-ball chest passes 3 × 3 as hard as you can · 3 × 10-second bike sprints with a minute between · then three EASY practice throws of each of the four throws below.
 
@@ -477,7 +488,13 @@ Landmine punch × 5 per side — your loaded straight. One end of a barbell in a
 
 Straight punches are built on forward drive; hooks on rotation. They're different physical problems, so all four get trained.
 
-**3 · 0:30 — FIGHT SIMULATION · 6 rounds × 3 minutes · rest from the week table · 24 min**
+**3 · 0:30 — NORDIC CURLS · sets and reps from the week table · rest 2 min · 8 min**
+
+How: kneel with your heels anchored under something solid (or a partner-less setup: loaded bar over the ankles). Keeping your body straight from knees to head, lower yourself forward as SLOWLY as you can, catch yourself with your hands, push back up. Stop the set the moment your lower back rounds — not at the rep count.
+
+Before the rounds, on purpose: the hardest eccentric work of the week goes on fresh hamstrings, not on ones that have just done twenty-four minutes of rounds — a maximal eccentric on a tired muscle is how the protective exercise becomes the injury. The rounds after it are bike, ski and landmine, which don't need a fresh hamstring. And it's still the last day, so the soreness has two leg-easy days to leave before Wednesday. Strong hamstrings on the way down is the best-proven injury protection in all of sport; the reps ramp up over the first month — follow the table. (Week 16: skip.)
+
+**4 · 0:38 — FIGHT SIMULATION · 6 rounds × 3 minutes · rest from the week table · 24 min**
 
 Each round: minute 1 on the SkiErg → minute 2 on the assault bike → minute 3 landmine punches (odd rounds) or medicine-ball slams (even rounds). If your gym has a bag, minute 3 is bag work — hard and technically clean.
 
@@ -493,11 +510,11 @@ Three-minute rounds, never enough rest, holding output across six — nothing el
 
 Weeks 1 and 16 — THE 20-MINUTE BIKE TEST instead of the fight rounds: 5 easy minutes, then 20 minutes for the most distance you can, on the same bike or SkiErg every time. No pacing plan — go and find out. Write down two numbers: the distance, and the highest heart rate you saw. That peak is your practical maximum; from now on every easy ride sits around 65–75% of it. Week 1 is the baseline; week 16 is the verdict.
 
-**4 · 0:54 — THE POST-MAX SIT · 3 min**
+**5 · 1:02 — THE POST-MAX SIT · 3 min**
 
 Straight off the last round: sit down, eyes closed, heart at 170-plus, chest heaving — and find the breath at the nostrils. Write down the seconds it took to genuinely settle onto it. This is the corner between rounds, trained; nobody practises it and everybody needs it. On weeks 1 and 16 it follows the bike test instead.
 
-**5 · 0:57 — CORE + L-SIT + HANDS · rest 60s · 10 min**
+**6 · 1:05 — CORE + L-SIT + HANDS · rest 60s · 10 min**
 
 Hanging leg raises, 3 × 8–12 — hang from a bar, dumbbell between your feet if needed, lift legs to hip height or above, no swinging.
 
@@ -507,19 +524,13 @@ Side plank reach-through, 2 × 10 per side — in a side plank, thread your top 
 
 Hands: knuckle hold 3 × 20s and band wrist extension 2 × 15 (as Tuesday).
 
-**6 · 1:07 — THE SLOW LANE · one lever hold · 3 sets · 3 min**
+**7 · 1:15 — THE SLOW LANE · one lever hold · 3 sets · 3 min**
 
 One lever per Sunday, rotating week by week: the tuck front lever (hang from the bar, pull the shoulder blades down, knees to the chest, body horizontal, face up); then skin the cat and the German hang (rotate backward through the arms from a hang until the feet drop toward the floor, and hang there with the shoulders stretched — face down, the start of the back lever); then, at home in the week, the planche leans. Ten seconds a hold to start, and the three laws on the Calisthenics page govern this block absolutely: five seconds added per fortnight at most, twelve weeks a level minimum, and any inside-elbow ache buys the lane two weeks off.
 
-**7 · 1:10 — NORDIC CURLS · sets and reps from the week table · rest 2 min · 8 min**
-
-How: kneel with your heels anchored under something solid (or a partner-less setup: loaded bar over the ankles). Keeping your body straight from knees to head, lower yourself forward as SLOWLY as you can, catch yourself with your hands, push back up. Stop the set the moment your lower back rounds — not at the rep count.
-
-Last block of the last day, on purpose: the hardest hamstring work of the week, followed by two leg-free days, so the soreness is gone before it can cost you a sprint. Strong hamstrings on the way down is the best-proven injury protection in all of sport; the reps ramp up over the first month — follow the table. (Week 16: skip.)
-
 **8 · 1:18 — WEEKLY CHECK · 2 min · write these down**
 
-Bodyweight · resting heart rate · how many green / yellow / red days · any joint that's complaining (hips, shoulders, elbows, wrists, knees, Achilles 0–10) · how many boxing nights your hands felt slow · energy 1–10 · how many evenings you did RANGE · hours of sleep, averaged · and on weeks 1, 5, 9 and 13, the four range tests (the home page).
+Bodyweight · resting heart rate · how many green / yellow / red days · any joint that's complaining (hips, shoulders, elbows, wrists, knees, Achilles 0–10) · how many boxing nights your hands felt slow · energy 1–10 · how many evenings you did RANGE · hours of sleep, averaged · lights-out time, averaged · and on weeks 1, 5, 9 and 13, the four range tests (the home page).
 
 Two slow-hands nights, or three yellows in one week = next week is an easy week, whatever the plan says. Every 4–6 weeks: tape — arms, shoulders, waist.
 
@@ -759,6 +770,8 @@ Total training time is about three hours a week lower than the Singles version. 
 **What this version is.** Optimal 8 Singles with the aesthetics taken out, the mobility taken home, the weekday sessions capped under an hour, the weekend sessions cut to what the fighter needs, shorter strength rests, and one new rule. Everything that makes you hit harder, move faster, last longer or stay in one piece is unchanged and at the same numbers.
 
 **What changed in v1.1, and the coaching behind it.** Friday became sleep because the ride was the lowest-value session in the week and the alarm was the highest-cost one; a coach who lets a shift worker lose an hour of sleep for a token aerobic dose isn't coaching. The tendon block went in because the strength this program builds will outrun tendon adaptation — that's true for any fast-gaining lifter, and the sprints, depth jumps and Nordics are where the bill would land; two still holds a week, one Achilles, one patellar, is the cheapest insurance in sport. The mental drills that live inside sessions moved onto these pages because a drill you have to look up in a second document at heart rate 170 is a drill you don't do. And Camp Mode exists because the program was only ever the base phase of a boxer's year, and a boxer's program has to know what to do when the boxing comes back.
+
+**Why the repeat bursts replaced the 30-second all-outs.** A boxer's hardest work is a flurry of six to ten seconds, twenty or thirty seconds apart, for three minutes. The 30-second all-out trained a quality the ring samples rarely, and it was the most expensive session in the week to recover from. The bursts train the exact shape of a round — and the ability to repeat a burst is decided by how fast the muscle refills between them, which is aerobic work done at flat-out intensity. The easy weekend hour is the base that refilling depends on, put where it costs no sleep.
 
 **Why RANGE, and why it's twenty minutes.** You named your hips and shoulders as a limiting factor, and for a boxer they are — hip rotation is where the hook and the cross come from, shoulder range is what holds a guard without the traps. Eight minutes of mobility maintains; it never changes stiffness that's decades old. Change needs long holds with a long exhale, contract-relax to reset the guarding, strength at the end of the range so the body keeps it, and every day for three months. Twenty minutes is the smallest dose that does all four. The morning five keeps the joints honest between evenings. The get-ups and the crawls are the functional layer you asked for: the whole body agreeing on how to get off the floor, and the shoulder loaded in the one pattern nothing else in the week uses.
 
