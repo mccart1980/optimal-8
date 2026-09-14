@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import "./storage.js"; // installs window.storage (localStorage-backed)
 import fighterDoc from "../optimal8fighter.md?raw";
 import ironMindDoc from "../iron-mind-v4-2.md?raw";
+import campDoc from "../optimal-8-camp.md?raw";
 import {
   C, FONTS, dsp, bdy, mno, buzz, mmss, r25, num, DAYS, DSH, iso, mondayOf, parseISO, todayKey, addDays, fmtDate,
   load, save, Card, Eye, Lab, Fld, Btn, Chip, Note, Seg,
@@ -19,6 +20,13 @@ import {
 } from "./im-ui.jsx";
 import { isTestWeek, isKeepWeek, rangeTitle, rangeMins, rangeLine, RANGE_INTRO } from "./range.js";
 import { RangeTool, MorningFiveTool, RangeTests, RangeTrack, RangeSheet } from "./range-ui.jsx";
+import {
+  CAMP_L, CAMP_START_DEFAULT, CPH, CENG, CENG_MENU, CS, CPROTO,
+  campRxFor, campSess, campBlank, campDatesLabel, campDayLabel, campWeekOf, campMonday,
+  CAMP_DAILY_CHECK, WORKING_WEIGHT_RULE, CAMP_TEST_WEEKS,
+  CAMP_HOMELINE, CAMP_HOMELINE_TAPER, CAMP_EASY_HOUR, SAUNA_LINE, PHASE_NAME, HAND_BACK,
+} from "./camp.js";
+import { CampWeekTable, FightWeekTable, CampWorkPanel, CampNumbers, CampWeekCard } from "./camp-ui.jsx";
 
 /* ================================================================
    OPTIMAL 8 — THE FIGHTER BUILD v1.5 · companion app
@@ -77,6 +85,7 @@ const PH = {
   reload: { n: "RELOAD", long: "RELOAD", ac: C.moss, vl: "—",
     note: "Sets −40%, intensity ~70%. Light movement, full food. The adaptation happens now, not during the testing. Sprints and jumps stay in at reduced volume. Then straight into week 1 of the next macrocycle." },
 };
+Object.assign(PH, CPH);
 const phaseOf = (w) => (w <= 5 ? "b1" : w <= 10 ? "b2" : w <= 14 ? "b3" : w <= 16 ? "taper" : w === 17 ? "hell" : "reload");
 const bwk = (w) => (w <= 5 ? w : w <= 10 ? w - 5 : w <= 14 ? w - 10 : null);
 
@@ -128,24 +137,14 @@ const PQ = { 1: pqB("3 × 3 @ 65%", 65), 2: pqB("3 × 3 @ 68%", 68), 3: pqB("3 �
   11: pqB("SPEED 3 × 3 @ 70%", 70, 3, 3, 1), 12: pqB("SPEED 3 × 3 @ 70%", 70, 3, 3, 1), 13: pqB("SPEED 3 × 3 @ 70%", 70, 3, 3, 1), 14: pqB("SPEED 3 × 3 @ 70%", 70, 3, 3, 1), 15: pqB("2 × 2 @ 70%", 70, 2, 2), 16: null, 17: null, 18: pqB("2 × 3 @ 60% — reload", 60, 2) };
 Object.keys(R).forEach((w) => { R[w].eng2 = ENG2[w] === undefined ? null : ENG2[w]; R[w].pq = PQ[w] || null; });
 
-/* ---------------- CAMP MODE — when boxing returns ----------------
-   The camp table from the document. Boxing takes over the two bike
-   sessions and the fight simulation; what boxing never covers stays
-   and gets protected. `keep` is the running order for that day.     */
-const MODE = { camp: false, lastTen: false };
-const CAMP = {
-  mon: { keep: ["A", "B", "C", "D", "F", "G", "H"], m: 48, t: "3am · bench throw, box jumps, bench, chins, rows, band catch. Shoulder circuit at home.", note: "The shoulder circuit moves home in camp. The rings and the muscle-up line stop: boxing nights leave no room for a fourth pressing exposure." },
-  tue: { sleep: 1 },
-  wed: { keep: ["A", "B", "C", "D", "E", "F"], m: 55, t: "3am · sled, trap bar, pause squat, RDL, neck holds", note: "The loads are capped at 80% of the week table on any week with sparring." },
-  thu: { keep: ["A", "B", "C", "D", "X", "G"], m: 40, t: "3am · throws + landmine, split squat, Spanish squat hold, Achilles hold, neck. No bike.", note: "No bike in camp — boxing does that job better, and stacking them is how you arrive at sparring flat." },
-  fri: { sleep: 1 },
-  sat: { keep: ["A", "B", "C", "D", "E", "F", "G"], m: 85, t: "The leg & power session, as written", note: "If Sunday is sparring, the jump circuit is cut to one round." },
-  sun: { keep: ["A", "C", "T", "H", "I"], m: 40, t: "Punch throws (2 rounds), trunk, Nordics, weekly check. No fight sim — the ring did it.", note: "The engine gets measured in the ring now, not on a bike. RANGE and the morning five stay in camp — they're the cheapest injury insurance you own. Calisthenics in camp: the handstand at home stays; the rings, the pistols, the L-sits and the slow lane stop." },
-};
-const CAMP_INTRO = "This program is a base phase: it assumes the evenings are free. The day your coach puts you back on the pads four or five nights a week — and more so the day a fight is booked — half of it becomes a liability, and a program that doesn't say which half isn't finished. This is the switch. Boxing nights: the head-contact rule is the law. RANGE and the morning five stay in camp — they're the cheapest injury insurance you own.";
+/* ---------------- CAMP MODE ----------------
+   ON, the twelve-week camp runs in place of Optimal 8 Fighter: its own
+   dated week table, its own session pages, its own tests, counting from
+   its own start date. OFF, the Fighter is exactly as it was.
+   `fight` is the week-11 fork.                                        */
+const MODE = { camp: false, fight: false, lastTen: false };
 const LASTTEN_INTRO = "Week table numbers stop; every lift goes to 2 sets at 70%, fast; no sprints, no depth jumps, no Nordics inside the last seven days; the jump circuit becomes box jumps only. The two power doses stay because they keep the nervous system sharp without costing anything. The last heavy thing you do is nine days out. The fuel plan's \"making weight\" section runs the food.";
 
-const campRx = (rx) => Object.assign({}, rx, { vec: 2, camp: 1 });
 const lastTenRx = (rx) => {
   const two = "2 sets @ 70% — fast";
   return Object.assign({}, rx, {
@@ -157,7 +156,7 @@ const lastTenRx = (rx) => {
   });
 };
 const baseRxFor = (w) => R[w] || R[1];
-const rxFor = (w) => { let rx = baseRxFor(w); if (MODE.camp) rx = campRx(rx); if (MODE.lastTen) rx = lastTenRx(rx); return rx; };
+const rxFor = (w) => { if (MODE.camp) return campRxFor(w, MODE.fight); let rx = baseRxFor(w); if (MODE.lastTen) rx = lastTenRx(rx); return rx; };
 
 /* ---------- timer step builders ---------- */
 function steps(kind, o) {
@@ -166,7 +165,22 @@ function steps(kind, o) {
   if (kind === "sim") { const r = o.rounds || 6, rest = o.rest == null ? 60 : o.rest;
     for (let i = 1; i <= r; i++) { W("RD " + i + " · MIN 1 — SKIERG", 60); W("RD " + i + " · MIN 2 — ASSAULT BIKE", 60); W("RD " + i + " · MIN 3 — " + (i % 2 ? "LANDMINE PUNCHES" : "MED-BALL SLAMS") + (o.max3 ? " · MAXIMAL" : ""), 60); if (i < r && rest > 0) Rs("REST — ROUND-RECOVERY BREATHING · 2 SIGHS, THEN IN 3 OUT 6", rest); } }
   else if (kind === "vo2") { const r = o.short ? 3 : 4; for (let i = 1; i <= r; i++) { W("INTERVAL " + i + " — 90–95% HRMAX", 240); if (i < r) Rs("EASY", 180); } }
-  else if (kind === "lac") { for (let b = 1; b <= 2; b++) { const reps = o.short && b === 2 ? 2 : 3; for (let i = 1; i <= reps; i++) { W("BLOCK " + b + " · REP " + i + " — MAX", 40); if (i < reps) Rs("REST", 80); } if (b === 1) Rs("BETWEEN BLOCKS", 300); } }
+  else if (kind === "lac") { const blocks = o.blocks || 2, base = o.reps || 3;
+    for (let b = 1; b <= blocks; b++) { const reps = o.short && b === blocks ? base - 1 : base;
+      for (let i = 1; i <= reps; i++) { W("BLOCK " + b + " · REP " + i + " — MAX", 40); if (i < reps) Rs("REST", 80); }
+      if (b < blocks) Rs("BETWEEN BLOCKS", 300); } }
+  else if (kind === "mod") { for (let i = 1; i <= 4; i++) { W("INTERVAL " + i + " — SHORT SENTENCES POSSIBLE", 180); if (i < 4) Rs("EASY", 180); } }
+  else if (kind === "tempo") { const n = o.reps || 10; for (let i = 1; i <= n; i++) { W("MINUTE " + i + " OF " + n + " — HARD BUT CONTROLLED, ~70%", 60); if (i < n) Rs("EASY", 60); } }
+  else if (kind === "thr") { for (let i = 1; i <= 2; i++) { W("THRESHOLD " + i + " — SHORT PHRASES ONLY", 480); if (i < 2) Rs("EASY", 180); } }
+  else if (kind === "bursttest") { for (let i = 1; i <= 10; i++) { W("BURST " + i + " OF 10 — FLAT OUT", 6, i === 1 ? "Write this one down." : i === 10 ? "Write this one down — the last against the first." : ""); if (i < 10) Rs("EASY · " + i + " OF 10 DONE", 30); } }
+  else if (kind === "ergrounds") { const r = o.rounds || 7, rest = o.rest == null ? 60 : o.rest;
+    for (let i = 1; i <= r; i++) { W("ROUND " + i + " OF " + r + " — FIGHT PACE", 180, i === 1 || i === r ? "Write this round's output down." : "");
+      if (i < r) Rs("THE CORNER MINUTE — 2 SIGHS, THEN NOSE ONLY, IN 3 OUT 6", rest, "Stood up, hands off the knees."); } }
+  else if (kind === "csim") { const r = o.rounds || 6, rest = o.rest == null ? 60 : o.rest;
+    for (let i = 1; i <= r; i++) {
+      if (o.pace) W("ROUND " + i + " OF " + r + " — FIGHT PACE", 180);
+      else { W("RD " + i + " · MIN 1 — SKIERG", 60); W("RD " + i + " · MIN 2 — ASSAULT BIKE", 60); W("RD " + i + " · MIN 3 — MED-BALL SLAMS OR THE BAG", 60); }
+      if (i < r) Rs("THE CORNER MINUTE — 2 SIGHS, THEN NOSE ONLY, IN 3 OUT 6", rest, "Stood up, hands off the knees. Relaxed jaw, shoulders down."); } }
   else if (kind === "rz") { /* repeat bursts — the flurry, trained */
     const sets = o.sets == null ? 2 : o.sets, n = 8 - (o.short ? 1 : 0);
     for (let st = 1; st <= sets; st++) {
@@ -269,6 +283,8 @@ const PROTO = {
       ["RANGE only", "no skill block"],
       ["If you skip it", "nothing shows this week. By week 6 the hips tighten back to where they were, the internal-rotation lift stops moving, and the tests say so in numbers."]] },
 };
+Object.assign(PROTO, CPROTO);
+
 /* v1.5 — thirty to forty easy nasal minutes on a weekend afternoon: the
    aerobic base that left with the Friday alarm, put back where it costs no
    sleep. Once a weekend, either day — so ticking it on one day clears both. */
@@ -563,25 +579,42 @@ const S = {
     { L: "C", n: "Shoulder Circuit + Band Catch", m: 8, p: "CUFF", items: [{ n: "Circuit + band deceleration catch", s: "2 rounds · then 2 × 8/arm", id: "catch", k: "chk" }] }] },
 };
 
-/* Is this day a sleep day? Friday always; Tuesday and Friday in camp mode. */
-const sleepDay = (day) => (MODE.camp ? !!(CAMP[day] && CAMP[day].sleep) : !!(S[day] && S[day].sleep));
-const campFor = (day) => (MODE.camp ? CAMP[day] : null);
+/* The day's page: the camp's when Camp Mode is on, the Fighter's when it
+   isn't. Camp days with no page of their own (week 1's Monday, fight week
+   after the bell, the hand-back) return null and get a card instead. */
+const sessFor = (day, rx) => (MODE.camp ? campSess(day, rx || rxFor(1)) : S[day]);
+
+/* Is this day a sleep day? Friday, in both programs. */
+const sleepDay = (day, rx) => {
+  if (MODE.camp) { const c = campSess(day, rx || rxFor(1)); return !!(c && c.sleep); }
+  return !!(S[day] && S[day].sleep);
+};
 
 /* blocks visible for a day in a given week, in the order they are performed */
 function blocksFor(day, rx) {
-  const sess = S[day]; if (!sess) return [];
-  if (sleepDay(day)) return [];
-  const camp = campFor(day);
+  const sess = sessFor(day, rx); if (!sess) return [];
+  if (sess.sleep) return [];
   let b = sess.b.filter((x) => x.sp || !(x.hide && x.hide(rx)));
-  if (camp) { const order = camp.keep; b = sess.b.filter((x) => order.indexOf(x.L) >= 0 && !(x.hide && x.hide(rx))).sort((p, q) => order.indexOf(p.L) - order.indexOf(q.L)); }
-  else b = b.filter((x) => !x.campOnly);
-  if (MODE.lastTen) b = b.filter((x) => !x.noTaper);
-  if (day === "sat" && rx.lowerLead) { const e = b.findIndex((x) => x.L === "E"), f = b.findIndex((x) => x.L === "F"); if (e >= 0 && f >= 0 && e < f) { const arr = b.slice(); const tmp = arr[e]; arr[e] = arr[f]; arr[f] = tmp; b = arr; } }
+  if (!MODE.camp) {
+    b = b.filter((x) => !x.campOnly);
+    if (MODE.lastTen) b = b.filter((x) => !x.noTaper);
+    if (day === "sat" && rx.lowerLead) { const e = b.findIndex((x) => x.L === "E"), f = b.findIndex((x) => x.L === "F"); if (e >= 0 && f >= 0 && e < f) { const arr = b.slice(); const tmp = arr[e]; arr[e] = arr[f]; arr[f] = tmp; b = arr; } }
+  }
   return b;
 }
 const realBlocks = (day, rx) => blocksFor(day, rx).filter((x) => x.L);
 
 const MAXES = [["squat", "Back Squat"], ["bench", "Flat Bench"], ["tbdl", "Trap Bar Deadlift"], ["pp", "Push Press"]];
+/* The camp loads every lift from a WORKING WEIGHT, never a max. They live
+   beside the maxes so export, import and the backup file cover them, and
+   the maxes themselves are never touched by a camp. */
+const CAMP_WORK = [["cw_squat", "Back Squat"], ["cw_tbdl", "Trap Bar Deadlift"], ["cw_pp", "Push Press"]];
+const LIFT_NAME = {}; MAXES.concat(CAMP_WORK).forEach((x) => { LIFT_NAME[x[0]] = x[1]; });
+const liftName = (id) => LIFT_NAME[id] || id;
+const isWork = (id) => String(id || "").indexOf("cw_") === 0;
+/* which engine map and menu the pages read from */
+const engMap = () => (MODE.camp ? CENG : ENG);
+const engMenu = () => (MODE.camp ? CENG_MENU : ENG_MENU);
 const TESTS = [
   { id: "sprint", n: "Flying sprint 20m", u: "s", dir: "down", d: "3 attempts, best time", tgt: "−1–3%" },
   { id: "jump", n: "Depth jump rebound", u: "cm", dir: "up", d: "3 attempts, best height — phone slow-motion or jump mat", tgt: "+3–5%" },
@@ -804,7 +837,8 @@ function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, ope
   const needsCal = b.calib && ((rx.cal && rx[b.calib === "tbdl" ? "tb" : "pp"] && rx[b.calib === "tbdl" ? "tb" : "pp"].cal) || !num(maxes[b.calib]));
   const [calIn, setCalIn] = useState(""); const [maxIn, setMaxIn] = useState("");
   const mainMax = mainLift ? num(maxes[mainLift]) : null;
-  const fs1 = log[key("fs_rd1")], fs6 = log[key("fs_rd6")];
+  const fsK = MODE.camp ? ["c_fs_rd1", "c_fs_rd6"] : ["fs_rd1", "fs_rd6"];
+  const fs1 = log[key(fsK[0])], fs6 = log[key(fsK[1])];
   const drop = fs1 && fs6 && num(fs1.w) && num(fs6.w) ? (num(fs1.w) - num(fs6.w)) / num(fs1.w) * 100 : null;
   const startRest = (secs) => startTimer({ kind: "rest", opt: { secs }, title: "REST" });
   /* Weekly check: shoulders, elbows or wrists at 4 or above on Sunday, and
@@ -821,11 +855,11 @@ function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, ope
 
       {mainLift && !(rx.maxBe && mainLift === "bench" && day === "sat" && false) ? (
         <div style={{ background: C.ink, border: "1px solid " + P.ac, borderRadius: 5, padding: 12, marginBottom: 11 }}>
-          <Eye c={P.ac} s={{ marginBottom: 4 }}>Week {week} · {P.long}</Eye>
+          <Eye c={P.ac} s={{ marginBottom: 4 }}>Week {week} · {P.long}{MODE.camp && b.work ? " · " + (PHASE_NAME[(rx.tb && b.work === "cw_tbdl" ? rx.tb.phase : rx.sq ? rx.sq.phase : "")] || "WORKING WEIGHT") : ""}</Eye>
           <div style={Object.assign({}, bdy, { fontSize: 16, fontWeight: 700, color: C.chalk })}>{b.pres ? b.pres(rx).sc : mainLift === "tbdl" ? rx.tb.sc : mainLift === "pp" ? (rx.pp ? rx.pp.sc : "") : mainLift === "bench" ? (isMaxWeek ? "MAX SINGLE" : rx.upperC && day === "mon" ? "4 rounds · 2 @ 85%" : (rx.bsc || rx.sc)) : rx.sc}</div>
           {!isMaxWeek && !needsCal ? (() => { const pct = b.pres ? b.pres(rx).pct : mainLift === "tbdl" ? rx.tb.pct : mainLift === "pp" ? (rx.pp && rx.pp.pct) : mainLift === "bench" && rx.upperC && day === "mon" ? 85 : rx.pct; const kg = calc(mainLift, pct);
             return kg ? <div onClick={() => openPlates(kg[0])} style={Object.assign({}, mno, { fontSize: 30, fontWeight: 700, color: C.brass, marginTop: 6, cursor: "pointer" })}>{kgLine(kg)} <span style={{ fontSize: 9, color: C.ash, letterSpacing: 1 }}>▶ PLATES</span></div>
-              : <Note c={C.ash} s={{ fontStyle: "italic" }}>Enter your {MAXES.find((x) => x[0] === mainLift)[1]} max in TRACK to see kilos here.</Note>; })() : null}
+              : <Note c={C.ash} s={{ fontStyle: "italic" }}>{isWork(mainLift) ? "Set your " + liftName(mainLift).toLowerCase() + " working weight below to see kilos here." : "Enter your " + liftName(mainLift) + " max in TRACK to see kilos here."}</Note>; })() : null}
           {yellow && !isMaxWeek ? <div style={Object.assign({}, mno, { fontSize: 9.5, color: C.brass, marginTop: 6 })}>YELLOW DAY — loads reduced 7%</div> : null}
           {isMaxWeek ? (
             <div style={{ marginTop: 8 }}>
@@ -865,29 +899,33 @@ function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, ope
           <Note>{b.ramp.why}</Note>
         </div>) : null}
 
+      {b.work ? <CampWorkPanel id={b.work} name={liftName(b.work)} kg={num(maxes[b.work])} onSet={(kg, src) => onSetMax(b.work, kg, src)} reset={!!rx.reset} confirm={!!rx.confirm} week={week} /> : null}
+
       {b.cal && calis ? <CalPanel line={b.cal} calis={calis} setCalis={setCalis} mode={cmode} week={week} /> : null}
 
-      {b.eng && ENG[rx[b.engKey || "eng"]] ? (
+      {b.eng && engMap()[rx[b.engKey || "eng"]] ? (() => { const E = engMap()[rx[b.engKey || "eng"]];
+        return (
         <div style={{ background: C.ink, border: "1px solid " + C.cobalt, borderRadius: 5, padding: "11px 12px", marginBottom: 11 }}>
-          <Eye c={C.cobalt} s={{ marginBottom: 4 }}>Block week {rx.bw || "—"} · rotation</Eye>
-          <div style={Object.assign({}, bdy, { fontSize: 15, fontWeight: 700, color: C.chalk })}>{ENG[rx[b.engKey || "eng"]].d}</div>
-          <Note>{ENG[rx[b.engKey || "eng"]].why}</Note>
-          {ENG[rx[b.engKey || "eng"]].rule ? <Note c={C.oxide} bold>{ENG[rx[b.engKey || "eng"]].rule}</Note> : null}
-        </div>) : null}
+          <Eye c={C.cobalt} s={{ marginBottom: 4 }}>{MODE.camp ? "Week " + rx.w + " · " + PH[rx.ph].n : "Block week " + (rx.bw || "—") + " · rotation"}</Eye>
+          <div style={Object.assign({}, bdy, { fontSize: 15, fontWeight: 700, color: C.chalk })}>{E.d}</div>
+          <Note>{E.why}</Note>
+          {E.rule ? <Note c={C.oxide} bold>{E.rule}</Note> : null}
+        </div>); })() : null}
       {b.menu ? (
         <div style={{ background: C.ink, border: "1px solid " + C.line, borderRadius: 5, padding: "11px 12px", marginBottom: 11 }}>
-          <Eye c={C.cobalt} s={{ marginBottom: 6 }}>The four session types</Eye>
-          {ENG_MENU.map((k) => { const e = ENG[k], on = rx[b.engKey || "eng"] === k || (k === "rz" && rx[b.engKey || "eng"] === "rz3") || (k === "easy" && rx[b.engKey || "eng"] === "easy15");
+          <Eye c={C.cobalt} s={{ marginBottom: 6 }}>{MODE.camp ? "The conditioning session types" : "The four session types"}</Eye>
+          {engMenu().map((k) => { const e = engMap()[k], on = rx[b.engKey || "eng"] === k || (k === "rz" && (rx[b.engKey || "eng"] === "rz3" || rx[b.engKey || "eng"] === "rz1")) || (k === "lac" && rx[b.engKey || "eng"] === "lac2") || (k === "easy" && rx[b.engKey || "eng"] === "easy15");
             return (
               <div key={k} style={{ padding: "7px 0", borderBottom: "1px solid " + C.line, opacity: on ? 1 : .62 }}>
                 <div style={Object.assign({}, mno, { fontSize: 10.5, fontWeight: 700, letterSpacing: 1, color: on ? C.brass : C.ash })}>{e.n}{on ? " · THIS WEEK" : ""}</div>
                 <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, marginTop: 3, lineHeight: 1.45 })}>{e.d}</div>
               </div>); })}
         </div>) : null}
-      {b.sim ? (
+      {b.sim && rx.sim ? (
         <div style={{ background: C.ink, border: "1px solid " + C.brass, borderRadius: 5, padding: "11px 12px", marginBottom: 11 }}>
-          <Eye c={C.brass} s={{ marginBottom: 4 }}>This week's rest</Eye>
-          <div style={Object.assign({}, bdy, { fontSize: 15, fontWeight: 700, color: C.chalk })}>{(rx.sim.rounds || 6)} rounds · {rx.sim.rest}s between{rx.sim.max3 ? " · minute 3 MAXIMAL" : ""}{rx.sim.tested ? " · TESTED — log round 1 and round 6" : ""}</div>
+          <Eye c={C.brass} s={{ marginBottom: 4 }}>{rx.sim.rehearsal ? "The rehearsal" : "This week's rounds and rest"}</Eye>
+          <div style={Object.assign({}, bdy, { fontSize: 15, fontWeight: 700, color: C.chalk })}>{(rx.sim.rounds || 6)} rounds · {rx.sim.rest}s between{rx.sim.max3 ? " · minute 3 MAXIMAL" : ""}{rx.sim.tested || rx.sim.scored ? " · SCORED — log round 1 and the last round" : ""}{rx.sim.easy ? " · easy, to learn the stations" : ""}</div>
+          {MODE.camp ? <Note c={C.oxide} bold>{rx.sim.rounds === 7 ? "Seven rounds. The sixth is trained as the seventh, so that round six is a place you've already been." : rx.sim.rehearsal ? "Not a test — a rehearsal. Everything that goes wrong today, you fix before the day it matters." : "Scored weeks: 2, 5, 6, 9, 10 — and 11 on the no-fight path."}</Note> : null}
           {drop != null ? <div style={{ marginTop: 8 }}><span style={Object.assign({}, mno, { fontSize: 22, fontWeight: 700, color: drop <= 5 ? C.moss : drop <= 10 ? C.brass : C.oxide })}>{drop.toFixed(1)}% drop-off</span><Note>{drop <= 5 ? "Excellent." : drop <= 10 ? "Good — the standard." : drop <= 20 ? "Aerobic base needs work." : "Pacing or engine."}</Note></div> : null}
         </div>) : null}
 
@@ -967,7 +1005,7 @@ function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, ope
         if (!lastDone && !ans.a) return null;
         const step = lift === "squat" || lift === "tbdl" ? 5 : 2.5;
         const next = cm ? Math.round(cm * 1.025 / step) * step : null;
-        const lname = (MAXES.find((x) => x[0] === lift) || [, lift])[1];
+        const lname = liftName(lift);
         return (
           <div style={{ background: C.ink, border: "1px solid " + C.brass, borderRadius: 5, padding: 12, margin: "11px 0" }}>
             <Eye c={C.brass} s={{ marginBottom: 6 }}>The fast-bar rule · once per lift per week</Eye>
@@ -986,23 +1024,28 @@ function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, ope
         <div style={{ background: C.ink, border: "1px solid " + C.moss, borderRadius: 5, padding: "11px 12px", marginBottom: 11 }}>
           <Eye c={C.moss} s={{ marginBottom: 6 }}>This week, counted for you</Eye>
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-            {[["SESSIONS", weekStats.done + "/" + weekStats.planned], ["GREEN", weekStats.g], ["YELLOW", weekStats.y], ["RED", weekStats.r], ["HANDS SLOW", weekStats.slow], ["SPARRED", weekStats.spar]].map((x) => (
+            {(MODE.camp
+              ? [["SESSIONS", weekStats.done + "/" + weekStats.planned], ["GREEN", weekStats.g], ["YELLOW", weekStats.y], ["RED", weekStats.r]]
+              : [["SESSIONS", weekStats.done + "/" + weekStats.planned], ["GREEN", weekStats.g], ["YELLOW", weekStats.y], ["RED", weekStats.r], ["HANDS SLOW", weekStats.slow], ["SPARRED", weekStats.spar]]).map((x) => (
               <div key={x[0]} style={{ flex: "1 1 28%", background: C.card, borderRadius: 4, padding: "7px 4px", textAlign: "center", border: "1px solid " + C.line }}>
                 <div style={Object.assign({}, mno, { fontSize: 7.5, color: C.ash, letterSpacing: 1 })}>{x[0]}</div>
                 <div style={Object.assign({}, mno, { fontSize: 15, fontWeight: 700, color: C.chalk })}>{x[1]}</div></div>))}
           </div>
-          {weekStats.slow >= 2 ? <Note c={C.oxide} bold>Two slow nights at boxing this week — that morning was too much. Cut it, don't push through.</Note> : null}
-          {weekStats.y >= 3 ? <Note c={C.oxide} bold>Three yellow days — one early-deload trigger. A second in the same week means deload now.</Note> : null}
+          {!MODE.camp && weekStats.slow >= 2 ? <Note c={C.oxide} bold>Two slow nights at boxing this week — that morning was too much. Cut it, don't push through.</Note> : null}
+          {weekStats.y >= 3 ? <Note c={C.oxide} bold>{MODE.camp ? "Three yellows in a week: next week runs at the table's numbers minus one set on everything and the interval sessions at 90%." : "Three yellow days — one early-deload trigger. A second in the same week means deload now."}</Note> : null}
         </div>) : null}
 
-      {b.rangeTests && openRangeTests ? (
-        <div style={{ background: C.ink, border: "1px solid " + (isTestWeek(rangeWeek) ? C.oxide : C.line), borderRadius: 5, padding: "11px 12px", marginBottom: 11 }}>
-          <Eye c={isTestWeek(rangeWeek) ? C.oxide : C.ash} s={{ marginBottom: 4 }}>The four range tests — weeks 1, 5, 9 and 13</Eye>
-          <div style={Object.assign({}, bdy, { fontSize: 13, color: C.chalk, lineHeight: 1.5 })}>90/90 sit · deep squat · wall flexion · hands behind the back. Write the eight numbers down. If nothing has moved by week 5, the holds aren't long enough or the exhale isn't happening; fix that before adding anything.</div>
-          {isTestWeek(rangeWeek)
-            ? <Btn on={openRangeTests} c={C.oxide} fill s={{ width: "100%", marginTop: 10 }}>▶ THE FOUR RANGE TESTS · RANGE WEEK {rangeWeek}</Btn>
-            : <Note>Not this week — range week {rangeWeek}. The next one is {[1, 5, 9, 13].concat([21, 29, 37, 45]).filter((x) => x > rangeWeek)[0]}.</Note>}
-        </div>) : null}
+      {b.rangeTests && openRangeTests ? (() => {
+        const on = MODE.camp ? CAMP_TEST_WEEKS.indexOf(week) >= 0 : isTestWeek(rangeWeek);
+        const next = MODE.camp ? CAMP_TEST_WEEKS.filter((x) => x > week)[0] : [1, 5, 9, 13].concat([21, 29, 37, 45]).filter((x) => x > rangeWeek)[0];
+        return (
+        <div style={{ background: C.ink, border: "1px solid " + (on ? C.oxide : C.line), borderRadius: 5, padding: "11px 12px", marginBottom: 11 }}>
+          <Eye c={on ? C.oxide : C.ash} s={{ marginBottom: 4 }}>The four range tests — {MODE.camp ? "camp weeks 1, 6 and 11" : "weeks 1, 5, 9 and 13"}</Eye>
+          <div style={Object.assign({}, bdy, { fontSize: 13, color: C.chalk, lineHeight: 1.5 })}>90/90 sit · deep squat · wall flexion · hands behind the back. Write the eight numbers down. If nothing has moved by {MODE.camp ? "week 6" : "week 5"}, the holds aren't long enough or the exhale isn't happening; fix that before adding anything.</div>
+          {on
+            ? <Btn on={openRangeTests} c={C.oxide} fill s={{ width: "100%", marginTop: 10 }}>▶ THE FOUR RANGE TESTS · {MODE.camp ? "CAMP WEEK " + week : "RANGE WEEK " + rangeWeek}</Btn>
+            : <Note>Not this week{MODE.camp ? "" : " — range week " + rangeWeek}. The next one is {MODE.camp ? "camp week " + (next || "—") : next}.</Note>}
+        </div>); })() : null}
 
       {b.rules ? <div style={{ background: C.ink, border: "1px solid " + C.oxide, borderRadius: 5, padding: 12, margin: "11px 0" }}><Eye c={C.oxide}>The two rules</Eye>{b.rules.map((r, k) => <div key={k} style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, lineHeight: 1.45, marginBottom: 8 })}>{k + 1}. {r}</div>)}</div> : null}
       {v(b.w, rx) ? <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.oxide, lineHeight: 1.5, marginTop: 9, paddingLeft: 10, borderLeft: "2px solid " + C.oxide, fontWeight: 600 })}>{v(b.w, rx)}</div> : null}
@@ -1042,7 +1085,7 @@ function summaryFor(b, rx, calc, calis) {
   if (b.review) return "2 min — write it down";
   if (b.cal && calis) { const lev = curLevel(calis, b.cal); return "LEVEL " + lev.l + " · " + (b.rxLine ? b.rxLine(rx) : ""); }
   if (b.rxLine) return b.rxLine(rx);
-  if (b.eng && ENG[rx[b.engKey || "eng"]]) return ENG[rx[b.engKey || "eng"]].d;
+  if (b.eng && engMap()[rx[b.engKey || "eng"]]) return engMap()[rx[b.engKey || "eng"]].d;
   const its = v(b.items, rx);
   if (its && its.length && its[0].s) { const f = its[0]; const s = v(f.s, rx); const kg = f.mk && f.pct != null ? calc(f.mk, v(f.pct, rx)) : null; return s + (kg ? " → " + kg.join("–") + " kg" : ""); }
   if (b.p && PROTO[b.p]) return PROTO[b.p].s;
@@ -1051,8 +1094,24 @@ function summaryFor(b, rx, calc, calis) {
 const dayKey = (macro, week, day) => "m" + macro + "w" + week + "-" + day;
 const prevDayKey = (macro, week, day, L) => { const i = DAYS.indexOf(day); if (i > 0) return dayKey(macro, week, DAYS[i - 1]); if (week > 1) return dayKey(macro, week - 1, "sun"); return dayKey(macro - 1, L, "sun"); };
 
+/* The evening line — RANGE, then the block that follows it, then the sit.
+   The same component on every page in both programs. */
+function HomeLine({ rangeWeek, openHome, openProto, taper }) {
+  const line = MODE.camp ? (taper ? CAMP_HOMELINE_TAPER : CAMP_HOMELINE) : HOMELINE;
+  return (
+    <Card ac={C.violet} s={{ padding: 0 }}>
+      <button onClick={() => (openHome ? openHome() : openProto("HOME"))} style={{ display: "flex", width: "100%", alignItems: "center", gap: 11, textAlign: "left", background: "transparent", border: "none", padding: "12px 13px", cursor: "pointer", minHeight: 44 }}>
+        <span style={{ flex: 1, minWidth: 0 }}>
+          <div style={Object.assign({}, bdy, { fontSize: 13.5, fontWeight: 600, color: C.chalk, lineHeight: 1.4 })}>{line}</div>
+          <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, marginTop: 3, letterSpacing: 1 })}>TAP FOR THE HOME BLOCK{MODE.camp ? " · RANGE WEEK " + rangeWeek : ""}</div>
+        </span>
+        <span style={Object.assign({}, mno, { fontSize: 13, color: C.violet, flexShrink: 0 })}>▸</span>
+      </button>
+    </Card>);
+}
+
 function Session(props) {
-  const { macro, week, day, isCurrent, done, setDone, log, setLog, maxes, bw, ready, setReady, sparPrev, sparThis, setSparThis, swapped, setSwapped, box, setBox, note, setNote, openProto, startTimer, openPlates, onSetMax, autoRest, openFlow, goIron, weekStats, addBody, calis, setCalis, taper, rangeWeek, openHome, openRangeTests } = props;
+  const { macro, week, day, isCurrent, done, setDone, log, setLog, maxes, bw, ready, setReady, sparPrev, sparThis, setSparThis, swapped, setSwapped, box, setBox, note, setNote, openProto, startTimer, openPlates, onSetMax, autoRest, openFlow, goIron, weekStats, addBody, calis, setCalis, taper, rangeWeek, openHome, openRangeTests, campLabel } = props;
   const rx = rxFor(week), P = PH[rx.ph];
   const [open, setOpen] = useState(null);
   if (rx.hell) return (
@@ -1062,26 +1121,44 @@ function Session(props) {
       <Note c={C.chalk}>This week replaces the program; it doesn't stack on top. One flagship test per day, drawn from the cards each morning. Day 6 last.</Note>
       <Btn on={goIron} c={C.oxide} fill s={{ width: "100%", marginTop: 12 }}>GO TO HELL WEEK</Btn>
     </Card>);
-  if (day === "sat" && rx.test) return <TestDay macro={macro} week={week} day={day} done={done} setDone={setDone} log={log} setLog={setLog} maxes={maxes} onSetMax={onSetMax} bw={bw} addBody={addBody} />;
-  if (sleepDay(day)) {
+  if (!MODE.camp && day === "sat" && rx.test) return <TestDay macro={macro} week={week} day={day} done={done} setDone={setDone} log={log} setLog={setLog} maxes={maxes} onSetMax={onSetMax} bw={bw} addBody={addBody} />;
+  if (MODE.camp && !sessFor(day, rx)) {
+    const bl = campBlank(day, rx, campLabel ? campLabel(day) : "");
+    return (
+      <div>
+        <Card ac={bl.c}>
+          <Eye c={bl.c}>{DSH[day]}{campLabel ? " " + campLabel(day) : ""} · camp week {week}</Eye>
+          <div style={Object.assign({}, dsp, { fontSize: 30, fontWeight: 800, letterSpacing: 1.4, color: C.chalk, lineHeight: 1.05 })}>{bl.h}</div>
+          {bl.l.map((x, i) => <Note key={i} c={i ? C.ash : C.chalk}>{x}</Note>)}
+        </Card>
+        <HomeLine rangeWeek={rangeWeek} openHome={openHome} openProto={openProto} taper={!!rx.tp} />
+        <Card>
+          <Eye>Session notes</Eye>
+          <textarea value={note || ""} onChange={(e) => setNote(e.target.value)} placeholder="How the week is landing."
+            style={Object.assign({}, bdy, { width: "100%", minHeight: 64, background: C.ink, border: "1px solid " + C.line, borderRadius: 4, color: C.chalk, fontSize: 13, padding: 9, resize: "vertical" })} />
+        </Card>
+      </div>);
+  }
+  if (sleepDay(day, rx)) {
     const isFri = day === "fri";
+    const FR = MODE.camp ? CS.fri : S.fri;
     return (
       <div>
         <Card ac={C.moss}>
-          <Eye c={C.moss}>{DSH[day]} · week {week}</Eye>
+          <Eye c={C.moss}>{DSH[day]}{campLabel ? " " + campLabel(day) : ""} · week {week}</Eye>
           <div style={Object.assign({}, dsp, { fontSize: 34, fontWeight: 800, letterSpacing: 1.6, color: C.chalk, lineHeight: 1 })}>SLEEP</div>
-          <div style={Object.assign({}, bdy, { fontSize: 15, color: C.chalk, marginTop: 8, fontWeight: 600 })}>{isFri ? "No alarm. Tomorrow is the biggest session of the week, and the best thing you can do for it is not get up at half three." : "No alarm. Camp mode: boxing owns the evenings, so this morning is sleep."}</div>
+          <div style={Object.assign({}, bdy, { fontSize: 15, color: C.chalk, marginTop: 8, fontWeight: 600 })}>{FR.intro}</div>
           <Chip c={C.moss} s={{ marginTop: 12, display: "inline-block" }}>No session today</Chip>
-          {isFri ? <Note>{S.fri.sleepWhy}</Note> : <Note>Camp week: four sessions, about four hours. Maximal strength, the power doses, the tendon block, the neck, the Nordics and the trunk are what boxing never covers. Those stay, and they get protected.</Note>}
-          {isFri ? <Note c={C.brass} bold>{S.fri.safeguard}</Note> : null}
-          {isFri ? <Note c={C.chalk}>{S.fri.sleepFood}</Note> : null}
+          <Note>{FR.sleepWhy}</Note>
+          <Note c={C.brass} bold>{FR.safeguard}</Note>
+          <Note c={C.chalk}>{FR.sleepFood}</Note>
           <div style={Object.assign({}, mno, { fontSize: 9.5, color: C.brass, marginTop: 12, letterSpacing: 1 })}>{isFri ? "FRIDAY'S EXTRA HOUR OF SLEEP IS COUNTED AS TRAINING, BECAUSE IT IS." : "REST IS THE SESSION."}</div>
         </Card>
         <Card ac={C.violet} s={{ padding: 0 }}>
           <button onClick={() => (openHome ? openHome() : openProto("HOME"))} style={{ display: "flex", width: "100%", alignItems: "center", gap: 11, textAlign: "left", background: "transparent", border: "none", padding: "14px 13px", cursor: "pointer", minHeight: 44 }}>
             <span style={{ flex: 1, minWidth: 0 }}>
               <div style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1.3, color: C.chalk })}>TONIGHT: {rangeTitle(rangeWeek)} · {rangeMins(rangeWeek)} MIN</div>
-              <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.ash, marginTop: 4, lineHeight: 1.45 })}>{rangeLine(rangeWeek)}{isFri ? " Friday's extra stretch is folded into it, and there's no skill block." : ""}</div>
+              <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.ash, marginTop: 4, lineHeight: 1.45 })}>{rangeLine(rangeWeek)}{isFri ? (MODE.camp ? " Friday evening: RANGE only, no block after it." : " Friday's extra stretch is folded into it, and there's no skill block.") : ""}</div>
               <div style={Object.assign({}, mno, { fontSize: 9, color: C.violet, marginTop: 5, letterSpacing: 1 })}>TAP FOR THE HOME BLOCK</div>
             </span>
             <span style={Object.assign({}, mno, { fontSize: 13, color: C.violet, flexShrink: 0 })}>▸</span>
@@ -1094,8 +1171,8 @@ function Session(props) {
         </Card>
       </div>);
   }
-  const own = S[day], srcDay = swapped ? "light" : day, sess = S[srcDay];
-  const camp = campFor(srcDay);
+  const srcDay = MODE.camp ? day : swapped ? "light" : day;
+  const own = sessFor(day, rx), sess = sessFor(srcDay, rx);
   const blocks = blocksFor(srcDay, rx), real = blocks.filter((x) => x.L);
   const dk = dayKey(macro, week, day), dl = done[dk] || [];
   const pct = real.length ? Math.round(dl.length / real.length * 100) : 0;
@@ -1114,22 +1191,27 @@ function Session(props) {
             <span style={Object.assign({}, dsp, { fontSize: 28, fontWeight: 800, letterSpacing: 1.6, color: C.chalk, lineHeight: 1 })}>{own.n}</span>
             <span style={Object.assign({}, mno, { fontSize: 10.5, color: own.ac, whiteSpace: "nowrap" })}>{mins} MIN{own.pm ? " · PM" : ""}</span>
           </div>
-          <div style={Object.assign({}, bdy, { fontSize: 14, color: C.chalk, marginTop: 5, fontWeight: 600 })}>{swapped ? "Light session (sparring rule)" : camp ? camp.t : sess.t}</div>
+          <div style={Object.assign({}, bdy, { fontSize: 14, color: C.chalk, marginTop: 5, fontWeight: 600 })}>{swapped && !MODE.camp ? "Light session (sparring rule)" : sess.t}</div>
           <div style={{ display: "flex", gap: 6, marginTop: 8, flexWrap: "wrap" }}>
-            <Chip c={P.ac}>M{macro} · WK {week} · {P.n}</Chip>
-            {camp ? <Chip c={C.oxide}>Camp mode</Chip> : null}
+            {MODE.camp
+              ? <Chip c={P.ac}>CAMP · WK {week} · {P.n}</Chip>
+              : <Chip c={P.ac}>M{macro} · WK {week} · {P.n}</Chip>}
+            {MODE.camp && campLabel ? <Chip c={C.brass}>{DSH[day]} {campLabel(day)}</Chip> : null}
+            {MODE.camp && rx.fork ? <Chip c={C.violet}>{rx.fork === "fight" ? "Fight confirmed" : "No fight — test week"}</Chip> : null}
+            {MODE.camp && rx.sauna ? <Chip c={C.oxide}>Sauna week</Chip> : null}
             {rx.lastTen ? <Chip c={C.oxide}>Last ten days</Chip> : null}
             {own.free ? <Chip c={C.moss}>Free day</Chip> : <Chip c={C.brass}>3am session</Chip>}
-            {rx.maxSq && day === "sat" ? <Chip c={C.oxide}>Squat max single</Chip> : null}
-            {rx.maxBe && day === "sun" ? <Chip c={C.oxide}>Bench max single</Chip> : null}
-            {rx.dl ? <Chip c={C.moss}>Deload</Chip> : null}{rx.tp ? <Chip c={C.cobalt}>Taper</Chip> : null}{rx.cal && (day === "wed" || day === "sat") ? <Chip c={C.brass}>Calibration</Chip> : null}
+            {!MODE.camp && rx.maxSq && day === "sat" ? <Chip c={C.oxide}>Squat max single</Chip> : null}
+            {!MODE.camp && rx.maxBe && day === "sun" ? <Chip c={C.oxide}>Bench max single</Chip> : null}
+            {rx.dl ? <Chip c={C.moss}>{MODE.camp ? "Easy week" : "Deload"}</Chip> : null}{rx.tp ? <Chip c={C.cobalt}>Taper</Chip> : null}{!MODE.camp && rx.cal && (day === "wed" || day === "sat") ? <Chip c={C.brass}>Calibration</Chip> : null}
           </div>
           {sess.intro ? <Note c={C.ash}>{sess.intro}</Note> : null}
-          {camp && camp.note ? <Note c={C.oxide} bold>CAMP MODE · {camp.note}</Note> : null}
+          {MODE.camp && rx.reset ? <Note c={C.brass} bold>RESET WEEK · the working weights reset: a set of 3 that's hard but leaves two in you, on the trap bar (Wednesday) and the squat (Saturday). That triple is the new working weight.</Note> : null}
+          {MODE.camp && rx.confirm ? <Note c={C.brass} bold>WEEK 1 · confirm every working weight with a set of 5 that's hard but leaves two in you. {WORKING_WEIGHT_RULE}</Note> : null}
           {rx.lastTen ? <Note c={C.oxide} bold>THE LAST TEN DAYS · {LASTTEN_INTRO}</Note> : null}
         </div>
 
-        {sparPrev ? (
+        {sparPrev && !MODE.camp ? (
           <div style={{ background: C.ink, borderTop: "1px solid " + C.oxide, borderBottom: "1px solid " + C.oxide, padding: "11px 14px" }}>
             <Eye c={C.oxide} s={{ marginBottom: 4 }}>The sparring rule</Eye>
             <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, lineHeight: 1.5 })}>You sparred last night. The morning is the light session — Tuesday's warm-up, Thursday's neck block, Monday's shoulder circuit, about 30 minutes — or nothing. Any headache, fogginess or light sensitivity: do nothing at all, and tell your coach.</div>
@@ -1139,11 +1221,13 @@ function Session(props) {
           </div>) : null}
 
         <div style={{ padding: "12px 14px 14px" }}>
-          <Eye s={{ marginBottom: 6 }}>Readiness — sets today's loads</Eye>
+          <Eye s={{ marginBottom: 6 }}>{MODE.camp ? "The daily check — before every session, and it governs the camp" : "Readiness — sets today's loads"}</Eye>
+          {MODE.camp ? <div style={{ marginBottom: 8 }}>{CAMP_DAILY_CHECK.q.map((q, i) => <div key={i} style={Object.assign({}, bdy, { fontSize: 12, color: C.ash, lineHeight: 1.45, padding: "2px 0" })}>{i + 1}. {q}</div>)}</div> : null}
           <Seg opts={[["G", "GREEN", C.moss], ["Y", "YELLOW −7%", C.brass], ["R", "RED", C.oxide]]} val={ready} on={(val) => setReady(ready === val ? "" : val)} />
-          {ready === "Y" ? <Note c={C.brass}>Top sets reduced 7%. Sprints become 3 × 20m @ 90%. Drop the last accessory block.</Note> : null}
-          {ready === "R" ? <Note c={C.oxide}>No max effort, no sprints, no jumps today. Prep, protocols, mobility — then stop.</Note> : null}
-          {own.box ? (
+          {ready === "Y" ? <Note c={C.brass}>{MODE.camp ? CAMP_DAILY_CHECK.yellow : "Top sets reduced 7%. Sprints become 3 × 20m @ 90%. Drop the last accessory block."}</Note> : null}
+          {ready === "R" ? <Note c={C.oxide}>{MODE.camp ? CAMP_DAILY_CHECK.red : "No max effort, no sprints, no jumps today. Prep, protocols, mobility — then stop."}</Note> : null}
+          {!ready && MODE.camp ? <Note>{CAMP_DAILY_CHECK.green}</Note> : null}
+          {own.box && !MODE.camp ? (
             <div style={{ marginTop: 12 }}>
               <Eye s={{ marginBottom: 6 }}>Tonight at boxing</Eye>
               <div style={{ display: "flex", gap: 6 }}>
@@ -1186,34 +1270,28 @@ function Session(props) {
           </Card>);
       })}
 
-      {day === "sat" || day === "sun" ? (() => {
+      {(MODE.camp ? (day === "sun" && !!rx.sim) : (day === "sat" || day === "sun")) ? (() => {
+        const EH = MODE.camp ? CAMP_EASY_HOUR : EASY_HOUR;
         const ek = "m" + macro + "w" + week + "-easyhour", ev = log[ek] || {}, ok = !!ev.ok;
         return (
           <Card ac={ok ? C.moss : C.moss} s={{ padding: 0 }}>
             <div style={{ padding: "12px 13px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
-                <span style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1.3, color: C.chalk })}>{EASY_HOUR.n}</span>
-                <span style={Object.assign({}, mno, { fontSize: 9, color: C.moss, letterSpacing: 1, textAlign: "right" })}>{EASY_HOUR.tag}</span>
+                <span style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1.3, color: C.chalk })}>{EH.n}</span>
+                <span style={Object.assign({}, mno, { fontSize: 9, color: C.moss, letterSpacing: 1, textAlign: "right" })}>{EH.tag}</span>
               </div>
-              <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, marginTop: 5, lineHeight: 1.45 })}>{EASY_HOUR.s}</div>
-              <Note>{EASY_HOUR.why}</Note>
+              <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, marginTop: 5, lineHeight: 1.45 })}>{EH.s}</div>
+              <Note>{EH.why}</Note>
+              {MODE.camp && rx.sauna ? <Note c={C.oxide} bold>{SAUNA_LINE}</Note> : null}
               <button onClick={() => { const n = Object.assign({}, log); n[ek] = { ok: !ok, d: ok ? null : day }; setLog(n); buzz(20); }}
                 aria-label="The easy hour"
                 style={Object.assign({}, dsp, { marginTop: 10, width: "100%", minHeight: 44, fontSize: 13, fontWeight: 700, letterSpacing: 1, borderRadius: 5, cursor: "pointer", background: ok ? C.moss : "transparent", color: ok ? C.ink : C.ash, border: "1px solid " + (ok ? C.moss : C.line) })}>
-                {ok ? "✓ DONE THIS WEEKEND" + (ev.d && ev.d !== day ? " · " + DSH[ev.d] : "") : "MARK DONE"}
+                {ok ? (MODE.camp ? "✓ DONE" : "✓ DONE THIS WEEKEND") + (ev.d && ev.d !== day ? " · " + DSH[ev.d] : "") : "MARK DONE"}
               </button>
             </div>
           </Card>); })() : null}
 
-      <Card ac={C.violet} s={{ padding: 0 }}>
-        <button onClick={() => (openHome ? openHome() : openProto("HOME"))} style={{ display: "flex", width: "100%", alignItems: "center", gap: 11, textAlign: "left", background: "transparent", border: "none", padding: "12px 13px", cursor: "pointer", minHeight: 44 }}>
-          <span style={{ flex: 1, minWidth: 0 }}>
-            <div style={Object.assign({}, bdy, { fontSize: 13.5, fontWeight: 600, color: C.chalk, lineHeight: 1.4 })}>{HOMELINE}</div>
-            <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, marginTop: 3, letterSpacing: 1 })}>TAP FOR THE HOME BLOCK</div>
-          </span>
-          <span style={Object.assign({}, mno, { fontSize: 13, color: C.violet, flexShrink: 0 })}>▸</span>
-        </button>
-      </Card>
+      <HomeLine rangeWeek={rangeWeek} openHome={openHome} openProto={openProto} taper={!!rx.tp} />
 
       <Card>
         <Eye>Session notes</Eye>
@@ -1228,7 +1306,7 @@ function Session(props) {
    ================================================================ */
 function Flow(props) {
   const { macro, week, day, done, setDone, swapped, sparPrev, ready, close } = props;
-  const rx = rxFor(week), srcDay = swapped ? "light" : day, own = S[day];
+  const rx = rxFor(week), srcDay = MODE.camp ? day : swapped ? "light" : day, own = sessFor(day, rx) || S[day];
   const real = realBlocks(srcDay, rx);
   const dk = dayKey(macro, week, day), dl = done[dk] || [];
   const [i, setI] = useState(() => { const f = real.findIndex((x) => dl.indexOf(x.L) < 0); return f < 0 ? 0 : f; });
@@ -1313,9 +1391,11 @@ function TestDay({ macro, week, day, done, setDone, log, setLog, maxes, onSetMax
 /* ================================================================
    WEEK — the map, and where you are on it
    ================================================================ */
-function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDoneMap }) {
+function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDoneMap, campStart, fight }) {
   const { macro, week } = view; const rx = rxFor(week), P = PH[rx.ph];
-  const move = (d) => { let w = week + d, m = macro; if (w < 1) { if (m <= 1) return; m -= 1; w = L; } if (w > L) { m += 1; w = 1; } setView({ macro: m, week: w }); };
+  const move = (d) => { let w = week + d, m = macro;
+    if (MODE.camp) { if (w < 1 || w > L) return; setView({ macro, week: w }); return; }
+    if (w < 1) { if (m <= 1) return; m -= 1; w = L; } if (w > L) { m += 1; w = 1; } setView({ macro: m, week: w }); };
   const isCur = current.macro === macro && current.week === week;
   const wks = Array.from({ length: L }, (_, i) => i + 1);
   const Row = ({ k, val }) => <div style={{ display: "flex", justifyContent: "space-between", gap: 10, padding: "7px 0", borderBottom: "1px solid " + C.line }}>
@@ -1327,21 +1407,22 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <Btn on={() => move(-1)} c={C.ash} small s={{ minWidth: 48 }}>◀</Btn>
           <span style={{ textAlign: "center" }}>
-            <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, letterSpacing: 1.4 })}>MACROCYCLE {macro}</div>
-            <div style={Object.assign({}, dsp, { fontSize: 34, fontWeight: 800, letterSpacing: 1, color: C.chalk, lineHeight: 1.05 })}>WEEK {week}</div>
+            <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, letterSpacing: 1.4 })}>{MODE.camp ? "CAMP · " + campDatesLabel(campStart, week) : "MACROCYCLE " + macro}</div>
+            <div style={Object.assign({}, dsp, { fontSize: 34, fontWeight: 800, letterSpacing: 1, color: C.chalk, lineHeight: 1.05 })}>WEEK {week}{MODE.camp ? " / 12" : ""}</div>
             <div style={Object.assign({}, dsp, { fontSize: 16, fontWeight: 700, color: P.ac, marginTop: 3, letterSpacing: 1.4 })}>{P.long}</div>
           </span>
           <Btn on={() => move(1)} c={C.brass} small s={{ minWidth: 48 }}>▶</Btn>
         </div>
         <div style={{ display: "flex", gap: 2, marginTop: 14 }}>
           {wks.map((n) => { const r = rxFor(n), ph = PH[r.ph]; const sel = n === week; const dn = weekDoneMap && weekDoneMap[n];
-            return <div key={n} onClick={() => setView({ macro, week: n })} style={{ flex: 1, height: 30, borderRadius: 3, cursor: "pointer", background: sel ? ph.ac : (r.hell ? "rgba(194,78,51,.35)" : r.dl || r.reload ? "rgba(102,132,90,.35)" : r.test ? "rgba(79,132,168,.45)" : (r.maxSq ? "rgba(210,160,71,.35)" : "rgba(138,149,158,.13)")), border: sel ? "none" : "1px solid " + C.line, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2 }}>
+            return <div key={n} onClick={() => setView({ macro, week: n })} style={{ flex: 1, height: 30, borderRadius: 3, cursor: "pointer", background: sel ? ph.ac : (r.hell ? "rgba(194,78,51,.35)" : r.dl || r.reload ? "rgba(102,132,90,.35)" : r.test || r.tp ? "rgba(79,132,168,.45)" : (r.maxSq ? "rgba(210,160,71,.35)" : "rgba(138,149,158,.13)")), border: sel ? "none" : "1px solid " + C.line, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2 }}>
               <span style={Object.assign({}, mno, { fontSize: 7, color: sel ? C.ink : C.ash })}>{n}</span>
               {dn != null ? <span style={{ width: 4, height: 4, borderRadius: 2, background: dn >= 1 ? C.moss : dn > 0 ? C.brass : "transparent" }} /> : null}
             </div>; })}
         </div>
         <div style={{ display: "flex", gap: 9, marginTop: 7, flexWrap: "wrap" }}>
-          {[["MAX SINGLE", "rgba(210,160,71,.6)"], ["DELOAD", "rgba(102,132,90,.6)"], ["TEST", "rgba(79,132,168,.7)"]].concat(L > 16 ? [["HELL WEEK", "rgba(194,78,51,.6)"]] : []).map((x) =>
+          {(MODE.camp ? [["EASY + TESTS", "rgba(102,132,90,.6)"], ["THE FORK / FIGHT WEEK", "rgba(79,132,168,.7)"]]
+            : [["MAX SINGLE", "rgba(210,160,71,.6)"], ["DELOAD", "rgba(102,132,90,.6)"], ["TEST", "rgba(79,132,168,.7)"]].concat(L > 16 ? [["HELL WEEK", "rgba(194,78,51,.6)"]] : [])).map((x) =>
             <span key={x[0]} style={Object.assign({}, mno, { fontSize: 8, color: C.ash, display: "flex", alignItems: "center", gap: 4 })}><span style={{ width: 9, height: 9, borderRadius: 2, background: x[1], display: "inline-block" }} />{x[0]}</span>)}
         </div>
         {isCur ? <Chip c={C.moss} s={{ marginTop: 12, display: "inline-block" }}>This is the current week</Chip>
@@ -1349,21 +1430,16 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
         <Note>{P.note}</Note>
       </Card>
 
-      {MODE.camp || MODE.lastTen ? (
+      {MODE.camp ? <CampWeekTable start={campStart} week={week} setWeek={(w) => setView({ macro, week: w })} fight={fight} /> : null}
+      {MODE.camp ? <CampWeekCard start={campStart} rx={rx} /> : null}
+      {MODE.camp && fight && week >= 11 ? <FightWeekTable start={campStart} /> : null}
+      {MODE.lastTen ? (
         <Card ac={C.oxide}>
-          <Eye c={C.oxide}>{MODE.lastTen ? "The last ten days before a fight" : "Camp mode — when boxing returns"}</Eye>
-          <Note c={C.chalk} s={{ marginTop: 0 }}>{MODE.lastTen ? LASTTEN_INTRO : CAMP_INTRO}</Note>
-          <div style={{ marginTop: 10 }}>
-            {DAYS.map((d) => { const cd = CAMP[d];
-              return <div key={d} style={{ display: "flex", justifyContent: "space-between", gap: 10, padding: "7px 0", borderBottom: "1px solid " + C.line }}>
-                <span style={Object.assign({}, bdy, { fontSize: 12.5, fontWeight: 600, color: cd.sleep ? C.moss : C.chalk, flexShrink: 0, width: 42 })}>{DSH[d]}</span>
-                <span style={Object.assign({}, bdy, { fontSize: 12, color: C.ash, flex: 1, lineHeight: 1.4 })}>{cd.sleep ? "SLEEP" : cd.t}</span>
-                <span style={Object.assign({}, mno, { fontSize: 9.5, color: C.brass, flexShrink: 0 })}>{cd.sleep ? "—" : "~" + cd.m + "m"}</span>
-              </div>; })}
-          </div>
-          <Note>Coming back to base: the week after a fight, or the week boxing drops back to two nights, this page closes, the full week reopens at an easy-week loading, and the count continues from wherever you were.</Note>
+          <Eye c={C.oxide}>The last ten days before a fight</Eye>
+          <Note c={C.chalk} s={{ marginTop: 0 }}>{LASTTEN_INTRO}</Note>
         </Card>) : null}
 
+      {MODE.camp ? null : (
       <Card ac={C.brass}>
         <Eye c={C.brass}>What this week actually is</Eye>
         {rx.hell ? <Note c={C.chalk}>Hell Week. Six flagship tests, one a day. No Optimal 8 volume — the IRON tab runs this week.</Note> : (
@@ -1391,19 +1467,23 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
             {rx.mid ? <Note c={C.oxide} bold>Mid-check. Not your real numbers — you are fatigued. A direction check.</Note> : null}
             {rx.dl ? <Note c={C.moss} bold>Deload. Sprints and jumps stay in at reduced volume — the 5-day residual doesn't pause.</Note> : null}
           </div>)}
-      </Card>
+      </Card>)}
 
-      {DAYS.map((d) => { const dk = dayKey(macro, week, d); const n = (done[dk] || []).length; const tot = rx.hell ? 0 : (d === "sat" && rx.test ? 1 : realBlocks(d, rx).length); const full = tot > 0 && n >= tot;
-        const sl = sleepDay(d), camp = campFor(d);
+      {DAYS.map((d, di) => { const dk = dayKey(macro, week, d); const n = (done[dk] || []).length;
+        const sess = sessFor(d, rx);
+        const tot = rx.hell ? 0 : (!MODE.camp && d === "sat" && rx.test ? 1 : realBlocks(d, rx).length); const full = tot > 0 && n >= tot;
+        const sl = sleepDay(d, rx);
+        const blank = MODE.camp && !sess;
+        const ac = sess ? sess.ac : C.ash;
         return (
-          <Card key={d} ac={full ? C.moss : sl ? C.moss : S[d].ac} s={{ padding: 0, opacity: rx.hell ? .4 : 1 }}>
+          <Card key={d} ac={full ? C.moss : sl ? C.moss : ac} s={{ padding: 0, opacity: rx.hell ? .4 : blank ? .65 : 1 }}>
             <button onClick={() => openDay(d)} style={{ display: "flex", width: "100%", alignItems: "center", gap: 12, textAlign: "left", background: "transparent", border: "none", padding: "11px 13px", cursor: "pointer", minHeight: 44 }}>
               <span style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-                  <span style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 700, letterSpacing: 1.2, color: C.chalk })}>{S[d].n}{S[d].pm ? " · PM" : ""}</span>
-                  <span style={Object.assign({}, mno, { fontSize: 9.5, color: sl ? C.moss : S[d].ac })}>{rx.hell || sl ? "—" : d === "sat" && rx.test ? "TEST DAY" : (camp ? camp.m : v(S[d].m, rx)) + " MIN"}</span>
+                  <span style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 700, letterSpacing: 1.2, color: C.chalk })}>{(sess ? sess.n : DSH[d])}{MODE.camp ? " · " + campDayLabel(campStart, week, di) : ""}{sess && sess.pm ? " · PM" : ""}</span>
+                  <span style={Object.assign({}, mno, { fontSize: 9.5, color: sl ? C.moss : ac })}>{rx.hell || sl || blank ? "—" : !MODE.camp && d === "sat" && rx.test ? "TEST DAY" : v(sess.m, rx) + " MIN"}</span>
                 </div>
-                <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.ash, marginTop: 3 })}>{sl ? "SLEEP. No alarm." + (d === "fri" ? " Full stretch at home in the evening." : "") : d === "sat" && rx.test ? "Sprint · jump · throws · squat · bench · pull · tape" : camp ? camp.t : S[d].t}</div>
+                <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.ash, marginTop: 3 })}>{sl ? "SLEEP. No alarm." + (d === "fri" ? " RANGE at home in the evening." : "") : blank ? campBlank(d, rx, "").h : !MODE.camp && d === "sat" && rx.test ? "Sprint · jump · throws · squat · bench · pull · tape" : sess.t}</div>
               </span>
               <span style={Object.assign({}, mno, { fontSize: 10, color: full ? C.moss : n ? C.brass : C.ash, flexShrink: 0 })}>{tot ? n + "/" + tot : ""}</span>
             </button>
@@ -1434,8 +1514,8 @@ function Bars({ data, unit, color }) {
     </div>);
 }
 
-function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L, IM, calis, camp, rangeWeeks, rangeGet }) {
-  const [sub, setSub] = useState("numbers");
+function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L, IM, calis, camp, rangeWeeks, rangeGet, campStart, fight }) {
+  const [sub, setSub] = useState(camp ? "camp" : "numbers");
   const [edit, setEdit] = useState({});
   const [tape, setTape] = useState({});
   const macro = current.macro;
@@ -1445,9 +1525,12 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
   return (
     <div>
       <div style={{ display: "flex", gap: 5, marginBottom: 12 }}>
-        {[["numbers", "NUMBERS"], ["progress", "PROGRESS"], ["body", "BODY"], ["calis", "CALIS"], ["range", "RANGE"], ["iron", "IRON MIND"]].map((x) => <button key={x[0]} onClick={() => setSub(x[0])}
+        {(camp ? [["camp", "CAMP"], ["numbers", "MAXES"], ["body", "BODY"], ["calis", "CALIS"], ["range", "RANGE"], ["iron", "IRON MIND"]]
+          : [["numbers", "NUMBERS"], ["progress", "PROGRESS"], ["body", "BODY"], ["calis", "CALIS"], ["range", "RANGE"], ["iron", "IRON MIND"]]).map((x) => <button key={x[0]} onClick={() => setSub(x[0])}
           style={Object.assign({}, dsp, { flex: 1, fontSize: 9.5, fontWeight: 700, letterSpacing: .3, padding: "11px 1px", borderRadius: 4, cursor: "pointer", minHeight: 44, background: sub === x[0] ? C.brass : "transparent", color: sub === x[0] ? C.ink : C.ash, border: "1px solid " + (sub === x[0] ? C.brass : C.line) })}>{x[1]}</button>)}
       </div>
+
+      {sub === "camp" ? <CampNumbers start={campStart} fight={fight} log={log} maxes={maxes} onSetMax={onSetMax} /> : null}
 
       {sub === "numbers" ? (
         <div>
@@ -1472,6 +1555,8 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
             })}
             <Note>Squat and bench: your best single. Trap bar and push press: week 1 finds them (hard triple × 1.08), or enter one here.</Note>
           </Card>
+          {camp ? <Note c={C.ash} s={{ fontStyle: "italic" }}>Camp Mode is on: the camp loads from working weights, not these. Your maxes wait here, untouched, until the switch goes off.</Note> : null}
+          {camp ? null : (
           <Card ac={C.cobalt}>
             <Eye c={C.cobalt}>Fight-sim fade — scored weeks 4, 9 and 14</Eye>
             {[4, 9, 14].map((w) => { const f = fade(macro, w);
@@ -1479,7 +1564,7 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
                 <span style={Object.assign({}, bdy, { fontSize: 13, color: C.chalk })}>Week {w}</span>
                 <span style={Object.assign({}, mno, { fontSize: 13, fontWeight: 700, color: f == null ? C.ash : f <= 5 ? C.moss : f <= 10 ? C.brass : C.oxide })}>{f == null ? "—" : f.toFixed(1) + "% drop"}</span></div>; })}
             <Note>Round 6 against round 1. Under 5% is excellent, under 10% is the standard. The whole game is pushing it toward zero.</Note>
-          </Card>
+          </Card>)}
         </div>) : null}
 
       {sub === "progress" ? (
@@ -1514,7 +1599,7 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
                 return (
                   <div key={w} style={{ display: "flex", alignItems: "center", gap: 4 }}>
                     <span style={Object.assign({}, mno, { fontSize: 7.5, color: C.ash, width: 20 })}>{w}</span>
-                    {DAYS.map((d) => { const dk = dayKey(macro, w, d); const n = (done[dk] || []).length; const tot = rx.hell ? 0 : (d === "sat" && rx.test ? 1 : realBlocks(d, rx).length);
+                    {DAYS.map((d) => { const dk = dayKey(macro, w, d); const n = (done[dk] || []).length; const tot = rx.hell ? 0 : (!MODE.camp && d === "sat" && rx.test ? 1 : realBlocks(d, rx).length);
                       const f = tot ? n / tot : 0;
                       return <div key={d} style={{ flex: 1, height: 12, borderRadius: 2, background: tot === 0 ? "transparent" : f >= 1 ? C.moss : f > 0 ? "rgba(210,160,71,.55)" : C.card, border: "1px solid " + C.line }} />; })}
                   </div>);
@@ -1563,7 +1648,7 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
           <Card ac={C.brass}>
             <Eye c={C.brass}>Calisthenics — where each line stands</Eye>
             <Note c={C.chalk} s={{ marginTop: 0 }}>{CALIS_INTRO}</Note>
-            {camp ? <Note c={C.oxide} bold>{MODE_LINE.camp}</Note> : null}
+            {camp ? <Note c={C.oxide} bold>CAMP MODE — the five lines run at your current levels in the same slots: ring rows Monday, ring dips and the muscle-up line Wednesday, the pistol line Tuesday, the L-sit and the tuck front lever Sunday. Half the sets in week 6, holds only from week 11. The handstand and the planche leans are not on the camp's clock.</Note> : null}
           </Card>
           {LINES.map((ln) => { const lev = curLevel(calis, ln.id); const own = ownedDate(calis, ln.id, lev.i);
             const hist = (calis && calis.owned && calis.owned[ln.id]) || {};
@@ -1593,17 +1678,17 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
 /* ================================================================
    PLAN — both documents, read offline, with a table of contents
    ================================================================ */
-function PlanView() {
-  const [doc, setDoc] = useState("fighter");
+function PlanView({ camp }) {
+  const [doc, setDoc] = useState(camp ? "camp" : "fighter");
   return (
     <div>
       <div style={{ display: "flex", gap: 5, marginBottom: 12 }}>
-        {[["fighter", "FIGHTER v1.5", C.oxide], ["iron", "IRON MIND v4.2", C.violet]].map((x) => (
+        {[["camp", "CAMP", C.brass], ["fighter", "FIGHTER v1.5", C.oxide], ["iron", "IRON MIND v4.2", C.violet]].map((x) => (
           <button key={x[0]} onClick={() => setDoc(x[0])}
-            style={Object.assign({}, dsp, { flex: 1, fontSize: 12, fontWeight: 700, letterSpacing: 1, padding: "11px 0", borderRadius: 4, cursor: "pointer", minHeight: 44, background: doc === x[0] ? x[2] : "transparent", color: doc === x[0] ? C.ink : C.ash, border: "1px solid " + (doc === x[0] ? x[2] : C.line) })}>{x[1]}</button>))}
+            style={Object.assign({}, dsp, { flex: 1, fontSize: 11, fontWeight: 700, letterSpacing: .8, padding: "11px 0", borderRadius: 4, cursor: "pointer", minHeight: 44, background: doc === x[0] ? x[2] : "transparent", color: doc === x[0] ? C.ink : C.ash, border: "1px solid " + (doc === x[0] ? x[2] : C.line) })}>{x[1]}</button>))}
       </div>
-      <Note s={{ marginTop: 0, marginBottom: 10 }}>Both documents in full, on the phone, with no signal. Everything the app runs comes off these pages.</Note>
-      {doc === "fighter" ? <DocView md={fighterDoc} accent={C.oxide} /> : <DocView md={ironMindDoc} accent={C.violet} />}
+      <Note s={{ marginTop: 0, marginBottom: 10 }}>All three documents in full, on the phone, with no signal. Everything the app runs comes off these pages.</Note>
+      {doc === "camp" ? <DocView md={campDoc} accent={C.brass} /> : doc === "fighter" ? <DocView md={fighterDoc} accent={C.oxide} /> : <DocView md={ironMindDoc} accent={C.violet} />}
     </div>);
 }
 
@@ -1620,7 +1705,7 @@ const Toggle = ({ on, set, n, s, c }) => (
     </span>
   </div>);
 
-function Settings({ st, setSt, current, L, exportData, importData, close, IM, calis, setCalis }) {
+function Settings({ st, setSt, current, L, exportData, importData, close, IM, calis, setCalis, campWeek }) {
   const [io, setIo] = useState(""); const [showIo, setShowIo] = useState(false); const [confirm, setConfirm] = useState(false);
   const [msg, setMsg] = useState(""); const fileRef = useRef(null);
   const upd = (patch) => setSt(Object.assign({}, st, patch));
@@ -1631,10 +1716,10 @@ function Settings({ st, setSt, current, L, exportData, importData, close, IM, ca
           <span style={Object.assign({}, dsp, { fontSize: 20, fontWeight: 800, letterSpacing: 1.4, color: C.chalk })}>SETTINGS</span>
           <Btn on={close} c={C.ash} small s={{ minWidth: 44, minHeight: 44 }}>CLOSE</Btn>
         </div>
-        <Eye>Schedule</Eye>
+        <Eye>Schedule — Optimal 8 Fighter</Eye>
         <Lab>Monday of week 1, macrocycle {st.macroBase}</Lab>
         <Fld type="date" v={st.start} on={(val) => { if (val) upd({ start: iso(mondayOf(parseISO(val))) }); }} a="left" />
-        <Note>Today reads as <span style={{ color: C.brass }}>macro {current.macro} · week {current.week}</span>. If that's wrong, open the WEEK tab, find the right week and tap "make this the current week".</Note>
+        <Note>{st.camp ? "Camp Mode is on, so this is the clock Optimal 8 Fighter comes back to when the switch goes off — it keeps counting underneath." : <span>Today reads as <span style={{ color: C.brass }}>macro {current.macro} · week {current.week}</span>. If that's wrong, open the WEEK tab, find the right week and tap "make this the current week".</span>}</Note>
         <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
         <Eye>Cycle</Eye>
         {[["iron", "Iron Mind weeks 17–18 (Hell Week + Reload)", "On = 18-week cycle. Off = 16 weeks, straight from test day into week 1 of the next cycle."],
@@ -1649,14 +1734,28 @@ function Settings({ st, setSt, current, L, exportData, importData, close, IM, ca
             </span>
           </div>))}
         <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
-        <Eye c={C.oxide}>Camp mode — when boxing returns</Eye>
-        <Toggle on={!!st.camp} set={() => upd({ camp: !st.camp, lastTen: st.camp ? false : st.lastTen })} c={C.oxide}
-          n="CAMP MODE" s="Swaps the week to the camp table: Monday, Wednesday, Thursday and Saturday keep what boxing never covers, Sunday drops the fight sim, and Tuesday and Friday become sleep days. Four sessions, about four hours. RANGE and the morning five stay in camp — they're the cheapest injury insurance you own. Calisthenics goes to the handstand at home only — the rings, the pistols, the L-sits and the slow lane stop." />
-        {st.camp ? <div style={{ paddingLeft: 24 }}>
+        <Eye c={C.brass}>Camp mode — the twelve weeks</Eye>
+        <Toggle on={!!st.camp} set={() => upd({ camp: !st.camp })} c={C.brass}
+          n="CAMP MODE" s="ON, Optimal 8 · Camp runs in place of Optimal 8 Fighter: its own twelve-week table with dates, its own session pages, its own timers, its own tests. OFF, Optimal 8 Fighter is exactly as it was, counting from its own start date. Your maxes, calisthenics levels, RANGE, Iron Mind, your streak and all your history are shared — nothing is lost either way." />
+        {st.camp ? (
+          <div style={{ paddingLeft: 8 }}>
+            <div style={{ padding: "12px 0", borderBottom: "1px solid " + C.line }}>
+              <Lab>Camp day one — the Tuesday week 1 starts on</Lab>
+              <Fld type="date" v={st.campStart || CAMP_START_DEFAULT} on={(val) => { if (val) upd({ campStart: val }); }} a="left" />
+              <Note>Today reads as <span style={{ color: C.brass }}>camp week {campWeek}</span> of twelve. Week 1 starts on a Tuesday: there is no Monday base in week 1. Default: Tuesday 15 September 2026, with the fight on Tuesday 1 December.</Note>
+            </div>
+            <div style={{ padding: "12px 0", borderBottom: "1px solid " + C.line }}>
+              <Lab>Week 11 — the fork, Monday 23 November</Lab>
+              <Seg opts={[["y", "FIGHT CONFIRMED", C.oxide], ["n", "NO FIGHT", C.cobalt]]} val={st.campFight ? "y" : "n"} on={(val) => upd({ campFight: val === "y" })} />
+              <Note>{st.campFight
+                ? "Fight confirmed. Week 11 sharpens — the short retests, the light trap bar, the fight-pace rounds, the speed microdose and the fight-day rehearsal — and week 12 is fight week, with the fight on the Tuesday."
+                : "No fight. Week 11 is the test week and the camp's verdict — the retests, the working-weight resets, the nasal threshold, the timed 20s and the scored simulation — and Optimal 8 Fighter restarts at week 1 on the Monday after it."}</Note>
+            </div>
+            <Note c={C.brass} bold>{CAMP_DAILY_CHECK.red}</Note>
+          </div>) : null}
+        {!st.camp ? (
           <Toggle on={!!st.lastTen} set={() => upd({ lastTen: !st.lastTen })} c={C.oxide}
-            n="THE LAST TEN DAYS BEFORE A FIGHT" s="Week table numbers stop; every lift goes to 2 sets at 70%, fast; no sprints, no depth jumps, no Nordics; the jump circuit becomes box jumps only. The two power doses stay. The last heavy thing you do is nine days out." />
-        </div> : null}
-        {st.camp ? <Note c={C.oxide}>Boxing nights: the head-contact rule is the law. The morning after any sparring is the LIGHT SESSION or nothing.</Note> : null}
+            n="THE LAST TEN DAYS BEFORE A FIGHT" s="Optimal 8 Fighter only. Week table numbers stop; every lift goes to 2 sets at 70%, fast; no sprints, no depth jumps, no Nordics; the jump circuit becomes box jumps only. The two power doses stay. The last heavy thing you do is nine days out." />) : null}
 
         <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
         <Eye c={C.violet}>RANGE — the home block</Eye>
@@ -1670,7 +1769,7 @@ function Settings({ st, setSt, current, L, exportData, importData, close, IM, ca
         <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
         <Eye c={C.brass}>Calisthenics — the lines and the levels</Eye>
         <Note c={C.chalk} s={{ marginTop: 0 }}>{CALIS_INTRO}</Note>
-        {st.camp ? <Note c={C.oxide} bold>{MODE_LINE.camp}</Note> : null}
+        {st.camp ? <Note c={C.brass} bold>CAMP MODE — the five lines run at your current levels in the same slots. Half the sets in week 6, holds only from week 11. The handstand and the planche leans are not on the camp's clock; they stay in your home block as your own call.</Note> : null}
         {LINES.map((ln) => { const lev = curLevel(calis, ln.id); const own = ownedDate(calis, ln.id, lev.i);
           return (
             <div key={ln.id} style={{ padding: "12px 0", borderBottom: "1px solid " + C.line }}>
@@ -2002,7 +2101,8 @@ function HellWeek({ current, maxes, bw, hwLog, setHwLog, L }) {
 const KEYS = { st: "o8s-settings", done: "o8s-done", log: "o8s-log", maxes: "o8s-maxes", maxHist: "o8s-maxhist", body: "o8s-body", ready: "o8s-ready", spar: "o8s-spar", swap: "o8s-swap", box: "o8s-box", notes: "o8s-notes", forge: "o8s-forge", fweek: "o8s-fweek", hw: "o8s-hw", calis: "o8s-calis" };
 const DEF_ST = () => ({ start: defaultStart(), macroBase: 1, iron: false, sound: true, autoRest: true,
   medStage: 1, breathStage: 1, hardLevel: 1, sitLen: 30, imStart: null, rangeStart: null,
-  camp: false, lastTen: false, taper: false, levelStart: null, v12: true });
+  camp: false, campStart: CAMP_START_DEFAULT, campFight: false, lastTen: false, taper: false,
+  levelStart: null, v12: true });
 
 export default function App() {
   const [st, setStRaw] = useState(DEF_ST());
@@ -2090,20 +2190,37 @@ export default function App() {
     setLoaded(true);
   })(); }, []);
 
-  /* Camp mode and the last ten days rewrite the week, so they have to be in
-     place before anything reads a prescription. */
-  MODE.camp = !!st.camp; MODE.lastTen = !!st.lastTen;
+  /* Camp mode, its fork and the last ten days rewrite the week, so they have
+     to be in place before anything reads a prescription. */
+  MODE.camp = !!st.camp; MODE.fight = !!st.campFight; MODE.lastTen = !st.camp && !!st.lastTen;
 
-  const L = st.iron ? 18 : 16;
-  const current = useMemo(() => { const wk = Math.floor((mondayOf(new Date()) - mondayOf(parseISO(st.start))) / 604800000);
+  const campStart = st.campStart || CAMP_START_DEFAULT;
+  const L = st.camp ? CAMP_L : st.iron ? 18 : 16;
+  /* The camp counts from its own start date; the Fighter keeps counting from
+     its own underneath, so the switch going off lands you back where you were. */
+  const current = useMemo(() => {
+    if (st.camp) { const w = campWeekOf(campStart, new Date());
+      if (w < 1) return { macro: "C", week: 1, pre: true, camp: 1 };
+      return { macro: "C", week: Math.min(CAMP_L, w), camp: 1, done: w > CAMP_L }; }
+    const wk = Math.floor((mondayOf(new Date()) - mondayOf(parseISO(st.start))) / 604800000);
     if (wk < 0) return { macro: st.macroBase, week: 1, pre: true };
-    return { macro: st.macroBase + Math.floor(wk / L), week: (wk % L) + 1 }; }, [st.start, st.macroBase, L]);
+    return { macro: st.macroBase + Math.floor(wk / L), week: (wk % L) + 1 }; }, [st.start, st.macroBase, L, st.camp, campStart]);
   const today = todayKey();
   const shown = selDay || { macro: current.macro, week: current.week, day: today };
   const isToday = shown.macro === current.macro && shown.week === current.week && shown.day === today;
+  /* the date a camp day falls on, for the header, the pages and the tables */
+  const campLabel = st.camp ? (day) => campDayLabel(campStart, shown.week, DAYS.indexOf(day)) : null;
   const vw = view || { macro: current.macro, week: current.week };
   const setView = (x) => setViewRaw(x);
-  const setCurrent = (m, w) => { let base = st.macroBase, off; if (m < base) { base = m; off = w - 1; } else off = (m - base) * L + (w - 1);
+  const setCurrent = (m, w) => {
+    if (st.camp) { /* slide the camp's start date so this week is now */
+      const d = new Date(campMonday(campStart).getTime());
+      const shift = (w - 1) * 604800000;
+      const nowMon = mondayOf(new Date()).getTime();
+      const delta = nowMon - (d.getTime() + shift);
+      setSt(Object.assign({}, st, { campStart: iso(new Date(parseISO(campStart).getTime() + delta)) }));
+      setViewRaw({ macro: "C", week: w }); setSelDay(null); return; }
+    let base = st.macroBase, off; if (m < base) { base = m; off = w - 1; } else off = (m - base) * L + (w - 1);
     const start = new Date(mondayOf(new Date()).getTime() - off * 604800000);
     setSt(Object.assign({}, st, { start: iso(start), macroBase: base })); setViewRaw({ macro: m, week: w }); setSelDay(null); };
 
@@ -2116,11 +2233,11 @@ export default function App() {
   const weekStats = useMemo(() => { let g = 0, y = 0, r = 0, slow = 0, spr = 0, dn = 0, planned = 0; const rx = rxFor(shown.week);
     DAYS.forEach((d) => { const k = dayKey(shown.macro, shown.week, d); const rv = readyMap[k]; if (rv === "G") g++; if (rv === "Y") y++; if (rv === "R") r++;
       if (boxMap[k] === "slow") slow++; if (sparMap[k]) spr++;
-      const tot = rx.hell ? 0 : (d === "sat" && rx.test ? 1 : realBlocks(d, rx).length); if (tot) { planned++; if ((done[k] || []).length >= tot) dn++; } });
-    return { g, y, r, slow, spar: spr, done: dn, planned }; }, [readyMap, boxMap, sparMap, done, shown.macro, shown.week, st.camp, st.lastTen]);
+      const tot = rx.hell ? 0 : (!MODE.camp && d === "sat" && rx.test ? 1 : realBlocks(d, rx).length); if (tot) { planned++; if ((done[k] || []).length >= tot) dn++; } });
+    return { g, y, r, slow, spar: spr, done: dn, planned }; }, [readyMap, boxMap, sparMap, done, shown.macro, shown.week, st.camp, st.campFight, st.lastTen]);
   const weekDoneMap = useMemo(() => { const out = {}; for (let w = 1; w <= L; w++) { const rx = rxFor(w); let dn = 0, tot = 0;
-    DAYS.forEach((d) => { const t = rx.hell ? 0 : (d === "sat" && rx.test ? 1 : realBlocks(d, rx).length); if (t) { tot++; if ((done[dayKey(vw.macro, w, d)] || []).length >= t) dn++; } });
-    out[w] = tot ? dn / tot : null; } return out; }, [done, vw.macro, L, st.camp, st.lastTen]);
+    DAYS.forEach((d) => { const t = rx.hell ? 0 : (!MODE.camp && d === "sat" && rx.test ? 1 : realBlocks(d, rx).length); if (t) { tot++; if ((done[dayKey(vw.macro, w, d)] || []).length >= t) dn++; } });
+    out[w] = tot ? dn / tot : null; } return out; }, [done, vw.macro, L, st.camp, st.campFight, st.lastTen]);
 
   /* ---------------- IRON MIND ----------------
      Its own week count: when the training program restarts at week 1, this
@@ -2132,19 +2249,23 @@ export default function App() {
      training program restarts at week 1 and THE KEEP really is for good. */
   const rangeStart = st.rangeStart || st.start;
   const rangeWeekOf = useCallback((macro, week) => {
-    const mon = new Date(mondayOf(parseISO(st.start)).getTime() + (((macro - st.macroBase) * L) + (week - 1)) * 604800000);
+    const mon = st.camp
+      ? new Date(campMonday(campStart).getTime() + (week - 1) * 604800000)
+      : new Date(mondayOf(parseISO(st.start)).getTime() + (((macro - st.macroBase) * L) + (week - 1)) * 604800000);
     return Math.max(1, Math.floor((mondayOf(mon) - mondayOf(parseISO(rangeStart))) / 604800000) + 1);
-  }, [st.start, st.macroBase, rangeStart, L]);
+  }, [st.start, st.macroBase, rangeStart, L, st.camp, campStart]);
   const rangeWeek = rangeWeekOf(current.macro, current.week);
   const shownRangeWeek = rangeWeekOf(shown.macro, shown.week);
   /* the test weeks so far, oldest first — what TRACK charts */
   const rangeTestWeeks = useMemo(() => { const out = [];
+    if (st.camp) { for (let w = 1; w <= CAMP_L; w++) { const rw = rangeWeekOf("C", w); if (!isTestWeek(rw)) continue; if (w > current.week) continue;
+      out.push({ key: "mCw" + w, label: "rw" + rw, rangeWeek: rw }); } return out.slice(-8); }
     for (let m = st.macroBase; m <= current.macro; m++) for (let w = 1; w <= L; w++) {
       const rw = rangeWeekOf(m, w); if (!isTestWeek(rw)) continue;
       if (m === current.macro && w > current.week) continue;
       out.push({ key: "m" + m + "w" + w, label: "rw" + rw, rangeWeek: rw });
     }
-    return out.slice(-8); }, [st.macroBase, current.macro, current.week, L, rangeWeekOf]);
+    return out.slice(-8); }, [st.macroBase, current.macro, current.week, L, rangeWeekOf, st.camp]);
   const imWeek = useMemo(() => Math.max(1, Math.floor((mondayOf(new Date()) - mondayOf(parseISO(imStart))) / 604800000) + 1), [imStart]);
   const imRec = imDay[dayIso] || {};
   const taperNow = !!st.taper || current.week === 15 || current.week === 16;
@@ -2222,10 +2343,16 @@ export default function App() {
       floorOpen: () => setTool({ kind: "floor" }),
       goHell: () => { setTab("iron"); setIsub("hell"); },
       /* the home skill block — Monday to Thursday, after the mobility, before the sit */
+      /* In camp the evening block after RANGE is the hollow block: the two
+         shapes, three minutes, Monday to Thursday. The handstand and the
+         planche leans come off the clock and stay as your own call. */
       skill: (() => { const i = DAYS.indexOf(todayKey()); const hs = curLevel(calis, "handstand");
         return { show: i >= 0 && i <= 3, level: hs.l, what: hs.what, camp: !!st.camp,
+          title: st.camp ? "THE HOLLOW BLOCK — 3 minutes, Monday to Thursday, after " + rangeTitle(rangeWeek) : null,
+          campNote: "In camp the hollow hold and the arch hold are the block; the handstand and the planche leans are not on the camp's clock — they stay here if you want them, as your own call, and go to holds only from week 11.",
+          showHandstand: !st.camp,
           planche: (i === 1 || i === 3) && !st.camp, plancheText: SKILL_BLOCK.planche,
-          wrists: SKILL_BLOCK.wrists, hollow: SKILL_BLOCK.hollow, why: SKILL_BLOCK.why, n: SKILL_BLOCK.n }; })(),
+          wrists: SKILL_BLOCK.wrists, hollow: SKILL_BLOCK.hollow, why: st.camp ? "The two shapes every lever and every L-sit is made of, and the stiffest trunk position there is." : SKILL_BLOCK.why, n: SKILL_BLOCK.n }; })(),
     };
   }, [st, imStart, imDay, imSit, imHard, imWk, imWeek, dayIso, weekMonday, hwLog, taperNow, calis, rangeWeek]);
 
@@ -2238,7 +2365,7 @@ export default function App() {
     openProto: setProto, startTimer: T.start, openPlates: setPlates, onSetMax, autoRest: st.autoRest,
     openFlow: () => setFlow(true), goIron: () => { setTab("iron"); setIsub("hell"); }, weekStats, addBody,
     calis, setCalis, taper: taperNow,
-    rangeWeek: shownRangeWeek, openHome: () => setTool({ kind: "homeblock" }),
+    rangeWeek: shownRangeWeek, openHome: () => setTool({ kind: "homeblock" }), campLabel,
     openRangeTests: () => setTool({ kind: "rangetests", macro: shown.macro, week: shown.week }) };
 
   const exportData = async () => JSON.stringify({ st, done, log, maxes, maxHist, body, readyMap, sparMap, swapMap, boxMap, notes, forge, fweek, hwLog, imDay, imSit, imHard, imWk, calis });
@@ -2252,7 +2379,9 @@ export default function App() {
 
   const TABS = [["today", "TODAY"], ["week", "WEEK"], ["track", "TRACK"], ["iron", "IRON"], ["plan", "PLAN"]];
   const P = PH[rxFor(current.week).ph];
-  const noMaxes = loaded && !num(maxes.squat) && !num(maxes.bench);
+  const noMaxes = loaded && !st.camp && !num(maxes.squat) && !num(maxes.bench);
+  const noCampWork = loaded && !!st.camp && !num(maxes.cw_squat) && !num(maxes.cw_tbdl);
+  const dayAc = (k) => { const sx = sessFor(k, rxFor(shown.week)); return sx ? sx.ac : C.ash; };
 
   return (
     <div style={Object.assign({}, bdy, { background: C.ink, minHeight: "100vh", color: C.chalk })}>
@@ -2260,7 +2389,7 @@ export default function App() {
       {T.t ? <TimerFull T={T} /> : null}
       {plates !== null && plates !== undefined ? <Plates kg={plates} onClose={() => setPlates(null)} /> : null}
       {proto ? <ProtoSheet id={proto} close={() => setProto(null)} /> : null}
-      {showSettings ? <Settings st={st} setSt={setSt} current={current} L={L} exportData={exportData} importData={importData} close={() => setShowSettings(false)} IM={IM} calis={calis} setCalis={setCalis} /> : null}
+      {showSettings ? <Settings st={st} setSt={setSt} current={current} L={L} exportData={exportData} importData={importData} close={() => setShowSettings(false)} IM={IM} calis={calis} setCalis={setCalis} campWeek={st.camp ? Math.max(1, Math.min(CAMP_L, campWeekOf(campStart, new Date()))) : 0} /> : null}
       {flow ? <Flow {...sessProps} close={() => setFlow(false)} /> : null}
       {tool ? (
         tool.kind === "breath" ? <BreathTool id={tool.id} sound={st.sound} onClose={() => setTool(null)}
@@ -2286,9 +2415,9 @@ export default function App() {
       <div style={{ borderBottom: "1px solid " + C.line, background: C.slab, position: "sticky", top: 0, zIndex: 30, paddingTop: "env(safe-area-inset-top)" }}>
         <div style={{ borderTop: "3px solid " + P.ac }} />
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 13px", paddingLeft: "max(13px, env(safe-area-inset-left))", paddingRight: "max(13px, env(safe-area-inset-right))", maxWidth: 640, margin: "0 auto" }}>
-          <span style={Object.assign({}, dsp, { fontSize: 19, fontWeight: 800, letterSpacing: 2, color: C.chalk })}>OPTIMAL<span style={{ color: P.ac }}>·</span>8<span style={{ fontSize: 12, color: C.ash, letterSpacing: 1 }}> FIGHTER</span></span>
+          <span style={Object.assign({}, dsp, { fontSize: 19, fontWeight: 800, letterSpacing: 2, color: C.chalk })}>OPTIMAL<span style={{ color: P.ac }}>·</span>8<span style={{ fontSize: 12, color: C.ash, letterSpacing: 1 }}> {st.camp ? "CAMP" : "FIGHTER"}</span></span>
           <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <Chip c={P.ac}>M{current.macro} · WK {current.week} · {P.n}</Chip>
+            <Chip c={P.ac}>{st.camp ? "WK " + current.week + "/12 · " + P.n : "M" + current.macro + " · WK " + current.week + " · " + P.n}</Chip>
             <button onClick={() => setShowSettings(true)} aria-label="Settings" style={Object.assign({}, mno, { background: "transparent", border: "1px solid " + C.line, color: C.ash, borderRadius: 4, width: 44, height: 44, cursor: "pointer", fontSize: 16 })}>⚙</button>
           </span>
         </div>
@@ -2298,7 +2427,7 @@ export default function App() {
               {DAYS.map((k) => { const active = shown.day === k && shown.week === current.week && shown.macro === current.macro;
                 return <button key={k} onClick={() => setSelDay(k === today ? null : { macro: current.macro, week: current.week, day: k })}
                   style={Object.assign({}, dsp, { flex: 1, fontSize: 10.5, fontWeight: 700, padding: "7px 0", borderRadius: 4, cursor: "pointer", minHeight: 32,
-                    background: active ? S[k].ac : "transparent", color: active ? C.ink : (k === today ? C.moss : C.ash), border: "1px solid " + (active ? S[k].ac : k === today ? C.moss : C.line) })}>{DSH[k]}</button>; })}
+                    background: active ? dayAc(k) : "transparent", color: active ? C.ink : (k === today ? C.moss : C.ash), border: "1px solid " + (active ? dayAc(k) : k === today ? C.moss : C.line) })}>{DSH[k]}</button>; })}
             </div>
             {selDay ? <button onClick={() => setSelDay(null)} style={Object.assign({}, mno, { marginTop: 6, background: "transparent", border: "none", color: C.moss, fontSize: 9.5, letterSpacing: 1, cursor: "pointer", padding: 0 })}>◀ BACK TO TODAY ({DSH[today]})</button> : null}
           </div>) : <div style={{ paddingBottom: 2 }} />}
@@ -2309,7 +2438,9 @@ export default function App() {
           <div>
             {tab === "today" ? (
               <div>
-                {current.pre ? <Card ac={C.brass}><Eye c={C.brass}>Not started yet</Eye><Note c={C.chalk} s={{ marginTop: 0 }}>Week 1 begins {fmtDate(st.start)}. Change it in settings if that's wrong.</Note></Card> : null}
+                {current.pre ? <Card ac={C.brass}><Eye c={C.brass}>Not started yet</Eye><Note c={C.chalk} s={{ marginTop: 0 }}>Week 1 begins {fmtDate(st.camp ? campStart : st.start)}. Change it in settings if that's wrong.</Note></Card> : null}
+                {current.done ? <Card ac={C.moss}><Eye c={C.moss}>The camp is over</Eye><Note c={C.chalk} s={{ marginTop: 0 }}>{HAND_BACK}</Note><Btn small c={C.moss} fill s={{ marginTop: 10 }} on={() => setShowSettings(true)}>OPEN SETTINGS</Btn></Card> : null}
+                {noCampWork ? <Card ac={C.brass}><Eye c={C.brass}>First — your working weights</Eye><Note c={C.chalk} s={{ marginTop: 0 }}>No maxes, ever, in camp. Week 1 confirms each lift with a set of 5 that's hard but leaves two in you, and every percentage comes off that.</Note><Btn small c={C.brass} fill s={{ marginTop: 10 }} on={() => setTab("track")}>SET THE WORKING WEIGHTS</Btn></Card> : null}
                 {noMaxes ? <Card ac={C.brass}><Eye c={C.brass}>First — your numbers</Eye><Note c={C.chalk} s={{ marginTop: 0 }}>Enter your best squat and bench singles so every weight shows in kilos. Trap bar and push press get found in week 1.</Note><Btn small c={C.brass} fill s={{ marginTop: 10 }} on={() => setTab("track")}>ENTER MAXES</Btn></Card> : null}
                 {isToday ? <IronToday IM={IM} part="head" /> : null}
                 {isToday ? <IronToday IM={IM} part="waking" /> : null}
@@ -2321,10 +2452,10 @@ export default function App() {
                 {isToday ? <IronToday IM={IM} part="evening" /> : null}
                 {isToday && IM.isSunday ? <IronToday IM={IM} part="sunday" /> : null}
               </div>) : null}
-            {tab === "week" ? <WeekView view={vw} setView={setView} current={current} setCurrent={setCurrent} done={done} L={L} weekDoneMap={weekDoneMap}
+            {tab === "week" ? <WeekView view={vw} setView={setView} current={current} setCurrent={setCurrent} done={done} L={L} weekDoneMap={weekDoneMap} campStart={campStart} fight={!!st.campFight}
               openDay={(d) => { setSelDay({ macro: vw.macro, week: vw.week, day: d }); setTab("today"); }} /> : null}
             {tab === "track" ? <Track current={current} maxes={maxes} onSetMax={onSetMax} maxHist={maxHist} log={log} body={body} addBody={addBody} done={done} L={L} IM={IM} calis={calis} camp={!!st.camp}
-              rangeWeeks={rangeTestWeeks} rangeGet={rangeGet} /> : null}
+              rangeWeeks={rangeTestWeeks} rangeGet={rangeGet} campStart={campStart} fight={!!st.campFight} /> : null}
             {tab === "iron" ? (
               <div>
                 <div style={{ display: "flex", gap: 4, marginBottom: 12 }}>
@@ -2336,7 +2467,7 @@ export default function App() {
                   : isub === "hardship" ? <HardshipView IM={IM} />
                   : <HellWeek current={current} maxes={maxes} bw={bw} hwLog={hwLog} setHwLog={setHwLog} L={L} />}
               </div>) : null}
-            {tab === "plan" ? <PlanView /> : null}
+            {tab === "plan" ? <PlanView camp={!!st.camp} /> : null}
             <div style={Object.assign({}, bdy, { fontSize: 10.5, color: C.ash, textAlign: "center", padding: "24px 0 6px", lineHeight: 1.6 })}>
               Beat your last peak by 3–6%. Three times a year.<br />Nothing else matters.
             </div>

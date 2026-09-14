@@ -74,11 +74,14 @@ first if there's anything in there you want to keep.
   straight into week 1 again. Turn it on if you want Hell Week and the Reload
   bolted on the end, making it an 18-week cycle.
 - **Bell sounds** and **Auto rest clock** — timer behaviour, on by default.
-- **CAMP MODE** — swaps the week to the camp table for when boxing comes back:
-  four sessions, Tuesday and Friday asleep, no bike sessions and no fight sim.
-  RANGE and the morning five stay on. Calisthenics goes to the handstand at home
-  only. Underneath it, **the last ten days before a fight** strips the loading
-  right down.
+- **CAMP MODE** — ON, Optimal 8 · Camp runs *in place of* Optimal 8 Fighter:
+  the twelve-week camp from `optimal-8-camp.md`, with its own dated week table,
+  its own session pages, its own timers and its own tests, counting from its own
+  start date. OFF, Optimal 8 Fighter is exactly as it was, counting from its own
+  start date underneath. See **Camp mode** below.
+- **The last ten days before a fight** (Fighter only) — strips the Fighter's
+  loading right down: every lift to 2 sets at 70%, fast, no sprints, no depth
+  jumps, no Nordics, and the jump circuit becomes box jumps only.
 - **RANGE week 1 began** — RANGE has its own twelve-week clock, so it keeps
   counting when the training cycle restarts at week 1. Twelve weeks of the
   twenty-minute block, then THE KEEP at ten minutes for good; the four tests on
@@ -94,6 +97,46 @@ first if there's anything in there you want to keep.
   when the gate is cleared honestly.
 - **Training taper weeks** — while it's on, the hardship tests pause and every
   calisthenics line goes to holds only.
+
+## Camp mode — the twelve weeks
+
+Turn **CAMP MODE** on in settings and the whole app switches over to
+`optimal-8-camp.md`: twelve weeks to be fight-ready for a 6 × 3, running in
+place of Optimal 8 Fighter and handing back at the end.
+
+- **Camp day one** — the Tuesday week 1 starts on. Defaults to **Tuesday 15
+  September 2026**, with the fight on **Tuesday 1 December**; change it and
+  every date in the app moves with it. Week 1 starts on a Tuesday, so there is
+  no Monday base in week 1.
+- **The week** — Monday BASE, Tuesday POWER + ENGINE 1, Wednesday STRENGTH,
+  Thursday THROWS + ENGINE 2, Friday asleep, Saturday THE LONG SESSION, Sunday
+  THE ROUNDS. Every block in the order the document runs it, with its minutes,
+  its rests and its wording.
+- **No maxes, ever.** Every lift loads from a **working weight**, confirmed in
+  week 1 with a set of 5 and reset in week 6 with a set of 3. Each main lift
+  carries a panel with the +2.5% / −2.5% rule on it. Your Optimal 8 maxes are
+  never touched by a camp — they're still there when the switch goes off.
+- **The lift phases** — slow lowering with the five-second cue (weeks 1–2),
+  paused with the three-second cue (3–4), fast (5–7), and contrast into the
+  jump circuit (8–10).
+- **The conditioning** — moderate intervals, 4-minute intervals, repeat bursts,
+  tempo intervals, threshold, 40-second repeats, rounds on the erg 7 × 3,
+  fight-pace rounds and easy, each with its own timer.
+- **Sunday's simulation** — six rounds, seven in the peak block, with the corner
+  minute written and timed into every rest and the post-max sit straight after.
+  Scored in weeks 2, 5, 6, 9 and 10 — and 11 on the no-fight path.
+- **The tests, on their dates** — the burst decrement, the 20-minute test, broad
+  jump, rotational throw, push-ups, chin-ups, plank, Copenhagen, BOLT, the nasal
+  threshold, the four range tests and the working-weight resets. TRACK → CAMP
+  charts all of it, plus the fade.
+- **Week 11 — the fork.** A setting: **fight confirmed**, yes or no. Yes gives
+  you the sharpen week and fight week, with a **fight-week table** for the
+  Tuesday 1 December layout. No gives you the test week, the camp's verdict, and
+  the hand-back to Optimal 8 on the Monday after it.
+- **Shared with the Fighter** — maxes, calisthenics levels, RANGE test results,
+  Iron Mind stages, your streak and all your history. Turning the switch either
+  way loses nothing.
+- **The document** is on the PLAN tab alongside the Fighter and Iron Mind.
 
 ## What v1.5 changed
 

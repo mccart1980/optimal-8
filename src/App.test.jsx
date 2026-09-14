@@ -343,7 +343,7 @@ describe("Optimal 8", () => {
   });
 
   it("strips the week down inside the last ten days before a fight", async () => {
-    await mount({ camp: true, lastTen: true });
+    await mount({ lastTen: true });
     fireEvent.click(screen.getByRole("button", { name: "SAT" }));
 
     expect(await screen.findByText("Box jumps only — the last ten days")).toBeInTheDocument();
@@ -354,24 +354,185 @@ describe("Optimal 8", () => {
     await waitFor(() => expect(screen.queryByText("Nordic Curls")).not.toBeInTheDocument());
   });
 
-  it("swaps the week to the camp table when camp mode is on", async () => {
-    await mount({ camp: true });
+  /* ---------------- CAMP MODE — the twelve weeks ---------------- */
 
-    // Tuesday is a sleep day in camp
-    fireEvent.click(screen.getByRole("button", { name: "TUE" }));
-    expect(await screen.findByText("SLEEP")).toBeInTheDocument();
+  const CAMP_START = "2026-09-15";              // Tuesday 15 September 2026
+  const camp = (extra) => mount(Object.assign({ camp: true, campStart: CAMP_START }, extra || {}));
+  /* a is before b in the document */
+  const before = (a, b) => !!(a.compareDocumentPosition(b) & 4);
 
-    // Thursday keeps the tendon work and drops the bike
+  it("runs Tuesday 15 September as camp week 1, with the burst test before the intervals", async () => {
+    vi.setSystemTime(new Date(2026, 8, 15, 9, 0, 0));   // Tuesday 15 September 2026
+    await camp();
+
+    // the camp's own clock, counting from its own start date
+    expect(await screen.findByText("WK 1/12 · FOUNDATION")).toBeInTheDocument();
+    expect(screen.getByText("TUE 15 Sep")).toBeInTheDocument();
+
+    const burst = await findHead("THE BURST TEST");
+    const intervals = head("MODERATE INTERVALS");
+    expect(before(burst, intervals)).toBe(true);
+
+    // the session runs in the document's order, and the settle closes the engine work
+    expect(before(head("Warm-up + bear crawls"), burst)).toBe(true);
+    expect(before(intervals, head("The 60-Second Settle"))).toBe(true);
+    expect(before(head("The 60-Second Settle"), head("Seated Calf Raise + Achilles Hold"))).toBe(true);
+
+    // ten bursts of six seconds, first against last
+    fireEvent.click(burst);
+    expect(await screen.findByText("Burst 1 — peak power")).toBeInTheDocument();
+    expect(screen.getByText("Burst 10 — peak power")).toBeInTheDocument();
+  });
+
+  it("renders the sharpen page in week 11 when the fight is confirmed, and the test week when it isn't", async () => {
+    vi.setSystemTime(new Date(2026, 10, 25, 9, 0, 0));  // Wednesday 25 November 2026, camp week 11
+
+    await camp({ campFight: true });
+    expect(await screen.findByText("WK 11/12 · THE FORK")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "SAT" }));
+    expect(await findHead("THE SPEED MICRODOSE")).toBeInTheDocument();
+    expect(screen.queryByText("Back Squat")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "SUN" }));
+    expect(await findHead("THE FIGHT-DAY REHEARSAL")).toBeInTheDocument();
+
+    cleanup();
+    localStorage.clear();
+    localStorage.setItem("o8s-migrated", "true");
+
+    await camp({ campFight: false });
+    fireEvent.click(screen.getByRole("button", { name: "SAT" }));
+    expect(await findHead("Back Squat")).toBeInTheDocument();
+    expect(screen.queryByText("THE SPEED MICRODOSE")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "SUN" }));
+    expect(await findHead("The 6 × 3 Simulation")).toBeInTheDocument();
+  });
+
+  it("runs the camp's lift phases, its conditioning types and its rounds", async () => {
+    vi.setSystemTime(new Date(2026, 8, 16, 9, 0, 0));   // Wednesday 16 September 2026, camp week 1
+    await camp();
+
+    // week 1 is slow lowering, with the five-second cue on the page
+    fireEvent.click(await findHead("Trap Bar Deadlift"));
+    expect(await screen.findByText(/lower the bar over a full five seconds/)).toBeInTheDocument();
+    expect(screen.getAllByText("3 × 5 @ 70% — SLOW LOWERING, 5 s down").length).toBeGreaterThan(0);
+
+    // Thursday opens with the nasal threshold in week 1, then tempo intervals
     fireEvent.click(screen.getByRole("button", { name: "THU" }));
-    expect(await screen.findByText("Spanish Squat Hold")).toBeInTheDocument();
-    expect(screen.getByText("Achilles Hold")).toBeInTheDocument();
-    expect(screen.queryByText(/40-SECOND REPEATS/)).not.toBeInTheDocument();
+    const nasal = await findHead("The Nasal Threshold Test");
+    expect(before(nasal, head("TEMPO INTERVALS"))).toBe(true);
 
-    // and the calisthenics go to the handstand at home only
+    // Sunday is the 20-minute test, then three easy rounds, then the post-max sit
+    fireEvent.click(screen.getByRole("button", { name: "SUN" }));
+    const t20 = await findHead("The 20-Minute Test");
+    expect(before(t20, head("The 3 × 3 Simulation"))).toBe(true);
+    expect(before(head("The 3 × 3 Simulation"), head("The Post-Max Sit"))).toBe(true);
+
+  });
+
+  it("puts the corner minute in every rest of the rounds, and the post-max sit after them", async () => {
+    vi.setSystemTime(new Date(2026, 8, 20, 9, 0, 0));   // Sunday 20 September 2026, camp week 1
+    await camp();
+
+    fireEvent.click(await findHead("The 3 × 3 Simulation"));
+    expect(await screen.findByText((_t, el) => !!el && !el.children.length && /Every rest is THE CORNER MINUTE/.test(el.textContent || ""))).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "▶ START THE ROUNDS" })).toBeInTheDocument();
+
+    fireEvent.click(head("The Post-Max Sit"));
+    expect(await screen.findByText(/heart at 170-plus, find the breath at the nostrils/)).toBeInTheDocument();
+  });
+
+  it("moves to paused, then fast, then contrast, and puts the jump circuit behind the contrast squat", async () => {
+    vi.setSystemTime(new Date(2026, 10, 4, 9, 0, 0));   // Wednesday 4 November 2026, camp week 8
+    await camp();
+
+    expect(await screen.findByText("WK 8/12 · PEAK")).toBeInTheDocument();
+    fireEvent.click(await findHead("Trap Bar Deadlift"));
+    expect(await screen.findByText(/straight into the jump circuit/)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "SAT" }));
+    fireEvent.click(await findHead("Back Squat"));
+    expect(await screen.findByText("Band-assisted jump")).toBeInTheDocument();
+    expect(screen.getByText("Trap bar jump")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "▶ START THE JUMP CIRCUIT" })).toBeInTheDocument();
+
+    // seven rounds in the peak block, so the sixth is a place you've been
+    fireEvent.click(screen.getByRole("button", { name: "SUN" }));
+    expect(await findHead("The 7 × 3 Simulation")).toBeInTheDocument();
+  });
+
+  it("loads the camp from working weights and never from a max", async () => {
+    localStorage.setItem("o8s-maxes", JSON.stringify({ squat: 140, bench: 100, cw_squat: 120, cw_tbdl: 160 }));
+    vi.setSystemTime(new Date(2026, 8, 16, 9, 0, 0));   // Wednesday 16 September 2026
+    await camp();
+
+    fireEvent.click(await findHead("Trap Bar Deadlift"));
+    expect(await screen.findByText("Trap Bar Deadlift — working weight")).toBeInTheDocument();
+    expect(screen.getByText((_t, el) => !!el && el.children.length === 1 && (el.textContent || "").trim() === "112.5 kg ▶ PLATES")).toBeInTheDocument();   // 70% of 160
+    expect(screen.getByText("NO MAXES, EVER, IN CAMP")).toBeInTheDocument();
+
+    // the fighter's maxes are untouched and still on TRACK
+    fireEvent.click(screen.getByRole("button", { name: "TRACK" }));
+    fireEvent.click(await screen.findByRole("button", { name: "MAXES" }));
+    expect(await screen.findByText("140 kg")).toBeInTheDocument();
+  });
+
+  it("gives the camp a dated week table, and a fight-week table for Tuesday 1 December", async () => {
+    vi.setSystemTime(new Date(2026, 10, 25, 9, 0, 0));  // camp week 11
+    await camp({ campFight: true });
+
+    fireEvent.click(screen.getByRole("button", { name: "WEEK" }));
+    expect(await screen.findByText("The twelve weeks — every number, every week, with dates")).toBeInTheDocument();
+    expect(screen.getByText("15–20 Sep")).toBeInTheDocument();
+    expect(screen.getByText("23–29 Nov")).toBeInTheDocument();
+    expect(screen.getByText("30 Nov–6 Dec")).toBeInTheDocument();
+
+    expect(screen.getByText("Fight week — fight on Tuesday 1 December")).toBeInTheDocument();
+    expect(screen.getByText("TUE 1 Dec")).toBeInTheDocument();
+    expect(screen.getByText(/Round six is a place you've already been/)).toBeInTheDocument();
+  });
+
+  it("hands back to Optimal 8 Fighter exactly as it was when the switch goes off", async () => {
+    await camp();
+    expect(await screen.findByText(/STRENGTH — sled, the trap bar in its phase/)).toBeInTheDocument();
+
+    cleanup();
+    localStorage.clear();
+    localStorage.setItem("o8s-migrated", "true");
+    await mount({ camp: false, campStart: CAMP_START });
+
+    // the Fighter's own clock, its own week 1 Monday, its own page
     fireEvent.click(screen.getByRole("button", { name: "MON" }));
-    await waitFor(() => expect(screen.queryByText("Ring Dips")).not.toBeInTheDocument());
-    fireEvent.click(screen.getByRole("button", { name: "WED" }));
-    await waitFor(() => expect(screen.queryByText("Ring Rows")).not.toBeInTheDocument());
+    expect(await screen.findByText("Upper Strength + Power Dose + Rings")).toBeInTheDocument();
+    expect(head("Bench Press")).toBeInTheDocument();
+    expect(screen.getByText("Ring Dips")).toBeInTheDocument();
+  });
+
+  it("switches the camp on, off and at the fork from settings", async () => {
+    vi.setSystemTime(new Date(2026, 8, 15, 9, 0, 0));
+    await camp();
+
+    fireEvent.click(screen.getByRole("button", { name: "Settings" }));
+    expect(await screen.findByText("Camp mode — the twelve weeks")).toBeInTheDocument();
+    expect(screen.getByText("Camp day one — the Tuesday week 1 starts on")).toBeInTheDocument();
+    expect(screen.getByText(/camp week 1/)).toBeInTheDocument();
+
+    // the fork is a setting, and it rewrites weeks 11 and 12
+    fireEvent.click(screen.getByRole("button", { name: "FIGHT CONFIRMED" }));
+    await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-settings")).campFight).toBe(true));
+    expect(await screen.findByText(/week 12 is fight week/)).toBeInTheDocument();
+
+    // and turning it off hands the app straight back to the Fighter
+    fireEvent.click(screen.getByText("CAMP MODE"));
+    await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-settings")).camp).toBe(false));
+    fireEvent.click(screen.getByRole("button", { name: "CLOSE" }));
+    expect(await screen.findByText(/Crawls · Jumps · Pistols · Engine 1/)).toBeInTheDocument();
+  });
+
+  it("puts the camp document on the PLAN tab", async () => {
+    await camp();
+    fireEvent.click(screen.getByRole("button", { name: "PLAN" }));
+    expect(await screen.findByRole("button", { name: "CAMP" })).toBeInTheDocument();
+    expect(screen.getAllByText("THE TWELVE WEEKS — EVERY NUMBER, EVERY WEEK, WITH DATES").length).toBe(2);
   });
 
   it("offers the fast-bar rule after the last bench set and raises the max 2.5%", async () => {
