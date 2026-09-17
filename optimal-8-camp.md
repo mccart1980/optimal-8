@@ -1,8 +1,8 @@
-# OPTIMAL 8 · CAMP — TWELVE WEEKS FROM TUESDAY 15 SEPTEMBER
+# OPTIMAL 8 · CAMP — FROM MONDAY 21 SEPTEMBER
 
-**Your camp. Built from where you are, not from nothing: your working weights, your calisthenics at their levels, RANGE, the tendon block, the get-ups and the crawls, Iron Mind underneath. Twelve weeks to be fight-ready for a 6 × 3 on the 1st of December — and if no date comes, twelve weeks that hand Optimal 8 Fighter back a fitter man than it lent out.**
+**Your camp. Built from where you are, not from nothing: your working weights, your calisthenics at their levels, RANGE, the tendon block, the get-ups and the crawls, Iron Mind underneath. Ten weeks and a day to be fight-ready for a 6 × 3 on the 1st of December — and if no date comes, twelve weeks that hand Optimal 8 Fighter back a fitter man than it lent out.**
 
-Optimal 8 Fighter is untouched. This runs in its place for twelve weeks — the Camp Mode switch in the app turns it on — and when it ends, fight or no fight, the switch goes off and Optimal 8 restarts at week 1 with better numbers. Everything you need to run a session is written on that session's page. No codes, no jargon.
+Optimal 8 Fighter is untouched. This runs in its place — the Camp Mode switch in the app turns it on — and when it ends, fight or no fight, the switch goes off and Optimal 8 restarts at week 1 with better numbers. The start slipped a week, so the camp is now ten weeks and a day to the 1st of December and twelve weeks if no date comes; the peak block gives up one week on the fight path and nothing else moves. Everything you need to run a session is written on that session's page. No codes, no jargon.
 
 **The philosophy in five lines.** The engine is the priority, because it's the thing that isn't where you want it, and it's built brutally from week 2: two conditioning sessions a week shaped like a round, the rounds every Sunday at fight rest, seven rounds in the peak block, the fade scored every fortnight. Strength is kept and turned into speed through the phased lifts — slow lowering, paused, fast, contrast — with working weights that reset and climb, never a max. Durability and movement don't stop for a camp — RANGE, the tendon block, the neck, the hands and the Nordics run all twelve weeks, because a camp is the worst time to let a hip close or a hamstring go. Brutal lives in the sessions: every hard session has a number to beat and a standard that ends it. Discipline lives in the structure: Friday asleep, sleep as a rule, no new exercises after week 6, and the last ten days sacred.
 
@@ -31,7 +31,7 @@ You asked for what the best use. Here it is, named, so you know what each part o
 
 ## START HERE — HOW TO RUN THIS
 
-**The week at its peak (weeks 3–5 and 7–10).** Four mornings before the shift, Friday asleep, the long session Saturday, the rounds Sunday, RANGE and the sit every evening.
+**The week at its peak (weeks 3–5 and 7–9).** Four mornings before the shift, Friday asleep, the long session Saturday, the rounds Sunday, RANGE and the sit every evening.
 
 | Day | Session | Time |
 |---|---|---|
@@ -62,47 +62,45 @@ About seven hours in the gym a week at peak and three at home. Weeks 1–2 build
 6. Cold water stays out of camp. It blunts the adaptation you're paying for.
 7. The bag is skill, not conditioning. Conditioning is measured on the erg, where the number can't lie.
 8. Easy means easy. Monday's base and the easy hour are nasal and conversational, or they're stealing from Tuesday and Sunday. Cold water stays out of camp; the sauna comes in from week 4.
-9. The fork is Monday 23 November. Fight confirmed: week 11 sharpens with the fight-day rehearsal and week 12 is fight week. No fight: week 11 is a test week and Optimal 8 restarts on the 30th.
+9. The fork is Monday 23 November, the start of week 10. Fight confirmed: week 10 is the sharpen week, the fight is Tuesday the 1st, and Optimal 8 restarts on 7 December. No fight: week 10 is the last hard week, week 11 is the test week, and Optimal 8 restarts on 7 December.
 10. The fade is the number. Round six's output divided by round one's. Everything here is aimed at moving it toward 100%.
 
 ---
 
 ## THE TWELVE WEEKS — EVERY NUMBER, EVERY WEEK, WITH DATES
 
-**The blocks.** Weeks 1–2 FOUNDATION — slow lowering, base, the baseline numbers. Weeks 3–5 BUILD — paused then fast lifts, the aerobic ceiling, the rounds at fight rest. Week 6 EASY + TESTS, working weights reset. Weeks 7–10 PEAK — fast then contrast lifts, depth jumps, top speed, repeat bursts, seven rounds, the sauna. Week 11 THE FORK — sharpen, or test. Week 12 FIGHT WEEK — or Optimal 8 restarts.
-
-Week 1 starts on a Tuesday: there is no Monday base in week 1.
+**The blocks.** Weeks 1–2 FOUNDATION — slow lowering, base, the baseline numbers. Weeks 3–5 BUILD — paused then fast lifts, the aerobic ceiling, the rounds at fight rest. Week 6 EASY + TESTS, working weights reset. Weeks 7–9 PEAK — fast then contrast lifts, depth jumps, top speed, repeat bursts, seven rounds, the sauna. Week 10 THE FORK — sharpen for the 1st, or the last hard week. Week 11 — fight, or the test week. Week 12 — Optimal 8 Fighter, week 1.
 
 | Wk | Dates | Block | Mon BASE | Tue ENGINE 1 | Wed trap bar · phase · sets | Thu ENGINE 2 | Sat sprints · squat | Sun ROUNDS | Nordics (Wed) |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | 15–20 Sep | Foundation | — | 4 × 4 min hard, 3 easy · BURST TEST first | SLOW LOWERING (5 s down) · 3 × 5 @ 70% | tempo 10 × 1 min | build-ups + 3 × 20 m · 3 × 5 @ 70%, 5 s down · JUMP & THROW TESTS | 20-MINUTE TEST, then 3 easy rounds | 2 × 3 |
-| 2 | 21–27 Sep | Foundation | 40 min | REPEAT BURSTS 2 × 8 | slow lowering · 4 × 4 @ 72% | 40-s repeats × 6 | 4 × 20 m · 4 × 4 @ 72%, 5 s down | 6 × 3 SIM — SCORED (baseline), 90 s | 2 × 4 |
-| 3 | 28 Sep–4 Oct | Build | 45 min | 4 × 4 min hard | PAUSED (3 s) · 3 × 3 @ 75% | threshold 2 × 8 min | 4 × 20 m · 3 × 3 @ 75% paused | 6 × 3, 60 s | 3 × 4 |
-| 4 | 5–11 Oct | Build | 45 min | REPEAT BURSTS 2 × 8 | paused · 4 × 3 @ 78% | 40-s repeats 2 × 6 | 5 × 20 m · 4 × 3 @ 78% paused | 6 × 3, 60 s · sauna starts | 3 × 5 |
-| 5 | 12–18 Oct | Build | 45 min | 4 × 4 min hard | FAST · 4 × 3 @ 82% | REPEAT BURSTS 2 × 8 | 5 × 20 m · 4 × 3 @ 82% fast | 6 × 3 SIM — SCORED, 60 s | 3 × 5 |
-| 6 | 19–25 Oct | EASY + TESTS | 30 min | 20 min easy · RETESTS first | reset working weights · 2 × 3 @ 65% fast | 20 min easy | 3 × 20 m @ 90% · 2 × 3 @ 65% | 6 × 3 SIM — SCORED, 60 s | 2 × 3 |
-| 7 | 26 Oct–1 Nov | Peak | 45 min | REPEAT BURSTS 2 × 8 | fast · 4 × 3 @ 85% | ROUNDS ON THE ERG 7 × 3, 60 s | 5 × 20 m · 4 × 3 @ 85% fast · depth jumps begin | 7 × 3, 60 s | 3 × 5 |
-| 8 | 2–8 Nov | Peak | 45 min | 4 × 4 min hard | CONTRAST · 3 × 2 @ 85% + the circuit | 40-s repeats 2 × 6 | 5 × 20 m · CONTRAST 3 × 2 @ 85% + circuit, 3 rounds · depth jumps | 7 × 3, 60 s | 3 × 5 |
-| 9 | 9–15 Nov | Peak | 45 min | REPEAT BURSTS 2 × 8 | contrast · 3 × 2 @ 87% + circuit | ROUNDS ON THE ERG 7 × 3, 60 s | 5 × 20 m · CONTRAST 3 × 2 @ 87% + circuit · depth jumps | 7 × 3 SIM — SCORED, 60 s | 3 × 5 |
-| 10 | 16–22 Nov | Peak, last hard week | 40 min | 40-s repeats 2 × 6 | contrast · 3 × 2 @ 88% + circuit, 2 rounds | REPEAT BURSTS 2 × 8 | 4 × 20 m · CONTRAST 3 × 2 @ 88% + circuit, 2 rounds · depth jumps | 7 × 3 SIM — SCORED (last read), 60 s | 3 × 5 |
-| 11 | 23–29 Nov | THE FORK | 30 min | fight: RETESTS, then bursts 1 × 8 · no fight: RETESTS | 2 × 2 @ 80% fast, bench throws, chins | 4 × 3 min at fight pace, 60 s | fight: SPEED MICRODOSE · no fight: 3 × 20 m + 2 × 2 @ 80% | fight: REHEARSAL · no fight: 6 × 3 SIM — SCORED, 60 s | 2 × 3 |
-| 12 | 30 Nov–6 Dec | FIGHT WEEK — or Optimal 8, week 1 | Mon 30: 20 min easy, feet up | Tue 1 Dec: FIGHT | — | — | — | — | — |
+| 1 | 21–27 Sep | Foundation | 30 min | 4 × 4 min hard, 3 easy · BURST TEST first | SLOW LOWERING (5 s down) · 3 × 5 @ 70% | tempo 10 × 1 min · NASAL TEST first | build-ups + 3 × 20 m @ 90% · 3 × 5 @ 70%, 5 s down · JUMP & THROW TESTS | 20-MINUTE TEST, then 3 easy rounds | 2 × 3 |
+| 2 | 28 Sep–4 Oct | Foundation | 40 min | REPEAT BURSTS 2 × 8 | slow lowering · 4 × 4 @ 72% | 40-s repeats × 6 | 4 × 20 m · 4 × 4 @ 72%, 5 s down | 6 × 3 SIM — SCORED (baseline), 90 s | 2 × 4 |
+| 3 | 5–11 Oct | Build | 45 min | 4 × 4 min hard | PAUSED (3 s) · 3 × 3 @ 75% | threshold 2 × 8 min | 4 × 20 m · 3 × 3 @ 75% paused | 6 × 3, 60 s | 3 × 4 |
+| 4 | 12–18 Oct | Build | 45 min | REPEAT BURSTS 2 × 8 | paused · 4 × 3 @ 78% | 40-s repeats 2 × 6 | 5 × 20 m · 4 × 3 @ 78% paused | 6 × 3, 60 s · sauna starts | 3 × 5 |
+| 5 | 19–25 Oct | Build | 45 min | 4 × 4 min hard | FAST · 4 × 3 @ 82% | REPEAT BURSTS 2 × 8 | 5 × 20 m · 4 × 3 @ 82% fast | 6 × 3 SIM — SCORED, 60 s | 3 × 5 |
+| 6 | 26 Oct–1 Nov | EASY + TESTS | 30 min | 20 min easy · RETESTS first | reset working weights · 2 × 3 @ 65% fast | 20 min easy · NASAL TEST first | 3 × 20 m @ 90% · 2 × 3 @ 65% | 6 × 3 SIM — SCORED, 60 s | 2 × 3 |
+| 7 | 2–8 Nov | Peak | 45 min | REPEAT BURSTS 2 × 8 | fast · 4 × 3 @ 85% | ROUNDS ON THE ERG 7 × 3, 60 s | 5 × 20 m · 4 × 3 @ 85% fast · depth jumps begin | 7 × 3, 60 s | 3 × 5 |
+| 8 | 9–15 Nov | Peak | 45 min | 4 × 4 min hard | CONTRAST · 3 × 2 @ 85% + the circuit | 40-s repeats 2 × 6 | 5 × 20 m · CONTRAST 3 × 2 @ 85% + circuit, 3 rounds · depth jumps | 7 × 3, 60 s | 3 × 5 |
+| 9 | 16–22 Nov | Peak, last hard week on the fight path | 45 min | REPEAT BURSTS 2 × 8 | contrast · 3 × 2 @ 87% + circuit | ROUNDS ON THE ERG 7 × 3, 60 s | 5 × 20 m · CONTRAST 3 × 2 @ 87% + circuit · depth jumps | 7 × 3 SIM — SCORED (last read), 60 s | 3 × 5 |
+| 10 | 23–29 Nov | THE FORK | fight: 30 min · no fight: 40 min | fight: RETESTS, then bursts 1 × 8 · no fight: 40-s repeats 2 × 6 | fight: 2 × 2 @ 80% fast, bench throws, chins · no fight: contrast 3 × 2 @ 88% + circuit, 2 rounds | fight: 4 × 3 min at fight pace, 60 s · no fight: REPEAT BURSTS 2 × 8 | fight: SPEED MICRODOSE · no fight: 4 × 20 m · contrast 3 × 2 @ 88% + circuit, 2 rounds | fight: REHEARSAL-LITE · no fight: 7 × 3 SIM — SCORED, 60 s | 2 × 3 · no fight 3 × 5 |
+| 11 | 30 Nov–6 Dec | FIGHT — or the test week | fight: Mon 30 feet up, Tue 1 Dec FIGHT, then three easy days · no fight: 30 min | no fight: RETESTS | no fight: working-weight reset, bench throws, chins, Nordics 2 × 3 | no fight: NASAL TEST, 4 × 3 at fight pace | no fight: 3 × 20 m timed, squat reset, throws for distance | no fight: 6 × 3 SIM — SCORED, the tape | 2 × 3 |
+| 12 | 7–13 Dec | Optimal 8 Fighter, week 1 | — | — | — | — | — | — | — |
 
-Sled runs on Wednesday: weeks 1–2: 4 · weeks 3–5 and 7–9: 5 · weeks 6, 10 and 11: 3 · week 12: none. Throws and the landmine are dosed on the Thursday, Saturday and Sunday pages; the output rule ends them. Calisthenics lines run at your current levels from week 1, drop to two sets in week 6, and become holds only from week 11. RANGE, the morning five, the neck, the hands and the tendon block run every week of the twelve, including fight week at half dose.
+Sled runs on Wednesday: weeks 1–2: 4 · weeks 3–5 and 7–9: 5 · week 6: 3 · week 10: 3 on the fight path, 5 on the no-fight path · week 11: none on the fight path, 3 on the other. Throws and the landmine are dosed on the Thursday, Saturday and Sunday pages; the output rule ends them. Calisthenics lines run at your current levels from week 1, drop to two sets in week 6, and become holds only from the fork on the fight path. RANGE, the morning five, the neck, the hands and the tendon block run every week, including fight week at half dose.
 
 ---
 
-## THE TESTS — WEEK ONE, WEEK SIX, WEEK ELEVEN
+## THE TESTS — WEEK ONE, WEEK SIX, THE FORK
 
-You cannot coach what you don't measure. The baselines land in week 1 — the burst test on Tuesday the 15th, the jump and throw and the push-up and chin-up counts on Saturday the 19th, the 20-minute test on Sunday the 20th. The retests are Tuesday 20 October, fresh, at the start of the easy week. The final retest is Tuesday 24 November, short and sharp, whichever path week 11 is on.
+You cannot coach what you don't measure. The baselines land in week 1 — the burst test on Tuesday the 22nd, the nasal threshold on Thursday the 24th, the jump and throw and the push-up and chin-up counts on Saturday the 26th, the 20-minute test on Sunday the 27th. The retests are Tuesday 27 October, fresh, at the start of the easy week. The final retest is Tuesday 24 November on the fight path, or Tuesday 1 December on the other.
 
-1. **The 20-minute test** (Sunday 20 September): 5 easy minutes, then 20 minutes for the most distance you can on the erg you'll use all camp, and the highest heart rate you see. The engine's ceiling and your peak heart rate — every easy session is paced at 65–75% of it.
-2. **The 6 × 3 simulation, scored** (weeks 2, 5, 6, 9, 10): round-one output and round-six output. Round six divided by round one is the fade. Week 2 is the baseline; week 10 is the last honest read.
-3. **The repeat-burst decrement** (Tuesday, weeks 1, 6, 11): ten bursts of 6 seconds flat out with 30 seconds easy; peak power of the first versus the last. Whether your fourth flurry has anything in it.
-4. **Broad jump** and **rotational throw**, best of three (Saturday, week 1; Tuesday, weeks 6 and 11). Power, measured. **The nasal threshold** rides Thursday's bike in weeks 1, 6 and 11: eight minutes nose only, pace up every two minutes until the mouth has to open.
+1. **The 20-minute test** (Sunday 27 September): 5 easy minutes, then 20 minutes for the most distance you can on the erg you'll use all camp, and the highest heart rate you see. The engine's ceiling and your peak heart rate — every easy session is paced at 65–75% of it.
+2. **The 6 × 3 simulation, scored** (weeks 2, 5, 6 and 9; weeks 10 and 11 too on the no-fight path): round-one output and round-six output. Round six divided by round one is the fade. Week 2 is the baseline; week 9 is the last honest read before a fight.
+3. **The repeat-burst decrement** (Tuesday, weeks 1 and 6, and at the fork): ten bursts of 6 seconds flat out with 30 seconds easy; peak power of the first versus the last. Whether your fourth flurry has anything in it.
+4. **Broad jump** and **rotational throw**, best of three (Saturday, week 1; Tuesday, week 6 and at the fork). Power, measured. **The nasal threshold** rides Thursday's bike in weeks 1 and 6, and on the no-fight path in week 11: eight minutes nose only, pace up every two minutes until the mouth has to open.
 5. **Push-ups to a standard** — chest to a fist, two seconds down, unbroken, max. **Chin-ups** — dead hang, max. **Plank** and **Copenhagen hold** to failure.
 6. **BOLT** — a normal breath in and out, pinch the nose, time to the first definite urge. Breathing efficiency and a readiness number.
-7. **Resting heart rate** on waking, five mornings averaged. **Bodyweight** and **waist**, weekly; the tape at weeks 1, 6 and 11. **Working weights** — squat, trap bar, push press — confirmed in week 1 and reset in week 6; the change is the strength number. **The four range tests** in weeks 1, 6 and 11, because the hips and shoulders don't get a camp off.
+7. **Resting heart rate** on waking, five mornings averaged. **Bodyweight** and **waist**, weekly; the tape at weeks 1, 6 and 11. **Working weights** — squat, trap bar, push press — confirmed in week 1 and reset in week 6; the change is the strength number. **The four range tests** in weeks 1, 6 and 10, because the hips and shoulders don't get a camp off.
 
 Targets over twelve honest weeks from where you are: fade 8–12 points better · 20-minute distance +8–10% · burst decrement halved · jump and throw +6–8% · working weights +8–12% · BOLT +8 seconds · resting heart rate down 4–8 beats · every range test moved.
 
@@ -158,7 +156,7 @@ Moderate intervals (week 1): 4 × 3 minutes at a pace where you could speak shor
 
 Repeat bursts: 8 bursts of 6–8 seconds at absolute maximum with 40 seconds easy between; 5 full minutes easy; 8 more. This is a flurry, twenty or thirty seconds apart, for a round — and what decides whether the fourth flurry has anything in it is how fast the muscle refills between them. If a burst is visibly weaker than the last, take an extra 20 seconds; if two in a row are, the set is over.
 
-40-second repeats (week 10, Tuesday): as Thursday's page.
+40-second repeats (week 10, Tuesday, on the no-fight path): as Thursday's page.
 
 Easy (weeks 4 and 8): 20 minutes conversational.
 
@@ -190,7 +188,7 @@ Load the sled with 40–60% of bodyweight, lean in at about 45°, sprint 20 metr
 
 Stand inside the bar, grip the handles, flat back, drive the floor away. Nothing passes over your body and a rep you're not sure of goes down, not up — the one heavy lift safe to do alone at this hour.
 
-The phases, block by block: **SLOW LOWERING (weeks 1–2)** — lower the bar to the floor over a full five seconds, touch, and drive up fast. The slow lowering is what builds tissue in a body that's out of practice and the tendon stiffness that sprinting will need; it will make you sore in week 1 and then it won't. **PAUSED (weeks 3–4)** — lower normally, stop dead an inch off the floor for three seconds, then drive. The position force starts from, owned. **FAST (weeks 5–7)** — no pause: down under control, up as fast as the bar will move; week 6 at 65%, easy. **CONTRAST (weeks 8–10)** — 3 × 2 at the table's percentage, fast, then straight into the jump circuit (Saturday's page describes it) with trap bar jumps as the loaded jump. Heavy wakes the system up; fast uses it. **Week 11** — 2 × 2 at 80%, fast. **Week 12** — nothing.
+The phases, block by block: **SLOW LOWERING (weeks 1–2)** — lower the bar to the floor over a full five seconds, touch, and drive up fast. The slow lowering is what builds tissue in a body that's out of practice and the tendon stiffness that sprinting will need; it will make you sore in week 1 and then it won't. **PAUSED (weeks 3–4)** — lower normally, stop dead an inch off the floor for three seconds, then drive. The position force starts from, owned. **FAST (weeks 5–7)** — no pause: down under control, up as fast as the bar will move; week 6 at 65%, easy. **CONTRAST (weeks 8–9, and 10 on the no-fight path)** — 3 × 2 at the table's percentage, fast, then straight into the jump circuit (Saturday's page describes it) with trap bar jumps as the loaded jump. Heavy wakes the system up; fast uses it. **The sharpen week** — 2 × 2 at 80%, fast. **Fight week** — nothing.
 
 **4 · 0:30 — BENCH THROW · 4 × 3 · rest 90 s · 6 min**
 
@@ -226,7 +224,7 @@ Rotational shot-put, 2 × 3 per side — medicine ball, 3–5 kg, at the shoulde
 
 **3 · 0:16 — SPLIT SQUAT, REAR FOOT ELEVATED · 3 × 6–8 each leg · rest 60 s · 7 min**
 
-Back foot up on a bench behind you, front shin near vertical, a dumbbell in each hand; sink until the back knee nearly touches, drive up through the front heel. Weak side first, and the same weight on both legs. The rear-leg drive and the pivot are one foot; this is where the weak side gets found and fixed. Week 6 and week 11: 2 sets. Week 12: none.
+Back foot up on a bench behind you, front shin near vertical, a dumbbell in each hand; sink until the back knee nearly touches, drive up through the front heel. Weak side first, and the same weight on both legs. The rear-leg drive and the pivot are one foot; this is where the weak side gets found and fixed. Week 6 and the sharpen week: 2 sets. Fight week: none.
 
 **4 · 0:23 — SPANISH SQUAT HOLD · 3 × 30 seconds · rest 30 s · 3 min**
 
@@ -234,17 +232,17 @@ A thick band around the back of both knees, anchored to the rack in front of you
 
 **5 · 0:26 — ENGINE 2 · 24–28 min · the table says which**
 
-Tempo intervals (week 1): 10 × 1 minute hard-but-controlled — about 70% of flat out, breathing hard but never gasping — with 1 minute easy between. Aerobic power without the cost; the bridge from base to the hard work. **Weeks 1, 6 and 11: the NASAL THRESHOLD TEST first** — eight minutes nose only, pace up every two minutes until the mouth has to open; log the pace and the honest half — did it open because it had to, or because you caved — then run the session one round short.
+Tempo intervals (week 1): 10 × 1 minute hard-but-controlled — about 70% of flat out, breathing hard but never gasping — with 1 minute easy between. Aerobic power without the cost; the bridge from base to the hard work. **Weeks 1 and 6 (and week 11 on the no-fight path): the NASAL THRESHOLD TEST first** — eight minutes nose only, pace up every two minutes until the mouth has to open; log the pace and the honest half — did it open because it had to, or because you caved — then run the session one round short.
 
 Threshold (week 3): 2 × 8 minutes at the hardest pace you could hold for half an hour — sentences impossible, short phrases possible — with 3 easy minutes between. The pace of a hard round, held.
 
 40-second repeats: 40 seconds absolutely flat out, 80 seconds easy. Six; in the weeks the table says 2 × 6, rest 5 full minutes and do six more. Rounds 1–2 feel fine, round 3 burns, the last three are horrible. That burning is the late rounds, and this is the only session that goes there. Don't hold back early to survive the end.
 
-Repeat bursts (weeks 5 and 10): as Tuesday's page.
+Repeat bursts (week 5, and week 10 on the no-fight path): as Tuesday's page.
 
 Rounds on the erg (weeks 7 and 9): 7 × 3 minutes on the bike or SkiErg at fight pace — the output you can hold across all seven — 60 seconds between. One round past the fight. Write down round 1 and round 7.
 
-Fight-pace rounds (week 11): 4 × 3 minutes at the pace you held in week 9, 60 seconds between, and stop. Sharp, not tired.
+Fight-pace rounds (week 10 on the fight path; week 11 on the other): 4 × 3 minutes at the pace you held in week 9, 60 seconds between, and stop. Sharp, not tired.
 
 Easy (week 6): 20 minutes conversational.
 
@@ -276,27 +274,27 @@ Turkish get-up, 2 per side, light — lie on your back with a kettlebell pressed
 
 **2 · 0:16 — FLYING SPRINTS · runs from the table · rest 2½–3 min · 14 min**
 
-Jog-build for 10–15 metres, then 20 metres absolutely flat out. Walk back, full rest — speed, not cardio. Curved treadmill, outdoors, or a treadmill on an 8–12% incline at 12–15 km/h for 8–10 seconds with the safety clip on. Week 1: build-ups, then three runs at 90% — no flat-out sprint until week 2. Weeks 6 and 11: at 90%. Yellow day: 3 runs at 90%.
+Jog-build for 10–15 metres, then 20 metres absolutely flat out. Walk back, full rest — speed, not cardio. Curved treadmill, outdoors, or a treadmill on an 8–12% incline at 12–15 km/h for 8–10 seconds with the safety clip on. Week 1: build-ups, then three runs at 90% — no flat-out sprint until week 2. Week 6 and the fork week: at 90%. Yellow day: 3 runs at 90%.
 
 **3 · 0:30 — REACTIVE JUMPS · 8 min · rest 2 min**
 
-Weeks 1–6: LOADED DROP JUMPS, 3 × 4 — a hex dumbbell in each hand, 8–12 kg, dip fast into a quarter squat, let both dumbbells go at the bottom and jump straight up as high as you can, empty-handed; land soft on clear floor. Weeks 7–10: DEPTH JUMPS, 4 × 5 — step off a 30–40 cm box and, the instant the feet touch, jump as high as you can, shortest possible time on the floor. Stop the set the moment a jump is lower than the last.
+Weeks 1–6: LOADED DROP JUMPS, 3 × 4 — a hex dumbbell in each hand, 8–12 kg, dip fast into a quarter squat, let both dumbbells go at the bottom and jump straight up as high as you can, empty-handed; land soft on clear floor. Weeks 7–9 (and 10 on the no-fight path): DEPTH JUMPS, 4 × 5 — step off a 30–40 cm box and, the instant the feet touch, jump as high as you can, shortest possible time on the floor. Stop the set the moment a jump is lower than the last.
 
 **4 · 0:38 — SIDE BOUNDS · 3 × 4 per side · rest 90 s · 6 min**
 
-Stand on one leg, jump sideways as far as you can, land on the other and stick it dead still for 2 seconds. Weeks 8–10: no stick — bounce straight back the other way. The sideways push-off that cuts a ring off.
+Stand on one leg, jump sideways as far as you can, land on the other and stick it dead still for 2 seconds. Weeks 8–9: no stick — bounce straight back the other way. The sideways push-off that cuts a ring off.
 
 **5 · 0:44 — BACK SQUAT · sets from the table · rest 3 min · PINS SET · 16 min**
 
 Warm-up sets first: 40% × 3, 60% × 2, 75% × 1 of working. Bar on the back, break at the hips and knees together, sit to just below parallel, drive up. Pins set just below your lowest position, every set — you're alone.
 
-The same phases as the trap bar: **weeks 1–2 slow lowering** — five seconds down, drive up fast; **weeks 3–4 paused** — three seconds dead still at the bottom, then drive; **weeks 5–7 fast** (week 6 easy); **weeks 8–10 CONTRAST** — each set is 2 reps at the table's percentage, fast, then rest 20 seconds, box jumps × 3, rest 20, trap bar jumps × 3 (a trap bar loaded to 20% of its working weight, jump with it, land soft), rest 20, band-assisted jumps × 3 (a heavy band looped over the top of the rack and tucked under the armpits so it pulls you upward — it makes you faster than you are), then 3 minutes' rest, three rounds (two in week 10). The round ends the moment jump height drops. **Week 11**: 2 × 2 at 80% fast on the no-fight path, the speed microdose on the fight path. **Week 12**: nothing.
+The same phases as the trap bar: **weeks 1–2 slow lowering** — five seconds down, drive up fast; **weeks 3–4 paused** — three seconds dead still at the bottom, then drive; **weeks 5–7 fast** (week 6 easy); **weeks 8–9 CONTRAST, and week 10 on the no-fight path** — each set is 2 reps at the table's percentage, fast, then rest 20 seconds, box jumps × 3, rest 20, trap bar jumps × 3 (a trap bar loaded to 20% of its working weight, jump with it, land soft), rest 20, band-assisted jumps × 3 (a heavy band looped over the top of the rack and tucked under the armpits so it pulls you upward — it makes you faster than you are), then 3 minutes' rest, three rounds (two in week 10). The round ends the moment jump height drops. **The fork week**: the speed microdose on the fight path; contrast at 88% on the other. **Fight week**: nothing.
 
 Lower-body maximal strength is the best predictor there is of how hard trained boxers hit. Twelve weeks builds some, expresses all of it, and the contrast block is where it becomes speed.
 
 **6 · 1:00 — PUSH PRESS · 3 × 3 · rest 2 min · 8 min**
 
-Bar on the front of the shoulders, quick shallow knee dip, drive it overhead with the legs and punch it to lockout. Legs, braced trunk, hands — the route a punch takes. Loaded like the other lifts: fast, two in reserve; weeks 8–10 at 85%, week 11 at 70%.
+Bar on the front of the shoulders, quick shallow knee dip, drive it overhead with the legs and punch it to lockout. Legs, braced trunk, hands — the route a punch takes. Loaded like the other lifts: fast, two in reserve; weeks 8–9 at 85%, the fork week at 70%.
 
 **7 · 1:08 — THE FOUR PUNCH THROWS · 2 rounds · 12 min**
 
@@ -316,11 +314,11 @@ The session the camp is for. Fed and rested — porridge two hours before, half 
 
 **3 · 0:26 — THE 6 × 3 SIMULATION · rest from the table · 24–28 min**
 
-Six rounds of three minutes (weeks 7–10: seven). Each round: minute 1 on the SkiErg → minute 2 on the assault bike → minute 3 medicine-ball slams — a 5–8 kg ball overhead and driven into the floor, caught on the bounce, hard and continuous — or, if the gym has a bag, bag work, hard and technically clean.
+Six rounds of three minutes (weeks 7–9: seven; and 10 on the no-fight path). Each round: minute 1 on the SkiErg → minute 2 on the assault bike → minute 3 medicine-ball slams — a 5–8 kg ball overhead and driven into the floor, caught on the bounce, hard and continuous — or, if the gym has a bag, bag work, hard and technically clean.
 
 Rule 1: relaxed jaw, shoulders down. Finish a round with your traps by your ears and it doesn't count. Rule 2: every rest is the CORNER MINUTE — two physiological sighs the second the round ends (a full breath in through the nose, a short second sip on top, one long slow exhale through the mouth, twice), then nose only, in for 3 and out for 6, stood up, hands off the knees. Hands-on-knees gasping keeps you revved and starts the next round behind. Rule 3: on scored weeks write down round one's output and round six's. Round six divided by round one is the fade.
 
-Week 1: the 20-MINUTE TEST, then three easy rounds to learn the stations. Scored weeks: 2, 5, 6, 9, 10 — and 11 on the no-fight path.
+Week 1: the 20-MINUTE TEST, then three easy rounds to learn the stations. Scored weeks: 2, 5, 6 and 9 — and 10 and 11 on the no-fight path.
 
 **4 · 0:54 — THE POST-MAX SIT · 3 min** — straight off the last round: sit, eyes closed, heart at 170-plus, find the breath at the nostrils. Write down the seconds it took. The corner, trained.
 
@@ -334,13 +332,13 @@ Bodyweight · waist · resting heart rate · green / yellow / red days · joints
 
 Three yellows in a week: next week runs at the table's numbers minus one set on everything and the interval sessions at 90%.
 
-**Done · ~1:11.** RANGE tonight, and the easy hour this afternoon — 30–40 minutes easy, nose only, bike or walk, four-plus hours after the session. Weeks 4–10: sauna, 15–20 minutes, twice a week if you can get one, Sunday and one weekday evening — heat acclimation over three weeks raises blood volume and endurance the way nothing else this cheap does. Never straight from the sauna into cold.
+**Done · ~1:11.** RANGE tonight, and the easy hour this afternoon — 30–40 minutes easy, nose only, bike or walk, four-plus hours after the session. Weeks 4–9: sauna, 15–20 minutes, twice a week if you can get one, Sunday and one weekday evening — heat acclimation over three weeks raises blood volume and endurance the way nothing else this cheap does. Never straight from the sauna into cold.
 
 ---
 
 ## CALISTHENICS — THE LINES AND THE LEVELS
 
-The five lines you're already running, at the levels you've reached, in the same slots: nothing new to learn in a camp. The handstand, the planche leans and the German hang are not on the camp's clock — they stay in your home skill block if you want them there, as your call, at holds only from week 11.
+The five lines you're already running, at the levels you've reached, in the same slots: nothing new to learn in a camp. The handstand, the planche leans and the German hang are not on the camp's clock — they stay in your home skill block if you want them there, as your call, at holds only from the fork.
 
 **You own a level when you hit the top of its target for the prescribed sets on two occasions running.** Adding reps at a level always comes before adding difficulty. Reps in the tank on every set. Easy weeks: half the sets. Weeks 11–12: holds only. Any elbow or wrist at 4 or above on the weekly check: holds only the following week.
 
@@ -418,7 +416,7 @@ Wall slides × 12, with a 3-second reach at the top — back flat on the wall, f
 
 ---
 
-### THE FOUR TESTS · weeks 1, 6 and 11 · on the Sunday weekly check
+### THE FOUR TESTS · weeks 1, 6 and 10 · on the Sunday weekly check
 
 1. **90/90 sit** — both sitting bones on the floor, no hands: yes or no each side, and how many centimetres the back knee sits off the floor.
 2. **Deep squat** — heels down, 60 seconds: heels stayed down, thighs below parallel, back flat — three yes-or-nos.
@@ -443,27 +441,27 @@ Hollow hold, 2 × 20 seconds — on your back, lower back pressed into the floor
 
 ---
 
-## WEEK 11 · THE FORK · 23–29 NOVEMBER
+## WEEK 10 · THE FORK · 23–29 NOVEMBER
 
 By Monday 23 November you know whether there's a fight on the 1st. Both paths are written; you run one.
 
-**FIGHT CONFIRMED — SHARPEN.** The camp's work is done; week 11 converts it. Volume drops by about 40%; intensity stays; everything is short and fast and finished fresh. **Monday:** 30 minutes easy, neck, hands. **Tuesday:** the retests, short — burst decrement, broad jump, throw, BOLT, the range tests — inside a 40-minute session, then one set of eight repeat bursts, sharp, and the settle. **Wednesday:** sled 3 runs; 2 × 2 on the trap bar at 80%, fast; bench throws 3 × 3; chins 2 × 5; Nordics 2 × 3; neck holds. **Thursday:** three easy throws, then 4 × 3 minutes at fight pace on the erg, 60 seconds between, and the settle; neck, hands. **Friday:** sleep. **Saturday:** the SPEED MICRODOSE — get-ups, warm-up and build-ups, 3 × 20 m at 90%, box jumps 2 × 3, rotational throws 2 × 3 per side, bench throws 3 × 3; 25 minutes, everything fast, nothing tired. **Sunday: THE FIGHT-DAY REHEARSAL.** Get up at the time you'll get up on the 1st. Eat what you'll eat, when you'll eat it. Do the warm-up you'll do. Then, at the hour the fight is on, six rounds of three minutes at fight pace on the erg or the bag, 60 seconds between, the corner minute every rest, the post-max sit after. Not a test — a rehearsal. Everything that goes wrong today, you fix before the day it matters.
+**FIGHT CONFIRMED — SHARPEN.** The camp's work is done; week 10 converts it. Volume drops by about 40%; intensity stays; everything is short and fast and finished fresh. **Monday:** 30 minutes easy, neck, hands. **Tuesday:** the retests, short — burst decrement, broad jump, throw, BOLT, the range tests — inside a 40-minute session, then one set of eight repeat bursts, sharp, and the settle. **Wednesday:** sled 3 runs; 2 × 2 on the trap bar at 80%, fast; bench throws 3 × 3; chins 2 × 5; Nordics 2 × 3; neck holds. **Thursday:** three easy throws, then 4 × 3 minutes at fight pace on the erg, 60 seconds between, and the settle; neck, hands. **Friday:** sleep. **Saturday:** the SPEED MICRODOSE — get-ups, warm-up and build-ups, 3 × 20 m at 90%, box jumps 2 × 3, rotational throws 2 × 3 per side, bench throws 3 × 3; 25 minutes, everything fast, nothing tired. **Sunday: THE REHEARSAL-LITE.** Get up at the time you'll get up on the 1st. Eat what you'll eat, when you'll eat it. Do the warm-up you'll do. Then, at the hour the fight is on, two rounds of three minutes at fight pace — not six, the fight is two days away — the corner minute between, the post-max sit after. Everything that goes wrong today, you fix before the day it matters. Then feet up.
 
-**NO FIGHT — THE TEST WEEK.** Week 11 becomes the camp's verdict, and the hand-over to Optimal 8. **Monday:** 30 minutes easy, neck, hands. **Tuesday:** the retests — burst decrement, broad jump, throw, BOLT, push-ups, chins, the range tests — then 20 minutes easy. **Wednesday:** the working-weight reset — a set of 3 on the trap bar, hard with two in you — bench throws 3 × 3, chins 3 × 5, Nordics 2 × 3. **Thursday:** the nasal threshold test, then 4 × 3 minutes at fight pace and the settle. **Friday:** sleep. **Saturday:** build-ups, 3 × 20 m timed, the squat reset — a set of 3 the same way — push press 2 × 2, the throws for distance. **Sunday:** the 6 × 3 simulation, scored, the fade against week 2's baseline, the tape. Then Optimal 8 Fighter restarts at week 1 on Monday 30 November with every number better than the ones it left with, and the Camp Mode switch goes off.
+**NO FIGHT — THE LAST HARD WEEK.** Week 10 runs as the fourth peak week — Monday 40 minutes, Tuesday 40-second repeats 2 × 6, Wednesday contrast at 88% with two rounds of the circuit, Thursday repeat bursts, Saturday the sprints and the contrast at 88%, Sunday the seven rounds scored — and week 11 becomes the camp's verdict and the hand-over to Optimal 8: **Monday:** 30 minutes easy, neck, hands. **Tuesday:** the retests — burst decrement, broad jump, throw, BOLT, push-ups, chins, the range tests — then 20 minutes easy. **Wednesday:** the working-weight reset — a set of 3 on the trap bar, hard with two in you — bench throws 3 × 3, chins 3 × 5, Nordics 2 × 3. **Thursday:** the nasal threshold test, then 4 × 3 minutes at fight pace and the settle. **Friday:** sleep. **Saturday:** build-ups, 3 × 20 m timed, the squat reset — a set of 3 the same way — push press 2 × 2, the throws for distance. **Sunday:** the 6 × 3 simulation, scored, the fade against week 2's baseline, the tape. Then Optimal 8 Fighter restarts at week 1 on Monday 7 December with every number better than the ones it left with, and the Camp Mode switch goes off.
 
 ---
 
-## WEEK 12 · FIGHT WEEK · FIGHT ON TUESDAY 1 DECEMBER
+## WEEK 11 · FIGHT WEEK · TUESDAY 1 DECEMBER
 
-You cannot get fitter this week. You can only get fresher or more tired. Every decision this week is made by asking which of those it does. For a Tuesday fight, the taper's last days are the end of week 11 and the start of week 12:
+You cannot get fitter this week. You can only get fresher or more tired. For a Tuesday fight the taper is the last days of week 10 and the first of week 11:
 
 | Day | What |
 |---|---|
-| Wednesday 25 Nov | As the sharpen page: the light trap bar and throws. |
+| Wednesday 25 Nov | As the sharpen page: the light trap bar, the throws, the chins. |
 | Thursday 26 Nov | The four fight-pace rounds and the settle. |
 | Friday 27 Nov | Sleep. |
 | Saturday 28 Nov | The SPEED MICRODOSE, 25 minutes. Nothing tired. |
-| Sunday 29 Nov | THE REHEARSAL, with two fight-pace rounds instead of six — the wake time, the meals, the warm-up, then two rounds and the corner minute. Then feet up. |
+| Sunday 29 Nov | THE REHEARSAL-LITE — the wake time, the meals, the warm-up, two rounds at fight pace, the corner minute. Then feet up. |
 | Monday 30 Nov | ACTIVATION · 20 min: Tuesday's warm-up, band pull-aparts and external rotations, three easy throws per side, two minutes of shadow boxing at pace, three physiological sighs, done. Weigh-in if there is one. The rehearsal's meals. RANGE at half dose. Bed by half past eight. |
 | Tuesday 1 Dec | FIGHT. The warm-up you rehearsed. The corner minute in every rest. Round six is a place you've already been. |
 
@@ -505,7 +503,7 @@ Skill. Hitting hard on contact, snap and retraction, distance, timing, the guard
 
 **Why the rounds are Sunday and the long session Saturday.** The rounds are the hardest thing in the week and the session the camp is for, so they get the day with no shift after it and an easy morning after it. The long session sits the day before because sprints and squats don't blunt a round session the way rounds would blunt sprints. Friday sleeps in front of both.
 
-**Why the last ten days are sacred.** Fitness is built over weeks and expressed over days. Everything you'll have on the 1st of December, you'll have by Sunday 22 November. Week 11 sharpens it; the last days protect it. The fighter who trains hard in fight week is the fighter who arrives tired, and every experienced coach has watched it happen. This program stops it by writing it down.
+**Why the last ten days are sacred.** Fitness is built over weeks and expressed over days. Everything you'll have on the 1st of December, you'll have by Sunday 22 November. Week 10 sharpens it; the last days protect it. Losing the fourth peak week to the delayed start costs a little top-end power, not fitness — the fitness was built by week 9 either way. The fighter who trains hard in fight week is the fighter who arrives tired, and every experienced coach has watched it happen. This program stops it by writing it down.
 
 **Why sleep is a rule.** Sleep extension is the best-evidenced performance intervention there is. For a scaffolder on 3:30 alarms it's also the scarcest thing. Half past eight, four nights a week, and Friday off the alarm, is the single most important line in the file.
 
