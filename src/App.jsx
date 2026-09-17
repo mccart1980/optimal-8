@@ -1323,7 +1323,7 @@ function Session(props) {
         <div style={{ padding: "12px 14px 14px" }}>
           <Eye s={{ marginBottom: 6 }}>{MODE.camp ? "The daily check — before every session, and it governs the camp" : "Readiness — sets today's loads"}</Eye>
           {MODE.camp ? <div style={{ marginBottom: 8 }}>{CAMP_DAILY_CHECK.q.map((q, i) => <div key={i} style={Object.assign({}, bdy, { fontSize: 12, color: C.ash, lineHeight: 1.45, padding: "2px 0" })}>{i + 1}. {q}</div>)}</div> : null}
-          {isCurrent ? <MorningFlagLine flag={mFlag} /> : null}
+          <MorningFlagLine flag={mFlag} />
           <Seg opts={[["G", "GREEN", C.moss], ["Y", "YELLOW −7%", C.brass], ["R", "RED", C.oxide]]} val={ready} on={(val) => setReady(ready === val ? "" : val)} />
           {ready === "Y" ? <Note c={C.brass}>{MODE.camp ? CAMP_DAILY_CHECK.yellow : "Top sets reduced 7%. Sprints become 3 × 20m @ 90%. Drop the last accessory block."}</Note> : null}
           {ready === "R" ? <Note c={C.oxide}>{MODE.camp ? CAMP_DAILY_CHECK.red : "No max effort, no sprints, no jumps today. Prep, protocols, mobility — then stop."}</Note> : null}
@@ -2271,6 +2271,7 @@ export default function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [isub, setIsub] = useState("breathe");
   const [trackSub, setTrackSub] = useState(null);
+  const [photoDate, setPhotoDate] = useState(null);
   const [done, setDoneRaw] = useState({});
   const [log, setLogRaw] = useState({});
   const [maxes, setMaxesRaw] = useState({});
@@ -2528,9 +2529,16 @@ export default function App() {
       : iso(new Date(mondayOf(parseISO(st.start)).getTime() + (((shown.macro - st.macroBase) * L) + (shown.week - 1)) * 604800000));
     return Array.from({ length: 7 }, (_, i) => addDays(mon, i));
   }, [st.camp, campStart, st.start, st.macroBase, L, shown.macro, shown.week]);
-  const mFlag = useMemo(() => morningFlag(morning[dayIso], morning, st, dayIso), [morning, st, dayIso]);
+  /* The morning numbers belong to the day you are looking at, not to the
+     day it happens to be: tapping MON on the day strip shows Monday's
+     morning, so a morning missed on the day can be filled in after it.
+     Only a day that hasn't happened yet has nothing to show. */
+  const shownIso = weekDates[DAYS.indexOf(shown.day)] || dayIso;
+  const shownFuture = shownIso > dayIso;
+  const mFlag = useMemo(() => morningFlag(morning[shownIso], morning, st, shownIso), [morning, st, shownIso]);
   const photoDay = isPhotoDay(!!st.camp, current.week, today);
-  const photosToday = photos[dayIso] || {};
+  const shownPhotoDay = isPhotoDay(!!st.camp, shown.week, shown.day);
+  const photosShown = photos[shownIso] || {};
   const dateOf = useCallback((mac, wk, dy) => {
     const di = Math.max(0, DAYS.indexOf(dy || "sun"));
     const mon = mac === "C"
@@ -2637,9 +2645,9 @@ export default function App() {
                 {noMaxes ? <Card ac={C.brass}><Eye c={C.brass}>First — your numbers</Eye><Note c={C.chalk} s={{ marginTop: 0 }}>Enter your best squat and bench singles so every weight shows in kilos. Trap bar and push press get found in week 1.</Note><Btn small c={C.brass} fill s={{ marginTop: 10 }} on={() => setTab("track")}>ENTER MAXES</Btn></Card> : null}
                 {isToday ? <IronToday IM={IM} part="head" /> : null}
                 {isToday ? <IronToday IM={IM} part="waking" /> : null}
-                {isToday ? <MorningCard dayIso={dayIso} morning={morning} setMorning={setMorning} st={st} camp={!!st.camp} /> : null}
-                {isToday && photoDay ? <PhotoPrompt camp={!!st.camp} week={current.week} done={!!(photosToday.front || photosToday.side || photosToday.back)}
-                  onOpen={() => { setTab("track"); setTrackSub("photos"); }} /> : null}
+                {!shownFuture ? <MorningCard dayIso={shownIso} isToday={isToday} morning={morning} setMorning={setMorning} st={st} camp={!!st.camp} /> : null}
+                {shownPhotoDay ? <PhotoPrompt camp={!!st.camp} week={shown.week} future={shownFuture} done={!!(photosShown.front || photosShown.side || photosShown.back)}
+                  onOpen={() => { setPhotoDate(shownIso); setTab("track"); setTrackSub("photos"); }} /> : null}
                 {isToday ? <div style={Object.assign({}, mno, { fontSize: 9.5, letterSpacing: 1.8, color: C.brass, padding: "8px 2px 6px" })}>THE SESSION · WRITTEN ON THE PAGE, RUN FROM HERE</div> : null}
                 <Session {...sessProps} />
                 {isToday ? <IronToday IM={IM} part="site" /> : null}
@@ -2652,8 +2660,8 @@ export default function App() {
               openDay={(d) => { setSelDay({ macro: vw.macro, week: vw.week, day: d }); setTab("today"); }} /> : null}
             {tab === "track" ? <Track current={current} maxes={maxes} onSetMax={onSetMax} maxHist={maxHist} log={log} body={body} addBody={addBody} done={done} L={L} IM={IM} calis={calis} camp={!!st.camp}
               rangeWeeks={rangeTestWeeks} rangeGet={rangeGet} campStart={campStart} fight={!!st.campFight}
-              sub={trackSub} setSub={setTrackSub} st={st} morning={morning} photos={photos} setPhotos={setPhotos} fuel={fuel} dateOf={dateOf}
-              dayIso={dayIso} photoDay={photoDay} ergUnit={st.ergUnit || "w"} /> : null}
+              sub={trackSub} setSub={(x) => { setTrackSub(x); setPhotoDate(null); }} st={st} morning={morning} photos={photos} setPhotos={setPhotos} fuel={fuel} dateOf={dateOf}
+              dayIso={photoDate || dayIso} photoDay={photoDay} ergUnit={st.ergUnit || "w"} /> : null}
             {tab === "iron" ? (
               <div>
                 <div style={{ display: "flex", gap: 4, marginBottom: 12 }}>

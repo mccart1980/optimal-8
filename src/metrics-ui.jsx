@@ -52,7 +52,7 @@ const Against = ({ v, avg, base, dir, u }) => {
 /* ================================================================
    MORNING NUMBERS — on TODAY, above the daily check
    ================================================================ */
-export function MorningCard({ dayIso, morning, setMorning, st, camp }) {
+export function MorningCard({ dayIso, morning, setMorning, st, camp, isToday }) {
   const rec = morning[dayIso] || {};
   const put = (f, v) => setMorning(Object.assign({}, morning, { [dayIso]: Object.assign({}, rec, { [f]: v }) }));
   const flag = morningFlag(rec, morning, st, dayIso);
@@ -61,7 +61,9 @@ export function MorningCard({ dayIso, morning, setMorning, st, camp }) {
     <Card ac={ac}>
       <div style={{ marginBottom: 4 }}>
         <div style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1.5, color: ac })}>THE MORNING NUMBERS</div>
-        <div style={Object.assign({}, mno, { fontSize: 8.5, color: C.ash, letterSpacing: 1.2, marginTop: 2 })}>FROM THE CHEST STRAP · BEFORE THE DAILY CHECK</div>
+        <div style={Object.assign({}, mno, { fontSize: 8.5, color: isToday === false ? C.brass : C.ash, letterSpacing: 1.2, marginTop: 2 })}>
+          {isToday === false ? fmtDate(dayIso).toUpperCase() + " · FILLING IT IN AFTER THE DAY" : "FROM THE CHEST STRAP · BEFORE THE DAILY CHECK"}
+        </div>
       </div>
       {MORNING_FIELDS.map((f) => {
         const avg7 = rolling7(morning, f.id, dayIso).avg;
@@ -330,13 +332,13 @@ export function PhotosView({ photos, setPhotos, camp, week, dayIso, isPhotoDay }
 }
 
 /* the nudge on TODAY, on the Sundays that ask for them */
-export function PhotoPrompt({ onOpen, camp, week, done }) {
+export function PhotoPrompt({ onOpen, camp, week, done, future }) {
   return (
     <Card ac={C.violet}>
       <Eye c={C.violet}>{camp ? "Camp week " + week : "Week " + week} · Sunday — the photos</Eye>
-      <div style={Object.assign({}, dsp, { fontSize: 20, fontWeight: 800, letterSpacing: 1.2, color: C.chalk })}>{done ? "PHOTOS DONE" : "FRONT, SIDE, BACK"}</div>
+      <div style={Object.assign({}, dsp, { fontSize: 20, fontWeight: 800, letterSpacing: 1.2, color: C.chalk })}>{done ? "PHOTOS DONE" : future ? "THIS SUNDAY" : "FRONT, SIDE, BACK"}</div>
       <Note c={C.chalk} s={{ marginTop: 5 }}>Same light, same spot. They stay on the phone.</Note>
-      <Btn small c={C.violet} fill={!done} s={{ width: "100%", marginTop: 10 }} on={onOpen}>{done ? "SEE THE PHOTOS" : "TAKE THEM"}</Btn>
+      <Btn small c={C.violet} fill={!done && !future} s={{ width: "100%", marginTop: 10 }} on={onOpen}>{done ? "SEE THE PHOTOS" : future ? "THE PHOTOS SCREEN" : "TAKE THEM"}</Btn>
     </Card>);
 }
 

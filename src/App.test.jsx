@@ -837,6 +837,32 @@ describe("Optimal 8", () => {
     await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-morning"))["2026-09-09"].rhr).toBe("56"));
   });
 
+  it("keeps the morning numbers on every day of the week, not only on today", async () => {
+    seedMornings(50, 80);
+    await mount();
+
+    // today (Wednesday) — the card is there, on its own date
+    expect(await screen.findByText("THE MORNING NUMBERS")).toBeInTheDocument();
+    expect(screen.getByText("FROM THE CHEST STRAP · BEFORE THE DAILY CHECK")).toBeInTheDocument();
+
+    // tap back to Monday: the card stays, carrying Monday's own morning
+    fireEvent.click(screen.getByRole("button", { name: "MON" }));
+    expect(await screen.findByText("THE MORNING NUMBERS")).toBeInTheDocument();
+    expect(screen.getByText(/MON,? 7 SEPT? · FILLING IT IN AFTER THE DAY/)).toBeInTheDocument();
+    // Monday's seeded resting heart rate, not Wednesday's
+    expect(screen.getByPlaceholderText("bpm").value).toBe("50");
+
+    // a morning missed on the day can be filled in after it, against Monday's date
+    fireEvent.change(screen.getByPlaceholderText("bpm"), { target: { value: "57" } });
+    await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-morning"))["2026-09-07"].rhr).toBe("57"));
+    // and it flags Monday's check, not Wednesday's
+    expect(await screen.findByText("THE MORNING NUMBERS FLAG THIS YELLOW")).toBeInTheDocument();
+
+    // a day that hasn't happened yet has no morning to log
+    fireEvent.click(screen.getByRole("button", { name: "SAT" }));
+    await waitFor(() => expect(screen.queryByText("THE MORNING NUMBERS")).not.toBeInTheDocument());
+  });
+
   it("computes the drop on the 60-second settle and logs it", async () => {
     await mount();
     fireEvent.click(screen.getByRole("button", { name: "TUE" }));
@@ -846,7 +872,8 @@ describe("Optimal 8", () => {
     expect(screen.getByText("HR at the end of the last interval")).toBeInTheDocument();
     expect(screen.getByText("Heart rate at 60 seconds")).toBeInTheDocument();
 
-    const hr = screen.getAllByPlaceholderText("bpm");
+    const panel = screen.getByText("Recovery heart rate — the drop over the settle").parentElement;
+    const hr = within(panel).getAllByPlaceholderText("bpm");
     expect(hr.length).toBe(2);
     fireEvent.change(hr[0], { target: { value: "172" } });
     fireEvent.change(hr[1], { target: { value: "138" } });
@@ -901,7 +928,8 @@ describe("Optimal 8", () => {
     expect(await screen.findByText("The easy zone — 65–75% of your peak heart rate")).toBeInTheDocument();
     expect(screen.getByText("117–135")).toBeInTheDocument();
 
-    fireEvent.change(screen.getByPlaceholderText("bpm"), { target: { value: "150" } });
+    const zone = screen.getByText("The easy zone — 65–75% of your peak heart rate").parentElement;
+    fireEvent.change(within(zone).getByPlaceholderText("bpm"), { target: { value: "150" } });
     expect(await screen.findByText(/Easy means easy/)).toBeInTheDocument();
   });
 
@@ -991,7 +1019,8 @@ describe("Optimal 8", () => {
     expect(await screen.findByText("The easy zone — 65–75% of your peak heart rate")).toBeInTheDocument();
     expect(screen.getByText("120–138")).toBeInTheDocument();
     expect(screen.getByText("Average heart rate")).toBeInTheDocument();
-    fireEvent.change(screen.getByPlaceholderText("bpm"), { target: { value: "128" } });
+    const zone = screen.getByText("The easy zone — 65–75% of your peak heart rate").parentElement;
+    fireEvent.change(within(zone).getByPlaceholderText("bpm"), { target: { value: "128" } });
     expect(await screen.findByText("In the zone.")).toBeInTheDocument();
 
     // and the 20-minute test itself logs four five-minute splits
