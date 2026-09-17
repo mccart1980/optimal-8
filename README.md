@@ -31,6 +31,7 @@ version in the background.
 
 Everything — your maxes, ticked sessions, notes, body weight, Hell Week scores,
 your calisthenics levels and the dates you owned them, your four range tests,
+the morning numbers, the erg outputs, the bar speeds, your photos,
 and the whole Iron Mind side: the day's ticks, your sits, your BOLT and your
 hardship tests — is stored
 **on your phone**, inside the app. There is no account,
@@ -39,6 +40,59 @@ other devices.
 
 That also means: **if you delete the app from your home screen, or clear
 Safari's website data, your training history goes with it.** So back it up.
+
+## The measurement layer
+
+Everything below is **optional**, and every field in it is a ten-second entry.
+Nothing that was already in the app changed to make room for it.
+
+**The morning numbers.** On TODAY, above the daily check: resting heart rate
+and HRV, typed in from a chest-strap app, plus last night's hours of sleep and
+the time the light went off. Each of the two heart numbers is shown against its
+own seven-day rolling average and against the week-1 baseline. Resting heart
+rate 5 or more beats over the baseline, or HRV 12% or more below its seven-day
+average, flags the daily check **yellow**; both together suggests **red**. It
+is a flag, not an instruction — the check is still yours to make. Settings has
+**RECALIBRATE BASELINE**, which sets the week-1 baseline to the last seven days.
+
+**Recovery heart rate.** The 60-second settle now takes the heart rate at the
+end of the last interval and the heart rate 60 seconds later. The app works out
+the drop, logs it, and charts it.
+
+**The easy zone.** Once the 20-minute test's peak heart rate is logged, the app
+works out 65–75% of it and shows that zone on Monday's base and on the easy
+hour. Each of those has an average heart rate field. Out of the zone gets a
+quiet line, not an alarm.
+
+**Erg output.** Every conditioning session — the intervals, the 40-second
+repeats, the repeat bursts, the rounds on the erg, the 6 × 3 and 7 × 3
+simulations and the 20-minute test — has an output field per interval, per
+burst or per round, in the unit you pick in settings (watts, metres or
+calories). They chart by session type, so a four-minute interval session is
+only ever read against another one. On scored weeks the simulation's fade is
+worked out from rounds one and six by itself.
+
+**Sleep.** The two morning fields fill the weekly check's sleep averages. Type
+over either one and your number stands.
+
+**Bar speed.** The top set of the squat, bench, trap bar and push press takes an
+optional bar speed in metres a second. It charts per lift at the same load —
+a speed at a different weight isn't the same measurement — and it sits beside
+the fast-bar prompt.
+
+**Photos.** A PHOTOS screen in TRACK. The app asks on the Sunday of weeks 1, 5,
+9 and 13 (weeks 1, 6 and 11 in camp mode) for front, side and back. The photos
+stay on the phone, inside the app — not in your camera roll, not on anyone's
+server — and they travel in the backup as base64, which is what makes a backup
+with photos in it a big file.
+
+**The dashboard.** A new screen at the top of TRACK: seven numbers, each with
+the way it is going and the day it was last written down — the fade, the
+20-minute distance, the burst decrement, the recovery heart rate, resting heart
+rate, HRV, and bodyweight and waist. Bodyweight and waist come from the fuel
+app's export if you have imported it in settings, and are typed on the
+dashboard if you haven't. In camp mode the camp's own target sits beside each
+number.
 
 ## Backing up
 
@@ -211,6 +265,13 @@ npm run icons   # regenerate the app icons from scripts/generate-icons.mjs
 
 - `src/App.jsx` — the training app: the macrocycle table, the session cards,
   protocols, timers, camp mode and Hell Week.
+- `src/metrics.js` — the measurement layer's arithmetic, with no React in it:
+  the rolling averages and the baseline, the yellow/red flag, the recovery drop,
+  the easy zone, the output slots for each session shape, the fade, the sleep
+  averages, the bar-speed series, the fuel-export parser and the trend arrows.
+- `src/metrics-ui.jsx` — its screens: the morning card, the recovery heart rate
+  and easy-zone panels, the per-interval output fields, the photos screen, the
+  dashboard and the settings block.
 - `src/range.js` — the home block as data: THE MORNING FIVE, every RANGE move
   with its hold, THE KEEP, and the four tests, all in the document's wording.
 - `src/range-ui.jsx` — the guided timers for the morning five, RANGE and the

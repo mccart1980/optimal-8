@@ -765,4 +765,244 @@ describe("Optimal 8", () => {
     fireEvent.click(screen.getByRole("button", { name: "IRON MIND v4.2" }));
     await waitFor(() => expect(screen.getAllByText("THE DAY — ONE PAGE, EVERY DAY").length).toBe(2));
   });
+
+  /* ================================================================
+     THE MEASUREMENT LAYER
+     ================================================================ */
+
+  /* a settled week of mornings behind today, so today has a baseline
+     and a seven-day average to be read against */
+  const seedMornings = (rhr, hrv) => {
+    const m = {};
+    for (let i = 7; i >= 1; i--) {
+      const d = new Date(2026, 8, 9 - i);
+      const iso = d.getFullYear() + "-0" + (d.getMonth() + 1) + "-" + (d.getDate() < 10 ? "0" : "") + d.getDate();
+      m[iso] = { rhr: String(rhr), hrv: String(hrv), sleep: "8", lights: "21:30" };
+    }
+    localStorage.setItem("o8s-morning", JSON.stringify(m));
+    return m;
+  };
+
+  it("takes the morning numbers before the daily check and flags the check yellow", async () => {
+    seedMornings(50, 80);
+    await mount();
+
+    expect(await screen.findByText("THE MORNING NUMBERS")).toBeInTheDocument();
+    expect(screen.getByText("FROM THE CHEST STRAP · BEFORE THE DAILY CHECK")).toBeInTheDocument();
+    expect(screen.getByText("Resting heart rate")).toBeInTheDocument();
+    expect(screen.getByText("HRV")).toBeInTheDocument();
+
+    // resting heart rate 6 over the week-1 baseline of 50 is a yellow on its own
+    fireEvent.change(screen.getByPlaceholderText("bpm"), { target: { value: "56" } });
+
+    expect(await screen.findByText("YELLOW FLAG ON TODAY'S CHECK")).toBeInTheDocument();
+    expect(screen.getAllByText(/6 bpm over the week-1 baseline/).length).toBe(2);
+    // and the daily check itself carries it
+    expect(screen.getByText("THE MORNING NUMBERS FLAG THIS YELLOW")).toBeInTheDocument();
+    // read against its own seven-day average and against week 1
+    expect(screen.getAllByText(/7-DAY AVG/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/WEEK 1/).length).toBeGreaterThan(0);
+
+    // HRV 12%+ under its seven-day average too, and the two together suggest RED
+    fireEvent.change(screen.getByPlaceholderText("ms"), { target: { value: "65" } });
+    expect(await screen.findByText("BOTH FLAGS — THIS SUGGESTS RED")).toBeInTheDocument();
+    expect(screen.getByText("THE MORNING NUMBERS SUGGEST RED")).toBeInTheDocument();
+
+    await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-morning"))["2026-09-09"].rhr).toBe("56"));
+  });
+
+  it("computes the drop on the 60-second settle and logs it", async () => {
+    await mount();
+    fireEvent.click(screen.getByRole("button", { name: "TUE" }));
+    fireEvent.click(await findHead("The 60-Second Settle"));
+
+    expect(await screen.findByText("Recovery heart rate — the drop over the settle")).toBeInTheDocument();
+    expect(screen.getByText("HR at the end of the last interval")).toBeInTheDocument();
+    expect(screen.getByText("Heart rate at 60 seconds")).toBeInTheDocument();
+
+    const hr = screen.getAllByPlaceholderText("bpm");
+    expect(hr.length).toBe(2);
+    fireEvent.change(hr[0], { target: { value: "172" } });
+    fireEvent.change(hr[1], { target: { value: "138" } });
+
+    expect(await screen.findByText("THE DROP")).toBeInTheDocument();
+    expect(screen.getByText("34")).toBeInTheDocument();
+    expect(screen.getByText("excellent")).toBeInTheDocument();
+
+    // the drop is written into the log, so it charts and exports like everything else
+    await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-log"))["m1w1-tue-settle_drop"].w).toBe("34"));
+  });
+
+  it("puts an output field on every interval of a conditioning session, in the unit from settings", async () => {
+    await mount();
+    fireEvent.click(screen.getByRole("button", { name: "TUE" }));
+    fireEvent.click(await findHead("4-MINUTE INTERVALS"));
+
+    // week 1's Tuesday is the four-minute intervals: four intervals, four fields
+    expect(await screen.findByText("Output, interval by interval — W each")).toBeInTheDocument();
+    ["INT 1", "INT 2", "INT 3", "INT 4"].forEach((l) => expect(screen.getByText(l)).toBeInTheDocument());
+    const f = screen.getAllByPlaceholderText("W");
+    expect(f.length).toBe(4);
+    fireEvent.change(f[0], { target: { value: "300" } });
+    fireEvent.change(f[1], { target: { value: "290" } });
+    expect(await screen.findByText("590")).toBeInTheDocument();
+    await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-log"))["m1w1-tue-cond_erg"].v[0]).toBe("300"));
+  });
+
+  it("computes the simulation's fade from rounds one and six on a scored week", async () => {
+    await mount({ start: "2026-08-17" });                 // week 4 — a scored week
+    fireEvent.click(screen.getByRole("button", { name: "SUN" }));
+    fireEvent.click(await findHead("Fight Simulation"));
+
+    expect(await screen.findByText("Round output — W each")).toBeInTheDocument();
+    const f = screen.getAllByPlaceholderText("W");
+    expect(f.length).toBe(6);
+    fireEvent.change(f[0], { target: { value: "100" } });
+    fireEvent.change(f[5], { target: { value: "90" } });
+
+    expect(await screen.findByText("THE FADE — ROUND 6 AGAINST ROUND 1 · SCORED WEEK")).toBeInTheDocument();
+    expect(screen.getByText(/90%/)).toBeInTheDocument();
+    // and it fills the two round figures the rest of the app already reads
+    await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-log"))["m1w4-sun-fs_rd1"].w).toBe("100"));
+    await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-log"))["m1w4-sun-fs_rd6"].w).toBe("90"));
+  });
+
+  it("shows the easy zone on the easy hour once the 20-minute test's peak is logged", async () => {
+    localStorage.setItem("o8s-log", JSON.stringify({ "m1w1-sun-bike20hr": { w: "180" } }));
+    await mount();
+    fireEvent.click(screen.getByRole("button", { name: "SAT" }));
+
+    expect(await screen.findByText("The easy zone — 65–75% of your peak heart rate")).toBeInTheDocument();
+    expect(screen.getByText("117–135")).toBeInTheDocument();
+
+    fireEvent.change(screen.getByPlaceholderText("bpm"), { target: { value: "150" } });
+    expect(await screen.findByText(/Easy means easy/)).toBeInTheDocument();
+  });
+
+  it("offers bar speed on the top set of the four bars, and nowhere else", async () => {
+    await mount();
+    fireEvent.click(screen.getByRole("button", { name: "MON" }));
+    fireEvent.click(await findHead("Bench Press"));
+    expect(await screen.findByText("Bar speed — top set (m/s) · optional")).toBeInTheDocument();
+    fireEvent.change(screen.getByPlaceholderText("m/s"), { target: { value: "0.42" } });
+    await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-log"))["m1w1-mon-bench"].bs).toBe("0.42"));
+
+    // the ring dips are not one of the four bars
+    fireEvent.click(head("Ring Dips"));
+    await waitFor(() => expect(screen.queryByPlaceholderText("m/s")).not.toBeInTheDocument());
+  });
+
+  it("fills the weekly check's sleep averages from the mornings", async () => {
+    seedMornings(50, 80);
+    await mount({ start: "2026-09-07" });
+    fireEvent.click(screen.getByRole("button", { name: "SUN" }));
+    fireEvent.click(await screen.findByText("Weekly Check"));
+
+    expect(await screen.findByText("Sleep — filled from this week's mornings")).toBeInTheDocument();
+    expect(screen.getByText(/lights out 21:30/)).toBeInTheDocument();
+  });
+
+  it("puts the dashboard at the top of TRACK, with the photos beside it", async () => {
+    seedMornings(50, 80);
+    localStorage.setItem("o8s-log", JSON.stringify({ "m1w1-sun-bike20": { w: "5200" }, "m1w1-sun-bike20hr": { w: "180" } }));
+    await mount();
+    fireEvent.click(screen.getByRole("button", { name: "TRACK" }));
+
+    expect(await screen.findByText("The dashboard — the seven numbers")).toBeInTheDocument();
+    expect(screen.getByText("Fade — round six against round one")).toBeInTheDocument();
+    expect(screen.getByText("20-minute test — distance")).toBeInTheDocument();
+    expect(screen.getByText("Burst decrement — first against last")).toBeInTheDocument();
+    expect(screen.getByText("Recovery heart rate — the 60-second drop")).toBeInTheDocument();
+    expect(screen.getByText("Resting heart rate")).toBeInTheDocument();
+    expect(screen.getByText("HRV")).toBeInTheDocument();
+    expect(screen.getByText("Bodyweight")).toBeInTheDocument();
+    expect(screen.getByText("Waist")).toBeInTheDocument();
+    expect(screen.getByText("5200")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "PHOTOS" }));
+    expect(await screen.findByText("Photos — the Sunday of weeks 1, 5, 9 and 13")).toBeInTheDocument();
+    expect(screen.getByText(/never leave the phone/)).toBeInTheDocument();
+    expect(screen.getByLabelText("Add the front photo")).toBeInTheDocument();
+    expect(screen.getByLabelText("Add the side photo")).toBeInTheDocument();
+    expect(screen.getByLabelText("Add the back photo")).toBeInTheDocument();
+  });
+
+  it("shows the camp's targets beside the dashboard's numbers in Camp Mode", async () => {
+    await mount({ camp: true, campStart: "2026-09-15" });
+    fireEvent.click(screen.getByRole("button", { name: "TRACK" }));
+
+    expect(await screen.findByText("The dashboard — the seven numbers, against the camp's targets")).toBeInTheDocument();
+    expect(screen.getByText("CAMP TARGET · 8–12 POINTS BETTER THAN WEEK 2")).toBeInTheDocument();
+    expect(screen.getByText("CAMP TARGET · +8–10% ON WEEK 1")).toBeInTheDocument();
+    expect(screen.getByText("CAMP TARGET · THE DECREMENT HALVED")).toBeInTheDocument();
+    expect(screen.getByText("CAMP TARGET · DOWN 4–8 BEATS")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "PHOTOS" }));
+    expect(await screen.findByText("Photos — the Sunday of camp weeks 1, 6 and 11")).toBeInTheDocument();
+  });
+
+  it("recalibrates the baseline and sets the erg unit from settings", async () => {
+    seedMornings(50, 80);
+    await mount();
+    fireEvent.click(screen.getByLabelText("Settings"));
+
+    expect(await screen.findByText("The morning numbers — the baseline")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "RECALIBRATE BASELINE" }));
+    expect(await screen.findByText(/Baseline set from the last 7 days/)).toBeInTheDocument();
+    await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-settings")).base.rhr).toBe(50));
+
+    fireEvent.click(screen.getByRole("button", { name: "METRES" }));
+    await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-settings")).ergUnit).toBe("m"));
+  });
+
+  it("paces Monday's base off the 20-minute test's peak, and gives the test its own splits", async () => {
+    // camp week 2: Monday's base exists, and week 1's Sunday test has been logged
+    localStorage.setItem("o8s-log", JSON.stringify({ "mCw1-sun-c_bike20": { w: "5200" }, "mCw1-sun-c_bike20hr": { w: "184" } }));
+    await mount({ camp: true, campStart: "2026-09-01" });      // today (9 Sep) is camp week 2
+    fireEvent.click(screen.getByRole("button", { name: "MON" }));
+    fireEvent.click(await findHead("Easy, nose only"));
+
+    expect(await screen.findByText("The easy zone — 65–75% of your peak heart rate")).toBeInTheDocument();
+    expect(screen.getByText("120–138")).toBeInTheDocument();
+    expect(screen.getByText("Average heart rate")).toBeInTheDocument();
+    fireEvent.change(screen.getByPlaceholderText("bpm"), { target: { value: "128" } });
+    expect(await screen.findByText("In the zone.")).toBeInTheDocument();
+
+    // and the 20-minute test itself logs four five-minute splits
+    cleanup();
+    await mount({ camp: true, campStart: "2026-09-08" });      // camp week 1, which carries the test
+    fireEvent.click(screen.getByRole("button", { name: "SUN" }));
+    fireEvent.click(await findHead("The 20-Minute Test"));
+    expect(await screen.findByText("Five-minute splits — W each")).toBeInTheDocument();
+    ["MIN 1–5", "MIN 6–10", "MIN 11–15", "MIN 16–20"].forEach((l) => expect(screen.getByText(l)).toBeInTheDocument());
+  });
+
+  it("shows the bar speed beside the fast-bar prompt", async () => {
+    localStorage.setItem("o8s-maxes", JSON.stringify({ squat: 140, bench: 100 }));
+    localStorage.setItem("o8s-log", JSON.stringify({
+      "m1w1-mon-bench": { bs: "0.41", sets: [{ ok: true, w: "75", r: "6" }, { ok: true, w: "75", r: "6" }, { ok: true, w: "75", r: "6" }, { ok: true, w: "75", r: "6" }] },
+    }));
+    await mount({ start: "2026-09-07" });
+    fireEvent.click(screen.getByRole("button", { name: "MON" }));
+    fireEvent.click(await findHead("Bench Press"));
+
+    expect(await screen.findByText("The fast-bar rule · once per lift per week")).toBeInTheDocument();
+    expect(screen.getByText(/BAR SPEED/)).toBeInTheDocument();
+    expect(screen.getByText("0.41")).toBeInTheDocument();
+  });
+
+  it("carries the new data through export and import", async () => {
+    seedMornings(50, 80);
+    localStorage.setItem("o8s-photos", JSON.stringify({ "2026-09-06": { front: "data:image/jpeg;base64,AAA" } }));
+    await mount();
+    fireEvent.click(screen.getByLabelText("Settings"));
+    fireEvent.click(await screen.findByRole("button", { name: "EXPORT" }));
+
+    const box = await screen.findByPlaceholderText("Paste a backup here, then tap load");
+    await waitFor(() => expect(box.value.length).toBeGreaterThan(10));
+    const d = JSON.parse(box.value);
+    expect(d.morning["2026-09-02"].rhr).toBe("50");
+    expect(d.photos["2026-09-06"].front).toBe("data:image/jpeg;base64,AAA");
+    expect("fuel" in d).toBe(true);
+  });
 });

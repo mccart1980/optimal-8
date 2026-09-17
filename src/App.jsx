@@ -27,6 +27,14 @@ import {
   CAMP_HOMELINE, CAMP_HOMELINE_TAPER, CAMP_EASY_HOUR, SAUNA_LINE, PHASE_NAME, HAND_BACK,
 } from "./camp.js";
 import { CampWeekTable, FightWeekTable, CampWorkPanel, CampNumbers, CampWeekCard } from "./camp-ui.jsx";
+import {
+  morningFlag, recoveryDrop, easyZone, ergSlots, ergShapeFor, ergTotal, simFade, sleepWeek,
+  BAR_SPEED_ITEMS, isPhotoDay, parseFuelExport, series, parseKey, ergUnitLabel, r1,
+} from "./metrics.js";
+import {
+  MorningCard, MorningFlagLine, RecoveryHR, EasyZonePanel, ErgPanel, BarSpeedField,
+  BarSpeedTrack, ErgTrack, PhotosView, PhotoPrompt, Dashboard, MeasureSettings, MiniBars,
+} from "./metrics-ui.jsx";
 
 /* ================================================================
    OPTIMAL 8 — THE FIGHTER BUILD v1.5 · companion app
@@ -748,7 +756,7 @@ function Plates({ kg, bar, onClose }) {
 /* ================================================================
    SET LOGGER — tap a set to confirm it; the rest clock starts itself
    ================================================================ */
-function SetLogger({ sets, reps, autoKg, cur, onChange, onSetDone, prevSets, prevLabel, prevMacro }) {
+function SetLogger({ sets, reps, autoKg, cur, onChange, onSetDone, prevSets, prevLabel, prevMacro, barSpeed, prevSpeed }) {
   const n = Math.max(1, Number(sets) || 1);
   const rows = (cur && cur.sets) || [];
   const repNum = typeof reps === "number" ? reps : (String(reps || "").match(/^\d+/) || [""])[0];
@@ -776,6 +784,7 @@ function SetLogger({ sets, reps, autoKg, cur, onChange, onSetDone, prevSets, pre
           style={Object.assign({}, mno, { flex: 1, fontSize: 9, letterSpacing: .8, padding: "7px 0", borderRadius: 3, cursor: "pointer", background: vl === o[0] ? o[1] : "transparent", color: vl === o[0] ? C.ink : C.ash, border: "1px solid " + (vl === o[0] ? "transparent" : C.line) })}>{o[0]}</button>)}
       </div>
       <div style={Object.assign({}, mno, { fontSize: 8, color: C.ash, marginTop: 4 })}>CLEAN = every rep fast · SLOWED = a rep visibly slower · CUT = stopped the set early</div>
+      {barSpeed ? <BarSpeedField v={cur && cur.bs} on={(val) => onChange(Object.assign({}, cur, { bs: val }))} prev={prevSpeed} /> : null}
     </div>);
 }
 
@@ -823,7 +832,7 @@ function CalPanel({ line, calis, setCalis, mode, week }) {
     </div>);
 }
 
-function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, openProto, startTimer, openPlates, onSetMax, autoRest, weekStats, calis, setCalis, taper, rangeWeek, openRangeTests }) {
+function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, openProto, startTimer, openPlates, onSetMax, autoRest, weekStats, calis, setCalis, taper, rangeWeek, openRangeTests, ergUnit, peakHR, morning, weekDates }) {
   const P = PH[rx.ph], yellow = ready === "Y", red = ready === "R";
   const key = (id) => "m" + macro + "w" + week + "-" + day + "-" + id;
   const prevW = (id) => log["m" + macro + "w" + (week - 1) + "-" + day + "-" + id];
@@ -841,6 +850,64 @@ function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, ope
   const fs1 = log[key(fsK[0])], fs6 = log[key(fsK[1])];
   const drop = fs1 && fs6 && num(fs1.w) && num(fs6.w) ? (num(fs1.w) - num(fs6.w)) / num(fs1.w) * 100 : null;
   const startRest = (secs) => startTimer({ kind: "rest", opt: { secs }, title: "REST" });
+
+  /* ---------------- THE MEASUREMENT LAYER ----------------
+     Every field below is optional and nothing above it changes. The
+     settle grows two heart rates, the conditioning sessions grow an
+     output field per interval or per round, Monday's base and the
+     easy hour grow an average heart rate, and the weekly check's two
+     sleep numbers fill themselves from the mornings. */
+  const itemsArr = items || [];
+  const settleId = b.settle ? ((itemsArr[0] && itemsArr[0].id) || "settle") : null;
+  const hasT20 = itemsArr.some((x) => x.id === "bike20" || x.id === "c_bike20");
+  const engKeyName = b.engKey || "eng";
+  const ergBase = b.sim ? (MODE.camp ? "c_fs" : "fs") : hasT20 ? (MODE.camp ? "c_bike20" : "bike20") : b.eng ? ((itemsArr[0] && itemsArr[0].id) || null) : null;
+  const ergShape = !ergBase ? null
+    : b.sim ? { kind: "sim", opt: { rounds: (rx.sim && rx.sim.rounds) || 6 } }
+    : hasT20 ? { kind: "t20", opt: {} }
+    : ergShapeFor(rx[engKeyName], MODE.camp);
+  const ergName = !ergBase ? "" : b.sim ? "Round output" : hasT20 ? "Five-minute splits" : "Output, interval by interval";
+  const ergKey = ergBase ? key(ergBase + "_erg") : null;
+  const ergVals = ergKey ? ((log[ergKey] || {}).v || []) : [];
+  const ergPrevTotal = ergBase ? ergTotal(((log["m" + macro + "w" + (week - 1) + "-" + day + "-" + ergBase + "_erg"] || {}).v) || []) : null;
+  const ergPut = (i, val) => { const v = ergVals.slice(); while (v.length < (ergShape ? ergSlots(ergShape.kind, ergShape.opt).length : 0)) v.push(""); v[i] = val;
+    const n = Object.assign({}, log); n[ergKey] = { v }; setLog(n); };
+  const simScored = !!(b.sim && rx.sim && (rx.sim.scored || rx.sim.tested));
+  const simF = b.sim ? simFade(ergVals) : null;
+  const easyBlock = itemsArr.some((x) => x.id === "c_base");
+  const easyHRId = easyBlock ? "c_base_hr" : null;
+  const zone = easyZone(peakHR);
+  const sleepAvg = (b.review && weekDates) ? sleepWeek(morning || {}, weekDates) : null;
+
+  /* The three numbers the app works out for you, written into the log
+     so they export, import and chart like everything else. */
+  useEffect(() => {
+    const patch = {}; let any = false;
+    if (settleId) {
+      const d = recoveryDrop((log[key(settleId + "_hrend")] || {}).w, (log[key(settleId + "_hr60")] || {}).w);
+      const k = key(settleId + "_drop"), cur = (log[k] || {}).w;
+      const want = d == null ? null : String(d);
+      if ((cur == null ? null : String(cur)) !== want) { patch[k] = want == null ? {} : { w: want }; any = true; }
+    }
+    if (b.sim && ergBase && simScored && simF) {
+      [[key(ergBase + "_rd1"), simF.rd1], [key(ergBase + "_rd6"), simF.rdLast]].forEach((r) => {
+        const cur = num((log[r[0]] || {}).w);
+        if (cur !== r[1]) { patch[r[0]] = Object.assign({}, log[r[0]], { w: String(r[1]), auto: 1 }); any = true; }
+      });
+    }
+    if (sleepAvg) {
+      const pre = MODE.camp ? "cwr_" : "wr_";
+      [[pre + "sleep", sleepAvg.hours], [pre + "lights", sleepAvg.lights]].forEach((r) => {
+        if (r[1] == null) return;
+        const k = key(r[0]), e = log[k] || {};
+        if (e.w != null && e.w !== "" && !e.auto) return;                    /* typed by hand wins */
+        if (String(e.w == null ? "" : e.w) === String(r[1])) return;
+        patch[k] = { w: String(r[1]), auto: 1 }; any = true;
+      });
+    }
+    if (any) setLog(Object.assign({}, log, patch));
+  });
+
   /* Weekly check: shoulders, elbows or wrists at 4 or above on Sunday, and
      next week every calisthenics line is holds only. */
   const jointFlag = (() => { if (week < 2) return false;
@@ -972,6 +1039,28 @@ function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, ope
         </div>) : null}
       {rest ? <div onClick={() => rt && startRest(rt)} style={Object.assign({}, mno, { fontSize: 10.5, color: C.brass, marginBottom: 11, letterSpacing: .6, cursor: rt ? "pointer" : "default", border: "1px dashed " + (rt ? C.brass : "transparent"), borderRadius: 4, padding: rt ? "8px 10px" : 0 })}>{rest.toUpperCase()}{rt ? "  ▶ TIME IT" : ""}</div> : null}
 
+      {ergBase && ergShape && !(red && b.hard) ? (
+        <ErgPanel title={ergName} slots={ergSlots(ergShape.kind, ergShape.opt)} vals={ergVals} onVal={ergPut} unit={ergUnit}
+          fade={b.sim ? simF : null} scored={simScored} prevTotal={ergPrevTotal} />) : null}
+
+      {settleId ? (
+        <RecoveryHR endHR={(log[key(settleId + "_hrend")] || {}).w} hr60={(log[key(settleId + "_hr60")] || {}).w}
+          onEnd={(val) => patch(settleId + "_hrend", "w", val)} on60={(val) => patch(settleId + "_hr60", "w", val)}
+          prev={num((log["m" + macro + "w" + (week - 1) + "-" + day + "-" + settleId + "_drop"] || {}).w)} />) : null}
+
+      {easyBlock ? (
+        <EasyZonePanel peak={peakHR} avgHR={(log[key(easyHRId)] || {}).w} onAvg={(val) => patch(easyHRId, "w", val)} />) : null}
+
+      {sleepAvg && (sleepAvg.hours != null || sleepAvg.lights != null) ? (
+        <div style={{ background: C.ink, border: "1px solid " + C.moss, borderRadius: 5, padding: "10px 12px", marginBottom: 11 }}>
+          <Eye c={C.moss} s={{ marginBottom: 4 }}>Sleep — filled from this week's mornings</Eye>
+          <div style={Object.assign({}, mno, { fontSize: 15, fontWeight: 700, color: C.chalk })}>
+            {sleepAvg.hours == null ? "—" : sleepAvg.hours + " h"}<span style={{ color: C.ash, fontSize: 10 }}> over {sleepAvg.nights} night{sleepAvg.nights === 1 ? "" : "s"}</span>
+            {sleepAvg.lights ? <span> · lights out {sleepAvg.lights}</span> : null}
+          </div>
+          <Note>The two sleep lines below are filled in for you from the hours and lights-out you logged each morning. Type over either one and your number stands.</Note>
+        </div>) : null}
+
       {items && !(red && b.hard) ? items.map((it, j) => {
         const id = it.id, k = it.k, cur = id ? (log[key(id)] || {}) : {};
         const auto = it.mk && it.pct != null ? calc(it.mk, v(it.pct, rx)) : null;
@@ -988,7 +1077,8 @@ function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, ope
             {bwLine(it) ? <div style={Object.assign({}, mno, { fontSize: 11, color: C.brass, marginTop: 4 })}>{bwLine(it)}</div> : null}
             {cue ? <Note s={{ marginTop: 3 }}>{cue}</Note> : null}
             {id && k === "wr" ? <SetLogger sets={v(it.sets, rx)} reps={v(it.reps, rx)} autoKg={auto ? auto[0] : null} cur={cur} onChange={(e) => setE(id, e)}
-              onSetDone={() => { if (autoRest && rt) startRest(rt); }} prevSets={setsSummary(pw)} prevLabel={"LAST WEEK"} prevMacro={pm && setsSummary(pm) ? "M" + (macro - 1) + " SAME WEEK: " + setsSummary(pm) : null} /> : null}
+              onSetDone={() => { if (autoRest && rt) startRest(rt); }} prevSets={setsSummary(pw)} prevLabel={"LAST WEEK"} prevMacro={pm && setsSummary(pm) ? "M" + (macro - 1) + " SAME WEEK: " + setsSummary(pm) : null}
+              barSpeed={!!BAR_SPEED_ITEMS[id]} prevSpeed={pw && num(pw.bs) != null ? { speed: num(pw.bs), load: topSet(pw) } : null} /> : null}
             {id && k === "out" ? <div style={{ marginTop: 8 }}><Lab>{it.u || "output"}</Lab><Fld v={cur.w} on={(val) => patch(id, "w", val)} ph="—" a="left" />
               {pw && pw.w ? <div style={Object.assign({}, mno, { fontSize: 9, color: C.brass, marginTop: 5 })}>LAST WEEK: {pw.w}</div> : null}
               {pm && pm.w ? <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, marginTop: 3 })}>M{macro - 1} SAME WEEK: {pm.w}</div> : null}</div> : null}
@@ -1010,6 +1100,15 @@ function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, ope
           <div style={{ background: C.ink, border: "1px solid " + C.brass, borderRadius: 5, padding: 12, margin: "11px 0" }}>
             <Eye c={C.brass} s={{ marginBottom: 6 }}>The fast-bar rule · once per lift per week</Eye>
             <div style={Object.assign({}, bdy, { fontSize: 16, fontWeight: 700, color: C.chalk })}>Last rep as fast as the first?</div>
+            {(() => { const now = e2 ? num(e2.bs) : null, was = it && it.id ? num((prevW(it.id) || {}).bs) : null;
+              if (now == null && was == null) return null;
+              const load = e2 ? topSet(e2) : null, wasLoad = it && it.id ? topSet(prevW(it.id)) : null;
+              const same = load != null && wasLoad != null && load === wasLoad;
+              return (
+                <div style={{ display: "flex", gap: 14, marginTop: 6 }}>
+                  <span style={Object.assign({}, mno, { fontSize: 9.5, color: C.ash, letterSpacing: 1 })}>BAR SPEED <span style={{ color: C.chalk, fontSize: 13, fontWeight: 700 }}>{now == null ? "—" : now}</span>{load != null ? " @ " + load + " kg" : ""}</span>
+                  {was != null ? <span style={Object.assign({}, mno, { fontSize: 9.5, color: same ? C.brass : C.ash, letterSpacing: 1 })}>LAST WEEK <span style={{ fontSize: 13, fontWeight: 700 }}>{was}</span>{wasLoad != null ? " @ " + wasLoad + " kg" : ""}{same ? " · SAME LOAD" : ""}</span> : null}
+                </div>); })()}
             {ans.a === "y" ? <Note c={C.moss} bold>Yes — {lname} max {ans.from} → {ans.kg} kg for next week. It's in TRACK; change it there if that's wrong.</Note>
               : !cm ? <Note c={C.ash} s={{ fontStyle: "italic" }}>Enter your {lname} max in TRACK first.</Note>
               : <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
@@ -1111,7 +1210,7 @@ function HomeLine({ rangeWeek, openHome, openProto, taper }) {
 }
 
 function Session(props) {
-  const { macro, week, day, isCurrent, done, setDone, log, setLog, maxes, bw, ready, setReady, sparPrev, sparThis, setSparThis, swapped, setSwapped, box, setBox, note, setNote, openProto, startTimer, openPlates, onSetMax, autoRest, openFlow, goIron, weekStats, addBody, calis, setCalis, taper, rangeWeek, openHome, openRangeTests, campLabel } = props;
+  const { macro, week, day, isCurrent, done, setDone, log, setLog, maxes, bw, ready, setReady, sparPrev, sparThis, setSparThis, swapped, setSwapped, box, setBox, note, setNote, openProto, startTimer, openPlates, onSetMax, autoRest, openFlow, goIron, weekStats, addBody, calis, setCalis, taper, rangeWeek, openHome, openRangeTests, campLabel, ergUnit, peakHR, morning, weekDates, mFlag } = props;
   const rx = rxFor(week), P = PH[rx.ph];
   const [open, setOpen] = useState(null);
   if (rx.hell) return (
@@ -1223,6 +1322,7 @@ function Session(props) {
         <div style={{ padding: "12px 14px 14px" }}>
           <Eye s={{ marginBottom: 6 }}>{MODE.camp ? "The daily check — before every session, and it governs the camp" : "Readiness — sets today's loads"}</Eye>
           {MODE.camp ? <div style={{ marginBottom: 8 }}>{CAMP_DAILY_CHECK.q.map((q, i) => <div key={i} style={Object.assign({}, bdy, { fontSize: 12, color: C.ash, lineHeight: 1.45, padding: "2px 0" })}>{i + 1}. {q}</div>)}</div> : null}
+          {isCurrent ? <MorningFlagLine flag={mFlag} /> : null}
           <Seg opts={[["G", "GREEN", C.moss], ["Y", "YELLOW −7%", C.brass], ["R", "RED", C.oxide]]} val={ready} on={(val) => setReady(ready === val ? "" : val)} />
           {ready === "Y" ? <Note c={C.brass}>{MODE.camp ? CAMP_DAILY_CHECK.yellow : "Top sets reduced 7%. Sprints become 3 × 20m @ 90%. Drop the last accessory block."}</Note> : null}
           {ready === "R" ? <Note c={C.oxide}>{MODE.camp ? CAMP_DAILY_CHECK.red : "No max effort, no sprints, no jumps today. Prep, protocols, mobility — then stop."}</Note> : null}
@@ -1263,7 +1363,7 @@ function Session(props) {
             {isOpen ? (
               <div className="rise" style={{ padding: "0 12px 12px" }}>
                 <div style={{ height: 1, background: C.line, marginBottom: 12 }} />
-                <BlockBody b={b} rx={rx} week={week} macro={macro} day={day} log={log} setLog={setLog} maxes={maxes} bw={bw} ready={effReady} openProto={openProto} startTimer={startTimer} openPlates={openPlates} onSetMax={onSetMax} autoRest={autoRest} weekStats={weekStats} calis={calis} setCalis={setCalis} taper={taper} rangeWeek={rangeWeek} openRangeTests={openRangeTests} />
+                <BlockBody b={b} rx={rx} week={week} macro={macro} day={day} log={log} setLog={setLog} maxes={maxes} bw={bw} ready={effReady} openProto={openProto} startTimer={startTimer} openPlates={openPlates} onSetMax={onSetMax} autoRest={autoRest} weekStats={weekStats} calis={calis} setCalis={setCalis} taper={taper} rangeWeek={rangeWeek} openRangeTests={openRangeTests} ergUnit={ergUnit} peakHR={peakHR} morning={morning} weekDates={weekDates} />
                 {b.tr ? <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, marginTop: 12, textAlign: "center", letterSpacing: 1 })}>↓ {b.tr} MIN TRANSITION ↓</div> : null}
                 <Btn on={() => mark(b.L)} c={isDone ? C.line : C.moss} fill={!isDone} s={{ width: "100%", marginTop: 12, color: isDone ? C.ash : C.ink }}>{isDone ? "UNDO" : "MARK BLOCK DONE"}</Btn>
               </div>) : null}
@@ -1283,7 +1383,8 @@ function Session(props) {
               <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, marginTop: 5, lineHeight: 1.45 })}>{EH.s}</div>
               <Note>{EH.why}</Note>
               {MODE.camp && rx.sauna ? <Note c={C.oxide} bold>{SAUNA_LINE}</Note> : null}
-              <button onClick={() => { const n = Object.assign({}, log); n[ek] = { ok: !ok, d: ok ? null : day }; setLog(n); buzz(20); }}
+              <EasyZonePanel compact peak={peakHR} avgHR={ev.hr} onAvg={(val) => { const n = Object.assign({}, log); n[ek] = Object.assign({}, ev, { hr: val }); setLog(n); }} />
+              <button onClick={() => { const n = Object.assign({}, log); n[ek] = Object.assign({}, log[ek], { ok: !ok, d: ok ? null : day }); setLog(n); buzz(20); }}
                 aria-label="The easy hour"
                 style={Object.assign({}, dsp, { marginTop: 10, width: "100%", minHeight: 44, fontSize: 13, fontWeight: 700, letterSpacing: 1, borderRadius: 5, cursor: "pointer", background: ok ? C.moss : "transparent", color: ok ? C.ink : C.ash, border: "1px solid " + (ok ? C.moss : C.line) })}>
                 {ok ? (MODE.camp ? "✓ DONE" : "✓ DONE THIS WEEKEND") + (ev.d && ev.d !== day ? " · " + DSH[ev.d] : "") : "MARK DONE"}
@@ -1514,8 +1615,36 @@ function Bars({ data, unit, color }) {
     </div>);
 }
 
-function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L, IM, calis, camp, rangeWeeks, rangeGet, campStart, fight }) {
-  const [sub, setSub] = useState(camp ? "camp" : "numbers");
+/* The erg outputs, gathered by session type, so the same session is only
+   ever read against another one of its own kind. */
+const ERG_TYPE_NAME = { vo2: "4-minute intervals", mod: "Moderate intervals", lac: "40-second repeats", lac2: "40-second repeats · 2 × 6",
+  rz: "Repeat bursts", rz1: "Repeat bursts · one set", rz3: "Repeat bursts · one set", tempo: "Tempo intervals", thr: "Threshold",
+  erg: "Rounds on the erg", fp: "Fight-pace rounds", easy: "Easy", easy15: "Easy flush", sim: "The simulation", t20: "The 20-minute test" };
+function ergByType(log, camp, L, macro) {
+  const out = {};
+  const push = (type, label, week, total) => { if (total == null) return;
+    const r = (out[type] = out[type] || { n: ERG_TYPE_NAME[type] || type, rows: [] }); r.rows.push({ label, week, v: r1(total) }); };
+  Object.keys(log || {}).forEach((k) => {
+    if (k.indexOf("_erg") < 0) return;
+    const p = parseKey(k); if (!p) return;
+    if (camp ? p.macro !== "C" : p.macro === "C") return;
+    if (!camp && String(p.macro) !== String(macro)) return;
+    const rx = rxFor(p.week);
+    const base = p.id.replace(/_erg$/, "");
+    const type = /fs$/.test(base) ? "sim" : /bike20$/.test(base) ? "t20"
+      : base === "cond" || base === "c_eng1" ? rx.eng || rx.eng1
+      : base === "cond2" || base === "c_eng2" ? rx.eng2 : null;
+    if (!type) return;
+    push(type, (camp ? "w" : "w") + p.week, p.week, ergTotal((log[k] || {}).v || []));
+  });
+  Object.keys(out).forEach((t) => out[t].rows.sort((a, b) => a.week - b.week));
+  return out;
+}
+
+function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L, IM, calis, camp, rangeWeeks, rangeGet, campStart, fight, sub: subIn, setSub: setSubIn, st, morning, photos, setPhotos, fuel, dateOf, dayIso, photoDay, ergUnit }) {
+  const [subOwn, setSubOwn] = useState("dash");
+  const sub = subIn || subOwn;
+  const setSub = (x) => { setSubOwn(x); if (setSubIn) setSubIn(x); };
   const [edit, setEdit] = useState({});
   const [tape, setTape] = useState({});
   const macro = current.macro;
@@ -1525,10 +1654,30 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
   return (
     <div>
       <div style={{ display: "flex", gap: 5, marginBottom: 12 }}>
-        {(camp ? [["camp", "CAMP"], ["numbers", "MAXES"], ["body", "BODY"], ["calis", "CALIS"], ["range", "RANGE"], ["iron", "IRON MIND"]]
-          : [["numbers", "NUMBERS"], ["progress", "PROGRESS"], ["body", "BODY"], ["calis", "CALIS"], ["range", "RANGE"], ["iron", "IRON MIND"]]).map((x) => <button key={x[0]} onClick={() => setSub(x[0])}
-          style={Object.assign({}, dsp, { flex: 1, fontSize: 9.5, fontWeight: 700, letterSpacing: .3, padding: "11px 1px", borderRadius: 4, cursor: "pointer", minHeight: 44, background: sub === x[0] ? C.brass : "transparent", color: sub === x[0] ? C.ink : C.ash, border: "1px solid " + (sub === x[0] ? C.brass : C.line) })}>{x[1]}</button>)}
+        {(camp ? [["dash", "DASH"], ["camp", "CAMP"], ["numbers", "MAXES"], ["measure", "MEASURE"], ["photos", "PHOTOS"], ["body", "BODY"], ["calis", "CALIS"], ["range", "RANGE"], ["iron", "IRON MIND"]]
+          : [["dash", "DASH"], ["numbers", "NUMBERS"], ["progress", "PROGRESS"], ["measure", "MEASURE"], ["photos", "PHOTOS"], ["body", "BODY"], ["calis", "CALIS"], ["range", "RANGE"], ["iron", "IRON MIND"]]).map((x) => <button key={x[0]} onClick={() => setSub(x[0])}
+          style={Object.assign({}, dsp, { flex: "1 1 20%", fontSize: 9.5, fontWeight: 700, letterSpacing: .3, padding: "11px 1px", borderRadius: 4, cursor: "pointer", minHeight: 44, background: sub === x[0] ? C.brass : "transparent", color: sub === x[0] ? C.ink : C.ash, border: "1px solid " + (sub === x[0] ? C.brass : C.line) })}>{x[1]}</button>)}
       </div>
+
+      {sub === "dash" ? <Dashboard log={log} morning={morning || {}} st={st || {}} camp={camp} body={body} fuel={fuel} addBody={addBody} dateOf={dateOf}
+        openPhotos={() => setSub("photos")} /> : null}
+
+      {sub === "photos" ? <PhotosView photos={photos || {}} setPhotos={setPhotos} camp={camp} week={current.week} dayIso={dayIso} isPhotoDay={photoDay} /> : null}
+
+      {sub === "measure" ? (
+        <div>
+          <ErgTrack ergRows={ergByType(log, camp, L, current.macro)} unit={ergUnit} />
+          <BarSpeedTrack log={log} camp={camp} />
+          <Card ac={C.cobalt}>
+            <Eye c={C.cobalt}>Recovery heart rate — the 60-second drop, session by session</Eye>
+            {(() => { const rows = ["settle", "settle2", "c_settle1", "c_settle2"]
+                .reduce((a, id) => a.concat(series(log, id + "_drop", camp)), [])
+                .sort((a, b) => a.week - b.week).slice(-10);
+              return rows.length ? <MiniBars data={rows.map((r) => ["w" + r.week, r.v])} color={C.cobalt} />
+                : <Note s={{ fontStyle: "italic" }}>Nothing logged yet. The two heart rates sit on every 60-second settle.</Note>; })()}
+            <Note>The heart rate at the end of the last interval against the heart rate sixty seconds later. Bigger is better, and it moves with the base.</Note>
+          </Card>
+        </div>) : null}
 
       {sub === "camp" ? <CampNumbers start={campStart} fight={fight} log={log} maxes={maxes} onSetMax={onSetMax} /> : null}
 
@@ -1705,7 +1854,7 @@ const Toggle = ({ on, set, n, s, c }) => (
     </span>
   </div>);
 
-function Settings({ st, setSt, current, L, exportData, importData, close, IM, calis, setCalis, campWeek }) {
+function Settings({ st, setSt, current, L, exportData, importData, close, IM, calis, setCalis, campWeek, morning, dayIso, fuel, setFuel, importFuelText }) {
   const [io, setIo] = useState(""); const [showIo, setShowIo] = useState(false); const [confirm, setConfirm] = useState(false);
   const [msg, setMsg] = useState(""); const fileRef = useRef(null);
   const upd = (patch) => setSt(Object.assign({}, st, patch));
@@ -1756,6 +1905,9 @@ function Settings({ st, setSt, current, L, exportData, importData, close, IM, ca
         {!st.camp ? (
           <Toggle on={!!st.lastTen} set={() => upd({ lastTen: !st.lastTen })} c={C.oxide}
             n="THE LAST TEN DAYS BEFORE A FIGHT" s="Optimal 8 Fighter only. Week table numbers stop; every lift goes to 2 sets at 70%, fast; no sprints, no depth jumps, no Nordics; the jump circuit becomes box jumps only. The two power doses stay. The last heavy thing you do is nine days out." />) : null}
+
+        <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
+        <MeasureSettings st={st} upd={upd} morning={morning || {}} dayIso={dayIso} fuel={fuel} setFuel={setFuel} importFuelText={importFuelText} />
 
         <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
         <Eye c={C.violet}>RANGE — the home block</Eye>
@@ -1845,7 +1997,7 @@ function Settings({ st, setSt, current, L, exportData, importData, close, IM, ca
         <input ref={fileRef} type="file" accept="application/json,.json" style={{ display: "none" }} aria-hidden="true" tabIndex={-1}
           onChange={async (e) => { const f = e.target.files && e.target.files[0]; e.target.value = ""; if (!f) return;
             try { const txt = await readTextFile(f); JSON.parse(txt); importData(txt); } catch (err) { setMsg("That file isn't an Optimal 8 backup."); } }} />
-        <Note>EXPORT TO FILE saves a .json backup you can keep in Files or send to yourself. IMPORT FROM FILE loads one back in.</Note>
+        <Note>EXPORT TO FILE saves a .json backup you can keep in Files or send to yourself. IMPORT FROM FILE loads one back in. The morning numbers, the erg outputs, the bar speeds and the photos all travel in it — the photos as base64, which is what makes a backup with photos in it a big file.</Note>
         {msg ? <Note c={C.brass}>{msg}</Note> : null}
         {showIo ? <div style={{ marginTop: 8 }}>
           <textarea value={io} onChange={(e) => setIo(e.target.value)} placeholder="Paste a backup here, then tap load"
@@ -2098,11 +2250,13 @@ function HellWeek({ current, maxes, bw, hwLog, setHwLog, L }) {
 /* ================================================================
    APP SHELL
    ================================================================ */
-const KEYS = { st: "o8s-settings", done: "o8s-done", log: "o8s-log", maxes: "o8s-maxes", maxHist: "o8s-maxhist", body: "o8s-body", ready: "o8s-ready", spar: "o8s-spar", swap: "o8s-swap", box: "o8s-box", notes: "o8s-notes", forge: "o8s-forge", fweek: "o8s-fweek", hw: "o8s-hw", calis: "o8s-calis" };
+const KEYS = { st: "o8s-settings", done: "o8s-done", log: "o8s-log", maxes: "o8s-maxes", maxHist: "o8s-maxhist", body: "o8s-body", ready: "o8s-ready", spar: "o8s-spar", swap: "o8s-swap", box: "o8s-box", notes: "o8s-notes", forge: "o8s-forge", fweek: "o8s-fweek", hw: "o8s-hw", calis: "o8s-calis", morning: "o8s-morning", photos: "o8s-photos", fuel: "o8s-fuel" };
 const DEF_ST = () => ({ start: defaultStart(), macroBase: 1, iron: false, sound: true, autoRest: true,
   medStage: 1, breathStage: 1, hardLevel: 1, sitLen: 30, imStart: null, rangeStart: null,
   camp: false, campStart: CAMP_START_DEFAULT, campFight: false, lastTen: false, taper: false,
-  levelStart: null, v12: true });
+  levelStart: null, v12: true,
+  /* the measurement layer */
+  ergUnit: "w", base: null });
 
 export default function App() {
   const [st, setStRaw] = useState(DEF_ST());
@@ -2115,6 +2269,7 @@ export default function App() {
   const [flow, setFlow] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [isub, setIsub] = useState("breathe");
+  const [trackSub, setTrackSub] = useState(null);
   const [done, setDoneRaw] = useState({});
   const [log, setLogRaw] = useState({});
   const [maxes, setMaxesRaw] = useState({});
@@ -2129,6 +2284,9 @@ export default function App() {
   const [fweek, setFweekRaw] = useState(1);
   const [hwLog, setHwRaw] = useState([]);
   const [calis, setCalisRaw] = useState(DEF_CALIS());
+  const [morning, setMorningRaw] = useState({});
+  const [photos, setPhotosRaw] = useState({});
+  const [fuel, setFuelRaw] = useState(null);
   const [imDay, setImDayRaw] = useState({});
   const [imSit, setImSitRaw] = useState([]);
   const [imHard, setImHardRaw] = useState([]);
@@ -2143,6 +2301,7 @@ export default function App() {
   const setBoxMap = mk(setBoxRaw, KEYS.box), setNotes = mk(setNotesRaw, KEYS.notes);
   const setForge = mk(setForgeRaw, KEYS.forge), setFweek = mk(setFweekRaw, KEYS.fweek), setHwLog = mk(setHwRaw, KEYS.hw);
   const setCalis = mk(setCalisRaw, KEYS.calis);
+  const setMorning = mk(setMorningRaw, KEYS.morning), setPhotos = mk(setPhotosRaw, KEYS.photos), setFuel = mk(setFuelRaw, KEYS.fuel);
   const setImDay = mk(setImDayRaw, IM_KEYS.day), setImSit = mk(setImSitRaw, IM_KEYS.sit);
   const setImHard = mk(setImHardRaw, IM_KEYS.hard), setImWk = mk(setImWkRaw, IM_KEYS.wk);
 
@@ -2185,6 +2344,7 @@ export default function App() {
     setReadyRaw(await load(KEYS.ready, {})); setSparRaw(await load(KEYS.spar, {})); setSwapRaw(await load(KEYS.swap, {}));
     setBoxRaw(await load(KEYS.box, {})); setNotesRaw(await load(KEYS.notes, {}));
     setCalisRaw(Object.assign(DEF_CALIS(), await load(KEYS.calis, null) || {}));
+    setMorningRaw(await load(KEYS.morning, {})); setPhotosRaw(await load(KEYS.photos, {})); setFuelRaw(await load(KEYS.fuel, null));
     setImDayRaw(await load(IM_KEYS.day, {})); setImSitRaw(await load(IM_KEYS.sit, []));
     setImHardRaw(await load(IM_KEYS.hard, [])); setImWkRaw(await load(IM_KEYS.wk, {}));
     setLoaded(true);
@@ -2356,7 +2516,36 @@ export default function App() {
     };
   }, [st, imStart, imDay, imSit, imHard, imWk, imWeek, dayIso, weekMonday, hwLog, taperNow, calis, rangeWeek]);
 
+  /* ---------------- THE MEASUREMENT LAYER ----------------
+     The peak heart rate the 20-minute test found paces the easy zone;
+     the week's seven dates fill the weekly check's sleep averages from
+     the mornings; the morning flag rides on the daily check. */
+  const peakHR = useMemo(() => { const r = series(log, st.camp ? "c_bike20hr" : "bike20hr", !!st.camp, "sun"); return r.length ? r[r.length - 1].v : null; }, [log, st.camp]);
+  const weekDates = useMemo(() => {
+    const mon = st.camp
+      ? iso(new Date(campMonday(campStart).getTime() + (shown.week - 1) * 604800000))
+      : iso(new Date(mondayOf(parseISO(st.start)).getTime() + (((shown.macro - st.macroBase) * L) + (shown.week - 1)) * 604800000));
+    return Array.from({ length: 7 }, (_, i) => addDays(mon, i));
+  }, [st.camp, campStart, st.start, st.macroBase, L, shown.macro, shown.week]);
+  const mFlag = useMemo(() => morningFlag(morning[dayIso], morning, st, dayIso), [morning, st, dayIso]);
+  const photoDay = isPhotoDay(!!st.camp, current.week, today);
+  const photosToday = photos[dayIso] || {};
+  const dateOf = useCallback((mac, wk, dy) => {
+    const di = Math.max(0, DAYS.indexOf(dy || "sun"));
+    const mon = mac === "C"
+      ? iso(new Date(campMonday(campStart).getTime() + (wk - 1) * 604800000))
+      : iso(new Date(mondayOf(parseISO(st.start)).getTime() + (((mac - st.macroBase) * L) + (wk - 1)) * 604800000));
+    return fmtDate(addDays(mon, di));
+  }, [campStart, st.start, st.macroBase, L]);
+  const importFuelText = async (file) => {
+    try { const txt = await readTextFile(file); const parsed = parseFuelExport(txt);
+      if (!parsed) return "That file has no bodyweight or waist entries the app could read.";
+      setFuel(parsed); return parsed.entries.length + " day" + (parsed.entries.length === 1 ? "" : "s") + " imported from the fuel app.";
+    } catch (e) { return "Couldn't read that file."; }
+  };
+
   const sessProps = { macro: shown.macro, week: shown.week, day: shown.day, isCurrent: isToday, done, setDone, log, setLog, maxes, bw,
+    ergUnit: st.ergUnit || "w", peakHR, morning, weekDates, mFlag,
     ready: readyMap[dk] || "", setReady: (val) => setReadyMap(Object.assign({}, readyMap, { [dk]: val })),
     sparPrev: !!sparMap[pdk], sparThis: !!sparMap[dk], setSparThis: (val) => setSparMap(Object.assign({}, sparMap, { [dk]: val })),
     swapped: !!swapMap[dk], setSwapped: (val) => setSwapMap(Object.assign({}, swapMap, { [dk]: val })),
@@ -2368,14 +2557,16 @@ export default function App() {
     rangeWeek: shownRangeWeek, openHome: () => setTool({ kind: "homeblock" }), campLabel,
     openRangeTests: () => setTool({ kind: "rangetests", macro: shown.macro, week: shown.week }) };
 
-  const exportData = async () => JSON.stringify({ st, done, log, maxes, maxHist, body, readyMap, sparMap, swapMap, boxMap, notes, forge, fweek, hwLog, imDay, imSit, imHard, imWk, calis });
+  const exportData = async () => JSON.stringify({ st, done, log, maxes, maxHist, body, readyMap, sparMap, swapMap, boxMap, notes, forge, fweek, hwLog, imDay, imSit, imHard, imWk, calis, morning, photos, fuel });
   const importData = (s) => { try { const d = JSON.parse(s || "{}");
     setSt(Object.assign(DEF_ST(), d.st || {}, { v12: true }));
     setDone(d.st && d.st.v12 ? (d.done || {}) : migrateDone(d.done || {})); setLog(d.log || {}); setMaxes(d.maxes || {}); setMaxHist(d.maxHist || []); setBody(d.body || []);
     setReadyMap(d.readyMap || {}); setSparMap(d.sparMap || {}); setSwapMap(d.swapMap || {}); setBoxMap(d.boxMap || {}); setNotes(d.notes || {});
     setForge(d.forge || []); setFweek(d.fweek || 1); setHwLog(d.hwLog || []);
     setImDay(d.imDay || {}); setImSit(d.imSit || []); setImHard(d.imHard || []); setImWk(d.imWk || {});
-    setCalis(Object.assign(DEF_CALIS(), d.calis || {})); setShowSettings(false); } catch (e) {} };
+    setCalis(Object.assign(DEF_CALIS(), d.calis || {}));
+    setMorning(d.morning || {}); setPhotos(d.photos || {}); setFuel(d.fuel || null);
+    setShowSettings(false); } catch (e) {} };
 
   const TABS = [["today", "TODAY"], ["week", "WEEK"], ["track", "TRACK"], ["iron", "IRON"], ["plan", "PLAN"]];
   const P = PH[rxFor(current.week).ph];
@@ -2389,7 +2580,8 @@ export default function App() {
       {T.t ? <TimerFull T={T} /> : null}
       {plates !== null && plates !== undefined ? <Plates kg={plates} onClose={() => setPlates(null)} /> : null}
       {proto ? <ProtoSheet id={proto} close={() => setProto(null)} /> : null}
-      {showSettings ? <Settings st={st} setSt={setSt} current={current} L={L} exportData={exportData} importData={importData} close={() => setShowSettings(false)} IM={IM} calis={calis} setCalis={setCalis} campWeek={st.camp ? Math.max(1, Math.min(CAMP_L, campWeekOf(campStart, new Date()))) : 0} /> : null}
+      {showSettings ? <Settings st={st} setSt={setSt} current={current} L={L} exportData={exportData} importData={importData} close={() => setShowSettings(false)} IM={IM} calis={calis} setCalis={setCalis} campWeek={st.camp ? Math.max(1, Math.min(CAMP_L, campWeekOf(campStart, new Date()))) : 0}
+        morning={morning} dayIso={dayIso} fuel={fuel} setFuel={setFuel} importFuelText={importFuelText} /> : null}
       {flow ? <Flow {...sessProps} close={() => setFlow(false)} /> : null}
       {tool ? (
         tool.kind === "breath" ? <BreathTool id={tool.id} sound={st.sound} onClose={() => setTool(null)}
@@ -2444,6 +2636,9 @@ export default function App() {
                 {noMaxes ? <Card ac={C.brass}><Eye c={C.brass}>First — your numbers</Eye><Note c={C.chalk} s={{ marginTop: 0 }}>Enter your best squat and bench singles so every weight shows in kilos. Trap bar and push press get found in week 1.</Note><Btn small c={C.brass} fill s={{ marginTop: 10 }} on={() => setTab("track")}>ENTER MAXES</Btn></Card> : null}
                 {isToday ? <IronToday IM={IM} part="head" /> : null}
                 {isToday ? <IronToday IM={IM} part="waking" /> : null}
+                {isToday ? <MorningCard dayIso={dayIso} morning={morning} setMorning={setMorning} st={st} camp={!!st.camp} /> : null}
+                {isToday && photoDay ? <PhotoPrompt camp={!!st.camp} week={current.week} done={!!(photosToday.front || photosToday.side || photosToday.back)}
+                  onOpen={() => { setTab("track"); setTrackSub("photos"); }} /> : null}
                 {isToday ? <div style={Object.assign({}, mno, { fontSize: 9.5, letterSpacing: 1.8, color: C.brass, padding: "8px 2px 6px" })}>THE SESSION · WRITTEN ON THE PAGE, RUN FROM HERE</div> : null}
                 <Session {...sessProps} />
                 {isToday ? <IronToday IM={IM} part="site" /> : null}
@@ -2455,7 +2650,9 @@ export default function App() {
             {tab === "week" ? <WeekView view={vw} setView={setView} current={current} setCurrent={setCurrent} done={done} L={L} weekDoneMap={weekDoneMap} campStart={campStart} fight={!!st.campFight}
               openDay={(d) => { setSelDay({ macro: vw.macro, week: vw.week, day: d }); setTab("today"); }} /> : null}
             {tab === "track" ? <Track current={current} maxes={maxes} onSetMax={onSetMax} maxHist={maxHist} log={log} body={body} addBody={addBody} done={done} L={L} IM={IM} calis={calis} camp={!!st.camp}
-              rangeWeeks={rangeTestWeeks} rangeGet={rangeGet} campStart={campStart} fight={!!st.campFight} /> : null}
+              rangeWeeks={rangeTestWeeks} rangeGet={rangeGet} campStart={campStart} fight={!!st.campFight}
+              sub={trackSub} setSub={setTrackSub} st={st} morning={morning} photos={photos} setPhotos={setPhotos} fuel={fuel} dateOf={dateOf}
+              dayIso={dayIso} photoDay={photoDay} ergUnit={st.ergUnit || "w"} /> : null}
             {tab === "iron" ? (
               <div>
                 <div style={{ display: "flex", gap: 4, marginBottom: 12 }}>
