@@ -2,10 +2,10 @@ import { C } from "./ui.jsx";
 import { mondayOf, parseISO } from "./ui.jsx";
 
 /* ================================================================
-   OPTIMAL 8 · CAMP — twelve weeks from Tuesday 15 September.
+   OPTIMAL 8 · CAMP — from Monday 21 September.
    The camp document as data: the dated week table, the seven session
    pages in their running order, the lift phases, the conditioning
-   session types, the rounds, the tests and the week-11 fork.
+   session types, the rounds, the tests and the week-10 fork.
 
    Optimal 8 Fighter is untouched. This runs in its place while the
    Camp Mode switch is on, and hands back at the end.
@@ -18,10 +18,10 @@ import { mondayOf, parseISO } from "./ui.jsx";
    ================================================================ */
 
 export const CAMP_L = 12;
-export const CAMP_START_DEFAULT = "2026-09-15";   /* Tuesday 15 September 2026 */
+export const CAMP_START_DEFAULT = "2026-09-21";   /* Monday 21 September 2026 */
 
 export const CAMP_INTRO =
-  "Your camp. Built from where you are, not from nothing: your working weights, your calisthenics at their levels, RANGE, the tendon block, the get-ups and the crawls, Iron Mind underneath. Optimal 8 Fighter is untouched — this runs in its place for twelve weeks, and when it ends, fight or no fight, the switch goes off and Optimal 8 restarts at week 1 with better numbers.";
+  "Your camp. Built from where you are, not from nothing: your working weights, your calisthenics at their levels, RANGE, the tendon block, the get-ups and the crawls, Iron Mind underneath. Ten weeks and a day to be fight-ready for a 6 × 3 on the 1st of December, and twelve weeks if no date comes. Optimal 8 Fighter is untouched — this runs in its place, and when it ends, fight or no fight, the switch goes off and Optimal 8 restarts at week 1 with better numbers.";
 
 export const CAMP_PHILOSOPHY =
   "The engine is the priority, because it's the thing that isn't where you want it, and it's built brutally from week 2. Strength is kept and turned into speed through the phased lifts — slow lowering, paused, fast, contrast — with working weights that reset and climb, never a max. Durability and movement don't stop for a camp. Brutal lives in the sessions: every hard session has a number to beat and a standard that ends it. Discipline lives in the structure: Friday asleep, sleep as a rule, no new exercises after week 6, and the last ten days sacred.";
@@ -35,7 +35,7 @@ export const CAMP_RULES = [
   "Cold water stays out of camp. It blunts the adaptation you're paying for.",
   "The bag is skill, not conditioning. Conditioning is measured on the erg, where the number can't lie.",
   "Easy means easy. Monday's base and the easy hour are nasal and conversational, or they're stealing from Tuesday and Sunday. The sauna comes in from week 4.",
-  "The fork is Monday 23 November. Fight confirmed: week 11 sharpens with the fight-day rehearsal and week 12 is fight week. No fight: week 11 is a test week and Optimal 8 restarts on the 30th.",
+  "The fork is Monday 23 November, the start of week 10. Fight confirmed: week 10 is the sharpen week, the fight is Tuesday the 1st, and Optimal 8 restarts on 7 December. No fight: week 10 is the last hard week, week 11 is the test week, and Optimal 8 restarts on 7 December.",
   "The fade is the number. Round six's output divided by round one's. Everything here is aimed at moving it toward 100%.",
 ];
 
@@ -66,25 +66,30 @@ export const CORNER_MINUTE =
 /* ---------------- the blocks ---------------- */
 export const CPH = {
   c1: { n: "FOUNDATION", long: "WEEKS 1–2 · FOUNDATION", ac: C.moss, vl: "—",
-    note: "Slow lowering, base, the baseline numbers. Not because you're unfit — because the sprinting, the depth jumps and the seven-round sims in weeks 7–10 are the hardest things a tendon does, and five-second lowering is the fastest way to make a tendon ready for them." },
+    note: "Slow lowering, base, the baseline numbers. Not because you're unfit — because the sprinting, the depth jumps and the seven-round sims in weeks 7–9 are the hardest things a tendon does, and five-second lowering is the fastest way to make a tendon ready for them." },
   c2: { n: "BUILD", long: "WEEKS 3–5 · BUILD", ac: C.cobalt, vl: "—",
     note: "Paused then fast lifts, the aerobic ceiling, the rounds at fight rest. The paused holds own the bottom position where force starts; the fast phase teaches the nervous system to fire." },
   c3: { n: "EASY + TESTS", long: "WEEK 6 · EASY + TESTS", ac: C.brass, vl: "—",
     note: "Adaptation lands in the easy week, not the hard ones. The tests are how you know it landed, and they're what reset the working weights and the paces for the peak block. Skipping it is how the peak block starts from a hole." },
-  c4: { n: "PEAK", long: "WEEKS 7–10 · PEAK", ac: C.oxide, vl: "—",
-    note: "Fast then contrast lifts, depth jumps, top speed, repeat bursts, seven rounds, the sauna. The contrast block is where strength becomes speed. Week 10 is the last hard week — everything you'll have on the 1st of December, you'll have by Sunday 22 November." },
-  c5: { n: "THE FORK", long: "WEEK 11 · THE FORK", ac: C.violet, vl: "—",
-    note: "By Monday 23 November you know whether there's a fight on the 1st. Both paths are written; you run one. Fight confirmed: the camp's work is done and week 11 converts it. No fight: week 11 is the camp's verdict, and the hand-over to Optimal 8." },
-  c6: { n: "FIGHT WEEK", long: "WEEK 12 · FIGHT WEEK", ac: C.brass, vl: "—",
-    note: "You cannot get fitter this week. You can only get fresher or more tired. Every decision this week is made by asking which of those it does." },
+  c4: { n: "PEAK", long: "WEEKS 7–9 · PEAK", ac: C.oxide, vl: "—",
+    note: "Fast then contrast lifts, depth jumps, top speed, repeat bursts, seven rounds, the sauna. The contrast block is where strength becomes speed. Week 9 is the last hard week on the fight path — everything you'll have on the 1st of December, you'll have by Sunday 22 November." },
+  c5: { n: "THE FORK", long: "WEEK 10 · THE FORK", ac: C.violet, vl: "—",
+    note: "By Monday 23 November you know whether there's a fight on the 1st. Both paths are written; you run one. Fight confirmed: the camp's work is done and week 10 converts it — the sharpen week, and the fight is the Tuesday after it. No fight: week 10 is the last hard week, and week 11 becomes the camp's verdict." },
+  c6: { n: "FIGHT WEEK", long: "WEEK 11 · FIGHT WEEK", ac: C.brass, vl: "—",
+    note: "You cannot get fitter this week. You can only get fresher or more tired. For a Tuesday fight the taper is the last days of week 10 and the first of week 11." },
   c7: { n: "HAND-BACK", long: "WEEK 12 · OPTIMAL 8 RESTARTS", ac: C.moss, vl: "—",
-    note: "No fight. The camp is done and Optimal 8 Fighter restarts at week 1 on the Monday, with every number better than the ones it left with. Turn Camp Mode off." },
+    note: "The camp is done, fight or no fight, and Optimal 8 Fighter restarts at week 1 on Monday 7 December with every number better than the ones it left with. Turn Camp Mode off." },
+  /* the two phases only the no-fight path runs */
+  c9: { n: "PEAK", long: "WEEK 10 · THE LAST HARD WEEK", ac: C.oxide, vl: "—",
+    note: "No fight. Week 10 runs as the fourth peak week — contrast at 88% with two rounds of the circuit, the sprints, the seven rounds scored — and week 11 becomes the camp's verdict and the hand-over to Optimal 8." },
+  c8: { n: "THE TEST WEEK", long: "WEEK 11 · THE TEST WEEK", ac: C.cobalt, vl: "—",
+    note: "No fight. Week 11 is the camp's verdict and the hand-over to Optimal 8: the retests, the working-weight resets, the nasal threshold, the timed 20s and the scored simulation." },
 };
-const phaseOfCamp = (w) => (w <= 2 ? "c1" : w <= 5 ? "c2" : w === 6 ? "c3" : w <= 10 ? "c4" : w === 11 ? "c5" : "c6");
+const phaseOfCamp = (w) => (w <= 2 ? "c1" : w <= 5 ? "c2" : w === 6 ? "c3" : w <= 9 ? "c4" : w === 10 ? "c5" : w === 11 ? "c6" : "c7");
 
 /* ---------------- dates ---------------- */
-/* Week 1 starts on a Tuesday: there is no Monday base in week 1, so the
-   camp's week clock still runs Monday to Sunday off the Monday before it. */
+/* The camp's week clock runs Monday to Sunday from day one: week 1 is a
+   full week, starting Monday 21 September. */
 export const campMonday = (start) => mondayOf(parseISO(start || CAMP_START_DEFAULT));
 export const campDayDate = (start, w, dayIdx) => {
   const d = new Date(campMonday(start).getTime());
@@ -95,9 +100,9 @@ export const campWeekOf = (start, today) =>
   Math.floor((mondayOf(today || new Date()) - campMonday(start)) / 604800000) + 1;
 const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const dm = (d) => d.getDate() + " " + MON[d.getMonth()];
-/* "15–20 Sep" in week 1 (it opens on the Tuesday), "21–27 Sep" after it */
+/* "21–27 Sep", then "28 Sep–4 Oct" */
 export const campDatesLabel = (start, w) => {
-  const a = campDayDate(start, w, w === 1 ? 1 : 0), b = campDayDate(start, w, 6);
+  const a = campDayDate(start, w, 0), b = campDayDate(start, w, 6);
   return a.getMonth() === b.getMonth() ? a.getDate() + "–" + dm(b) : dm(a) + "–" + dm(b);
 };
 export const campDayLabel = (start, w, dayIdx) => dm(campDayDate(start, w, dayIdx));
@@ -115,7 +120,7 @@ export const CENG = {
     why: "This is a flurry, twenty or thirty seconds apart, for a round — and what decides whether the fourth flurry has anything in it is how fast the muscle refills between them.",
     rule: "If a burst is visibly weaker than the last, take an extra 20 seconds; if two in a row are, the set is over." },
   rz1: { n: "REPEAT BURSTS · ONE SET", d: "one set of 8 bursts of 6–8 s at absolute maximum with 40 s easy between",
-    why: "Week 11, fight confirmed: sharp, not tired. The shape of a round held, the volume halved.",
+    why: "The fork week, fight confirmed: sharp, not tired. The shape of a round held, the volume halved.",
     rule: "If a burst is visibly weaker than the last, take an extra 20 seconds; if two in a row are, the set is over." },
   tempo: { n: "TEMPO INTERVALS", d: "10 × 1 minute hard-but-controlled — about 70% of flat out — with 1 minute easy between",
     why: "Aerobic power without the cost; the bridge from base to the hard work." },
@@ -153,15 +158,16 @@ export const cengTimer = (key, short) => {
    ================================================================ */
 const tb = (sc, sets, reps, pct, phase) => ({ sc, sets, reps, pct, phase });
 const CW = {};
-const cw = (w, o) => {
-  CW[w] = Object.assign({
-    w, ph: phaseOfCamp(w), camp: 1, vec: 2, jump: "AEL", js: [3, 4], bound: "stick",
-    spr: null, sled: null, nor: null, sim: null, base: null, cr: null, cpct: null,
-    pp: { sc: "3 × 3", sets: 3, reps: 3, pct: 75 },
-  }, o);
-};
+const CDEF = () => ({
+  camp: 1, vec: 2, jump: "AEL", js: [3, 4], bound: "stick",
+  spr: null, sled: null, nor: null, sim: null, base: null, cr: null, cpct: null,
+  pp: { sc: "3 × 3", sets: 3, reps: 3, pct: 75 },
+});
+const cw = (w, o) => { CW[w] = Object.assign({ w, ph: phaseOfCamp(w) }, CDEF(), o); };
+/* the other path a forked week can run */
+const cwAlt = (w, ph, o) => Object.assign({ w, ph }, CDEF(), o);
 
-cw(1, { block: "Foundation", base: null, eng1: "mod", eng2: "tempo",
+cw(1, { block: "Foundation", base: 30, eng1: "mod", eng2: "tempo",
   tb: tb("3 × 5 @ 70% — SLOW LOWERING, 5 s down", 3, 5, 70, "slow"),
   sq: tb("3 × 5 @ 70% — SLOW LOWERING, 5 s down", 3, 5, 70, "slow"),
   sled: 4, nor: [2, 3], spr: { n: 3, pct: 90, buildOnly: 1 },
@@ -205,57 +211,58 @@ cw(8, { block: "Peak", base: 45, eng1: "vo2", eng2: "lac2",
   sled: 5, nor: [3, 5], spr: { n: 5, pct: 100 }, jump: "DEPTH", js: [4, 5], bound: "cont",
   cr: 3, cpct: 85, sim: { rounds: 7, rest: 60 }, sauna: 1,
   pp: { sc: "3 × 3", sets: 3, reps: 3, pct: 85 } });
-cw(9, { block: "Peak", base: 45, eng1: "rz", eng2: "erg",
+cw(9, { block: "Peak, last hard week on the fight path", base: 45, eng1: "rz", eng2: "erg",
   tb: tb("contrast · 3 × 2 @ 87% + circuit", 3, 2, 87, "contrast"),
   sq: tb("CONTRAST · 3 × 2 @ 87% + the jump circuit", 3, 2, 87, "contrast"),
   sled: 5, nor: [3, 5], spr: { n: 5, pct: 100 }, jump: "DEPTH", js: [4, 5], bound: "cont",
-  cr: 3, cpct: 87, sim: { rounds: 7, rest: 60, scored: 1 }, sauna: 1,
+  cr: 3, cpct: 87, sim: { rounds: 7, rest: 60, scored: "last" }, sauna: 1,
   pp: { sc: "3 × 3", sets: 3, reps: 3, pct: 85 } });
-cw(10, { block: "Peak, last hard week", base: 40, eng1: "lac2", eng2: "rz",
-  tb: tb("contrast · 3 × 2 @ 88% + circuit, 2 rounds", 3, 2, 88, "contrast"),
-  sq: tb("CONTRAST · 3 × 2 @ 88% + the jump circuit", 3, 2, 88, "contrast"),
-  sled: 3, nor: [3, 5], spr: { n: 4, pct: 100 }, jump: "DEPTH", js: [4, 5], bound: "cont",
-  cr: 2, cpct: 88, sim: { rounds: 7, rest: 60, scored: "last" }, sauna: 1,
-  pp: { sc: "3 × 3", sets: 3, reps: 3, pct: 85 } });
-/* Week 11 is written twice — the fork picks one. */
-cw(11, { block: "THE FORK", base: 30, eng1: "rz1", eng2: "fp",
+/* Weeks 10 and 11 are written twice — the fork picks the path. */
+cw(10, { block: "THE FORK", base: 30, eng1: "rz1", eng2: "fp",
   tb: tb("2 × 2 @ 80% — fast", 2, 2, 80, "fast"),
   sq: null, sled: 3, nor: [2, 3], spr: { n: 3, pct: 90, micro: 1 },
   sim: { rounds: 2, rest: 60, rehearsal: 1 }, tp: 1, fork: "fight", nasal: 0,
-  tests: { tue: "retest11f" },
+  tests: { tue: "retest10f", sun: "range" },
   pp: null });
-cw(12, { block: "FIGHT WEEK", base: 20, eng1: null, eng2: null,
-  tb: null, sq: null, sled: null, nor: null, spr: null, sim: null, tp: 1, fightWeek: 1, pp: null });
+cw(11, { block: "FIGHT WEEK", base: 20, eng1: null, eng2: null,
+  tb: null, sq: null, sled: null, nor: null, spr: null, sim: null,
+  tp: 1, fightWeek: 1, fork: "fight", pp: null });
+cw(12, { block: "OPTIMAL 8 · WEEK 1", base: null, eng1: null, eng2: null,
+  tb: null, sq: null, sled: null, nor: null, spr: null, sim: null, handBack: 1, pp: null });
 
-/* the no-fight path for week 11 */
-const CW11_NOFIGHT = Object.assign({}, CW[11], {
-  eng1: "easy", eng2: "fp", fork: "nofight", nasal: 1,
+/* NO FIGHT — week 10 runs as the fourth peak week, the last hard week */
+const CW10_NOFIGHT = cwAlt(10, "c9", { block: "Peak, the last hard week", base: 40, eng1: "lac2", eng2: "rz",
+  tb: tb("contrast · 3 × 2 @ 88% + circuit, 2 rounds", 3, 2, 88, "contrast"),
+  sq: tb("CONTRAST · 3 × 2 @ 88% + the jump circuit", 3, 2, 88, "contrast"),
+  sled: 5, nor: [3, 5], spr: { n: 4, pct: 100 }, jump: "DEPTH", js: [4, 5], bound: "cont",
+  cr: 2, cpct: 88, sim: { rounds: 7, rest: 60, scored: 1 }, fork: "nofight",
+  pp: { sc: "3 × 3", sets: 3, reps: 3, pct: 85 } });
+/* NO FIGHT — week 11 is the test week, the camp's verdict and the hand-over */
+const CW11_NOFIGHT = cwAlt(11, "c8", { block: "THE TEST WEEK", base: 30, eng1: "easy", eng2: "fp",
+  tb: tb("2 × 2 @ 80% — fast", 2, 2, 80, "fast"),
   sq: tb("2 × 2 @ 80% — fast · the squat reset first", 2, 2, 80, "fast"),
-  spr: { n: 3, pct: 100, timed: 1 },
-  sim: { rounds: 6, rest: 60, scored: "verdict" },
+  sled: 3, nor: [2, 3], spr: { n: 3, pct: 100, timed: 1 },
+  sim: { rounds: 6, rest: 60, scored: "verdict" }, tp: 1, fork: "nofight", nasal: 1,
   reset: 1, tests: { tue: "retest11n", sun: "range" },
-  pp: { sc: "2 × 2", sets: 2, reps: 2, pct: 70 },
-});
-/* and week 12 on the no-fight path is the hand-back */
-const CW12_NOFIGHT = Object.assign({}, CW[12], { handBack: 1, fightWeek: 0, base: null, ph: "c7", block: "OPTIMAL 8 · WEEK 1" });
+  pp: { sc: "2 × 2", sets: 2, reps: 2, pct: 70 } });
 
 export const campRxFor = (w, fight) => {
   const n = Math.max(1, Math.min(CAMP_L, Number(w) || 1));
+  if (n === 10) return fight ? CW[10] : CW10_NOFIGHT;
   if (n === 11) return fight ? CW[11] : CW11_NOFIGHT;
-  if (n === 12) return fight ? CW[12] : CW12_NOFIGHT;
   return CW[n];
 };
 
 /* the week table's row, built from the same numbers the sessions use */
 export const campRow = (rx) => ({
-  mon: rx.base ? rx.base + " min" : rx.w === 1 ? "—" : rx.w === 12 ? (rx.handBack ? "OPTIMAL 8 · week 1" : "ACTIVATION · 20 min") : "—",
-  tue: rx.w === 12 ? (rx.handBack ? "—" : "FIGHT")
+  mon: rx.handBack ? "OPTIMAL 8 · week 1" : rx.fightWeek ? "ACTIVATION · 20 min" : rx.base ? rx.base + " min" : "—",
+  tue: rx.handBack ? "—" : rx.fightWeek ? "FIGHT"
     : (CENG[rx.eng1] ? CENG[rx.eng1].n : "—") + (rx.tests && rx.tests.tue ? " · " + (rx.tests.tue === "burst" ? "BURST TEST first" : "RETESTS first") : ""),
-  wed: rx.tb ? rx.tb.sc : "—",
-  thu: rx.w === 12 ? "—" : (CENG[rx.eng2] ? CENG[rx.eng2].n : "—") + (rx.nasal && rx.w !== 1 ? " · nasal threshold first" : rx.w === 1 ? " · NASAL THRESHOLD first" : ""),
-  sat: rx.w === 12 ? "—" : (rx.spr ? rx.spr.n + " × 20 m" + (rx.spr.pct < 100 ? " @ 90%" : "") : "—") + (rx.sq ? " · " + rx.sq.sc : rx.spr && rx.spr.micro ? " · SPEED MICRODOSE" : ""),
-  sun: rx.w === 12 ? "—"
-    : rx.sim ? (rx.sim.rehearsal ? "THE REHEARSAL · " + rx.sim.rounds + " × 3 at fight pace"
+  wed: rx.tb ? (rx.reset ? "reset the working weights · " : "") + rx.tb.sc : "—",
+  thu: rx.handBack || rx.fightWeek ? "—" : (CENG[rx.eng2] ? CENG[rx.eng2].n : "—") + (rx.nasal && rx.w !== 1 ? " · nasal threshold first" : rx.w === 1 ? " · NASAL THRESHOLD first" : ""),
+  sat: rx.handBack || rx.fightWeek ? "—" : (rx.spr ? rx.spr.n + " × 20 m" + (rx.spr.pct < 100 ? " @ 90%" : "") : "—") + (rx.sq ? " · " + rx.sq.sc : rx.spr && rx.spr.micro ? " · SPEED MICRODOSE" : ""),
+  sun: rx.handBack || rx.fightWeek ? "—"
+    : rx.sim ? (rx.sim.rehearsal ? "THE REHEARSAL-LITE · " + rx.sim.rounds + " × 3 at fight pace"
       : rx.sim.easy ? "20-MINUTE TEST, then " + rx.sim.rounds + " easy rounds"
       : rx.sim.rounds + " × 3" + (rx.sim.scored ? " SIM — SCORED" + (rx.sim.scored === "baseline" ? " (baseline)" : rx.sim.scored === "last" ? " (last read)" : "") : "") + ", " + rx.sim.rest + " s") : "—",
   nor: rx.nor ? rx.nor[0] + " × " + rx.nor[1] : "—",
@@ -263,38 +270,41 @@ export const campRow = (rx) => ({
 });
 
 export const CAMP_TABLE_NOTE =
-  "Sled runs on Wednesday: weeks 1–2: 4 · weeks 3–5 and 7–9: 5 · weeks 6, 10 and 11: 3 · week 12: none. Throws and the landmine are dosed on the Thursday, Saturday and Sunday pages; the output rule ends them. Calisthenics lines run at your current levels from week 1, drop to two sets in week 6, and become holds only from week 11. RANGE, the morning five, the neck, the hands and the tendon block run every week of the twelve, including fight week at half dose.";
+  "Sled runs on Wednesday: weeks 1–2: 4 · weeks 3–5 and 7–9: 5 · week 6: 3 · week 10: 3 on the fight path, 5 on the no-fight path · week 11: none on the fight path, 3 on the other. Throws and the landmine are dosed on the Thursday, Saturday and Sunday pages; the output rule ends them. Calisthenics lines run at your current levels from week 1, drop to two sets in week 6, and become holds only from the fork on the fight path. RANGE, the morning five, the neck, the hands and the tendon block run every week, including fight week at half dose.";
 
 /* ================================================================
    FIGHT WEEK — the Tuesday 1 December layout
    ================================================================ */
 export const FIGHT_WEEK_INTRO =
-  "You cannot get fitter this week. You can only get fresher or more tired. Every decision this week is made by asking which of those it does. For a Tuesday fight, the taper's last days are the end of week 11 and the start of week 12.";
+  "You cannot get fitter this week. You can only get fresher or more tired. For a Tuesday fight the taper is the last days of week 10 and the first of week 11.";
 /* [ week, dayIdx, what ] — the date is computed from the camp's start */
 export const FIGHT_WEEK_ROWS = [
-  [11, 2, "As the sharpen page: the light trap bar and throws."],
-  [11, 3, "The four fight-pace rounds and the settle."],
-  [11, 4, "Sleep."],
-  [11, 5, "The SPEED MICRODOSE, 25 minutes. Nothing tired."],
-  [11, 6, "THE REHEARSAL, with two fight-pace rounds instead of six — the wake time, the meals, the warm-up, then two rounds and the corner minute. Then feet up."],
-  [12, 0, "ACTIVATION · 20 min: Tuesday's warm-up, band pull-aparts and external rotations, three easy throws per side, two minutes of shadow boxing at pace, three physiological sighs, done. Weigh-in if there is one. The rehearsal's meals. RANGE at half dose. Bed by half past eight."],
-  [12, 1, "FIGHT. The warm-up you rehearsed. The corner minute in every rest. Round six is a place you've already been."],
+  [10, 2, "As the sharpen page: the light trap bar, the throws, the chins."],
+  [10, 3, "The four fight-pace rounds and the settle."],
+  [10, 4, "Sleep."],
+  [10, 5, "The SPEED MICRODOSE, 25 minutes. Nothing tired."],
+  [10, 6, "THE REHEARSAL-LITE — the wake time, the meals, the warm-up, two rounds at fight pace, the corner minute. Then feet up."],
+  [11, 0, "ACTIVATION · 20 min: Tuesday's warm-up, band pull-aparts and external rotations, three easy throws per side, two minutes of shadow boxing at pace, three physiological sighs, done. Weigh-in if there is one. The rehearsal's meals. RANGE at half dose. Bed by half past eight."],
+  [11, 1, "FIGHT. The warm-up you rehearsed. The corner minute in every rest. Round six is a place you've already been."],
 ];
 export const FIGHT_WEEK_FOOD =
   "Food this week holds — the fuel plan exactly as written, and the making-weight section only if you decided on it in week 1. The commonest way to lose a fight in the last week is to eat less because you're training less and arrive at the ring empty.";
 export const FIGHT_WEEK_AFTER = "After the fight: three easy days, then Optimal 8 Fighter restarts at week 1 on Monday 7 December.";
 
 export const HAND_BACK =
-  "Optimal 8 Fighter restarts at week 1 on Monday 30 November with every number better than the ones it left with, and the Camp Mode switch goes off.";
+  "Optimal 8 Fighter restarts at week 1 on Monday 7 December with every number better than the ones it left with, and the Camp Mode switch goes off.";
 
 /* ================================================================
    THE TESTS
    ================================================================ */
 export const CAMP_TEST_INTRO =
-  "You cannot coach what you don't measure. The baselines land in week 1 — the burst test on Tuesday, the jump and throw and the push-up and chin-up counts on Saturday, the 20-minute test on Sunday. The retests are Tuesday of week 6, fresh, at the start of the easy week. The final retest is Tuesday of week 11, short and sharp, whichever path the fork is on.";
+  "You cannot coach what you don't measure. The baselines land in week 1 — the burst test on Tuesday, the nasal threshold on Thursday, the jump and throw and the push-up and chin-up counts on Saturday, the 20-minute test on Sunday. The retests are Tuesday of week 6, fresh, at the start of the easy week. The final retest is Tuesday of week 10 on the fight path, short and sharp, or Tuesday of week 11 on the other.";
 
-export const CAMP_TEST_WEEKS = [1, 6, 11];
-export const SCORED_WEEKS = [2, 5, 6, 9, 10];
+/* the retests, and with them the four range tests and the tape: week 10 at
+   the fork on the fight path, week 11 in the test week on the other */
+export const campTestWeeks = (fight) => [1, 6, fight ? 10 : 11];
+export const scoredWeeks = (fight) => (fight ? [2, 5, 6, 9] : [2, 5, 6, 9, 10, 11]);
+export const SCORED_WEEKS_LINE = "Scored weeks: 2, 5, 6 and 9 — and 10 and 11 on the no-fight path.";
 
 /* ================================================================
    PROTOCOLS — written once, referenced by name. Keys are prefixed so
@@ -358,7 +368,7 @@ export const CAMP_EASY_HOUR = {
   why: "Active recovery for legs that have just done the rounds, and the aerobic base that the base day alone doesn't carry.",
   tag: "SUNDAY AFTERNOON · NOSE ONLY",
 };
-export const SAUNA_LINE = "Weeks 4–10: sauna, 15–20 minutes, twice a week if you can get one, Sunday and one weekday evening — heat acclimation over three weeks raises blood volume and endurance the way nothing else this cheap does. Never straight from the sauna into cold.";
+export const SAUNA_LINE = "Weeks 4–9: sauna, 15–20 minutes, twice a week if you can get one, Sunday and one weekday evening — heat acclimation over three weeks raises blood volume and endurance the way nothing else this cheap does. Never straight from the sauna into cold.";
 
 /* ================================================================
    THE SEVEN PAGES, in running order, exactly as written
@@ -366,7 +376,7 @@ export const SAUNA_LINE = "Weeks 4–10: sauna, 15–20 minutes, twice a week if
 const vv = (x, rx) => (typeof x === "function" ? x(rx) : x);
 const isTest = (rx, day) => !!(rx.tests && rx.tests[day]);
 
-/* the burst test, the retests, and the week-11 short battery */
+/* the burst test, the retests, and the fork week's short battery */
 const testItems = (kind) => {
   const burst = [
     { n: "Burst 1 — peak power", s: "6 seconds flat out", cue: "Ten bursts of 6 seconds flat out with 30 seconds easy between. Write down the first and the last; the last divided by the first is the decrement.", id: "c_burst1", k: "out", u: "peak power / output" },
@@ -392,11 +402,11 @@ const testItems = (kind) => {
   ];
   if (kind === "burst") return burst.concat(tape);
   if (kind === "retest") return burst.concat(power, bolt, strength, holds, tape);
-  if (kind === "retest11f") return burst.concat(power, bolt, tape);
+  if (kind === "retest10f") return burst.concat(power, bolt, tape);
   if (kind === "retest11n") return burst.concat(power, bolt, strength, tape);
   return [];
 };
-const testTitle = { burst: "THE BURST TEST", retest: "THE RETESTS", retest11f: "THE RETESTS — SHORT", retest11n: "THE RETESTS" };
+const testTitle = { burst: "THE BURST TEST", retest: "THE RETESTS", retest10f: "THE RETESTS — SHORT", retest11n: "THE RETESTS" };
 
 export const CS = {
   /* ---------------- MONDAY · BASE ---------------- */
@@ -430,7 +440,7 @@ export const CS = {
     { L: "T", n: (rx) => testTitle[rx.tests.tue], m: 18, star: 1, hard: 1, hide: (rx) => !isTest(rx, "tue"),
       timer: (rx) => (rx.tests.tue === "burst" || String(rx.tests.tue).indexOf("retest") === 0 ? { kind: "bursttest", title: "BURST TEST · 10 × 6 s" } : null),
       rxLine: (rx) => (rx.tests.tue === "burst" ? "Ten bursts of 6 s flat out, 30 s easy — first against last"
-        : rx.tests.tue === "retest11f" ? "Short and sharp, inside a 40-minute session — then one set of eight repeat bursts"
+        : rx.tests.tue === "retest10f" ? "Short and sharp, inside a 40-minute session — then one set of eight repeat bursts"
         : "Fresh, first, at the start of the session"),
       items: (rx) => testItems(rx.tests.tue),
       rangeTests: 1,
@@ -536,7 +546,7 @@ export const CS = {
         { n: "The pace it opened at", s: "write it down", id: "c_nasal_pace", k: "out", u: "pace" },
         { n: "The honest half", s: "did it open because it had to, or because you caved?", id: "c_nasal_honest", k: "out", u: "had to / caved" }],
       w: "Then run the session below one round short.",
-      why: "Weeks 1, 6 and 11. Eight minutes nose only, pace up every two minutes until the mouth has to open; log the pace and the honest half — did it open because it had to, or because you caved? The hardest measure of breathing efficiency under load you own, and the honest half is worth more than the number.", tr: 2 },
+      why: "Weeks 1 and 6, and week 11 on the no-fight path. Eight minutes nose only, pace up every two minutes until the mouth has to open; log the pace and the honest half — did it open because it had to, or because you caved? The hardest measure of breathing efficiency under load you own, and the honest half is worth more than the number.", tr: 2 },
     { L: "E", n: (rx) => (CENG[rx.eng2] ? CENG[rx.eng2].n : "Engine 2"), m: (rx) => (rx.eng2 === "easy" ? 20 : 28), star: 1, hard: 1, eng: 1, engKey: "eng2",
       hide: (rx) => !rx.eng2, timer: (rx) => cengTimer(rx.eng2, !!rx.nasal),
       items: [{ n: "Output", s: "write it down", id: "c_eng2", k: "out", u: "output / peak HR" },
@@ -574,7 +584,7 @@ export const CS = {
       items: [{ n: "Broad jump", s: "best of three", cue: "Two-foot jump forward for distance, stick the landing dead still. Three attempts, best one counts.", id: "c_jump", k: "out", u: "metres" },
         { n: "Rotational throw", s: "best of three per side", cue: "Medicine ball at the shoulder, side-on to the wall, drive off the back hip. Three per side, best distance.", id: "c_throw", k: "out", u: "metres" }],
       w: "Fresh, before the sprints. Power tested tired is not power.",
-      why: "Week 1's baseline for the two power numbers. Retested Tuesday of weeks 6 and 11. Target over twelve weeks: +6–8%.", tr: 2 },
+      why: "Week 1's baseline for the two power numbers. Retested Tuesday of week 6, and Tuesday at the fork. Target over twelve weeks: +6–8%.", tr: 2 },
     { L: "M", n: "THE SPEED MICRODOSE", m: 25, star: 1, hard: 1, hide: (rx) => !(rx.spr && rx.spr.micro),
       rxLine: () => "25 minutes, everything fast, nothing tired",
       items: [{ n: "3 × 20 m @ 90%", s: "after the build-ups", id: "c_micro_spr", k: "chk" },
@@ -582,7 +592,7 @@ export const CS = {
         { n: "Rotational throws", s: "2 × 3 per side", id: "c_micro_throw", k: "chk" },
         { n: "Bench throws", s: "3 × 3", id: "c_micro_bt", k: "chk" }],
       w: "Everything fast, nothing tired. Nothing here is allowed to cost you anything.",
-      why: "Week 11, fight confirmed. Speed fades fastest once you stop, and this is the dose that keeps it without spending anything." },
+      why: "The fork week, fight confirmed. Speed fades fastest once you stop, and this is the dose that keeps it without spending anything." },
     { L: "B", n: "Flying Sprints", m: 14, star: 1, hard: 1, rest: "Rest 2:30–3:00 — full recovery", rt: 165,
       hide: (rx) => !rx.spr || !!rx.spr.micro,
       rxLine: (rx) => (rx.spr.buildOnly ? "build-ups, then 3 runs at 90% — no flat-out sprint until week 2" : rx.spr.n + " × 20 m" + (rx.spr.pct < 100 ? " @ 90%" : " · flat out") + (rx.spr.timed ? " · timed" : "")),
@@ -596,11 +606,11 @@ export const CS = {
         cue: rx.jump === "AEL" ? "A hex dumbbell in each hand, 8–12 kg, dip fast into a quarter squat, let both dumbbells go at the bottom and jump straight up as high as you can, empty-handed; land soft on clear floor."
           : "Step off a 30–40 cm box and, the instant the feet touch, jump as high as you can, shortest possible time on the floor.", id: "c_jumpsat", k: "out", u: "height / quality" }],
       w: "Stop the set the moment a jump is lower than the last.",
-      why: "Weeks 1–6 loaded drop jumps; weeks 7–10 depth jumps — the fastest way to convert strength into power that exists.", tr: 2 },
+      why: "Weeks 1–6 loaded drop jumps; weeks 7–9, and 10 on the no-fight path, depth jumps — the fastest way to convert strength into power that exists.", tr: 2 },
     { L: "D", n: "Side Bounds", m: 6, rest: "Rest 90 s", rt: 90, hide: (rx) => !!rx.tp,
       rxLine: () => "3 × 4 per side",
       items: (rx) => [{ n: rx.bound === "stick" ? "Side bound — stick the landing" : "Side bound — continuous", s: "3 × 4 per side",
-        cue: rx.bound === "stick" ? "Stand on one leg, jump sideways as far as you can, land on the other and stick it dead still for 2 seconds." : "Weeks 8–10: no stick — bounce straight back the other way.", id: "c_bound", k: "chk" }],
+        cue: rx.bound === "stick" ? "Stand on one leg, jump sideways as far as you can, land on the other and stick it dead still for 2 seconds." : "Weeks 8–9: no stick — bounce straight back the other way.", id: "c_bound", k: "chk" }],
       why: "The sideways push-off that cuts a ring off." },
     { L: "E", n: "Back Squat", m: 16, star: 1, hard: 1, mainLift: "cw_squat", work: "cw_squat", hide: (rx) => !rx.sq,
       pres: (rx) => ({ sc: rx.sq.sc, pct: rx.sq.pct }),
@@ -642,7 +652,7 @@ export const CS = {
         { n: "Copenhagen hold", s: "to failure — write the weaker side", cue: "Side plank, top foot on a bench, bottom leg lifted.", id: "c_copen", k: "out", u: "seconds" },
         { n: "BOLT", s: "time to the first definite urge", cue: "A normal breath in and out, pinch the nose, and time it to the first definite urge to breathe. The Iron Mind breath tool times it.", id: "c_bolt", k: "out", u: "seconds" }],
       w: "Last, because they cost. Everything above them is tested fresh.",
-      why: "The week-1 baselines the retests in weeks 6 and 11 are read against." }] },
+      why: "The week-1 baselines the retests in week 6 and at the fork are read against." }] },
 
   /* ---------------- SUNDAY · THE ROUNDS ---------------- */
   sun: { n: "SUNDAY", t: "★ THE ROUNDS · 8:30 — get-ups, throws, the simulation, the post-max sit, core with the L-sit and lever, hands, weekly check", m: 75, ac: C.brass, free: 1,
@@ -662,7 +672,7 @@ export const CS = {
       items: [{ n: "Distance", s: "the engine's ceiling", cue: "Five easy minutes, then 20 minutes for the most distance you can on the erg you'll use all camp. No pacing plan — go and find out.", id: "c_bike20", k: "out", u: "distance (m)" },
         { n: "Peak heart rate", s: "the highest you saw", cue: "Every easy session from here is paced at 65–75% of it.", id: "c_bike20hr", k: "out", u: "bpm" }],
       why: "The engine's ceiling and your peak heart rate. Week 1's baseline; every easy session is paced off it.", tr: 2 },
-    { L: "C", n: (rx) => (rx.sim && rx.sim.rehearsal ? "THE FIGHT-DAY REHEARSAL" : "The " + (rx.sim ? rx.sim.rounds : 6) + " × 3 Simulation"), m: 28, star: 1, sim: 1, hard: 1, hide: (rx) => !rx.sim,
+    { L: "C", n: (rx) => (rx.sim && rx.sim.rehearsal ? "THE REHEARSAL-LITE" : "The " + (rx.sim ? rx.sim.rounds : 6) + " × 3 Simulation"), m: 28, star: 1, sim: 1, hard: 1, hide: (rx) => !rx.sim,
       timer: (rx) => ({ kind: "csim", opt: { rounds: rx.sim.rounds, rest: rx.sim.rest, pace: !!rx.sim.rehearsal }, title: rx.sim.rehearsal ? "THE REHEARSAL" : "THE ROUNDS" }),
       rxLine: (rx) => rx.sim.rounds + " × 3 min · rest " + rx.sim.rest + " s" + (rx.sim.scored ? " · SCORED" : rx.sim.easy ? " · easy, to learn the stations" : rx.sim.rehearsal ? " · at fight pace" : ""),
       items: (rx) => (rx.sim.rehearsal
@@ -676,13 +686,13 @@ export const CS = {
       rules: [
         "Relaxed jaw, shoulders down. Finish a round with your traps by your ears and it doesn't count.",
         CORNER_MINUTE,
-        "On scored weeks write down round one's output and round six's. Round six divided by round one is the fade. Scored weeks: 2, 5, 6, 9, 10 — and 11 on the no-fight path.",
+        "On scored weeks write down round one's output and round six's. Round six divided by round one is the fade. " + SCORED_WEEKS_LINE,
       ],
       recovery: 1,
       why: (rx) => (rx.sim.rehearsal
         ? "Get up at the time you'll get up on the 1st. Eat what you'll eat, when you'll eat it. Do the warm-up you'll do. Then, at the hour the fight is on, the rounds at fight pace, the corner minute every rest, the post-max sit after. Not a test — a rehearsal. Everything that goes wrong today, you fix before the day it matters."
-        : "Six rounds of three minutes — seven in weeks 7–10, so that round six is a place you've already been. Nothing else you own trains the actual shape of a fight."),
-      note: (rx) => (rx.sim.rehearsal && rx.sim.rounds === 2 ? "For a Tuesday fight the rehearsal runs two fight-pace rounds instead of six: the wake time, the meals, the warm-up, then two rounds and the corner minute. Then feet up." : ""), tr: 2 },
+        : "Six rounds of three minutes — seven in weeks 7–9, and in week 10 on the no-fight path, so that round six is a place you've already been. Nothing else you own trains the actual shape of a fight."),
+      note: (rx) => (rx.sim.rehearsal && rx.sim.rounds === 2 ? "The rehearsal-lite: two fight-pace rounds, not six — the fight is two days away. The wake time, the meals, the warm-up, then two rounds and the corner minute. Then feet up." : ""), tr: 2 },
     { L: "D", n: "The Post-Max Sit", m: 3, hide: (rx) => !rx.sim && !rx.test20,
       timer: () => ({ kind: "postmax", title: "POST-MAX SIT" }), rxLine: () => "3 min — straight off the last round",
       items: [{ n: "Seconds to settle onto the breath", s: "write it down", cue: "Straight off the last round: sit, eyes closed, heart at 170-plus, find the breath at the nostrils. Write down the seconds it took.", id: "c_postmax", k: "out", u: "seconds" }],
@@ -728,10 +738,11 @@ export const PHASE_WHY = {
 export const PHASE_NAME = { slow: "SLOW LOWERING · 5 s down", paused: "PAUSED · 3 s hold", fast: "FAST", contrast: "CONTRAST + the jump circuit" };
 
 /* ================================================================
-   WEEK 12 — fight week. Monday activates, Tuesday is the fight, and
-   the rest of the week is the three easy days before Optimal 8.
+   FIGHT WEEK — week 11 on the fight path. Monday activates, Tuesday is
+   the fight, and the rest of the week is the three easy days before
+   Optimal 8. (The c12_ ids are storage keys; they don't move.)
    ================================================================ */
-export const CS12 = {
+export const CSFW = {
   mon: { n: "MONDAY", t: "ACTIVATION · 20 min — then feet up", m: 20, ac: C.brass,
     intro: "The day before. Everything you'll have tomorrow, you have already. This morning only wakes it up.",
     b: [
@@ -752,29 +763,27 @@ export const CS12 = {
       items: [{ n: "The warm-up you rehearsed", s: "exactly as Sunday the 29th", id: "c12_fwu", k: "chk" },
         { n: "The corner minute", s: "every rest", cue: CORNER_MINUTE, id: "c12_corner", k: "chk" },
         { n: "How it went", s: "write it down tonight", id: "c12_result", k: "out", u: "rounds / result" }],
-      why: "Everything you'll have on the 1st of December, you had by Sunday 22 November. Week 11 sharpened it; the last days protected it." }] },
+      why: "Everything you'll have on the 1st of December, you had by Sunday 22 November. Week 10 sharpened it; the last days protected it." }] },
 };
 
 /* the sessions for a camp day, or null when the day is a card of its own */
 export const campSess = (day, rx) => {
   if (rx.handBack) return null;
-  if (rx.fightWeek) return CS12[day] || null;
-  if (rx.w === 1 && day === "mon") return null;
+  if (rx.fightWeek) return CSFW[day] || null;
   return CS[day];
 };
 
 /* what the card says on the days that have no session page */
 export const campBlank = (day, rx, dateLabel) => {
   if (rx.handBack) return { h: "OPTIMAL 8 RESTARTS", c: C.moss,
-    l: ["The camp is done. Optimal 8 Fighter restarts at week 1 on Monday " + (dateLabel || "30 November") + " with every number better than the ones it left with.",
+    l: ["The camp is done. Optimal 8 Fighter restarts at week 1 on Monday " + (dateLabel || "7 December") + " with every number better than the ones it left with.",
       "Turn CAMP MODE off in settings. Your maxes, your calisthenics levels, RANGE, Iron Mind and the whole history come with you — nothing is lost in the switch.",
       "Then three easy days if the last Sunday was a hard one, and week 1."] };
   if (rx.fightWeek) return { h: "AFTER THE FIGHT", c: C.moss,
     l: ["Three easy days, then Optimal 8 Fighter restarts at week 1 on Monday 7 December.",
       "Nothing hard, nothing fast, nothing heavy. RANGE and the sit as usual.",
       "Then turn CAMP MODE off."] };
-  return { h: "CAMP STARTS TUESDAY", c: C.brass,
-    l: ["Week 1 starts on a Tuesday: there is no Monday base in week 1.",
-      "Tomorrow is the burst test, then the engine introduced — not tested.",
-      "Tonight: RANGE, the hollow block, the sit. Weigh yourself, and decide about making weight on day one, not in week 9."] };
+  return { h: "NOTHING WRITTEN TODAY", c: C.moss,
+    l: ["No session on this page.",
+      "Tonight: RANGE, the hollow block, the sit — they don't stop."] };
 };

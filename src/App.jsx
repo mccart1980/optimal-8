@@ -23,7 +23,7 @@ import { RangeTool, MorningFiveTool, RangeTests, RangeTrack, RangeSheet } from "
 import {
   CAMP_L, CAMP_START_DEFAULT, CPH, CENG, CENG_MENU, CS, CPROTO,
   campRxFor, campSess, campBlank, campDatesLabel, campDayLabel, campWeekOf, campMonday,
-  CAMP_DAILY_CHECK, WORKING_WEIGHT_RULE, CAMP_TEST_WEEKS,
+  CAMP_DAILY_CHECK, WORKING_WEIGHT_RULE, campTestWeeks, SCORED_WEEKS_LINE,
   CAMP_HOMELINE, CAMP_HOMELINE_TAPER, CAMP_EASY_HOUR, SAUNA_LINE, PHASE_NAME, HAND_BACK,
 } from "./camp.js";
 import { CampWeekTable, FightWeekTable, CampWorkPanel, CampNumbers, CampWeekCard } from "./camp-ui.jsx";
@@ -992,7 +992,7 @@ function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, ope
         <div style={{ background: C.ink, border: "1px solid " + C.brass, borderRadius: 5, padding: "11px 12px", marginBottom: 11 }}>
           <Eye c={C.brass} s={{ marginBottom: 4 }}>{rx.sim.rehearsal ? "The rehearsal" : "This week's rounds and rest"}</Eye>
           <div style={Object.assign({}, bdy, { fontSize: 15, fontWeight: 700, color: C.chalk })}>{(rx.sim.rounds || 6)} rounds · {rx.sim.rest}s between{rx.sim.max3 ? " · minute 3 MAXIMAL" : ""}{rx.sim.tested || rx.sim.scored ? " · SCORED — log round 1 and the last round" : ""}{rx.sim.easy ? " · easy, to learn the stations" : ""}</div>
-          {MODE.camp ? <Note c={C.oxide} bold>{rx.sim.rounds === 7 ? "Seven rounds. The sixth is trained as the seventh, so that round six is a place you've already been." : rx.sim.rehearsal ? "Not a test — a rehearsal. Everything that goes wrong today, you fix before the day it matters." : "Scored weeks: 2, 5, 6, 9, 10 — and 11 on the no-fight path."}</Note> : null}
+          {MODE.camp ? <Note c={C.oxide} bold>{rx.sim.rounds === 7 ? "Seven rounds. The sixth is trained as the seventh, so that round six is a place you've already been." : rx.sim.rehearsal ? "Not a test — a rehearsal. Everything that goes wrong today, you fix before the day it matters." : SCORED_WEEKS_LINE}</Note> : null}
           {drop != null ? <div style={{ marginTop: 8 }}><span style={Object.assign({}, mno, { fontSize: 22, fontWeight: 700, color: drop <= 5 ? C.moss : drop <= 10 ? C.brass : C.oxide })}>{drop.toFixed(1)}% drop-off</span><Note>{drop <= 5 ? "Excellent." : drop <= 10 ? "Good — the standard." : drop <= 20 ? "Aerobic base needs work." : "Pacing or engine."}</Note></div> : null}
         </div>) : null}
 
@@ -1135,11 +1135,12 @@ function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, ope
         </div>) : null}
 
       {b.rangeTests && openRangeTests ? (() => {
-        const on = MODE.camp ? CAMP_TEST_WEEKS.indexOf(week) >= 0 : isTestWeek(rangeWeek);
-        const next = MODE.camp ? CAMP_TEST_WEEKS.filter((x) => x > week)[0] : [1, 5, 9, 13].concat([21, 29, 37, 45]).filter((x) => x > rangeWeek)[0];
+        const campTests = campTestWeeks(MODE.fight);
+        const on = MODE.camp ? campTests.indexOf(week) >= 0 : isTestWeek(rangeWeek);
+        const next = MODE.camp ? campTests.filter((x) => x > week)[0] : [1, 5, 9, 13].concat([21, 29, 37, 45]).filter((x) => x > rangeWeek)[0];
         return (
         <div style={{ background: C.ink, border: "1px solid " + (on ? C.oxide : C.line), borderRadius: 5, padding: "11px 12px", marginBottom: 11 }}>
-          <Eye c={on ? C.oxide : C.ash} s={{ marginBottom: 4 }}>The four range tests — {MODE.camp ? "camp weeks 1, 6 and 11" : "weeks 1, 5, 9 and 13"}</Eye>
+          <Eye c={on ? C.oxide : C.ash} s={{ marginBottom: 4 }}>The four range tests — {MODE.camp ? "camp weeks 1, 6 and " + campTests[2] : "weeks 1, 5, 9 and 13"}</Eye>
           <div style={Object.assign({}, bdy, { fontSize: 13, color: C.chalk, lineHeight: 1.5 })}>90/90 sit · deep squat · wall flexion · hands behind the back. Write the eight numbers down. If nothing has moved by {MODE.camp ? "week 6" : "week 5"}, the holds aren't long enough or the exhale isn't happening; fix that before adding anything.</div>
           {on
             ? <Btn on={openRangeTests} c={C.oxide} fill s={{ width: "100%", marginTop: 10 }}>▶ THE FOUR RANGE TESTS · {MODE.camp ? "CAMP WEEK " + week : "RANGE WEEK " + rangeWeek}</Btn>
@@ -1296,7 +1297,7 @@ function Session(props) {
               ? <Chip c={P.ac}>CAMP · WK {week} · {P.n}</Chip>
               : <Chip c={P.ac}>M{macro} · WK {week} · {P.n}</Chip>}
             {MODE.camp && campLabel ? <Chip c={C.brass}>{DSH[day]} {campLabel(day)}</Chip> : null}
-            {MODE.camp && rx.fork ? <Chip c={C.violet}>{rx.fork === "fight" ? "Fight confirmed" : "No fight — test week"}</Chip> : null}
+            {MODE.camp && rx.fork ? <Chip c={C.violet}>{rx.fork === "fight" ? "Fight confirmed" : "No fight"}</Chip> : null}
             {MODE.camp && rx.sauna ? <Chip c={C.oxide}>Sauna week</Chip> : null}
             {rx.lastTen ? <Chip c={C.oxide}>Last ten days</Chip> : null}
             {own.free ? <Chip c={C.moss}>Free day</Chip> : <Chip c={C.brass}>3am session</Chip>}
@@ -1533,7 +1534,7 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
 
       {MODE.camp ? <CampWeekTable start={campStart} week={week} setWeek={(w) => setView({ macro, week: w })} fight={fight} /> : null}
       {MODE.camp ? <CampWeekCard start={campStart} rx={rx} /> : null}
-      {MODE.camp && fight && week >= 11 ? <FightWeekTable start={campStart} /> : null}
+      {MODE.camp && fight && week >= 10 ? <FightWeekTable start={campStart} /> : null}
       {MODE.lastTen ? (
         <Card ac={C.oxide}>
           <Eye c={C.oxide}>The last ten days before a fight</Eye>
@@ -1797,7 +1798,7 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
           <Card ac={C.brass}>
             <Eye c={C.brass}>Calisthenics — where each line stands</Eye>
             <Note c={C.chalk} s={{ marginTop: 0 }}>{CALIS_INTRO}</Note>
-            {camp ? <Note c={C.oxide} bold>CAMP MODE — the five lines run at your current levels in the same slots: ring rows Monday, ring dips and the muscle-up line Wednesday, the pistol line Tuesday, the L-sit and the tuck front lever Sunday. Half the sets in week 6, holds only from week 11. The handstand and the planche leans are not on the camp's clock.</Note> : null}
+            {camp ? <Note c={C.oxide} bold>CAMP MODE — the five lines run at your current levels in the same slots: ring rows Monday, ring dips and the muscle-up line Wednesday, the pistol line Tuesday, the L-sit and the tuck front lever Sunday. Half the sets in week 6, holds only from the fork on the fight path. The handstand and the planche leans are not on the camp's clock.</Note> : null}
           </Card>
           {LINES.map((ln) => { const lev = curLevel(calis, ln.id); const own = ownedDate(calis, ln.id, lev.i);
             const hist = (calis && calis.owned && calis.owned[ln.id]) || {};
@@ -1889,16 +1890,16 @@ function Settings({ st, setSt, current, L, exportData, importData, close, IM, ca
         {st.camp ? (
           <div style={{ paddingLeft: 8 }}>
             <div style={{ padding: "12px 0", borderBottom: "1px solid " + C.line }}>
-              <Lab>Camp day one — the Tuesday week 1 starts on</Lab>
+              <Lab>Camp day one — the Monday week 1 starts on</Lab>
               <Fld type="date" v={st.campStart || CAMP_START_DEFAULT} on={(val) => { if (val) upd({ campStart: val }); }} a="left" />
-              <Note>Today reads as <span style={{ color: C.brass }}>camp week {campWeek}</span> of twelve. Week 1 starts on a Tuesday: there is no Monday base in week 1. Default: Tuesday 15 September 2026, with the fight on Tuesday 1 December.</Note>
+              <Note>Today reads as <span style={{ color: C.brass }}>camp week {campWeek}</span> of twelve. Week 1 is a full week, Monday to Sunday. Default: Monday 21 September 2026, with the fight on Tuesday 1 December.</Note>
             </div>
             <div style={{ padding: "12px 0", borderBottom: "1px solid " + C.line }}>
-              <Lab>Week 11 — the fork, Monday 23 November</Lab>
+              <Lab>Week 10 — the fork, Monday 23 November</Lab>
               <Seg opts={[["y", "FIGHT CONFIRMED", C.oxide], ["n", "NO FIGHT", C.cobalt]]} val={st.campFight ? "y" : "n"} on={(val) => upd({ campFight: val === "y" })} />
               <Note>{st.campFight
-                ? "Fight confirmed. Week 11 sharpens — the short retests, the light trap bar, the fight-pace rounds, the speed microdose and the fight-day rehearsal — and week 12 is fight week, with the fight on the Tuesday."
-                : "No fight. Week 11 is the test week and the camp's verdict — the retests, the working-weight resets, the nasal threshold, the timed 20s and the scored simulation — and Optimal 8 Fighter restarts at week 1 on the Monday after it."}</Note>
+                ? "Fight confirmed. Week 10 is the sharpen week — the short retests, the light trap bar, the fight-pace rounds, the speed microdose and the rehearsal-lite — and week 11 is fight week, with the fight on Tuesday 1 December."
+                : "No fight. Week 10 is the last hard week, week 11 is the test week and the camp's verdict — the retests, the working-weight resets, the nasal threshold, the timed 20s and the scored simulation — and Optimal 8 Fighter restarts at week 1 on Monday 7 December."}</Note>
             </div>
             <Note c={C.brass} bold>{CAMP_DAILY_CHECK.red}</Note>
           </div>) : null}
@@ -1921,7 +1922,7 @@ function Settings({ st, setSt, current, L, exportData, importData, close, IM, ca
         <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
         <Eye c={C.brass}>Calisthenics — the lines and the levels</Eye>
         <Note c={C.chalk} s={{ marginTop: 0 }}>{CALIS_INTRO}</Note>
-        {st.camp ? <Note c={C.brass} bold>CAMP MODE — the five lines run at your current levels in the same slots. Half the sets in week 6, holds only from week 11. The handstand and the planche leans are not on the camp's clock; they stay in your home block as your own call.</Note> : null}
+        {st.camp ? <Note c={C.brass} bold>CAMP MODE — the five lines run at your current levels in the same slots. Half the sets in week 6, holds only from the fork on the fight path. The handstand and the planche leans are not on the camp's clock; they stay in your home block as your own call.</Note> : null}
         {LINES.map((ln) => { const lev = curLevel(calis, ln.id); const own = ownedDate(calis, ln.id, lev.i);
           return (
             <div key={ln.id} style={{ padding: "12px 0", borderBottom: "1px solid " + C.line }}>
@@ -2509,7 +2510,7 @@ export default function App() {
       skill: (() => { const i = DAYS.indexOf(todayKey()); const hs = curLevel(calis, "handstand");
         return { show: i >= 0 && i <= 3, level: hs.l, what: hs.what, camp: !!st.camp,
           title: st.camp ? "THE HOLLOW BLOCK — 3 minutes, Monday to Thursday, after " + rangeTitle(rangeWeek) : null,
-          campNote: "In camp the hollow hold and the arch hold are the block; the handstand and the planche leans are not on the camp's clock — they stay here if you want them, as your own call, and go to holds only from week 11.",
+          campNote: "In camp the hollow hold and the arch hold are the block; the handstand and the planche leans are not on the camp's clock — they stay here if you want them, as your own call, and go to holds only from the fork on the fight path.",
           showHandstand: !st.camp,
           planche: (i === 1 || i === 3) && !st.camp, plancheText: SKILL_BLOCK.planche,
           wrists: SKILL_BLOCK.wrists, hollow: SKILL_BLOCK.hollow, why: st.camp ? "The two shapes every lever and every L-sit is made of, and the stiffest trunk position there is." : SKILL_BLOCK.why, n: SKILL_BLOCK.n }; })(),

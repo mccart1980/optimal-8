@@ -4,7 +4,7 @@ import {
   CAMP_L, campRxFor, campRow, campDatesLabel, campDayLabel, CPH,
   CAMP_TABLE_NOTE, CAMP_TEST_INTRO, CAMP_TARGETS, WORKING_WEIGHT_RULE, CAMP_INTRO, CAMP_PHILOSOPHY,
   FIGHT_WEEK_INTRO, FIGHT_WEEK_ROWS, FIGHT_WEEK_FOOD, FIGHT_WEEK_AFTER,
-  SCORED_WEEKS, CAMP_TEST_WEEKS, PHASE_NAME, OUTPUT_RULE, CAMP_RULES,
+  scoredWeeks, campTestWeeks, PHASE_NAME, OUTPUT_RULE, CAMP_RULES,
 } from "./camp.js";
 
 /* ================================================================
@@ -26,7 +26,7 @@ export function CampWeekTable({ start, week, setWeek, fight }) {
         <Eye c={C.brass} s={{ marginBottom: 4 }}>The twelve weeks — every number, every week, with dates</Eye>
         <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, lineHeight: 1.5 })}>{CAMP_INTRO}</div>
         <Note>{CAMP_PHILOSOPHY}</Note>
-        <Note c={C.ash}>Weeks 1–2 FOUNDATION · weeks 3–5 BUILD · week 6 EASY + TESTS · weeks 7–10 PEAK · week 11 THE FORK · week 12 FIGHT WEEK. Week 1 starts on a Tuesday: there is no Monday base in week 1.</Note>
+        <Note c={C.ash}>Weeks 1–2 FOUNDATION · weeks 3–5 BUILD · week 6 EASY + TESTS · weeks 7–9 PEAK · week 10 THE FORK — sharpen for the 1st, or the last hard week · week 11 fight, or the test week · week 12 Optimal 8 Fighter, week 1.</Note>
       </div>
       <div style={{ overflowX: "auto", padding: "0 14px 14px" }}>
         <table style={{ borderCollapse: "collapse", width: "100%", minWidth: 640 }}>
@@ -84,7 +84,7 @@ export function CampWeekCard({ start, rx }) {
       {rx.reset ? <Note c={C.brass} bold>Reset week: the working weights reset with a set of 3 that's hard but leaves two in you — trap bar Wednesday, squat Saturday.</Note> : null}
       {rx.confirm ? <Note c={C.brass} bold>Week 1 confirms every working weight with a set of 5 that's hard but leaves two in you.</Note> : null}
       {rx.sim && rx.sim.scored ? <Note c={C.oxide} bold>SCORED — round one's output and round six's. Round six divided by round one is the fade.</Note> : null}
-      {rx.fork ? <Note c={C.violet} bold>{rx.fork === "fight" ? "THE FORK · FIGHT CONFIRMED — week 11 sharpens with the fight-day rehearsal and week 12 is fight week." : "THE FORK · NO FIGHT — week 11 is the test week, and Optimal 8 restarts on the 30th."}</Note> : null}
+      {rx.fork ? <Note c={C.violet} bold>{rx.fork === "fight" ? "THE FORK · FIGHT CONFIRMED — week 10 is the sharpen week, ending in the rehearsal-lite; the fight is Tuesday 1 December, and Optimal 8 restarts on 7 December." : "THE FORK · NO FIGHT — week 10 is the last hard week, week 11 is the test week, and Optimal 8 restarts on 7 December."}</Note> : null}
       <Note>{OUTPUT_RULE}</Note>
     </Card>);
 }
@@ -138,7 +138,7 @@ export function CampWorkPanel({ id, name, kg, onSet, reset, confirm, week }) {
         <div style={{ flex: 1 }}><Lab>{reset ? "Today's set of 3 (kg)" : confirm ? "Today's set of 5 (kg)" : "Set it by hand (kg)"}</Lab><Fld v={inp} on={setInp} ph="kg" /></div>
         <Btn c={C.brass} fill dis={!num(inp)} on={() => { const k = num(inp); if (!k) return; onSet(r25(k), (reset ? "reset · set of 3 · camp wk " : confirm ? "confirmed · set of 5 · camp wk " : "by hand · camp wk ") + week); setInp(""); }}>SAVE</Btn>
       </div>
-      <Note>{reset ? "Week 6 and the no-fight week 11: a set of 3, hard but with two in you. That triple is the new working weight." : confirm ? "Week 1: a set of 5 that's hard but leaves two in you. That five is the working weight the whole camp loads from." : WORKING_WEIGHT_RULE}</Note>
+      <Note>{reset ? "Week 6, and week 11 on the no-fight path: a set of 3, hard but with two in you. That triple is the new working weight." : confirm ? "Week 1: a set of 5 that's hard but leaves two in you. That five is the working weight the whole camp loads from." : WORKING_WEIGHT_RULE}</Note>
     </div>);
 }
 
@@ -147,7 +147,8 @@ export function CampNumbers({ start, fight, log, maxes, onSetMax }) {
   const [edit, setEdit] = useState({});
   const get = (w, day, id) => { const e = log["mCw" + w + "-" + day + "-" + id]; return e ? num(e.w) : null; };
   const fade = (w) => { const a = get(w, "sun", "c_fs_rd1"), b = get(w, "sun", "c_fs_rd6"); return a && b ? b / a * 100 : null; };
-  const testRow = (id) => CAMP_TEST_WEEKS.map((w) => {
+  const TEST_WEEKS = campTestWeeks(fight);
+  const testRow = (id) => TEST_WEEKS.map((w) => {
     const day = id === "c_bike20" || id === "c_bike20hr" ? "sun" : (w === 1 && (id === "c_push" || id === "c_chin" || id === "c_plank" || id === "c_copen" || id === "c_jump" || id === "c_throw" || id === "c_bolt")) ? "sat" : "tue";
     return [w, get(w, day, id)];
   });
@@ -180,25 +181,25 @@ export function CampNumbers({ start, fight, log, maxes, onSetMax }) {
 
       <Card ac={C.cobalt}>
         <Eye c={C.cobalt}>The fade — round six against round one</Eye>
-        {SCORED_WEEKS.concat(fight ? [] : [11]).map((w) => { const f = fade(w);
+        {scoredWeeks(fight).map((w) => { const f = fade(w);
           return (
             <div key={w} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid " + C.line }}>
               <span style={Object.assign({}, bdy, { fontSize: 13, color: C.chalk })}>Week {w} · {campDatesLabel(start, w)}</span>
               <span style={Object.assign({}, mno, { fontSize: 13, fontWeight: 700, color: f == null ? C.ash : f >= 95 ? C.moss : f >= 90 ? C.brass : C.oxide })}>{f == null ? "—" : f.toFixed(1) + "%"}</span>
             </div>); })}
-        <Note>Week 2 is the baseline; week 10 is the last honest read. Everything here is aimed at moving it toward 100%.</Note>
+        <Note>Week 2 is the baseline; week 9 is the last honest read before a fight. Everything here is aimed at moving it toward 100%.</Note>
       </Card>
 
       <Card ac={C.oxide}>
-        <Eye c={C.oxide}>The tests — weeks 1, 6 and 11</Eye>
+        <Eye c={C.oxide}>The tests — weeks 1, 6 and {TEST_WEEKS[2]}</Eye>
         <Note c={C.chalk} s={{ marginTop: 0 }}>{CAMP_TEST_INTRO}</Note>
         <div style={{ overflowX: "auto", marginTop: 8 }}>
           <table style={{ borderCollapse: "collapse", width: "100%" }}>
-            <thead><tr><Head>Test</Head>{CAMP_TEST_WEEKS.map((w) => <Head key={w} w={58}>Wk {w}</Head>)}</tr></thead>
+            <thead><tr><Head>Test</Head>{TEST_WEEKS.map((w) => <Head key={w} w={58}>Wk {w}</Head>)}</tr></thead>
             <tbody>
               {TESTED.map((t) => { const row = testRow(t[0]);
                 return <tr key={t[0]}><Cell b>{t[1]}</Cell>{row.map((r) => <Cell key={r[0]} c={r[1] == null ? C.ash : C.brass}>{r[1] == null ? "—" : r[1]}</Cell>)}</tr>; })}
-              <tr><Cell b>20-minute test (m)</Cell>{CAMP_TEST_WEEKS.map((w) => { const val = get(w, "sun", "c_bike20");
+              <tr><Cell b>20-minute test (m)</Cell>{TEST_WEEKS.map((w) => { const val = get(w, "sun", "c_bike20");
                 return <Cell key={w} c={val == null ? C.ash : C.brass}>{val == null ? "—" : val}</Cell>; })}</tr>
             </tbody>
           </table>

@@ -356,18 +356,22 @@ describe("Optimal 8", () => {
 
   /* ---------------- CAMP MODE — the twelve weeks ---------------- */
 
-  const CAMP_START = "2026-09-15";              // Tuesday 15 September 2026
+  const CAMP_START = "2026-09-21";              // Monday 21 September 2026
   const camp = (extra) => mount(Object.assign({ camp: true, campStart: CAMP_START }, extra || {}));
   /* a is before b in the document */
   const before = (a, b) => !!(a.compareDocumentPosition(b) & 4);
 
-  it("runs Tuesday 15 September as camp week 1, with the burst test before the intervals", async () => {
-    vi.setSystemTime(new Date(2026, 8, 15, 9, 0, 0));   // Tuesday 15 September 2026
+  it("runs Monday 21 September as camp week 1, with a full first week", async () => {
+    vi.setSystemTime(new Date(2026, 8, 21, 9, 0, 0));   // Monday 21 September 2026
     await camp();
 
-    // the camp's own clock, counting from its own start date
+    // the camp's own clock, counting from its own start date — and week 1 opens with the base
     expect(await screen.findByText("WK 1/12 · FOUNDATION")).toBeInTheDocument();
-    expect(screen.getByText("TUE 15 Sep")).toBeInTheDocument();
+    expect(screen.getByText("MON 21 Sep")).toBeInTheDocument();
+    expect(await findHead("Easy, nose only")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "TUE" }));
+    expect(await screen.findByText("TUE 22 Sep")).toBeInTheDocument();
 
     const burst = await findHead("THE BURST TEST");
     const intervals = head("MODERATE INTERVALS");
@@ -384,25 +388,46 @@ describe("Optimal 8", () => {
     expect(screen.getByText("Burst 10 — peak power")).toBeInTheDocument();
   });
 
-  it("renders the sharpen page in week 11 when the fight is confirmed, and the test week when it isn't", async () => {
-    vi.setSystemTime(new Date(2026, 10, 25, 9, 0, 0));  // Wednesday 25 November 2026, camp week 11
+  it("sharpens in week 10 when the fight is confirmed, and runs the last hard week when it isn't", async () => {
+    vi.setSystemTime(new Date(2026, 10, 25, 9, 0, 0));  // Wednesday 25 November 2026, camp week 10
 
     await camp({ campFight: true });
-    expect(await screen.findByText("WK 11/12 · THE FORK")).toBeInTheDocument();
+    expect(await screen.findByText("WK 10/12 · THE FORK")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "SAT" }));
     expect(await findHead("THE SPEED MICRODOSE")).toBeInTheDocument();
     expect(screen.queryByText("Back Squat")).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "SUN" }));
-    expect(await findHead("THE FIGHT-DAY REHEARSAL")).toBeInTheDocument();
+    expect(await findHead("THE REHEARSAL-LITE")).toBeInTheDocument();
+
+    cleanup();
+    localStorage.clear();
+    localStorage.setItem("o8s-migrated", "true");
+
+    // no fight: week 10 is the fourth peak week, and week 11 becomes the test week
+    await camp({ campFight: false });
+    expect(await screen.findByText("WK 10/12 · PEAK")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "SAT" }));
+    expect(await findHead("Back Squat")).toBeInTheDocument();
+    expect(screen.queryByText("THE SPEED MICRODOSE")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "SUN" }));
+    expect(await findHead("The 7 × 3 Simulation")).toBeInTheDocument();
+  });
+
+  it("makes week 11 fight week on one path and the camp's verdict on the other", async () => {
+    vi.setSystemTime(new Date(2026, 11, 1, 9, 0, 0));   // Tuesday 1 December 2026, camp week 11
+
+    await camp({ campFight: true });
+    expect(await screen.findByText("WK 11/12 · FIGHT WEEK")).toBeInTheDocument();
+    expect(await findHead("The fight")).toBeInTheDocument();
+    expect(screen.getByText(/Round six is a place you've already been/)).toBeInTheDocument();
 
     cleanup();
     localStorage.clear();
     localStorage.setItem("o8s-migrated", "true");
 
     await camp({ campFight: false });
-    fireEvent.click(screen.getByRole("button", { name: "SAT" }));
-    expect(await findHead("Back Squat")).toBeInTheDocument();
-    expect(screen.queryByText("THE SPEED MICRODOSE")).not.toBeInTheDocument();
+    expect(await screen.findByText("WK 11/12 · THE TEST WEEK")).toBeInTheDocument();
+    expect(await findHead("THE RETESTS")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "SUN" }));
     expect(await findHead("The 6 × 3 Simulation")).toBeInTheDocument();
   });
@@ -442,7 +467,7 @@ describe("Optimal 8", () => {
   });
 
   it("moves to paused, then fast, then contrast, and puts the jump circuit behind the contrast squat", async () => {
-    vi.setSystemTime(new Date(2026, 10, 4, 9, 0, 0));   // Wednesday 4 November 2026, camp week 8
+    vi.setSystemTime(new Date(2026, 10, 11, 9, 0, 0));  // Wednesday 11 November 2026, camp week 8
     await camp();
 
     expect(await screen.findByText("WK 8/12 · PEAK")).toBeInTheDocument();
@@ -477,14 +502,15 @@ describe("Optimal 8", () => {
   });
 
   it("gives the camp a dated week table, and a fight-week table for Tuesday 1 December", async () => {
-    vi.setSystemTime(new Date(2026, 10, 25, 9, 0, 0));  // camp week 11
+    vi.setSystemTime(new Date(2026, 10, 25, 9, 0, 0));  // camp week 10, the fork
     await camp({ campFight: true });
 
     fireEvent.click(screen.getByRole("button", { name: "WEEK" }));
     expect(await screen.findByText("The twelve weeks — every number, every week, with dates")).toBeInTheDocument();
-    expect(screen.getByText("15–20 Sep")).toBeInTheDocument();
+    expect(screen.getByText("21–27 Sep")).toBeInTheDocument();
     expect(screen.getByText("23–29 Nov")).toBeInTheDocument();
     expect(screen.getByText("30 Nov–6 Dec")).toBeInTheDocument();
+    expect(screen.getByText("7–13 Dec")).toBeInTheDocument();
 
     expect(screen.getByText("Fight week — fight on Tuesday 1 December")).toBeInTheDocument();
     expect(screen.getByText("TUE 1 Dec")).toBeInTheDocument();
@@ -508,18 +534,18 @@ describe("Optimal 8", () => {
   });
 
   it("switches the camp on, off and at the fork from settings", async () => {
-    vi.setSystemTime(new Date(2026, 8, 15, 9, 0, 0));
+    vi.setSystemTime(new Date(2026, 8, 22, 9, 0, 0));
     await camp();
 
     fireEvent.click(screen.getByRole("button", { name: "Settings" }));
     expect(await screen.findByText("Camp mode — the twelve weeks")).toBeInTheDocument();
-    expect(screen.getByText("Camp day one — the Tuesday week 1 starts on")).toBeInTheDocument();
+    expect(screen.getByText("Camp day one — the Monday week 1 starts on")).toBeInTheDocument();
     expect(screen.getByText(/camp week 1/)).toBeInTheDocument();
 
-    // the fork is a setting, and it rewrites weeks 11 and 12
+    // the fork is a setting, and it rewrites weeks 10 and 11
     fireEvent.click(screen.getByRole("button", { name: "FIGHT CONFIRMED" }));
     await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-settings")).campFight).toBe(true));
-    expect(await screen.findByText(/week 12 is fight week/)).toBeInTheDocument();
+    expect(await screen.findByText(/week 11 is fight week/)).toBeInTheDocument();
 
     // and turning it off hands the app straight back to the Fighter
     fireEvent.click(screen.getByText("CAMP MODE"));
@@ -928,7 +954,7 @@ describe("Optimal 8", () => {
   });
 
   it("shows the camp's targets beside the dashboard's numbers in Camp Mode", async () => {
-    await mount({ camp: true, campStart: "2026-09-15" });
+    await mount({ camp: true, campStart: "2026-09-21" });
     fireEvent.click(screen.getByRole("button", { name: "TRACK" }));
 
     expect(await screen.findByText("The dashboard — the seven numbers, against the camp's targets")).toBeInTheDocument();

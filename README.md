@@ -158,10 +158,9 @@ Turn **CAMP MODE** on in settings and the whole app switches over to
 `optimal-8-camp.md`: twelve weeks to be fight-ready for a 6 × 3, running in
 place of Optimal 8 Fighter and handing back at the end.
 
-- **Camp day one** — the Tuesday week 1 starts on. Defaults to **Tuesday 15
+- **Camp day one** — the Monday week 1 starts on. Defaults to **Monday 21
   September 2026**, with the fight on **Tuesday 1 December**; change it and
-  every date in the app moves with it. Week 1 starts on a Tuesday, so there is
-  no Monday base in week 1.
+  every date in the app moves with it. Week 1 is a full week, Monday to Sunday.
 - **The week** — Monday BASE, Tuesday POWER + ENGINE 1, Wednesday STRENGTH,
   Thursday THROWS + ENGINE 2, Friday asleep, Saturday THE LONG SESSION, Sunday
   THE ROUNDS. Every block in the order the document runs it, with its minutes,
@@ -172,21 +171,22 @@ place of Optimal 8 Fighter and handing back at the end.
   never touched by a camp — they're still there when the switch goes off.
 - **The lift phases** — slow lowering with the five-second cue (weeks 1–2),
   paused with the three-second cue (3–4), fast (5–7), and contrast into the
-  jump circuit (8–10).
+  jump circuit (8–9, and 10 on the no-fight path).
 - **The conditioning** — moderate intervals, 4-minute intervals, repeat bursts,
   tempo intervals, threshold, 40-second repeats, rounds on the erg 7 × 3,
   fight-pace rounds and easy, each with its own timer.
 - **Sunday's simulation** — six rounds, seven in the peak block, with the corner
   minute written and timed into every rest and the post-max sit straight after.
-  Scored in weeks 2, 5, 6, 9 and 10 — and 11 on the no-fight path.
+  Scored in weeks 2, 5, 6 and 9 — and 10 and 11 on the no-fight path.
 - **The tests, on their dates** — the burst decrement, the 20-minute test, broad
   jump, rotational throw, push-ups, chin-ups, plank, Copenhagen, BOLT, the nasal
   threshold, the four range tests and the working-weight resets. TRACK → CAMP
   charts all of it, plus the fade.
-- **Week 11 — the fork.** A setting: **fight confirmed**, yes or no. Yes gives
-  you the sharpen week and fight week, with a **fight-week table** for the
-  Tuesday 1 December layout. No gives you the test week, the camp's verdict, and
-  the hand-back to Optimal 8 on the Monday after it.
+- **Week 10 — the fork.** A setting: **fight confirmed**, yes or no. Yes makes
+  week 10 the sharpen week and week 11 fight week, with a **fight-week table**
+  for the Tuesday 1 December layout. No makes week 10 the last hard week and
+  week 11 the test week, the camp's verdict. Either way Optimal 8 Fighter
+  restarts at week 1 on **Monday 7 December**, in camp week 12.
 - **Shared with the Fighter** — maxes, calisthenics levels, RANGE test results,
   Iron Mind stages, your streak and all your history. Turning the switch either
   way loses nothing.
