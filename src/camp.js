@@ -397,7 +397,7 @@ const testItems = (kind) => {
   ];
   const tape = [
     { n: "Bodyweight", s: "kg", id: "c_bw", k: "out", u: "kg" },
-    { n: "Waist", s: "cm — the tape at weeks 1, 6 and 11", id: "c_waist", k: "out", u: "cm" },
+    { n: "Waist", s: "cm", id: "c_waist", k: "out", u: "cm" },
     { n: "Resting heart rate", s: "five mornings averaged", id: "c_rhr", k: "out", u: "bpm" },
   ];
   if (kind === "burst") return burst.concat(tape);
@@ -467,7 +467,7 @@ export const CS = {
       why: "Stay on the bike, eyes closed, heart pounding, find the breath at the nostrils, count the seconds it takes to land there. The corner between rounds, trained." },
     { L: "F", n: "Trunk", m: 9, rest: "Rest 45 s", rt: 45, hide: (rx) => !!rx.tp,
       items: [{ n: "Pallof press", s: "3 × 10 per side · 2 s hold", cue: "Band at chest height anchored beside you, press the hands straight out and hold 2 seconds without letting it twist you.", id: "c_pallof", k: "wr", sets: 3, reps: "10/side" },
-        { n: "Ab wheel rollout", s: "3 × 8–12", cue: "Knees down, out only as far as the lower back stays flat.", id: "c_abwheel", k: "wr", sets: 3, reps: "8–12" },
+        { n: "Ab wheel rollout", s: "3 × 8–12", cue: "Knees down, out only as far as the lower back remains flat.", id: "c_abwheel", k: "wr", sets: 3, reps: "8–12" },
         { n: "Copenhagen plank", s: "2 × 30 s per side", cue: "Side plank, top foot on a bench, bottom leg lifted.", id: "c_copenplank", k: "chk" }],
       why: "The groin you pivot off, and the trunk that turns leg drive into hand speed." },
     { L: "G", n: "Seated Calf Raise + Achilles Hold", m: 5, rest: "Rest 60 s", rt: 60,
@@ -559,10 +559,10 @@ export const CS = {
       why: "As Tuesday. Every session ends with the settle." },
     { L: "G", n: "Neck", m: 8, p: "C_NECK",
       timer: () => ({ kind: "hold", opt: { sets: 3, secs: 10, rest: 20, label: "4-DIRECTION HOLD" }, title: "NECK HOLDS" }),
-      items: [{ n: "The neck block", s: "as Monday", id: "c_neck_thu", k: "chk" }] },
+      items: [{ n: "The neck block", s: "4 movements", id: "c_neck_thu", k: "chk" }] },
     { L: "H", n: "Hands", m: 4, p: "C_HANDS",
       timer: () => ({ kind: "hold", opt: { sets: 3, secs: 20, rest: 30, label: "KNUCKLE HOLD" }, title: "HANDS" }),
-      items: [{ n: "Knuckle hold + band wrist extension", s: "as Monday", id: "c_hands_thu", k: "chk" }] }] },
+      items: [{ n: "Knuckle hold + band wrist extension", s: "3 × 20 s · 2 × 15", id: "c_hands_thu", k: "chk" }] }] },
 
   /* ---------------- FRIDAY · SLEEP ---------------- */
   fri: { n: "FRIDAY", t: "SLEEP. No alarm. RANGE at home in the evening.", m: 0, ac: C.moss, sleep: 1,
@@ -664,7 +664,7 @@ export const CS = {
       rest: "45 s between exercises · 90 s between rounds", rt: 45,
       timer: (rx) => ({ kind: "vec", opt: { rounds: rx.vec }, title: "PUNCH THROWS" }),
       rxLine: (rx) => rx.vec + " rounds — as Saturday",
-      items: [{ n: "The four throws", s: "2 rounds — as Saturday", cue: "Rotational shot-put 4/side, downward diagonal 4/side, hook throw 4/side, landmine punch 5/side.", id: "c_sunthrows", k: "chk" }],
+      items: [{ n: "The four throws", s: "2 rounds", cue: "Rotational shot-put 4/side, downward diagonal 4/side, hook throw 4/side, landmine punch 5/side.", id: "c_sunthrows", k: "chk" }],
       w: OUTPUT_RULE },
     { L: "X", n: "The 20-Minute Test", m: 25, star: 1, hard: 1, hide: (rx) => !rx.test20,
       timer: () => ({ kind: "z2", opt: { min: 20, label: "20-MIN TEST — MAXIMUM DISTANCE" }, title: "20-MIN TEST" }),
@@ -702,7 +702,7 @@ export const CS = {
         { n: "The L-sit line — at your level", s: "3 sets", cue: "The tuck L-sit between two boxes to start; the line climbs one leg at a time to the full L-sit.", id: "lsit", k: "wr", sets: 3, reps: "at your level" },
         { n: "Side plank reach-through", s: "2 × 10 per side", id: "c_sprt", k: "chk" },
         { n: "Tuck front lever", s: "3 holds", cue: "Hang from the bar, pull the shoulder blades down, knees to the chest, body horizontal, face up; ten seconds to start. The three elbow laws apply: five seconds added per fortnight at most, twelve weeks a level minimum, any ache on the inside of the elbow and the lever rests for two weeks.", id: "lever", k: "wr", sets: 3, reps: "hold" },
-        { n: "Hands", s: "knuckle hold 3 × 20 s · band wrist extension 2 × 15", cue: "As Monday.", id: "c_hands_sun", k: "chk" }] },
+        { n: "Hands", s: "knuckle hold 3 × 20 s · band wrist extension 2 × 15", cue: "On your fists on a mat, the wrist dead straight; then forearm on the knee, palm down, lifting the knuckles toward you.", id: "c_hands_sun", k: "chk" }] },
     { L: "F", n: "Weekly Check", m: 2, review: 1, rangeTests: 1,
       items: [{ n: "Bodyweight", s: "kg", id: "cwr_bw", k: "out", u: "kg" },
         { n: "Waist", s: "cm", id: "cwr_waist", k: "out", u: "cm" },
@@ -760,7 +760,7 @@ export const CSFW = {
     { L: "A", n: "The fight", m: 0, star: 1,
       timer: () => ({ kind: "csim", opt: { rounds: 6, rest: 60, pace: 1 }, title: "THE FIGHT" }),
       rxLine: () => "6 × 3 · the corner minute in every rest",
-      items: [{ n: "The warm-up you rehearsed", s: "exactly as Sunday the 29th", id: "c12_fwu", k: "chk" },
+      items: [{ n: "The warm-up you rehearsed", s: "as rehearsed", id: "c12_fwu", k: "chk" },
         { n: "The corner minute", s: "every rest", cue: CORNER_MINUTE, id: "c12_corner", k: "chk" },
         { n: "How it went", s: "write it down tonight", id: "c12_result", k: "out", u: "rounds / result" }],
       why: "Everything you'll have on the 1st of December, you had by Sunday 22 November. Week 10 sharpened it; the last days protected it." }] },

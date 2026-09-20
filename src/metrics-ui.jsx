@@ -62,7 +62,7 @@ export function MorningCard({ dayIso, morning, setMorning, st, camp, isToday }) 
       <div style={{ marginBottom: 4 }}>
         <div style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1.5, color: ac })}>THE MORNING NUMBERS</div>
         <div style={Object.assign({}, mno, { fontSize: 8.5, color: isToday === false ? C.brass : C.ash, letterSpacing: 1.2, marginTop: 2 })}>
-          {isToday === false ? fmtDate(dayIso).toUpperCase() + " · FILLING IT IN AFTER THE DAY" : "FROM THE CHEST STRAP · BEFORE THE DAILY CHECK"}
+          {isToday === false ? fmtDate(dayIso).toUpperCase() : "FROM THE CHEST STRAP"}
         </div>
       </div>
       {MORNING_FIELDS.map((f) => {
@@ -91,14 +91,6 @@ export function MorningCard({ dayIso, morning, setMorning, st, camp, isToday }) 
         </div>
       </div>
 
-      {flag.level ? (
-        <div style={{ background: C.ink, border: "1px solid " + ac, borderRadius: 5, padding: "10px 12px", marginTop: 10 }}>
-          <div style={Object.assign({}, dsp, { fontSize: 15, fontWeight: 700, letterSpacing: 1.2, color: ac })}>
-            {flag.level === "R" ? "BOTH FLAGS — THIS SUGGESTS RED" : "YELLOW FLAG ON TODAY'S CHECK"}
-          </div>
-          <Note c={C.chalk} s={{ marginTop: 5 }}>{flag.why}</Note>
-        </div>) : (
-        <Note>Resting heart rate {RHR_OVER}+ bpm over the week-1 baseline, or HRV {Math.round(HRV_UNDER * 100)}% or more below its seven-day average, flags the check yellow. Both together suggests red. {camp ? "The camp's daily check still asks the other three questions." : ""}</Note>)}
     </Card>);
 }
 
@@ -134,7 +126,6 @@ export function RecoveryHR({ endHR, hr60, onEnd, on60, prev }) {
           <Note s={{ marginTop: 2 }}>{recoveryBand(drop)}</Note>
         </div>) : null}
       {prev != null ? <div style={Object.assign({}, mno, { fontSize: 9, color: C.brass, marginTop: 6 })}>LAST WEEK: {prev} bpm</div> : null}
-      <Note>How fast the heart comes down in a minute is the cleanest read there is on the aerobic base underneath everything else. It is charted in the dashboard.</Note>
     </div>);
 }
 
@@ -151,7 +142,7 @@ export function EasyZonePanel({ peak, avgHR, onAvg, compact }) {
         ? <div style={Object.assign({}, mno, { fontSize: 24, fontWeight: 700, color: C.moss })}>{zone[0]}–{zone[1]} <span style={{ fontSize: 10, color: C.ash, letterSpacing: 1 }}>BPM · FROM A PEAK OF {peak}</span></div>
         : <Note c={C.ash} s={{ fontStyle: "italic", marginTop: 0 }}>Log the peak heart rate from the 20-minute test and the zone appears here.</Note>}
       <div style={{ marginTop: 9 }}><Lab>Average heart rate</Lab><Fld v={avgHR} on={onAvg} ph="bpm" /></div>
-      {note ? <Note c={note.in ? C.moss : C.ash} s={{ fontStyle: note.in ? "normal" : "italic" }}>{note.s}</Note> : null}
+      {note ? <div style={Object.assign({}, mno, { fontSize: 9.5, letterSpacing: 1, marginTop: 7, color: note.in ? C.moss : C.brass })}>{note.in ? "IN THE ZONE" : note.low ? "UNDER THE ZONE" : "OVER THE ZONE"}</div> : null}
     </div>);
 }
 
@@ -181,9 +172,7 @@ export function ErgPanel({ title, slots, vals, onVal, unit, fade, scored, prevTo
         <div style={{ marginTop: 10, paddingTop: 9, borderTop: "1px solid " + C.line }}>
           <div style={Object.assign({}, mno, { fontSize: 8, color: C.oxide, letterSpacing: 1.2 })}>THE FADE — ROUND {fade.idx} AGAINST ROUND 1{scored ? " · SCORED WEEK" : ""}</div>
           <div style={Object.assign({}, mno, { fontSize: 24, fontWeight: 700, color: fade.held >= 95 ? C.moss : fade.held >= 90 ? C.brass : C.oxide })}>{fade.held}%<span style={{ fontSize: 11, color: C.ash }}> held · {fade.drop}% drop</span></div>
-          <Note s={{ marginTop: 2 }}>Computed from rounds one and {fade.idx} the moment both are in. It fills the fade on the dashboard by itself.</Note>
         </div>) : null}
-      <Note>Same erg, same unit, all cycle — that is what makes one week's session comparable with the last.</Note>
     </div>);
 }
 
@@ -337,7 +326,6 @@ export function PhotoPrompt({ onOpen, camp, week, done, future }) {
     <Card ac={C.violet}>
       <Eye c={C.violet}>{camp ? "Camp week " + week : "Week " + week} · Sunday — the photos</Eye>
       <div style={Object.assign({}, dsp, { fontSize: 20, fontWeight: 800, letterSpacing: 1.2, color: C.chalk })}>{done ? "PHOTOS DONE" : future ? "THIS SUNDAY" : "FRONT, SIDE, BACK"}</div>
-      <Note c={C.chalk} s={{ marginTop: 5 }}>Same light, same spot. They stay on the phone.</Note>
       <Btn small c={C.violet} fill={!done && !future} s={{ width: "100%", marginTop: 10 }} on={onOpen}>{done ? "SEE THE PHOTOS" : future ? "THE PHOTOS SCREEN" : "TAKE THEM"}</Btn>
     </Card>);
 }

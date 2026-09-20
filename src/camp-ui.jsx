@@ -138,7 +138,6 @@ export function CampWorkPanel({ id, name, kg, onSet, reset, confirm, week }) {
         <div style={{ flex: 1 }}><Lab>{reset ? "Today's set of 3 (kg)" : confirm ? "Today's set of 5 (kg)" : "Set it by hand (kg)"}</Lab><Fld v={inp} on={setInp} ph="kg" /></div>
         <Btn c={C.brass} fill dis={!num(inp)} on={() => { const k = num(inp); if (!k) return; onSet(r25(k), (reset ? "reset · set of 3 · camp wk " : confirm ? "confirmed · set of 5 · camp wk " : "by hand · camp wk ") + week); setInp(""); }}>SAVE</Btn>
       </div>
-      <Note>{reset ? "Week 6, and week 11 on the no-fight path: a set of 3, hard but with two in you. That triple is the new working weight." : confirm ? "Week 1: a set of 5 that's hard but leaves two in you. That five is the working weight the whole camp loads from." : WORKING_WEIGHT_RULE}</Note>
     </div>);
 }
 

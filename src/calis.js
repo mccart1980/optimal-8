@@ -25,15 +25,22 @@ export const SLOW_LAWS = [
 ];
 export const SLOW_WHY = "Straight-arm work loads the elbow tendons like nothing else, and tendon adapts over months while muscle adapts over weeks; for you, right now, that gap is wider than normal.";
 
-/* The two shapes and the wrist work that open the home skill block. */
+/* The home skill block, as rows. Identical in both modes, and prescribed:
+   wrists, the handstand at your level, the two shapes, and the planche
+   leans on Tuesday and Thursday. Each row is name · prescription · how. */
 export const SKILL_BLOCK = {
-  n: "THE SKILL BLOCK · MONDAY TO THURSDAY · 6 MIN",
-  when: "after the mobility, before the sit",
-  why: "Balance skills are built by frequency. Five minutes of handstand four evenings a week beats an hour of it on one; the wall in your house is a better teacher than any gym.",
-  wrists: "Wrists first, always: circles × 10 each way, then palms flat on the floor and rock forward and back × 10.",
-  handstand: "Handstand, 4 minutes at your level — the body is one straight line, ribs in, glutes tight, pushing the floor away through the shoulders the whole time.",
-  hollow: "Hollow hold, 2 × 20 seconds — on your back, lower back pressed into the floor, arms overhead, legs straight and lifted, one shallow banana. Then arch hold, 2 × 20 seconds — face down, arms and legs lifted. The two shapes every calisthenics skill is made of.",
-  planche: "Planche leans, Tuesday and Thursday only, 3 × 15 seconds — a push-up position, then shift the shoulders forward past the wrists as far as they'll go, arms locked, body rigid. The home end of the slow lane: five seconds added per fortnight, never with an elbow that aches.",
+  n: "THE SKILL BLOCK",
+  mins: 6,
+  wrists: { id: "sk_wrists", n: "Wrists", s: "10 each way + 10 rocks",
+    how: "Circles × 10 each way, then palms flat on the floor and rock forward and back × 10." },
+  handstand: { id: "sk_handstand", n: "Handstand", s: "4 min",
+    how: "One straight line, ribs in, glutes tight, pushing the floor away through the shoulders the whole time." },
+  hollow: { id: "sk_hollow", n: "Hollow hold", s: "2 × 20 s",
+    how: "On your back, lower back pressed into the floor, arms overhead, legs straight and lifted, one shallow banana." },
+  arch: { id: "sk_arch", n: "Arch hold", s: "2 × 20 s",
+    how: "Face down, arms and legs lifted." },
+  planche: { id: "sk_planche", n: "Planche leans", s: "3 × 15 s",
+    how: "A push-up position, then shift the shoulders forward past the wrists as far as they'll go, arms locked, body rigid." },
 };
 
 /* ---------- the seven lines ---------- */
@@ -139,9 +146,18 @@ export function calMode(rx, taper, jointFlag) {
   if (rx && rx.dl) return "half";
   return "full";
 }
-export const MODE_LINE = {
-  full: null,
-  half: "EASY WEEK — every line at half its sets, no slow lane.",
-  holds: "HOLDS ONLY — handstand and ring support. Nothing to failure, nothing new.",
-  camp: "CAMP MODE — the handstand at home stays; everything else on this page stops.",
-};
+export const MODE_LINE = { full: null, half: null, holds: null, camp: null };
+
+/* The prescription for today, with the week's mode already resolved into
+   it: half the sets in an easy week, the hold in a holds week. Nothing on
+   the screen ever says "easy week" or "holds only" — the row is the answer. */
+const halveSets = (t) => String(t || "").replace(/(\d+)(\s*×)/, (m, n, x) => Math.max(1, Math.ceil(Number(n) / 2)) + x);
+export function levelPres(id, lev, week, mode) {
+  const L = lineById(id); if (!L || !lev) return "";
+  if (mode === "holds" && L.hold) return L.hold.split(" — ")[0];
+  /* the slow lane's home end is a row of its own in the evening block, so
+     the session page carries only the lever the session actually does */
+  if (L.slow) return ((week || 1) % 2 === 1 ? "Front lever · " + lev.front : "Back lever · " + lev.back);
+  const base = levelText(id, lev, week);
+  return mode === "half" ? halveSets(base) : base;
+}

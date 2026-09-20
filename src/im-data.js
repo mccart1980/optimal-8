@@ -45,10 +45,10 @@ export const ONE_THING_HOW = "Sixty seconds, in your head, four questions in ord
 export const REVIEW_HOW = "2 minutes, spoken under your breath or in your head, never written. Facts, not adjectives; then it's over, no second pass. Seneca every night in bed; the Pythagoreans before him; the samurai's daily self-examination.";
 
 export const SITE = [
-  { id: "reset", n: "The reset", s: "At every break and before anything difficult: two sighs, then thirty seconds with your eyes on one fixed point and nothing else. Eyes steady, mind steadies — a hard-wired link, and why it works in thirty seconds." },
+  { id: "reset", n: "The reset", s: "At every break and before anything difficult: two sighs, then thirty seconds with your eyes on one fixed point and nothing else." },
   { id: "onejob", n: "One job at a time", s: "Start it, stay on it, finish it, then look up. Zanshin — the remaining mind." },
   { id: "seven", n: "Seven breaths", s: "Any decision you catch yourself circling: seven slow breaths, decide, act. Not instantly — that's impulse. Not endlessly — that's the circling. The samurai's rule from the Hagakure." },
-  { id: "phone", n: "The phone rule", s: "First five minutes of any break, the phone stays in the pocket." },
+  { id: "phone", n: "The phone rule", s: "First five minutes of any break, the phone in the pocket." },
 ];
 
 export const NOSE_ALL_DAY = "Nose breathing while you work, at whatever pace lets you.";

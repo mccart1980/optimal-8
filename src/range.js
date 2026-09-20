@@ -40,6 +40,15 @@ export const MORNING_FIVE = [
   { k: "seg", l: "ANKLES — 10 SLOW DEEP KNEE-BENDS OVER THE TOES, HEELS DOWN", s: 15 },
 ];
 
+/* The morning five as five rows — one joint each, with its reps. */
+export const MORNING_FIVE_ROWS = [
+  { id: "m5_neck", n: "Neck", s: "3 circles each way", how: "Gentle, chin leading, the slowest biggest circle it can make." },
+  { id: "m5_shoulders", n: "Shoulders", s: "3 each way per side", how: "The biggest circle the arm can draw: forward, up past the ear, back and down. Trunk dead still, no shrug." },
+  { id: "m5_midback", n: "Mid-back", s: "cat-camel × 8 · elbow to ceiling × 6 per side", how: "On all fours; then a hand behind the head and the elbow turned to the ceiling." },
+  { id: "m5_hips", n: "Hips", s: "3 each way per side", how: "Holding a wall: knee to the chest, out to the side, round to the back and down. Standing tall." },
+  { id: "m5_ankles", n: "Ankles", s: "circles × 5 each way · 10 knee-bends", how: "Then ten slow deep knee-bends over the toes, heels down." },
+];
+
 /* ---------------- RANGE · 20 min ---------------- */
 export const RANGE_SECTIONS = [
   { n: "0 · DOWN-REGULATE", mins: 1, c: C.moss,
@@ -142,3 +151,10 @@ export const stepsFor = (w, full) => (isKeepWeek(w)
   : RANGE_STEPS.map((x) => Object.assign({}, x, { s: full ? x.s : (x.s20 == null ? x.s : x.s20) })));
 
 export const totalOf = (steps) => steps.reduce((a, x) => a + x.s, 0);
+
+/* Every move splits into a row and a how: the name, the side and the reps
+   are the row; everything after the dash is the one line that opens on a
+   tap. Used by the evening block on TODAY and by the morning five. */
+export const moveName = (l) => String(l || "").split(" — ")[0].trim();
+export const moveHow = (l) => { const i = String(l || "").indexOf(" — "); return i < 0 ? "" : String(l).slice(i + 3).trim(); };
+export const secsLabel = (s) => (s >= 60 ? (s % 60 ? Math.floor(s / 60) + ":" + (s % 60 < 10 ? "0" : "") + (s % 60) : s / 60 + " min") : s + " s");

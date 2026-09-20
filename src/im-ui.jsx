@@ -6,7 +6,10 @@ import {
   GOODWILL_LINE, DEATH_LINE, ELEVEN, GUIDED, guidedById, LADDER, CEILING, ARROWS, TESTS5, COLLISION,
   GATES, PROGRESSION, dayDone, sitPlan, testForWeek,
 } from "./im-data.js";
-import { MORNING_FIVE_HOW, isKeepWeek, isTestWeek, rangeTitle, rangeMins, rangeLine } from "./range.js";
+import {
+  MORNING_FIVE_HOW, MORNING_FIVE_ROWS, isKeepWeek, isTestWeek, rangeTitle, rangeMins, rangeLine,
+  stepsFor, totalOf, moveName, moveHow, secsLabel,
+} from "./range.js";
 
 /* ================================================================
    BELLS — Web Audio only, no audio files. Vibration where available.
@@ -503,6 +506,26 @@ const SlotHead = ({ n, s, c }) => (
     {s ? <div style={Object.assign({}, mno, { fontSize: 8.5, color: C.ash, letterSpacing: 1.2, marginTop: 2 })}>{s}</div> : null}
   </div>);
 
+/* ---------------- THE EVENING ROW ----------------
+   Number · move · reps or hold time, and a tick. The one line on how to
+   do it opens on a tap, and nowhere else. */
+function MoveRow({ no, n, s, how, ok, on, c, right }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ padding: "7px 0", borderBottom: "1px solid " + C.line }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <button onClick={on} aria-label={(ok ? "Untick " : "Tick ") + n}
+          style={Object.assign({}, mno, { width: 40, height: 40, flexShrink: 0, borderRadius: 5, cursor: "pointer", fontSize: 12, fontWeight: 700, background: ok ? (c || C.moss) : "transparent", color: ok ? C.ink : C.ash, border: "1px solid " + (ok ? (c || C.moss) : C.line) })}>{ok ? "✓" : no}</button>
+        <span onClick={() => how && setOpen(!open)} style={{ flex: 1, minWidth: 0, cursor: how ? "pointer" : "default" }}>
+          <div style={Object.assign({}, bdy, { fontSize: 13.5, fontWeight: 600, color: ok ? C.ash : C.chalk, lineHeight: 1.3, textDecoration: ok ? "line-through" : "none" })}>{n}</div>
+          {s ? <div style={Object.assign({}, mno, { fontSize: 9.5, color: C.brass, marginTop: 2, letterSpacing: .6 })}>{s}</div> : null}
+        </span>
+        {right || null}
+      </div>
+      {how && open ? <div className="rise" style={Object.assign({}, bdy, { fontSize: 12, color: C.ash, lineHeight: 1.45, padding: "5px 0 2px 50px" })}>{how}</div> : null}
+    </div>);
+}
+
 export function IronToday({ IM, part }) {
   const { st, dayIso, isSunday, rec, tick, imWeek, open, floorOpen } = IM;
   const ok = (k) => !!(rec.ticks && rec.ticks[k]);
@@ -511,38 +534,38 @@ export function IronToday({ IM, part }) {
   const rw = IM.rangeWeek || 1;
   const plan = sitPlan(med, imWeek, isSunday, st.sitLen);
 
-  if (part === "waking") return (
-    <Card ac={C.moss}>
-      <SlotHead n="ON WAKING" s="2 MINUTES, BEFORE THE PHONE" c={C.moss} />
-      <Tick ok={ok("sighs")} on={() => tick("sighs")} title="Three physiological sighs" sub={SIGH_HOW}
-        right={<OpenBtn on={() => open({ kind: "breath", id: "sigh3" })} label="Open the pacer" c={C.moss} />} />
-      <Tick ok={ok("onething")} on={() => tick("onething")} title="The one thing" sub={ONE_THING_HOW} />
-      <div style={{ paddingLeft: 55, marginTop: 6 }}>
-        {ONE_THING_Q.map((q, i) => <div key={i} style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, padding: "4px 0", lineHeight: 1.45 })}><span style={Object.assign({}, mno, { fontSize: 9, color: C.moss })}>{i + 1} · </span>{q}</div>)}
-      </div>
-      <Tick ok={ok("morning5")} on={() => tick("morning5")} title="THE MORNING FIVE — 5 minutes of joint circles" sub={MORNING_FIVE_HOW} c={C.moss}
-        right={<OpenBtn on={() => open({ kind: "morning5" })} label="Open the morning five" c={C.moss} />} />
-      <div style={{ paddingLeft: 55, marginTop: 4, marginBottom: 4 }}>
-        <div style={Object.assign({}, mno, { fontSize: 9.5, color: C.ash, padding: "2px 0", lineHeight: 1.5 })}>NECK · SHOULDERS · MID-BACK · HIPS · ANKLES</div>
-      </div>
-      {isSunday ? <Tick ok={ok("bolt")} on={() => tick("bolt")} title="BOLT score — on waking, before the sighs" sub={presetById("bolt").how} c={C.cobalt}
-        right={<OpenBtn on={() => open({ kind: "breath", id: "bolt" })} label="Open the BOLT stopwatch" c={C.cobalt} />} /> : null}
-    </Card>);
+  if (part === "waking") {
+    let n = 0;
+    return (
+      <Card ac={C.moss}>
+        <SlotHead n="ON WAKING" s="7 MIN" c={C.moss} />
+        <MoveRow no={++n} ok={ok("sighs")} on={() => tick("sighs")} n="Physiological sighs" s="× 3" how={SIGH_HOW} c={C.moss}
+          right={<OpenBtn on={() => open({ kind: "breath", id: "sigh3" })} label="Open the pacer" c={C.moss} />} />
+        <MoveRow no={++n} ok={ok("onething")} on={() => tick("onething")} n="The one thing" s="4 questions" how={ONE_THING_Q.join(" ")} c={C.moss} />
+        <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, letterSpacing: 1.2, padding: "10px 0 2px" })}>THE MORNING FIVE · 5 MIN</div>
+        {MORNING_FIVE_ROWS.map((r) => <MoveRow key={r.id} no={++n} ok={ok(r.id)} on={() => tick(r.id)} n={r.n} s={r.s} how={r.how} c={C.moss} />)}
+        <Btn on={() => { tick("morning5"); open({ kind: "morning5" }); }} c={C.moss} fill={!ok("morning5")} s={{ width: "100%", marginTop: 10 }}>▶ THE MORNING FIVE · 5 MIN</Btn>
+        {isSunday ? <MoveRow no={++n} ok={ok("bolt")} on={() => tick("bolt")} n="BOLT score" s="one hold" how={presetById("bolt").how} c={C.cobalt}
+          right={<OpenBtn on={() => open({ kind: "breath", id: "bolt" })} label="Open the BOLT stopwatch" c={C.cobalt} />} /> : null}
+      </Card>);
+  }
 
-  if (part === "site") return (
-    <Card ac={C.brass}>
-      <SlotHead n="ON SITE" s="FREE" c={C.brass} />
-      <Note c={C.chalk} s={{ marginTop: 0, marginBottom: 6 }}>{NOSE_ALL_DAY}</Note>
-      <Tick ok={ok("reset")} on={() => tick("reset")} title={SITE[0].n} sub={SITE[0].s} c={C.brass} />
-      <Tick ok={ok("walk")} on={() => tick("walk")} title={"★ The walking practice — " + W.n} sub={W.s} c={C.brass}
-        right={W.tool ? <OpenBtn on={() => open({ kind: "guided", id: W.tool })} label="Open walking meditation" c={C.brass} /> : null} />
-      {SITE.slice(1).map((x) => <Tick key={x.id} ok={ok(x.id)} on={() => tick(x.id)} title={x.n} sub={x.s} c={C.brass} />)}
-    </Card>);
+  if (part === "site") {
+    let n = 0;
+    return (
+      <Card ac={C.brass}>
+        <SlotHead n="ON SITE" s="FREE" c={C.brass} />
+        <MoveRow no={++n} ok={ok("reset")} on={() => tick("reset")} n={SITE[0].n} s="2 sighs · 30 s on one point" how={SITE[0].s} c={C.brass} />
+        <MoveRow no={++n} ok={ok("walk")} on={() => tick("walk")} n={"The walking practice — " + W.n} s={W.tag || ""} how={W.s} c={C.brass}
+          right={W.tool ? <OpenBtn on={() => open({ kind: "guided", id: W.tool })} label="Open walking meditation" c={C.brass} /> : null} />
+        {SITE.slice(1).map((x) => <MoveRow key={x.id} no={++n} ok={ok(x.id)} on={() => tick(x.id)} n={x.n} how={x.s} c={C.brass} />)}
+      </Card>);
+  }
 
   if (part === "lunch") return (
     <Card ac={C.cobalt}>
       <SlotHead n="LUNCH, IN THE VAN" s="5–10 MINUTES" c={C.cobalt} />
-      <Tick ok={ok("lunch")} on={() => tick("lunch")} title={"★ The breath practice — " + BS.n} sub={BS.lunchLine} c={C.cobalt} />
+      <MoveRow no={1} ok={ok("lunch")} on={() => tick("lunch")} n={"The breath practice — " + BS.n} s={BS.lunchLine} c={C.cobalt} />
       <div style={{ marginTop: 8 }}>
         {BS.lunch.map((pid) => { const P = presetById(pid); if (!P) return null;
           return (
@@ -554,60 +577,54 @@ export function IronToday({ IM, part }) {
               <span style={Object.assign({}, mno, { fontSize: 14, color: P.c })}>▸</span>
             </button>); })}
       </div>
-      <Note>Skip it on a chaotic day; the floor covers you.</Note>
     </Card>);
 
   if (part === "shower") return (
     <Card ac={C.cobalt}>
       <SlotHead n="THE SHOWER AFTER WORK" s={L.n + " · " + L.freq.toUpperCase()} c={C.cobalt} />
-      <Tick ok={ok("cold")} on={() => tick("cold")} title="The cold slot" sub={L.cold} c={C.cobalt}
+      <MoveRow no={1} ok={ok("cold")} on={() => tick("cold")} n="The cold slot" s={L.coldTag || ""} how={L.cold} c={C.cobalt}
         right={<OpenBtn on={() => open({ kind: "cold" })} label="Open the cold timer" c={C.cobalt} />} />
-      <Note c={C.oxide}>Weekdays only in this slot; weekend rules on the Hardship page. Breath controlled throughout.</Note>
     </Card>);
 
-  if (part === "evening") return (
-    <Card ac={C.violet}>
-      <SlotHead n="EVENING" s={"15–35 MINUTES, AFTER " + rangeTitle(rw)} c={C.violet} />
-      <Tick ok={ok("mobility")} on={() => tick("mobility")} title={"★ " + rangeTitle(rw) + " — " + rangeMins(rw) + " minutes"}
-        sub={rangeLine(rw) + (isFriday(dayIso) ? " Friday evening: RANGE only, no skill block." : "")} c={C.violet}
-        right={<OpenBtn on={() => open({ kind: "range" })} label={"Open the " + (isKeepWeek(rw) ? "keep" : "range") + " timer"} c={C.violet} />} />
-      {isTestWeek(rw) ? (
-        <button onClick={() => open({ kind: "rangetests" })} style={{ display: "flex", width: "100%", gap: 10, alignItems: "center", textAlign: "left", background: "transparent", border: "1px solid " + C.oxide, borderRadius: 5, padding: "9px 11px", margin: "8px 0 2px", cursor: "pointer", minHeight: 44 }}>
-          <span style={{ flex: 1, minWidth: 0 }}>
-            <div style={Object.assign({}, bdy, { fontSize: 13.5, fontWeight: 600, color: C.chalk })}>THE FOUR RANGE TESTS — range week {rw}</div>
-            <div style={Object.assign({}, mno, { fontSize: 8.5, color: C.ash, marginTop: 2, letterSpacing: 1 })}>90/90 SIT · DEEP SQUAT · WALL FLEXION · HANDS BEHIND THE BACK</div>
-          </span>
-          <span style={Object.assign({}, mno, { fontSize: 14, color: C.oxide })}>▸</span>
-        </button>) : null}
-      {IM.skill && IM.skill.show ? (
-        <div>
-          <Tick ok={ok("skill")} on={() => tick("skill")} title={IM.skill.title || ("THE SKILL BLOCK — 6 minutes, Monday to Thursday, after " + rangeTitle(rw))} sub={IM.skill.why} c={C.brass} />
-          <div style={{ paddingLeft: 55, marginTop: 4, marginBottom: 6 }}>
-            {IM.skill.showHandstand === false ? null : <div style={Object.assign({}, bdy, { fontSize: 12, color: C.ash, padding: "3px 0", lineHeight: 1.45 })}>{IM.skill.wrists}</div>}
-            {IM.skill.showHandstand === false ? null : (
-              <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, padding: "3px 0", lineHeight: 1.45 })}>
-                <span style={Object.assign({}, mno, { fontSize: 9, color: C.brass, letterSpacing: 1 })}>HANDSTAND · LEVEL {IM.skill.level} · </span>{IM.skill.what}
-              </div>)}
-            <div style={Object.assign({}, bdy, { fontSize: 12, color: C.ash, padding: "3px 0", lineHeight: 1.45 })}>{IM.skill.hollow}</div>
-            {IM.skill.planche ? <div style={Object.assign({}, bdy, { fontSize: 12, color: C.ash, padding: "3px 0", lineHeight: 1.45 })}>{IM.skill.plancheText}</div> : null}
-            {IM.skill.camp ? <div style={Object.assign({}, bdy, { fontSize: 12, color: C.oxide, padding: "3px 0", lineHeight: 1.45, fontWeight: 600 })}>{IM.skill.campNote}</div> : null}
-          </div>
-        </div>) : null}
-      <Tick ok={ok("sit")} on={() => tick("sit")} title={"★ THE SIT — " + plan.mins + " minutes"} sub={(MED_STAGE[med] || MED_STAGE[1]).line} c={C.violet}
-        right={<OpenBtn on={() => open({ kind: "sit" })} label="Open the sit timer" c={C.violet} />} />
-      <div style={{ paddingLeft: 55, marginTop: 4, marginBottom: 6 }}>
-        {plan.segs.map((sg, i) => <div key={i} style={Object.assign({}, mno, { fontSize: 9.5, color: C.ash, padding: "2px 0" })}>{sg.m} MIN · {sg.l}</div>)}
-      </div>
-      <Tick ok={ok("review")} on={() => tick("review")} title="THE REVIEW" sub={REVIEW_HOW} c={C.violet} />
-      <div style={{ paddingLeft: 55, marginTop: 6 }}>
-        {REVIEW_Q.map((q, i) => <div key={i} style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, padding: "4px 0", lineHeight: 1.45 })}><span style={Object.assign({}, mno, { fontSize: 9, color: C.violet })}>{i + 1} · </span>{q}</div>)}
-      </div>
-    </Card>);
+  if (part === "evening") {
+    const moves = stepsFor(rw, false);
+    const skill = IM.skill && IM.skill.show ? IM.skill : null;
+    const total = Math.round(totalOf(moves) / 60) + (skill ? skill.mins : 0) + plan.mins + 2;
+    let n = 0;
+    return (
+      <Card ac={C.violet}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8, marginBottom: 6 }}>
+          <span style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1.5, color: C.violet })}>EVENING</span>
+          <span style={Object.assign({}, mno, { fontSize: 10, color: C.brass, letterSpacing: 1 })}>{total} MIN</span>
+        </div>
+
+        <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, letterSpacing: 1.2, padding: "6px 0 2px" })}>{rangeTitle(rw)} · {rangeMins(rw)} MIN</div>
+        {moves.map((m, i) => <MoveRow key={i} no={++n} ok={ok("rng" + i)} on={() => tick("rng" + i)} n={moveName(m.l)} s={secsLabel(m.s)} how={moveHow(m.l)} c={C.violet} />)}
+        <Btn on={() => { tick("mobility"); open({ kind: "range" }); }} c={C.violet} fill={!ok("mobility")} s={{ width: "100%", margin: "10px 0" }}>▶ {rangeTitle(rw)} · {rangeMins(rw)} MIN</Btn>
+        {isTestWeek(rw) ? <Btn on={() => open({ kind: "rangetests" })} c={C.oxide} s={{ width: "100%", marginBottom: 10 }}>▶ THE FOUR RANGE TESTS</Btn> : null}
+
+        {skill ? (
+          <div>
+            <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, letterSpacing: 1.2, padding: "6px 0 2px" })}>{skill.n} · {skill.mins} MIN</div>
+            {skill.rows.map((r) => <MoveRow key={r.id} no={++n} ok={ok(r.id)} on={() => tick(r.id)} n={r.n} s={r.s} how={r.how} c={C.brass} />)}
+          </div>) : null}
+
+        <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, letterSpacing: 1.2, padding: "10px 0 2px" })}>THE SIT · {plan.mins} MIN</div>
+        <MoveRow no={++n} ok={ok("sit")} on={() => tick("sit")} n="The sit" s={plan.mins + " min"} how={(MED_STAGE[med] || MED_STAGE[1]).line} c={C.violet}
+          right={<OpenBtn on={() => open({ kind: "sit" })} label="Open the sit timer" c={C.violet} />} />
+
+        <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, letterSpacing: 1.2, padding: "10px 0 2px" })}>THE REVIEW · 2 MIN</div>
+        <MoveRow no={++n} ok={ok("review")} on={() => tick("review")} n="The review" s="3 questions" how={REVIEW_Q.join(" ")} c={C.violet} />
+        <div style={{ paddingLeft: 50, marginTop: 6 }}>
+          {REVIEW_Q.map((q, i) => <div key={i} style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, padding: "3px 0", lineHeight: 1.4 })}><span style={Object.assign({}, mno, { fontSize: 9, color: C.violet })}>{i + 1} · </span>{q}</div>)}
+        </div>
+      </Card>);
+  }
 
   if (part === "sunday") return (
     <Card ac={C.brass}>
       <SlotHead n="SUNDAY" s="+15 MINUTES" c={C.brass} />
-      <Tick ok={ok("numbers")} on={() => tick("numbers")} title="The four numbers — ten seconds each" sub="Days done this week (of 7) · best clean cycles in a sit · BOLT · this week's Crossover gap." c={C.brass} />
+      <MoveRow no={1} ok={ok("numbers")} on={() => tick("numbers")} n="The four numbers" s="10 s each" c={C.brass} />
       <div style={{ display: "flex", gap: 6, marginTop: 10, flexWrap: "wrap" }}>
         {IM.four.map((x) => (
           <div key={x[0]} style={{ flex: "1 1 40%", background: C.ink, border: "1px solid " + C.line, borderRadius: 5, padding: "9px 6px", textAlign: "center" }}>
@@ -615,7 +632,6 @@ export function IronToday({ IM, part }) {
             <div style={Object.assign({}, mno, { fontSize: 19, fontWeight: 700, color: x[1] == null ? C.ash : C.brass })}>{x[1] == null ? "—" : x[1]}</div>
           </div>))}
       </div>
-      <Note>If a fifth number ever appears, something has wandered.</Note>
     </Card>);
 
   /* the header strip: streak, days this week, never miss twice, FLOOR */
@@ -634,12 +650,7 @@ export function IronToday({ IM, part }) {
               <div style={Object.assign({}, mno, { fontSize: 19, fontWeight: 700, color: done && x[0] === "DONE TODAY" ? C.moss : C.chalk })}>{x[1]}</div>
             </div>))}
         </div>
-        {IM.missedYesterday && IM.hasHistory && !done ? <div style={{ background: C.ink, border: "1px solid " + C.oxide, borderRadius: 5, padding: "10px 12px", marginTop: 10 }}>
-          <div style={Object.assign({}, dsp, { fontSize: 15, fontWeight: 800, letterSpacing: 1.2, color: C.oxide })}>NEVER MISS TWICE</div>
-          <Note c={C.chalk} s={{ marginTop: 3 }}>{NEVER_TWICE}</Note>
-        </div> : null}
         <Btn on={floorOpen} c={C.moss} fill={!done} s={{ width: "100%", marginTop: 10, fontSize: 15 }}>▶ THE FLOOR · 4 MINUTES</Btn>
-        <Note>The day is done when the sit and the review are ticked — or the floor is used. A floor day counts. A skipped day doesn't. One streak for the whole day, training included.</Note>
       </div>
     </Card>);
 }

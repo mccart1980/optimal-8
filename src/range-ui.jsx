@@ -19,11 +19,7 @@ const mmssL = (s) => Math.floor(s / 60) + ":" + (s % 60 < 10 ? "0" : "") + (s % 
 export function MorningFiveTool({ sound, onClose }) {
   const steps = useMemo(() => MORNING_FIVE.map((x) => Object.assign({}, x)), []);
   return (
-    <Pacer steps={steps} sound={sound} title="THE MORNING FIVE" sub="ON WAKING · JOINT CIRCLES · 5 MIN" colour={C.moss} onClose={onClose}
-      footer={
-        <div style={{ background: C.card, border: "1px solid " + C.line, borderRadius: 6, padding: 12, maxHeight: 150, overflowY: "auto" }}>
-          <Note c={C.chalk} s={{ marginTop: 0 }}>{MORNING_FIVE_HOW}</Note>
-        </div>} />);
+    <Pacer steps={steps} sound={sound} title="THE MORNING FIVE" sub="ON WAKING · JOINT CIRCLES · 5 MIN" colour={C.moss} onClose={onClose} />);
 }
 
 /* --- RANGE / THE KEEP · the evening guided timer --- */
@@ -41,13 +37,7 @@ export function RangeTool({ rangeWeek, sound, onClose }) {
             <div style={{ marginBottom: 8 }}>
               <Lab>Length</Lab>
               <Seg opts={[[0, "20 MIN"], [1, "FULL HOLDS · " + mmssL(totalOf(stepsFor(rangeWeek, true)))]]} val={full ? 1 : 0} on={(v) => setFull(!!v)} c={C.violet} />
-              <div style={Object.assign({}, mno, { fontSize: 8.5, color: C.ash, letterSpacing: .8, marginTop: 5, lineHeight: 1.5 })}>
-                20 MIN RUNS THE DOCUMENT'S SECTIONS — 1 + 5 + 8 + 6. FULL HOLDS RUNS EVERY HOLD AT THE LENGTH THE DOCUMENT WRITES, WHICH COMES TO MORE THAN TWENTY.
-              </div>
             </div>)}
-          <div style={{ background: C.card, border: "1px solid " + C.line, borderRadius: 6, padding: 12, maxHeight: 150, overflowY: "auto" }}>
-            <Note c={C.chalk} s={{ marginTop: 0 }}>{keep ? KEEP_LINE : RANGE_HOW}</Note>
-          </div>
         </div>} />);
 }
 
@@ -55,7 +45,6 @@ export function RangeTool({ rangeWeek, sound, onClose }) {
 export function RangeTests({ week, rangeWeek, get, put, onClose }) {
   return (
     <Sheet title="THE FOUR RANGE TESTS" sub={"RANGE WEEK " + rangeWeek + " · ON THE SUNDAY WEEKLY CHECK"} colour={C.oxide} onClose={onClose}>
-      <Card ac={C.oxide}><Note c={C.chalk} s={{ marginTop: 0 }}>{TEST_INTRO}</Note></Card>
       {RANGE_TESTS.map((t, i) => (
         <Card key={t.id} ac={t.c}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10 }}>
@@ -71,7 +60,6 @@ export function RangeTests({ week, rangeWeek, get, put, onClose }) {
                 : <Fld v={get(f.id)} on={(v) => put(f.id, v)} ph="—" />}
             </div>))}
         </Card>))}
-      <Card><Note c={C.chalk} s={{ marginTop: 0 }}>{RANGE_SKIP}</Note></Card>
       <Btn on={onClose} c={C.oxide} fill s={{ width: "100%" }}>DONE — IT'S SAVED</Btn>
     </Sheet>);
 }
@@ -134,41 +122,29 @@ export function RangeTrack({ weeks, get }) {
 /* --- the home block, written out: the protocol sheet's RANGE half --- */
 export function RangeSheet({ rangeWeek, onClose, onOpenRange, onOpenMorning }) {
   const keep = isKeepWeek(rangeWeek);
+  const Move = ({ l, s }) => (
+    <div style={{ display: "flex", gap: 10, alignItems: "baseline", padding: "7px 0", borderBottom: "1px solid " + C.line }}>
+      <span style={Object.assign({}, bdy, { flex: 1, minWidth: 0, fontSize: 12.5, color: C.chalk, lineHeight: 1.4 })}>{l}</span>
+      <span style={Object.assign({}, mno, { fontSize: 9.5, color: C.brass, flexShrink: 0 })}>{s}s</span>
+    </div>);
   return (
     <Sheet title="THE HOME BLOCK" sub={"THE MORNING FIVE · " + rangeTitle(rangeWeek) + " · THE SKILL BLOCK"} colour={C.violet} onClose={onClose}>
-      <Card ac={C.violet}><Note c={C.chalk} s={{ marginTop: 0 }}>{RANGE_INTRO}</Note><Note>{RANGE_HOW}</Note><Note c={C.oxide}>{RANGE_HIPS}</Note></Card>
       <Card ac={C.moss}>
-        <Eye c={C.moss}>The morning five · on waking, after the sighs and the one thing · 5 min</Eye>
-        <Note c={C.chalk} s={{ marginTop: 0 }}>{MORNING_FIVE_HOW}</Note>
-        {MORNING_FIVE.map((s, i) => (
-          <div key={i} style={{ display: "flex", gap: 10, padding: "7px 0", borderBottom: "1px solid " + C.line }}>
-            <span style={Object.assign({}, mno, { fontSize: 9.5, color: C.brass, flexShrink: 0, width: 34 })}>{s.s}s</span>
-            <span style={Object.assign({}, bdy, { fontSize: 12, color: C.chalk, lineHeight: 1.45 })}>{s.l}</span>
-          </div>))}
+        <Eye c={C.moss}>The morning five · 5 min</Eye>
+        {MORNING_FIVE.map((s, i) => <Move key={i} l={s.l} s={s.s} />)}
         <Btn on={onOpenMorning} c={C.moss} fill s={{ width: "100%", marginTop: 10 }}>▶ THE MORNING FIVE · 5 MIN</Btn>
       </Card>
       {keep ? (
         <Card ac={C.violet}>
           <Eye c={C.violet}>The keep · every evening · 10 min</Eye>
-          <Note c={C.chalk} s={{ marginTop: 0 }}>{KEEP_LINE}</Note>
-          {KEEP_STEPS.map((s, i) => (
-            <div key={i} style={{ display: "flex", gap: 10, padding: "7px 0", borderBottom: "1px solid " + C.line }}>
-              <span style={Object.assign({}, mno, { fontSize: 9.5, color: C.brass, flexShrink: 0, width: 34 })}>{s.s}s</span>
-              <span style={Object.assign({}, bdy, { fontSize: 12, color: C.chalk, lineHeight: 1.45 })}>{s.l}</span>
-            </div>))}
+          {KEEP_STEPS.map((s, i) => <Move key={i} l={s.l} s={s.s} />)}
           <Btn on={onOpenRange} c={C.violet} fill s={{ width: "100%", marginTop: 10 }}>▶ THE KEEP · 10 MIN</Btn>
         </Card>) : (
         RANGE_SECTIONS.map((sec, si) => (
           <Card key={si} ac={sec.c}>
             <Eye c={sec.c}>{sec.n} · {sec.mins} min</Eye>
-            {sec.note ? <Note c={C.chalk} s={{ marginTop: 0 }}>{sec.note}</Note> : null}
-            {RANGE_STEPS.filter((s) => s.sec === si).map((s, i) => (
-              <div key={i} style={{ display: "flex", gap: 10, padding: "7px 0", borderBottom: "1px solid " + C.line }}>
-                <span style={Object.assign({}, mno, { fontSize: 9.5, color: C.brass, flexShrink: 0, width: 34 })}>{s.s}s</span>
-                <span style={Object.assign({}, bdy, { fontSize: 12, color: C.chalk, lineHeight: 1.45 })}>{s.l}</span>
-              </div>))}
+            {RANGE_STEPS.filter((s) => s.sec === si).map((s, i) => <Move key={i} l={s.l} s={s.s20 == null ? s.s : s.s20} />)}
             {si === RANGE_SECTIONS.length - 1 ? <Btn on={onOpenRange} c={C.violet} fill s={{ width: "100%", marginTop: 10 }}>▶ RANGE · 20 MIN</Btn> : null}
           </Card>)))}
-      <Card><Note c={C.chalk} s={{ marginTop: 0 }}>{KEEP_LINE}</Note><Note>{RANGE_SKIP}</Note></Card>
     </Sheet>);
 }
