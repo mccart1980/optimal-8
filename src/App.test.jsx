@@ -123,14 +123,17 @@ describe("Optimal 8", () => {
     expect(await screen.findByText(/^Ring support hold, 3 × 20 seconds at the top/)).toBeInTheDocument();
   });
 
-  it("puts the home skill block on the evening line, Monday to Thursday", async () => {
+  it("puts the hollow block on every evening but Friday", async () => {
     await mount();      // the fixed day is a Wednesday
 
-    expect(await screen.findByText("THE SKILL BLOCK · 6 MIN")).toBeInTheDocument();
-    expect(screen.getByText("Handstand")).toBeInTheDocument();
+    fireEvent.click(await screen.findByText("The hollow block"));
+    expect(await screen.findByText("Handstand")).toBeInTheDocument();
     expect(screen.getByText("4 min · level 1")).toBeInTheDocument();
     // planche leans are Tuesday and Thursday only, so not today
     expect(screen.queryByText("Planche leans")).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "FRI" }));
+    await waitFor(() => expect(screen.queryByText("The hollow block")).not.toBeInTheDocument());
   });
 
   it("puts week 1 Thursday's split squat and Spanish squat hold before the bike", async () => {
@@ -149,18 +152,18 @@ describe("Optimal 8", () => {
     expect(screen.getByText("The 60-Second Settle")).toBeInTheDocument();
   });
 
-  it("renders Friday as a sleep day whose only evening line is RANGE", async () => {
+  it("renders Friday as a sleep day whose evening still runs", async () => {
     await mount();
     fireEvent.click(screen.getByRole("button", { name: "FRI" }));
 
     expect(await screen.findByText("SLEEP")).toBeInTheDocument();
     expect(screen.getByText("No alarm")).toBeInTheDocument();
-    // the evening line is RANGE, and there is no skill block on a Friday
-    expect(screen.getByText("RANGE · 20 MIN")).toBeInTheDocument();
-    expect(screen.queryByText(/THE FULL STRETCH/)).not.toBeInTheDocument();
-    // the ride is gone: no bike block, and nothing to tick off
+    // the evening still runs, and there is no hollow block on a Friday
+    expect(screen.getByText("RANGE")).toBeInTheDocument();
+    expect(screen.getByText("The sit")).toBeInTheDocument();
+    expect(screen.queryByText("The hollow block")).not.toBeInTheDocument();
+    // the ride is gone: no bike block
     expect(screen.queryByText("Easy bike")).not.toBeInTheDocument();
-    expect(screen.queryByText("▶ START SESSION")).not.toBeInTheDocument();
   });
 
   it("opens Saturday's and Sunday's warm-ups with the Turkish get-up", async () => {
@@ -199,48 +202,38 @@ describe("Optimal 8", () => {
     await waitFor(() => expect(screen.queryByText("Warm-up + bear crawls")).not.toBeInTheDocument());
   });
 
-  it("shows RANGE in the evening on TODAY, with the morning five on waking", async () => {
+  it("runs the whole day as one flow, the morning down to lights out", async () => {
     await mount();
 
-    expect(await screen.findByText("THE MORNING FIVE · 5 MIN")).toBeInTheDocument();
+    // the five morning items, in order, then the session, the site, lunch, the evening
+    ["Resting heart rate and HRV", "Three physiological sighs", "The one thing", "The morning five", "The check"]
+      .forEach((n) => expect(screen.getByText(n)).toBeInTheDocument());
+    const order = ["MORNING", "SESSION", "ON SITE", "LUNCH", "EVENING"].map((n) => screen.getByText(n));
+    order.forEach((el, i) => { if (i) expect(order[i - 1].compareDocumentPosition(el) & 4).toBeTruthy(); });
+
+    // the evening runs RANGE → the hollow block → the sit → the review → the light
+    const ev = ["RANGE", "The hollow block", "The sit", "The review", "Casein before bed", "Lights out"].map((n) => screen.getByText(n));
+    ev.forEach((el, i) => { if (i) expect(ev[i - 1].compareDocumentPosition(el) & 4).toBeTruthy(); });
+
+    // the morning five is five rows under one running timer
+    fireEvent.click(screen.getByText("The morning five"));
     ["Neck", "Shoulders", "Mid-back", "Hips", "Ankles"].forEach((n) => expect(screen.getByText(n)).toBeInTheDocument());
+    expect(screen.getAllByRole("button", { name: "START" }).length).toBe(1);
 
-    const range = screen.getByText("RANGE · 20 MIN");
-    expect(range).toBeInTheDocument();
-    // RANGE comes before the skill block and the sit
-    const skill = screen.getByText("THE SKILL BLOCK · 6 MIN");
-    const sit = screen.getByText("THE SIT · 12 MIN");
-    expect(range.compareDocumentPosition(skill) & 4).toBeTruthy();
-    expect(skill.compareDocumentPosition(sit) & 4).toBeTruthy();
-
-    // the timer steps through the document's moves, mid-back first
-    fireEvent.click(screen.getByRole("button", { name: "▶ RANGE · 20 MIN" }));
-    expect(await screen.findByText("RANGE")).toBeInTheDocument();
+    // and RANGE is the document's moves in order, mid-back first, under one timer
+    fireEvent.click(screen.getByText("RANGE"));
+    expect(await screen.findByText("DOWN-REGULATE")).toBeInTheDocument();
+    expect(screen.getByText("FOAM ROLLER EXTENSIONS × 8")).toBeInTheDocument();
     expect(screen.getByText(/DOWN-REGULATE — FEET ON A CHAIR/)).toBeInTheDocument();
-    expect(screen.getByText(/NEXT · FOAM ROLLER EXTENSIONS/)).toBeInTheDocument();
-  });
-
-  it("writes the whole home block out behind the session's home line", async () => {
-    await mount();
-    fireEvent.click(screen.getByText("THIS EVENING"));
-
-    expect(await screen.findByText("THE HOME BLOCK")).toBeInTheDocument();
-    expect(screen.getByText("The morning five · 5 min")).toBeInTheDocument();
-    expect(screen.getByText("1 · MID-BACK — FIRST, ALWAYS · 5 min")).toBeInTheDocument();
-    expect(screen.getByText("2 · HIPS · 8 min")).toBeInTheDocument();
-    expect(screen.getByText("3 · SHOULDERS · 6 min")).toBeInTheDocument();
-    expect(screen.getAllByText(/90\/90 · RIGHT LEG FRONT/).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/KETTLEBELL ARM BAR · LEFT/).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole("button", { name: "START" }).length).toBe(1);
   });
 
   it("switches RANGE to THE KEEP from range week 13", async () => {
     // week 1 Monday thirteen weeks back puts today in range week 13
     await mount({ start: "2026-06-15", rangeStart: "2026-06-15" });
 
-    expect(await screen.findByText("THE KEEP · 10 MIN")).toBeInTheDocument();
-    expect(screen.queryByText("RANGE · 20 MIN")).not.toBeInTheDocument();
-    // week 13 is also a test week
-    expect(screen.getByRole("button", { name: "▶ THE FOUR RANGE TESTS" })).toBeInTheDocument();
+    expect(await screen.findByText("THE KEEP")).toBeInTheDocument();
+    expect(screen.queryByText("RANGE")).not.toBeInTheDocument();
   });
 
   it("puts the four range tests on the Sunday weekly check in weeks 1, 5, 9 and 13", async () => {
@@ -259,13 +252,13 @@ describe("Optimal 8", () => {
   it("shows a 12-minute sit on TODAY at meditation stage 1", async () => {
     await mount();
 
-    expect(await screen.findByText("THE SIT · 12 MIN")).toBeInTheDocument();
-    expect(screen.getByText("The sit")).toBeInTheDocument();
+    const sit = await screen.findByText("The sit");
+    expect(within(sit.parentElement).getByText("12 MIN")).toBeInTheDocument();
     // the day is woven in order around the session
-    const waking = screen.getByText("ON WAKING");
+    const morning = screen.getByText("MORNING");
     const session = screen.getByText("WEDNESDAY");
     const evening = screen.getByText("EVENING");
-    expect(waking.compareDocumentPosition(session) & 4).toBeTruthy();
+    expect(morning.compareDocumentPosition(session) & 4).toBeTruthy();
     expect(session.compareDocumentPosition(evening) & 4).toBeTruthy();
   });
 
@@ -288,7 +281,8 @@ describe("Optimal 8", () => {
 
   it("opens the sit at stage 1 with the clean cycle and drift buttons", async () => {
     await mount();
-    fireEvent.click(screen.getByLabelText("Open the sit timer"));
+    fireEvent.click(screen.getByText("The sit"));
+    fireEvent.click(await screen.findByRole("button", { name: "▶ THE SIT · 12 MIN" }));
 
     expect(await screen.findByText("THE SIT")).toBeInTheDocument();
     expect(screen.getByText("STAGE 1 · CONCENTRATION · 12 MINUTES")).toBeInTheDocument();
@@ -590,8 +584,8 @@ describe("Optimal 8", () => {
     await mount();
 
     // the four yes/no taps resolve the day and write it to its own o8s- key
-    const check = (await screen.findByText("THE CHECK")).parentElement;
-    within(check).getAllByRole("button", { name: "NO" }).forEach((b) => fireEvent.click(b));
+    fireEvent.click(await screen.findByText("The check"));
+    screen.getAllByRole("button", { name: "NO" }).forEach((b) => fireEvent.click(b));
     await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-ready"))["m1w1-wed"]).toBe("G"));
 
     // the Iron Mind day writes to its own o8s- key and marks the day done
@@ -721,19 +715,19 @@ describe("Optimal 8", () => {
   it("puts THE EASY HOUR on the weekend, once, ticked from either day", async () => {
     await mount();
     fireEvent.click(screen.getByRole("button", { name: "SAT" }));
-    expect(await screen.findByText("THE EASY HOUR")).toBeInTheDocument();
+    expect(await screen.findByText("The easy hour")).toBeInTheDocument();
     expect(screen.getByText("30–40 MIN · NOSE ONLY · ONCE A WEEKEND")).toBeInTheDocument();
 
-    fireEvent.click(screen.getByLabelText("The easy hour"));
+    fireEvent.click(screen.getByLabelText("Tick The easy hour"));
     await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-log"))["m1w1-easyhour"].ok).toBe(true));
 
     // ticking it on Saturday clears Sunday too
     fireEvent.click(screen.getByRole("button", { name: "SUN" }));
-    expect(await screen.findByText(/✓ DONE THIS WEEKEND/)).toBeInTheDocument();
+    expect(await screen.findByLabelText("Untick The easy hour")).toBeInTheDocument();
 
     // and it is a weekend item only
     fireEvent.click(screen.getByRole("button", { name: "WED" }));
-    await waitFor(() => expect(screen.queryByText("THE EASY HOUR")).not.toBeInTheDocument());
+    await waitFor(() => expect(screen.queryByText("The easy hour")).not.toBeInTheDocument());
   });
 
   it("asks for lights-out time on the weekly check", async () => {
@@ -751,7 +745,7 @@ describe("Optimal 8", () => {
     await mount();
     fireEvent.click(screen.getByRole("button", { name: "FRI" }));
     expect(await screen.findByText("SLEEP")).toBeInTheDocument();
-    expect(screen.queryByText("▶ START SESSION")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Tick Warm-up")).not.toBeInTheDocument();
     // the engine safeguard is a paragraph, so it lives on PLAN
     expect(screen.queryByText(/The safeguard, written down/)).not.toBeInTheDocument();
   });
@@ -920,6 +914,7 @@ describe("Optimal 8", () => {
     localStorage.setItem("o8s-log", JSON.stringify({ "m1w1-sun-bike20hr": { w: "180" } }));
     await mount();
     fireEvent.click(screen.getByRole("button", { name: "SAT" }));
+    fireEvent.click(await screen.findByText("The easy hour"));
 
     expect(await screen.findByText("The easy zone — 65–75% of your peak heart rate")).toBeInTheDocument();
     expect(screen.getByText("117–135")).toBeInTheDocument();
@@ -1071,18 +1066,28 @@ describe("Optimal 8", () => {
     if (hit.length) throw new Error(where + " still says: " + hit.map((s) => s + " → …" + txt.slice(Math.max(0, txt.indexOf(s) - 70), txt.indexOf(s) + 70) + "…").join(" | "));
   };
 
-  /* Open every step on the page in turn, so the how lines and the panels
-     behind them are scanned too. */
+  /* The flow, swept: every item is listed once, only the item you are on
+     is open, and the lines behind each one are scanned as it opens. */
+  const dupesIn = (arr) => { const seen = {}, out = []; arr.forEach((x) => { if (seen[x]) out.push(x); seen[x] = 1; }); return out; };
+  const flowRows = () => Array.from(document.querySelectorAll("[data-flow-id]"));
+  const runTimers = () => Array.from(document.querySelectorAll("button")).filter((b) => b.textContent.trim() === "START").length;
   const sweepDay = (where) => {
     scan(where);
-    const steps = Array.from(document.querySelectorAll("button[aria-label^='Tick ']"));
-    steps.forEach((b) => {
-      const row = b.parentElement && b.parentElement.children[1];
-      if (!row) return;
-      fireEvent.click(row);
-      scan(where + " · step open");
-      fireEvent.click(row);
-    });
+    const rows = flowRows();
+    if (!rows.length) throw new Error(where + " has no flow on it");
+    const ids = dupesIn(rows.map((r) => r.getAttribute("data-flow-id")));
+    const names = dupesIn(rows.map((r) => r.getAttribute("data-flow-name")));
+    if (ids.length) throw new Error(where + " lists an item twice: " + ids.join(", "));
+    if (names.length) throw new Error(where + " lists a row twice: " + names.join(", "));
+    for (let i = 0; i < rows.length; i++) {
+      const row = flowRows()[i];
+      if (!row) break;
+      fireEvent.click(row.children[1]);
+      const open = document.querySelectorAll("[data-flow-open='1']");
+      if (open.length !== 1) throw new Error(where + " has " + open.length + " items open at once");
+      if (runTimers() > 1) throw new Error(where + " shows two running timers");
+      scan(where + " · item open");
+    }
   };
 
   /* Monday of the week that makes `w` the current week, counting back
@@ -1103,7 +1108,7 @@ describe("Optimal 8", () => {
       }
       cleanup();
     }
-  }, 240000);
+  }, 900000);
 
   it("keeps every Camp Mode day a running order, on both paths", async () => {
     for (const fight of [false, true]) {
@@ -1117,7 +1122,7 @@ describe("Optimal 8", () => {
         cleanup();
       }
     }
-  }, 240000);
+  }, 900000);
 
   it("keeps the last ten days and an easy week clean too", async () => {
     await mount({ start: weekStart(16), lastTen: true });
@@ -1129,15 +1134,15 @@ describe("Optimal 8", () => {
     cleanup();
     await mount({ start: weekStart(5) });
     sweepDay("Easy week");
-  }, 120000);
+  }, 600000);
 
   it("writes the session as numbered steps with a clock time, a prescription and a rest", async () => {
     await mount({ start: weekStart(1) });
     fireEvent.click(screen.getByRole("button", { name: "MON" }));
     await findHead("Bench Press");
 
-    // the steps are numbered from one, not lettered
-    expect(screen.getByLabelText("Tick Warm-up").textContent).toBe("1");
+    // the steps are numbered down the whole flow, the morning's five first
+    expect(screen.getByLabelText("Tick Warm-up").textContent).toBe("6");
     expect(screen.getByLabelText("Tick Bench Press")).toBeInTheDocument();
 
     // a 3am session opens at 03:00 and each step carries the clock
@@ -1154,27 +1159,33 @@ describe("Optimal 8", () => {
     expect(await screen.findByText(/Pins at chest height/)).toBeInTheDocument();
   });
 
-  it("opens the morning with four yes/no taps, then the two strap numbers, then the session", async () => {
+  it("opens the morning with the two strap numbers, and closes it with four yes/no taps", async () => {
     await mount();
-    expect(await screen.findByText("THE CHECK")).toBeInTheDocument();
-    const check = screen.getByText("THE CHECK").parentElement;
-    expect(within(check).getAllByRole("button", { name: "YES" }).length).toBe(4);
-    expect(within(check).getAllByRole("button", { name: "NO" }).length).toBe(4);
+    // the numbers are the first item, and they are already open
+    expect(await screen.findByText("THE MORNING NUMBERS")).toBeInTheDocument();
+
+    // the check is the last morning item, and the session comes after it
+    const numbers = screen.getByText("Resting heart rate and HRV");
+    const check = screen.getByText("The check");
+    expect(numbers.compareDocumentPosition(check) & 4).toBeTruthy();
+    expect(check.compareDocumentPosition(screen.getByText("WEDNESDAY")) & 4).toBeTruthy();
+
+    // it opens on a tap: four yes/no taps, and nothing else on the screen
+    fireEvent.click(check);
+    expect(screen.getAllByRole("button", { name: "YES" }).length).toBe(4);
+    expect(screen.getAllByRole("button", { name: "NO" }).length).toBe(4);
+    expect(screen.queryByText("THE MORNING NUMBERS")).not.toBeInTheDocument();
 
     // four yeses resolve the day to red, and the hard steps come off the order
-    within(check).getAllByRole("button", { name: "YES" }).forEach((b) => fireEvent.click(b));
-    expect(await screen.findByText("RED")).toBeInTheDocument();
+    screen.getAllByRole("button", { name: "YES" }).forEach((b) => fireEvent.click(b));
+    expect(await screen.findByText(/^RED —/)).toBeInTheDocument();
     await waitFor(() => expect(screen.queryByLabelText(/^Tick Heavy Sled Sprints/)).not.toBeInTheDocument());
-
-    // the check sits above the numbers, and the numbers above the session
-    const numbers = screen.getByText("THE MORNING NUMBERS");
-    expect(screen.getByText("THE CHECK").compareDocumentPosition(numbers) & 4).toBeTruthy();
-    expect(numbers.compareDocumentPosition(screen.getByText("WEDNESDAY")) & 4).toBeTruthy();
   });
 
-  it("prescribes the same home skill block in both modes", async () => {
+  it("prescribes the same hollow block in both modes", async () => {
     for (const camp of [false, true]) {
       await mount(camp ? { camp: true, campStart: weekStart(1) } : {});
+      fireEvent.click(await screen.findByText("The hollow block"));
       expect(await screen.findByText("Hollow hold")).toBeInTheDocument();
       expect(screen.getByText("Arch hold")).toBeInTheDocument();
       expect(screen.getByText("Handstand")).toBeInTheDocument();
@@ -1184,19 +1195,43 @@ describe("Optimal 8", () => {
     }
   });
 
-  it("writes the evening as a numbered list of moves with a total at the top", async () => {
+  it("writes the evening as RANGE, the hollow block, the sit, the review and the light", async () => {
     await mount();
-    expect(await screen.findByText("EVENING")).toBeInTheDocument();
-    const evening = screen.getByText("EVENING").parentElement.parentElement;
-    // every RANGE move is its own row, with its hold time
-    expect(within(evening).getByText(/^OPEN BOOK · RIGHT SIDE UP/)).toBeInTheDocument();
-    expect(within(evening).getByText("DEEP SQUAT HOLD")).toBeInTheDocument();
-    // then the sit and the review, one row each
-    expect(within(evening).getByText("The sit")).toBeInTheDocument();
-    expect(within(evening).getByText("The review")).toBeInTheDocument();
-    expect(within(evening).getByText("3 questions")).toBeInTheDocument();
-    // the morning five is five rows
-    expect(screen.getByText("THE MORNING FIVE · 5 MIN")).toBeInTheDocument();
-    ["Neck", "Shoulders", "Mid-back", "Hips", "Ankles"].forEach((n) => expect(screen.getByText(n)).toBeInTheDocument());
+    const names = Array.from(document.querySelectorAll("[data-flow-id^='ev-']")).map((r) => r.getAttribute("data-flow-name"));
+    expect(names).toEqual(["RANGE", "The hollow block", "The sit", "The review", "Casein before bed", "Lights out"]);
+
+    // every RANGE move is its own row, with its hold time, behind the one timer
+    fireEvent.click(screen.getByText("RANGE"));
+    expect(await screen.findByText("OPEN BOOK · RIGHT SIDE UP")).toBeInTheDocument();
+    expect(screen.getByText("DEEP SQUAT HOLD")).toBeInTheDocument();
+
+    // the review is the three questions, on one screen
+    fireEvent.click(screen.getByText("The review"));
+    expect(await screen.findByText("Where did I go wrong today?")).toBeInTheDocument();
+    expect(screen.getByText("What did I do well?")).toBeInTheDocument();
+    expect(screen.queryByText("OPEN BOOK · RIGHT SIDE UP")).not.toBeInTheDocument();
+  });
+
+  it("finishes the day on the last item, and shows the streak", async () => {
+    await mount();
+    const nextBtn = () => Array.from(document.querySelectorAll("button")).find((b) => /^NEXT/.test(b.textContent.trim()));
+    let guard = 0, b;
+    while ((b = nextBtn()) && guard++ < 80) fireEvent.click(b);
+    expect(await screen.findByText("DONE")).toBeInTheDocument();
+    expect(screen.getByText(/^STREAK ·/)).toBeInTheDocument();
+    expect(nextBtn()).toBeUndefined();
+    // and the day counts on the streak, because the sit and the review are in it
+    await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-imday"))["2026-09-09"].ticks.review).toBe(true));
+  }, 60000);
+
+  it("reopens where it was left", async () => {
+    await mount();
+    fireEvent.click(screen.getByText("The one thing"));
+    await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-flow"))["m1w1-wed"]).toBe("m-onething"));
+
+    cleanup();
+    render(<App />);
+    await waitFor(() => expect(screen.queryByText("LOADING…")).not.toBeInTheDocument());
+    await waitFor(() => expect(document.querySelector("[data-flow-open='1']").getAttribute("data-flow-id")).toBe("m-onething"));
   });
 });

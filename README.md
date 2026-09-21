@@ -27,6 +27,43 @@ Once it's installed you can use it on a plane, in a basement gym, anywhere with
 no signal. When you next open it with a connection it quietly picks up any new
 version in the background.
 
+## TODAY — one guided flow
+
+TODAY is a single list. Every item of the day appears on it exactly once, in
+the order it happens: the morning, the session, the site, lunch, the evening.
+The item you are on is open with its timer or its fields; everything finished
+is collapsed above it with a tick, everything still to come is collapsed
+below. One **NEXT** button moves down the list, and the flow remembers where
+you were and reopens there.
+
+The **session start time** sits at the top. Every clock time on the list is
+computed from it: the morning runs back from it, the session runs forward.
+
+- **MORNING** — resting heart rate and HRV; three physiological sighs on one
+  guided 30-second screen; the one thing, four prompts, no typing; the morning
+  five, five rows under a single running timer; and the check, four yes/no taps
+  that resolve the day GREEN, YELLOW or RED with the day's adjustment on one
+  line.
+- **SESSION** — the running order, step by step, with the loads, the rest timer
+  between sets and the 60-second settle in its one place after the last
+  interval. On Sunday it closes with the weekly check and the BOLT score.
+- **ON SITE** — one row that opens the reminders: nose breathing, the reset,
+  one job at a time, seven breaths, the phone rule. No timers.
+- **LUNCH** — one row: the breath practice for your stage, which opens the
+  pacer preset and comes back.
+- **EVENING** — RANGE, move by move under the running timer; the hollow block
+  (every evening but Friday); the sit, which opens the timer for your stage;
+  the review; then casein and lights out. Weekends add the easy hour, and in
+  weeks 4–9 of camp mode the sauna.
+
+Finishing the last item shows the day as **DONE**, with the streak.
+
+The **IRON** tab is a library, not a to-do list: the breath pacer and every
+preset, the sit timers, the walking practice, the hardship ladder with the cold
+and heat timers, the five tests, the floor and Hell Week. Nothing on it is
+listed on TODAY — TODAY opens the tool it needs from inside the flow and
+returns when it is done.
+
 ## Where your data lives
 
 Everything — your maxes, ticked sessions, notes, body weight, Hell Week scores,
@@ -46,9 +83,9 @@ Safari's website data, your training history goes with it.** So back it up.
 Everything below is **optional**, and every field in it is a ten-second entry.
 Nothing that was already in the app changed to make room for it.
 
-**The morning numbers.** On TODAY, above the daily check: resting heart rate
-and HRV, typed in from a chest-strap app, plus last night's hours of sleep and
-the time the light went off. Each of the two heart numbers is shown against its
+**The morning numbers.** The first item on TODAY: resting heart rate and HRV,
+typed in from a chest-strap app. Last night's hours of sleep and the time the
+light goes off sit on the evening's lights-out row. Each of the two heart numbers is shown against its
 own seven-day rolling average and against the week-1 baseline. Resting heart
 rate 5 or more beats over the baseline, or HRV 12% or more below its seven-day
 average, flags the daily check **yellow**; both together suggests **red**. It
@@ -200,8 +237,9 @@ place of Optimal 8 Fighter and handing back at the end.
 - **Repeat bursts** replace the 30-second all-outs: two sets of eight 6–8-second
   bursts with 40 seconds easy between and five minutes between sets, with a
   burst counter and the weaker-burst rule on the timer. Week 15 runs one set.
-- **THE EASY HOUR** — 30–40 minutes easy, nose only, once a weekend. It appears
-  on TODAY on Saturday and Sunday; ticking it on either day clears both.
+- **THE EASY HOUR** — 30–40 minutes easy, nose only, once a weekend. It is the
+  first evening row on Saturday and Sunday; ticking it on either day clears
+  both.
 - **Sunday** now runs warm-up → throws → Nordics → fight simulation → post-max
   sit → core + L-sit + hands → lever hold → weekly check, so the hardest
   eccentric work of the week lands on fresh hamstrings.
@@ -216,18 +254,15 @@ place of Optimal 8 Fighter and handing back at the end.
 
 ## The home block
 
-- **THE MORNING FIVE** — five minutes of joint circles on waking, guided, in the
-  document's order. It sits on TODAY under the sighs and the one thing.
-- **RANGE** — twenty minutes every evening, guided move by move with every hold,
-  side switch and contract-relax cue. The timer offers two lengths: **20 MIN**
-  runs the document's sections (1 + 5 + 8 + 6 minutes), and **FULL HOLDS** runs
-  every hold at the exact length the document writes, which comes to about
-  25 minutes. Twenty is the default.
+- **THE MORNING FIVE** — five minutes of joint circles on waking. Five rows
+  under one running timer, in the document's order, fourth in the morning.
+- **RANGE** — twenty minutes every evening, listed move by move with every hold
+  under one running timer that steps through them and marks where it is.
 - **THE KEEP** — from range week 13 the evening line becomes the ten-minute
   keep, and it stays there.
 - **THE FOUR TESTS** — 90/90 sit, deep squat, wall flexion, hands behind the
-  back. They appear on the Sunday weekly check on range weeks 1, 5, 9 and 13,
-  and again every eight weeks. TRACK → RANGE charts them.
+  back. They open from the Sunday weekly check on range weeks 1, 5, 9 and 13,
+  and again every eight weeks, and nowhere else. TRACK → RANGE charts them.
 
 ## Asking for changes later
 
@@ -274,8 +309,7 @@ npm run icons   # regenerate the app icons from scripts/generate-icons.mjs
   dashboard and the settings block.
 - `src/range.js` — the home block as data: THE MORNING FIVE, every RANGE move
   with its hold, THE KEEP, and the four tests, all in the document's wording.
-- `src/range-ui.jsx` — the guided timers for the morning five, RANGE and the
-  keep, the four-tests screen, the TRACK charts and the home-block sheet.
+- `src/range-ui.jsx` — the four-tests screen and the TRACK charts for them.
 - `src/calis.js` — the calisthenics lines as data: every level and every
   "own it when" from the document's Calisthenics page, plus the rules that
   govern easy weeks, taper weeks and camp mode.
@@ -283,8 +317,10 @@ npm run icons   # regenerate the app icons from scripts/generate-icons.mjs
 - `src/im-data.js` — Iron Mind as data: the breath presets, the sit stages, the
   guided timers, the hardship ladder and the gates. Every instruction string in
   there is the document's own wording.
-- `src/im-ui.jsx` — the Iron Mind screens: the pacer, the sit timer, the cold
-  and heat timers, the five tests, and the day woven into TODAY.
+- `src/im-ui.jsx` — the IRON library: the pacer, the sit timer, the cold and
+  heat timers, the floor and the five tests.
+- `src/today.jsx` — TODAY's guided flow: the row shell, the running timer that
+  steps through a list of moves, the four yes/no taps and the NEXT button.
 - `src/mdview.jsx` — renders `optimal8fighter.md` and `iron-mind-v4-2.md` in the
   PLAN tab, offline, with a table of contents. Those two files are the source of
   truth; the app imports them directly.

@@ -52,13 +52,14 @@ const Against = ({ v, avg, base, dir, u }) => {
 /* ================================================================
    MORNING NUMBERS — on TODAY, above the daily check
    ================================================================ */
-export function MorningCard({ dayIso, morning, setMorning, st, camp, isToday }) {
+export function MorningCard({ dayIso, morning, setMorning, st, camp, isToday, sleep, bare }) {
   const rec = morning[dayIso] || {};
   const put = (f, v) => setMorning(Object.assign({}, morning, { [dayIso]: Object.assign({}, rec, { [f]: v }) }));
   const flag = morningFlag(rec, morning, st, dayIso);
   const ac = flag.level === "R" ? C.oxide : flag.level === "Y" ? C.brass : C.cobalt;
+  const Wrap = bare ? ({ children }) => <div>{children}</div> : ({ children }) => <Card ac={ac}>{children}</Card>;
   return (
-    <Card ac={ac}>
+    <Wrap>
       <div style={{ marginBottom: 4 }}>
         <div style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1.5, color: ac })}>THE MORNING NUMBERS</div>
         <div style={Object.assign({}, mno, { fontSize: 8.5, color: isToday === false ? C.brass : C.ash, letterSpacing: 1.2, marginTop: 2 })}>
@@ -83,15 +84,29 @@ export function MorningCard({ dayIso, morning, setMorning, st, camp, isToday }) 
             <Against v={num(rec[f.id])} avg={r1(avg7)} base={b} dir={f.dir} u={f.u} />
           </div>); })}
 
-      <div style={{ padding: "9px 0", borderBottom: "1px solid " + C.line }}>
-        <div style={Object.assign({}, mno, { fontSize: 8, color: C.ash, letterSpacing: 1.2, marginBottom: 6 })}>SLEEP, LAST NIGHT</div>
-        <div style={{ display: "flex", gap: 8 }}>
-          <div style={{ flex: 1 }}><Lab>Hours slept</Lab><Fld v={rec.sleep} on={(v) => put("sleep", v)} ph="hours" /></div>
-          <div style={{ flex: 1 }}><Lab>Lights out</Lab><Fld v={rec.lights} on={(v) => put("lights", v)} ph="21:30" type="text" /></div>
-        </div>
-      </div>
+      {sleep === false ? null : (
+        <div style={{ padding: "9px 0", borderBottom: "1px solid " + C.line }}>
+          <div style={Object.assign({}, mno, { fontSize: 8, color: C.ash, letterSpacing: 1.2, marginBottom: 6 })}>SLEEP, LAST NIGHT</div>
+          <div style={{ display: "flex", gap: 8 }}>
+            <div style={{ flex: 1 }}><Lab>Hours slept</Lab><Fld v={rec.sleep} on={(v) => put("sleep", v)} ph="hours" /></div>
+            <div style={{ flex: 1 }}><Lab>Lights out</Lab><Fld v={rec.lights} on={(v) => put("lights", v)} ph="21:30" type="text" /></div>
+          </div>
+        </div>)}
 
-    </Card>);
+    </Wrap>);
+}
+
+/* The two sleep numbers, on the evening's lights-out row: last night's
+   hours against this morning's record, tonight's lights-out against
+   tomorrow's. The weekly check averages both across the week. */
+export function SleepFields({ dayIso, nextIso, morning, setMorning }) {
+  const rec = morning[dayIso] || {}, nx = morning[nextIso] || {};
+  const put = (day, f, v) => setMorning(Object.assign({}, morning, { [day]: Object.assign({}, morning[day] || {}, { [f]: v }) }));
+  return (
+    <div style={{ display: "flex", gap: 8 }}>
+      <div style={{ flex: 1 }}><Lab>Lights out tonight</Lab><Fld v={nx.lights} on={(v) => put(nextIso, "lights", v)} ph="21:30" type="text" /></div>
+      <div style={{ flex: 1 }}><Lab>Hours slept last night</Lab><Fld v={rec.sleep} on={(v) => put(dayIso, "sleep", v)} ph="hours" /></div>
+    </div>);
 }
 
 /* the line the daily check itself carries */

@@ -8,23 +8,30 @@ import {
   load, save, Card, Eye, Lab, Fld, Btn, Chip, Note, Seg,
 } from "./ui.jsx";
 import { DocView } from "./mdview.jsx";
-import { IM_KEYS, GATES, dayDone, streakTo } from "./im-data.js";
+import {
+  IM_KEYS, GATES, dayDone, streakTo, SIGH_HOW, ONE_THING_Q, REVIEW_Q, SITE, NOSE_ALL_DAY,
+  BREATH_STAGE, MED_STAGE, presetById, sitPlan,
+} from "./im-data.js";
 import {
   LINES, lineById, curLevel, ownedDate, levelText, levelPres, calMode, DEF_CALIS,
   CALIS_INTRO, CALIS_RULES, SLOW_LAWS, SLOW_WHY, SKILL_BLOCK, MODE_LINE,
   FRONT_LEVER_LINE, BACK_LEVER_LINE, PLANCHE_LINE, SUNDAY_LEVER,
 } from "./calis.js";
 import {
-  IronToday, BreatheView, SitView, HardshipView, IronTrack,
+  BreatheView, SitView, HardshipView, IronTrack,
   BreathTool, GuidedTool, SitTool, ColdTimer, HeatTimer, FloorTool,
 } from "./im-ui.jsx";
-import { isTestWeek, isKeepWeek, rangeTitle, rangeMins, rangeLine, RANGE_INTRO } from "./range.js";
-import { RangeTool, MorningFiveTool, RangeTests, RangeTrack, RangeSheet } from "./range-ui.jsx";
+import { TodayFlow, TimedRows, Lines, CheckTaps } from "./today.jsx";
+import {
+  isTestWeek, isKeepWeek, rangeTitle, rangeMins, RANGE_INTRO,
+  MORNING_FIVE, MORNING_FIVE_ROWS, stepsFor, moveName, secsLabel,
+} from "./range.js";
+import { RangeTests, RangeTrack } from "./range-ui.jsx";
 import {
   CAMP_L, CAMP_START_DEFAULT, CPH, CENG, CENG_MENU, CS, CPROTO,
   campRxFor, campSess, campBlank, campDatesLabel, campDayLabel, campWeekOf, campMonday,
   CAMP_DAILY_CHECK, WORKING_WEIGHT_RULE, campTestWeeks, SCORED_WEEKS_LINE,
-  CAMP_HOMELINE, CAMP_HOMELINE_TAPER, CAMP_EASY_HOUR, SAUNA_LINE, PHASE_NAME, HAND_BACK,
+  CAMP_EASY_HOUR, PHASE_NAME, HAND_BACK,
 } from "./camp.js";
 import { CampWeekTable, FightWeekTable, CampWorkPanel, CampNumbers, CampWeekCard } from "./camp-ui.jsx";
 import {
@@ -32,8 +39,8 @@ import {
   BAR_SPEED_ITEMS, isPhotoDay, parseFuelExport, series, parseKey, ergUnitLabel, r1,
 } from "./metrics.js";
 import {
-  MorningCard, MorningFlagLine, RecoveryHR, EasyZonePanel, ErgPanel, BarSpeedField,
-  BarSpeedTrack, ErgTrack, PhotosView, PhotoPrompt, Dashboard, MeasureSettings, MiniBars,
+  MorningCard, RecoveryHR, EasyZonePanel, ErgPanel, BarSpeedField,
+  BarSpeedTrack, ErgTrack, PhotosView, PhotoPrompt, Dashboard, MeasureSettings, MiniBars, SleepFields,
 } from "./metrics-ui.jsx";
 
 /* ================================================================
@@ -302,8 +309,6 @@ const EASY_HOUR = {
   why: "It's active recovery for legs that just sprinted, and it's the aerobic base that left with the Friday alarm, put back where it costs no sleep. Once a weekend, either day.",
   tag: "30–40 MIN · NOSE ONLY · ONCE A WEEKEND",
 };
-
-const HOMELINE = "HOME · tonight: RANGE, 20 min (from week 13: THE KEEP, 10 min) · Mon–Thu then the skill block, 6 min: handstand, hollow and arch, planche leans on Tuesday and Thursday · and the morning five on waking";
 
 /* ================================================================
    SESSIONS — the seven pages, in running order, exactly as written.
@@ -1219,22 +1224,6 @@ function rowFor(b, rx, calc, calis, mode) {
 const dayKey = (macro, week, day) => "m" + macro + "w" + week + "-" + day;
 const prevDayKey = (macro, week, day, L) => { const i = DAYS.indexOf(day); if (i > 0) return dayKey(macro, week, DAYS[i - 1]); if (week > 1) return dayKey(macro, week - 1, "sun"); return dayKey(macro - 1, L, "sun"); };
 
-/* The evening line — RANGE, then the block that follows it, then the sit.
-   The same component on every page in both programs. */
-function HomeLine({ rangeWeek, openHome, openProto, day }) {
-  const skill = DAYS.indexOf(day) >= 0 && DAYS.indexOf(day) <= 3;
-  return (
-    <Card ac={C.violet} s={{ padding: 0 }}>
-      <button onClick={() => (openHome ? openHome() : openProto("HOME"))} style={{ display: "flex", width: "100%", alignItems: "center", gap: 11, textAlign: "left", background: "transparent", border: "none", padding: "12px 13px", cursor: "pointer", minHeight: 44 }}>
-        <span style={{ flex: 1, minWidth: 0 }}>
-          <div style={Object.assign({}, dsp, { fontSize: 15, fontWeight: 800, letterSpacing: 1.2, color: C.chalk })}>THIS EVENING</div>
-          <div style={Object.assign({}, mno, { fontSize: 10, color: C.violet, marginTop: 3, letterSpacing: .8 })}>{rangeTitle(rangeWeek)} · {rangeMins(rangeWeek)} MIN{skill ? " · THE SKILL BLOCK · 6 MIN" : ""}</div>
-        </span>
-        <span style={Object.assign({}, mno, { fontSize: 13, color: C.violet, flexShrink: 0 })}>▸</span>
-      </button>
-    </Card>);
-}
-
 /* ================================================================
    THE CHECK — four yes/no taps. The app counts them and resolves the
    day: nothing on the screen states the rule, and the loads below are
@@ -1247,220 +1236,293 @@ export const checkReady = (a) => {
   const yes = ans.filter((x) => x === "y").length;
   return yes >= 4 ? "R" : yes >= 2 ? "Y" : "G";
 };
-function DailyCheck({ answers, setAnswers }) {
-  const a = answers || [];
-  const ready = checkReady(a);
-  const ac = ready === "R" ? C.oxide : ready === "Y" ? C.brass : ready === "G" ? C.moss : C.cobalt;
-  const put = (i, val) => { const n = a.slice(); while (n.length < CHECK_Q.length) n.push(""); n[i] = n[i] === val ? "" : val; setAnswers(n); buzz(15); };
+
+/* ================================================================
+   TODAY — ONE GUIDED FLOW
+
+   The whole day, top to bottom, as one ordered list: the morning, the
+   session, the site, lunch, the evening. Every item appears once. The
+   current item is open with its timer or its fields; everything above
+   it is collapsed with a tick, everything below is collapsed. One NEXT
+   button moves down the list. The clock times come from the session
+   start time entered at the top.
+   ================================================================ */
+
+/* the nine guided segments of the morning five, folded onto its five rows */
+const M5_ROW = [0, 1, 1, 2, 2, 3, 3, 4, 4];
+const CASEIN_LINE = "Thirty to forty grams of slow protein, the last thing before the light goes off.";
+/* RANGE's steps and its rows, built once per shape, so the running timer
+   behind them is never reset by a re-render above it. */
+const RANGE_CACHE = {};
+const rangeSteps = (rw) => { const k = isKeepWeek(rw) ? "keep" : "range";
+  if (!RANGE_CACHE[k]) { const steps = stepsFor(rw, false);
+    RANGE_CACHE[k] = { steps, rows: steps.map((m, i) => ({ id: "r" + i, n: moveName(m.l), s: secsLabel(m.s) })) }; }
+  return RANGE_CACHE[k]; };
+const SAUNA_ROW = "Fifteen to twenty minutes, Sunday and one weekday evening. Never straight from the sauna into cold.";
+const parseHHMM = (s, fallback) => { const m = String(s || "").match(/^\s*(\d{1,2})\s*[:.]?\s*(\d{2})\s*$/); if (!m) return fallback;
+  const h = Number(m[1]), x = Number(m[2]); if (h > 23 || x > 59) return fallback; return h * 60 + x; };
+
+/* the day's header — the session's own name, its shape and its chips */
+function SessionHead({ own, sess, rx, P, macro, week, day, campLabel, swapped, sparPrev, setSwapped, box, setBox, sparThis, setSparThis, dl, real }) {
+  const pct = real.length ? Math.round(dl.length / real.length * 100) : 0;
+  const mins = v(sess.m, rx);
   return (
-    <Card ac={ac}>
-      <div style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1.5, color: ac, marginBottom: 8 })}>THE CHECK</div>
-      {CHECK_Q.map((q, i) => (
-        <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "7px 0", borderBottom: "1px solid " + C.line }}>
-          <span style={Object.assign({}, bdy, { flex: 1, minWidth: 0, fontSize: 13.5, fontWeight: 600, color: C.chalk, lineHeight: 1.3 })}>{q}</span>
-          <span style={{ width: 132, flexShrink: 0 }}>
-            <Seg opts={[["y", "YES", C.oxide], ["n", "NO", C.moss]]} val={a[i] || ""} on={(val) => put(i, val)} />
-          </span>
-        </div>))}
-      {ready ? <div style={Object.assign({}, mno, { fontSize: 11, letterSpacing: 1.4, color: ac, marginTop: 10 })}>{ready === "R" ? "RED" : ready === "Y" ? "YELLOW · LOADS −7%" : "GREEN"}</div> : null}
+    <Card ac={own.ac} s={{ padding: 0, overflow: "hidden" }}>
+      <div style={{ padding: 14 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
+          <span style={Object.assign({}, dsp, { fontSize: 28, fontWeight: 800, letterSpacing: 1.6, color: C.chalk, lineHeight: 1 })}>{own.n}</span>
+          <span style={Object.assign({}, mno, { fontSize: 10.5, color: own.ac, whiteSpace: "nowrap" })}>{mins} MIN{own.pm ? " · PM" : ""}</span>
+        </div>
+        <div style={Object.assign({}, bdy, { fontSize: 14, color: C.chalk, marginTop: 5, fontWeight: 600 })}>{swapped && !MODE.camp ? "Light session (sparring rule)" : sess.t}</div>
+        <div style={{ display: "flex", gap: 6, marginTop: 8, flexWrap: "wrap" }}>
+          {MODE.camp ? <Chip c={P.ac}>CAMP · WK {week} · {P.n}</Chip> : <Chip c={P.ac}>M{macro} · WK {week} · {P.n}</Chip>}
+          {MODE.camp && campLabel ? <Chip c={C.brass}>{DSH[day]} {campLabel(day)}</Chip> : null}
+          {MODE.camp && rx.fork ? <Chip c={C.violet}>{rx.fork === "fight" ? "Fight confirmed" : "No fight"}</Chip> : null}
+          {MODE.camp && rx.sauna ? <Chip c={C.oxide}>Sauna week</Chip> : null}
+          {rx.lastTen ? <Chip c={C.oxide}>Last ten days</Chip> : null}
+          {own.free ? <Chip c={C.moss}>Free day</Chip> : <Chip c={C.brass}>3am session</Chip>}
+          {!MODE.camp && rx.maxSq && day === "sat" ? <Chip c={C.oxide}>Squat max single</Chip> : null}
+          {!MODE.camp && rx.maxBe && day === "sun" ? <Chip c={C.oxide}>Bench max single</Chip> : null}
+          {rx.dl ? <Chip c={C.moss}>{MODE.camp ? "Easy week" : "Deload"}</Chip> : null}{rx.tp ? <Chip c={C.cobalt}>Taper</Chip> : null}
+          {!MODE.camp && rx.cal && (day === "wed" || day === "sat") ? <Chip c={C.brass}>Calibration</Chip> : null}
+        </div>
+      </div>
+      <div style={{ padding: "0 14px 14px" }}>
+        {sparPrev && !MODE.camp ? (
+          <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
+            <Btn on={() => setSwapped(!swapped)} c={C.oxide} fill={!swapped} small s={{ flex: 1 }}>{swapped ? "BACK TO THE PLAN" : "USE THE LIGHT SESSION"}</Btn>
+          </div>) : null}
+        {own.box && !MODE.camp ? (
+          <div style={{ marginBottom: 12 }}>
+            <Eye s={{ marginBottom: 6 }}>Tonight at boxing</Eye>
+            <div style={{ display: "flex", gap: 6 }}>
+              <div style={{ flex: 2 }}><Seg opts={[["sharp", "HANDS SHARP", C.moss], ["slow", "HANDS SLOW", C.oxide]]} val={box} on={(val) => setBox(box === val ? "" : val)} /></div>
+              <button onClick={() => setSparThis(!sparThis)} style={Object.assign({}, dsp, { flex: 1, fontSize: 12, fontWeight: 700, letterSpacing: .8, borderRadius: 4, cursor: "pointer", minHeight: 38, background: sparThis ? C.violet : "transparent", color: sparThis ? C.ink : C.ash, border: "1px solid " + (sparThis ? C.violet : C.line) })}>{sparThis ? "SPARRED ✓" : "SPARRED?"}</button>
+            </div>
+          </div>) : null}
+        <div style={{ height: 6, background: C.ink, borderRadius: 3, overflow: "hidden" }}><div style={{ width: pct + "%", height: "100%", background: pct === 100 ? C.moss : own.ac, transition: "width .3s" }} /></div>
+        <div style={{ display: "flex", justifyContent: "space-between", marginTop: 5 }}>
+          <span style={Object.assign({}, mno, { fontSize: 9, color: C.ash })}>{dl.length}/{real.length} STEPS</span>
+        </div>
+      </div>
     </Card>);
 }
 
-function Session(props) {
-  const { macro, week, day, isCurrent, done, setDone, log, setLog, maxes, bw, ready, setReady, sparPrev, sparThis, setSparThis, swapped, setSwapped, box, setBox, note, setNote, openProto, startTimer, openPlates, onSetMax, autoRest, openFlow, goIron, weekStats, addBody, calis, setCalis, taper, rangeWeek, openHome, openRangeTests, campLabel, ergUnit, peakHR, morning, weekDates, mFlag } = props;
+/* ---------------- THE FLOW ---------------- */
+function Today(props) {
+  const {
+    macro, week, day, isToday, shownIso, shownFuture, done, setDone, log, setLog, maxes, bw,
+    ready, sparPrev, sparThis, setSparThis, swapped, setSwapped, box, setBox, note, setNote,
+    openProto, startTimer, openPlates, onSetMax, autoRest, weekStats, addBody,
+    calis, setCalis, taper, rangeWeek, openRangeTests, campLabel, ergUnit, peakHR,
+    morning, setMorning, weekDates, st, imRec, setTick, imStreak, imWeek,
+    checkA, setCheckA, openTool, sound, flowAt, setFlowAt, goIron, photoPrompt,
+  } = props;
+
   const rx = rxFor(week), P = PH[rx.ph];
-  const [open, setOpen] = useState(null);
-  if (rx.hell) return (
-    <Card ac={C.oxide}>
-      <Eye c={C.oxide}>Week 17 · Hell Week</Eye>
-      <div style={Object.assign({}, dsp, { fontSize: 24, fontWeight: 800, letterSpacing: 1.2, color: C.chalk })}>NO OPTIMAL 8 VOLUME</div>
-      <Btn on={goIron} c={C.oxide} fill s={{ width: "100%", marginTop: 12 }}>GO TO HELL WEEK</Btn>
-    </Card>);
-  if (!MODE.camp && day === "sat" && rx.test) return <TestDay macro={macro} week={week} day={day} done={done} setDone={setDone} log={log} setLog={setLog} maxes={maxes} onSetMax={onSetMax} bw={bw} addBody={addBody} />;
-  if (MODE.camp && !sessFor(day, rx)) {
-    const bl = campBlank(day, rx, campLabel ? campLabel(day) : "");
-    return (
-      <div>
-        <Card ac={bl.c}>
-          <Eye c={bl.c}>{DSH[day]}{campLabel ? " " + campLabel(day) : ""} · camp week {week}</Eye>
-          <div style={Object.assign({}, dsp, { fontSize: 30, fontWeight: 800, letterSpacing: 1.4, color: C.chalk, lineHeight: 1.05 })}>{bl.h}</div>
-        </Card>
-        <HomeLine rangeWeek={rangeWeek} openHome={openHome} openProto={openProto} day={day} />
-        <Card>
-          <Eye>Session notes</Eye>
-          <textarea value={note || ""} onChange={(e) => setNote(e.target.value)} placeholder="How the week is landing."
-            style={Object.assign({}, bdy, { width: "100%", minHeight: 64, background: C.ink, border: "1px solid " + C.line, borderRadius: 4, color: C.chalk, fontSize: 13, padding: 9, resize: "vertical" })} />
-        </Card>
-      </div>);
+  const own = sessFor(day, rx) || S[day] || S.mon;
+  const srcDay = MODE.camp ? day : swapped ? "light" : day;
+  const sess = sessFor(srcDay, rx) || own;
+  const effReady = sparPrev && !swapped ? "R" : ready;
+  const dk = dayKey(macro, week, day), dl = done[dk] || [];
+  const yellow = effReady === "Y";
+  const calc = (mk, pctv) => { const m = num(maxes[mk]); if (!m || pctv == null) return null; const adj = yellow ? 0.93 : 1;
+    const lo = Array.isArray(pctv) ? pctv[0] : pctv, hi = Array.isArray(pctv) ? pctv[1] : pctv;
+    const a = r25(m * lo / 100 * adj), z = r25(m * hi / 100 * adj); return a === z ? [a] : [a, z]; };
+  const markL = (L, val) => { const cur = done[dk] || []; const has = cur.indexOf(L) >= 0; if (!!val === has) return;
+    const n = Object.assign({}, done); n[dk] = val ? cur.concat([L]) : cur.filter((x) => x !== L); setDone(n); };
+  const ok = (k) => !!(imRec.ticks && imRec.ticks[k]);
+
+  const med = st.medStage || 1, br = st.breathStage || 1;
+  const BS = BREATH_STAGE[br], plan = sitPlan(med, imWeek, day === "sun", st.sitLen);
+  const rw = rangeWeek;
+
+  const items = [];
+  const push = (o) => { if (o) items.push(o); };
+  const im = (id, sec, colour, n, s, mins, tick, body) =>
+    ({ id, sec, colour, n, s, mins, done: ok(tick), mark: (val) => setTick(tick, val), body });
+
+  /* ---------------- MORNING ---------------- */
+  if (!shownFuture) {
+    push(im("m-numbers", "MORNING", C.cobalt, "Resting heart rate and HRV", "TWO NUMBERS", 1, "mnum",
+      () => <MorningCard bare sleep={false} dayIso={shownIso} isToday={isToday} morning={morning} setMorning={setMorning} st={st} camp={!!st.camp} />));
+    push(im("m-sighs", "MORNING", C.moss, "Three physiological sighs", "× 3 · 30 SECONDS", 1, "sighs",
+      () => (
+        <div>
+          <Note c={C.chalk} s={{ marginTop: 0 }}>{SIGH_HOW}</Note>
+          <Btn on={() => openTool({ kind: "breath", id: "sigh3" })} c={C.moss} fill s={{ width: "100%", marginTop: 10 }}>▶ THE GUIDED 30 SECONDS</Btn>
+        </div>)));
+    push(im("m-onething", "MORNING", C.moss, "The one thing", "4 QUESTIONS", 1, "onething",
+      () => <Lines rows={ONE_THING_Q} colour={C.moss} />));
+    push(im("m-five", "MORNING", C.moss, "The morning five", "5 JOINTS · 5 MIN", 5, "morning5",
+      () => <TimedRows steps={MORNING_FIVE} rows={MORNING_FIVE_ROWS} rowOf={(i) => M5_ROW[i] == null ? 4 : M5_ROW[i]} colour={C.moss} sound={sound} />));
+    push(im("m-check", "MORNING", C.cobalt, "The check", "4 YES/NO", 1, "check",
+      () => <CheckTaps qs={CHECK_Q} answers={checkA} setAnswers={setCheckA} result={checkReady(checkA)} />));
   }
-  if (sleepDay(day, rx)) {
-    return (
-      <div>
+
+  /* ---------------- SESSION ---------------- */
+  const blockProps = { rx, week, macro, day, log, setLog, maxes, bw, ready: effReady, openProto, startTimer, openPlates,
+    onSetMax, autoRest, weekStats, calis, setCalis, taper, rangeWeek: rw, openRangeTests, ergUnit, peakHR, morning, weekDates };
+  const real = rx.hell || sleepDay(day, rx) ? [] : realBlocks(srcDay, rx).filter((x) => !(effReady === "R" && x.hard));
+  const headFor = (node) => () => node;
+
+  if (rx.hell) {
+    push({ id: "S:hell", sec: "SESSION", colour: C.oxide, n: "Hell Week", s: "NO OPTIMAL 8 VOLUME", mins: 0,
+      done: dl.indexOf("HELL") >= 0, mark: (val) => markL("HELL", val),
+      body: () => <Btn on={goIron} c={C.oxide} fill s={{ width: "100%" }}>GO TO HELL WEEK</Btn> });
+  } else if (MODE.camp && !sessFor(day, rx)) {
+    const bl = campBlank(day, rx, campLabel ? campLabel(day) : "");
+    push({ id: "S:blank", sec: "SESSION", colour: bl.c, n: bl.h, s: DSH[day] + (campLabel ? " " + campLabel(day) : ""), mins: 0,
+      done: dl.indexOf("BLANK") >= 0, mark: (val) => markL("BLANK", val),
+      body: () => <Lines rows={bl.l} colour={bl.c} /> });
+  } else if (sleepDay(day, rx)) {
+    push({ id: "S:sleep", sec: "SESSION", colour: C.moss, n: "Sleep", s: "NO ALARM", mins: 0,
+      done: dl.indexOf("SLEEP") >= 0, mark: (val) => markL("SLEEP", val),
+      head: headFor(
         <Card ac={C.moss}>
           <Eye c={C.moss}>{DSH[day]}{campLabel ? " " + campLabel(day) : ""} · week {week}</Eye>
           <div style={Object.assign({}, dsp, { fontSize: 34, fontWeight: 800, letterSpacing: 1.6, color: C.chalk, lineHeight: 1 })}>SLEEP</div>
           <Chip c={C.moss} s={{ marginTop: 12, display: "inline-block" }}>No alarm</Chip>
-        </Card>
-        <HomeLine rangeWeek={rangeWeek} openHome={openHome} openProto={openProto} day={day} />
-        <Card>
-          <Eye>Session notes</Eye>
-          <textarea value={note || ""} onChange={(e) => setNote(e.target.value)} placeholder="How you slept. How the week is landing."
-            style={Object.assign({}, bdy, { width: "100%", minHeight: 64, background: C.ink, border: "1px solid " + C.line, borderRadius: 4, color: C.chalk, fontSize: 13, padding: 9, resize: "vertical" })} />
-        </Card>
-      </div>);
+        </Card>),
+      body: () => <Note c={C.chalk} s={{ marginTop: 0 }}>The alarm is off. The evening below still runs.</Note> });
+  } else if (!MODE.camp && day === "sat" && rx.test) {
+    push({ id: "S:test", sec: "SESSION", colour: C.cobalt, n: "Test day", s: "THE WHOLE BATTERY", mins: v(sess.m, rx),
+      done: dl.length > 0, mark: (val) => { const n = Object.assign({}, done); n[dk] = val ? ["TEST"] : []; setDone(n); },
+      body: () => <TestDay macro={macro} week={week} day={day} done={done} setDone={setDone} log={log} setLog={setLog} maxes={maxes} onSetMax={onSetMax} bw={bw} addBody={addBody} /> });
+  } else {
+    const headNode = (
+      <SessionHead own={own} sess={sess} rx={rx} P={P} macro={macro} week={week} day={day} campLabel={campLabel}
+        swapped={swapped} sparPrev={sparPrev} setSwapped={setSwapped} box={box} setBox={setBox}
+        sparThis={sparThis} setSparThis={setSparThis} dl={dl} real={real} />);
+    real.forEach((b, i) => {
+      const name = v(b.n, rx);
+      const row = rowFor(b, rx, calc, calis, b.cal ? calMode(rx, taper, jointFlagFor(log, macro, week)) : null);
+      push({ id: "S:" + b.L, sec: "SESSION", colour: own.ac, n: name,
+        s: [row.work, row.load, row.rest].filter(Boolean).join(" · "),
+        mins: Number(v(b.m, rx)) || 0, tr: Number(b.tr) || 0,
+        done: dl.indexOf(b.L) >= 0, mark: (val) => markL(b.L, val),
+        head: i === 0 ? headFor(headNode) : null,
+        body: () => <BlockBody {...blockProps} b={b} /> });
+    });
   }
-  const srcDay = MODE.camp ? day : swapped ? "light" : day;
-  const own = sessFor(day, rx), sess = sessFor(srcDay, rx);
-  const effReady = sparPrev && !swapped ? "R" : ready;
-  const blocks = orderFor(srcDay, rx, effReady), real = blocks.filter((x) => x.L);
-  const dk = dayKey(macro, week, day), dl = done[dk] || [];
-  const pct = real.length ? Math.round(dl.length / real.length * 100) : 0;
-  const nx = real.find((b) => dl.indexOf(b.L) < 0);
-  const yellow = effReady === "Y";
-  const calc = (mk, pctv) => { const m = num(maxes[mk]); if (!m || pctv == null) return null; const adj = yellow ? 0.93 : 1; const lo = Array.isArray(pctv) ? pctv[0] : pctv, hi = Array.isArray(pctv) ? pctv[1] : pctv; const a = r25(m * lo / 100 * adj), z = r25(m * hi / 100 * adj); return a === z ? [a] : [a, z]; };
-  const mark = (L) => { const cur = done[dk] || []; const n = Object.assign({}, done); n[dk] = cur.indexOf(L) >= 0 ? cur.filter((x) => x !== L) : cur.concat([L]); setDone(n); buzz(20); };
-  const RC = { G: C.moss, Y: C.brass, R: C.oxide };
-  const mins = v(sess.m, rx);
+
+  /* Sunday closes the session with the week's two numbers. */
+  if (day === "sun" && !rx.hell) {
+    push(im("S:bolt", "SESSION", C.cobalt, "BOLT score", "ONE HOLD", 2, "bolt",
+      () => (
+        <div>
+          <Note c={C.chalk} s={{ marginTop: 0 }}>{presetById("bolt").how}</Note>
+          <Btn on={() => openTool({ kind: "breath", id: "bolt" })} c={C.cobalt} fill s={{ width: "100%", marginTop: 10 }}>▶ THE BOLT STOPWATCH</Btn>
+        </div>)));
+  }
+
+  /* ---------------- ON SITE ---------------- */
+  push(im("site", "ON SITE", C.brass, "The reminders", "NO TIMERS", 0, "site",
+    () => <Lines rows={[{ n: "Nose breathing", s: NOSE_ALL_DAY }].concat(SITE.map((x) => ({ n: x.n, s: x.s })))} colour={C.brass} />));
+
+  /* ---------------- LUNCH ---------------- */
+  push(im("lunch", "LUNCH", C.cobalt, "The breath practice — " + BS.n, BS.n, 0, "lunch",
+    () => (
+      <div>
+        <Note c={C.chalk} s={{ marginTop: 0 }}>{BS.lunchLine}</Note>
+        <div style={{ marginTop: 10 }}>
+          {BS.lunch.map((pid) => { const PR = presetById(pid); if (!PR) return null;
+            return (
+              <button key={pid} onClick={() => openTool({ kind: "breath", id: pid })}
+                style={{ display: "flex", width: "100%", gap: 10, alignItems: "center", textAlign: "left", background: "transparent", border: "1px solid " + C.line, borderRadius: 5, padding: "9px 11px", marginBottom: 6, cursor: "pointer", minHeight: 44 }}>
+                <span style={{ flex: 1, minWidth: 0 }}>
+                  <div style={Object.assign({}, bdy, { fontSize: 13.5, fontWeight: 600, color: C.chalk })}>{PR.n}</div>
+                  <div style={Object.assign({}, mno, { fontSize: 8.5, color: C.ash, marginTop: 2, letterSpacing: 1 })}>{PR.tag} · {PR.mins}</div>
+                </span>
+                <span style={Object.assign({}, mno, { fontSize: 14, color: PR.c })}>▸</span>
+              </button>); })}
+        </div>
+      </div>)));
+
+  /* ---------------- EVENING ---------------- */
+  const weekend = MODE.camp ? (day === "sun" && !!rx.sim) : (day === "sat" || day === "sun");
+  if (weekend) {
+    const EH = MODE.camp ? CAMP_EASY_HOUR : EASY_HOUR;
+    const ek = "m" + macro + "w" + week + "-easyhour", ev = log[ek] || {};
+    push({ id: "ev-easy", sec: "EVENING", colour: C.moss, n: "The easy hour", s: EH.tag, mins: 0,
+      done: !!ev.ok, mark: (val) => { const n = Object.assign({}, log); n[ek] = Object.assign({}, ev, { ok: !!val, d: val ? day : null }); setLog(n); },
+      body: () => (
+        <div>
+          <Note c={C.chalk} s={{ marginTop: 0 }}>{EH.s}</Note>
+          <EasyZonePanel compact peak={peakHR} avgHR={ev.hr} onAvg={(val) => { const n = Object.assign({}, log); n[ek] = Object.assign({}, log[ek], { hr: val }); setLog(n); }} />
+        </div>) });
+    if (MODE.camp && rx.sauna) {
+      push(im("ev-sauna", "EVENING", C.oxide, "Sauna", "15–20 MIN", 0, "sauna",
+        () => <Note c={C.chalk} s={{ marginTop: 0 }}>{SAUNA_ROW}</Note>));
+    }
+  }
+
+  const RG = rangeSteps(rw);
+  push(im("ev-range", "EVENING", C.violet, rangeTitle(rw), rangeMins(rw) + " MIN", rangeMins(rw), "mobility",
+    () => <TimedRows steps={RG.steps} rows={RG.rows} colour={C.violet} sound={sound} />));
+
+  if (day !== "fri") {
+    const hs = curLevel(calis, "handstand");
+    const rows = [SKILL_BLOCK.wrists,
+      Object.assign({}, SKILL_BLOCK.handstand, { s: "4 min · level " + hs.l, how: hs.what }),
+      SKILL_BLOCK.hollow, SKILL_BLOCK.arch];
+    if (day === "tue" || day === "thu") rows.push(SKILL_BLOCK.planche);
+    push(im("ev-skill", "EVENING", C.brass, "The hollow block", SKILL_BLOCK.mins + " MIN", SKILL_BLOCK.mins, "skill",
+      () => <Lines rows={rows.map((r) => ({ n: r.n, s: r.s, how: r.how }))} colour={C.brass} />));
+  }
+
+  push(im("ev-sit", "EVENING", C.violet, "The sit", plan.mins + " MIN", plan.mins, "sit",
+    () => (
+      <div>
+        <Note c={C.chalk} s={{ marginTop: 0 }}>{(MED_STAGE[med] || MED_STAGE[1]).line}</Note>
+        <Btn on={() => openTool({ kind: "sit" })} c={C.violet} fill s={{ width: "100%", marginTop: 10 }}>▶ THE SIT · {plan.mins} MIN</Btn>
+      </div>)));
+
+  push(im("ev-review", "EVENING", C.violet, "The review", "3 QUESTIONS", 2, "review",
+    () => <Lines rows={REVIEW_Q} colour={C.violet} />));
+
+  push(im("ev-casein", "EVENING", C.brass, "Casein before bed", "30–40 G", 0, "casein",
+    () => <Note c={C.chalk} s={{ marginTop: 0 }}>{CASEIN_LINE}</Note>));
+
+  push(im("ev-lights", "EVENING", C.cobalt, "Lights out", "THE TIME, AND LAST NIGHT'S HOURS", 0, "lights",
+    () => <SleepFields dayIso={shownIso} nextIso={addDays(shownIso, 1)} morning={morning} setMorning={setMorning} />));
+
+  /* ---------------- the clock ---------------- */
+  const startKey = dk + "-start";
+  const startStr = (log[startKey] || {}).w || hhmm(START_MIN(own));
+  const startMin = parseHHMM(startStr, START_MIN(own));
+  const mornMins = items.filter((x) => x.sec === "MORNING").reduce((a, x) => a + (x.mins || 0), 0);
+  let t = startMin - mornMins;
+  items.forEach((x) => { if (x.sec !== "MORNING") return; x.clock = hhmm((t + 1440) % 1440); t += x.mins || 0; });
+  t = startMin;
+  items.forEach((x) => { if (x.sec !== "SESSION") return; x.clock = hhmm(t % 1440); t += (x.mins || 0) + (x.tr || 0); });
+
+  const header = (
+    <Card ac={C.brass} s={{ padding: "12px 13px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <span style={{ flex: 1, minWidth: 0 }}>
+          <div style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1.5, color: C.chalk })}>SESSION START</div>
+          <div style={Object.assign({}, mno, { fontSize: 8.5, color: C.ash, letterSpacing: 1.2, marginTop: 2 })}>EVERY TIME BELOW COMES OFF THIS</div>
+        </span>
+        <span style={{ width: 96, flexShrink: 0 }}>
+          <Fld v={startStr} on={(val) => { const n = Object.assign({}, log); n[startKey] = { w: val }; setLog(n); }} ph="03:00" type="text" />
+        </span>
+      </div>
+    </Card>);
+
+  const curId = flowAt[dk] === undefined ? undefined : flowAt[dk];
+  const go = (id) => setFlowAt(Object.assign({}, flowAt, { [dk]: id }));
+
   return (
     <div>
-      <Card ac={own.ac} s={{ padding: 0, overflow: "hidden" }}>
-        <div style={{ padding: 14 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
-            <span style={Object.assign({}, dsp, { fontSize: 28, fontWeight: 800, letterSpacing: 1.6, color: C.chalk, lineHeight: 1 })}>{own.n}</span>
-            <span style={Object.assign({}, mno, { fontSize: 10.5, color: own.ac, whiteSpace: "nowrap" })}>{mins} MIN{own.pm ? " · PM" : ""}</span>
-          </div>
-          <div style={Object.assign({}, bdy, { fontSize: 14, color: C.chalk, marginTop: 5, fontWeight: 600 })}>{swapped && !MODE.camp ? "Light session (sparring rule)" : sess.t}</div>
-          <div style={{ display: "flex", gap: 6, marginTop: 8, flexWrap: "wrap" }}>
-            {MODE.camp
-              ? <Chip c={P.ac}>CAMP · WK {week} · {P.n}</Chip>
-              : <Chip c={P.ac}>M{macro} · WK {week} · {P.n}</Chip>}
-            {MODE.camp && campLabel ? <Chip c={C.brass}>{DSH[day]} {campLabel(day)}</Chip> : null}
-            {MODE.camp && rx.fork ? <Chip c={C.violet}>{rx.fork === "fight" ? "Fight confirmed" : "No fight"}</Chip> : null}
-            {MODE.camp && rx.sauna ? <Chip c={C.oxide}>Sauna week</Chip> : null}
-            {rx.lastTen ? <Chip c={C.oxide}>Last ten days</Chip> : null}
-            {own.free ? <Chip c={C.moss}>Free day</Chip> : <Chip c={C.brass}>3am session</Chip>}
-            {!MODE.camp && rx.maxSq && day === "sat" ? <Chip c={C.oxide}>Squat max single</Chip> : null}
-            {!MODE.camp && rx.maxBe && day === "sun" ? <Chip c={C.oxide}>Bench max single</Chip> : null}
-            {rx.dl ? <Chip c={C.moss}>{MODE.camp ? "Easy week" : "Deload"}</Chip> : null}{rx.tp ? <Chip c={C.cobalt}>Taper</Chip> : null}{!MODE.camp && rx.cal && (day === "wed" || day === "sat") ? <Chip c={C.brass}>Calibration</Chip> : null}
-          </div>
-        </div>
-
-        <div style={{ padding: "12px 14px 14px" }}>
-          {sparPrev && !MODE.camp ? (
-            <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
-              <Btn on={() => setSwapped(!swapped)} c={C.oxide} fill={!swapped} small s={{ flex: 1 }}>{swapped ? "BACK TO THE PLAN" : "USE THE LIGHT SESSION"}</Btn>
-            </div>) : null}
-          {own.box && !MODE.camp ? (
-            <div style={{ marginBottom: 12 }}>
-              <Eye s={{ marginBottom: 6 }}>Tonight at boxing</Eye>
-              <div style={{ display: "flex", gap: 6 }}>
-                <div style={{ flex: 2 }}><Seg opts={[["sharp", "HANDS SHARP", C.moss], ["slow", "HANDS SLOW", C.oxide]]} val={box} on={(val) => setBox(box === val ? "" : val)} /></div>
-                <button onClick={() => setSparThis(!sparThis)} style={Object.assign({}, dsp, { flex: 1, fontSize: 12, fontWeight: 700, letterSpacing: .8, borderRadius: 4, cursor: "pointer", minHeight: 38, background: sparThis ? C.violet : "transparent", color: sparThis ? C.ink : C.ash, border: "1px solid " + (sparThis ? C.violet : C.line) })}>{sparThis ? "SPARRED ✓" : "SPARRED?"}</button>
-              </div>
-            </div>) : null}
-          <div style={{ height: 6, background: C.ink, borderRadius: 3, overflow: "hidden" }}><div style={{ width: pct + "%", height: "100%", background: pct === 100 ? C.moss : own.ac, transition: "width .3s" }} /></div>
-          <div style={{ display: "flex", justifyContent: "space-between", marginTop: 5 }}>
-            <span style={Object.assign({}, mno, { fontSize: 9, color: C.ash })}>{dl.length}/{real.length} STEPS</span>
-            <span style={Object.assign({}, mno, { fontSize: 9, color: pct === 100 ? C.moss : C.ash })}>{pct === 100 ? "SESSION COMPLETE" : nx ? "NEXT · " + v(nx.n, rx).toUpperCase() : ""}</span>
-          </div>
-          <Btn on={openFlow} c={pct === 100 ? C.moss : own.ac} fill={pct < 100} s={{ width: "100%", marginTop: 12, fontSize: 16 }}>{pct === 100 ? "REVIEW SESSION" : pct > 0 ? "▶ CONTINUE SESSION" : "▶ START SESSION"}</Btn>
-        </div>
-      </Card>
-
-      {(() => { let clock = START_MIN(own), step = 0; return blocks.map((b, idx) => {
-        if (b.sp) return null;
-        const at = clock; clock += (Number(v(b.m, rx)) || 0) + (Number(b.tr) || 0); step += 1;
-        const isDone = dl.indexOf(b.L) >= 0, isOpen = open === b.L, isNext = nx && b.L === nx.L;
-        const edge = isDone ? C.moss : isNext ? own.ac : C.line;
-        const name = v(b.n, rx), row = rowFor(b, rx, calc, calis, b.cal ? calMode(rx, taper, jointFlagFor(log, macro, week)) : null);
-        return (
-          <Card key={b.L} ac={edge} s={{ padding: 0, opacity: isDone ? .62 : 1 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px" }}>
-              <button onClick={() => mark(b.L)} aria-label={(isDone ? "Untick " : "Tick ") + name}
-                style={Object.assign({}, mno, { width: 40, height: 40, flexShrink: 0, borderRadius: 5, cursor: "pointer", fontSize: 13, fontWeight: 700, background: isDone ? C.moss : C.ink, color: isDone ? C.ink : own.ac, border: "1px solid " + (isDone ? C.moss : C.line) })}>{isDone ? "✓" : step}</button>
-              <span onClick={() => setOpen(isOpen ? null : b.L)} style={{ flex: 1, minWidth: 0, cursor: "pointer" }}>
-                <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, letterSpacing: 1 })}>{hhmm(at)}</div>
-                <div style={Object.assign({}, bdy, { fontSize: 14.5, fontWeight: 600, color: C.chalk, lineHeight: 1.25 })}>{name}</div>
-                <div style={Object.assign({}, mno, { fontSize: 9.5, color: C.brass, marginTop: 3, lineHeight: 1.4 })}>
-                  {[row.work, row.load, row.rest].filter(Boolean).join(" · ")}
-                </div>
-              </span>
-              <span onClick={() => setOpen(isOpen ? null : b.L)} style={Object.assign({}, mno, { fontSize: 13, color: own.ac, flexShrink: 0, cursor: "pointer", width: 18, textAlign: "right" })}>{isOpen ? "▾" : "▸"}</span>
-            </div>
-            {isOpen ? (
-              <div className="rise" style={{ padding: "0 12px 12px" }}>
-                <div style={{ height: 1, background: C.line, marginBottom: 12 }} />
-                <BlockBody b={b} rx={rx} week={week} macro={macro} day={day} log={log} setLog={setLog} maxes={maxes} bw={bw} ready={effReady} openProto={openProto} startTimer={startTimer} openPlates={openPlates} onSetMax={onSetMax} autoRest={autoRest} weekStats={weekStats} calis={calis} setCalis={setCalis} taper={taper} rangeWeek={rangeWeek} openRangeTests={openRangeTests} ergUnit={ergUnit} peakHR={peakHR} morning={morning} weekDates={weekDates} />
-                {b.tr ? <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, marginTop: 12, textAlign: "center", letterSpacing: 1 })}>↓ {b.tr} MIN TRANSITION ↓</div> : null}
-                <Btn on={() => mark(b.L)} c={isDone ? C.line : C.moss} fill={!isDone} s={{ width: "100%", marginTop: 12, color: isDone ? C.ash : C.ink }}>{isDone ? "UNDO" : "MARK STEP DONE"}</Btn>
-              </div>) : null}
-          </Card>);
-      }); })()}
-
-      {(MODE.camp ? (day === "sun" && !!rx.sim) : (day === "sat" || day === "sun")) ? (() => {
-        const EH = MODE.camp ? CAMP_EASY_HOUR : EASY_HOUR;
-        const ek = "m" + macro + "w" + week + "-easyhour", ev = log[ek] || {}, ok = !!ev.ok;
-        return (
-          <Card ac={ok ? C.moss : C.moss} s={{ padding: 0 }}>
-            <div style={{ padding: "12px 13px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
-                <span style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1.3, color: C.chalk })}>{EH.n}</span>
-                <span style={Object.assign({}, mno, { fontSize: 9, color: C.moss, letterSpacing: 1, textAlign: "right" })}>{EH.tag}</span>
-              </div>
-              <EasyZonePanel compact peak={peakHR} avgHR={ev.hr} onAvg={(val) => { const n = Object.assign({}, log); n[ek] = Object.assign({}, ev, { hr: val }); setLog(n); }} />
-              <button onClick={() => { const n = Object.assign({}, log); n[ek] = Object.assign({}, log[ek], { ok: !ok, d: ok ? null : day }); setLog(n); buzz(20); }}
-                aria-label="The easy hour"
-                style={Object.assign({}, dsp, { marginTop: 10, width: "100%", minHeight: 44, fontSize: 13, fontWeight: 700, letterSpacing: 1, borderRadius: 5, cursor: "pointer", background: ok ? C.moss : "transparent", color: ok ? C.ink : C.ash, border: "1px solid " + (ok ? C.moss : C.line) })}>
-                {ok ? (MODE.camp ? "✓ DONE" : "✓ DONE THIS WEEKEND") + (ev.d && ev.d !== day ? " · " + DSH[ev.d] : "") : "MARK DONE"}
-              </button>
-            </div>
-          </Card>); })() : null}
-
-      <HomeLine rangeWeek={rangeWeek} openHome={openHome} openProto={openProto} day={day} />
-
+      <TodayFlow items={items} curId={curId} go={go} streak={imStreak} header={header}
+        mark={(it, val) => it.mark(val)} />
+      {photoPrompt || null}
       <Card>
         <Eye>Session notes</Eye>
         <textarea value={note || ""} onChange={(e) => setNote(e.target.value)} placeholder="How it went. What slowed. What hurt. Hands at 7pm."
           style={Object.assign({}, bdy, { width: "100%", minHeight: 64, background: C.ink, border: "1px solid " + C.line, borderRadius: 4, color: C.chalk, fontSize: 13, padding: 9, resize: "vertical" })} />
       </Card>
-    </div>);
-}
-
-/* ================================================================
-   FLOW — one block at a time, full screen
-   ================================================================ */
-function Flow(props) {
-  const { macro, week, day, done, setDone, swapped, sparPrev, ready, close } = props;
-  const rx = rxFor(week), srcDay = MODE.camp ? day : swapped ? "light" : day, own = sessFor(day, rx) || S[day];
-  const effReady = sparPrev && !swapped ? "R" : ready;
-  const real = orderFor(srcDay, rx, effReady).filter((x) => x.L);
-  const dk = dayKey(macro, week, day), dl = done[dk] || [];
-  const [i, setI] = useState(() => { const f = real.findIndex((x) => dl.indexOf(x.L) < 0); return f < 0 ? 0 : f; });
-  const b = real[i]; if (!b) return null;
-  const isDone = dl.indexOf(b.L) >= 0;
-  const mark = () => { const cur = done[dk] || []; const n = Object.assign({}, done); const was = cur.indexOf(b.L) >= 0; n[dk] = was ? cur.filter((x) => x !== b.L) : cur.concat([b.L]); setDone(n); buzz(30); if (!was && i < real.length - 1) setTimeout(() => setI(i + 1), 180); };
-  return (
-    <div style={{ position: "fixed", inset: 0, background: C.ink, zIndex: 60, display: "flex", flexDirection: "column" }}>
-      <div style={{ padding: "10px 14px 8px", paddingTop: "calc(10px + env(safe-area-inset-top))", borderBottom: "1px solid " + C.line, background: C.slab }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <span style={Object.assign({}, mno, { fontSize: 10, color: C.ash, letterSpacing: 1.2 })}>{own.n} · WK {week} · {dl.length}/{real.length} DONE</span>
-          <Btn on={close} c={C.ash} small s={{ minWidth: 44, minHeight: 44 }}>EXIT</Btn>
-        </div>
-        <div style={{ display: "flex", gap: 3, marginTop: 9 }}>
-          {real.map((x, k) => <div key={x.L} onClick={() => setI(k)} style={{ flex: 1, height: 6, borderRadius: 3, cursor: "pointer", background: dl.indexOf(x.L) >= 0 ? C.moss : k === i ? own.ac : C.line }} />)}
-        </div>
-      </div>
-      <div className="rise" key={i} style={{ flex: 1, overflowY: "auto", padding: "16px 16px 90px", maxWidth: 640, margin: "0 auto", width: "100%" }}>
-        <div style={Object.assign({}, mno, { fontSize: 10, color: C.ash, letterSpacing: 1.4 })}>STEP {i + 1} OF {real.length}{v(b.m, rx) ? " · " + v(b.m, rx) + " MIN" : ""}</div>
-        <div style={Object.assign({}, dsp, { fontSize: 30, fontWeight: 800, letterSpacing: 1, color: C.chalk, lineHeight: 1.05, margin: "5px 0 14px" })}>{v(b.n, rx)}</div>
-        <BlockBody {...props} b={b} rx={rx} ready={effReady} />
-        {b.tr ? <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, marginTop: 14, textAlign: "center", letterSpacing: 1 })}>↓ {b.tr} MIN TRANSITION ↓</div> : null}
-      </div>
-      <div style={{ display: "flex", gap: 8, padding: "8px 12px", paddingBottom: "calc(8px + env(safe-area-inset-bottom))", borderTop: "1px solid " + C.line, background: C.slab, minHeight: 58 }}>
-        <Btn on={() => setI(Math.max(0, i - 1))} c={C.ash} dis={i === 0} s={{ flex: 1, padding: "8px 0", minHeight: 40 }}>◀</Btn>
-        <Btn on={mark} c={isDone ? C.line : C.moss} fill={!isDone} s={{ flex: 3, color: isDone ? C.ash : C.ink, fontSize: 15, padding: "8px 0", minHeight: 40 }}>{isDone ? "UNDO" : i === real.length - 1 ? "DONE — FINISH" : "DONE — NEXT"}</Btn>
-        <Btn on={() => setI(Math.min(real.length - 1, i + 1))} c={C.ash} dis={i === real.length - 1} s={{ flex: 1, padding: "8px 0", minHeight: 40 }}>▶</Btn>
-      </div>
     </div>);
 }
 
@@ -2271,7 +2333,7 @@ function HellWeek({ current, maxes, bw, hwLog, setHwLog, L }) {
 /* ================================================================
    APP SHELL
    ================================================================ */
-const KEYS = { st: "o8s-settings", done: "o8s-done", log: "o8s-log", maxes: "o8s-maxes", maxHist: "o8s-maxhist", body: "o8s-body", ready: "o8s-ready", spar: "o8s-spar", swap: "o8s-swap", box: "o8s-box", notes: "o8s-notes", forge: "o8s-forge", fweek: "o8s-fweek", hw: "o8s-hw", calis: "o8s-calis", morning: "o8s-morning", photos: "o8s-photos", fuel: "o8s-fuel" };
+const KEYS = { st: "o8s-settings", done: "o8s-done", log: "o8s-log", maxes: "o8s-maxes", maxHist: "o8s-maxhist", body: "o8s-body", ready: "o8s-ready", spar: "o8s-spar", swap: "o8s-swap", box: "o8s-box", notes: "o8s-notes", forge: "o8s-forge", fweek: "o8s-fweek", hw: "o8s-hw", calis: "o8s-calis", morning: "o8s-morning", photos: "o8s-photos", fuel: "o8s-fuel", flow: "o8s-flow" };
 const DEF_ST = () => ({ start: defaultStart(), macroBase: 1, iron: false, sound: true, autoRest: true,
   medStage: 1, breathStage: 1, hardLevel: 1, sitLen: 30, imStart: null, rangeStart: null,
   camp: false, campStart: CAMP_START_DEFAULT, campFight: false, lastTen: false, taper: false,
@@ -2287,7 +2349,6 @@ export default function App() {
   const [view, setViewRaw] = useState(null);
   const [proto, setProto] = useState(null);
   const [plates, setPlates] = useState(null);
-  const [flow, setFlow] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [isub, setIsub] = useState("breathe");
   const [trackSub, setTrackSub] = useState(null);
@@ -2309,6 +2370,7 @@ export default function App() {
   const [morning, setMorningRaw] = useState({});
   const [photos, setPhotosRaw] = useState({});
   const [fuel, setFuelRaw] = useState(null);
+  const [flowAt, setFlowAtRaw] = useState({});
   const [imDay, setImDayRaw] = useState({});
   const [imSit, setImSitRaw] = useState([]);
   const [imHard, setImHardRaw] = useState([]);
@@ -2324,6 +2386,7 @@ export default function App() {
   const setForge = mk(setForgeRaw, KEYS.forge), setFweek = mk(setFweekRaw, KEYS.fweek), setHwLog = mk(setHwRaw, KEYS.hw);
   const setCalis = mk(setCalisRaw, KEYS.calis);
   const setMorning = mk(setMorningRaw, KEYS.morning), setPhotos = mk(setPhotosRaw, KEYS.photos), setFuel = mk(setFuelRaw, KEYS.fuel);
+  const setFlowAt = mk(setFlowAtRaw, KEYS.flow);
   const setImDay = mk(setImDayRaw, IM_KEYS.day), setImSit = mk(setImSitRaw, IM_KEYS.sit);
   const setImHard = mk(setImHardRaw, IM_KEYS.hard), setImWk = mk(setImWkRaw, IM_KEYS.wk);
 
@@ -2367,6 +2430,7 @@ export default function App() {
     setBoxRaw(await load(KEYS.box, {})); setNotesRaw(await load(KEYS.notes, {}));
     setCalisRaw(Object.assign(DEF_CALIS(), await load(KEYS.calis, null) || {}));
     setMorningRaw(await load(KEYS.morning, {})); setPhotosRaw(await load(KEYS.photos, {})); setFuelRaw(await load(KEYS.fuel, null));
+    setFlowAtRaw(await load(KEYS.flow, {}));
     setImDayRaw(await load(IM_KEYS.day, {})); setImSitRaw(await load(IM_KEYS.sit, []));
     setImHardRaw(await load(IM_KEYS.hard, [])); setImWkRaw(await load(IM_KEYS.wk, {}));
     setLoaded(true);
@@ -2460,6 +2524,11 @@ export default function App() {
 
   const imTick = (k) => { const cur = imDay[dayIso] || {}; const ticks = Object.assign({}, cur.ticks); ticks[k] = !ticks[k];
     setImDay(Object.assign({}, imDay, { [dayIso]: Object.assign({}, cur, { ticks }) })); buzz(20); };
+  /* The flow ticks the day it is showing, not the day it happens to be, so a
+     day filled in after the fact lands on its own date. */
+  const tickOn = (isoDay) => (k, val) => { const cur = imDay[isoDay] || {}; const ticks = Object.assign({}, cur.ticks);
+    if (!!ticks[k] === !!val) return; ticks[k] = !!val;
+    setImDay(Object.assign({}, imDay, { [isoDay]: Object.assign({}, cur, { ticks }) })); buzz(20); };
   const imFloor = () => { const cur = imDay[dayIso] || {}; setImDay(Object.assign({}, imDay, { [dayIso]: Object.assign({}, cur, { floor: 1 }) })); buzz([80, 40, 80]); };
   const setWkField = (field, val) => { const cur = imWk[weekMonday] || {}; setImWk(Object.assign({}, imWk, { [weekMonday]: Object.assign({}, cur, { [field]: val }) })); };
 
@@ -2579,20 +2648,25 @@ export default function App() {
     setReadyMap(Object.assign({}, readyMap, { [dk]: checkReady(a) })); };
   const readyNow = readyMap[dk] || checkReady(checkA) || "";
 
-  const sessProps = { macro: shown.macro, week: shown.week, day: shown.day, isCurrent: isToday, done, setDone, log, setLog, maxes, bw,
-    ergUnit: st.ergUnit || "w", peakHR, morning, weekDates, mFlag,
-    ready: readyNow, setReady: (val) => setReadyMap(Object.assign({}, readyMap, { [dk]: val })),
+  const todayProps = { macro: shown.macro, week: shown.week, day: shown.day, isToday, shownIso, shownFuture,
+    done, setDone, log, setLog, maxes, bw,
+    ergUnit: st.ergUnit || "w", peakHR, morning, setMorning, weekDates, st,
+    imRec: imDay[shownIso] || {},
+    setTick: tickOn(shownIso), imStreak: IM.streak, imWeek,
+    ready: readyNow,
     sparPrev: !!sparMap[pdk], sparThis: !!sparMap[dk], setSparThis: (val) => setSparMap(Object.assign({}, sparMap, { [dk]: val })),
     swapped: !!swapMap[dk], setSwapped: (val) => setSwapMap(Object.assign({}, swapMap, { [dk]: val })),
     box: boxMap[dk] || "", setBox: (val) => setBoxMap(Object.assign({}, boxMap, { [dk]: val })),
     note: notes[dk] || "", setNote: (val) => setNotes(Object.assign({}, notes, { [dk]: val })),
     openProto: setProto, startTimer: T.start, openPlates: setPlates, onSetMax, autoRest: st.autoRest,
-    openFlow: () => setFlow(true), goIron: () => { setTab("iron"); setIsub("hell"); }, weekStats, addBody,
-    calis, setCalis, taper: taperNow,
-    rangeWeek: shownRangeWeek, openHome: () => setTool({ kind: "homeblock" }), campLabel,
+    goIron: () => { setTab("iron"); setIsub("hell"); }, weekStats, addBody,
+    calis, setCalis, taper: taperNow, checkA, setCheckA,
+    openTool: (t) => setTool(t.kind === "rangetests" ? { kind: "rangetests", macro: shown.macro, week: shown.week } : t),
+    sound: st.sound, flowAt, setFlowAt,
+    rangeWeek: shownRangeWeek, campLabel,
     openRangeTests: () => setTool({ kind: "rangetests", macro: shown.macro, week: shown.week }) };
 
-  const exportData = async () => JSON.stringify({ st, done, log, maxes, maxHist, body, readyMap, sparMap, swapMap, boxMap, notes, forge, fweek, hwLog, imDay, imSit, imHard, imWk, calis, morning, photos, fuel });
+  const exportData = async () => JSON.stringify({ st, done, log, maxes, maxHist, body, readyMap, sparMap, swapMap, boxMap, notes, forge, fweek, hwLog, imDay, imSit, imHard, imWk, calis, morning, photos, fuel, flowAt });
   const importData = (s) => { try { const d = JSON.parse(s || "{}");
     setSt(Object.assign(DEF_ST(), d.st || {}, { v12: true }));
     setDone(d.st && d.st.v12 ? (d.done || {}) : migrateDone(d.done || {})); setLog(d.log || {}); setMaxes(d.maxes || {}); setMaxHist(d.maxHist || []); setBody(d.body || []);
@@ -2601,6 +2675,7 @@ export default function App() {
     setImDay(d.imDay || {}); setImSit(d.imSit || []); setImHard(d.imHard || []); setImWk(d.imWk || {});
     setCalis(Object.assign(DEF_CALIS(), d.calis || {}));
     setMorning(d.morning || {}); setPhotos(d.photos || {}); setFuel(d.fuel || null);
+    setFlowAt(d.flowAt || {});
     setShowSettings(false); } catch (e) {} };
 
   const TABS = [["today", "TODAY"], ["week", "WEEK"], ["track", "TRACK"], ["iron", "IRON"], ["plan", "PLAN"]];
@@ -2617,7 +2692,6 @@ export default function App() {
       {proto ? <ProtoSheet id={proto} close={() => setProto(null)} /> : null}
       {showSettings ? <Settings st={st} setSt={setSt} current={current} L={L} exportData={exportData} importData={importData} close={() => setShowSettings(false)} IM={IM} calis={calis} setCalis={setCalis} campWeek={st.camp ? Math.max(1, Math.min(CAMP_L, campWeekOf(campStart, new Date()))) : 0}
         morning={morning} dayIso={dayIso} fuel={fuel} setFuel={setFuel} importFuelText={importFuelText} /> : null}
-      {flow ? <Flow {...sessProps} close={() => setFlow(false)} /> : null}
       {tool ? (
         tool.kind === "breath" ? <BreathTool id={tool.id} sound={st.sound} onClose={() => setTool(null)}
             onBolt={(secs) => setWkField("bolt", secs)} boltNow={num((imWk[weekMonday] || {}).bolt)}
@@ -2630,10 +2704,6 @@ export default function App() {
             onSave={(e) => setWkField("cold", Object.assign({ stamp: String(Date.now()) }, e))} />
         : tool.kind === "heat" ? <HeatTimer sound={st.sound} onClose={() => setTool(null)} />
         : tool.kind === "floor" ? <FloorTool sound={st.sound} onClose={() => setTool(null)} onDone={imFloor} />
-        : tool.kind === "morning5" ? <MorningFiveTool sound={st.sound} onClose={() => setTool(null)} />
-        : tool.kind === "range" ? <RangeTool rangeWeek={rangeWeek} sound={st.sound} onClose={() => setTool(null)} />
-        : tool.kind === "homeblock" ? <RangeSheet rangeWeek={shownRangeWeek} onClose={() => setTool(null)}
-            onOpenRange={() => setTool({ kind: "range" })} onOpenMorning={() => setTool({ kind: "morning5" })} />
         : tool.kind === "rangetests" ? (() => { const k = rangeKey(tool.macro || current.macro, tool.week || current.week);
             return <RangeTests week={tool.week || current.week} rangeWeek={rangeWeekOf(tool.macro || current.macro, tool.week || current.week)}
               get={(id) => rangeGet(k, id)} put={(id, v) => rangePut(k, id, v)} onClose={() => setTool(null)} />; })()
@@ -2669,18 +2739,10 @@ export default function App() {
                 {current.done ? <Card ac={C.moss}><Eye c={C.moss}>The camp is over</Eye><Btn small c={C.moss} fill s={{ marginTop: 4 }} on={() => setShowSettings(true)}>OPEN SETTINGS</Btn></Card> : null}
                 {noCampWork ? <Card ac={C.brass}><Eye c={C.brass}>First — your working weights</Eye><Btn small c={C.brass} fill s={{ marginTop: 4 }} on={() => setTab("track")}>SET THE WORKING WEIGHTS</Btn></Card> : null}
                 {noMaxes ? <Card ac={C.brass}><Eye c={C.brass}>First — your numbers</Eye><Btn small c={C.brass} fill s={{ marginTop: 4 }} on={() => setTab("track")}>ENTER MAXES</Btn></Card> : null}
-                {isToday ? <IronToday IM={IM} part="head" /> : null}
-                {isToday ? <IronToday IM={IM} part="waking" /> : null}
-                {!shownFuture ? <DailyCheck answers={checkA} setAnswers={setCheckA} /> : null}
-                {!shownFuture ? <MorningCard dayIso={shownIso} isToday={isToday} morning={morning} setMorning={setMorning} st={st} camp={!!st.camp} /> : null}
-                <Session {...sessProps} />
-                {shownPhotoDay ? <PhotoPrompt camp={!!st.camp} week={shown.week} future={shownFuture} done={!!(photosShown.front || photosShown.side || photosShown.back)}
-                  onOpen={() => { setPhotoDate(shownIso); setTab("track"); setTrackSub("photos"); }} /> : null}
-                {isToday ? <IronToday IM={IM} part="site" /> : null}
-                {isToday ? <IronToday IM={IM} part="lunch" /> : null}
-                {isToday ? <IronToday IM={IM} part="shower" /> : null}
-                {isToday ? <IronToday IM={IM} part="evening" /> : null}
-                {isToday && IM.isSunday ? <IronToday IM={IM} part="sunday" /> : null}
+                <Today {...todayProps} photoPrompt={shownPhotoDay
+                  ? <PhotoPrompt camp={!!st.camp} week={shown.week} future={shownFuture} done={!!(photosShown.front || photosShown.side || photosShown.back)}
+                      onOpen={() => { setPhotoDate(shownIso); setTab("track"); setTrackSub("photos"); }} />
+                  : null} />
               </div>) : null}
             {tab === "week" ? <WeekView view={vw} setView={setView} current={current} setCurrent={setCurrent} done={done} L={L} weekDoneMap={weekDoneMap} campStart={campStart} fight={!!st.campFight}
               openDay={(d) => { setSelDay({ macro: vw.macro, week: vw.week, day: d }); setTab("today"); }} /> : null}

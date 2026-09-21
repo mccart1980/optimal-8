@@ -1,45 +1,13 @@
-import React, { useMemo, useState } from "react";
+import React from "react";
 import { C, dsp, bdy, mno, num, Card, Eye, Lab, Fld, Btn, Chip, Note, Seg } from "./ui.jsx";
-import { Pacer, Sheet } from "./im-ui.jsx";
-import {
-  RANGE_INTRO, RANGE_HOW, RANGE_HIPS, RANGE_SKIP, KEEP_LINE, MORNING_FIVE_HOW, MORNING_FIVE,
-  RANGE_SECTIONS, RANGE_STEPS, KEEP_STEPS, TEST_INTRO, RANGE_TESTS, RANGE_CM,
-  isKeepWeek, rangeTitle, stepsFor, totalOf,
-} from "./range.js";
+import { Sheet } from "./im-ui.jsx";
+import { TEST_INTRO, RANGE_TESTS, RANGE_CM } from "./range.js";
 
 /* ================================================================
-   THE HOME BLOCK — the screens for THE MORNING FIVE, RANGE, THE KEEP
-   and the four tests. One guided timer engine (the Pacer) behind all
-   of them, timestamp-based, holding a wake lock while it runs.
+   THE FOUR RANGE TESTS — the screen they are entered on, from the
+   Sunday weekly check, and the charts TRACK reads them back on.
+   THE MORNING FIVE and RANGE itself run inside TODAY's flow.
    ================================================================ */
-
-const mmssL = (s) => Math.floor(s / 60) + ":" + (s % 60 < 10 ? "0" : "") + (s % 60);
-
-/* --- THE MORNING FIVE · a 5-minute guided timer --- */
-export function MorningFiveTool({ sound, onClose }) {
-  const steps = useMemo(() => MORNING_FIVE.map((x) => Object.assign({}, x)), []);
-  return (
-    <Pacer steps={steps} sound={sound} title="THE MORNING FIVE" sub="ON WAKING · JOINT CIRCLES · 5 MIN" colour={C.moss} onClose={onClose} />);
-}
-
-/* --- RANGE / THE KEEP · the evening guided timer --- */
-export function RangeTool({ rangeWeek, sound, onClose }) {
-  const keep = isKeepWeek(rangeWeek);
-  const [full, setFull] = useState(false);
-  const steps = useMemo(() => stepsFor(rangeWeek, full), [rangeWeek, full]);
-  const total = totalOf(steps);
-  return (
-    <Pacer steps={steps} sound={sound} title={keep ? "THE KEEP" : "RANGE"}
-      sub={(keep ? "EVERY EVENING, FOR GOOD · " : "EVERY EVENING · ") + mmssL(total)} colour={C.violet} onClose={onClose}
-      footer={
-        <div>
-          {keep ? null : (
-            <div style={{ marginBottom: 8 }}>
-              <Lab>Length</Lab>
-              <Seg opts={[[0, "20 MIN"], [1, "FULL HOLDS · " + mmssL(totalOf(stepsFor(rangeWeek, true)))]]} val={full ? 1 : 0} on={(v) => setFull(!!v)} c={C.violet} />
-            </div>)}
-        </div>} />);
-}
 
 /* --- THE FOUR TESTS · weeks 1, 5, 9 and 13 --- */
 export function RangeTests({ week, rangeWeek, get, put, onClose }) {
@@ -117,34 +85,4 @@ export function RangeTrack({ weeks, get }) {
         <Note>If nothing has moved by week 5, the holds aren't long enough or the exhale isn't happening; fix that before adding anything.</Note>
       </Card>
     </div>);
-}
-
-/* --- the home block, written out: the protocol sheet's RANGE half --- */
-export function RangeSheet({ rangeWeek, onClose, onOpenRange, onOpenMorning }) {
-  const keep = isKeepWeek(rangeWeek);
-  const Move = ({ l, s }) => (
-    <div style={{ display: "flex", gap: 10, alignItems: "baseline", padding: "7px 0", borderBottom: "1px solid " + C.line }}>
-      <span style={Object.assign({}, bdy, { flex: 1, minWidth: 0, fontSize: 12.5, color: C.chalk, lineHeight: 1.4 })}>{l}</span>
-      <span style={Object.assign({}, mno, { fontSize: 9.5, color: C.brass, flexShrink: 0 })}>{s}s</span>
-    </div>);
-  return (
-    <Sheet title="THE HOME BLOCK" sub={"THE MORNING FIVE · " + rangeTitle(rangeWeek) + " · THE SKILL BLOCK"} colour={C.violet} onClose={onClose}>
-      <Card ac={C.moss}>
-        <Eye c={C.moss}>The morning five · 5 min</Eye>
-        {MORNING_FIVE.map((s, i) => <Move key={i} l={s.l} s={s.s} />)}
-        <Btn on={onOpenMorning} c={C.moss} fill s={{ width: "100%", marginTop: 10 }}>▶ THE MORNING FIVE · 5 MIN</Btn>
-      </Card>
-      {keep ? (
-        <Card ac={C.violet}>
-          <Eye c={C.violet}>The keep · every evening · 10 min</Eye>
-          {KEEP_STEPS.map((s, i) => <Move key={i} l={s.l} s={s.s} />)}
-          <Btn on={onOpenRange} c={C.violet} fill s={{ width: "100%", marginTop: 10 }}>▶ THE KEEP · 10 MIN</Btn>
-        </Card>) : (
-        RANGE_SECTIONS.map((sec, si) => (
-          <Card key={si} ac={sec.c}>
-            <Eye c={sec.c}>{sec.n} · {sec.mins} min</Eye>
-            {RANGE_STEPS.filter((s) => s.sec === si).map((s, i) => <Move key={i} l={s.l} s={s.s20 == null ? s.s : s.s20} />)}
-            {si === RANGE_SECTIONS.length - 1 ? <Btn on={onOpenRange} c={C.violet} fill s={{ width: "100%", marginTop: 10 }}>▶ RANGE · 20 MIN</Btn> : null}
-          </Card>)))}
-    </Sheet>);
 }

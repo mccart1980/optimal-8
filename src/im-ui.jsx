@@ -1,15 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { C, dsp, bdy, mno, num, mmss, buzz, Card, Eye, Lab, Fld, Btn, Chip, Note, Seg, Tick, OpenBtn } from "./ui.jsx";
+import { C, dsp, bdy, mno, num, mmss, buzz, Card, Eye, Lab, Fld, Btn, Chip, Note, Seg } from "./ui.jsx";
 import {
-  SAFETY, CARDINAL, FLOOR_TEXT, NEVER_TWICE, ONE_THING_Q, REVIEW_Q, SIGH_HOW, ONE_THING_HOW, REVIEW_HOW,
-  SITE, NOSE_ALL_DAY, WALKING, BREATH_STAGE, PRESETS, presetById, MED_STAGE, HOW_TO_SIT, THE_CATCH,
-  GOODWILL_LINE, DEATH_LINE, ELEVEN, GUIDED, guidedById, LADDER, CEILING, ARROWS, TESTS5, COLLISION,
-  GATES, PROGRESSION, dayDone, sitPlan, testForWeek,
+  SAFETY, CARDINAL, FLOOR_TEXT, REVIEW_Q, WALKING, BREATH_STAGE, PRESETS, presetById,
+  MED_STAGE, HOW_TO_SIT, THE_CATCH, GOODWILL_LINE, DEATH_LINE, ELEVEN, GUIDED, guidedById,
+  LADDER, CEILING, ARROWS, TESTS5, COLLISION, GATES, PROGRESSION, sitPlan, testForWeek,
 } from "./im-data.js";
-import {
-  MORNING_FIVE_HOW, MORNING_FIVE_ROWS, isKeepWeek, isTestWeek, rangeTitle, rangeMins, rangeLine,
-  stepsFor, totalOf, moveName, moveHow, secsLabel,
-} from "./range.js";
 
 /* ================================================================
    BELLS — Web Audio only, no audio files. Vibration where available.
@@ -498,165 +493,6 @@ export function FloorTool({ sound, onClose, onDone }) {
 }
 
 /* ================================================================
-   TODAY — the Iron Mind day, woven into the training day
-   ================================================================ */
-const SlotHead = ({ n, s, c }) => (
-  <div style={{ marginBottom: 4 }}>
-    <div style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1.5, color: c || C.chalk })}>{n}</div>
-    {s ? <div style={Object.assign({}, mno, { fontSize: 8.5, color: C.ash, letterSpacing: 1.2, marginTop: 2 })}>{s}</div> : null}
-  </div>);
-
-/* ---------------- THE EVENING ROW ----------------
-   Number · move · reps or hold time, and a tick. The one line on how to
-   do it opens on a tap, and nowhere else. */
-function MoveRow({ no, n, s, how, ok, on, c, right }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <div style={{ padding: "7px 0", borderBottom: "1px solid " + C.line }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-        <button onClick={on} aria-label={(ok ? "Untick " : "Tick ") + n}
-          style={Object.assign({}, mno, { width: 40, height: 40, flexShrink: 0, borderRadius: 5, cursor: "pointer", fontSize: 12, fontWeight: 700, background: ok ? (c || C.moss) : "transparent", color: ok ? C.ink : C.ash, border: "1px solid " + (ok ? (c || C.moss) : C.line) })}>{ok ? "✓" : no}</button>
-        <span onClick={() => how && setOpen(!open)} style={{ flex: 1, minWidth: 0, cursor: how ? "pointer" : "default" }}>
-          <div style={Object.assign({}, bdy, { fontSize: 13.5, fontWeight: 600, color: ok ? C.ash : C.chalk, lineHeight: 1.3, textDecoration: ok ? "line-through" : "none" })}>{n}</div>
-          {s ? <div style={Object.assign({}, mno, { fontSize: 9.5, color: C.brass, marginTop: 2, letterSpacing: .6 })}>{s}</div> : null}
-        </span>
-        {right || null}
-      </div>
-      {how && open ? <div className="rise" style={Object.assign({}, bdy, { fontSize: 12, color: C.ash, lineHeight: 1.45, padding: "5px 0 2px 50px" })}>{how}</div> : null}
-    </div>);
-}
-
-export function IronToday({ IM, part }) {
-  const { st, dayIso, isSunday, rec, tick, imWeek, open, floorOpen } = IM;
-  const ok = (k) => !!(rec.ticks && rec.ticks[k]);
-  const med = st.medStage || 1, br = st.breathStage || 1, hl = st.hardLevel || 1;
-  const BS = BREATH_STAGE[br], L = LADDER[hl], W = WALKING[br];
-  const rw = IM.rangeWeek || 1;
-  const plan = sitPlan(med, imWeek, isSunday, st.sitLen);
-
-  if (part === "waking") {
-    let n = 0;
-    return (
-      <Card ac={C.moss}>
-        <SlotHead n="ON WAKING" s="7 MIN" c={C.moss} />
-        <MoveRow no={++n} ok={ok("sighs")} on={() => tick("sighs")} n="Physiological sighs" s="× 3" how={SIGH_HOW} c={C.moss}
-          right={<OpenBtn on={() => open({ kind: "breath", id: "sigh3" })} label="Open the pacer" c={C.moss} />} />
-        <MoveRow no={++n} ok={ok("onething")} on={() => tick("onething")} n="The one thing" s="4 questions" how={ONE_THING_Q.join(" ")} c={C.moss} />
-        <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, letterSpacing: 1.2, padding: "10px 0 2px" })}>THE MORNING FIVE · 5 MIN</div>
-        {MORNING_FIVE_ROWS.map((r) => <MoveRow key={r.id} no={++n} ok={ok(r.id)} on={() => tick(r.id)} n={r.n} s={r.s} how={r.how} c={C.moss} />)}
-        <Btn on={() => { tick("morning5"); open({ kind: "morning5" }); }} c={C.moss} fill={!ok("morning5")} s={{ width: "100%", marginTop: 10 }}>▶ THE MORNING FIVE · 5 MIN</Btn>
-        {isSunday ? <MoveRow no={++n} ok={ok("bolt")} on={() => tick("bolt")} n="BOLT score" s="one hold" how={presetById("bolt").how} c={C.cobalt}
-          right={<OpenBtn on={() => open({ kind: "breath", id: "bolt" })} label="Open the BOLT stopwatch" c={C.cobalt} />} /> : null}
-      </Card>);
-  }
-
-  if (part === "site") {
-    let n = 0;
-    return (
-      <Card ac={C.brass}>
-        <SlotHead n="ON SITE" s="FREE" c={C.brass} />
-        <MoveRow no={++n} ok={ok("reset")} on={() => tick("reset")} n={SITE[0].n} s="2 sighs · 30 s on one point" how={SITE[0].s} c={C.brass} />
-        <MoveRow no={++n} ok={ok("walk")} on={() => tick("walk")} n={"The walking practice — " + W.n} s={W.tag || ""} how={W.s} c={C.brass}
-          right={W.tool ? <OpenBtn on={() => open({ kind: "guided", id: W.tool })} label="Open walking meditation" c={C.brass} /> : null} />
-        {SITE.slice(1).map((x) => <MoveRow key={x.id} no={++n} ok={ok(x.id)} on={() => tick(x.id)} n={x.n} how={x.s} c={C.brass} />)}
-      </Card>);
-  }
-
-  if (part === "lunch") return (
-    <Card ac={C.cobalt}>
-      <SlotHead n="LUNCH, IN THE VAN" s="5–10 MINUTES" c={C.cobalt} />
-      <MoveRow no={1} ok={ok("lunch")} on={() => tick("lunch")} n={"The breath practice — " + BS.n} s={BS.lunchLine} c={C.cobalt} />
-      <div style={{ marginTop: 8 }}>
-        {BS.lunch.map((pid) => { const P = presetById(pid); if (!P) return null;
-          return (
-            <button key={pid} onClick={() => open({ kind: "breath", id: pid })} style={{ display: "flex", width: "100%", gap: 10, alignItems: "center", textAlign: "left", background: "transparent", border: "1px solid " + C.line, borderRadius: 5, padding: "9px 11px", marginBottom: 6, cursor: "pointer", minHeight: 44 }}>
-              <span style={{ flex: 1, minWidth: 0 }}>
-                <div style={Object.assign({}, bdy, { fontSize: 13.5, fontWeight: 600, color: C.chalk })}>{P.n}</div>
-                <div style={Object.assign({}, mno, { fontSize: 8.5, color: C.ash, marginTop: 2, letterSpacing: 1 })}>{P.tag} · {P.mins}</div>
-              </span>
-              <span style={Object.assign({}, mno, { fontSize: 14, color: P.c })}>▸</span>
-            </button>); })}
-      </div>
-    </Card>);
-
-  if (part === "shower") return (
-    <Card ac={C.cobalt}>
-      <SlotHead n="THE SHOWER AFTER WORK" s={L.n + " · " + L.freq.toUpperCase()} c={C.cobalt} />
-      <MoveRow no={1} ok={ok("cold")} on={() => tick("cold")} n="The cold slot" s={L.coldTag || ""} how={L.cold} c={C.cobalt}
-        right={<OpenBtn on={() => open({ kind: "cold" })} label="Open the cold timer" c={C.cobalt} />} />
-    </Card>);
-
-  if (part === "evening") {
-    const moves = stepsFor(rw, false);
-    const skill = IM.skill && IM.skill.show ? IM.skill : null;
-    const total = Math.round(totalOf(moves) / 60) + (skill ? skill.mins : 0) + plan.mins + 2;
-    let n = 0;
-    return (
-      <Card ac={C.violet}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8, marginBottom: 6 }}>
-          <span style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1.5, color: C.violet })}>EVENING</span>
-          <span style={Object.assign({}, mno, { fontSize: 10, color: C.brass, letterSpacing: 1 })}>{total} MIN</span>
-        </div>
-
-        <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, letterSpacing: 1.2, padding: "6px 0 2px" })}>{rangeTitle(rw)} · {rangeMins(rw)} MIN</div>
-        {moves.map((m, i) => <MoveRow key={i} no={++n} ok={ok("rng" + i)} on={() => tick("rng" + i)} n={moveName(m.l)} s={secsLabel(m.s)} how={moveHow(m.l)} c={C.violet} />)}
-        <Btn on={() => { tick("mobility"); open({ kind: "range" }); }} c={C.violet} fill={!ok("mobility")} s={{ width: "100%", margin: "10px 0" }}>▶ {rangeTitle(rw)} · {rangeMins(rw)} MIN</Btn>
-        {isTestWeek(rw) ? <Btn on={() => open({ kind: "rangetests" })} c={C.oxide} s={{ width: "100%", marginBottom: 10 }}>▶ THE FOUR RANGE TESTS</Btn> : null}
-
-        {skill ? (
-          <div>
-            <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, letterSpacing: 1.2, padding: "6px 0 2px" })}>{skill.n} · {skill.mins} MIN</div>
-            {skill.rows.map((r) => <MoveRow key={r.id} no={++n} ok={ok(r.id)} on={() => tick(r.id)} n={r.n} s={r.s} how={r.how} c={C.brass} />)}
-          </div>) : null}
-
-        <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, letterSpacing: 1.2, padding: "10px 0 2px" })}>THE SIT · {plan.mins} MIN</div>
-        <MoveRow no={++n} ok={ok("sit")} on={() => tick("sit")} n="The sit" s={plan.mins + " min"} how={(MED_STAGE[med] || MED_STAGE[1]).line} c={C.violet}
-          right={<OpenBtn on={() => open({ kind: "sit" })} label="Open the sit timer" c={C.violet} />} />
-
-        <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, letterSpacing: 1.2, padding: "10px 0 2px" })}>THE REVIEW · 2 MIN</div>
-        <MoveRow no={++n} ok={ok("review")} on={() => tick("review")} n="The review" s="3 questions" how={REVIEW_Q.join(" ")} c={C.violet} />
-        <div style={{ paddingLeft: 50, marginTop: 6 }}>
-          {REVIEW_Q.map((q, i) => <div key={i} style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, padding: "3px 0", lineHeight: 1.4 })}><span style={Object.assign({}, mno, { fontSize: 9, color: C.violet })}>{i + 1} · </span>{q}</div>)}
-        </div>
-      </Card>);
-  }
-
-  if (part === "sunday") return (
-    <Card ac={C.brass}>
-      <SlotHead n="SUNDAY" s="+15 MINUTES" c={C.brass} />
-      <MoveRow no={1} ok={ok("numbers")} on={() => tick("numbers")} n="The four numbers" s="10 s each" c={C.brass} />
-      <div style={{ display: "flex", gap: 6, marginTop: 10, flexWrap: "wrap" }}>
-        {IM.four.map((x) => (
-          <div key={x[0]} style={{ flex: "1 1 40%", background: C.ink, border: "1px solid " + C.line, borderRadius: 5, padding: "9px 6px", textAlign: "center" }}>
-            <div style={Object.assign({}, mno, { fontSize: 7.5, color: C.ash, letterSpacing: 1 })}>{x[0]}</div>
-            <div style={Object.assign({}, mno, { fontSize: 19, fontWeight: 700, color: x[1] == null ? C.ash : C.brass })}>{x[1] == null ? "—" : x[1]}</div>
-          </div>))}
-      </div>
-    </Card>);
-
-  /* the header strip: streak, days this week, never miss twice, FLOOR */
-  const done = dayDone(rec);
-  return (
-    <Card ac={done ? C.moss : C.brass} s={{ padding: 0 }}>
-      <div style={{ padding: "12px 14px" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
-          <span style={Object.assign({}, dsp, { fontSize: 20, fontWeight: 800, letterSpacing: 1.5, color: C.chalk })}>IRON MIND</span>
-          <span style={Object.assign({}, mno, { fontSize: 9.5, color: C.ash })}>WEEK {imWeek}</span>
-        </div>
-        <div style={{ display: "flex", gap: 6, marginTop: 10 }}>
-          {[["STREAK", IM.streak], ["THIS WEEK", IM.weekDone + "/7"], ["DONE TODAY", done ? (rec.floor ? "FLOOR" : "YES") : "NO"]].map((x) => (
-            <div key={x[0]} style={{ flex: 1, background: C.ink, border: "1px solid " + C.line, borderRadius: 5, padding: "9px 4px", textAlign: "center" }}>
-              <div style={Object.assign({}, mno, { fontSize: 7.5, color: C.ash, letterSpacing: 1 })}>{x[0]}</div>
-              <div style={Object.assign({}, mno, { fontSize: 19, fontWeight: 700, color: done && x[0] === "DONE TODAY" ? C.moss : C.chalk })}>{x[1]}</div>
-            </div>))}
-        </div>
-        <Btn on={floorOpen} c={C.moss} fill={!done} s={{ width: "100%", marginTop: 10, fontSize: 15 }}>▶ THE FLOOR · 4 MINUTES</Btn>
-      </div>
-    </Card>);
-}
-const isFriday = (d) => { try { return new Date(d + "T00:00:00").getDay() === 5; } catch (e) { return false; } };
-
-/* ================================================================
    IRON TAB — BREATHE
    ================================================================ */
 export function BreatheView({ IM }) {
@@ -671,6 +507,13 @@ export function BreatheView({ IM }) {
         <div style={Object.assign({}, dsp, { fontSize: 21, fontWeight: 800, letterSpacing: 1.2, color: C.chalk })}>{BREATH_STAGE[br].n}</div>
         <div style={Object.assign({}, mno, { fontSize: 9.5, color: C.ash, marginTop: 3 })}>{BREATH_STAGE[br].weeks}</div>
         <Note c={C.chalk}>{BREATH_STAGE[br].gate}</Note>
+        {WALKING[br] ? (
+          <div style={{ marginTop: 12, borderTop: "1px solid " + C.line, paddingTop: 10 }}>
+            <Eye c={C.brass}>The walking practice</Eye>
+            <div style={Object.assign({}, bdy, { fontSize: 14, fontWeight: 700, color: C.chalk })}>{WALKING[br].n}</div>
+            <Note c={C.chalk}>{WALKING[br].s}</Note>
+            {WALKING[br].tool ? <Btn on={() => open({ kind: "guided", id: WALKING[br].tool })} c={C.brass} fill s={{ width: "100%", marginTop: 10 }}>▶ WALKING MEDITATION</Btn> : null}
+          </div>) : null}
         <Note>The road runs: calm → tolerate → control → power. In that order, with the gates cleared honestly. The heavy tools are earned, and they're earned by the slow ones. Change your stage in Settings — the app never advances it for you.</Note>
       </Card>
       {groups.map((g) => {
@@ -804,6 +647,12 @@ export function HardshipView({ IM }) {
           <Btn on={() => IM.open({ kind: "cold" })} c={C.cobalt} fill s={{ flex: 1 }}>▶ COLD</Btn>
           {L.heat ? <Btn on={() => IM.open({ kind: "heat" })} c={C.oxide} s={{ flex: 1 }}>▶ HEAT</Btn> : null}
         </div>
+      </Card>
+
+      <Card ac={C.moss}>
+        <Eye c={C.moss}>The floor</Eye>
+        <Note c={C.chalk} s={{ marginTop: 0 }}>{FLOOR_TEXT}</Note>
+        <Btn on={IM.floorOpen} c={C.moss} fill s={{ width: "100%", marginTop: 12 }}>▶ THE FLOOR · 4 MINUTES</Btn>
       </Card>
 
       <Card ac={C.oxide}><Eye c={C.oxide}>The operating teaching</Eye><Note c={C.chalk} s={{ marginTop: 0 }}>{ARROWS}</Note><Note c={C.oxide} bold>{CARDINAL}</Note></Card>
