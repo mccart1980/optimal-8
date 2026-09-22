@@ -1201,6 +1201,26 @@ describe("Optimal 8", () => {
     fireEvent.click(await screen.findByRole("button", { name: "THE SEASON" }));
   };
 
+  it("moves camp day one from settings, and reads a mid-week date back to its Monday", async () => {
+    await mount({ camp: true, program: "camp", campStart: "2026-09-07", start: "2026-08-31" });
+    fireEvent.click(screen.getByLabelText("Settings"));
+    const lab = await screen.findByText("Camp day one — the Monday week 1 starts on");
+    const field = lab.parentElement.querySelector("input");
+    expect(field.value).toBe("2026-09-07");
+    fireEvent.change(field, { target: { value: "2026-09-30" } });     // a Wednesday
+    await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-settings")).campStart).toBe("2026-09-28"));
+  });
+
+  it("hands camp day one to the fight date when there is one", async () => {
+    await mount({ camp: true, program: "camp", fightDate: "2027-03-13" });
+    fireEvent.click(screen.getByLabelText("Settings"));
+    const lab = await screen.findByText("Camp day one — the Monday week 1 starts on");
+    // it is shown, not typed into, and it says where it comes from
+    expect(lab.parentElement.querySelector("input")).toBeNull();
+    expect(within(lab.parentElement).getByText(/Mon,? 4 Jan/)).toBeInTheDocument();
+    expect(screen.getByText(/Move the fight date to move camp day one/)).toBeInTheDocument();
+  });
+
   it("dates the season backwards from the fight", async () => {
     await season({ program: "prep", fightDate: "2027-03-13", start: "2026-09-28" });
 

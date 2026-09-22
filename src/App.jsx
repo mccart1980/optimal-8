@@ -2246,8 +2246,16 @@ function Settings({ st, setSt, current, L, exportData, importData, close, IM, ca
           <div style={{ paddingLeft: 8 }}>
             <div style={{ padding: "12px 0", borderBottom: "1px solid " + C.line }}>
               <Lab>Camp day one — the Monday week 1 starts on</Lab>
-              <Fld type="date" v={st.campStart || CAMP_START_DEFAULT} on={(val) => { if (val) upd({ campStart: val }); }} a="left" />
-              <Note>Today reads as <span style={{ color: C.brass }}>camp week {campWeek}</span> of twelve. Week 1 is a full week, Monday to Sunday. Default: Monday 21 September 2026, with the fight on Tuesday 1 December.</Note>
+              {st.fightDate ? (
+                <div>
+                  <div style={Object.assign({}, mno, { fontSize: 19, color: C.chalk, background: C.ink, border: "1px solid " + C.line, borderRadius: 4, padding: "11px 8px", textAlign: "center", minHeight: 48 })}>
+                    {fmtDate(campStartFor(st.fightDate))}
+                  </div>
+                  <Note c={C.brass}>The fight date above sets this: the camp is the ten weeks that end on the fight. Move the fight date to move camp day one.</Note>
+                </div>
+              ) : (
+                <Fld type="date" v={st.campStart || CAMP_START_DEFAULT} on={(val) => { if (val) upd({ campStart: iso(mondayOf(parseISO(val))) }); }} a="left" />)}
+              <Note>Today reads as <span style={{ color: C.brass }}>camp week {campWeek}</span>. Week 1 is a full week, Monday to Sunday — a date mid-week is moved back to its Monday.</Note>
             </div>
             <div style={{ padding: "12px 0", borderBottom: "1px solid " + C.line }}>
               <Lab>Week 10 — the fork, Monday 23 November</Lab>
@@ -3147,7 +3155,7 @@ export default function App() {
       <div style={{ position: "fixed", left: 0, right: 0, bottom: 0, zIndex: 50, background: C.slab, borderTop: "1px solid " + C.line, paddingBottom: "env(safe-area-inset-bottom)" }}>
         <div style={{ display: "flex", maxWidth: 640, margin: "0 auto" }}>
           {TABS.map((x) => <button key={x[0]} onClick={() => { setTab(x[0]); setProto(null); }}
-            style={Object.assign({}, dsp, { flex: 1, fontSize: 11, fontWeight: 700, letterSpacing: .8, background: "transparent", border: "none", borderTop: "2px solid " + (tab === x[0] ? P.ac : "transparent"), color: tab === x[0] ? C.chalk : C.ash, padding: "12px 2px 14px", cursor: "pointer", minHeight: 50 })}>{x[1]}</button>)}
+            style={Object.assign({}, dsp, { flex: 1, fontSize: 14, fontWeight: 700, letterSpacing: .4, background: "transparent", border: "none", borderTop: "3px solid " + (tab === x[0] ? P.ac : "transparent"), color: tab === x[0] ? C.chalk : C.ash, padding: "12px 1px 14px", cursor: "pointer", minHeight: 52 })}>{x[1]}</button>)}
         </div>
       </div>
     </div>);
