@@ -1128,6 +1128,34 @@ describe("Optimal 8", () => {
     }
   }, 900000);
 
+  it("keeps every PREP day a running order, week by week", async () => {
+    for (let w = 1; w <= 16; w++) {
+      await mount({ program: "prep", start: weekStart(w) });
+      for (const d of DAYNAMES) {
+        fireEvent.click(screen.getByRole("button", { name: d }));
+        await waitFor(() => expect(screen.queryByText("LOADING…")).not.toBeInTheDocument());
+        sweepDay("PREP week " + w + " " + d);
+      }
+      cleanup();
+    }
+  }, 900000);
+
+  it("keeps a fight-dated PREP and the two easy weeks clean too", async () => {
+    await mount({ program: "prep", fightDate: "2026-12-19", start: weekStart(3) });
+    for (const d of DAYNAMES) {
+      fireEvent.click(screen.getByRole("button", { name: d }));
+      await waitFor(() => expect(screen.queryByText("LOADING…")).not.toBeInTheDocument());
+      sweepDay("Dated PREP " + d);
+    }
+    cleanup();
+    await mount({ program: "transition", fightDate: "2026-09-05", start: weekStart(1) });
+    for (const d of DAYNAMES) {
+      fireEvent.click(screen.getByRole("button", { name: d }));
+      await waitFor(() => expect(screen.queryByText("LOADING…")).not.toBeInTheDocument());
+      sweepDay("Transition " + d);
+    }
+  }, 600000);
+
   it("keeps the last ten days and an easy week clean too", async () => {
     await mount({ start: weekStart(16), lastTen: true });
     for (const d of DAYNAMES) {
@@ -1161,6 +1189,209 @@ describe("Optimal 8", () => {
     fireEvent.click(head("Bench Press"));
     fireEvent.click(await screen.findByText("Bench press"));
     expect(await screen.findByText(/Pins at chest height/)).toBeInTheDocument();
+  });
+
+  /* ================================================================
+     THE SEASON — one fight date dates everything
+     ================================================================ */
+
+  const season = async (extra) => {
+    await mount(extra);
+    fireEvent.click(screen.getByRole("button", { name: "WEEK" }));
+    fireEvent.click(await screen.findByRole("button", { name: "THE SEASON" }));
+  };
+
+  it("dates the season backwards from the fight", async () => {
+    await season({ program: "prep", fightDate: "2027-03-13", start: "2026-09-28" });
+
+    expect(await screen.findByText(/FIGHT · SAT,? 13 MAR/i)).toBeInTheDocument();
+    // prep hands over on the Saturday before the camp, and the camp is the ten weeks to the fight
+    expect(screen.getByText(/Prep ends \w{3},? 2 Jan/)).toBeInTheDocument();
+    expect(screen.getByText(/camp starts \w{3},? 4 Jan/)).toBeInTheDocument();
+    expect(screen.getByText(/14 prep weeks/)).toBeInTheDocument();
+
+    // the whole plan is on the strip: prep, test day, camp, fight, the two easy weeks
+    expect(screen.getByText("PREP WK 1")).toBeInTheDocument();
+    expect(screen.getByText("PREP WK 14")).toBeInTheDocument();
+    expect(screen.getByText("TEST DAY")).toBeInTheDocument();
+    expect(screen.getByText("CAMP WK 1")).toBeInTheDocument();
+    expect(screen.getByText("FIGHT")).toBeInTheDocument();
+    expect(screen.getByText("TRANSITION WK 2")).toBeInTheDocument();
+  });
+
+  it("truncates PREP from the front when there is less room", async () => {
+    // ten weeks of room instead of fourteen
+    await season({ program: "prep", fightDate: "2027-03-13", start: "2026-10-26" });
+    expect(await screen.findByText(/10 prep weeks/)).toBeInTheDocument();
+    expect(screen.getByText(/the first 4 of the calendar cut from the front/)).toBeInTheDocument();
+    expect(screen.getByText("PREP WK 10")).toBeInTheDocument();
+    expect(screen.queryByText("PREP WK 11")).not.toBeInTheDocument();
+  });
+
+  it("runs PREP in its sixteen-week form with no fight date", async () => {
+    await season({ program: "prep" });
+    expect(await screen.findByText("NO FIGHT DATE")).toBeInTheDocument();
+    expect(screen.getByText("PREP WK 16")).toBeInTheDocument();
+    expect(screen.queryByText("PREP WK 17")).not.toBeInTheDocument();
+    // the blocks the sixteen-week form names
+    ["ACCUMULATE", "INTENSIFY", "CONVERT", "TEST WEEK"].forEach((n) => expect(screen.getAllByText(n).length).toBeGreaterThan(0));
+  });
+
+  it("re-dates the season when the fight date moves, and says which weeks changed", async () => {
+    await season({ program: "prep", fightDate: "2027-03-20", prevFight: "2027-03-13", start: "2026-09-28" });
+    expect(await screen.findByText(/The date moved/i)).toBeInTheDocument();
+    expect(screen.getByText(/weeks changed/)).toBeInTheDocument();
+    expect(screen.getByText(/camp starts \w{3},? 11 Jan/)).toBeInTheDocument();
+  });
+
+  /* ================================================================
+     PREP — the calendar drives the session
+     ================================================================ */
+
+  it("renders PREP week 3's trap bar with the slow-lowering cue", async () => {
+    await mount({ program: "prep", start: "2026-08-24" });      // the fixed Wednesday is week 3
+    fireEvent.click(screen.getByRole("button", { name: "WED" }));
+
+    fireEvent.click(await findHead("Trap Bar Deadlift"));
+    // the phase is on the block, and the week's own line with it
+    expect(await screen.findByText("SLOW LOWERING · 5 s down")).toBeInTheDocument();
+    expect(screen.getAllByText("4 × 6 @ 72%").length).toBeGreaterThan(0);
+    // and the cue says what slow lowering is
+    fireEvent.click(screen.getByText("Trap bar deadlift"));
+    expect(await screen.findByText(/lower the bar to the floor over a full five seconds/i)).toBeInTheDocument();
+  });
+
+  it("moves the lift through its phases as the calendar says", async () => {
+    const phases = [["2026-08-24", 3, "SLOW LOWERING · 5 s down"], ["2026-08-03", 6, "NORMAL TEMPO"],
+      ["2026-07-27", 7, "PAUSED · 3 s hold"], ["2026-07-06", 10, "MAX SINGLE · pins set"]];
+    for (const [start, , name] of phases) {
+      await mount({ program: "prep", start });
+      fireEvent.click(screen.getByRole("button", { name: "WED" }));
+      fireEvent.click(await findHead("Trap Bar Deadlift"));
+      expect(await screen.findByText(name)).toBeInTheDocument();
+      cleanup();
+    }
+  });
+
+  it("puts the movement session on Wednesday and Saturday evenings in the build", async () => {
+    await mount({ program: "prep", start: "2026-08-24" });
+    expect(await screen.findByText("The movement session")).toBeInTheDocument();
+    // and the accumulation block's carb top-up on Monday and Thursday
+    fireEvent.click(screen.getByRole("button", { name: "THU" }));
+    expect(await screen.findByText("Carb top-up · 17:00")).toBeInTheDocument();
+  });
+
+  /* ================================================================
+     LOADING BY BAR SPEED
+     ================================================================ */
+
+  it("takes 5% off when the first work set is slower than the phase target", async () => {
+    localStorage.setItem("o8s-maxes", JSON.stringify({ tbdl: 200, squat: 180, bench: 120, pp: 80 }));
+    await mount({ program: "prep", start: "2026-08-24" });
+    fireEvent.click(screen.getByRole("button", { name: "WED" }));
+    fireEvent.click(await findHead("Trap Bar Deadlift"));
+
+    // the trap bar's accumulation target, from the document's typical numbers
+    expect(await screen.findByText("FIRST WORK SET · TARGET 0.65 M/S")).toBeInTheDocument();
+    expect(screen.getByText(/RACK IT AT 20% SLOWER THAN THE FIRST REP/)).toBeInTheDocument();
+
+    fireEvent.change(screen.getByPlaceholderText("m/s"), { target: { value: "0.55" } });
+    expect(await screen.findByText("TAKE 5% OFF")).toBeInTheDocument();
+    // and the remaining sets are recalculated: 72% of 200 is 145, less 5% is 137.5
+    expect(screen.getByText(/at 137.5 kg/)).toBeInTheDocument();
+
+    // on target it stays, and faster it goes up
+    fireEvent.change(screen.getByPlaceholderText("m/s"), { target: { value: "0.66" } });
+    expect(await screen.findByText("STAY")).toBeInTheDocument();
+    fireEvent.change(screen.getByPlaceholderText("m/s"), { target: { value: "0.80" } });
+    expect(await screen.findByText("ADD 2.5%")).toBeInTheDocument();
+  });
+
+  it("draws the phase targets off the profile once it has one", async () => {
+    localStorage.setItem("o8s-maxes", JSON.stringify({ tbdl: 200 }));
+    await mount({ program: "prep", start: "2026-08-24",
+      profiles: { tbdl: { points: [{ load: 50, speed: "1.00" }, { load: 60, speed: "0.90" }, { load: 70, speed: "0.80" }, { load: 80, speed: "0.70" }, { load: 85, speed: "0.65" }] } } });
+    fireEvent.click(screen.getByRole("button", { name: "WED" }));
+    fireEvent.click(await findHead("Trap Bar Deadlift"));
+    // the line through those points reads 0.78 at 72%
+    expect(await screen.findByText("FIRST WORK SET · TARGET 0.78 M/S")).toBeInTheDocument();
+    expect(screen.getByText("from your profile")).toBeInTheDocument();
+  });
+
+  /* ================================================================
+     READINESS, THE ENGINE AND THE GUIDE
+     ================================================================ */
+
+  it("turns the morning yellow on the numbers alone", async () => {
+    seedMornings(50, 80);
+    await mount({ program: "prep", start: "2026-08-24" });
+    // resting heart rate 6 over the baseline of 50 is a yellow with no taps at all
+    fireEvent.change(screen.getByPlaceholderText("bpm"), { target: { value: "56" } });
+    fireEvent.click(await screen.findByText("The check"));
+    expect(await screen.findByText(/^YELLOW/)).toBeInTheDocument();
+    expect(screen.getByText(/resting heart rate 6 over baseline/)).toBeInTheDocument();
+  });
+
+  it("carries last time's number and the target on every conditioning row", async () => {
+    localStorage.setItem("o8s-log", JSON.stringify({
+      "mPw1-tue-p_e1": { w: "240", kind: "rz", d: "2026-08-25" } }));
+    await mount({ program: "prep", start: "2026-08-24" });   // week 3 Tuesday runs the bursts
+    fireEvent.click(screen.getByRole("button", { name: "TUE" }));
+    fireEvent.click(await findHead("REPEAT BURSTS"));
+    expect(await screen.findByText(/LAST TIME · 240/)).toBeInTheDocument();
+    expect(screen.getByText("The sixteenth burst against the first. It should shrink.")).toBeInTheDocument();
+  });
+
+  it("renders the guide on its own tab, with this week at the top", async () => {
+    await mount({ program: "prep", start: "2026-08-24" });
+    fireEvent.click(screen.getByRole("button", { name: "GUIDE" }));
+
+    expect(await screen.findByText(/This week is ACCUMULATE/)).toBeInTheDocument();
+    expect(screen.getByText(/Tests this week: none/)).toBeInTheDocument();
+    // and guide.md itself, with its contents
+    expect(screen.getByText("CONTENTS")).toBeInTheDocument();
+    expect(screen.getAllByText("WHAT TO DO TODAY").length).toBeGreaterThan(0);
+    expect(screen.getByText(/Open the app. It shows one thing at a time/)).toBeInTheDocument();
+  });
+
+  it("names the tests on the weeks that carry them", async () => {
+    await mount({ program: "prep", start: "2026-08-03" });    // the lighter week with the tests on it
+    fireEvent.click(screen.getByRole("button", { name: "GUIDE" }));
+    expect(await screen.findByText(/This week is ACCUMULATE/)).toBeInTheDocument();
+    expect(screen.getByText(/the four range tests and the three flexibility tests/)).toBeInTheDocument();
+  });
+
+  /* ================================================================
+     READABILITY
+     ================================================================ */
+
+  it("scales the whole app from the text-size setting", async () => {
+    const zoomNow = () => Number(document.querySelector(".o8-root").style.getPropertyValue("--o8-zoom"));
+    await mount({ textSize: "n" });
+    const base = zoomNow();
+    expect(base).toBeGreaterThan(0);
+    cleanup();
+    await mount({ textSize: "l" });
+    const large = zoomNow();
+    cleanup();
+    await mount({ textSize: "xl" });
+    const largest = zoomNow();
+    // three steps, each scaling the whole app, on top of whatever the phone asks for
+    expect(large / base).toBeCloseTo(1.15, 2);
+    expect(largest / base).toBeCloseTo(1.32, 2);
+  });
+
+  it("keeps the flow readable and its targets big enough to hit", async () => {
+    await mount({ textSize: "xl" });
+    const rows = Array.from(document.querySelectorAll("[data-flow-id]"));
+    expect(rows.length).toBeGreaterThan(0);
+    rows.forEach((r) => {
+      const tick = r.querySelector("button[aria-label^='Tick '], button[aria-label^='Untick ']");
+      expect(parseFloat(tick.style.width)).toBeGreaterThanOrEqual(48);
+      expect(parseFloat(tick.style.height)).toBeGreaterThanOrEqual(48);
+      const name = r.children[1].children[r.children[1].children.length - 2];
+      expect(parseFloat(name.style.fontSize)).toBeGreaterThanOrEqual(18);
+    });
   });
 
   /* ================================================================

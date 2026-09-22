@@ -2,6 +2,7 @@ import React from "react";
 import { C, dsp, bdy, mno, num, Card, Eye, Lab, Fld, Btn, Chip, Note, Seg } from "./ui.jsx";
 import { Sheet } from "./im-ui.jsx";
 import { TEST_INTRO, RANGE_TESTS, RANGE_CM } from "./range.js";
+import { FLEX_TESTS } from "./prep.js";
 
 /* ================================================================
    THE FOUR RANGE TESTS — the screen they are entered on, from the
@@ -10,9 +11,9 @@ import { TEST_INTRO, RANGE_TESTS, RANGE_CM } from "./range.js";
    ================================================================ */
 
 /* --- THE FOUR TESTS · weeks 1, 5, 9 and 13 --- */
-export function RangeTests({ week, rangeWeek, get, put, onClose }) {
+export function RangeTests({ week, rangeWeek, get, put, onClose, flex }) {
   return (
-    <Sheet title="THE FOUR RANGE TESTS" sub={"RANGE WEEK " + rangeWeek + " · ON THE SUNDAY WEEKLY CHECK"} colour={C.oxide} onClose={onClose}>
+    <Sheet title={flex ? "THE RANGE AND FLEXIBILITY TESTS" : "THE FOUR RANGE TESTS"} sub={"RANGE WEEK " + rangeWeek + " · ON THE SUNDAY WEEKLY CHECK"} colour={C.oxide} onClose={onClose}>
       {RANGE_TESTS.map((t, i) => (
         <Card key={t.id} ac={t.c}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10 }}>
@@ -28,6 +29,18 @@ export function RangeTests({ week, rangeWeek, get, put, onClose }) {
                 : <Fld v={get(f.id)} on={(v) => put(f.id, v)} ph="—" />}
             </div>))}
         </Card>))}
+      {flex ? FLEX_TESTS.map((t, i) => (
+        <Card key={t.id} ac={t.c}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10 }}>
+            <span style={Object.assign({}, dsp, { fontSize: 18, fontWeight: 800, letterSpacing: 1.1, color: C.chalk })}>{i + 5}. {t.n}</span>
+            <Chip c={t.c}>TARGET {t.tgt.toUpperCase()}</Chip>
+          </div>
+          <Note c={C.chalk}>{t.how}</Note>
+          <div style={{ padding: "10px 0" }}>
+            <Lab>{t.n} ({t.u})</Lab>
+            <Fld v={get(t.id)} on={(v) => put(t.id, v)} ph="—" />
+          </div>
+        </Card>)) : null}
       <Btn on={onClose} c={C.oxide} fill s={{ width: "100%" }}>DONE — IT'S SAVED</Btn>
     </Sheet>);
 }

@@ -27,6 +27,106 @@ Once it's installed you can use it on a plane, in a basement gym, anywhere with
 no signal. When you next open it with a connection it quietly picks up any new
 version in the background.
 
+## THE SEASON
+
+One optional **fight date** in settings dates everything, backwards from the
+fight:
+
+- **CAMP** is the ten weeks that end on it — foundation 1, build 3, easy and
+  tests 1, peak 3, sharpen 1, fight week.
+- **PREP** runs to test day on the Saturday before the camp starts: fourteen
+  weeks when there are fourteen, otherwise as many as there are, with the
+  document's calendar truncated from the front so the weeks nearest the camp
+  are the ones that survive.
+- **TRANSITION** is the two easy weeks after the fight. The app offers them on
+  TODAY the day the fight is behind you.
+
+With no fight date, PREP runs its **sixteen-week form**: accumulate 1–6 (week 6
+lighter, with the tests), intensify 7–11 (max week 10, week 11 easy with the
+tests), convert 12–15, test week 16 — the same sessions, loads and rules, with
+a second normal-tempo week in accumulation and a second contrast week in
+conversion.
+
+**WEEK → THE SEASON** shows the whole plan as a dated strip: every prep week
+with its emphasis, test day, every camp week, the fight, then the two easy
+weeks. Move the fight date and it re-dates from the fight backwards and says
+how many weeks changed and which.
+
+The **Program** selector picks what runs today — PREP, CAMP, or **OPTIMAL 8
+FIGHTER**, which is the classic program, untouched.
+
+## PREP, AS THE DOCUMENT WRITES IT
+
+The calendar's weekly emphasis drives the session, not the other way round:
+
+- **The trap bar and the squat** move through their phases — slow lowering with
+  the five-second cue, normal tempo, paused with the three-second hold, fast,
+  the max single with its ramp, easy, contrast with the jump circuit, test week.
+  The phase is named on the block and the cue is on the lift.
+- **Monday's base** grows with the calendar, 45 to 60 minutes.
+- **Tuesday and Thursday** run the session types the calendar names, and never
+  the same quality twice in a week.
+- **Sunday's rounds** rest 90 seconds in accumulation and 60 from week 6.
+- **The size block** is on Thursday and Sunday in the accumulation weeks, and
+  nowhere else.
+- **The movement session** is a guided 30-minute timer on Wednesday and Saturday
+  evenings in accumulation, Saturday evenings after.
+- **The carb top-up** shows as one line on Monday and Thursday evenings in
+  accumulation. The fuel app owns the food.
+- **The sauna** comes in from week 6.
+- **The tests** fall on the weeks that carry them, and the three flexibility
+  tests — knee to wall, toe touch, seated rotation — sit with the four range
+  tests, each with its target.
+
+## LOADING BY BAR SPEED
+
+**Settings → THE PROFILE.** Five loads per lift and the mean speed the watch
+read at each. The app fits the line and takes the phase targets off it,
+replacing the document's typical numbers. Redraw it in the weeks the document
+says — week 1 and week 10 put the profile on the session itself.
+
+On every main lift's **first work set** the logger asks for the speed and
+answers with one of three things:
+
+- **STAY** — within 0.05 m/s of target, the load was right.
+- **TAKE 5% OFF** — more than 0.05 slower. The remaining sets are recalculated
+  and the new weight is on them.
+- **ADD 2.5%** — more than 0.05 faster. The remaining sets go up, and so does
+  next week.
+
+The row carries the stop threshold with it: 20% slower than the set's first rep
+on strength sets, 10% on fast and contrast sets. The rep count is a ceiling.
+
+## READINESS, WITH NUMBERS
+
+The morning check is the four taps **and** the two strap numbers together, on
+the document's thresholds: the rate 5 or more over baseline or HRV 12% or more
+under its seven-day average is a yellow on its own; four yes, three yellows
+running, or the rate 8+ over *and* HRV 15%+ under on the same morning is a red.
+The result is one line, and the day's adjustment is already applied — 7% off
+every load, the interval session at 90%, and in PREP the last block off the
+order. **RECALIBRATE BASELINE** is in settings, and the app asks for it on
+weeks 6 and 11.
+
+## THE ENGINE
+
+Every conditioning row shows the number from the last session of that type and
+the target the document sets for it, then logs this one.
+
+## THE GUIDE
+
+Its own tab: **guide.md** in large text with a table of contents, and a live
+panel at the top saying what this week's block is, what its emphasis is, and
+which tests fall in it.
+
+## READING IT AT 3AM
+
+Body text is 18px or more, the prescription on a session row is 24px, every tap
+target is at least 48px, and every colour used as text clears 4.5:1 against the
+background behind it. **Settings → Text size** has three steps that scale the
+whole app, and the phone's own text-size setting is read as well — the two
+multiply.
+
 ## TODAY — one guided flow
 
 TODAY is a single list. Every item of the day appears on it exactly once, in
@@ -339,6 +439,15 @@ npm run icons   # regenerate the app icons from scripts/generate-icons.mjs
   heat timers, the floor and the five tests.
 - `src/today.jsx` — TODAY's guided flow: the row shell, the running timer that
   steps through a list of moves, the four yes/no taps and the NEXT button.
+- `src/prep.js` — PREP as data: the fourteen-week calendar row by row, the lift
+  phases, the engine sessions with their targets, the seven session pages, the
+  movement session, the size block, the three flexibility tests, and the two
+  easy weeks after a fight.
+- `src/season.js` — the season: the camp's ten weeks off the fight date, PREP's
+  weeks off the camp, the sixteen-week form, the dated strip and what moved.
+- `src/velocity.js` — the load-velocity line, the phase targets it draws, the
+  first-work-set verdict and the stop thresholds.
+- `src/season-ui.jsx` — the SEASON strip, the GUIDE tab and the profile screen.
 - `src/mdview.jsx` — renders `optimal8fighter.md` and `iron-mind-v4-2.md` in the
   PLAN tab, offline, with a table of contents. Those two files are the source of
   truth; the app imports them directly.

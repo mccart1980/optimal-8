@@ -56,6 +56,51 @@ export function recalibrated(morning, today) {
 
 export const RHR_OVER = 5;        /* bpm over the week-1 baseline */
 export const HRV_UNDER = 0.12;    /* fraction below the seven-day average */
+export const RHR_RED = 8;         /* bpm over baseline that, with the HRV, is a red */
+export const HRV_RED = 0.15;      /* fraction below the average that, with the rate, is a red */
+
+/* ================================================================
+   READINESS — the four taps and the two numbers, together
+
+   GREEN: 0–1 yes, heart rate within 5 of baseline, HRV within 12% of
+   its seven-day average. YELLOW: 2–3 yes, or the rate 5+ over, or the
+   HRV 12%+ under. RED: 4 yes, three yellows running, or the rate 8+
+   over AND the HRV 15%+ under on the same morning.
+   ================================================================ */
+export function readiness(answers, flag, recent) {
+  const ans = answers || [];
+  const answered = ans.filter((x) => x === "y" || x === "n").length;
+  const yes = ans.filter((x) => x === "y").length;
+  const f = flag || {};
+  const b = f.base || {}, a7 = f.avg7 || {};
+  const over = f.rhr != null && b.rhr != null ? f.rhr - b.rhr : null;
+  const under = f.hrv != null && a7.hrv ? 1 - f.hrv / a7.hrv : null;
+  const numbersIn = over != null || under != null;
+  if (!answered && !numbersIn) return { level: "", from: [] };
+  const from = [];
+  let level = "G";
+  if (over != null && over >= RHR_OVER) { level = "Y"; from.push("resting heart rate " + Math.round(over) + " over baseline"); }
+  if (under != null && under >= HRV_UNDER) { level = "Y"; from.push("HRV " + Math.round(under * 100) + "% under its average"); }
+  if (answered >= ans.length && ans.length) {
+    if (yes >= 4) { level = "R"; from.push("four yes"); }
+    else if (yes >= 2) { if (level !== "R") level = "Y"; from.push(yes + " yes"); }
+  }
+  const yellows = (recent || []).filter((x) => x === "Y").length;
+  if (level === "Y" && yellows >= 2) { level = "R"; from.push("three yellows running"); }
+  if (over != null && under != null && over >= RHR_RED && under >= HRV_RED) { level = "R"; from.push("the rate and the HRV both out on the same morning"); }
+  return { level, from, over: over == null ? null : Math.round(over), under: under == null ? null : Math.round(under * 100) };
+}
+
+/* The one line the day is shown as. */
+export const READY_LINE = {
+  G: "GREEN — the session as written",
+  Y: "YELLOW — every load −7% · the interval session at 90% · the last block comes off",
+  R: "RED — warm-up, neck, hands, RANGE, home",
+};
+
+/* Two yellows running on the HRV alone turn the hard session into the
+   easy twenty minutes, and leave the base where it is. */
+export const hrvOnlyTwice = (recentFlags) => (recentFlags || []).filter((x) => x && x.hrvDown && !x.rhrUp).length >= 2;
 
 /* The flag the daily check carries.
    Resting heart rate 5+ bpm over the week-1 baseline, or HRV 12% or
