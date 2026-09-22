@@ -1086,6 +1086,10 @@ describe("Optimal 8", () => {
       const open = document.querySelectorAll("[data-flow-open='1']");
       if (open.length !== 1) throw new Error(where + " has " + open.length + " items open at once");
       if (runTimers() > 1) throw new Error(where + " shows two running timers");
+      const loaded = Array.from(document.querySelectorAll("[data-set-mode='bw']"))
+        .filter((el) => el.querySelectorAll("input[placeholder='kg'], input[placeholder='+kg']").length)
+        .map((el) => el.getAttribute("data-set-id"));
+      if (loaded.length) throw new Error(where + " asks for a weight on bodyweight work: " + loaded.join(", "));
       scan(where + " · item open");
     }
   };
@@ -1157,6 +1161,110 @@ describe("Optimal 8", () => {
     fireEvent.click(head("Bench Press"));
     fireEvent.click(await screen.findByText("Bench press"));
     expect(await screen.findByText(/Pins at chest height/)).toBeInTheDocument();
+  });
+
+  /* ================================================================
+     THE SET LOGGER — bodyweight work has no weight to write down
+     ================================================================ */
+
+  /* Every logger on the page, by the mode it is in. */
+  const loggers = (mode) => Array.from(document.querySelectorAll(mode ? "[data-set-mode='" + mode + "']" : "[data-set-mode]"));
+  const weightFields = (el) => el.querySelectorAll("input[placeholder='kg'], input[placeholder='+kg']").length;
+
+  it("logs bodyweight work as reps and a level, with no weight field", async () => {
+    await mount({ start: weekStart(1) });
+    fireEvent.click(screen.getByRole("button", { name: "MON" }));
+
+    fireEvent.click(await findHead("Ring Dips"));
+    expect(await screen.findByText("Ring dips — at your level")).toBeInTheDocument();
+
+    const bw = loggers("bw");
+    expect(bw.length).toBe(1);
+    expect(weightFields(bw[0])).toBe(0);
+    expect(bw[0].getAttribute("data-set-unit")).toBe("reps");
+    expect(screen.getByText("AT LEVEL 1")).toBeInTheDocument();
+    expect(screen.getByText("BODYWEIGHT")).toBeInTheDocument();
+    expect(screen.getAllByLabelText(/^Confirm set/).length).toBe(3);
+
+    // the reps are what gets logged, and no weight goes in beside them
+    fireEvent.change(screen.getAllByPlaceholderText("at your level")[0], { target: { value: "6" } });
+    fireEvent.click(screen.getByLabelText("Confirm set 1"));
+    await waitFor(() => {
+      const e = JSON.parse(localStorage.getItem("o8s-log"))["m1w1-mon-ringdip"];
+      expect(e.sets[0].r).toBe("6");
+      expect("w" in e.sets[0]).toBe(false);
+    });
+  });
+
+  it("logs the added load on weighted chins and the Achilles hold, beside bodyweight", async () => {
+    localStorage.setItem("o8s-body", JSON.stringify([{ d: "2026-09-01", bw: "82" }]));
+    await mount({ start: weekStart(1) });
+    fireEvent.click(screen.getByRole("button", { name: "MON" }));
+
+    fireEvent.click(await findHead("Weighted Chin-Up + The Muscle-Up Line"));
+    expect(await screen.findByText("BODYWEIGHT 82 KG + ADDED")).toBeInTheDocument();
+    expect(loggers("add").length).toBe(1);
+    fireEvent.change(screen.getAllByPlaceholderText("+kg")[0], { target: { value: "15" } });
+    fireEvent.click(within(loggers("add")[0]).getByLabelText("Confirm set 1"));
+    await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-log"))["m1w1-mon-chin"].sets[0].w).toBe("15"));
+
+    // the muscle-up line, in the same block, is bodyweight and takes no load
+    expect(loggers("bw").length).toBe(1);
+    expect(weightFields(loggers("bw")[0])).toBe(0);
+    expect(screen.queryByPlaceholderText("kg")).not.toBeInTheDocument();
+
+    // the Achilles hold logs its 45 seconds and the load it is held with
+    fireEvent.click(screen.getByRole("button", { name: "TUE" }));
+    fireEvent.click(await findHead("Seated Calf Raise + Achilles Hold"));
+    const add = await waitFor(() => { const a = loggers("add"); expect(a.length).toBe(1); return a[0]; });
+    expect(add.getAttribute("data-set-unit")).toBe("s");
+    expect(add.querySelectorAll("input[placeholder='+kg']").length).toBe(1);
+    // the seated calf raise beside it is barbell work and keeps its weight field
+    expect(loggers("kg").length).toBe(1);
+    expect(weightFields(loggers("kg")[0])).toBe(3);
+  });
+
+  it("keeps the weight field on barbell, trap bar, dumbbell and sled work", async () => {
+    await mount({ start: weekStart(1) });
+    fireEvent.click(screen.getByRole("button", { name: "MON" }));
+    fireEvent.click(await findHead("Bench Press"));
+    await waitFor(() => expect(loggers("kg").length).toBe(1));
+    // one weight field per set — four of them in week 1
+    expect(weightFields(loggers("kg")[0])).toBe(4);
+
+    fireEvent.click(screen.getByRole("button", { name: "WED" }));
+    fireEvent.click(await findHead("Trap Bar Deadlift"));
+    await waitFor(() => expect(loggers("kg").length).toBe(1));
+    expect(weightFields(loggers("kg")[0])).toBeGreaterThan(0);
+
+    // the sled is Wednesday's, and it still asks for the load it is dragging
+    fireEvent.click(await findHead("Heavy Sled Sprints"));
+    expect(await screen.findByText("load (kg) · time (s)")).toBeInTheDocument();
+    expect(screen.getByText(/kg on the sled at/)).toBeInTheDocument();
+    expect(loggers("bw").length).toBe(0);
+  });
+
+  it("logs holds in seconds, in both modes and in camp's calisthenics rows", async () => {
+    await mount({ start: weekStart(1) });
+    fireEvent.click(screen.getByRole("button", { name: "THU" }));
+    fireEvent.click(await findHead("Spanish Squat Hold"));
+    const bw = await waitFor(() => { const a = loggers("bw"); expect(a.length).toBe(1); return a[0]; });
+    expect(bw.getAttribute("data-set-unit")).toBe("s");
+    expect(weightFields(bw)).toBe(0);
+    expect(screen.getAllByLabelText(/^Confirm set/).length).toBe(3);
+    fireEvent.click(screen.getByLabelText("Confirm set 1"));
+    await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-log"))["m1w1-thu-spanish"].sets[0].r).toBe("30"));
+
+    cleanup();
+    await mount({ camp: true, campStart: weekStart(1) });
+    fireEvent.click(screen.getByRole("button", { name: "SUN" }));
+    fireEvent.click(await findHead("Core, L-Sit, Lever, Hands"));
+    expect(await screen.findByText("Tuck front lever")).toBeInTheDocument();
+    // the L-sit, the lever and the knuckle hold are bodyweight at their levels
+    const camp = loggers("bw");
+    expect(camp.length).toBe(3);
+    camp.forEach((el) => expect(weightFields(el)).toBe(0));
+    expect(screen.getAllByText("AT LEVEL 1").length).toBe(2);
   });
 
   it("opens the morning with the two strap numbers, and closes it with four yes/no taps", async () => {

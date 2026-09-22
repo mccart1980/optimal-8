@@ -372,7 +372,7 @@ const S = {
   tue: { n: "TUESDAY", t: "Crawls · Jumps · Pistols · Engine 1 · Hands · Trunk · Achilles", m: (rx) => (rx.test ? 34 : rx.eng === "easy" ? 61 : 65), ac: C.cobalt, box: 1,
     intro: "Power dose first, fresh, then the first of the week's two engine sessions. Your legs had yesterday off.", b: [
     { L: "A", n: "Warm-up + bear crawls", m: 8, p: "GEN8", rxLine: () => "8 min · bike, bands, hips, pogos — then bear crawls, 2 min",
-      items: [{ n: CRAWL_N, s: "10m forward, 10m backward, × 4", cue: CRAWL_S + " Slow beats fast: if the hips rock or the knees lift, you've gone too quick.", id: "crawl", k: "chk" }],
+      items: [{ n: CRAWL_N, s: "10m forward, 10m backward, × 4", cue: CRAWL_S + " Slow beats fast: if the hips rock or the knees lift, you've gone too quick.", id: "crawl", k: "wr", sets: 4, reps: 20 }],
       why: CRAWL_WHY },
     { L: "B", n: "Power dose — jumps", m: 8, star: 1, hard: 1, hide: (rx) => !!rx.test, rest: "Rest 90s", rt: 90,
       items: [{ n: "Broad jump", s: "3 × 2", cue: "Two-foot jump forward for distance, stick the landing dead still.", id: "broad", k: "chk" },
@@ -393,12 +393,12 @@ const S = {
     { L: "G", n: "Trunk", m: 9, hide: (rx) => !!rx.test, rest: "Rest 45s between exercises", rt: 45,
       items: [{ n: "Pallof press", s: "3 × 10/side · 2s hold", cue: "Band at chest height, anchored beside you. Press your hands straight out and hold two seconds without letting it twist you. Your trunk is what turns leg drive into hand speed, and it has to be stiff to transmit it.", id: "pallof", k: "wr", sets: 3, reps: "10/side" },
         { n: "Ab wheel rollout", s: "3 × 8–12", cue: "Knees down, roll out only as far as your lower back remains flat, pull back.", id: "abwheel", k: "wr", sets: 3, reps: "8–12" },
-        { n: "Copenhagen plank", s: "2 × 30s/side", cue: "Side plank with your top foot up on a bench, bottom leg lifted off the floor. Groin strength — the muscles you pivot off.", id: "copen", k: "chk" }] },
+        { n: "Copenhagen plank", s: "2 × 30s/side", cue: "Side plank with your top foot up on a bench, bottom leg lifted off the floor. Groin strength — the muscles you pivot off.", id: "copen", k: "wr", sets: 2, reps: 30 }] },
     { L: "H", n: "Seated Calf Raise + Achilles Hold", m: 5, p: "CALF", hide: (rx) => !!rx.test, rest: "Rest 60s", rt: 60,
       rxLine: () => "3 × 12, then one 45-second hold",
       timer: () => ({ kind: "hold", opt: { sets: 1, secs: 45, label: "ACHILLES HOLD — STANDING, STRAIGHT KNEE" }, title: "ACHILLES HOLD" }),
       items: [{ n: "Seated calf raise", s: "3 × 12", cue: "Seated machine, or a barbell padded across your knees. Up on the balls of the feet, pause, down slow, twelve times — seated, because the knee-bent position trains the muscle that keeps you on your toes in round six.", id: "soleus", k: "wr", sets: 3, reps: 12 },
-        { n: "Achilles hold — STANDING", s: "one × 45 seconds", cue: "The hold is STANDING: on the edge of a step, both feet, a dumbbell in each hand or a bar on your back, as heavy as you can hold dead still — rise to the top and hold 45 seconds, knees straight, no bouncing, no sinking. Straight knee, because that is the position the Achilles takes every sprint and every landing; a seated hold loads a different muscle into the same tendon and does less for it.", id: "achilles", k: "chk" }],
+        { n: "Achilles hold — STANDING", s: "one × 45 seconds", cue: "The hold is STANDING: on the edge of a step, both feet, a dumbbell in each hand or a bar on your back, as heavy as you can hold dead still — rise to the top and hold 45 seconds, knees straight, no bouncing, no sinking. Straight knee, because that is the position the Achilles takes every sprint and every landing; a seated hold loads a different muscle into the same tendon and does less for it.", id: "achilles", k: "wr", sets: 1, reps: 45 }],
       why: "The hold is the tendon block, part one. Muscle gets strong in weeks; tendon gets stiff in months, and a heavy still hold is the best-proven way to hurry it. Your Achilles takes every sprint and every depth jump on Saturday. Forty-five seconds a week is the insurance." }] },
 
   /* ---------------- WEDNESDAY ---------------- */
@@ -437,7 +437,7 @@ const S = {
   thu: { n: "THURSDAY", t: "Crawls · Throws + Landmine · Split Squat + Tendon Hold · Engine 2 · Neck", m: (rx) => (rx.test ? 18 : rx.eng2 === "easy" ? 57 : 61), ac: C.cobalt, box: 1,
     intro: "The third power dose, the only single-leg lift, the second engine session and the full neck block. (Week 16: warm-up and neck only.)", b: [
     { L: "A", n: "Warm-up + bear crawls", m: 8, p: "GEN8", note: "Same as Tuesday, bear crawls included.", rxLine: () => "8 min · same as Tuesday, bear crawls included",
-      items: [{ n: CRAWL_N, s: "10m forward, 10m backward, × 4", cue: CRAWL_S + " Slow beats fast: if the hips rock or the knees lift, you've gone too quick.", id: "crawl", k: "chk" }],
+      items: [{ n: CRAWL_N, s: "10m forward, 10m backward, × 4", cue: CRAWL_S + " Slow beats fast: if the hips rock or the knees lift, you've gone too quick.", id: "crawl", k: "wr", sets: 4, reps: 20 }],
       why: CRAWL_WHY },
     { L: "B", n: "Power dose — throws + landmine", m: 8, star: 1, hard: 1, hide: (rx) => !!rx.test, rest: "45s between sets", rt: 45,
       rxLine: () => "three easy throws first, then 2 × 3/side and 2 × 5/side",
@@ -452,7 +452,7 @@ const S = {
     { L: "D", n: "Spanish Squat Hold", m: 3, p: "SPAN", hide: (rx) => !!rx.test, rest: "Rest 30s", rt: 30,
       rxLine: () => "3 × 30 seconds",
       timer: () => ({ kind: "hold", opt: { sets: 3, secs: 30, rest: 30, label: "SPANISH SQUAT — DEAD STILL" }, title: "SPANISH SQUAT" }),
-      items: [{ n: "Spanish squat hold", s: "3 × 30 seconds · rest 30s", cue: "A thick band around the back of both knees, anchored to the rack in front of you at knee height. Lean back into the band so your shins stay vertical, and sit into a half squat — thighs around 45° — and hold, dead still, for 30 seconds. Rest 30. Three times. It should burn above the kneecap; it should never hurt inside the knee.", id: "spanish", k: "chk" }],
+      items: [{ n: "Spanish squat hold", s: "3 × 30 seconds · rest 30s", cue: "A thick band around the back of both knees, anchored to the rack in front of you at knee height. Lean back into the band so your shins stay vertical, and sit into a half squat — thighs around 45° — and hold, dead still, for 30 seconds. Rest 30. Three times. It should burn above the kneecap; it should never hurt inside the knee.", id: "spanish", k: "wr", sets: 3, reps: 30 }],
       why: "The tendon block, part two: the patellar tendon, which takes every depth jump and every box landing. Same logic as the Achilles hold — a heavy, still, painless load is what makes tendon stiff, and stiff tendon is what turns strength into speed without tearing." },
     { L: "E", n: (rx) => (ENG[rx.eng2] ? ENG[rx.eng2].n : "Bike session"), m: (rx) => engMin("eng2")(rx) + (nasalWk(rx) ? 8 : 0), star: 1, hard: 1, eng: 1, engKey: "eng2", hide: (rx) => !rx.eng2, timer: engTimer("eng2"),
       nasal: (rx) => nasalWk(rx),
@@ -464,7 +464,7 @@ const S = {
     { L: "X", n: "Achilles Hold", m: 2, campOnly: 1, p: "CALF",
       rxLine: () => "one × 45 seconds",
       timer: () => ({ kind: "hold", opt: { sets: 1, secs: 45, label: "ACHILLES HOLD — STANDING, STRAIGHT KNEE" }, title: "ACHILLES HOLD" }),
-      items: [{ n: "Achilles hold — STANDING", s: "one × 45 seconds", cue: "Standing on the edge of a step, both feet, knees straight. Load it as heavy as you can hold dead still and hold the top position for 45 seconds — no bouncing, no sinking.", id: "achilles_c", k: "chk" }],
+      items: [{ n: "Achilles hold — STANDING", s: "one × 45 seconds", cue: "Standing on the edge of a step, both feet, knees straight. Load it as heavy as you can hold dead still and hold the top position for 45 seconds — no bouncing, no sinking.", id: "achilles_c", k: "wr", sets: 1, reps: 45 }],
       why: "In camp the Achilles hold moves here, off the Tuesday that is now a sleep day. The tendon block does not come out — it is the cheapest insurance in sport." },
     { L: "G", n: "Neck", m: 10, p: "NECK", items: [{ n: "The full neck block", s: "4 movements", id: "neck", k: "chk" }] }] },
 
@@ -565,7 +565,7 @@ const S = {
       items: [{ n: "Hanging leg raise", s: "3 × 8–12", cue: "Hang from a bar, dumbbell between your feet if needed, lift the legs to hip height or above, no swinging.", id: "hlr", k: "wr", sets: 3, reps: "8–12" },
         { n: "The L-sit line — at your level", s: "3 sets", cue: "At the first level it's the tuck L-sit: sitting between two boxes or on parallettes, press the floor away until your backside lifts and hold with the knees pulled to the chest; the line climbs one leg at a time to the full L-sit and then the floor L-sit. Straight-arm pushing strength and the stiffest trunk position there is.", id: "lsit", k: "wr", sets: 3, reps: "at your level" },
         { n: "Side plank reach-through", s: "2 × 10/side", cue: "In a side plank, thread your top arm under your body, then rotate open to the ceiling.", id: "sprt", k: "chk" },
-        { n: "Hands", s: "knuckle hold 3 × 20s · band wrist extension 2 × 15", cue: "On your fists on a mat, the wrist dead straight; then forearm on the knee, palm down, lifting the knuckles toward you.", id: "hands2", k: "chk" }] },
+        { n: "Hands", s: "knuckle hold 3 × 20s · band wrist extension 2 × 15", cue: "On your fists on a mat, the wrist dead straight; then forearm on the knee, palm down, lifting the knuckles toward you.", id: "hands2", k: "wr", sets: 3, reps: 20 }] },
     { L: "J", n: "The Slow Lane — one lever hold", m: 3, cal: "slowlane", hide: (rx) => !!rx.test || !!rx.dl, rest: "Rest 60s", rt: 60,
       rxLine: () => "one lever · 3 sets · ten seconds a hold to start",
       items: [{ n: "The lever hold — at your level", s: "3 sets", cue: SUNDAY_LEVER, id: "lever", k: "wr", sets: 3, reps: "hold" }],
@@ -574,7 +574,7 @@ const S = {
     { L: "T", n: "Trunk", m: 9, campOnly: 1, rest: "Rest 45s between exercises", rt: 45,
       items: [{ n: "Pallof press", s: "3 × 10/side · 2s hold", cue: "Band at chest height, anchored beside you. Press your hands straight out and hold two seconds without letting it twist you.", id: "c_pallof", k: "wr", sets: 3, reps: "10/side" },
         { n: "Ab wheel rollout", s: "3 × 8–12", cue: "Knees down, roll out only as far as your lower back remains flat, pull back.", id: "c_abwheel", k: "wr", sets: 3, reps: "8–12" },
-        { n: "Copenhagen plank", s: "2 × 30s/side", cue: "Side plank with your top foot up on a bench, bottom leg lifted off the floor. Groin strength — the muscles you pivot off.", id: "c_copen", k: "chk" }],
+        { n: "Copenhagen plank", s: "2 × 30s/side", cue: "Side plank with your top foot up on a bench, bottom leg lifted off the floor. Groin strength — the muscles you pivot off.", id: "c_copen", k: "wr", sets: 2, reps: 30 }],
       why: "Camp moves the trunk block to Sunday: Tuesday is a sleep day now, and maximal strength, the power doses, the tendon block, the neck, the Nordics and the trunk are what boxing never covers." },
     { L: "I", n: "Weekly Check", m: 2, review: 1,
       items: [{ n: "Bodyweight", s: "kg", id: "wr_bw", k: "out", u: "kg" }, { n: "Resting heart rate", s: "bpm", id: "wr_rhr", k: "out", u: "bpm" }, { n: "HRV average", s: "ms", id: "wr_hrv", k: "out", u: "ms" },
@@ -768,26 +768,67 @@ function Plates({ kg, bar, onClose }) {
 /* ================================================================
    SET LOGGER — tap a set to confirm it; the rest clock starts itself
    ================================================================ */
-function SetLogger({ sets, reps, autoKg, cur, onChange, onSetDone, prevSets, prevLabel, prevMacro, barSpeed, prevSpeed }) {
+/* ================================================================
+   HOW A SET IS LOGGED
+
+   Bodyweight work has no weight to write down: it logs reps — seconds when
+   the prescription is a hold — and the level the line is on, and nothing
+   else. Two exercises are bodyweight plus a load, so they log that load as
+   +kg beside the bodyweight. Everything else — barbell, trap bar, dumbbell,
+   sled — keeps the weight field. The same map governs both programs, camp
+   mode's calisthenics rows included, because they share these item ids.
+   ================================================================ */
+const BW_ITEMS = ["ringrow", "ringdip", "muscleup", "pistol", "lsit", "lever", "nordic", "c_nordic",
+  "crawl", "c_crawl", "spanish", "c_spanish", "copen", "c_copen", "c_copenplank",
+  "hands2", "c_hands_mon", "c_hands_thu", "c_hands_sun"];
+const ADD_ITEMS = ["chin", "c_chinup", "achilles", "achilles_c"];
+/* the ones prescribed as a hold, so the number is seconds and not reps */
+const SECS_ITEMS = ["lsit", "lever", "spanish", "c_spanish", "copen", "c_copen", "c_copenplank",
+  "hands2", "c_hands_mon", "c_hands_thu", "c_hands_sun", "achilles", "achilles_c"];
+const SET_MODE = {}; BW_ITEMS.forEach((id) => { SET_MODE[id] = "bw"; }); ADD_ITEMS.forEach((id) => { SET_MODE[id] = "add"; });
+const SET_SECS = {}; SECS_ITEMS.forEach((id) => { SET_SECS[id] = 1; });
+const setMode = (id) => SET_MODE[id] || "kg";
+/* the calisthenics line an item is logged against, for the level on the row */
+const LINE_OF = { ringdip: "ringdip", muscleup: "muscleup", pistol: "pistol", ringrow: "ringrow", lsit: "lsit", lever: "slowlane" };
+/* a taper or a sore joint turns a line into a hold, so the unit follows the
+   prescription rather than the exercise */
+const holdish = (t) => /\bhold\b|second|\b\d+\s*s\b/i.test(String(t || ""));
+
+function SetLogger({ sets, reps, autoKg, cur, onChange, onSetDone, prevSets, prevLabel, prevMacro, barSpeed, prevSpeed, mode, secs, level, bw, setId }) {
   const n = Math.max(1, Number(sets) || 1);
   const rows = (cur && cur.sets) || [];
   const repNum = typeof reps === "number" ? reps : (String(reps || "").match(/^\d+/) || [""])[0];
-  const defW = (i) => { for (let k = i - 1; k >= 0; k--) if (rows[k] && rows[k].w) return rows[k].w; return autoKg != null ? String(autoKg) : ""; };
+  const bwOnly = mode === "bw";
+  const added = mode === "add";
+  const unit = secs ? "S" : "";
+  const defW = (i) => { if (bwOnly) return ""; for (let k = i - 1; k >= 0; k--) if (rows[k] && rows[k].w) return rows[k].w; return added || autoKg == null ? "" : String(autoKg); };
   const get = (i) => rows[i] || {};
   const put = (i, patch) => { const next = rows.slice(); while (next.length < n) next.push({}); next[i] = Object.assign({}, next[i], patch); onChange(Object.assign({}, cur, { sets: next })); };
-  const confirm = (i) => { const r = get(i); if (r.ok) { put(i, { ok: false }); return; } put(i, { ok: true, w: r.w != null && r.w !== "" ? r.w : defW(i), r: r.r != null && r.r !== "" ? r.r : String(repNum) }); buzz(30); if (onSetDone) onSetDone(i); };
+  const confirm = (i) => { const r = get(i); if (r.ok) { put(i, { ok: false }); return; }
+    const done = { ok: true, r: r.r != null && r.r !== "" ? r.r : String(repNum) };
+    if (!bwOnly) done.w = r.w != null && r.w !== "" ? r.w : defW(i);
+    put(i, done); buzz(30); if (onSetDone) onSetDone(i); };
   const vl = cur && cur.vl;
   return (
-    <div style={{ marginTop: 8 }}>
+    <div data-set-mode={mode || "kg"} data-set-unit={secs ? "s" : "reps"} data-set-id={setId} style={{ marginTop: 8 }}>
+      {level || bwOnly || added ? (
+        <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 7, flexWrap: "wrap" }}>
+          {level ? <Chip c={C.brass}>{level}</Chip> : null}
+          <Chip c={C.ash}>{bwOnly ? "BODYWEIGHT" : "BODYWEIGHT" + (bw ? " " + bw + " KG" : "") + " + ADDED"}</Chip>
+        </div>) : null}
       {prevSets ? <div style={Object.assign({}, mno, { fontSize: 9, color: C.brass, marginBottom: 6 })}>{prevLabel}: {prevSets}</div> : null}
       {prevMacro ? <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, marginBottom: 6 })}>{prevMacro}</div> : null}
       {Array.from({ length: n }).map((_, i) => { const r = get(i); const ok = !!r.ok;
         return (
           <div key={i} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
             <span style={Object.assign({}, mno, { fontSize: 9, color: ok ? C.moss : C.ash, width: 34, letterSpacing: .8 })}>SET {i + 1}</span>
-            <div style={{ flex: 1, position: "relative" }}><Fld v={r.w != null ? r.w : defW(i)} on={(val) => put(i, { w: val })} ph="kg" s={{ padding: "8px 24px 8px 6px", opacity: ok ? .75 : 1 }} /><span style={Object.assign({}, mno, { position: "absolute", right: 7, top: 12, fontSize: 9, color: C.ash })}>KG</span></div>
-            <span style={Object.assign({}, mno, { fontSize: 11, color: C.ash })}>×</span>
-            <div style={{ flex: .8, position: "relative" }}><Fld v={r.r != null ? r.r : String(repNum)} on={(val) => put(i, { r: val })} ph={String(reps || "")} s={{ padding: "8px 6px", opacity: ok ? .75 : 1 }} /></div>
+            {bwOnly ? null : (
+              <>
+                <div style={{ flex: 1, position: "relative" }}><Fld v={r.w != null ? r.w : defW(i)} on={(val) => put(i, { w: val })} ph={added ? "+kg" : "kg"} s={{ padding: "8px 28px 8px 6px", opacity: ok ? .75 : 1 }} /><span style={Object.assign({}, mno, { position: "absolute", right: 7, top: 12, fontSize: 9, color: C.ash })}>{added ? "+KG" : "KG"}</span></div>
+                <span style={Object.assign({}, mno, { fontSize: 11, color: C.ash })}>×</span>
+              </>)}
+            <div style={{ flex: bwOnly ? 1 : .8, position: "relative" }}><Fld v={r.r != null ? r.r : String(repNum)} on={(val) => put(i, { r: val })} ph={String(reps || "")} s={{ padding: unit ? "8px 22px 8px 6px" : "8px 6px", opacity: ok ? .75 : 1 }} />
+              {unit ? <span style={Object.assign({}, mno, { position: "absolute", right: 7, top: 12, fontSize: 9, color: C.ash })}>{unit}</span> : null}</div>
             <button onClick={() => confirm(i)} aria-label={"Confirm set " + (i + 1)} style={Object.assign({}, mno, { width: 44, height: 40, borderRadius: 5, cursor: "pointer", fontSize: 16, fontWeight: 700, background: ok ? C.moss : "transparent", color: ok ? C.ink : C.ash, border: "1px solid " + (ok ? C.moss : C.line) })}>{ok ? "✓" : "○"}</button>
           </div>);
       })}
@@ -813,7 +854,23 @@ export function howLine(t) {
   return parts.slice(0, 2).join("").trim();
 }
 
-const setsSummary = (e) => { if (!e) return ""; if (e.sets && e.sets.some((s) => s.ok)) { const ok = e.sets.filter((s) => s.ok); const ws = ok.map((s) => s.w); const same = ws.every((x) => x === ws[0]); return same ? ws[0] + " kg × " + ok.map((s) => s.r).join(",") : ok.map((s) => s.w + "×" + s.r).join(" · "); } if (e.w) return e.w + (e.r ? " × " + e.r : ""); return ""; };
+/* What last week reads back as. Bodyweight work has only the reps or the
+   seconds to show; added-load work shows the load with a plus in front. */
+const setsSummary = (e, mode, secs) => {
+  if (!e) return "";
+  const u = secs ? " s" : "";
+  if (e.sets && e.sets.some((s) => s.ok)) {
+    const ok = e.sets.filter((s) => s.ok);
+    if (mode === "bw") return ok.map((s) => s.r).join(",") + u;
+    const pre = mode === "add" ? "+" : "";
+    const ws = ok.map((s) => s.w);
+    if (ws.every((x) => x == null || x === "")) return ok.map((s) => s.r).join(",") + u;
+    const same = ws.every((x) => x === ws[0]);
+    return same ? pre + ws[0] + " kg × " + ok.map((s) => s.r).join(",") + u : ok.map((s) => pre + s.w + "×" + s.r).join(" · ");
+  }
+  if (e.w) return e.w + (e.r ? " × " + e.r : "");
+  return "";
+};
 const RAMP = [[50, 5], [65, 3], [75, 2], [85, 1], [92, 1]];
 
 /* Shoulders, elbows or wrists at 4 or above on last Sunday's check take
@@ -1075,9 +1132,16 @@ function BlockBody({ b, rx, week, macro, day, log, setLog, maxes, bw, ready, ope
             {auto && !(mainLift && it.mk === mainLift) ? <div onClick={() => openPlates(auto[0])} style={Object.assign({}, mno, { fontSize: 18, fontWeight: 700, color: C.brass, marginTop: 4, cursor: "pointer" })}>{kgLine(auto)} <span style={{ fontSize: 8, color: C.ash }}>▶ PLATES</span></div> : null}
             {bwLine(it) ? <div style={Object.assign({}, mno, { fontSize: 11, color: C.brass, marginTop: 4 })}>{bwLine(it)}</div> : null}
             {cue && how === j ? <div className="rise" style={Object.assign({}, bdy, { fontSize: 12.5, color: C.ash, lineHeight: 1.5, marginTop: 5 })}>{cue}</div> : null}
-            {id && k === "wr" ? <SetLogger sets={v(it.sets, rx)} reps={v(it.reps, rx)} autoKg={auto ? auto[0] : null} cur={cur} onChange={(e) => setE(id, e)}
-              onSetDone={() => { if (autoRest && rt) startRest(rt); }} prevSets={setsSummary(pw)} prevLabel={"LAST WEEK"} prevMacro={pm && setsSummary(pm) ? "M" + (macro - 1) + " SAME WEEK: " + setsSummary(pm) : null}
-              barSpeed={!!BAR_SPEED_ITEMS[id]} prevSpeed={pw && num(pw.bs) != null ? { speed: num(pw.bs), load: topSet(pw) } : null} /> : null}
+            {id && k === "wr" ? (() => {
+              const md = setMode(id);
+              const sec = !!SET_SECS[id] || (md !== "kg" && (holdish(v(it.reps, rx)) || holdish(sch)));
+              const ln = LINE_OF[id] && calis ? curLevel(calis, LINE_OF[id]) : null;
+              return (
+                <SetLogger key={id} sets={v(it.sets, rx)} reps={v(it.reps, rx)} autoKg={auto ? auto[0] : null} cur={cur} onChange={(e) => setE(id, e)}
+                  mode={md} secs={sec} level={ln ? "AT LEVEL " + ln.l : null} bw={md === "add" ? bw : null} setId={id}
+                  onSetDone={() => { if (autoRest && rt) startRest(rt); }} prevSets={setsSummary(pw, md, sec)} prevLabel={"LAST WEEK"}
+                  prevMacro={pm && setsSummary(pm, md, sec) ? "M" + (macro - 1) + " SAME WEEK: " + setsSummary(pm, md, sec) : null}
+                  barSpeed={md === "kg" && !!BAR_SPEED_ITEMS[id]} prevSpeed={pw && num(pw.bs) != null ? { speed: num(pw.bs), load: topSet(pw) } : null} />); })() : null}
             {id && k === "out" ? <div style={{ marginTop: 8 }}><Lab>{it.u || "output"}</Lab><Fld v={cur.w} on={(val) => patch(id, "w", val)} ph="—" a="left" />
               {pw && pw.w ? <div style={Object.assign({}, mno, { fontSize: 9, color: C.brass, marginTop: 5 })}>LAST WEEK: {pw.w}</div> : null}
               {pm && pm.w ? <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, marginTop: 3 })}>M{macro - 1} SAME WEEK: {pm.w}</div> : null}</div> : null}

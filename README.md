@@ -131,6 +131,24 @@ app's export if you have imported it in settings, and are typed on the
 dashboard if you haven't. In camp mode the camp's own target sits beside each
 number.
 
+## What the set logger asks for
+
+The logger follows the exercise, not the other way round.
+
+- **Bodyweight work** logs reps — or seconds, when the prescription is a hold —
+  and the level the line is on. There is no weight field: ring rows, ring dips,
+  the muscle-up line, the pistol line, the L-sit, the tuck front lever, the
+  Nordics, the Spanish squat hold, the knuckle hold, the Copenhagen plank and
+  the bear crawls. The hollow and arch holds, the planks, the push-up and
+  chin-up counts have never had one.
+- **Bodyweight plus a load** — the weighted chin-up and the Achilles hold — logs
+  that load as **+kg** beside your bodyweight, so what is written down is the
+  added weight and not a total that means nothing next block.
+- **Barbell, trap bar, dumbbell and sled work** keeps the weight field, with the
+  percentage of your max already filled in.
+
+The same rule runs in both programs and in Camp Mode's calisthenics rows.
+
 ## Backing up
 
 Open the app, tap the **⚙** button in the top right, and scroll down to
