@@ -848,9 +848,11 @@ describe("Optimal 8", () => {
     fireEvent.change(screen.getByPlaceholderText("bpm"), { target: { value: "57" } });
     await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-morning"))["2026-09-07"].rhr).toBe("57"));
 
-    // a day that hasn't happened yet has no morning to log
+    // a day still ahead has its morning too — it opens every day
     fireEvent.click(screen.getByRole("button", { name: "SAT" }));
-    await waitFor(() => expect(screen.queryByText("THE MORNING NUMBERS")).not.toBeInTheDocument());
+    fireEvent.click(await screen.findByText("Resting heart rate and HRV"));
+    expect(await screen.findByText("THE MORNING NUMBERS")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("bpm").value).toBe("");
   });
 
   it("computes the drop on the 60-second settle and logs it", async () => {
@@ -1190,6 +1192,106 @@ describe("Optimal 8", () => {
     fireEvent.click(await screen.findByText("Bench press"));
     expect(await screen.findByText(/Pins at chest height/)).toBeInTheDocument();
   });
+
+  /* ================================================================
+     THE MORNING — the same five items, every program, every day
+
+     This is one shared flow, so the morning cannot differ by mode. The
+     sweep below is what holds it to that.
+     ================================================================ */
+
+  const PROGRAMS = [
+    ["OPTIMAL 8 FIGHTER", {}],
+    ["CAMP", { camp: true, program: "camp", campStart: "2026-09-07" }],
+    ["PREP", { program: "prep", start: "2026-09-07" }],
+    ["TRANSITION", { program: "transition", fightDate: "2026-08-29" }],
+  ];
+  const MORNING_IDS = ["m-numbers", "m-sighs", "m-onething", "m-five", "m-check"];
+  const flowIds = () => Array.from(document.querySelectorAll("[data-flow-id]")).map((e) => e.getAttribute("data-flow-id"));
+
+  it("opens every day of every program with the morning, before the session", async () => {
+    seedMornings(50, 80);         // a settled week behind today, to read the numbers against
+    for (const [name, extra] of PROGRAMS) {
+      await mount(extra);
+      // a weekday, the Friday with no session on it, and both weekend days
+      for (const d of ["MON", "WED", "FRI", "SAT", "SUN"]) {
+        const where = name + " " + d;
+        fireEvent.click(screen.getByRole("button", { name: d }));
+        await waitFor(() => expect(screen.queryByText("LOADING…")).not.toBeInTheDocument());
+
+        const ids = flowIds();
+        // the five morning items are all there, in order
+        expect(ids.slice(0, 5), where + " does not open with the morning: " + ids.slice(0, 6).join(", ")).toEqual(MORNING_IDS);
+        // and every one of them is above the first session row
+        const firstSession = ids.findIndex((x) => /^S:/.test(x));
+        expect(firstSession, where + " has no session rows").toBeGreaterThan(0);
+        MORNING_IDS.forEach((m) => expect(ids.indexOf(m), where + " lost " + m).toBeLessThan(firstSession));
+
+        // the two heart-rate fields are on the first item, which opens the day
+        fireEvent.click(screen.getByText("Resting heart rate and HRV"));
+        expect(screen.getByText("Resting heart rate"), where).toBeInTheDocument();
+        expect(screen.getByText("HRV"), where).toBeInTheDocument();
+        expect(screen.getByPlaceholderText("ms"), where).toBeInTheDocument();
+
+        // a number typed in is read against the week-1 baseline and the
+        // seven-day average, and it feeds the colour
+        fireEvent.change(screen.getByPlaceholderText("bpm"), { target: { value: "58" } });
+        expect(screen.getAllByText(/7-DAY AVG/).length, where).toBeGreaterThan(0);
+        expect(screen.getAllByText(/WEEK 1/).length, where).toBeGreaterThan(0);
+
+        // the check is four yes/no taps, and the rate over baseline has
+        // already resolved the day before a single one of them is tapped
+        fireEvent.click(screen.getByText("The check"));
+        expect(screen.getAllByRole("button", { name: "YES" }).length, where).toBe(4);
+        expect(screen.getAllByRole("button", { name: "NO" }).length, where).toBe(4);
+        const line = screen.getByText(/^(GREEN|YELLOW|RED) —/);
+        expect(line, where + " shows no result line").toBeInTheDocument();
+        // and it is the numbers that did it, with the reason under it
+        expect(line.textContent, where).not.toMatch(/^GREEN/);
+        expect(screen.getByText(/resting heart rate \d+ over baseline/), where).toBeInTheDocument();
+        // four noes cannot talk it back down: the numbers stand on their own
+        screen.getAllByRole("button", { name: "NO" }).forEach((b) => fireEvent.click(b));
+        expect(screen.getByText(/^(YELLOW|RED) —/), where).toBeInTheDocument();
+
+        // and the rest of the day is below it
+        ["site", "lunch", "ev-range", "ev-sit", "ev-review", "ev-casein", "ev-lights"]
+          .forEach((x) => expect(ids.indexOf(x), where + " lost " + x).toBeGreaterThan(0));
+      }
+      cleanup();
+    }
+  }, 300000);
+
+  it("puts the settle and its recovery heart rate inside every interval session", async () => {
+    /* [program, day, the conditioning row it follows] */
+    const sessions = [
+      ["OPTIMAL 8 FIGHTER", {}, "TUE", "4-MINUTE INTERVALS"],
+      ["OPTIMAL 8 FIGHTER", {}, "THU", "40-SECOND REPEATS"],
+      ["CAMP", { camp: true, program: "camp", campStart: "2026-09-07" }, "TUE", "MODERATE INTERVALS"],
+      ["CAMP", { camp: true, program: "camp", campStart: "2026-09-07" }, "THU", "TEMPO INTERVALS"],
+      ["PREP", { program: "prep", start: "2026-09-07" }, "TUE", "MODERATE INTERVALS"],
+      ["PREP", { program: "prep", start: "2026-09-07" }, "THU", "TEMPO INTERVALS"],
+    ];
+    for (const [name, extra, d, engine] of sessions) {
+      const where = name + " " + d;
+      await mount(extra);
+      fireEvent.click(screen.getByRole("button", { name: d }));
+      await waitFor(() => expect(screen.queryByText("LOADING…")).not.toBeInTheDocument());
+
+      const ids = flowIds();
+      const names = Array.from(document.querySelectorAll("[data-flow-id]")).map((e) => e.getAttribute("data-flow-name"));
+      // exactly one settle, and it comes straight after the last interval
+      const settles = names.filter((n) => n === "The 60-Second Settle");
+      expect(settles.length, where + " has " + settles.length + " settles").toBe(1);
+      expect(names.indexOf("The 60-Second Settle"), where).toBe(names.indexOf(engine) + 1);
+
+      // and it carries the heart rate at 60 seconds
+      fireEvent.click(screen.getByText("The 60-Second Settle"));
+      expect(await screen.findByText("Recovery heart rate — the drop over the settle"), where).toBeInTheDocument();
+      expect(screen.getByText("HR at the end of the last interval"), where).toBeInTheDocument();
+      expect(screen.getByText("Heart rate at 60 seconds"), where).toBeInTheDocument();
+      cleanup();
+    }
+  }, 300000);
 
   /* ================================================================
      THE SEASON — one fight date dates everything

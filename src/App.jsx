@@ -1540,23 +1540,25 @@ function Today(props) {
   const im = (id, sec, colour, n, s, mins, tick, body) =>
     ({ id, sec, colour, n, s, mins, done: ok(tick), mark: (val) => setTick(tick, val), body });
 
-  /* ---------------- MORNING ---------------- */
-  if (!shownFuture) {
-    push(im("m-numbers", "MORNING", C.cobalt, "Resting heart rate and HRV", "TWO NUMBERS", 1, "mnum",
-      () => <MorningCard bare sleep={false} dayIso={shownIso} isToday={isToday} morning={morning} setMorning={setMorning} st={st} camp={!!st.camp} />));
-    push(im("m-sighs", "MORNING", C.moss, "Three physiological sighs", "× 3 · 30 SECONDS", 1, "sighs",
-      () => (
-        <div>
-          <Note c={C.chalk} s={{ marginTop: 0 }}>{SIGH_HOW}</Note>
-          <Btn on={() => openTool({ kind: "breath", id: "sigh3" })} c={C.moss} fill s={{ width: "100%", marginTop: 10 }}>▶ THE GUIDED 30 SECONDS</Btn>
-        </div>)));
-    push(im("m-onething", "MORNING", C.moss, "The one thing", "4 QUESTIONS", 1, "onething",
-      () => <Lines rows={ONE_THING_Q} colour={C.moss} />));
-    push(im("m-five", "MORNING", C.moss, "The morning five", "5 JOINTS · 5 MIN", 5, "morning5",
-      () => <TimedRows steps={MORNING_FIVE} rows={MORNING_FIVE_ROWS} rowOf={(i) => M5_ROW[i] == null ? 4 : M5_ROW[i]} colour={C.moss} sound={sound} />));
-    push(im("m-check", "MORNING", C.cobalt, "The check", "4 YES/NO", 1, "check",
-      () => <CheckTaps qs={CHECK_Q} answers={checkA} setAnswers={setCheckA} result={readNow.level} line={READY_LINE[readNow.level]} from={readNow.from} />));
-  }
+  /* ---------------- MORNING ----------------
+     The same five items open every day of every program — weekdays, the
+     Friday with no session in it, and both weekend mornings. Nothing about
+     the day or the program gates them; that is the whole point of building
+     the flow in one place. */
+  push(im("m-numbers", "MORNING", C.cobalt, "Resting heart rate and HRV", "TWO NUMBERS", 1, "mnum",
+    () => <MorningCard bare sleep={false} dayIso={shownIso} isToday={isToday} morning={morning} setMorning={setMorning} st={st} camp={!!st.camp} />));
+  push(im("m-sighs", "MORNING", C.moss, "Three physiological sighs", "× 3 · 30 SECONDS", 1, "sighs",
+    () => (
+      <div>
+        <Note c={C.chalk} s={{ marginTop: 0 }}>{SIGH_HOW}</Note>
+        <Btn on={() => openTool({ kind: "breath", id: "sigh3" })} c={C.moss} fill s={{ width: "100%", marginTop: 10 }}>▶ THE GUIDED 30 SECONDS</Btn>
+      </div>)));
+  push(im("m-onething", "MORNING", C.moss, "The one thing", "4 QUESTIONS", 1, "onething",
+    () => <Lines rows={ONE_THING_Q} colour={C.moss} />));
+  push(im("m-five", "MORNING", C.moss, "The morning five", "5 JOINTS · 5 MIN", 5, "morning5",
+    () => <TimedRows steps={MORNING_FIVE} rows={MORNING_FIVE_ROWS} rowOf={(i) => M5_ROW[i] == null ? 4 : M5_ROW[i]} colour={C.moss} sound={sound} />));
+  push(im("m-check", "MORNING", C.cobalt, "The check", "4 YES/NO", 1, "check",
+    () => <CheckTaps qs={CHECK_Q} answers={checkA} setAnswers={setCheckA} result={readNow.level} line={READY_LINE[readNow.level]} from={readNow.from} />));
 
   /* ---------------- SESSION ---------------- */
   const blockProps = { rx, week, macro, day, log, setLog, maxes, bw, ready: effReady, openProto, startTimer, openPlates,
@@ -1677,7 +1679,7 @@ function Today(props) {
   push(im("ev-range", "EVENING", C.violet, rangeTitle(rw), rangeMins(rw) + " MIN", rangeMins(rw), "mobility",
     () => <TimedRows steps={RG.steps} rows={RG.rows} colour={C.violet} sound={sound} />));
 
-  if (day !== "fri") {
+  if (DAYS.indexOf(day) <= 3) {
     const hs = curLevel(calis, "handstand");
     const rows = [SKILL_BLOCK.wrists,
       Object.assign({}, SKILL_BLOCK.handstand, { s: "4 min · level " + hs.l, how: hs.what }),

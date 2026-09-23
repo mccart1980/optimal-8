@@ -38,11 +38,11 @@ const Against = ({ v, avg, base, dir, u }) => {
   const sign = (n) => (n > 0 ? "+" : "") + r1(n);
   return (
     <div style={{ display: "flex", gap: 12, marginTop: 6, flexWrap: "wrap" }}>
-      <span style={Object.assign({}, mno, { fontSize: 9, color: C.ash, letterSpacing: .8 })}>
+      <span style={Object.assign({}, mno, { fontSize: 13, color: C.ash, letterSpacing: .6 })}>
         7-DAY AVG <span style={{ color: C.chalk }}>{avg == null ? "—" : avg + (u ? " " + u : "")}</span>
         {d7 == null ? null : <span style={{ color: col(d7) }}> ({sign(d7)})</span>}
       </span>
-      <span style={Object.assign({}, mno, { fontSize: 9, color: C.ash, letterSpacing: .8 })}>
+      <span style={Object.assign({}, mno, { fontSize: 13, color: C.ash, letterSpacing: .6 })}>
         WEEK 1 <span style={{ color: C.chalk }}>{base == null ? "—" : base + (u ? " " + u : "")}</span>
         {db == null ? null : <span style={{ color: col(db) }}> ({sign(db)})</span>}
       </span>
