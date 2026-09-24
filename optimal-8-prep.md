@@ -127,7 +127,7 @@ Bike or SkiErg in weeks 1–2; from week 3, a run if your legs and ankles are us
 
 **2 · 0:45 — NECK · 8 min**
 
-Four-direction holds, 3 × 10 seconds each direction — press your palm hard against your forehead and push your head into it; the head never moves. Then the back of the head, then each side. Rapid tense, 3 × 6 per direction — a band resting light pressure on your head; snap from fully relaxed to fully braced in under a second, hold 2 seconds, relax. Perturbation hold, 2 × 20 seconds — band around the head, anchored to the rack; brace in neutral and tug the band in small random pulses with your own hand; the head does not move. A stiffer neck lowers how much the head accelerates when hit. Not armour; a cheap bet on a sound mechanism, from day one.
+Four-direction holds, 3 × 10 seconds each direction — press your palm hard against your forehead and push your head into it; the head never moves. Then the back of the head, then each side. Rapid tense, 4 × 6 per direction — a band resting light pressure on your head; snap from fully relaxed to fully braced in under a second, hold 2 seconds, relax. Perturbation hold, 2 × 20 seconds — band around the head, anchored to the rack; brace in neutral and tug the band in small random pulses with your own hand; the head does not move. A stiffer neck lowers how much the head accelerates when hit. Not armour; a cheap bet on a sound mechanism, from day one.
 
 **3 · 0:53 — HANDS · 4 min**
 
@@ -151,7 +151,9 @@ Fresh legs, so the power dose goes first. Then the week's first hard conditionin
 
 **2 · 0:08 — POWER DOSE · JUMPS · 8 min · rest 90 s**
 
-Broad jumps, 3 × 2 — two-foot jump forward for distance, stick the landing dead still. Box jumps, 3 × 3 — the box chosen by the landing: you land on it in a quarter squat. Quick dip, jump as high as you can, land soft, step down. Explosiveness responds to how often the nervous system is asked, not how much. Eight minutes, three mornings a week, all camp.
+Broad jumps, 3 × 2 — two-foot jump forward for distance, stick the landing dead still. Box jumps, 3 × 3 — the box chosen by the landing: you land on it in a quarter squat. Quick dip, jump as high as you can, land soft, step down. Explosiveness responds to how often the nervous system is asked, not how much. Eight minutes, three mornings a week.
+
+**SHUTTLE BURSTS — from week 11:** six times five metres out and back, a hard push-off at each turn, twenty seconds between. A mover with good feet makes you change direction; the side bounds train it sideways, this trains it forward and back. Three minutes.
 
 **3 · 0:16 — THE PISTOL LINE · 2 × 5 per leg at your level · rest 60 s · 5 min**
 
@@ -191,35 +193,41 @@ The heavy morning, and the lift changes its shape by block — slow lowering in 
 
 **1 · 0:00 — WARM-UP · 6 min** — Tuesday's warm-up without the crawls, then trap bar warm-up sets: bar × 5, 50% × 3, 70% × 2 of working.
 
-**2 · 0:06 — HEAVY SLED · runs from the table · rest 2½ min · 12 min**
+**2 · 0:06 — HEAVY SLED · runs from the calendar · rest 2½ min · 12 min — even weeks: REPEAT SLED STARTS**
 
 Load the sled with 40–60% of bodyweight, lean in at about 45°, sprint 20 metres driving the ground backward through the whole foot; 5–7 seconds a run — faster, add weight; slower, take some off. Horizontal force, the push that starts a punch and closes distance, with no soreness and nothing on your spine. First, while the nervous system is freshest. No sled: skip to the trap bar and add a set.
 
-**3 · 0:18 — TRAP BAR DEADLIFT · sets from the table · rest 2½ min (3 in the contrast block) · 12 min**
+**Even-numbered weeks** (not the easy and test weeks): the long runs become REPEAT SLED STARTS — six heavy runs of ten metres with thirty seconds' rest. Forward pressure repeated on a clock, which is the shape of a pressure fight against a man who keeps resetting. Same load as the long runs.
+
+**3 · 0:18 — DRIVE HOLDS · 3 × 10 seconds · rest 60 s · 3 min**
+
+Load the sled so it won't move — or use a wall — and from your boxing stance drive into it as hard as you can for ten seconds, through the rear leg, the trunk braced, breathing out. Three times. This is the clinch against a heavier man: the strength to hold your ground under ninety kilos is an isometric, and this is the only place it's trained.
+
+**4 · 0:21 — TRAP BAR DEADLIFT · sets from the table · rest 2½ min (3 in the contrast block) · 12 min**
 
 Stand inside the bar, grip the handles, flat back, drive the floor away. Nothing passes over your body and a rep you're not sure of goes down, not up — the one heavy lift safe to do alone at this hour.
 
 The phases, block by block: **SLOW LOWERING (weeks 1–3)** — lower the bar to the floor over a full five seconds, touch, and drive up fast. Builds tissue and the tendon stiffness sprinting needs; sore in week 1, then not. **NORMAL TEMPO (weeks 4–5)** — down under control, up fast, the volume at its highest. **PAUSED (weeks 6–7)** — lower normally, stop dead an inch off the floor for three seconds, then drive. **FAST (week 8)** — no pause: down under control, up as fast as the bar will move. **MAX SINGLE (week 9)** — the ramp as on the Saturday page, pins set, then the back-off sets. **EASY (week 10)** — 2 × 3 at 65%, fast; the profile redrawn. **CONTRAST (weeks 11–13)** — 2 × 2 at the calendar's percentage, fast, then straight into the jump circuit (Saturday's page describes it) with trap bar jumps as the loaded jump. **TEST WEEK (week 14)** — 2 × 2 at 80%; the heavy triple on test day.
 
-**4 · 0:30 — BENCH THROW · 4 × 3 · rest 90 s · 6 min**
+**5 · 0:33 — BENCH THROW · 4 × 3 · rest 90 s · 6 min**
 
 Smith machine, light bar — about a third of what you'd bench. Lower to the chest, press so hard the bar leaves your hands, catch it, reset. Whatever weight flies highest. No Smith machine: a 4–6 kg medicine ball thrown off the chest at a wall, 4 × 5. The punch-speed lift.
 
-**5 · 0:36 — RING DIPS · 3 sets at your level · rest 90 s · 6 min**
+**6 · 0:39 — RING DIPS · 3 sets at your level · rest 90 s · 6 min**
 
 Support at the top of the rings, arms locked, rings still; lower until the shoulders are level with the elbows, press up, turning the palms forward at the top. Bar dips and the support hold below it (Calisthenics page). Pressing through a shoulder that has to stabilise itself — the cuff and serratus work that keeps a guard up. Elbow pain is a stop sign, not a challenge.
 
-**6 · 0:42 — WEIGHTED CHIN-UPS · 3 × 5, then the MUSCLE-UP LINE, 2 sets · rest 90 s · 8 min**
+**7 · 0:45 — WEIGHTED CHIN-UPS · 3 × 5, then the MUSCLE-UP LINE, 2 sets · rest 90 s · 8 min**
 
 Palms away, weight on a belt or a dumbbell between the feet, from a dead hang, chin over the bar, lower under control. Then two sets of the muscle-up line — chest-to-bar pull-ups at the first level, explosive, the bar touching the chest, climbing through negatives to the strict muscle-up (Calisthenics page). Pulling strength protects the shoulders that throw; the muscle-up is pulling power, the quality that snaps a hand back.
 
-**7 · 0:50 — NORDIC CURLS · sets from the table · rest 2 min · 6 min**
+**8 · 0:53 — NORDIC CURLS · sets from the table · rest 2 min · 6 min**
 
 Kneel with the heels anchored under something solid. Body straight from knees to head, lower forward as slowly as you can, catch yourself with your hands, push back up. Stop the set the moment the lower back rounds. Ramped from where you are — 3 × 4 to 3 × 5 — and held there. A hamstring on a Saturday sprint is the second-commonest way a preparation ends. Wednesday, so the soreness is gone before Saturday.
 
-**8 · 0:56 — NECK · HOLDS ONLY · 5 min** — the four-direction holds, 3 × 10 seconds each direction. The third neck dose of the week, because in camp the neck is the cheapest insurance there is.
+**9 · 0:59 — NECK · HOLDS ONLY · 5 min** — the four-direction holds, 3 × 10 seconds each direction. The third neck dose of the week, because in camp the neck is the cheapest insurance there is.
 
-**Done · ~1:01.** Tonight: RANGE, the skill block, the sit. Weeks 1–5: THE MOVEMENT SESSION first.
+**Done · ~1:04.** Tonight: RANGE, the skill block, the sit. Weeks 1–5: THE MOVEMENT SESSION first.
 
 ---
 
@@ -231,7 +239,7 @@ The third power dose — the rotational throw and the loaded punch — then the 
 
 **2 · 0:08 — POWER DOSE · THROWS + LANDMINE · 8 min · 45 s between sets**
 
-Rotational shot-put, 2 × 3 per side — medicine ball, 3–5 kg, at the shoulder, side-on to the wall, drive off the back hip; flat and hard, like the punch. Landmine punch, 2 × 5 per side — one end of a barbell in a corner, the other at your shoulder, in your stance; drive the hips and punch it up and away, never a press. Bar speed is the metric; add weight only when it still snaps.
+Rotational shot-put, 2 × 3 per side — medicine ball, 5–6 kg through the build and heavy blocks and 3–5 kg in the fast block, at the shoulder, side-on to the wall, drive off the back hip; flat and hard, like the punch. You'll be punching up and in at taller men: more force at the same speed is the adaptation. Landmine punch, 2 × 5 per side — one end of a barbell in a corner, the other at your shoulder, in your stance; step in off the rear foot and punch it up and away on the same movement, never a press — the drive that closes distance and the punch that lands, as one. Bar speed is the metric; add weight only when it still snaps.
 
 **3 · 0:16 — SPLIT SQUAT, REAR FOOT ELEVATED · 3 × 6–8 each leg · rest 60 s · 7 min**
 
@@ -285,19 +293,21 @@ Turkish get-up, 2 per side, light — lie on your back with a kettlebell pressed
 
 90/90 hip switches × 5 each way. Hip airplanes × 5 per side — stand on one leg holding the rack, hinge the chest to horizontal, rotate the chest toward the floor and then up. Cossack squats × 6 per side. Leg swings × 10 each way. Pogo hops 2 × 20. Then the sprint build-ups — never skipped: one 20-metre run at 60%, one at 75%, one at 90%.
 
-**2 · 0:16 — FLYING SPRINTS · runs from the table · rest 2½–3 min · 14 min**
+**2 · 0:16 — STANCE STARTS, THEN FLYING SPRINTS · 17 min**
+
+STANCE STARTS first: from your boxing stance, three ten-metre sprints, the first step explosive off the rear foot, 90 seconds between. Against a taller man the fight is decided in the first two metres, every time he moves; this is that, trained. Then the flying sprints — runs from the calendar, rest 2½–3 min:
 
 Jog-build for 10–15 metres, then 20 metres absolutely flat out. Walk back, full rest — speed, not cardio. Curved treadmill, outdoors, or a treadmill on an 8–12% incline at 12–15 km/h for 8–10 seconds with the safety clip on. Week 1: build-ups, then three runs at 90% — no flat-out sprint until week 2. Weeks 5, 10 and 14: at 90%. Yellow day: 3 runs at 90%.
 
-**3 · 0:30 — REACTIVE JUMPS · 8 min · rest 2 min**
+**3 · 0:33 — REACTIVE JUMPS · 8 min · rest 2 min**
 
 Weeks 1–10: LOADED DROP JUMPS, 3 × 4 — a hex dumbbell in each hand, 8–12 kg, dip fast into a quarter squat, let both dumbbells go at the bottom and jump straight up as high as you can, empty-handed; land soft on clear floor. Weeks 11–13: DEPTH JUMPS, 4 × 5 — step off a 30–40 cm box and, the instant the feet touch, jump as high as you can, shortest possible time on the floor. Stop the set the moment a jump is lower than the last.
 
-**4 · 0:38 — SIDE BOUNDS · 3 × 4 per side · rest 90 s · 6 min**
+**4 · 0:41 — SIDE BOUNDS · 3 × 4 per side · rest 90 s · 6 min**
 
 Stand on one leg, jump sideways as far as you can, land on the other and stick it dead still for 2 seconds. Weeks 11–13: no stick — bounce straight back the other way. The sideways push-off that cuts a ring off.
 
-**5 · 0:44 — BACK SQUAT · sets from the table · rest 3 min · PINS SET · 16 min**
+**5 · 0:47 — BACK SQUAT · sets from the table · rest 3 min · PINS SET · 16 min**
 
 Warm-up sets first: 40% × 3, 60% × 2, 75% × 1 of working. Bar on the back, break at the hips and knees together, sit to just below parallel, drive up. Pins set just below your lowest position, every set — you're alone.
 
@@ -305,15 +315,15 @@ The same phases as the trap bar: **weeks 1–3 slow lowering** — five seconds 
 
 Lower-body maximal strength is the best predictor there is of how hard trained boxers hit. Twelve weeks builds some, expresses all of it, and the contrast block is where it becomes speed.
 
-**6 · 1:00 — PUSH PRESS · 3 × 3 · rest 2 min · 8 min**
+**6 · 1:03 — PUSH PRESS · 3 × 3 · rest 2 min · 8 min**
 
 Bar on the front of the shoulders, quick shallow knee dip, drive it overhead with the legs and punch it to lockout. Legs, braced trunk, hands — the route a punch takes. Loaded like the other lifts: fast, two in reserve; weeks 11–13 at 85%; week 9 skipped (the squat max is enough); week 14 at 70%.
 
-**7 · 1:08 — THE FOUR PUNCH THROWS · 2 rounds · 12 min**
+**7 · 1:11 — THE FOUR PUNCH THROWS · 2 rounds · 12 min**
 
-Medicine ball, 3–5 kg; if it isn't flying, it's too heavy. 45 seconds between exercises, 90 between rounds. Rotational shot-put × 4 per side — ball at the shoulder, stance side-on to the wall, drive off the back hip, flat and hard. Downward diagonal throw × 4 per side — ball high outside the shoulder, driven down and across toward the opposite hip, back foot pivoting. Hook throw × 4 per side — ball at chest height in bent arms, pivot hard off the lead leg and sling it sideways into the wall. Landmine punch × 5 per side — one end of a barbell in a corner, the other at your shoulder in your stance, drive the hips and punch it up and away, never a slow press. Straights are forward drive, hooks are rotation; all four get trained.
+Medicine ball — 5–6 kg for the shot-put in the build and heavy blocks, 3–5 kg for the rest; if it isn't flying, it's too heavy. 45 seconds between exercises, 90 between rounds. Rotational shot-put × 4 per side — ball at the shoulder, stance side-on to the wall, drive off the back hip, flat and hard. Downward diagonal throw × 4 per side — ball high outside the shoulder, driven down and across toward the opposite hip, back foot pivoting. Hook throw × 4 per side — ball at chest height in bent arms, pivot hard off the lead leg and sling it sideways into the wall. Landmine punch × 5 per side — one end of a barbell in a corner, the other at your shoulder in your stance, drive the hips and punch it up and away, never a slow press. Straights are forward drive, hooks are rotation; all four get trained.
 
-**Done · ~1:22.** THE MOVEMENT SESSION this evening, then RANGE. Bed early: tomorrow is the rounds. Saturday's 5pm carb feed loads it.
+**Done · ~1:25.** THE MOVEMENT SESSION this evening, then RANGE. Bed early: tomorrow is the rounds. Saturday's 5pm carb feed loads it.
 
 ---
 
@@ -507,6 +517,8 @@ Skill. Hitting hard on contact, snap and retraction, distance, timing, the guard
 ---
 
 ## THE THINKING (read at home, not in the gym)
+
+**Why the six pressure-fighter additions.** You fight forward, non-stop, against men who are heavier, taller and mobile. That's four physical problems: crossing the distance a taller man keeps, again and again (stance starts, repeat sled starts, shuttle bursts); holding your ground when a heavier man leans on you (drive holds — an isometric, and the one quality the program had no exercise for); taking bigger punches (the neck at four sets of the rapid brace); and hitting up and in with more force at the same speed (the heavier ball, the landmine punch with the step-in). Fifteen minutes a week, nothing dropped, and none of it replaces what your coach does with distance, angles and the guard — it gives him a body that can get there, stay there and keep hitting.
 
 **Why three blocks and not fourteen weeks of the same week.** A body adapts to what it's asked repeatedly, and it adapts fastest when the asking is concentrated: five weeks of volume and base builds tissue and depth that heavy work can't, five weeks of heavy work builds strength that volume can't, four weeks of contrast turns the strength into speed that neither can. Optimal 8 asks for all three every week and gets a little of each; this asks for one at a time and gets more of all three by January.
 
