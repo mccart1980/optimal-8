@@ -1395,6 +1395,33 @@ describe("Optimal 8", () => {
     }
   });
 
+  it("runs repeat sled starts in PREP week 2 and the long runs in week 3, the drive holds after either", async () => {
+    const names = () => Array.from(document.querySelectorAll("[data-flow-id^='S:']")).map((e) => e.getAttribute("data-flow-name"));
+    await mount({ program: "prep", start: "2026-08-31" });      // the fixed Wednesday is week 2
+    fireEvent.click(screen.getByRole("button", { name: "WED" }));
+    await findHead("Repeat Sled Starts");
+    expect(screen.queryByText(headMatch("Heavy Sled Sprints"))).not.toBeInTheDocument();
+    expect(screen.getAllByText(/^6 × 10 m/).length).toBeGreaterThan(0);
+    expect(names().indexOf("Drive Holds")).toBe(names().indexOf("Repeat Sled Starts") + 1);
+    cleanup();
+
+    await mount({ program: "prep", start: "2026-08-24" });      // week 3
+    fireEvent.click(screen.getByRole("button", { name: "WED" }));
+    await findHead("Heavy Sled Sprints");
+    expect(screen.queryByText(headMatch("Repeat Sled Starts"))).not.toBeInTheDocument();
+    expect(screen.getAllByText(/^4 × 20 m/).length).toBeGreaterThan(0);
+    expect(names().indexOf("Drive Holds")).toBe(names().indexOf("Heavy Sled Sprints") + 1);
+  });
+
+  it("puts PREP's stance starts on Saturday, before the flying sprints", async () => {
+    await mount({ program: "prep", start: "2026-08-24" });
+    fireEvent.click(screen.getByRole("button", { name: "SAT" }));
+    await findHead("Flying Sprints");
+    const names = Array.from(document.querySelectorAll("[data-flow-id^='S:']")).map((e) => e.getAttribute("data-flow-name"));
+    expect(names.indexOf("Stance Starts")).toBeGreaterThanOrEqual(0);
+    expect(names.indexOf("Stance Starts") + 1).toBe(names.indexOf("Flying Sprints"));
+  });
+
   it("puts the movement session on Wednesday and Saturday evenings in the build", async () => {
     await mount({ program: "prep", start: "2026-08-24" });
     expect(await screen.findByText("The movement session")).toBeInTheDocument();

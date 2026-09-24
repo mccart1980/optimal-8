@@ -41,7 +41,7 @@ import { CampWeekTable, FightWeekTable, CampWorkPanel, CampNumbers, CampWeekCard
 import {
   PREP_INTRO, PREP_PHASE_NAME, PREP_PHASE_CUE, PENG, PENG_MENU, prepRx, prepEmphasis, prepTests,
   FLEX_TESTS, MOVE_INTRO, MOVE_STEPS, MOVE_ROWS, MOVE_ROW_OF, moveTonight, CARB_TOPUP, SAUNA_PREP,
-  TRANSITION_INTRO, TRANSITION_RULES, prepSess, transitionSess,
+  TRANSITION_INTRO, TRANSITION_RULES, prepSess, transitionSess, PPROTO,
 } from "./prep.js";
 import {
   buildSeason, rowOn, programOn, fightPassed, seasonDiff, seasonLabel, dateSpan,
@@ -349,7 +349,7 @@ const PROTO = {
       ["RANGE only", "no skill block"],
       ["If you skip it", "nothing shows this week. By week 6 the hips tighten back to where they were, the internal-rotation lift stops moving, and the tests say so in numbers."]] },
 };
-Object.assign(PROTO, CPROTO);
+Object.assign(PROTO, CPROTO, PPROTO);
 
 /* v1.5 — thirty to forty easy nasal minutes on a weekend afternoon: the
    aerobic base that left with the Friday alarm, put back where it costs no
