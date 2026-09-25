@@ -275,7 +275,7 @@ export function sameLoadSeries(rows) {
    ================================================================ */
 export const PHOTO_VIEWS = [["front", "FRONT"], ["side", "SIDE"], ["back", "BACK"]];
 export const PHOTO_WEEKS = [1, 5, 9, 13];
-export const CAMP_PHOTO_WEEKS = [1, 6, 11];
+export const CAMP_PHOTO_WEEKS = [1, 5, 9];
 export const photoWeeks = (camp) => (camp ? CAMP_PHOTO_WEEKS : PHOTO_WEEKS);
 export const isPhotoDay = (camp, week, day) => day === "sun" && photoWeeks(camp).indexOf(week) >= 0;
 export const PHOTO_NOTE = "The photos never leave the phone: they are stored inside the app, not in your camera roll and not on anything of anyone else's. They travel in the backup with everything else, written into it as base64 — which is why a backup with photos in it is a large file.";
@@ -339,10 +339,10 @@ export function bodyNow(fuel, body) {
    last written down. In camp, the camp's target sits beside it.
    ================================================================ */
 export const CAMP_TARGET = {
-  fade: "8–12 points better than week 2",
-  t20: "+8–10% on week 1",
-  burst: "the decrement halved",
-  recovery: "a bigger drop than week 1",
+  fade: "5–8 points better than Prep's last read",
+  t20: "held from Prep's last test",
+  burst: "the decrement down a further quarter",
+  recovery: "up 5 beats on week 1",
   rhr: "down 4–8 beats",
   hrv: "up on week 1",
   body: "weight held, waist down",

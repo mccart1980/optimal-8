@@ -1,4 +1,5 @@
 import { C } from "./ui.jsx";
+import { clusterTimer } from "./edge.js";
 
 /* ================================================================
    OPTIMAL 8 · PREP — as data
@@ -20,6 +21,7 @@ export const PREP_PHASE_NAME = {
   normal: "NORMAL TEMPO",
   paused: "PAUSED · 3 s hold",
   fast: "FAST",
+  cluster: "FAST, IN CLUSTERS · 20 s on the pins",
   max: "MAX SINGLE · pins set",
   easy: "EASY · fast",
   contrast: "CONTRAST + the jump circuit",
@@ -30,6 +32,7 @@ export const PREP_PHASE_CUE = {
   normal: "Down under control, up fast. The volume is at its highest here.",
   paused: "Lower normally, stop dead an inch off the floor for three seconds, then drive. Count the three seconds.",
   fast: "No pause: down under control, up as fast as the bar will move. The set ends the moment the bar slows.",
+  cluster: "Two reps, the bar down on the pins or the floor for twenty seconds, two more; three minutes between sets. The watch polices every one, and a rep under the threshold ends the set.",
   max: "After the warm-up ramp, one attempt at 100–102% of the working max, a second only after the first flew. Pins set, no exceptions.",
   easy: "Two sets of three at 65%, fast. Nothing heavy, nothing near failure.",
   contrast: "The sets at the calendar's percentage, fast, then straight into the jump circuit. Heavy wakes the system up; fast uses it.",
@@ -40,6 +43,7 @@ export const PREP_PHASE_WHY = {
   normal: "The volume block at its peak, with the food to match.",
   paused: "The position force starts from, owned.",
   fast: "The nervous system taught to fire.",
+  cluster: "More heavy reps at full speed than straight sets can give.",
   max: "One of two maximal exposures in the whole preparation, each after a ramp, each followed by a reset of every working weight.",
   easy: "The week the adaptation lands. Nothing is added.",
   contrast: "Where strength becomes speed.",
@@ -89,7 +93,7 @@ export const PPROTO = {
    sled/nor/spr: the three counts the calendar carries. */
 const R = {};
 const wk = (d, o) => { R[d] = Object.assign({ d, sled: 5, nor: [3, 5], spr: 5, sets: 4, reps: 3, pct: 80, rest: 60,
-  sim: 6, split: 3, jump: "drop", js: [3, 4], bound: "stick", pp: { sets: 3, reps: 3, pct: 75 } }, o); };
+  sim: 6, split: 3, jump: "drop", js: [3, 4], bound: "stick", box: [3, 3], bsets: 3, pp: { sets: 3, reps: 3, pct: 75 } }, o); };
 
 wk(1, { ph: "slow", sc: "3 × 5 @ 70%", sets: 3, reps: 5, pct: 70, base: 45, e1: "mod", e2: "tempo", rest: 90, sim: 0, t20: 1,
   sled: 4, nor: [3, 4], spr: 0, size: 1, move: 1, carb: 1, profile: 1, nasal: 1, burstTest: 1,
@@ -111,8 +115,9 @@ wk(6, { ph: "paused", sc: "4 × 4 @ 80%", sets: 4, reps: 4, pct: 80, base: 45, e
   em: "Paused 4 × 4 @ 80%. Base 45. Tue 4 × 4 · Thu bursts · Sun 6 × 3, 60 s. Sauna starts." });
 wk(7, { ph: "paused", sc: "4 × 3 @ 84%", sets: 4, reps: 3, pct: 84, base: 45, e1: "rz", e2: "thr", rest: 60, sauna: 1,
   em: "Paused 4 × 3 @ 84%. Tue bursts · Thu threshold · Sun 6 × 3, 60 s." });
-wk(8, { ph: "fast", sc: "4 × 3 @ 87%", sets: 4, reps: 3, pct: 87, base: 45, e1: "vo2", e2: "lac2", rest: 60, sauna: 1,
-  em: "Fast 4 × 3 @ 87%. Tue 4 × 4 · Thu 40-s repeats 2 × 6 · Sun 6 × 3, 60 s." });
+/* week 8 runs the clusters; with the edge off, straight sets */
+wk(8, { ph: "fast", sc: "4 × 3 @ 87% — straight sets", sets: 4, reps: 3, pct: 87, base: 45, e1: "vo2", e2: "lac2", rest: 60, sauna: 1, cluster: 1,
+  em: "Fast in clusters 5 × (2+2) @ 87–90%. Tue 4 × 4 · Thu 40-s repeats 2 × 6 · Sun 6 × 3, 60 s." });
 wk(9, { ph: "max", sc: "MAX SINGLE → 2 × 2 @ 88%", sets: 2, reps: 2, pct: 88, base: 45, e1: "rz", e2: "rz", rest: 60,
   sauna: 1, maxWeek: 1, noPP: 1,
   em: "MAX SINGLE. Wed trap bar max, Sat squat max, Sun bench max first thing; then 2 × 2 @ 88%. Push press skipped. Tue bursts · Thu bursts · Sun 6 × 3, 60 s." });
@@ -121,13 +126,13 @@ wk(10, { ph: "easy", sc: "2 × 3 @ 65% — fast", sets: 2, reps: 3, pct: 65, bas
   profile: 1, reset: 1, nasal: 1, burstTest: 1, tests: 1, tape: 1, photos: 1, bolt: 1,
   em: "EASY + TESTS. 2 × 3 @ 65% fast; working weights reset; profiles redrawn. Tue retests then easy · Thu nasal test then easy · Sun 6 × 3 scored · range and flexibility tests · tape · photos." });
 wk(11, { ph: "contrast", sc: "2 × 2 @ 85% + the circuit", sets: 2, reps: 2, pct: 85, base: 45, e1: "rz", e2: "lac2", rest: 60,
-  jump: "depth", js: [4, 5], bound: "cont", cr: 3, sauna: 1, pp: { sets: 3, reps: 3, pct: 85 },
+  jump: "depth", js: [4, 5], bound: "cont", cr: 3, sauna: 1, edgeWin: 1, pp: { sets: 3, reps: 3, pct: 85 },
   em: "Contrast 2 × 2 @ 85% + the circuit; depth jumps begin. Tue bursts · Thu 40-s repeats 2 × 6 · Sun 6 × 3, 60 s." });
 wk(12, { ph: "contrast", sc: "2 × 2 @ 87% + the circuit", sets: 2, reps: 2, pct: 87, base: 45, e1: "vo2", e2: "ergrounds", rest: 60,
-  jump: "depth", js: [4, 5], bound: "cont", cr: 3, sauna: 1, pp: { sets: 3, reps: 3, pct: 85 },
+  jump: "depth", js: [4, 5], bound: "cont", cr: 3, sauna: 1, edgeWin: 1, pp: { sets: 3, reps: 3, pct: 85 },
   em: "Contrast 2 × 2 @ 87% + circuit. Tue 4 × 4 · Thu rounds on the erg 6 × 3 · Sun 6 × 3, 60 s." });
 wk(13, { ph: "contrast", sc: "2 × 2 @ 88% + the circuit", sets: 2, reps: 2, pct: 88, base: 45, e1: "rz1", e2: "lac", rest: 60,
-  jump: "depth", js: [4, 5], bound: "cont", cr: 2, sauna: 1, scored: 1, xmas: 1, pp: { sets: 3, reps: 3, pct: 85 },
+  jump: "depth", js: [4, 5], bound: "cont", cr: 2, sauna: 1, edgeWin: 1, scored: 1, xmas: 1, pp: { sets: 3, reps: 3, pct: 85 },
   em: "Christmas week, volume down 25%. Contrast 2 × 2 @ 88% + circuit, 2 rounds. Tue bursts 1 × 8 · Thu 40-s repeats × 6 · Sun 6 × 3 scored — the last read." });
 wk(14, { ph: "test", sc: "2 × 2 @ 80%", sets: 2, reps: 2, pct: 80, base: 45, e1: "easy", e2: "fightpace", rest: 60, sim: 0, t20: 1,
   sled: 3, nor: [2, 3], spr: 0, sprEasy: 1, light: 1, half: 1, split: 2, testWeek: 1,
@@ -135,6 +140,20 @@ wk(14, { ph: "test", sc: "2 × 2 @ 80%", sets: 2, reps: 2, pct: 80, base: 45, e1
   em: "TEST WEEK. Light. Tue burst decrement then easy · Wed 2 × 2 @ 80% · Thu nasal test then 4 × 3 at fight pace · Sat TEST DAY · Sun the 20-minute test, range and flexibility tests, tape, photos." });
 
 export const PREP_ROWS = R;
+
+/* THE EDGE, for a PREP week. On, the week runs every addition its row
+   carries: the clusters in week 8; Tuesday's speed, the contacts up by
+   half, seven rounds and the sauna four times in weeks 11–13; the
+   microdoses and the Wednesday thirty every week. Off — two yellow
+   mornings, or the switch in settings — the base program. */
+export function prepEdge(rx, on) {
+  const o = Object.assign({}, rx, { edge: !!on, speed: false, sauna4: !!rx.edgeWin, micro: !!on, thirty: !!on });
+  if (!on) return o;
+  if (rx.cluster) Object.assign(o, { ph: "cluster", sc: "5 × (2+2) @ 87–90%", sets: 5, reps: "2+2", pct: 87 });
+  if (rx.edgeWin) Object.assign(o, { speed: true, box: [4, 3], js: [5, 5], bsets: 4, sim: rx.sim ? 7 : rx.sim });
+  return o;
+}
+
 export const prepRx = (doc) => R[doc] || R[1];
 export const prepEmphasis = (doc) => (R[doc] || R[1]).em;
 /* even-numbered weeks, not the easy and test weeks: the long sled runs
@@ -266,15 +285,24 @@ export const PS = {
     { L: "A", n: "Warm-up + bear crawls", m: 8, p: "GEN8", rxLine: () => "8 min · bike, bands, hips, pogos — then bear crawls, 2 min",
       items: [{ n: "Bear crawls · 2 min", s: "10 m forward, 10 m back, × 4", cue: "On hands and feet, knees an inch off the floor, back flat as a table, opposite hand and foot together. Slow beats fast.", id: "crawl", k: "wr", sets: 4, reps: 20 }] },
     { L: "B", n: "Power dose — jumps", m: 8, star: 1, hard: 1, rest: "Rest 90 s", rt: 90,
-      rxLine: (rx) => "broad jumps 3 × 2 · box jumps 3 × 3" + (rx.d >= 11 ? " · shuttle bursts × 6" : ""),
+      rxLine: (rx) => "broad jumps 3 × 2 · box jumps " + rx.box[0] + " × " + rx.box[1] + (rx.d >= 11 ? " · shuttle bursts × 6" : ""),
       items: (rx) => [{ n: "Broad jump", s: "3 × 2", cue: "Two-foot jump forward for distance, stick the landing dead still.", id: "p_broad", k: "chk" },
-        { n: "Box jump", s: "3 × 3", cue: "The box chosen by the landing: you land on it in a quarter squat. Quick dip, jump as high as you can, land soft, step down.", id: "boxjump", k: "chk" }]
+        { n: "Box jump", s: rx.box[0] + " × " + rx.box[1], cue: "The box chosen by the landing: you land on it in a quarter squat. Quick dip, jump as high as you can, land soft, step down.", id: "boxjump", k: "chk" }]
         .concat(rx.d >= 11 ? [{ n: "Shuttle bursts", s: "6 × 5 m out and back · 20 s between", cue: "Six times five metres out and back, a hard push-off at each turn, twenty seconds between. Three minutes.", id: "p_shuttle", k: "chk" }] : []),
       w: OUTPUT_RULE,
       why: "Explosiveness responds to how often the nervous system is asked, not how much." },
+    { L: "Q", n: "Speed — flying twenties", m: 8, star: 1, hard: 1, edge: 1, rest: "Rest 2:30", rt: 150, hide: (rx) => !rx.speed,
+      rxLine: () => "build-ups at 75% and 90%, then 3 × 20 m flat out",
+      items: [{ n: "Build-up 20 m", s: "one at 75%, one at 90%", cue: "Never skipped. The build-ups are what make the speed safe.", id: "p_speed_bu", k: "chk" },
+        { n: "Flying sprint 20 m", s: "3 × 20 m · rest 2½ min", cue: "After the shuttles: three flying 20-metre sprints, absolutely flat out. Curved treadmill or outdoors.", id: "p_speed_tue", k: "chk" }],
+      w: "A hamstring twinge on the build-ups ends the speed for the day. The Nordics never miss.",
+      why: "THE EDGE. Twice a week is what sprinters do, and it's the best hamstring insurance there is — provided the build-ups never miss." },
     { L: "C", n: "The Pistol Line", m: 5, cal: "pistol", rest: "Rest 60 s", rt: 60, rxLine: () => "2 × 5 per leg at your level",
       items: (rx) => [{ n: "The pistol line — at your level", s: (rx.half ? 1 : 2) + " × 5 per leg", cue: "Box pistol to start: stand on one leg in front of a box, the other straight out in front, sit to the box under control and stand without the free foot touching.", id: "pistol", k: "wr", sets: rx.half ? 1 : 2, reps: 5 }],
       why: "Two sets, never to failure: control, not load. The pivot foot learning to own the body." },
+    { L: "K", n: "Spanish Squat Hold", m: 3, p: "SPAN", rest: "Rest 30 s", rt: 30, rxLine: () => "3 × 30 seconds",
+      items: [{ n: "Spanish squat hold", s: "3 × 30 seconds · rest 30 s", cue: "As Thursday: a thick band around the back of both knees, anchored to the rack in front of you at knee height; lean back into it so the shins stay vertical, sit to a half squat, hold dead still.", id: "p_spanish_tue", k: "wr", sets: 3, reps: 30 }],
+      why: "The tendon block runs twice a week now, because the jumps do." },
     { L: "X", n: "Burst Decrement Test", m: 6, hide: (rx) => !rx.burstTest, star: 1,
       timer: () => ({ kind: "bursttest", title: "BURST DECREMENT" }), rxLine: () => "10 bursts of 6 s — the tenth against the first",
       items: [{ n: "First burst", s: "write it down", id: "p_burst1", k: "out", u: "output" },
@@ -319,7 +347,8 @@ export const PS = {
       why: "A percentage is a guess about today from a number measured weeks ago; a velocity is a measurement of today." },
     { L: "C", n: "Trap Bar Deadlift", m: 12, star: 1, hard: 1, mainLift: "tbdl", vel: "tbdl", phase: 1,
       pres: (rx) => ({ sc: rx.sc, pct: rx.pct }),
-      rest: (rx) => (rx.lift === "contrast" ? "Rest 3:00" : "Rest 2:30"), rt: (rx) => (rx.lift === "contrast" ? 180 : 150),
+      rest: (rx) => (rx.lift === "contrast" || rx.lift === "cluster" ? "Rest 3:00" : "Rest 2:30"), rt: (rx) => (rx.lift === "contrast" || rx.lift === "cluster" ? 180 : 150),
+      timer: (rx) => (rx.lift === "cluster" ? clusterTimer(rx.sets, "87–90%", "TRAP BAR") : null),
       rxLine: (rx) => rx.sc,
       items: (rx) => [{ n: "Trap bar deadlift", s: rx.sc, cue: PREP_PHASE_CUE[rx.lift] + " Stand inside the bar, grip the handles, flat back, drive the floor away. Nothing passes over your body and a rep you are not sure of goes down, not up.", id: "tbdl", k: "wr", mk: "tbdl", pct: rx.pct, sets: rx.sets, reps: rx.reps }],
       w: (rx) => PREP_PHASE_CUE[rx.lift],
@@ -362,6 +391,9 @@ export const PS = {
     { L: "D", n: "Spanish Squat Hold", m: 3, p: "SPAN", rest: "Rest 30 s", rt: 30, rxLine: () => "3 × 30 seconds",
       items: [{ n: "Spanish squat hold", s: "3 × 30 seconds · rest 30 s", cue: "A thick band around the back of both knees, anchored to the rack in front of you at knee height; lean back into it so the shins stay vertical, sit to a half squat, hold dead still.", id: "spanish", k: "wr", sets: 3, reps: 30 }],
       why: "The patellar tendon, which takes every depth jump and box landing in this camp." },
+    { L: "J", n: "Achilles Hold", m: 2, p: "CALF", rxLine: () => "one 45-second standing hold",
+      items: [{ n: "Achilles hold — STANDING", s: "one × 45 seconds", cue: "As Tuesday's calf block, hold only: on the edge of a step, as heavy as you can hold dead still, rise to the top and hold, knees straight.", id: "p_achilles_thu", k: "wr", sets: 1, reps: 45 }],
+      why: "Twice a week, because the contacts are up." },
     { L: "X", n: "Nasal Threshold Test", m: 8, hide: (rx) => !rx.nasal, star: 1,
       timer: () => ({ kind: "nasal", title: "NASAL THRESHOLD" }), rxLine: () => "8 min nose only, the pace up every 2 minutes",
       items: [{ n: "Pace at the moment the mouth opened", s: "write it down", id: "p_nasal", k: "out", u: "pace" },
@@ -413,12 +445,13 @@ export const PS = {
       items: (rx) => [{ n: rx.jump === "depth" ? "Depth jump" : "Loaded drop jump", s: rx.js[0] + " × " + rx.js[1],
         cue: rx.jump === "depth" ? "Step off a 30–40 cm box and, the instant the feet touch, jump as high as you can — the shortest possible time on the floor." : "A hex dumbbell in each hand, 8–12 kg, dip fast into a quarter squat, let both go at the bottom and jump straight up as high as you can, empty-handed; land soft on clear floor.", id: "p_react", k: "chk" }],
       w: "Stop the set the moment a jump is lower than the last." },
-    { L: "D", n: "Side Bounds", m: 6, hard: 1, hide: (rx) => !!rx.testWeek, rest: "Rest 90 s", rt: 90, rxLine: () => "3 × 4 per side",
-      items: (rx) => [{ n: "Side bound", s: "3 × 4 per side", cue: rx.bound === "cont" ? "Stand on one leg, jump sideways as far as you can, land on the other and bounce straight back the other way — no stick." : "Stand on one leg, jump sideways as far as you can, land on the other and stick it dead still for two seconds.", id: "p_bound", k: "chk" }],
+    { L: "D", n: "Side Bounds", m: 6, hard: 1, hide: (rx) => !!rx.testWeek, rest: "Rest 90 s", rt: 90, rxLine: (rx) => rx.bsets + " × 4 per side",
+      items: (rx) => [{ n: "Side bound", s: rx.bsets + " × 4 per side", cue: rx.bound === "cont" ? "Stand on one leg, jump sideways as far as you can, land on the other and bounce straight back the other way — no stick." : "Stand on one leg, jump sideways as far as you can, land on the other and stick it dead still for two seconds.", id: "p_bound", k: "chk" }],
       why: "The sideways push-off that cuts a ring off." },
     { L: "E", n: (rx) => (rx.lift === "contrast" ? "Back Squat + The Jump Circuit" : "Back Squat"), m: 16, star: 1, hard: 1,
       mainLift: "squat", vel: "squat", phase: 1, hide: (rx) => !!rx.testWeek,
       pres: (rx) => ({ sc: rx.sc, pct: rx.pct }), rest: "Rest 3:00", rt: 180, rxLine: (rx) => rx.sc,
+      timer: (rx) => (rx.lift === "cluster" ? clusterTimer(rx.sets, "87–90%", "BACK SQUAT") : null),
       items: (rx) => [{ n: "Back squat", s: rx.sc, cue: PREP_PHASE_CUE[rx.lift] + " Warm-up sets first: 40% × 3, 60% × 2, 75% × 1 of working. Bar on the back, break at the hips and knees together, sit to just below parallel, drive up. Pins set just below your lowest position, every set.", id: "squat", k: "wr", mk: "squat", pct: rx.pct, sets: rx.sets, reps: rx.reps }]
         .concat(rx.lift === "contrast" ? [{ n: "The jump circuit", s: rx.cr + " rounds", cue: "After each double: rest 20 s, box jumps × 3, rest 20, trap bar jumps × 3, rest 20, band-assisted jumps × 3, then 3 minutes. The round ends the moment jump height drops.", id: "p_circuit", k: "chk" }] : []),
       w: (rx) => PREP_PHASE_CUE[rx.lift], why: (rx) => PREP_PHASE_WHY[rx.lift] },
@@ -470,7 +503,7 @@ export const PS = {
         { n: "Last round output", s: "round six divided by round one is the fade", id: "c_fs_rd6", k: "out", u: "SkiErg m / bike cal" }],
       rules: ["Relaxed jaw, shoulders down. Finish a round with your traps by your ears and it does not count.", CORNER],
       recovery: 1,
-      why: "Six rounds of three minutes, all fourteen weeks; the rest shortens by block — 90 seconds in accumulation, 60 from week 6.", tr: 2 },
+      why: "Six rounds of three minutes through week 10; seven in weeks 11–13. The rest shortens by block — 90 seconds in accumulation, 60 from week 6.", tr: 2 },
     { L: "D", n: "The Post-Max Sit", m: 3, hide: (rx) => !rx.sim && !rx.t20,
       timer: () => ({ kind: "postmax", title: "POST-MAX SIT" }), rxLine: () => "3 min — straight off the last round",
       items: [{ n: "Seconds to settle onto the breath", s: "write it down", cue: "Straight off the last round: sit, eyes closed, heart at 170-plus, find the breath at the nostrils.", id: "postmax", k: "out", u: "seconds" }],

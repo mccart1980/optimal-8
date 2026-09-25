@@ -300,7 +300,7 @@ export function PhotosView({ photos, setPhotos, camp, week, dayIso, isPhotoDay }
   return (
     <div>
       <Card ac={isPhotoDay ? C.violet : C.line}>
-        <Eye c={C.violet}>Photos — {camp ? "the Sunday of camp weeks 1, 6 and 11" : "the Sunday of weeks 1, 5, 9 and 13"}</Eye>
+        <Eye c={C.violet}>Photos — {camp ? "the Sunday of camp weeks 1, 5 and 9" : "the Sunday of weeks 1, 5, 9 and 13"}</Eye>
         {isPhotoDay
           ? <div style={Object.assign({}, dsp, { fontSize: 20, fontWeight: 800, letterSpacing: 1.2, color: C.violet })}>TODAY IS A PHOTO DAY</div>
           : <Note c={C.chalk} s={{ marginTop: 0 }}>Not today. The next one is {camp ? "camp week " : "week "}{wks.filter((w) => w > week)[0] || wks[0]}.</Note>}

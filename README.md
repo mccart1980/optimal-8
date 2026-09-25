@@ -284,7 +284,7 @@ first if there's anything in there you want to keep.
   bolted on the end, making it an 18-week cycle.
 - **Bell sounds** and **Auto rest clock** — timer behaviour, on by default.
 - **CAMP MODE** — ON, Optimal 8 · Camp runs *in place of* Optimal 8 Fighter:
-  the twelve-week camp from `optimal-8-camp.md`, with its own dated week table,
+  the ten-week camp from `optimal-8-camp.md`, with its own dated week table,
   its own session pages, its own timers and its own tests, counting from its own
   start date. OFF, Optimal 8 Fighter is exactly as it was, counting from its own
   start date underneath. See **Camp mode** below.
@@ -307,45 +307,50 @@ first if there's anything in there you want to keep.
 - **Training taper weeks** — while it's on, the hardship tests pause and every
   calisthenics line goes to holds only.
 
-## Camp mode — the twelve weeks
+## Camp mode — the ten weeks
 
 Turn **CAMP MODE** on in settings and the whole app switches over to
-`optimal-8-camp.md`: twelve weeks to be fight-ready for a 6 × 3, running in
-place of Optimal 8 Fighter and handing back at the end.
+`optimal-8-camp.md`: ten weeks ending on the fight, running in place of
+Optimal 8 Fighter. With a fight date of **Saturday 13 March 2027** it runs
+**4 January to 13 March**, and PREP ends on its test day, **2 January**.
 
-- **Camp day one** — the Monday week 1 starts on. Defaults to **Monday 21
-  September 2026**, with the fight on **Tuesday 1 December**; change it and
-  every date in the app moves with it. Week 1 is a full week, Monday to Sunday.
+- **The blocks** — foundation (week 1), build (2–4), easy + tests (5), peak
+  (6–8), sharpen (9), fight week (10). No fork: if the fight date moves, the
+  camp moves with it.
+- **Camp day one** — with a fight date, the Monday nine weeks before the
+  fight's own week; without one, a setting (default **Monday 4 January 2027**).
 - **The week** — Monday BASE, Tuesday POWER + ENGINE 1, Wednesday STRENGTH,
   Thursday THROWS + ENGINE 2, Friday asleep, Saturday THE LONG SESSION, Sunday
-  THE ROUNDS. Every block in the order the document runs it, with its minutes,
-  its rests and its wording.
-- **No maxes, ever.** Every lift loads from a **working weight**, confirmed in
-  week 1 with a set of 5 and reset in week 6 with a set of 3. Each main lift
-  carries a panel with the +2.5% / −2.5% rule on it. Your Optimal 8 maxes are
-  never touched by a camp — they're still there when the switch goes off.
-- **The lift phases** — slow lowering with the five-second cue (weeks 1–2),
-  paused with the three-second cue (3–4), fast (5–7), and contrast into the
-  jump circuit (8–9, and 10 on the no-fight path).
-- **The conditioning** — moderate intervals, 4-minute intervals, repeat bursts,
-  tempo intervals, threshold, 40-second repeats, rounds on the erg 7 × 3,
-  fight-pace rounds and easy, each with its own timer.
-- **Sunday's simulation** — six rounds, seven in the peak block, with the corner
-  minute written and timed into every rest and the post-max sit straight after.
-  Scored in weeks 2, 5, 6 and 9 — and 10 and 11 on the no-fight path.
-- **The tests, on their dates** — the burst decrement, the 20-minute test, broad
-  jump, rotational throw, push-ups, chin-ups, plank, Copenhagen, BOLT, the nasal
-  threshold, the four range tests and the working-weight resets. TRACK → CAMP
-  charts all of it, plus the fade.
-- **Week 10 — the fork.** A setting: **fight confirmed**, yes or no. Yes makes
-  week 10 the sharpen week and week 11 fight week, with a **fight-week table**
-  for the Tuesday 1 December layout. No makes week 10 the last hard week and
-  week 11 the test week, the camp's verdict. Either way Optimal 8 Fighter
-  restarts at week 1 on **Monday 7 December**, in camp week 12.
-- **Shared with the Fighter** — maxes, calisthenics levels, RANGE test results,
-  Iron Mind stages, your streak and all your history. Turning the switch either
-  way loses nothing.
-- **The document** is on the PLAN tab alongside the Fighter and Iron Mind.
+  THE ROUNDS, every block in the document's order. The tendon block runs twice
+  a week: the Spanish hold on Tuesday and Thursday, the Achilles hold on
+  Tuesday and Thursday.
+- **No maxes.** Every lift loads from a **working weight** off test day, reset
+  in week 5 with a set of 3. Your Optimal 8 maxes are never touched.
+- **The lift phases** — slow lowering (week 1), paused (2–3), fast in clusters
+  (4), easy (5), contrast into the jump circuit (6–8), 2 × 2 at 80% (9).
+- **Sunday's simulation** — six rounds, eight in weeks 6 and 7, ten in week 8,
+  the corner minute in every rest; scored in weeks 1, 4, 5 and 8. Week 9's
+  Sunday is the fight-day rehearsal.
+- **Fight week** — Monday easy, Tuesday the speed microdose, Wednesday
+  nothing, Thursday activation, Friday the weigh-in, Saturday the fight, with
+  its own dated table.
+
+## THE EDGE — PREP and CAMP
+
+Seven additions, on by default, each on the weeks the documents give it:
+Tuesday speed after the shuttles (PREP 11–13, camp 6–8), cluster sets with a
+20-second pin-rest timer (PREP week 8, camp week 4), plyometric contacts up by
+half (PREP 11–13, camp 6–8), the evening power microdose on Monday and
+Wednesday, rounds past the fight (PREP seven in 11–13; camp eight, eight, ten),
+the Wednesday easy thirty, and the sauna four evenings a week (PREP 11–13,
+camp 6–8).
+
+**The guardrail.** When the morning check records a second yellow (or worse)
+in a week, the additions come off for the rest of that week — no Tuesday speed
+or Wednesday thirty, the clusters as straight sets, the contacts back to base,
+no microdoses, six rounds, the sauna twice — and TODAY says "The edge is off
+this week: two yellow mornings". It comes back the next Monday. **THE EDGE**
+in settings turns it off by hand.
 
 ## What v1.5 changed
 
