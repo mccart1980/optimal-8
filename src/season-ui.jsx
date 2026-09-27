@@ -86,7 +86,7 @@ export function SeasonView({ season, st, current, program, onProgram, moved }) {
 /* ================================================================
    THE GUIDE — the plain-English page, and what this week is
    ================================================================ */
-export function GuideView({ md, blockName, emphasis, tests }) {
+export function GuideView({ md, blockName, emphasis, tests, after }) {
   return (
     <div>
       <Card ac={C.brass}>
@@ -98,6 +98,7 @@ export function GuideView({ md, blockName, emphasis, tests }) {
           Tests this week: {tests && tests.length ? tests.join(", ") : "none"}
         </div>
       </Card>
+      {after || null}
       <DocView md={md} accent={C.brass} big />
     </div>);
 }

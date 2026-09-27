@@ -1,7 +1,7 @@
 import { C } from "./ui.jsx";
 
 /* ================================================================
-   IRON MIND v4.2 — the program, as data.
+   IRON MIND v5 — the program, as data.
    Every instruction string on this page is the document's own
    wording. Nothing here is paraphrased; where the document gives a
    duration, that duration is the one the timer runs.
@@ -11,7 +11,7 @@ export const IM_KEYS = {
   day: "o8s-imday",     /* { "2026-09-10": { ticks: {...}, floor: 1 } }         */
   sit: "o8s-imsit",     /* [ { d, stage, mins, cycles, best, drifts, segs } ]   */
   hard: "o8s-imhard",   /* [ { d, wk, test, mind, body, gap, honest, note } ]   */
-  wk: "o8s-imwk",       /* { "2026-09-07": { bolt } }  keyed by that Monday     */
+  wk: "o8s-imwk",       /* { "2026-09-07": { bolt, control, react, life, month } }  keyed by that Monday */
 };
 
 export const SAFETY = "Safety, at every stage. Breath holds and any fast breathing: seated or lying, never in or near water, never driving, never standing. Never holds and cold together. If anything tips toward panic: stop, sigh, session over — that's the tool used correctly, not a failure. Forceful techniques carry real contraindications — high blood pressure, heart conditions, epilepsy, recent abdominal surgery, severe asthma; if any ever apply, those techniques are out and the rest still works.";
@@ -36,6 +36,7 @@ export const REVIEW_Q = [
   "Where did I go wrong today?",
   "What did I do well?",
   "What did I leave undone that I'll do tomorrow?",
+  "Did anything move me today, and did I notice before or after I reacted?",
 ];
 
 export const SIGH_HOW = "Full breath in through the nose, a second short sip on top, one long slow exhale through the mouth, longer than the inhale. Three times. The fastest reliable way to bring the body down, and you're rehearsing the rescue tool while calm so it's automatic under stress.";
@@ -202,6 +203,11 @@ export const GUIDED = [
     how: "Pick one specific hard thing coming this week — a round, a max, a conversation — and run it through your own eyes, in real time (a round takes three minutes to rehearse, not twenty seconds), with the nerves included. Then the adversity run: the moment it goes wrong — gassing mid-round, caught clean, the mind saying quit — watched, and answered with control. You're pre-building the response so the ambush has already been met.",
     steps: [{ l: "THE THING, REAL TIME, YOUR OWN EYES", s: 180 }, { l: "NERVES INCLUDED", s: 60 }, { l: "THE ADVERSITY RUN — IT GOES WRONG", s: 120 }, { l: "ANSWERED WITH CONTROL", s: 60 }],
     extra: { n: "THE PRE-FIGHT 90 SECONDS", s: "In the car before any sparring: two sighs; one line, second person, your own name — \"You've done harder. Sharp and relaxed.\"; the single concrete thing you'll do when the first bell goes. Then in.",
+      steps: [{ l: "TWO SIGHS", s: 20 }, { l: "\"YOU'VE DONE HARDER. SHARP AND RELAXED.\"", s: 35 }, { l: "THE ONE CONCRETE THING AT THE FIRST BELL", s: 35 }] } },
+  { id: "fightrehearsal", st: 0, n: "Fight-week rehearsal", tag: "WEEKS 23–24 · EVERY EVENING · FIVE MINUTES, REAL TIME", c: C.oxide,
+    how: "Rehearsal every evening, five minutes, real time, through your own eyes: the walk to the ring, the first bell, the moment it goes wrong, the response.",
+    steps: [{ l: "THE WALK TO THE RING", s: 60 }, { l: "THE FIRST BELL", s: 60 }, { l: "THE MOMENT IT GOES WRONG", s: 90 }, { l: "THE RESPONSE", s: 90 }],
+    extra: { n: "THE PRE-FIGHT 90 SECONDS", s: "In the car: two sighs; one line, second person, your own name — \"You've done harder. Sharp and relaxed.\"; the single concrete thing you'll do when the first bell goes. Then in.",
       steps: [{ l: "TWO SIGHS", s: 20 }, { l: "\"YOU'VE DONE HARDER. SHARP AND RELAXED.\"", s: 35 }, { l: "THE ONE CONCRETE THING AT THE FIRST BELL", s: 35 }] } },
   { id: "switch", st: 3, n: "The four-station switch drill", tag: "5 MINUTES · THREE TIMES A WEEK · BEFORE THE SIT", c: C.cobalt,
     how: "Attention has width (broad or narrow) and direction (outward or inward) — four states — and mastery is switching cleanly on demand, not holding one. Stuck narrow-outward: fixating on the shot that landed and eating the one behind it. Stuck broad-inward: analysing mid-round. Stuck narrow-inward: every twinge enormous — the panic state, the aperture jammed shut on your own body. Progress 30s → 20s → 10s per station; then run it during a wall sit; then during conditioning. THE TRAINING EFFECT IS IN THE SWITCH.",

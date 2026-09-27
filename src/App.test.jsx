@@ -893,7 +893,7 @@ describe("Optimal 8", () => {
     expect(await screen.findByText("CONTENTS")).toBeInTheDocument();
     // both documents are readable offline: once in the contents, once as the heading
     expect(screen.getAllByText("WHEN BOXING RETURNS — CAMP MODE").length).toBe(2);
-    fireEvent.click(screen.getByRole("button", { name: "IRON MIND v4.2" }));
+    fireEvent.click(screen.getByRole("button", { name: "IRON MIND v5" }));
     await waitFor(() => expect(screen.getAllByText("THE DAY — ONE PAGE, EVERY DAY").length).toBe(2));
   });
 
@@ -1361,7 +1361,7 @@ describe("Optimal 8", () => {
         expect(screen.getByText(/^(YELLOW|RED) —/), where).toBeInTheDocument();
 
         // and the rest of the day is below it
-        ["site", "lunch", "ev-range", "ev-sit", "ev-review", "ev-casein", "ev-lights"]
+        ["site", "lunch", "ev-range", "ev-sit", "ev-review", "nt-casein", "nt-lights"]
           .forEach((x) => expect(ids.indexOf(x), where + " lost " + x).toBeGreaterThan(0));
       }
       cleanup();
@@ -1866,20 +1866,24 @@ describe("Optimal 8", () => {
     }
   });
 
-  it("writes the evening as RANGE, the hollow block, the sit, the review and the light", async () => {
+  it("writes the evening as RANGE, the hollow block, the sit, the review, then THE NIGHT", async () => {
     await mount();
     const names = Array.from(document.querySelectorAll("[data-flow-id^='ev-']")).map((r) => r.getAttribute("data-flow-name"));
-    expect(names).toEqual(["RANGE", "The hollow block", "The sit", "The review", "Casein before bed", "Lights out"]);
+    expect(names).toEqual(["RANGE", "The hollow block", "The sit", "The review"]);
+    const night = Array.from(document.querySelectorAll("[data-flow-id^='nt-']")).map((r) => r.getAttribute("data-flow-name"));
+    expect(night).toEqual(["Casein before bed", "Lights out"]);
+    expect(screen.getByText("THE NIGHT")).toBeInTheDocument();
 
     // every RANGE move is its own row, with its hold time, behind the one timer
     fireEvent.click(screen.getByText("RANGE"));
     expect(await screen.findByText("OPEN BOOK · RIGHT SIDE UP")).toBeInTheDocument();
     expect(screen.getByText("DEEP SQUAT HOLD")).toBeInTheDocument();
 
-    // the review is the three questions, on one screen
+    // the review is the four questions, the life question last, on one screen
     fireEvent.click(screen.getByText("The review"));
     expect(await screen.findByText("Where did I go wrong today?")).toBeInTheDocument();
     expect(screen.getByText("What did I do well?")).toBeInTheDocument();
+    expect(screen.getByText("Did anything move me today, and did I notice before or after I reacted?")).toBeInTheDocument();
     expect(screen.queryByText("OPEN BOOK · RIGHT SIDE UP")).not.toBeInTheDocument();
   });
 
@@ -1904,5 +1908,126 @@ describe("Optimal 8", () => {
     render(<App />);
     await waitFor(() => expect(screen.queryByText("LOADING…")).not.toBeInTheDocument());
     await waitFor(() => expect(document.querySelector("[data-flow-open='1']").getAttribute("data-flow-id")).toBe("m-onething"));
+  });
+
+  /* ================================================================
+     IRON MIND v5 — THE SEASON, THE LIFE PILLAR, THE NIGHT
+     ================================================================ */
+  const flowNames = () => Array.from(document.querySelectorAll("[data-flow-id]")).map((e) => e.getAttribute("data-flow-name"));
+  const flowIdsNow = () => Array.from(document.querySelectorAll("[data-flow-id]")).map((e) => e.getAttribute("data-flow-id"));
+
+  it("runs the Sunday life review after the weekly check, and logs and charts the reactivity count", async () => {
+    await mount();
+    fireEvent.click(screen.getByRole("button", { name: "SUN" }));
+    await findHead("Weekly Check");
+    const names = flowNames();
+    const check = names.indexOf("Weekly Check"), review = names.indexOf("The life review");
+    expect(check).toBeGreaterThan(0);
+    expect(review).toBeGreaterThan(check);
+
+    // the four questions, then the three numbers
+    fireEvent.click(screen.getByText("The life review"));
+    expect(await screen.findByText("What did I avoid?")).toBeInTheDocument();
+    expect(screen.getByText("What's the hard thing for next week?")).toBeInTheDocument();
+    fireEvent.change(screen.getByPlaceholderText("1–10"), { target: { value: "7" } });
+    fireEvent.change(screen.getByPlaceholderText("times moved"), { target: { value: "4" } });
+    await waitFor(() => {
+      const wk = JSON.parse(localStorage.getItem("o8s-imwk"))["2026-09-07"];
+      expect(wk.react).toBe("4");
+      expect(wk.control).toBe("7");
+    });
+
+    // the one-thing rate is computed from the morning's tick
+    expect(screen.getByTestId("onething-rate").textContent).toBe("0/7");
+    fireEvent.click(screen.getByRole("button", { name: "Tick The one thing" }));
+    await waitFor(() => expect(screen.getByTestId("onething-rate").textContent).toBe("1/7"));
+
+    // TRACK charts it, and shows week 1 against this week
+    fireEvent.click(screen.getByRole("button", { name: "TRACK" }));
+    fireEvent.click(await screen.findByRole("button", { name: "IRON MIND" }));
+    expect(await screen.findByText("The seven numbers — ten seconds each, Sunday")).toBeInTheDocument();
+    expect(within(screen.getByTestId("react-chart")).getByText("4")).toBeInTheDocument();
+    expect(screen.getByTestId("wk1-react").textContent).toMatch(/4$/);
+
+    // and the dashboard carries the reactivity count
+    fireEvent.click(screen.getByRole("button", { name: "DASH" }));
+    expect(await screen.findByText("Reactivity count — times moved before you noticed")).toBeInTheDocument();
+    expect(screen.getByText(/^Week 1: 4 · this week: 4\./)).toBeInTheDocument();
+    expect(screen.getByText("Week 1 against this week")).toBeInTheDocument();
+  });
+
+  it("puts a life test on every day, rotating, and the seven rules on GUIDE and in IRON", async () => {
+    await mount();
+    expect(screen.getByText("The life test — The avoided thing")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Tick The life test — The avoided thing" }));
+    await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-imwk"))["2026-09-07"].life.done).toBe(true));
+    cleanup();
+    await mount({ imStart: "2026-08-31" });           // season week 2
+    expect(screen.getByText("The life test — The no-complaint day")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "GUIDE" }));
+    expect(await screen.findByText("The rules — the code, made specific")).toBeInTheDocument();
+    expect(screen.getByText("Decide in seven breaths.")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "IRON" }));
+    fireEvent.click(await screen.findByRole("button", { name: "LIFE" }));
+    expect(await screen.findByText("The phone is a tool, not a place.")).toBeInTheDocument();
+    expect(screen.getByText("The monthly audit — twenty minutes")).toBeInTheDocument();
+  });
+
+  it("dates the season from the fight and runs the fight-week evening in week 23", async () => {
+    vi.setSystemTime(new Date(2027, 2, 3, 9, 0, 0));     // Wed 3 March 2027 — season week 23
+    await mount({ fightDate: "2027-03-13" });
+    expect(screen.getByTestId("fight-week-mind").textContent).toBe("WEEK 23 · SHARPEN");
+    const ids = flowIdsNow();
+    // the sit, then the rehearsal, then the review; the life test pauses
+    expect(ids.indexOf("ev-rehearse")).toBe(ids.indexOf("ev-sit") + 1);
+    expect(ids.indexOf("ev-review")).toBe(ids.indexOf("ev-rehearse") + 1);
+    expect(ids).not.toContain("lf-test");
+    expect(screen.getByText("20 MIN · COUNT AND FOLLOW")).toBeInTheDocument();
+    expect(screen.getByText("The breath practice — calm tools only")).toBeInTheDocument();
+    fireEvent.click(screen.getByText("The breath practice — calm tools only"));
+    expect(screen.getByText("Breathe Light")).toBeInTheDocument();
+    expect(screen.queryByText("The CO2 table")).not.toBeInTheDocument();
+
+    // the hardship tests pause, and the season page knows where it is
+    fireEvent.click(screen.getByRole("button", { name: "IRON" }));
+    fireEvent.click(await screen.findByRole("button", { name: "HARDSHIP" }));
+    expect(await screen.findByText(/The fight-week mind, week 23: hardship, none\./)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "SEASON" }));
+    expect(await screen.findByText("SEASON WEEK 23 OF 24")).toBeInTheDocument();
+    cleanup();
+
+    // week 24: twelve minutes, counting only
+    vi.setSystemTime(new Date(2027, 2, 9, 9, 0, 0));
+    await mount({ fightDate: "2027-03-13" });
+    expect(screen.getByTestId("fight-week-mind").textContent).toBe("WEEK 24 · FIGHT WEEK");
+    expect(screen.getByText("12 MIN · COUNTING ONLY")).toBeInTheDocument();
+    cleanup();
+
+    // week 1 is Monday 28 September: its Sunday 25 October carries the first audit,
+    // and Sunday 27 December the half-day sit
+    vi.setSystemTime(new Date(2026, 9, 25, 9, 0, 0));
+    await mount({ fightDate: "2027-03-13" });
+    expect(flowIdsNow()).toContain("wk-audit");
+    expect(flowIdsNow().indexOf("wk-audit")).toBe(flowIdsNow().indexOf("wk-life") + 1);
+    cleanup();
+    vi.setSystemTime(new Date(2026, 11, 27, 9, 0, 0));
+    await mount({ fightDate: "2027-03-13" });
+    expect(flowIdsNow()).toContain("hd-sit");
+    expect(flowIdsNow()).not.toContain("wk-audit");
+  });
+
+  it("opens Stage 4 from the after-the-fight page", async () => {
+    vi.setSystemTime(new Date(2027, 2, 14, 9, 0, 0));     // the morning after the fight
+    await mount({ fightDate: "2027-03-13", medStage: 3, breathStage: 3 });
+    expect(screen.getByText("After the fight")).toBeInTheDocument();
+    fireEvent.click(screen.getByText("The review"));
+    expect(await screen.findByText("What did I learn that I couldn't have learned any other way?")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "OPEN STAGE 4 — MEDITATION AND BREATH" }));
+    await waitFor(() => {
+      const st = JSON.parse(localStorage.getItem("o8s-settings"));
+      expect(st.medStage).toBe(4);
+      expect(st.breathStage).toBe(4);
+    });
   });
 });

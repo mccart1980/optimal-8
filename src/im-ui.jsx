@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { C, dsp, bdy, mno, num, mmss, buzz, Card, Eye, Lab, Fld, Btn, Chip, Note, Seg } from "./ui.jsx";
+import { C, dsp, bdy, mno, num, mmss, buzz, fmtDate, Card, Eye, Lab, Fld, Btn, Chip, Note, Seg } from "./ui.jsx";
 import {
   SAFETY, CARDINAL, FLOOR_TEXT, REVIEW_Q, WALKING, BREATH_STAGE, PRESETS, presetById,
   MED_STAGE, HOW_TO_SIT, THE_CATCH, GOODWILL_LINE, DEATH_LINE, ELEVEN, GUIDED, guidedById,
@@ -366,11 +366,12 @@ export function HeatTimer({ sound, onClose }) {
 }
 
 /* --- THE SIT --- */
-export function SitTool({ stage, imWeek, isSunday, sound, onClose, onSave, sitLen, onLen }) {
+export function SitTool({ stage, imWeek, isSunday, sound, onClose, onSave, sitLen, onLen, plan: fixed }) {
   const S = MED_STAGE[stage] || MED_STAGE[1];
   const [len, setLenRaw] = useState(sitLen || (S.opts && S.opts[0]) || S.mins);
   const setLen = (v) => { setLenRaw(v); if (onLen) onLen(v); };
-  const plan = useMemo(() => sitPlan(stage, imWeek, isSunday, len), [stage, imWeek, isSunday, len]);
+  /* the fight-week mind and the morning after the fight hand in their own sit */
+  const plan = useMemo(() => fixed || sitPlan(stage, imWeek, isSunday, len), [fixed, stage, imWeek, isSunday, len]);
   const steps = useMemo(() => plan.segs.map((sg) => ({ k: "seg", l: sg.l, s: Math.round(sg.m * 60) })), [plan]);
   const [cycles, setCycles] = useState(0), [drifts, setDrifts] = useState(0), [run, setRun] = useState(0), [best, setBest] = useState(0);
   const [saved, setSaved] = useState(false);
@@ -380,7 +381,7 @@ export function SitTool({ stage, imWeek, isSunday, sound, onClose, onSave, sitLe
   const commit = () => { onSave({ stage, mins: plan.mins, cycles, best, drifts, segs: plan.segs.map((x) => x.l) }); setSaved(true); };
   return (
     <Sheet title="THE SIT" sub={S.n + " · " + plan.mins + " MINUTES" + (isSunday ? " · SUNDAY" : "")} colour={C.violet} onClose={onClose}>
-      {S.opts ? <Card><Lab>Length</Lab><Seg opts={S.opts.map((x) => [x, x + " MIN"])} val={len} on={setLen} c={C.violet} /></Card> : null}
+      {S.opts && !fixed ? <Card><Lab>Length</Lab><Seg opts={S.opts.map((x) => [x, x + " MIN"])} val={len} on={setLen} c={C.violet} /></Card> : null}
       <Card ac={C.violet}>
         <div style={{ textAlign: "center" }}>
           <div style={Object.assign({}, mno, { fontSize: 60, fontWeight: 700, color: R.s.done ? C.moss : C.chalk, lineHeight: 1 })}>{R.s.done ? "✓" : mmss(R.s.left)}</div>
@@ -399,7 +400,7 @@ export function SitTool({ stage, imWeek, isSunday, sound, onClose, onSave, sitLe
       <Btn on={drift} c={C.oxide} s={{ width: "100%", minHeight: 60, fontSize: 17, marginBottom: 10 }}>DRIFT — BACK TO ONE ({drifts})</Btn>
 
       <Card><Note c={C.chalk} s={{ marginTop: 0 }}>{THE_CATCH}</Note><Note>{HOW_TO_SIT}</Note></Card>
-      {isSunday && stage >= 2 ? <Card ac={C.violet}><Eye c={C.violet}>Sunday</Eye><Note s={{ marginTop: 0 }}>{GOODWILL_LINE}</Note><Note>{DEATH_LINE}</Note></Card> : null}
+      {isSunday && stage >= 2 && !fixed ? <Card ac={C.violet}><Eye c={C.violet}>Sunday</Eye><Note s={{ marginTop: 0 }}>{GOODWILL_LINE}</Note><Note>{DEATH_LINE}</Note></Card> : null}
 
       <Btn on={commit} c={C.brass} fill={!saved} s={{ width: "100%" }}>{saved ? "SAVED — " + cycles + " CYCLES, BEST RUN " + best : "SAVE THE SIT"}</Btn>
     </Sheet>);
@@ -619,7 +620,7 @@ export function HardshipView({ IM }) {
   const [raw, setRaw] = useState({});
   const [silence, setSilence] = useState("");
   const thisTest = testForWeek(IM.imWeek);
-  const paused = IM.taperNow;
+  const paused = IM.taperNow || !!IM.fightWeek;
   const put = (k, vv) => setRaw(Object.assign({}, raw, { [k]: vv }));
   const gapOf = (t) => { const m = num(raw[t.id + "mind"]), b = num(raw[t.id + "body"]); return t.gap && m != null && b != null ? b - m : null; };
   const logTest = (t) => {
@@ -672,7 +673,7 @@ export function HardshipView({ IM }) {
       </Card>
 
       <div style={Object.assign({}, mno, { fontSize: 9.5, letterSpacing: 1.8, color: C.brass, padding: "12px 2px 8px" })}>THE FIVE TESTS — ONE A WEEK, ROTATING</div>
-      {paused ? <Card ac={C.oxide}><div style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1.3, color: C.oxide })}>TESTS PAUSE</div><Note c={C.chalk}>Taper weeks 15–16 of the training cycle: no maximal hardship sessions. Breath, sits and the daily core continue; the tests pause.</Note></Card> : null}
+      {paused ? <Card ac={C.oxide}><div style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1.3, color: C.oxide })}>TESTS PAUSE</div><Note c={C.chalk}>{IM.fightWeek ? "The fight-week mind, week " + IM.fightWeek + ": hardship, none. Cold and heat stop. The tests pause." : "Taper weeks 15–16 of the training cycle: no maximal hardship sessions. Breath, sits and the daily core continue; the tests pause."}</Note></Card> : null}
       {TESTS5.map((t) => { const isNow = t.id === thisTest.id, g = gapOf(t);
         const last = IM.hards.find((h) => h.test === t.id);
         return (
@@ -778,27 +779,53 @@ function MiniBars({ data, color, unit }) {
     </div>);
 }
 
+/* week 1 of the season against this week — the seven numbers side by side */
+export const WEEK_ONE_ROWS = [["Days done", "days", "/7"], ["Best clean cycles", "cycles", ""], ["BOLT", "bolt", "s"], ["Crossover gap", "gap", ""],
+  ["Control score", "control", ""], ["Reactivity count", "react", ""], ["One-thing rate", "onething", "/7"]];
+export function WeekOneCard({ IM, compact }) {
+  const a = IM.weekOne, b = IM.weekNow;
+  const show = (v, u) => (v == null ? "—" : v + u);
+  return (
+    <Card ac={C.violet}>
+      <Eye c={C.violet}>Week 1 against this week</Eye>
+      <div style={{ display: "flex", padding: "4px 0", borderBottom: "1px solid " + C.line }}>
+        <span style={{ flex: 1 }} />
+        <span style={Object.assign({}, mno, { width: 76, textAlign: "right", fontSize: 10, color: C.ash, letterSpacing: 1 })}>WEEK 1</span>
+        <span style={Object.assign({}, mno, { width: 76, textAlign: "right", fontSize: 10, color: C.violet, letterSpacing: 1 })}>WEEK {IM.imWeek}</span>
+      </div>
+      {WEEK_ONE_ROWS.filter((r) => !compact || r[1] === "react" || r[1] === "control" || r[1] === "onething" || r[1] === "days").map((r) => (
+        <div key={r[1]} data-testid={"wk1-" + r[1]} style={{ display: "flex", alignItems: "baseline", padding: "7px 0", borderBottom: "1px solid " + C.line }}>
+          <span style={Object.assign({}, bdy, { flex: 1, fontSize: 14, color: C.chalk })}>{r[0]}</span>
+          <span style={Object.assign({}, mno, { width: 76, textAlign: "right", fontSize: 15, color: C.ash })}>{show(a[r[1]], r[2])}</span>
+          <span style={Object.assign({}, mno, { width: 76, textAlign: "right", fontSize: 15, fontWeight: 700, color: C.chalk })}>{show(b[r[1]], r[2])}</span>
+        </div>))}
+      <Note>Week 1 began {fmtDate(IM.seasonStart)}. The reactivity count in week 1 against week 24 is the verdict on the whole program.</Note>
+    </Card>);
+}
+
 export function IronTrack({ IM }) {
   const rows = IM.weekRows;
   return (
     <div>
       <Card ac={C.brass}>
-        <Eye c={C.brass}>The four numbers — ten seconds each, Sunday</Eye>
+        <Eye c={C.brass}>The seven numbers — ten seconds each, Sunday</Eye>
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-          {IM.four.map((x) => (
+          {IM.four.concat(IM.three || []).map((x) => (
             <div key={x[0]} style={{ flex: "1 1 40%", background: C.ink, border: "1px solid " + C.line, borderRadius: 5, padding: "10px 6px", textAlign: "center" }}>
               <div style={Object.assign({}, mno, { fontSize: 7.5, color: C.ash, letterSpacing: 1 })}>{x[0]}</div>
               <div style={Object.assign({}, mno, { fontSize: 22, fontWeight: 700, color: x[1] == null ? C.ash : C.brass })}>{x[1] == null ? "—" : x[1]}</div>
             </div>))}
         </div>
-        <Note>If a fifth number ever appears, something has wandered.</Note>
+        <Note>Four are the fighter's; three are the man's. If an eighth number ever appears, something has wandered.</Note>
       </Card>
+
+      {IM.weekOne ? <WeekOneCard IM={IM} /> : null}
 
       <Card>
         <Eye c={C.moss}>Week by week</Eye>
         <div style={{ overflowX: "auto" }}>
-          <table style={Object.assign({}, bdy, { width: "100%", minWidth: 380, borderCollapse: "collapse", fontSize: 12 })}>
-            <thead><tr>{["Week", "Days done", "Best cycles", "BOLT", "Crossover"].map((h) => <th key={h} style={Object.assign({}, mno, { textAlign: h === "Week" ? "left" : "right", color: C.ash, fontSize: 8, letterSpacing: 1, padding: "6px 6px 6px 0", borderBottom: "1px solid " + C.line })}>{h.toUpperCase()}</th>)}</tr></thead>
+          <table style={Object.assign({}, bdy, { width: "100%", minWidth: 560, borderCollapse: "collapse", fontSize: 12 })}>
+            <thead><tr>{["Week", "Days done", "Best cycles", "BOLT", "Crossover", "Control", "Reactivity", "One thing"].map((h) => <th key={h} style={Object.assign({}, mno, { textAlign: h === "Week" ? "left" : "right", color: C.ash, fontSize: 8, letterSpacing: 1, padding: "6px 6px 6px 0", borderBottom: "1px solid " + C.line })}>{h.toUpperCase()}</th>)}</tr></thead>
             <tbody>
               {rows.map((r) => (
                 <tr key={r.mon}>
@@ -809,6 +836,9 @@ export function IronTrack({ IM }) {
                   <td style={{ textAlign: "right", padding: "8px 6px 8px 0", borderBottom: "1px solid " + C.line, color: r.cycles ? C.chalk : C.ash }}>{r.cycles || "—"}</td>
                   <td style={{ textAlign: "right", padding: "8px 6px 8px 0", borderBottom: "1px solid " + C.line, color: r.bolt != null ? C.chalk : C.ash }}>{r.bolt != null ? r.bolt + "s" : "—"}</td>
                   <td style={{ textAlign: "right", padding: "8px 6px 8px 0", borderBottom: "1px solid " + C.line, color: r.gap != null ? C.chalk : C.ash }}>{r.gap != null ? r.gap : "—"}</td>
+                  <td style={{ textAlign: "right", padding: "8px 6px 8px 0", borderBottom: "1px solid " + C.line, color: r.control != null ? C.chalk : C.ash }}>{r.control != null ? r.control : "—"}</td>
+                  <td style={{ textAlign: "right", padding: "8px 6px 8px 0", borderBottom: "1px solid " + C.line, color: r.react != null ? C.chalk : C.ash }}>{r.react != null ? r.react : "—"}</td>
+                  <td style={{ textAlign: "right", padding: "8px 6px 8px 0", borderBottom: "1px solid " + C.line, color: r.onething ? C.chalk : C.ash }}>{r.onething != null ? r.onething + "/7" : "—"}</td>
                 </tr>))}
             </tbody>
           </table>
@@ -822,6 +852,15 @@ export function IronTrack({ IM }) {
         <Note>The single biggest lever on your BOLT is nose breathing, all day. Breathe Light moves it more than everything else combined.</Note></Card>
       <Card ac={C.oxide}><Eye c={C.oxide}>Crossover gap</Eye><MiniBars data={rows.map((r) => [r.label, r.gap])} color={C.oxide} />
         <Note>Your physical numbers climb first. The mental numbers are what you're here for, and they lag by months. That lag is the program.</Note></Card>
+
+      <Card ac={C.brass}><Eye c={C.brass}>Control score</Eye><MiniBars data={rows.map((r) => [r.label, r.control])} color={C.brass} />
+        <Note>How much of the week went on the first column — your attention, your judgements, your actions. One number, honest.</Note></Card>
+      <Card ac={C.oxide}><Eye c={C.oxide}>Reactivity count</Eye><div data-testid="react-chart"><MiniBars data={rows.map((r) => [r.label, r.react])} color={C.oxide} /></div>
+        <Note>Times moved before you noticed. The number should fall over months; when it does, that's fudōshin measured.</Note></Card>
+      <Card ac={C.moss}><Eye c={C.moss}>One-thing rate</Eye><MiniBars data={rows.map((r) => [r.label, r.onething])} color={C.moss} />
+        <Note>Mornings out of seven where the one thing got done. Sevens are the target; fives are the truth at first.</Note></Card>
+      <Card ac={C.brass}><Eye c={C.brass}>Life test — what it cost</Eye><MiniBars data={rows.map((r) => [r.label, r.cost])} color={C.brass} />
+        <Note>Scored 1–10 for how much it cost you, so you can see it get cheaper.</Note></Card>
 
       <div style={Object.assign({}, mno, { fontSize: 9.5, letterSpacing: 1.8, color: C.brass, padding: "14px 2px 8px" })}>THE GATES</div>
       <GatesPanel IM={IM} />

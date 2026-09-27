@@ -1,6 +1,6 @@
 # Optimal 8
 
-The companion app for the Optimal 8 fighter build (v1.5) with Iron Mind v4.2
+The companion app for the Optimal 8 fighter build (v1.5) with Iron Mind v5
 running inside it — a 16-week strength and conditioning cycle, the twenty
 minutes of RANGE that runs at home every evening, and the mental training that
 attaches to it. One app, one day, one streak. It runs in your phone's browser,
@@ -307,6 +307,36 @@ first if there's anything in there you want to keep.
 - **Training taper weeks** — while it's on, the hardship tests pause and every
   calisthenics line goes to holds only.
 
+## IRON MIND v5 — THE SEASON
+
+`iron-mind-v5.md` is the source for the IRON tab and the Iron Mind items on
+TODAY.
+
+- **The season is dated.** With a fight date, Iron Mind week 24 is the fight's
+  own week and week 1 is twenty-three weeks before it — Monday 28 September
+  for a fight on Saturday 13 March — so the weeks line up with PREP and CAMP.
+  IRON → SEASON shows the dated table, where the season expects each stage
+  against where you have set it (the stages are still gated, never advanced
+  for you), the fight-week mind, and the after-the-fight page, which opens
+  Stage 4 of meditation and breath. Without a fight date the season counts
+  from the Iron Mind start in settings, as before.
+- **Weeks 23 and 24** replace the normal Iron Mind evening: the sit at 20
+  minutes counting and following (12 minutes counting only in fight week), a
+  five-minute rehearsal every evening, the calm breath tools only at lunch, no
+  hardship tests, no life test.
+- **The life pillar.** The seven rules on GUIDE and IRON → LIFE. A life test
+  row every day of the week, rotating through the seven in order, ticked and
+  scored 1–10 for what it cost. On Sunday, after the weekly check, the life
+  review (four questions, the control score, the reactivity count and the
+  one-thing rate, which is counted from the morning's one-thing tick). On the
+  Sundays the season names, the twenty-minute monthly audit. The half-day sit
+  on the Sunday of week 13 — 27 December.
+- **The review** has its fourth question, the life question.
+- **THE NIGHT** follows the review: the casein, tonight's lights-out target,
+  the seven rules of the sleep protocol on tap, and the lights-out time logged.
+- **TRACK → IRON MIND** shows the seven numbers, charts the three new ones, and
+  sets week 1 against this week; the dashboard carries the reactivity count.
+
 ## Camp mode — the ten weeks
 
 Turn **CAMP MODE** on in settings and the whole app switches over to
@@ -442,6 +472,11 @@ npm run icons   # regenerate the app icons from scripts/generate-icons.mjs
   there is the document's own wording.
 - `src/im-ui.jsx` — the IRON library: the pacer, the sit timer, the cold and
   heat timers, the floor and the five tests.
+- `src/life.js` — Iron Mind v5's season, life pillar and night as data: the
+  twenty-four weeks dated back from the fight, the seven rules, the seven life
+  tests, the life review and the audit, the sleep protocol, the fight-week mind.
+- `src/life-ui.jsx` — IRON → SEASON and IRON → LIFE, and the bodies of TODAY's
+  life, Sunday and night rows.
 - `src/today.jsx` — TODAY's guided flow: the row shell, the running timer that
   steps through a list of moves, the four yes/no taps and the NEXT button.
 - `src/prep.js` — PREP as data: the fourteen-week calendar row by row, the lift
@@ -453,7 +488,7 @@ npm run icons   # regenerate the app icons from scripts/generate-icons.mjs
 - `src/velocity.js` — the load-velocity line, the phase targets it draws, the
   first-work-set verdict and the stop thresholds.
 - `src/season-ui.jsx` — the SEASON strip, the GUIDE tab and the profile screen.
-- `src/mdview.jsx` — renders `optimal8fighter.md` and `iron-mind-v4-2.md` in the
+- `src/mdview.jsx` — renders `optimal8fighter.md` and `iron-mind-v5.md` in the
   PLAN tab, offline, with a table of contents. Those two files are the source of
   truth; the app imports them directly.
 - `src/storage.js` — a `window.storage` shim (the API the original claude.ai

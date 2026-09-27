@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import "./storage.js"; // installs window.storage (localStorage-backed)
 import fighterDoc from "../optimal8fighter.md?raw";
-import ironMindDoc from "../iron-mind-v4-2.md?raw";
+import ironMindDoc from "../iron-mind-v5.md?raw";
 import campDoc from "../optimal-8-camp.md?raw";
 import prepDocMd from "../optimal-8-prep.md?raw";
 import guideDoc from "../guide.md?raw";
@@ -62,12 +62,20 @@ import {
   MorningCard, RecoveryHR, EasyZonePanel, ErgPanel, BarSpeedField,
   BarSpeedTrack, ErgTrack, PhotosView, PhotoPrompt, Dashboard, MeasureSettings, MiniBars, SleepFields,
 } from "./metrics-ui.jsx";
+import {
+  imSeasonStart, imWeekOn, seasonMonday, fightWeekOn, morningAfter, afterFight, fightSitPlan, FIGHT_WEEK,
+  lifeTestForWeek, AUDIT_WEEKS, HALF_DAY_WEEK, lightsTarget, monthOneThing, AFTER_Q, SEASON_WEEKS,
+} from "./life.js";
+import {
+  RulesCard, LifeTestBody, LifeReviewBody, AuditBody, NightBody, HalfDayBody, FightWeekCard,
+  AfterFightCard, SeasonMindView, LifeView,
+} from "./life-ui.jsx";
 
 /* ================================================================
    OPTIMAL 8 — THE FIGHTER BUILD v1.5 · companion app
    The phase colour drives the screen: BUILD moss, FORCE oxide,
    VELOCITY brass, TAPER/TEST cobalt. Durability work is violet.
-   Iron Mind v4.2 runs inside it — one app, one day, one streak.
+   Iron Mind v5 runs inside it — one app, one day, one streak.
    ================================================================ */
 
 /* ---------- file backup (Web Share where available, download otherwise) ---------- */
@@ -1542,6 +1550,7 @@ function Today(props) {
     calis, setCalis, taper, rangeWeek, openRangeTests, campLabel, ergUnit, peakHR,
     morning, setMorning, weekDates, st, imRec, setTick, imStreak, imWeek,
     checkA, setCheckA, readNow, openTool, sound, flowAt, setFlowAt, goIron, photoPrompt,
+    imWks, setWkOn, oneThingOf,
   } = props;
 
   const rx = rxFor(week, day), P = PH[rx.ph];
@@ -1562,7 +1571,17 @@ function Today(props) {
   const ok = (k) => !!(imRec.ticks && imRec.ticks[k]);
 
   const med = st.medStage || 1, br = st.breathStage || 1;
-  const BS = BREATH_STAGE[br], plan = sitPlan(med, imWeek, day === "sun", st.sitLen);
+  /* THE SEASON: the week of the day on screen, dated from the fight. Weeks
+     23 and 24 run the fight-week mind in place of the normal evening; the
+     morning after the fight runs the 12-minute sit and the extra question. */
+  const seasonWk = imWeekOn(st, shownIso);
+  const fw = fightWeekOn(st, shownIso), FW = FIGHT_WEEK[fw] || null;
+  const dayAfter = morningAfter(st, shownIso);
+  const BS = BREATH_STAGE[br];
+  const plan = FW ? fightSitPlan(fw) : dayAfter ? fightSitPlan(24) : sitPlan(med, imWeek, day === "sun", st.sitLen);
+  const shownMon = iso(mondayOf(parseISO(shownIso)));
+  const wkRec = (imWks && imWks[shownMon]) || {};
+  const putWk = (patch) => setWkOn(shownMon, patch);
   const rw = rangeWeek;
 
   const items = [];
@@ -1647,17 +1666,40 @@ function Today(props) {
         </div>)));
   }
 
+  /* THE WEEK — Sunday, after the weekly check: the life review and its
+     three numbers, and the monthly audit on the Sundays the season names. */
+  if (day === "sun") {
+    const month = monthOneThing(st, imWks || {}, shownIso);
+    push(im("wk-life", "THE WEEK", C.brass, "The life review", "5 MIN · 4 QUESTIONS · 3 NUMBERS", 5, "lifereview",
+      () => <LifeReviewBody rec={wkRec} setRec={putWk} oneThing={oneThingOf(shownMon)} month={month} />));
+    if (AUDIT_WEEKS.indexOf(seasonWk) >= 0) {
+      push(im("wk-audit", "THE WEEK", C.oxide, "The monthly audit", "20 MIN · 3 QUESTIONS", 20, "audit",
+        () => <AuditBody rec={wkRec} setRec={putWk} />));
+    }
+  }
+
   /* ---------------- ON SITE ---------------- */
   push(im("site", "ON SITE", C.brass, "The reminders", "NO TIMERS", 0, "site",
     () => <Lines rows={[{ n: "Nose breathing", s: NOSE_ALL_DAY }].concat(SITE.map((x) => ({ n: x.n, s: x.s })))} colour={C.brass} />));
 
   /* ---------------- LUNCH ---------------- */
-  push(im("lunch", "LUNCH", C.cobalt, "The breath practice — " + BS.n, BS.n, 0, "lunch",
+  /* ---------------- LIFE ----------------
+     The week's life test: one of the seven, in order, ticked once and scored
+     for what it cost. The fight-week mind pauses it. */
+  if (!FW) {
+    const LT = lifeTestForWeek(seasonWk), lrec = wkRec.life || {};
+    push({ id: "lf-test", sec: "LIFE", colour: C.brass, n: "The life test — " + LT.n, s: lrec.done ? "DONE · COST " + (num(lrec.cost) == null ? "—" : lrec.cost) : "THIS WEEK · TICK IT, SCORE ITS COST", mins: 0,
+      done: !!lrec.done, mark: (val) => putWk({ life: Object.assign({}, lrec, { done: !!val, test: LT.id }) }),
+      body: () => <LifeTestBody test={LT} rec={lrec} setRec={(p) => putWk({ life: Object.assign({}, lrec, p) })} /> });
+  }
+
+  const lunchIds = FW ? FW.breath : BS.lunch;
+  push(im("lunch", "LUNCH", C.cobalt, FW ? "The breath practice — calm tools only" : "The breath practice — " + BS.n, FW ? "CALM TOOLS ONLY" : BS.n, 0, "lunch",
     () => (
       <div>
-        <Note c={C.chalk} s={{ marginTop: 0 }}>{BS.lunchLine}</Note>
+        <Note c={C.chalk} s={{ marginTop: 0 }}>{FW ? FW.breathLine : BS.lunchLine}</Note>
         <div style={{ marginTop: 10 }}>
-          {BS.lunch.map((pid) => { const PR = presetById(pid); if (!PR) return null;
+          {lunchIds.map((pid) => { const PR = presetById(pid); if (!PR) return null;
             return (
               <button key={pid} onClick={() => openTool({ kind: "breath", id: pid })}
                 style={{ display: "flex", width: "100%", gap: 10, alignItems: "center", textAlign: "left", background: "transparent", border: "1px solid " + C.line, borderRadius: 5, padding: "9px 11px", marginBottom: 6, cursor: "pointer", minHeight: 44 }}>
@@ -1669,6 +1711,12 @@ function Today(props) {
               </button>); })}
         </div>
       </div>)));
+
+  /* the half-day sit, on the Sunday the season names */
+  if (day === "sun" && seasonWk === HALF_DAY_WEEK) {
+    push(im("hd-sit", "THE HALF-DAY SIT", C.violet, "The half-day sit", "3–4 HOURS · NO PHONE, NO TALKING, NO READING", 0, "halfday",
+      () => <HalfDayBody open={openTool} />));
+  }
 
   /* ---------------- EVENING ---------------- */
   const weekend = MODE.camp ? (day === "sun" && !!rx.sim) : (day === "sat" || day === "sun");
@@ -1738,15 +1786,29 @@ function Today(props) {
       () => <Lines rows={rows.map((r) => ({ n: r.n, s: r.s, how: r.how }))} colour={C.brass} />));
   }
 
-  push(im("ev-sit", "EVENING", C.violet, "The sit", plan.mins + " MIN", plan.mins, "sit",
+  const sitItem = im("ev-sit", "EVENING", C.violet, "The sit", plan.mins + " MIN" + (FW ? " · " + (fw === 24 ? "COUNTING ONLY" : "COUNT AND FOLLOW") : dayAfter ? " · COUNTING ONLY" : ""), plan.mins, "sit",
     () => (
       <div>
-        <Note c={C.chalk} s={{ marginTop: 0 }}>{(MED_STAGE[med] || MED_STAGE[1]).line}</Note>
-        <Btn on={() => openTool({ kind: "sit" })} c={C.violet} fill s={{ width: "100%", marginTop: 10 }}>▶ THE SIT · {plan.mins} MIN</Btn>
-      </div>)));
+        <Note c={C.chalk} s={{ marginTop: 0 }}>{FW ? FW.s : (MED_STAGE[med] || MED_STAGE[1]).line}</Note>
+        <Btn on={() => openTool(FW || dayAfter ? { kind: "sit", plan } : { kind: "sit" })} c={C.violet} fill s={{ width: "100%", marginTop: 10 }}>▶ THE SIT · {plan.mins} MIN</Btn>
+      </div>));
+  if (FW) sitItem.head = () => <FightWeekCard w={fw} />;
+  push(sitItem);
 
-  push(im("ev-review", "EVENING", C.violet, "The review", "3 QUESTIONS", 2, "review",
-    () => <Lines rows={REVIEW_Q} colour={C.violet} />));
+  /* the fight-week mind: rehearsal every evening, five minutes, real time */
+  if (FW) {
+    push(im("ev-rehearse", "EVENING", C.oxide, "Rehearsal", "5 MIN · REAL TIME · YOUR OWN EYES", 5, "rehearse",
+      () => (
+        <div>
+          <Note c={C.chalk} s={{ marginTop: 0 }}>The walk to the ring, the first bell, the moment it goes wrong, the response.</Note>
+          <Btn on={() => openTool({ kind: "guided", id: "fightrehearsal" })} c={C.oxide} fill s={{ width: "100%", marginTop: 10 }}>▶ THE REHEARSAL · 5 MIN</Btn>
+          {fw === 24 ? <Btn on={() => openTool({ kind: "breath", id: "recovery" })} c={C.brass} s={{ width: "100%", marginTop: 8 }}>▶ THE CORNER MINUTE</Btn> : null}
+        </div>)));
+  }
+
+  const reviewQ = dayAfter ? REVIEW_Q.concat([AFTER_Q]) : REVIEW_Q;
+  push(im("ev-review", "EVENING", C.violet, "The review", reviewQ.length + " QUESTIONS", 2, "review",
+    () => <Lines rows={reviewQ} colour={C.violet} />));
 
   /* The accumulation block's two extra feeds. The fuel app owns the food;
      this is the one line that says the day has one. */
@@ -1755,11 +1817,14 @@ function Today(props) {
       () => <Note c={C.chalk} s={{ marginTop: 0 }}>{CARB_TOPUP}</Note>));
   }
 
-  push(im("ev-casein", "EVENING", C.brass, "Casein before bed", "30–40 G", 0, "casein",
+  /* ---------------- THE NIGHT ----------------
+     The sleep protocol, after the review: the casein, tonight's target,
+     the seven rules on tap, and the time the light actually went off. */
+  push(im("nt-casein", "THE NIGHT", C.brass, "Casein before bed", "30–40 G", 0, "casein",
     () => <Note c={C.chalk} s={{ marginTop: 0 }}>{CASEIN_LINE}</Note>));
 
-  push(im("ev-lights", "EVENING", C.cobalt, "Lights out", "THE TIME, AND LAST NIGHT'S HOURS", 0, "lights",
-    () => <SleepFields dayIso={shownIso} nextIso={addDays(shownIso, 1)} morning={morning} setMorning={setMorning} />));
+  push(im("nt-lights", "THE NIGHT", C.cobalt, "Lights out", lightsTarget(day).s + " · LOG THE TIME", 0, "lights",
+    () => <NightBody day={day} dayIso={shownIso} nextIso={addDays(shownIso, 1)} morning={morning} setMorning={setMorning} />));
 
   /* ---------------- the clock ---------------- */
   const startKey = dk + "-start";
@@ -2049,7 +2114,7 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
           style={Object.assign({}, dsp, { flex: "1 1 20%", fontSize: 9.5, fontWeight: 700, letterSpacing: .3, padding: "11px 1px", borderRadius: 4, cursor: "pointer", minHeight: 44, background: sub === x[0] ? C.brass : "transparent", color: sub === x[0] ? C.ink : C.ash, border: "1px solid " + (sub === x[0] ? C.brass : C.line) })}>{x[1]}</button>)}
       </div>
 
-      {sub === "dash" ? <Dashboard log={log} morning={morning || {}} st={st || {}} camp={camp} body={body} fuel={fuel} addBody={addBody} dateOf={dateOf}
+      {sub === "dash" ? <Dashboard log={log} morning={morning || {}} st={st || {}} camp={camp} body={body} fuel={fuel} addBody={addBody} dateOf={dateOf} iron={IM}
         openPhotos={() => setSub("photos")} /> : null}
 
       {sub === "photos" ? <PhotosView photos={photos || {}} setPhotos={setPhotos} camp={camp} week={current.week} dayIso={dayIso} isPhotoDay={photoDay} /> : null}
@@ -2223,7 +2288,7 @@ function PlanView({ program, title }) {
     <div>
       <Eye c={C.ash} s={{ marginBottom: 8 }}>{title}</Eye>
       <div style={{ display: "flex", gap: 5, marginBottom: 12, flexWrap: "wrap" }}>
-        {[["prep", "PREP", C.moss], ["camp", "CAMP", C.brass], ["fighter", "FIGHTER v1.5", C.oxide], ["iron", "IRON MIND v4.2", C.violet]].map((x) => (
+        {[["prep", "PREP", C.moss], ["camp", "CAMP", C.brass], ["fighter", "FIGHTER v1.5", C.oxide], ["iron", "IRON MIND v5", C.violet]].map((x) => (
           <button key={x[0]} onClick={() => setDoc(x[0])}
             style={Object.assign({}, dsp, { flex: "1 1 40%", fontSize: 15, fontWeight: 700, letterSpacing: .6, padding: "12px 0", borderRadius: 4, cursor: "pointer", minHeight: 48, background: doc === x[0] ? x[2] : "transparent", color: doc === x[0] ? C.ink : C.ash, border: "1px solid " + (doc === x[0] ? x[2] : C.line) })}>{x[1]}</button>))}
       </div>
@@ -2405,8 +2470,10 @@ function Settings({ st, setSt, current, L, exportData, importData, close, IM, ca
             </div>); })}
         <div style={{ padding: "12px 0", borderBottom: "1px solid " + C.line }}>
           <Lab>Iron Mind week 1 began</Lab>
-          <Fld type="date" v={st.imStart || st.start} on={(val) => { if (val) upd({ imStart: iso(mondayOf(parseISO(val))) }); }} a="left" />
-          <Note>This one keeps counting when the training program restarts at week 1. Today reads as <span style={{ color: C.violet }}>Iron Mind week {IM.imWeek}</span> — it sets the sit's length at Stage 2, and which of the five tests is this week's.</Note>
+          {st.fightDate
+            ? <Note c={C.chalk} s={{ marginTop: 0 }}>{fmtDate(IM.seasonStart)} — dated from the fight: week 24 is the fight's own week.</Note>
+            : <Fld type="date" v={st.imStart || st.start} on={(val) => { if (val) upd({ imStart: iso(mondayOf(parseISO(val))) }); }} a="left" />}
+          <Note>This one keeps counting when the training program restarts at week 1. Today reads as <span style={{ color: C.violet }}>Iron Mind week {IM.imWeek}</span> — it sets the sit's length at Stage 2, which of the five tests and the seven life tests is this week's, and the season's dates.</Note>
         </div>
         <Toggle on={!!st.taper} set={() => upd({ taper: !st.taper })} c={C.oxide}
           n="Training taper weeks" s="Weeks 15–16 of the training cycle: no maximal hardship sessions. Breath, sits and the daily core continue; the tests pause, and every calisthenics line goes to holds only — handstand and ring support, nothing to failure, nothing new. Weeks 15 and 16 turn this on by themselves — use the switch for a taper that lands anywhere else." />
@@ -2897,7 +2964,9 @@ export default function App() {
      one keeps counting. One streak for the whole day, training included. */
   const dayIso = iso(new Date());
   const weekMonday = iso(mondayOf(new Date()));
-  const imStart = st.imStart || st.start;
+  /* The season dates Iron Mind: with a fight date, week 24 is the fight's
+     own week and week 1 is twenty-three weeks before it. */
+  const imStart = imSeasonStart(st);
   /* RANGE runs on its own twelve-week clock, so it keeps counting when the
      training program restarts at week 1 and THE KEEP really is for good. */
   const rangeStart = st.rangeStart || st.start;
@@ -2917,7 +2986,8 @@ export default function App() {
       out.push({ key: "m" + m + "w" + w, label: "rw" + rw, rangeWeek: rw });
     }
     return out.slice(-8); }, [st.macroBase, current.macro, current.week, L, rangeWeekOf, program]);
-  const imWeek = useMemo(() => Math.max(1, Math.floor((mondayOf(new Date()) - mondayOf(parseISO(imStart))) / 604800000) + 1), [imStart]);
+  const imWeek = useMemo(() => imWeekOn(st, dayIso), [imStart, dayIso]);
+  const fightWeekNow = fightWeekOn(st, dayIso);
   const imRec = imDay[dayIso] || {};
   const taperNow = !!st.taper || current.week === 15 || current.week === 16;
 
@@ -2936,6 +3006,11 @@ export default function App() {
     setImDay(Object.assign({}, imDay, { [isoDay]: Object.assign({}, cur, { ticks }) })); buzz(20); };
   const imFloor = () => { const cur = imDay[dayIso] || {}; setImDay(Object.assign({}, imDay, { [dayIso]: Object.assign({}, cur, { floor: 1 }) })); buzz([80, 40, 80]); };
   const setWkField = (field, val) => { const cur = imWk[weekMonday] || {}; setImWk(Object.assign({}, imWk, { [weekMonday]: Object.assign({}, cur, { [field]: val }) })); };
+  /* any week's record, by its Monday — the life test, the Sunday numbers, the audit */
+  const setWkOn = (mon, patch) => { const cur = imWk[mon] || {}; setImWk(Object.assign({}, imWk, { [mon]: Object.assign({}, cur, patch) })); };
+  /* the one-thing rate: mornings of that week the one thing was ticked */
+  const oneThingOf = useCallback((mon) => Array.from({ length: 7 }, (_, i) => addDays(mon, i))
+    .filter((d) => imDay[d] && imDay[d].ticks && imDay[d].ticks.onething).length, [imDay]);
 
   const IM = useMemo(() => {
     const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekMonday, i));
@@ -2958,8 +3033,29 @@ export default function App() {
       const fl = days.filter((d) => imDay[d] && imDay[d].floor).length;
       const cyc = imSit.filter((x) => x.d >= mon && x.d < addDays(mon, 7)).reduce((a, x) => Math.max(a, x.best || 0), 0);
       const h = imHard.find((x) => x.d >= mon && x.d < addDays(mon, 7) && x.gap != null);
-      rows.push({ mon, label: mon.slice(5), days: dn, floors: fl, cycles: cyc, bolt: num((imWk[mon] || {}).bolt), gap: h ? h.gap : null });
+      const wr = imWk[mon] || {};
+      rows.push({ mon, label: mon.slice(5), days: dn, floors: fl, cycles: cyc, bolt: num(wr.bolt), gap: h ? h.gap : null,
+        control: num(wr.control), react: num(wr.react), onething: oneThingOf(mon), cost: num((wr.life || {}).cost) });
     }
+
+    /* one week's seven numbers, by its Monday */
+    const weekStat = (mon) => {
+      const days = Array.from({ length: 7 }, (_, j) => addDays(mon, j));
+      const h = imHard.find((x) => x.d >= mon && x.d < addDays(mon, 7) && x.gap != null);
+      const wr = imWk[mon] || {};
+      return { mon, days: days.filter((d) => dayDone(imDay[d])).length,
+        cycles: imSit.filter((x) => x.d >= mon && x.d < addDays(mon, 7)).reduce((a, x) => Math.max(a, x.best || 0), 0) || null,
+        bolt: num(wr.bolt), gap: h ? h.gap : null, control: num(wr.control), react: num(wr.react), onething: oneThingOf(mon) };
+    };
+    const seasonStart = imSeasonStart(st);
+    const weekOne = weekStat(seasonStart), weekNow = weekStat(weekMonday);
+    /* the verdict: twenty-four weeks of days done, the best clean cycles,
+       the reactivity count in week 1 against week 24 */
+    const seasonEnd = addDays(seasonStart, 7 * SEASON_WEEKS);
+    const verdict = {
+      days: Object.keys(imDay).filter((d) => d >= seasonStart && d < seasonEnd && dayDone(imDay[d])).length,
+      cycles: imSit.filter((x) => x.d >= seasonStart && x.d < seasonEnd).reduce((a, x) => Math.max(a, x.best || 0), 0),
+      react1: num((imWk[seasonStart] || {}).react), react24: num((imWk[seasonMonday(st, SEASON_WEEKS)] || {}).react) };
 
     const gateMet = (kind, val) => {
       if (kind === "days") return totalDays >= val;
@@ -2991,7 +3087,10 @@ export default function App() {
       hasHistory: Object.keys(imDay).length > 0,
       missedYesterday: !dayDone(imDay[addDays(dayIso, -1)]),
       four: [["DAYS DONE", weekDone + "/7"], ["BEST CLEAN CYCLES", bestThisWeek || null], ["BOLT", wkBolt == null ? null : wkBolt + "s"], ["CROSSOVER GAP", wkGap == null ? null : wkGap]],
-      weekRows: rows,
+      three: [["CONTROL SCORE", weekNow.control], ["REACTIVITY COUNT", weekNow.react], ["ONE-THING RATE", weekNow.onething + "/7"]],
+      weekRows: rows, weekOne, weekNow, seasonStart, verdict,
+      fightWeek: fightWeekNow, afterFight: afterFight(st, dayIso),
+      openStage4: () => { setSt(Object.assign({}, st, { medStage: 4, breathStage: 4 })); buzz([60, 40, 60]); },
       silenceFor: (mon) => num((imWk[mon] || {}).silence) || 0,
       addSilence: (m) => setWkField("silence", (num((imWk[weekMonday] || {}).silence) || 0) + m),
       addHard: (e) => { setImHard([e].concat(imHard)); buzz([60, 40, 60]); },
@@ -3009,7 +3108,7 @@ export default function App() {
         if (i === 1 || i === 3) rows.push(SKILL_BLOCK.planche);
         return { show: i >= 0 && i <= 3, n: SKILL_BLOCK.n, mins: SKILL_BLOCK.mins, rows }; })(),
     };
-  }, [st, imStart, imDay, imSit, imHard, imWk, imWeek, dayIso, weekMonday, hwLog, taperNow, calis, rangeWeek]);
+  }, [st, imStart, imDay, imSit, imHard, imWk, imWeek, dayIso, weekMonday, hwLog, taperNow, calis, rangeWeek, oneThingOf, fightWeekNow]);
 
   /* ---------------- THE MEASUREMENT LAYER ----------------
      The peak heart rate the 20-minute test found paces the easy zone;
@@ -3060,6 +3159,7 @@ export default function App() {
     ergUnit: st.ergUnit || "w", peakHR, morning, setMorning, weekDates, st,
     imRec: imDay[shownIso] || {},
     setTick: tickOn(shownIso), imStreak: IM.streak, imWeek,
+    imWks: imWk, setWkOn, oneThingOf,
     ready: readyNow,
     sparPrev: !!sparMap[pdk], sparThis: !!sparMap[dk], setSparThis: (val) => setSparMap(Object.assign({}, sparMap, { [dk]: val })),
     swapped: !!swapMap[dk], setSwapped: (val) => setSwapMap(Object.assign({}, swapMap, { [dk]: val })),
@@ -3129,7 +3229,7 @@ export default function App() {
             onBolt={(secs) => setWkField("bolt", secs)} boltNow={num((imWk[weekMonday] || {}).bolt)}
             onSettle={(secs) => setWkField("settle", secs)} settleNow={num((imWk[weekMonday] || {}).settle)} />
         : tool.kind === "guided" ? <GuidedTool id={tool.id} sound={st.sound} onClose={() => setTool(null)} />
-        : tool.kind === "sit" ? <SitTool stage={st.medStage || 1} imWeek={imWeek} isSunday={todayKey() === "sun"} sound={st.sound}
+        : tool.kind === "sit" ? <SitTool stage={st.medStage || 1} imWeek={imWeek} isSunday={todayKey() === "sun"} sound={st.sound} plan={tool.plan}
             sitLen={st.sitLen} onLen={(v) => setSt(Object.assign({}, st, { sitLen: v }))}
             onClose={() => setTool(null)} onSave={(e) => setImSit([Object.assign({ d: dayIso }, e)].concat(imSit))} />
         : tool.kind === "cold" ? <ColdTimer level={st.hardLevel || 1} sound={st.sound} onClose={() => setTool(null)}
@@ -3178,6 +3278,7 @@ export default function App() {
                     <div style={Object.assign({}, bdy, { fontSize: 18, color: C.chalk, lineHeight: 1.5 })}>Two easy weeks come next.</div>
                     <Btn c={C.moss} fill s={{ width: "100%", marginTop: 10 }} on={() => setSt(Object.assign({}, st, programPatch("transition")))}>RUN THE TWO EASY WEEKS</Btn>
                   </Card>) : null}
+                {IM.afterFight && ((st.medStage || 1) < 4 || (st.breathStage || 1) < 4) ? <AfterFightCard st={st} onOpen={IM.openStage4} verdict={IM.verdict} /> : null}
                 {recalPrompt ? (
                   <Card ac={C.cobalt}>
                     <Eye c={C.cobalt}>Week {current.week} — recalibrate the baselines</Eye>
@@ -3207,16 +3308,18 @@ export default function App() {
               dayIso={photoDate || dayIso} photoDay={photoDay} ergUnit={st.ergUnit || "w"} /> : null}
             {tab === "iron" ? (
               <div>
-                <div style={{ display: "flex", gap: 4, marginBottom: 12 }}>
-                  {[["breathe", "BREATHE", C.cobalt], ["sit", "SIT", C.violet], ["hardship", "HARDSHIP", C.oxide], ["hell", "HELL WEEK", C.oxide]].map((x) => <button key={x[0]} onClick={() => setIsub(x[0])}
-                    style={Object.assign({}, dsp, { flex: 1, fontSize: 11, fontWeight: 700, letterSpacing: .8, padding: "11px 2px", borderRadius: 4, cursor: "pointer", minHeight: 44, background: isub === x[0] ? x[2] : "transparent", color: isub === x[0] ? C.ink : C.ash, border: "1px solid " + (isub === x[0] ? x[2] : C.line) })}>{x[1]}</button>)}
+                <div style={{ display: "flex", gap: 4, marginBottom: 12, flexWrap: "wrap" }}>
+                  {[["breathe", "BREATHE", C.cobalt], ["sit", "SIT", C.violet], ["hardship", "HARDSHIP", C.oxide], ["life", "LIFE", C.brass], ["season", "SEASON", C.brass], ["hell", "HELL WEEK", C.oxide]].map((x) => <button key={x[0]} onClick={() => setIsub(x[0])}
+                    style={Object.assign({}, dsp, { flex: "1 1 30%", fontSize: 11, fontWeight: 700, letterSpacing: .8, padding: "11px 2px", borderRadius: 4, cursor: "pointer", minHeight: 44, background: isub === x[0] ? x[2] : "transparent", color: isub === x[0] ? C.ink : C.ash, border: "1px solid " + (isub === x[0] ? x[2] : C.line) })}>{x[1]}</button>)}
                 </div>
                 {isub === "breathe" ? <BreatheView IM={IM} />
                   : isub === "sit" ? <SitView IM={IM} />
                   : isub === "hardship" ? <HardshipView IM={IM} />
+                  : isub === "life" ? <LifeView IM={IM} />
+                  : isub === "season" ? <SeasonMindView IM={IM} />
                   : <HellWeek current={current} maxes={maxes} bw={bw} hwLog={hwLog} setHwLog={setHwLog} L={L} />}
               </div>) : null}
-            {tab === "guide" ? <GuideView md={guideDoc} blockName={thisBlock.name} emphasis={thisBlock.emphasis} tests={thisBlock.tests} /> : null}
+            {tab === "guide" ? <GuideView md={guideDoc} blockName={thisBlock.name} emphasis={thisBlock.emphasis} tests={thisBlock.tests} after={<RulesCard />} /> : null}
             {tab === "plan" ? <PlanView program={program} title={headerTitle} /> : null}
             {tab === "plan" ? (
               <div style={Object.assign({}, bdy, { fontSize: 10.5, color: C.ash, textAlign: "center", padding: "24px 0 6px", lineHeight: 1.6 })}>

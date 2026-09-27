@@ -1,5 +1,6 @@
 import React, { useState, useRef, useMemo } from "react";
-import { C, dsp, bdy, mno, num, buzz, fmtDate, Card, Eye, Lab, Fld, Btn, Note, Seg } from "./ui.jsx";
+import { C, dsp, bdy, mno, num, buzz, fmtDate, addDays, Card, Eye, Lab, Fld, Btn, Note, Seg } from "./ui.jsx";
+import { WeekOneCard } from "./im-ui.jsx";
 import {
   MORNING_FIELDS, rolling7, baseline, morningFlag, RHR_OVER, HRV_UNDER,
   recoveryDrop, recoveryBand, easyZone, zoneNote, ergUnitLabel, ergTotal, ergMean, recalibrated,
@@ -372,7 +373,7 @@ function DashRow({ n, t, u, fmt, date, target, note }) {
     </div>);
 }
 
-export function Dashboard({ log, morning, st, camp, body, fuel, addBody, dateOf, openPhotos }) {
+export function Dashboard({ log, morning, st, camp, body, fuel, addBody, dateOf, openPhotos, iron }) {
   const [tape, setTape] = useState({});
   const D = useMemo(() => {
     const fadeRows = pairSeries(log, camp ? "c_fs_rd1" : "fs_rd1", camp ? "c_fs_rd6" : "fs_rd6", camp, "sun", (a, b) => (a ? r1(b / a * 100) : null));
@@ -383,8 +384,10 @@ export function Dashboard({ log, morning, st, camp, body, fuel, addBody, dateOf,
       .sort((a, b) => a.week - b.week);
     const mDates = (f) => Object.keys(morning || {}).filter((d) => num((morning[d] || {})[f]) != null).sort();
     const mRows = (f) => mDates(f).map((d) => ({ d, v: num(morning[d][f]) }));
-    return { fadeRows, t20Rows, burstRows, recRows, rhrRows: mRows("rhr"), hrvRows: mRows("hrv") };
-  }, [log, morning, camp]);
+    /* the reactivity count, Sunday by Sunday, oldest first */
+    const reactRows = iron ? iron.weekRows.filter((r) => r.react != null).map((r) => ({ d: addDays(r.mon, 6), v: r.react })) : [];
+    return { fadeRows, t20Rows, burstRows, recRows, rhrRows: mRows("rhr"), hrvRows: mRows("hrv"), reactRows };
+  }, [log, morning, camp, iron]);
 
   const bn = bodyNow(fuel, body);
   const dat = (rows) => { const r = rows[rows.length - 1]; return r ? (r.d ? fmtDate(r.d) : dateOf(r.macro, r.week, r.day)) : null; };
@@ -408,6 +411,9 @@ export function Dashboard({ log, morning, st, camp, body, fuel, addBody, dateOf,
           note={bn.fromFuel ? "From the fuel app's export." : "The fuel app's export has not been imported — type it here or in settings."} />
         <DashRow n="Waist" t={{ v: bn.waist ? bn.waist.v : null, arrow: bn.waist && bn.waist.prev != null ? (bn.waist.v > bn.waist.prev ? "↑" : bn.waist.v < bn.waist.prev ? "↓" : "→") : "", good: bn.waist && bn.waist.prev != null ? bn.waist.v <= bn.waist.prev : null }}
           u="cm" date={bn.waist ? fmtDate(bn.waist.d) : null} />
+        {iron ? <DashRow n="Reactivity count — times moved before you noticed" t={trend(D.reactRows, "down")} u="" date={dat(D.reactRows)}
+          fmt={(v) => String(v)}
+          note={"Week 1: " + (iron.weekOne.react == null ? "—" : iron.weekOne.react) + " · this week: " + (iron.weekNow.react == null ? "—" : iron.weekNow.react) + ". The number should fall over months."} /> : null}
         {!bn.fromFuel ? (
           <div style={{ marginTop: 10 }}>
             <Lab>Bodyweight and waist — entered here</Lab>
@@ -419,6 +425,7 @@ export function Dashboard({ log, morning, st, camp, body, fuel, addBody, dateOf,
           </div>) : null}
         {openPhotos ? <Btn small c={C.violet} s={{ width: "100%", marginTop: 12 }} on={openPhotos}>THE PHOTOS →</Btn> : null}
       </Card>
+      {iron ? <WeekOneCard IM={iron} /> : null}
       {camp ? <Note c={C.brass} bold>The camp's targets over twelve honest weeks, beside each number. They are targets, not promises — the point of the dashboard is that you can see which of them you are actually on for.</Note> : null}
     </div>);
 }
