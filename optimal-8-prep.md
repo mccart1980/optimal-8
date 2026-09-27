@@ -133,7 +133,11 @@ Four-direction holds, 3 × 10 seconds each direction — press your palm hard ag
 
 Knuckle hold, 3 × 20 seconds — push-up position on your fists, wrist dead straight. Band wrist extension, 2 × 15 — forearm on your knee, palm down, band in the hand, lift the knuckles toward you.
 
-**4 · 0:57 — RING ROWS · 3 sets at your level · rest 60 s · 5 min**
+**4 · 0:57 — BAND DECELERATION CATCH · 2 × 8 per arm · 2 min**
+
+A light band anchored behind you at shoulder height, the end in your hand, in your stance. Punch the arm out fast; the band snatches it back — brake it hard and stop it dead in the last third of the return. Fast out, hard stop. Every punch you throw has to be braked and brought home by these muscles, and this is the only exercise that trains them to do it.
+
+**5 · 0:59 — RING ROWS · 3 sets at your level · rest 60 s · 5 min**
 
 Rings hung at hip height, hang beneath them with the body straight and heels on the floor, pull the rings to the chest, pause, lower slow; the line climbs to feet-elevated rows and archer rows (Calisthenics page). Light horizontal pulling on the easy day, keeping the shoulder honest without touching the elbow load Wednesday carries.
 
