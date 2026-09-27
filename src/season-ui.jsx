@@ -86,16 +86,27 @@ export function SeasonView({ season, st, current, program, onProgram, moved }) {
 /* ================================================================
    THE GUIDE — the plain-English page, and what this week is
    ================================================================ */
-export function GuideView({ md, blockName, emphasis, tests, after }) {
+export function GuideView({ md, blockName, emphasis, tests, after, phase, next }) {
+  const line = { fontSize: 19, color: C.chalk, marginTop: 12, paddingTop: 12, borderTop: "1px solid " + C.line, lineHeight: 1.5 };
   return (
     <div>
       <Card ac={C.brass}>
-        <div style={Object.assign({}, dsp, { fontSize: 24, fontWeight: 800, letterSpacing: 1.2, color: C.chalk, lineHeight: 1.15 })}>
+        <div data-testid="guide-live" style={Object.assign({}, dsp, { fontSize: 24, fontWeight: 800, letterSpacing: 1.2, color: C.chalk, lineHeight: 1.15 })}>
           This week is {blockName}
         </div>
         {emphasis ? <div style={Object.assign({}, bdy, { fontSize: 19, color: C.chalk, marginTop: 10, lineHeight: 1.5 })}>{emphasis}</div> : null}
         <div style={Object.assign({}, bdy, { fontSize: 19, color: tests && tests.length ? C.brass : C.ash, marginTop: 12, lineHeight: 1.5 })}>
           Tests this week: {tests && tests.length ? tests.join(", ") : "none"}
+        </div>
+        <div style={Object.assign({}, bdy, line)}>
+          <span style={{ color: C.ash }}>The food this week: </span>
+          <span style={{ fontWeight: 600, color: phase ? phase.c : C.chalk }}>{phase ? phase.n : "the day as printed"}</span>
+          {phase ? <span style={{ color: C.ash }}> — {phase.chg || "the day as printed"}</span> : null}
+        </div>
+        <div style={Object.assign({}, bdy, line)}>
+          <span style={{ color: C.ash }}>Next feed: </span>
+          {next ? <span><span style={{ fontWeight: 600 }}>{next.n}</span><span style={{ color: C.ash }}> at </span><span style={Object.assign({}, mno, { fontWeight: 700, color: C.brass })}>{next.t}</span></span>
+            : <span style={{ color: C.ash }}>nothing left today</span>}
         </div>
       </Card>
       {after || null}

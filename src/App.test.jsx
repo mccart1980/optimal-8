@@ -111,7 +111,8 @@ describe("Optimal 8", () => {
     fireEvent.click(screen.getByRole("button", { name: "MON" }));
     // an easy week prescribes half the sets — 3 × 5 becomes 2 × 5
     expect(await screen.findByText(/^Bar dips 2 × 5 · level 1/)).toBeInTheDocument();
-    expect(screen.queryByText(/EASY WEEK/)).not.toBeInTheDocument();
+    // the week is not named on the session's rows — the food phase says it, once, at the top
+    Array.from(document.querySelectorAll("[data-flow-id^='S:']")).forEach((row) => expect(row.textContent).not.toMatch(/EASY WEEK/));
     // and the slow lane is out that week
     fireEvent.click(screen.getByRole("button", { name: "SUN" }));
     await waitFor(() => expect(screen.queryByText("The Slow Lane — one lever hold")).not.toBeInTheDocument());
@@ -206,14 +207,16 @@ describe("Optimal 8", () => {
   it("runs the whole day as one flow, the morning down to lights out", async () => {
     await mount();
 
-    // the five morning items, in order, then the session, the site, lunch, the evening
+    // the five morning items, in order, then the session, the site, lunch, the evening — one list, no sections
     ["Resting heart rate and HRV", "Three physiological sighs", "The one thing", "The morning five", "The check"]
       .forEach((n) => expect(screen.getByText(n)).toBeInTheDocument());
-    const order = ["MORNING", "SESSION", "ON SITE", "LUNCH", "EVENING"].map((n) => screen.getByText(n));
-    order.forEach((el, i) => { if (i) expect(order[i - 1].compareDocumentPosition(el) & 4).toBeTruthy(); });
+    ["MORNING", "SESSION", "ON SITE", "LUNCH", "EVENING"].forEach((n) => expect(screen.queryByText(n)).not.toBeInTheDocument());
+    const ids = Array.from(document.querySelectorAll("[data-flow-id]")).map((e) => e.getAttribute("data-flow-id"));
+    const order = ["m-check", "S:A", "site", "lunch", "ev-range"].map((x) => ids.indexOf(x));
+    order.forEach((x, i) => { expect(x).toBeGreaterThanOrEqual(0); if (i) expect(x).toBeGreaterThan(order[i - 1]); });
 
-    // the evening runs RANGE → the hollow block → the sit → the review → the light
-    const ev = ["RANGE", "The hollow block", "The sit", "The review", "Casein before bed", "Lights out"].map((n) => screen.getByText(n));
+    // the evening runs RANGE → the hollow block → the sit → the review → casein → the light
+    const ev = ["RANGE", "The hollow block", "The sit", "The review", "CASEIN", "The night — lights out"].map((n) => screen.getByText(n));
     ev.forEach((el, i) => { if (i) expect(ev[i - 1].compareDocumentPosition(el) & 4).toBeTruthy(); });
 
     // the morning five is five rows under one running timer
@@ -256,9 +259,9 @@ describe("Optimal 8", () => {
     const sit = await screen.findByText("The sit");
     expect(within(sit.parentElement).getByText("12 MIN")).toBeInTheDocument();
     // the day is woven in order around the session
-    const morning = screen.getByText("MORNING");
+    const morning = screen.getByText("The check");
     const session = screen.getByText("WEDNESDAY");
-    const evening = screen.getByText("EVENING");
+    const evening = screen.getByText("RANGE");
     expect(morning.compareDocumentPosition(session) & 4).toBeTruthy();
     expect(session.compareDocumentPosition(evening) & 4).toBeTruthy();
   });
@@ -539,7 +542,7 @@ describe("Optimal 8", () => {
     vi.setSystemTime(new Date(2027, 0, 5, 9, 0, 0));
     await camp();
 
-    fireEvent.click(screen.getByRole("button", { name: "Settings" }));
+    fireEvent.click(screen.getByRole("button", { name: "SETTINGS" }));
     expect(await screen.findByText("Camp mode — the ten weeks")).toBeInTheDocument();
     expect(screen.getByText("Camp day one — the Monday week 1 starts on")).toBeInTheDocument();
     expect(screen.getByText(/camp week 1/)).toBeInTheDocument();
@@ -548,7 +551,7 @@ describe("Optimal 8", () => {
     // turning it off hands the app straight back to the Fighter
     fireEvent.click(screen.getByText("CAMP MODE"));
     await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-settings")).camp).toBe(false));
-    fireEvent.click(screen.getByRole("button", { name: "CLOSE" }));
+    fireEvent.click(screen.getByRole("button", { name: "TODAY" }));
     expect(await screen.findByText(/Crawls · Jumps · Pistols · Engine 1/)).toBeInTheDocument();
   });
 
@@ -655,10 +658,10 @@ describe("Optimal 8", () => {
     expect(await findHead("The 10 × 3 Simulation")).toBeInTheDocument();
     expect(screen.getByText("15–20 MIN · FOUR THIS WEEK")).toBeInTheDocument();
 
-    fireEvent.click(screen.getByLabelText("Settings"));
+    fireEvent.click(screen.getByRole("button", { name: "SETTINGS" }));
     fireEvent.click(await screen.findByText("THE EDGE"));
     await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-settings")).edge).toBe(false));
-    fireEvent.click(screen.getByRole("button", { name: "CLOSE" }));
+    fireEvent.click(screen.getByRole("button", { name: "TODAY" }));
     expect(await findHead("The 6 × 3 Simulation")).toBeInTheDocument();
     // switched off by hand, it is not the guardrail's line
     expect(screen.queryByTestId("edge-off")).not.toBeInTheDocument();
@@ -826,7 +829,7 @@ describe("Optimal 8", () => {
     await mount();
     fireEvent.click(screen.getByRole("button", { name: "SAT" }));
     expect(await screen.findByText("The easy hour")).toBeInTheDocument();
-    expect(screen.getByText("30–40 MIN · NOSE ONLY · ONCE A WEEKEND")).toBeInTheDocument();
+    expect(screen.getByText(/^30–40 MIN · NOSE ONLY · ONCE A WEEKEND/)).toBeInTheDocument();
 
     fireEvent.click(screen.getByLabelText("Tick The easy hour"));
     await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-log"))["m1w1-easyhour"].ok).toBe(true));
@@ -981,7 +984,7 @@ describe("Optimal 8", () => {
     fireEvent.change(hr[1], { target: { value: "138" } });
 
     expect(await screen.findByText("THE DROP")).toBeInTheDocument();
-    expect(screen.getByText("34")).toBeInTheDocument();
+    expect(within(panel).getByText("34")).toBeInTheDocument();
     expect(screen.getByText("excellent")).toBeInTheDocument();
 
     // the drop is written into the log, so it charts and exports like everything else
@@ -1100,7 +1103,7 @@ describe("Optimal 8", () => {
   it("recalibrates the baseline and sets the erg unit from settings", async () => {
     seedMornings(50, 80);
     await mount();
-    fireEvent.click(screen.getByLabelText("Settings"));
+    fireEvent.click(screen.getByRole("button", { name: "SETTINGS" }));
 
     expect(await screen.findByText("The morning numbers — the baseline")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "RECALIBRATE BASELINE" }));
@@ -1152,7 +1155,7 @@ describe("Optimal 8", () => {
     seedMornings(50, 80);
     localStorage.setItem("o8s-photos", JSON.stringify({ "2026-09-06": { front: "data:image/jpeg;base64,AAA" } }));
     await mount();
-    fireEvent.click(screen.getByLabelText("Settings"));
+    fireEvent.click(screen.getByRole("button", { name: "SETTINGS" }));
     fireEvent.click(await screen.findByRole("button", { name: "EXPORT" }));
 
     const box = await screen.findByPlaceholderText("Paste a backup here, then tap load");
@@ -1282,13 +1285,14 @@ describe("Optimal 8", () => {
     fireEvent.click(screen.getByRole("button", { name: "MON" }));
     await findHead("Bench Press");
 
-    // the steps are numbered down the whole flow, the morning's five first
-    expect(screen.getByLabelText("Tick Warm-up").textContent).toBe("6");
+    // the steps are numbered down the whole flow: the morning's five and its water,
+    // half the bottle, the gym bottle, then the session
+    expect(screen.getByLabelText("Tick Warm-up").textContent).toBe("9");
     expect(screen.getByLabelText("Tick Bench Press")).toBeInTheDocument();
 
-    // a 3am session opens at 03:00 and each step carries the clock
-    expect(screen.getByText("03:00")).toBeInTheDocument();
-    expect(screen.getByText("03:08")).toBeInTheDocument();
+    // a 03:30 session opens at 03:30 and each step carries the clock
+    expect(document.querySelector("[data-flow-id='S:A']").getAttribute("data-flow-time")).toBe("03:30");
+    expect(document.querySelector("[data-flow-id='S:B']").getAttribute("data-flow-time")).toBe("03:38");
 
     // the row carries the prescription and the rest, and nothing else
     expect(screen.getByText("4 × 6 · 75% · Rest 2:00")).toBeInTheDocument();
@@ -1327,8 +1331,8 @@ describe("Optimal 8", () => {
         await waitFor(() => expect(screen.queryByText("LOADING…")).not.toBeInTheDocument());
 
         const ids = flowIds();
-        // the five morning items are all there, in order
-        expect(ids.slice(0, 5), where + " does not open with the morning: " + ids.slice(0, 6).join(", ")).toEqual(MORNING_IDS);
+        // the five morning items are all there, in order, the waking drink among them
+        expect(ids.slice(0, 6).filter((x) => /^m-/.test(x)), where + " does not open with the morning: " + ids.slice(0, 6).join(", ")).toEqual(MORNING_IDS);
         // and every one of them is above the first session row
         const firstSession = ids.findIndex((x) => /^S:/.test(x));
         expect(firstSession, where + " has no session rows").toBeGreaterThan(0);
@@ -1361,7 +1365,7 @@ describe("Optimal 8", () => {
         expect(screen.getByText(/^(YELLOW|RED) —/), where).toBeInTheDocument();
 
         // and the rest of the day is below it
-        ["site", "lunch", "ev-range", "ev-sit", "ev-review", "nt-casein", "nt-lights"]
+        ["site", "lunch", "ev-range", "ev-sit", "ev-review", "w-last", "nt-lights"]
           .forEach((x) => expect(ids.indexOf(x), where + " lost " + x).toBeGreaterThan(0));
       }
       cleanup();
@@ -1412,7 +1416,7 @@ describe("Optimal 8", () => {
 
   it("moves camp day one from settings, and reads a mid-week date back to its Monday", async () => {
     await mount({ camp: true, program: "camp", campStart: "2026-09-07", start: "2026-08-31" });
-    fireEvent.click(screen.getByLabelText("Settings"));
+    fireEvent.click(screen.getByRole("button", { name: "SETTINGS" }));
     const lab = await screen.findByText("Camp day one — the Monday week 1 starts on");
     const field = lab.parentElement.querySelector("input");
     expect(field.value).toBe("2026-09-07");
@@ -1422,7 +1426,7 @@ describe("Optimal 8", () => {
 
   it("hands camp day one to the fight date when there is one", async () => {
     await mount({ camp: true, program: "camp", fightDate: "2027-03-13" });
-    fireEvent.click(screen.getByLabelText("Settings"));
+    fireEvent.click(screen.getByRole("button", { name: "SETTINGS" }));
     const lab = await screen.findByText("Camp day one — the Monday week 1 starts on");
     // it is shown, not typed into, and it says where it comes from
     expect(lab.parentElement.querySelector("input")).toBeNull();
@@ -1484,12 +1488,12 @@ describe("Optimal 8", () => {
     await waitFor(() => expect(title()).toBe("OPTIMAL 8 FIGHTER · WEEK 1"));
 
     // select PREP, with a fight date of Saturday 13 March 2027
-    fireEvent.click(screen.getByLabelText("Settings"));
+    fireEvent.click(screen.getByRole("button", { name: "SETTINGS" }));
     const lab = await screen.findByText("Fight date — optional");
     fireEvent.change(lab.parentElement.querySelector("input[type=date]"), { target: { value: "2027-03-13" } });
     fireEvent.click(screen.getByRole("button", { name: "PREP" }));
     await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-settings"))).toMatchObject({ program: "prep", camp: false, fightDate: "2027-03-13" }));
-    fireEvent.click(screen.getByRole("button", { name: "CLOSE" }));
+    fireEvent.click(screen.getByRole("button", { name: "TODAY" }));
 
     // the header reads the program, the week and the block
     await waitFor(() => expect(title()).toBe("OPTIMAL 8 · PREP · WEEK 1 · ACCUMULATE"));
@@ -1608,9 +1612,11 @@ describe("Optimal 8", () => {
   it("puts the movement session on Wednesday and Saturday evenings in the build", async () => {
     await mount({ program: "prep", start: "2026-08-24" });
     expect(await screen.findByText("The movement session")).toBeInTheDocument();
-    // and the accumulation block's carb top-up on Monday and Thursday
+    // and the accumulation block's carb top-up on Monday and Thursday, at 17:00
     fireEvent.click(screen.getByRole("button", { name: "THU" }));
-    expect(await screen.findByText("Carb top-up · 17:00")).toBeInTheDocument();
+    await waitFor(() => expect(document.querySelector("[data-flow-id='f-five']")).not.toBeNull());
+    expect(document.querySelector("[data-flow-id='f-five']").getAttribute("data-flow-time")).toBe("17:00");
+    expect(document.querySelector("[data-flow-id='f-five']").getAttribute("data-flow-name")).toMatch(/LOAD/);
   });
 
   /* ================================================================
@@ -1683,7 +1689,7 @@ describe("Optimal 8", () => {
     // and guide.md itself, with its contents
     expect(screen.getByText("CONTENTS")).toBeInTheDocument();
     expect(screen.getAllByText("WHAT TO DO TODAY").length).toBeGreaterThan(0);
-    expect(screen.getByText(/Open the app. It shows one thing at a time/)).toBeInTheDocument();
+    expect(screen.getByText(/Open the app. TODAY is the whole day in one list/)).toBeInTheDocument();
   });
 
   it("names the tests on the weeks that carry them", async () => {
@@ -1871,8 +1877,12 @@ describe("Optimal 8", () => {
     const names = Array.from(document.querySelectorAll("[data-flow-id^='ev-']")).map((r) => r.getAttribute("data-flow-name"));
     expect(names).toEqual(["RANGE", "The hollow block", "The sit", "The review"]);
     const night = Array.from(document.querySelectorAll("[data-flow-id^='nt-']")).map((r) => r.getAttribute("data-flow-name"));
-    expect(night).toEqual(["Casein before bed", "Lights out"]);
-    expect(screen.getByText("THE NIGHT")).toBeInTheDocument();
+    expect(night).toEqual(["The night — lights out"]);
+    expect(screen.queryByText("THE NIGHT")).not.toBeInTheDocument();
+    // after the review, on a casein night: the casein, the last drink, the light
+    const all = Array.from(document.querySelectorAll("[data-flow-id]")).map((e) => e.getAttribute("data-flow-id"));
+    const tail = all.slice(all.indexOf("ev-review") + 1).filter((x) => ["f-bed", "w-last", "nt-lights"].indexOf(x) >= 0);
+    expect(tail).toEqual(["f-bed", "w-last", "nt-lights"]);
 
     // every RANGE move is its own row, with its hold time, behind the one timer
     fireEvent.click(screen.getByText("RANGE"));
@@ -2029,5 +2039,155 @@ describe("Optimal 8", () => {
       expect(st.medStage).toBe(4);
       expect(st.breathStage).toBe(4);
     });
+  });
+
+  /* ================================================================
+     ONE TIMELINE — the fuel app merged in
+     ================================================================ */
+  const tlRows = () => Array.from(document.querySelectorAll("[data-flow-id]")).map((e) => ({
+    id: e.getAttribute("data-flow-id"), n: e.getAttribute("data-flow-name"), t: e.getAttribute("data-flow-time") }));
+  const toMin = (t) => { const p = String(t).split(":").map(Number); return p[0] * 60 + p[1]; };
+
+  it("runs Tuesday as one timeline: every row timed, in order, once, and no sections by type", async () => {
+    await mount();
+    fireEvent.click(screen.getByRole("button", { name: "TUE" }));
+    await waitFor(() => expect(tlRows().some((r) => r.id === "f-pre")).toBe(true));
+    const rows = tlRows();
+    if (process.env.DUMP_TIMELINE) console.log(rows.map((r) => r.t + "  " + r.id + "  " + r.n).join("\n"));
+
+    // no heading of the form "Hydration", "Food" or "Iron Mind", and no section lines at all
+    const texts = Array.from(document.querySelectorAll("body *")).filter((el) => !el.children.length).map((el) => (el.textContent || "").trim());
+    texts.forEach((x) => expect(x).not.toMatch(/^(hydration|food|iron mind)\b/i));
+    ["MORNING", "SESSION", "ON SITE", "LUNCH", "EVENING", "THE NIGHT"].forEach((h) => expect(screen.queryByText(h)).not.toBeInTheDocument());
+
+    // every row has a time, the rows ascend, and no item appears twice
+    rows.forEach((r) => expect(r.t, r.id + " has no time").toMatch(/^\d\d:\d\d$/));
+    rows.forEach((r, i) => { if (i) expect(toMin(r.t), rows[i - 1].id + " → " + r.id).toBeGreaterThanOrEqual(toMin(rows[i - 1].t)); });
+    expect(new Set(rows.map((r) => r.id)).size).toBe(rows.length);
+    expect(new Set(rows.map((r) => r.n)).size).toBe(rows.length);
+
+    // 03:00 wake, the strap numbers then the water; the 03:10 row is the bottle and the carb
+    expect(rows[0]).toMatchObject({ id: "m-numbers", t: "03:00" });
+    expect(rows[1].id).toBe("w-wake");
+    const at310 = rows.filter((r) => r.t === "03:10");
+    expect(at310.length).toBe(1);
+    expect(at310[0].id).toBe("f-pre");
+    expect(at310[0].n).toMatch(/BOTTLE/);
+    expect(at310[0].n).toMatch(/BANANA/);
+
+    // the weekday, in the document's order
+    const order = ["m-numbers", "w-wake", "m-sighs", "m-onething", "m-five", "m-check", "f-pre", "w-sess", "f-half", "f-breakfast", "w-start", "w-check7",
+      "f-lunch", "w-u1", "w-t1045", "site", "f-lunch-1", "lunch", "w-t1400", "f-three", "w-u2", "f-five", "ev-range", "ev-skill", "ev-sit", "ev-review", "w-last", "f-dinner", "nt-lights"];
+    const ids = rows.map((r) => r.id);
+    order.forEach((id, i) => { expect(ids.indexOf(id), id).toBeGreaterThanOrEqual(0); if (i) expect(ids.indexOf(id), order[i - 1] + " → " + id).toBeGreaterThan(ids.indexOf(order[i - 1])); });
+    const T = (id) => rows.find((r) => r.id === id).t;
+    expect([T("f-half"), T("f-breakfast"), T("w-start"), T("w-check7"), T("f-lunch"), T("w-u1"), T("w-t1045"), T("f-lunch-1"), T("w-t1400"), T("f-three"), T("w-u2"), T("f-five"), T("w-last")])
+      .toEqual(["04:35", "04:50", "05:15", "07:00", "09:00", "10:00", "10:45", "12:30", "14:00", "15:00", "16:00", "17:00", "20:00"]);
+    // the session starts at 03:30 with the gym bottle, then the steps
+    expect(T("w-sess")).toBe("03:30");
+    expect(ids.indexOf("w-sess")).toBeLessThan(ids.findIndex((x) => /^S:/.test(x)));
+  });
+
+  it("puts the load on load days only, casein on its nights, and the sauna and easy hour on theirs", async () => {
+    await mount();
+    fireEvent.click(screen.getByRole("button", { name: "MON" }));
+    await waitFor(() => expect(tlRows().some((r) => r.id === "f-pre")).toBe(true));
+    let ids = tlRows().map((r) => r.id);
+    expect(ids).not.toContain("f-five");
+    expect(ids).toContain("f-bed");
+    fireEvent.click(screen.getByRole("button", { name: "SAT" }));
+    await waitFor(() => expect(tlRows().some((r) => r.id === "f-post")).toBe(true));
+    const sat = tlRows();
+    ids = sat.map((r) => r.id);
+    expect(ids).toContain("f-five");
+    expect(ids).not.toContain("f-bed");
+    expect(ids).toContain("ev-easy");
+    const T = (id) => sat.find((r) => r.id === id).t;
+    expect([T("f-breakfast"), T("f-pre"), T("w-sess"), T("f-lunch"), T("f-lunch-1"), T("f-five"), T("f-dinner")])
+      .toEqual(["06:30", "07:45", "08:15", "11:30", "14:30", "17:00", "20:00"]);
+    // the other half and two bananas a quarter of an hour after the last step
+    const lastStep = sat.filter((r) => /^S:/.test(r.id)).pop();
+    expect(toMin(T("f-post"))).toBeGreaterThan(toMin(lastStep.t));
+    expect(toMin(T("f-post"))).toBeLessThanOrEqual(toMin(lastStep.t) + 60);
+    // Sunday's weekly rows close the day
+    fireEvent.click(screen.getByRole("button", { name: "SUN" }));
+    await waitFor(() => expect(tlRows().some((r) => r.id === "wk-life")).toBe(true));
+    const sun = tlRows().map((r) => r.id);
+    const lights = sun.indexOf("nt-lights");
+    ["S:bolt", "wk-life", "lf-test"].forEach((x) => expect(sun.indexOf(x), x).toBeGreaterThan(lights));
+  });
+
+  it("ticks a feed and its water together, swaps a slot, and brings the fuel app's backup across", async () => {
+    await mount();
+    fireEvent.click(screen.getByRole("button", { name: "TUE" }));
+    await waitFor(() => expect(tlRows().some((r) => r.id === "f-breakfast")).toBe(true));
+    const bfName = tlRows().find((r) => r.id === "f-breakfast").n;
+    fireEvent.click(screen.getByRole("button", { name: new RegExp("^Tick " + bfName.replace(/[+*()]/g, "\\$&")) }));
+    await waitFor(() => expect(screen.getByTestId("water-total").textContent).toMatch(/^0\.3/));
+    // swap the three o'clock
+    fireEvent.click(screen.getByText("TWO BANANAS"));
+    fireEvent.click(await screen.findByRole("button", { name: "Choose ONE BAGEL" }));
+    await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-menu")).picks["tue-three"]).toBe("onebagel"));
+    expect(tlRows().find((r) => r.id === "f-three").n).toBe("ONE BAGEL");
+
+    // the fuel app's own backup: options, cook weights, referee history
+    const backup = JSON.stringify({ app: "optimal-8-fuel", version: 1, data: {
+      "fu8-menu": { picks: { "wed-dinner": "salmon" }, used: { salmon: "2026-09-01" } },
+      "fu8-cook": { mince: { std: 245, big: 285, date: "2026-09-06" } },
+      "fu8-foods": [{ n: "RICE 100G DRY", out: 260, factor: 2.6 }],
+      "fu8-tape": [{ d: "2026-08-30", kg: 80.2, waist: 84 }, { d: "2026-09-06", kg: 80.6, waist: 84, arm: 39.5 }],
+      "fu8-settings": { breaks: ["09:30", "13:00"], len: { mon: 65, tue: 70, wed: 62, thu: 65, sat: 90, sun: 80 } } } });
+    fireEvent.click(screen.getByRole("button", { name: "SETTINGS" }));
+    const input = document.querySelectorAll("input[type=file]");
+    const file = new File([backup], "fuel-backup.json", { type: "application/json" });
+    Object.defineProperty(file, "text", { value: () => Promise.resolve(backup) });
+    fireEvent.change(Array.from(input).find((i) => /fuel/i.test(i.parentElement.textContent)) || input[0], { target: { files: [file] } });
+    expect(await screen.findByText(/^From the fuel app:/)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(JSON.parse(localStorage.getItem("o8s-menu")).picks["wed-dinner"]).toBe("salmon");
+      expect(JSON.parse(localStorage.getItem("o8s-cook")).mince.std).toBe(245);
+      expect(JSON.parse(localStorage.getItem("o8s-tape")).length).toBe(2);
+      expect(JSON.parse(localStorage.getItem("o8s-settings")).breaks).toEqual(["09:30", "13:00"]);
+      expect(JSON.parse(localStorage.getItem("o8s-settings")).len.tue).toBe(70);
+    });
+    // and the referee has the history
+    fireEvent.click(screen.getByRole("button", { name: "TRACK" }));
+    fireEvent.click(await screen.findByRole("button", { name: "REFEREE" }));
+    expect(await screen.findByText("2026-09-06")).toBeInTheDocument();
+    // COOK and SHOP came across
+    fireEvent.click(screen.getByRole("button", { name: "COOK" }));
+    expect(await screen.findByText(/SAVED · 245g STANDARD/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "SHOP" }));
+    expect(await screen.findByText("The weekly shop")).toBeInTheDocument();
+  }, 30000);
+
+  it("puts the band deceleration catch between the hands and the ring rows on Monday, in PREP and in CAMP", async () => {
+    for (const extra of [{ program: "prep", start: "2026-09-07" }, { camp: true, program: "camp", campStart: "2026-09-07" }]) {
+      await mount(extra);
+      fireEvent.click(screen.getByRole("button", { name: "MON" }));
+      await findHead("Band Deceleration Catch");
+      const names = Array.from(document.querySelectorAll("[data-flow-id^='S:']")).map((e) => e.getAttribute("data-flow-name"));
+      const i = names.indexOf("Band Deceleration Catch");
+      expect(names[i - 1]).toBe("Hands");
+      expect(names[i + 1]).toBe("Ring Rows");
+      expect(screen.getByText("2 × 8 per arm")).toBeInTheDocument();
+      cleanup();
+    }
+  });
+
+  it("holds every document on PLAN, and one live panel on GUIDE with the phase and the next feed", async () => {
+    await mount();
+    fireEvent.click(screen.getByRole("button", { name: "PLAN" }));
+    ["PREP", "CAMP", "FIGHTER v1.5", "IRON MIND v5", "FUEL · FIGHTER", "THE MENU", "MENU B + WATER", "FUEL · SEASON"].forEach((n) =>
+      expect(screen.getByRole("button", { name: n })).toBeInTheDocument());
+    fireEvent.click(screen.getByRole("button", { name: "THE MENU" }));
+    expect((await screen.findAllByText(/THE FIVE RULES/)).length).toBeGreaterThan(0);
+    fireEvent.click(screen.getByRole("button", { name: "GUIDE" }));
+    expect(await screen.findByText("The food this week:", { exact: false })).toBeInTheDocument();
+    expect(screen.getByText("Next feed:", { exact: false })).toBeInTheDocument();
+    // Wednesday 09:00: the mid-morning feed is due now
+    expect(screen.getByText("09:00")).toBeInTheDocument();
+    expect(screen.getByText("BATCH")).toBeInTheDocument();
+    expect(screen.getAllByText(/^FOOD AND DRINK$/).length).toBeGreaterThan(0);
   });
 });

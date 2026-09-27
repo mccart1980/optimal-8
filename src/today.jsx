@@ -92,19 +92,17 @@ export function CheckTaps({ qs, answers, setAnswers, result, line, from }) {
 /* ================================================================
    THE FLOW ITSELF
    ================================================================ */
-const secLine = (n, c) => (
-  <div style={Object.assign({}, mno, { fontSize: 14, fontWeight: 700, letterSpacing: 2, color: c || C.brass, padding: "16px 2px 8px" })}>{n}</div>);
 
 function FlowRow({ item, no, open, onOpen, onTick, last }) {
   const col = item.colour || C.brass;
   const edge = item.done ? C.moss : open ? col : C.line;
   return (
     <Card ac={edge} s={{ padding: 0, opacity: item.done && !open ? .62 : 1 }}>
-      <div data-flow-id={item.id} data-flow-name={item.n} data-flow-open={open ? "1" : "0"} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px" }}>
+      <div data-flow-id={item.id} data-flow-name={item.n} data-flow-time={item.clock || ""} data-flow-open={open ? "1" : "0"} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px" }}>
         <button onClick={onTick} aria-label={(item.done ? "Untick " : "Tick ") + item.n}
           style={Object.assign({}, mno, { width: 48, height: 48, flexShrink: 0, borderRadius: 5, cursor: "pointer", fontSize: 17, fontWeight: 700, background: item.done ? C.moss : C.ink, color: item.done ? C.ink : col, border: "1px solid " + (item.done ? C.moss : C.line) })}>{item.done ? "✓" : no}</button>
         <span onClick={onOpen} style={{ flex: 1, minWidth: 0, cursor: "pointer" }}>
-          {item.clock ? <div style={Object.assign({}, mno, { fontSize: 14, color: C.ash, letterSpacing: 1 })}>{item.clock}</div> : null}
+          {item.clock ? <div data-flow-clock={item.clock} style={Object.assign({}, mno, { fontSize: 16, fontWeight: 700, color: open ? col : C.ash, letterSpacing: 1 })}>{item.clock}</div> : null}
           <div style={Object.assign({}, bdy, { fontSize: 19, fontWeight: 600, color: C.chalk, lineHeight: 1.3 })}>{item.n}</div>
           {item.s ? <div style={Object.assign({}, mno, { fontSize: 24, fontWeight: 700, color: C.brass, marginTop: 4, lineHeight: 1.3, overflowWrap: "anywhere" })}>{item.s}</div> : null}
         </span>
@@ -134,7 +132,7 @@ export function TodayFlow({ items, curId, go, mark, streak, header }) {
     go(n ? n.id : null);
     buzz(30);
   };
-  let sec = null, no = 0;
+  let no = 0;
   return (
     <div>
       {header || null}
@@ -145,18 +143,16 @@ export function TodayFlow({ items, curId, go, mark, streak, header }) {
         </Card>) : null}
       {live.map((it, i) => {
         no += 1;
-        const head = it.sec !== sec ? (sec = it.sec, secLine(it.sec, it.secColour)) : null;
         const open = cur ? it.id === cur.id : false;
         return (
           <div key={it.id}>
-            {head}
             {it.head ? it.head() : null}
             <FlowRow item={it} no={no} open={open}
               onOpen={() => go(it.id)}
               onTick={() => mark(it, !it.done)} />
           </div>); })}
       {cur ? (
-        <div style={{ position: "sticky", bottom: 64, zIndex: 20, paddingTop: 6 }}>
+        <div style={{ position: "sticky", bottom: 112, zIndex: 20, paddingTop: 6 }}>
           <Btn on={next} c={C.moss} fill s={{ width: "100%", fontSize: 17, padding: "15px 0" }}>
             {live.filter((x) => !x.done).length <= 1 ? "NEXT — FINISH THE DAY" : "NEXT"}
           </Btn>

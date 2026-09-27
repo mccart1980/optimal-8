@@ -408,7 +408,7 @@ export function Dashboard({ log, morning, st, camp, body, fuel, addBody, dateOf,
           note={D.hrvRows.length ? "Seven-day average " + (r1(rolling7(morning, "hrv").avg) || "—") + " ms." : null} />
         <DashRow n="Bodyweight" t={{ v: bn.bw ? bn.bw.v : null, arrow: bn.bw && bn.bw.prev != null ? (bn.bw.v > bn.bw.prev ? "↑" : bn.bw.v < bn.bw.prev ? "↓" : "→") : "", good: null }}
           u="kg" date={bn.bw ? fmtDate(bn.bw.d) : null} target={tg("body")}
-          note={bn.fromFuel ? "From the fuel app's export." : "The fuel app's export has not been imported — type it here or in settings."} />
+          note={bn.fromFuel ? "From the referee's weigh-ins." : "Nothing on the referee yet — weigh in on TRACK → REFEREE, or type it here."} />
         <DashRow n="Waist" t={{ v: bn.waist ? bn.waist.v : null, arrow: bn.waist && bn.waist.prev != null ? (bn.waist.v > bn.waist.prev ? "↑" : bn.waist.v < bn.waist.prev ? "↓" : "→") : "", good: bn.waist && bn.waist.prev != null ? bn.waist.v <= bn.waist.prev : null }}
           u="cm" date={bn.waist ? fmtDate(bn.waist.d) : null} />
         {iron ? <DashRow n="Reactivity count — times moved before you noticed" t={trend(D.reactRows, "down")} u="" date={dat(D.reactRows)}
@@ -462,17 +462,17 @@ export function MeasureSettings({ st, upd, morning, dayIso, fuel, setFuel, impor
       <Note>Every conditioning session logs its output in this unit — per interval, per burst, per round. Pick one and keep it, or the weeks stop comparing.</Note>
 
       <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
-      <Eye c={C.violet}>The fuel app</Eye>
-      <Note c={C.chalk} s={{ marginTop: 0 }}>Import the fuel app's export and the dashboard reads bodyweight and waist straight out of it. Without it, you type them on the dashboard.</Note>
+      <Eye c={C.violet}>The fuel app — bring it across</Eye>
+      <Note c={C.chalk} s={{ marginTop: 0 }}>The fuel app lives in here now. Import its backup file once and your chosen options, your cooked-batch weights, your saved ratios, the shopping list and the referee's weigh-ins come across. Nothing already in this app is overwritten except the options and weights the backup carries.</Note>
       <div style={{ display: "flex", gap: 6, marginTop: 8 }}>
-        <Btn small c={C.violet} s={{ flex: 1 }} on={() => fileRef.current && fileRef.current.click()}>IMPORT THE FUEL EXPORT</Btn>
+        <Btn small c={C.violet} s={{ flex: 1 }} on={() => fileRef.current && fileRef.current.click()}>IMPORT THE FUEL APP'S BACKUP</Btn>
         {fuel && (fuel.entries || []).length ? <Btn small c={C.ash} s={{ flex: 1 }} on={() => { setFuel(null); setMsg("The fuel app's data has been cleared."); }}>CLEAR IT</Btn> : null}
       </div>
       <input ref={fileRef} type="file" accept="application/json,.json" style={{ display: "none" }} aria-hidden="true" tabIndex={-1}
         onChange={async (e) => { const f = e.target.files && e.target.files[0]; e.target.value = ""; if (!f) return;
           const r = await importFuelText(f); setMsg(r); }} />
       {fuel && (fuel.entries || []).length
-        ? <Note c={C.moss}>{fuel.entries.length} day{fuel.entries.length === 1 ? "" : "s"} from the fuel app, imported {fuel.importedAt ? fmtDate(fuel.importedAt) : ""}.</Note>
-        : <Note c={C.ash} s={{ fontStyle: "italic" }}>Nothing imported yet.</Note>}
+        ? <Note c={C.moss}>{fuel.entries.length} day{fuel.entries.length === 1 ? "" : "s"} of bodyweight and waist from an older fuel export, imported {fuel.importedAt ? fmtDate(fuel.importedAt) : ""}.</Note>
+        : null}
     </div>);
 }

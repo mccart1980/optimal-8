@@ -27,6 +27,47 @@ Once it's installed you can use it on a plane, in a basement gym, anywhere with
 no signal. When you next open it with a connection it quietly picks up any new
 version in the background.
 
+## ONE APP — THE FUEL APP LIVES IN HERE NOW
+
+Fuel · Optimal 8 has been merged into this app, and this is the only app. The
+tabs are **TODAY · WEEK · COOK · SHOP · TRACK · IRON · PLAN · GUIDE · SETTINGS**.
+
+- **TODAY is one timeline.** Every item of the day — mind, body, food, drink —
+  is one row with a time, sorted by the clock, with no sections by type. A
+  weekday at a 03:30 session runs: 03:00 the strap numbers, then 500 ml of
+  water; the sighs, the one thing, the morning five, the check; 03:10 half the
+  bottle and the chosen carb; 03:30 the gym bottle and the session; the other
+  half the moment it ends (04:35 on a 65-minute session); breakfast a quarter of
+  an hour later with 300 ml and the creatine; work start and the litre with
+  sachet 1; the bottle check; the two feeds at the break times with 500 ml each;
+  the urine checks at ten and four; the 300 ml top-ups; the on-site reminders;
+  the lunch breath practice; the three o'clock; the 5pm load on load days; the
+  evening (the easy thirty, the movement session or the microdose on their days,
+  RANGE, the hollow block, the sit, the review), ending at dinner; dinner with
+  300 ml; the casein half an hour before lights out on its nights; the last
+  drink at 20:00; lights out. Saturday, Sunday and Friday run their own orders
+  the same way, with the sauna and the easy hour on their days, and Sunday's
+  weekly rows — the weekly check, BOLT, the life review, the audit, the life
+  test and the photos — close Sunday's timeline. The top of TODAY carries the
+  food phase, what's eaten against the day, and the water against the target.
+- **COOK** and **SHOP** are the fuel app's, unchanged.
+- **TRACK → REFEREE** is the fuel app's referee — weight, waist, arm and
+  shoulder, the charts, and the feedback-loop rules read off your numbers — next
+  to the dashboard, which now reads bodyweight and waist from it.
+- **PLAN** holds every document: PREP, CAMP, FIGHTER, IRON MIND v5 and v4.2,
+  and the four fuel documents.
+- **GUIDE** is one plain-English guide with one live panel: this week's block,
+  the food phase, the tests this week, and the next feed.
+- **SETTINGS** is one set: the program, the start date, the fight date, the
+  making-weight switch, the break times and the session length per weekday,
+  text size, THE EDGE, the units. The fuel phase is read off the app's one
+  season.
+- **Bringing the fuel app's data across:** SETTINGS → *The fuel app — bring it
+  across* → IMPORT THE FUEL APP'S BACKUP, and pick the `.json` file the fuel app
+  exported. Your chosen options, cooked-batch weights, saved ratios, shopping
+  list, referee history, break times and session lengths come across. This
+  app's own EXPORT now carries all of it.
+
 ## THE SEASON
 
 One optional **fight date** in settings dates everything, backwards from the
@@ -71,8 +112,8 @@ The calendar's weekly emphasis drives the session, not the other way round:
   nowhere else.
 - **The movement session** is a guided 30-minute timer on Wednesday and Saturday
   evenings in accumulation, Saturday evenings after.
-- **The carb top-up** shows as one line on Monday and Thursday evenings in
-  accumulation. The fuel app owns the food.
+- **The carb top-up** is on TODAY at 17:00 on Monday and Thursday in
+  accumulation, with its options.
 - **The sauna** comes in from week 6.
 - **The tests** fall on the weeks that carry them, and the three flexibility
   tests — knee to wall, toe touch, seated rotation — sit with the four range
@@ -251,7 +292,7 @@ The same rule runs in both programs and in Camp Mode's calisthenics rows.
 
 ## Backing up
 
-Open the app, tap the **⚙** button in the top right, and scroll down to
+Open the app, tap the **SETTINGS** tab, and scroll down to
 **Backup**.
 
 **To make a backup**
@@ -491,6 +532,12 @@ npm run icons   # regenerate the app icons from scripts/generate-icons.mjs
 - `src/mdview.jsx` — renders `optimal8fighter.md` and `iron-mind-v5.md` in the
   PLAN tab, offline, with a table of contents. Those two files are the source of
   truth; the app imports them directly.
+- `src/fuel.js` — the fuel app as data: the blocks, the slots and their
+  options, the seven day plans, the phase table, the water schedule, the shop,
+  the referee's rules, and `fuelPlan()`, which puts a day's feeds and drinks on
+  the clock for TODAY.
+- `src/fuel-ui.jsx` — COOK, SHOP and the REFEREE from the fuel app, and the
+  bodies of TODAY's feed and water rows.
 - `src/storage.js` — a `window.storage` shim (the API the original claude.ai
   artifact used) backed by `localStorage`, keeping the existing `o8s-…` keys.
 - `vite.config.js` — Vite base path `/optimal-8/` plus the PWA manifest and

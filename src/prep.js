@@ -263,7 +263,7 @@ const engName = (key) => (rx) => (PENG[rx[key]] || PENG.easy).n;
 
 export const PS = {
   /* ---------------- MONDAY ---------------- */
-  mon: { n: "MONDAY", t: "Base · neck · hands · ring rows", m: (rx) => rx.base + 22, ac: C.moss, free: 0, box: 1,
+  mon: { n: "MONDAY", t: "Base · neck · hands · band deceleration catch · ring rows", m: (rx) => rx.base + 24, ac: C.moss, free: 0, box: 1,
     intro: "The low day in a high/low week, and it has to stay low. The base decides how fast you recover between exchanges, and it is the floor that lets Tuesday and Thursday be as hard as they are.", b: [
     { L: "A", n: "Base — easy, nose only", m: (rx) => rx.base, star: 1, eng: 1, engKey: "base",
       timer: (rx) => ({ kind: "z2", opt: { min: rx.base, label: "EASY — NOSE ONLY · 65–75% OF PEAK" }, title: "BASE" }),
@@ -275,6 +275,9 @@ export const PS = {
       items: [{ n: "The full neck block", s: "holds 3 × 10 s · rapid tense 4 × 6 per direction · perturbation 2 × 20 s", id: "p_neck_mon", k: "chk" }] },
     { L: "C", n: "Hands", m: 4, p: "HANDS",
       items: [{ n: "Hands", s: "knuckle hold 3 × 20 s · band wrist extension 2 × 15", cue: "On your fists on a mat, the wrist dead straight; then forearm on the knee, palm down, lifting the knuckles toward you.", id: "hands2", k: "wr", sets: 3, reps: 20 }] },
+    { L: "K", n: "Band Deceleration Catch", m: 2, rxLine: () => "2 × 8 per arm",
+      items: [{ n: "Band deceleration catch", s: "2 × 8 per arm", cue: "A light band anchored behind you at shoulder height, the end in your hand, in your stance. Punch the arm out fast; the band snatches it back — brake it hard and stop it dead in the last third of the return. Fast out, hard stop.", id: "p_decel", k: "chk" }],
+      why: "Every punch you throw has to be braked and brought home by these muscles, and this is the only exercise that trains them to do it." },
     { L: "D", n: "Ring Rows", m: 5, cal: "ringrow", rest: "Rest 60 s", rt: 60, rxLine: () => "3 sets at your level",
       items: (rx) => [{ n: "Ring rows — at your level", s: (rx.half ? 2 : 3) + " sets", cue: "Rings at hip height, hang beneath them with the body straight and heels on the floor, pull the rings to the chest, pause, lower slow.", id: "ringrow", k: "wr", sets: rx.half ? 2 : 3, reps: "at your level" }],
       why: "Light horizontal pulling on the easy day, keeping the shoulder honest without touching the elbow load Wednesday carries." }] },

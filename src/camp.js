@@ -390,7 +390,7 @@ const testTitle = { burst: "THE BURST TEST", retest: "THE RETESTS", retest9: "TH
 
 export const CS = {
   /* ---------------- MONDAY · BASE ---------------- */
-  mon: { n: "MONDAY", t: "BASE — easy nasal ride or run, 45 min · neck · hands · ring rows", m: (rx) => (rx.base || 0) + 17, ac: C.moss,
+  mon: { n: "MONDAY", t: "BASE — easy nasal ride or run, 45 min · neck · hands · band deceleration catch · ring rows", m: (rx) => (rx.base || 0) + 19, ac: C.moss,
     intro: "The base is the thing Optimal 8 was thin on and the thing the camp will lean on hardest. It decides how fast you recover between exchanges and between rounds — roughly three-quarters of a 6 × 3 is aerobic — and it's the floor that lets Tuesday and Thursday be as hard as they are. It's the low day in a high/low week, and it must stay low.",
     b: [
     { L: "A", n: "Easy, nose only", m: (rx) => rx.base || 45, star: 1,
@@ -407,6 +407,9 @@ export const CS = {
     { L: "C", n: "Hands", m: 4, p: "C_HANDS",
       timer: () => ({ kind: "hold", opt: { sets: 3, secs: 20, rest: 30, label: "KNUCKLE HOLD" }, title: "HANDS" }),
       items: [{ n: "Knuckle hold + band wrist extension", s: "3 × 20 s · 2 × 15", id: "c_hands_mon", k: "wr", sets: 3, reps: 20 }] },
+    { L: "K", n: "Band Deceleration Catch", m: 2, rxLine: () => "2 × 8 per arm",
+      items: [{ n: "Band deceleration catch", s: "2 × 8 per arm", cue: "A light band anchored behind you at shoulder height, the end in your hand, in your stance. Punch the arm out fast; the band snatches it back — brake it hard and stop it dead in the last third of the return. Fast out, hard stop.", id: "c_decel", k: "chk" }],
+      why: "Every punch you throw has to be braked and brought home by these muscles, and this is the only exercise that trains them to do it." },
     { L: "D", n: "Ring Rows", m: 5, cal: "ringrow", rest: "Rest 60 s", rt: 60, rxLine: () => "3 sets at your level",
       items: [{ n: "Ring rows — at your level", s: "3 sets", cue: "Rings hung at hip height, hang beneath them with the body straight and heels on the floor, pull the rings to the chest, pause, lower slow; the line climbs to feet-elevated rows and archer rows.", id: "ringrow", k: "wr", sets: 3, reps: "at your level" }],
       why: "Light horizontal pulling on the easy day, keeping the shoulder honest without touching the elbow load Wednesday carries." }] },
