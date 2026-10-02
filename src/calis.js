@@ -43,6 +43,17 @@ export const SKILL_BLOCK = {
     how: "A push-up position, then shift the shoulders forward past the wrists as far as they'll go, arms locked, body rigid." },
 };
 
+/* PREP's and CAMP's skill block: five minutes, the wrists without the
+   rocks, the handstand on parallettes, the two shapes. The planche leans
+   are gone — they bend the wrist further back than anything else and give
+   a puncher nothing back. */
+export const skillRowsO8 = (hs) => [
+  { id: "sk_wrists", n: "Wrists", s: "10 each way", how: "Wrist circles × 10 each way." },
+  { id: "sk_handstand", n: "Handstand — on parallettes", s: "3 min · level " + hs.l,
+    how: (hs.what ? hs.what + ". " : "") + "On parallettes, hands round the bars, wrists straight — the way your wrist is when a punch lands." },
+  SKILL_BLOCK.hollow, SKILL_BLOCK.arch];
+export const SKILL_MINS_O8 = 5;
+
 /* ---------- the seven lines ---------- */
 export const LINES = [
   { id: "handstand", n: "HANDSTAND", where: "home, Mon–Thu", day: "home", c: C.brass, home: 1,

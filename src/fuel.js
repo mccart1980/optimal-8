@@ -84,7 +84,19 @@ export const B = {
   halfrc4:    { n: "HALF BOTTLE + 4 RICE CAKES", kcal: 345, p: 28, c: 62, f: 1, extra: [["Rice cakes", "2 packs"]], i: [["UFIT 50g", "the other half"], ["Rice cakes", "4, with honey"], ["Honey", "on them"]] },
 
   banana:     { n: "BANANA", kcal: 105, p: 1, c: 27, f: 0, i: [["Banana", "1"]] },
+
+  /* FIGHT DAY — weigh-in to bell */
+  fcarb:      { n: "LOW-FIBRE CARBS — ABOUT 1 G PER KILO", kcal: 300, p: 6, c: 75, f: 1, bn: "Nothing new, nothing fatty, nothing fibrous.", i: [["Rice, bagels, white pasta, bananas, or rice cakes with honey", "about a gram of carbohydrate per kilo of bodyweight"]] },
+  flast:      { n: "THE LAST PROPER MEAL", kcal: 715, p: 59, c: 99, f: 11, bn: "Three hours out. Nothing new, nothing fatty, nothing fibrous.", i: [["Ben's Original rice pouch", "1"], ["Chicken breast, cooked", "150g"], ["Banana", "1"]] },
+  fhour:      { n: "HALF BOTTLE + BANANA", kcal: 249, p: 26, c: 36, f: 1, bn: "One hour out. Rice cakes and honey in place of the banana if that sits better.", i: [["UFIT 50g", "half · 250ml"], ["Banana — or rice cakes and honey", "1"]] },
 };
+
+/* The tendon days — Tuesday, Thursday and Saturday — add collagen to the
+   bottle before the session, with a small orange juice for the vitamin C. */
+export const COLLAGEN_DAYS = { tue: 1, thu: 1, sat: 1 };
+export const COLLAGEN_NOTE = "15 g of collagen or gelatin powder stirred into the bottle, with a small glass of orange juice for the vitamin C. Taken 30–60 minutes before the jumps and the tendon holds, it gives the tendons more of the material they rebuild from.";
+export const withCollagen = (b) => Object.assign({}, b, { n: b.n + " + COLLAGEN", kcal: b.kcal + 119, p: b.p + 14, c: b.c + 15,
+  i: b.i.concat([["Collagen or gelatin powder", "15 g, stirred into the bottle"], ["Orange juice", "150 ml"]]) });
 
 export const SLOT_OF = { halfban: "pre", porridge: "breakfast", porridgeb: "breakfast", batch: "lunch", batchbig: "lunch",
   twoban: "three", topup: "five", steak: "dinner", steakbig: "dinner", chicken: "dinner", pasta: "dinner",
@@ -200,7 +212,7 @@ export const HYDRA_RULES = [
 export const SHOP = [
   ["MEAT & EGGS", [["Beef mince 5%", "2.2 kg raw — the batch only"], ["Steak", "3 — one 200 g, two 250 g"], ["Chicken breast", "4 × 250 g"], ["Eggs", "3 dozen — 21 boiled (12 Sunday, 9 Wednesday) plus the dinners"]]],
   ["CARBS", [["Sweet potato", "4.3 kg raw"], ["Ben's Original rice pouches", "8"], ["Pasta, dry", "250 g"], ["Quaker Oat So Simple Golden Syrup sachets", "17 — two boxes of 15 last under a fortnight"], ["Honey", "~200 g"], ["Bananas", "~35"]]],
-  ["THE REST", [["Passata", "2.5 L — the batch, plus the two chicken dinners"], ["Beef stock", "as needed"], ["UFIT 50 g", "6 bottles"], ["Casein", "a 1 kg tub lasts about six weeks"], ["Milk", "2 L — the porridge only"], ["Mushrooms", "1.3 kg"], ["Electrolyte sachets", "8–12 a week"]]],
+  ["THE REST", [["Passata", "2.5 L — the batch, plus the two chicken dinners"], ["Beef stock", "as needed"], ["UFIT 50 g", "6 bottles"], ["Casein", "a 1 kg tub lasts about six weeks"], ["Milk", "2 L — the porridge only"], ["Mushrooms", "1.3 kg"], ["Electrolyte sachets", "8–12 a week"], ["Collagen or gelatin powder", "300 g — 15 g in the bottle on Tuesday, Thursday and Saturday"], ["Orange juice", "1 litre — 150 ml with the collagen"]]],
   ["SUPPLEMENTS", [["Creatine monohydrate", "Creatine 5 g in the post-session water, daily"], ["Omega-3 (fish oil)", "1–2 g EPA+DHA daily — there is no oily fish anywhere in your diet"], ["Vitamin D", "1,000–2,000 IU daily, October to April"], ["Multivitamin", "as before — cheap insurance"], ["Beta-alanine (optional)", "3.2 g/day split in two; needs four-plus weeks to work, so start week 1 or don't bother. Helps exactly where it hurts: the 40-second repeats, the repeat bursts and the fight sim. The tingling is harmless."]]],
 ];
 /* The document's "as you use them" list, in its order. An item appears only
@@ -344,6 +356,7 @@ export const EASY_WATER = 500;
    with a feed is on the feed's row, and the rest are rows of their own.
    ================================================================ */
 export function fuelPlan(o) {
+  if (o.fight) return fightDayPlan(o);
   const day = o.day, weekend = day === "sat" || day === "sun", work = !weekend;
   const sess = !!o.session;
   const S = o.start, len = Number(o.len) || 0;
@@ -378,7 +391,9 @@ export function fuelPlan(o) {
     else if (f.b === "casein" && lights != null) t = lights - 30;
     else t = tMin(f.t);
     const id = "f-" + (slot ? slot + (nth ? "-" + nth : "") : f.b);
-    rows.push({ id, kind: "feed", t, b: f.b, base, key, slot, big, pickId, blk, crit: !!f.crit, note: f.note || "", sub: f.sub || "", ml: 0 });
+    const col = slot === "pre" && !!COLLAGEN_DAYS[day];
+    rows.push({ id, kind: "feed", t, b: f.b, base, key, slot, big, pickId, blk: col ? withCollagen(blk) : blk, crit: !!f.crit,
+      note: col ? COLLAGEN_NOTE : f.note || "", sub: f.sub || "", ml: 0, collagen: col });
   });
   const feedOf = (pred) => rows.find((r) => r.kind === "feed" && pred(r));
   const lunch = rows.filter((r) => r.slot === "lunch");
@@ -432,3 +447,44 @@ export function fuelPlan(o) {
 /* The water a row carries once it is ticked. A dark urine check is 500 ml
    of its own, per the document. */
 export const mlOf = (r, checks) => (r.check ? ((checks || {})[r.check] === "dark" ? 500 : 0) : (r.ml || 0));
+
+/* ================================================================
+   FIGHT DAY — WEIGH-IN TO BELL. The session start is the bell; every
+   row runs back from it. With the making-weight switch on, the hours
+   between the scale and the bell put the weight back: 1.25–1.5 litres
+   for every kilo lost with a sachet in every litre, and low-fibre carbs
+   every hour or two until three hours out. Without it, the day eats as
+   a normal Saturday. Then the same for both: the last proper meal three
+   hours out, half the bottle and a banana an hour out, caffeine an hour
+   out, and sips with electrolytes through the warm-up and the rounds.
+   Bicarbonate is for the March fight only, after a trial.
+   ================================================================ */
+export const FIGHT_DAY = {
+  rehydrate: "Drink 1.25–1.5 litres for every kilo lost, an electrolyte sachet in every litre, sipped steadily, not gulped.",
+  caffeine: "About 240 mg — a strong coffee or a caffeine tablet. Only with blood pressure in the normal range, and only after using it before a hard session in camp; never for the first time on fight night. The noon caffeine rule doesn't apply tonight.",
+  bicarb: "The March fight only, and only after a trial on a Sunday simulation in camp — the dose and timing trialled. The dose is large and stomach upset is common; fight night is no place to find out.",
+  sips: "Sips of water with electrolytes through the warm-up and between rounds, nothing else.",
+};
+function fightDayPlan(o) {
+  const B0 = o.start, wake = Math.min(tMin("07:00"), B0 - 360), last = B0 - 180, rows = [];
+  const feed = (id, t, b, extra) => rows.push(Object.assign({ id, kind: "feed", t, b, base: b, key: b, slot: null, big: false, pickId: null, blk: B[b], crit: 0, note: "", sub: "", ml: 0 }, extra || {}));
+  const water = (id, t, ml, n, extra) => rows.push(Object.assign({ id: "w-" + id, kind: "water", t, ml, n }, extra || {}));
+  water("wake", wake + 1, 500, "500 ml water on waking", { cre: 1 });
+  if (o.cut) {
+    water("rehyd", wake + 5, 0, "Put the weight back — 1.25–1.5 litres for every kilo lost", { sachet: "A SACHET IN EVERY LITRE", note: FIGHT_DAY.rehydrate });
+    let n = 0;
+    for (let t = wake + 30; t <= last - 60; t += 120) feed("f-fcarb" + (n ? "-" + n : ""), t, "fcarb", { ml: 0, note: n ? "" : "Every hour or two until three hours out." }), n++;
+  } else {
+    feed("f-breakfast", wake + 15, "porridgeb", { slot: "breakfast", ml: 300, wnote: "300 ml water with it.", note: "A normal Saturday until three hours out — drink to the alarms." });
+    if (tMin("11:30") <= last - 60) feed("f-lunch", tMin("11:30"), "batchbig", { slot: "lunch", ml: 500, wnote: "500 ml water with it." });
+    if (tMin("14:30") <= last - 60) feed("f-lunch-1", tMin("14:30"), "batch", { slot: "lunch", ml: 500, wnote: "500 ml water with it." });
+  }
+  feed("f-fight3", last, "flast", { crit: 1, ml: 300, wnote: "300 ml water with it." });
+  if (o.march) water("bicarb", B0 - 90, 0, "Sodium bicarbonate — the March fight, as trialled", { note: FIGHT_DAY.bicarb });
+  feed("f-fight1", B0 - 60, "fhour", { crit: 1, ml: 250, wnote: "The half bottle counts as 250 ml." });
+  water("caffeine", B0 - 60, 0, "Caffeine — about 240 mg, an hour before the bell", { note: FIGHT_DAY.caffeine });
+  water("sips", B0 - 30, 0, "The warm-up and between rounds — sips with electrolytes", { sachet: "A SACHET", note: FIGHT_DAY.sips });
+  rows.sort((a, b) => a.t - b.t);
+  return { rows, target: 4000, weekend: true, work: false, wake, call: ["FIGHT DAY — WEIGH-IN TO BELL", "Nothing new, nothing fatty, nothing fibrous. The bell is the clock."],
+    dayName: "FIGHT DAY", star: 1, tag: "the bell" };
+}

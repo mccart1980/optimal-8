@@ -374,7 +374,9 @@ describe("Optimal 8", () => {
     expect(before(burst, intervals)).toBe(true);
 
     // the session runs in the document's order: the Spanish hold after the pistols, the settle after the engine
-    expect(before(head("Warm-up + bear crawls"), burst)).toBe(true);
+    expect(before(head("Warm-up"), head("The Jump Check"))).toBe(true);
+    expect(before(head("The Jump Check"), burst)).toBe(true);
+    expect(screen.queryByText("Warm-up + bear crawls")).not.toBeInTheDocument();
     expect(before(head("The Pistol Line"), head("Spanish Squat Hold"))).toBe(true);
     expect(before(head("Spanish Squat Hold"), intervals)).toBe(true);
     expect(before(intervals, head("The 60-Second Settle"))).toBe(true);
@@ -478,7 +480,8 @@ describe("Optimal 8", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "SAT" }));
     expect(await findHead("Depth Jumps")).toBeInTheDocument();
-    expect(screen.getAllByText(/^5 × 5/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/^4 × 4/).length).toBeGreaterThan(0);
+    expect(screen.queryByText(/^5 × 5/)).not.toBeInTheDocument();
     fireEvent.click(head("Back Squat"));
     expect(await screen.findByText("Band-assisted jump")).toBeInTheDocument();
     expect(screen.getByText("Trap bar jump")).toBeInTheDocument();
@@ -570,7 +573,7 @@ describe("Optimal 8", () => {
   const SEASON = { fightDate: "2027-03-13", start: "2026-09-28" };
   const ready = (m) => localStorage.setItem("o8s-ready", JSON.stringify(m));
 
-  it("runs PREP week 8 Wednesday in cluster sets, with the pin timer, the microdose and the easy thirty", async () => {
+  it("runs PREP week 8 Wednesday in cluster sets, with the pin timer and the easy thirty, and no microdose", async () => {
     vi.setSystemTime(new Date(2026, 10, 18, 9, 0, 0));  // Wednesday 18 November 2026, PREP week 8
     await mount(Object.assign({ program: "prep" }, SEASON));
     await waitFor(() => expect(title()).toBe("OPTIMAL 8 · PREP · WEEK 8 · INTENSIFY"));
@@ -582,10 +585,10 @@ describe("Optimal 8", () => {
     expect((await screen.findAllByText(/SET 1 OF 5 · 2 REPS/)).length).toBeGreaterThan(0);
     fireEvent.click(screen.getByRole("button", { name: "CLOSE TIMER" }));
 
-    // the evening: the easy thirty, then the power microdose, before RANGE
+    // the evening: the easy thirty before RANGE; the microdose is gone
     const thirty = screen.getByText("The Wednesday easy thirty");
-    const micro = screen.getByText("The power microdose");
-    expect(before(thirty, micro)).toBe(true);
+    expect(before(thirty, screen.getByText("RANGE"))).toBe(true);
+    expect(screen.queryByText("The power microdose")).not.toBeInTheDocument();
     expect(screen.queryByTestId("edge-off")).not.toBeInTheDocument();
 
     // Saturday's squat runs the same clusters
@@ -610,11 +613,10 @@ describe("Optimal 8", () => {
     expect(screen.getByText("The sit")).toBeInTheDocument();
     // the edge rows are gone
     expect(screen.queryByText("The Wednesday easy thirty")).not.toBeInTheDocument();
-    expect(screen.queryByText("The power microdose")).not.toBeInTheDocument();
 
-    // Monday came before the second yellow: its microdose stands
+    // Monday came before the second yellow: no edge-off line on it
     fireEvent.click(screen.getByRole("button", { name: "MON" }));
-    expect(await screen.findByText("The power microdose")).toBeInTheDocument();
+    expect(await findHead("Base — easy, nose only")).toBeInTheDocument();
     expect(screen.queryByTestId("edge-off")).not.toBeInTheDocument();
 
     cleanup();
@@ -623,7 +625,6 @@ describe("Optimal 8", () => {
     await mount(Object.assign({ program: "prep" }, SEASON));
     await waitFor(() => expect(title()).toBe("OPTIMAL 8 · PREP · WEEK 9 · INTENSIFY"));
     expect(await screen.findByText("The Wednesday easy thirty")).toBeInTheDocument();
-    expect(screen.getByText("The power microdose")).toBeInTheDocument();
     expect(screen.queryByTestId("edge-off")).not.toBeInTheDocument();
   });
 
@@ -647,7 +648,7 @@ describe("Optimal 8", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "SAT" }));
     expect(await findHead("Depth Jumps")).toBeInTheDocument();
-    expect(screen.getAllByText(/^4 × 5/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/^4 × 4/).length).toBeGreaterThan(0);
     expect(screen.queryByText(/^5 × 5/)).not.toBeInTheDocument();
   });
 
@@ -665,6 +666,159 @@ describe("Optimal 8", () => {
     expect(await findHead("The 6 × 3 Simulation")).toBeInTheDocument();
     // switched off by hand, it is not the guardrail's line
     expect(screen.queryByTestId("edge-off")).not.toBeInTheDocument();
+  });
+
+  /* ---------------- THE OCTOBER AUDIT ---------------- */
+
+  it("runs a PREP week-2 Saturday with close and plant after the stance starts, and no throws", async () => {
+    vi.setSystemTime(new Date(2026, 9, 10, 9, 0, 0));   // Saturday 10 October 2026, PREP week 2
+    await mount(Object.assign({ program: "prep" }, SEASON));
+    await waitFor(() => expect(title()).toBe("OPTIMAL 8 · PREP · WEEK 2 · ACCUMULATE"));
+    const plant = await findHead("Close and Plant");
+    expect(before(head("Stance Starts"), plant)).toBe(true);
+    expect(before(plant, head("Flying Sprints"))).toBe(true);
+    expect(screen.queryByText("The Four Punch Throws")).not.toBeInTheDocument();
+    // week 2 is even: the side bounds go forward-and-across at 45°
+    expect(head("Side Bounds — 45°")).toBeInTheDocument();
+  });
+
+  it("runs the PREP Sunday with the four throws as step 2, suitcase carries and face pulls, and no get-ups", async () => {
+    vi.setSystemTime(new Date(2026, 9, 11, 9, 0, 0));   // Sunday 11 October 2026, PREP week 2
+    await mount(Object.assign({ program: "prep" }, SEASON));
+    await waitFor(() => expect(title()).toBe("OPTIMAL 8 · PREP · WEEK 2 · ACCUMULATE"));
+    const throws = await findHead("The Four Punch Throws");
+    const wu = head("Warm-up");
+    expect(before(wu, throws)).toBe(true);
+    expect(before(throws, head("The 6 × 3 Simulation"))).toBe(true);
+    // nothing between the warm-up and the throws: they are the second step
+    expect(screen.queryByText("Bench Max Single")).not.toBeInTheDocument();
+    expect(screen.queryByText("Warm-up — get-ups first")).not.toBeInTheDocument();
+    fireEvent.click(throws);
+    expect(await screen.findByText("Downward diagonal throw")).toBeInTheDocument();
+    expect(screen.getByText("Landmine punch")).toBeInTheDocument();
+    fireEvent.click(head("Core, Carries, L-Sit, Lever, Face Pulls, Hands"));
+    expect(await screen.findByText("Suitcase carries")).toBeInTheDocument();
+    expect(screen.getByText("Face pulls")).toBeInTheDocument();
+    expect(screen.queryByText("Side plank reach-through")).not.toBeInTheDocument();
+    expect(screen.queryByText("Turkish get-up")).not.toBeInTheDocument();
+    // weeks 1–5: the hammer curls, on their own
+    expect(head("Hammer Curls")).toBeInTheDocument();
+    // the weekly check scores the hamstrings
+    fireEvent.click(head("Weekly Check"));
+    expect(await screen.findByText("Hamstrings")).toBeInTheDocument();
+  });
+
+  it("runs a PREP week-7 Wednesday with the paused bench press and no ring dips", async () => {
+    vi.setSystemTime(new Date(2026, 10, 11, 9, 0, 0));  // Wednesday 11 November 2026, PREP week 7
+    await mount(Object.assign({ program: "prep" }, SEASON));
+    await waitFor(() => expect(title()).toBe("OPTIMAL 8 · PREP · WEEK 7 · INTENSIFY"));
+    const bench = await findHead("Bench Press");
+    expect(screen.queryByText("Ring Dips")).not.toBeInTheDocument();
+    expect(before(bench, head("Bench Throw (Smith)"))).toBe(true);
+    expect(head("Drive Holds + Punch-Position Holds")).toBeInTheDocument();
+    fireEvent.click(bench);
+    expect((await screen.findAllByText("PAUSED · 3 × 3 @ 84%")).length).toBeGreaterThan(0);
+    // the bench reads the Loading table's intensify target
+    expect(screen.getByText(/FIRST WORK SET · TARGET 0.35 M\/S/)).toBeInTheDocument();
+  });
+
+  it("keeps the bench throw and the ring dips in PREP weeks 1–5, and the shrugs in the size block", async () => {
+    vi.setSystemTime(new Date(2026, 9, 7, 9, 0, 0));    // Wednesday 7 October 2026, PREP week 2
+    await mount(Object.assign({ program: "prep" }, SEASON));
+    expect(await findHead("Bench Throw (Smith)")).toBeInTheDocument();
+    expect(head("Ring Dips")).toBeInTheDocument();
+    expect(screen.queryByText("Bench Press")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "THU" }));
+    fireEvent.click(await findHead("The Size Block"));
+    expect(await screen.findByText("Trap bar shrugs")).toBeInTheDocument();
+    expect(before(head("Band Deceleration Catch"), head("The Size Block"))).toBe(true);
+    fireEvent.click(screen.getByRole("button", { name: "TUE" }));
+    expect(before(await findHead("Warm-up"), head("The Jump Check"))).toBe(true);
+    expect(before(head("The Jump Check"), head("Power dose — jumps"))).toBe(true);
+  });
+
+  it("shows depth jumps 4 × 4 on a camp week-6 Saturday", async () => {
+    vi.setSystemTime(new Date(2027, 1, 13, 9, 0, 0));   // Saturday 13 February 2027, camp week 6
+    await mount(Object.assign({ program: "camp", camp: true }, SEASON));
+    await waitFor(() => expect(title()).toBe("CAMP · WEEK 6 · PEAK"));
+    expect(await findHead("Depth Jumps")).toBeInTheDocument();
+    expect(screen.getAllByText(/^4 × 4/).length).toBeGreaterThan(0);
+    expect(head("Close and Plant")).toBeInTheDocument();
+    expect(screen.queryByText("The Four Punch Throws")).not.toBeInTheDocument();
+  });
+
+  it("closes the tendon gate: an Achilles at 3 on Sunday takes the next Saturday's depth jumps out", async () => {
+    vi.setSystemTime(new Date(2027, 1, 13, 9, 0, 0));   // Saturday 13 February 2027, camp week 6
+    localStorage.setItem("o8s-log", JSON.stringify({ "mCw5-sun-cwr_ach": { w: "3" } }));
+    await mount(Object.assign({ program: "camp", camp: true }, SEASON));
+    await waitFor(() => expect(title()).toBe("CAMP · WEEK 6 · PEAK"));
+    expect(await findHead("Loaded Drop Jumps")).toBeInTheDocument();
+    expect(screen.queryByText("Depth Jumps")).not.toBeInTheDocument();
+    expect(head("Flying Sprints")).toBeInTheDocument();
+    cleanup();
+    // a hamstring at 3 takes the flying sprints out instead
+    localStorage.setItem("o8s-log", JSON.stringify({ "mCw5-sun-cwr_ham": { w: "3" } }));
+    await mount(Object.assign({ program: "camp", camp: true }, SEASON));
+    expect(await findHead("Depth Jumps")).toBeInTheDocument();
+    expect(screen.queryByText("Flying Sprints")).not.toBeInTheDocument();
+  });
+
+  it("counts a jump check more than 7% under its four-week average as a yellow toward the guardrail", async () => {
+    vi.setSystemTime(new Date(2026, 10, 18, 9, 0, 0));  // Wednesday 18 November 2026, PREP week 8
+    ready({ "mPw8-mon": "Y" });
+    const jumps = { "mPw4-tue-p_jumpchk": { w: "50" }, "mPw5-tue-p_jumpchk": { w: "50" }, "mPw6-tue-p_jumpchk": { w: "50" }, "mPw7-tue-p_jumpchk": { w: "50" } };
+    localStorage.setItem("o8s-log", JSON.stringify(Object.assign({ "mPw8-tue-p_jumpchk": { w: "46" } }, jumps)));
+    await mount(Object.assign({ program: "prep" }, SEASON));
+    expect(await screen.findByText("The edge is off this week: two yellow mornings")).toBeInTheDocument();
+    cleanup();
+    // within 7%: one yellow, the edge stays on
+    localStorage.setItem("o8s-log", JSON.stringify(Object.assign({ "mPw8-tue-p_jumpchk": { w: "48" } }, jumps)));
+    await mount(Object.assign({ program: "prep" }, SEASON));
+    expect(await screen.findByText("The Wednesday easy thirty")).toBeInTheDocument();
+    expect(screen.queryByTestId("edge-off")).not.toBeInTheDocument();
+  });
+
+  it("puts collagen and orange juice in Tuesday's pre-session bottle, and not Wednesday's", async () => {
+    vi.setSystemTime(new Date(2026, 9, 6, 2, 0, 0));    // Tuesday 6 October 2026, PREP week 2
+    await mount(Object.assign({ program: "prep" }, SEASON));
+    expect(await screen.findByText(/HALF BOTTLE \+ BANANA \+ COLLAGEN$/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "WED" }));
+    expect(await screen.findByText(/HALF BOTTLE \+ BANANA$/)).toBeInTheDocument();
+    expect(screen.queryByText(/\+ COLLAGEN$/)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "SHOP" }));
+    expect(await screen.findByText("Collagen or gelatin powder")).toBeInTheDocument();
+    expect(screen.getByText("Orange juice")).toBeInTheDocument();
+  });
+
+  it("runs fight day from the weigh-in to the bell", async () => {
+    vi.setSystemTime(new Date(2027, 2, 13, 8, 0, 0));   // Saturday 13 March 2027, the fight
+    await mount(Object.assign({ program: "camp", camp: true }, SEASON));
+    expect(await screen.findByText("THE BELL")).toBeInTheDocument();
+    expect(screen.getByText(/THE LAST PROPER MEAL$/)).toBeInTheDocument();
+    expect(screen.getByText("Caffeine — about 240 mg, an hour before the bell")).toBeInTheDocument();
+    expect(screen.getByText("Sodium bicarbonate — the March fight, as trialled")).toBeInTheDocument();
+    expect(screen.getByText("The warm-up and between rounds — sips with electrolytes")).toBeInTheDocument();
+    // not cutting: no rehydration row
+    expect(screen.queryByText(/1.25–1.5 litres for every kilo lost/)).not.toBeInTheDocument();
+    cleanup();
+    await mount(Object.assign({ program: "camp", camp: true, cut: true }, SEASON));
+    expect(await screen.findByText("Put the weight back — 1.25–1.5 litres for every kilo lost")).toBeInTheDocument();
+    expect(screen.getAllByText("LOW-FIBRE CARBS — ABOUT 1 G PER KILO").length).toBeGreaterThan(0);
+  });
+
+  it("loads the bench throw at the profile's peak-power load, and shows the base as a four-week trend", async () => {
+    vi.setSystemTime(new Date(2026, 9, 7, 9, 0, 0));    // Wednesday 7 October 2026, PREP week 2
+    localStorage.setItem("o8s-maxes", JSON.stringify({ bench: 100 }));
+    // power: 20% × 1.6 = 32 · 30% × 1.4 = 42 · 40% × 1.2 = 48 · 50% × 0.9 = 45 — the peak is 40%
+    const profiles = { bthrow: { points: [{ load: 20, speed: "1.6" }, { load: 30, speed: "1.4" }, { load: 40, speed: "1.2" }, { load: 50, speed: "0.9" }], drawn: "2026-10-03" } };
+    localStorage.setItem("o8s-log", JSON.stringify({ "mPw1-mon-p_base_out": { w: "200" }, "mPw2-mon-p_base_out": { w: "210" } }));
+    await mount(Object.assign({ program: "prep", profiles }, SEASON));
+    fireEvent.click(await findHead("Bench Throw (Smith)"));
+    expect((await screen.findAllByText(/^40 kg/)).length).toBeGreaterThan(0);
+    fireEvent.click(screen.getByRole("button", { name: "MON" }));
+    fireEvent.click(await findHead("Base — easy, nose only"));
+    const trend = await screen.findByTestId("base-trend");
+    expect(trend.textContent).toMatch(/\+5\.0% across 2 weeks/);
   });
 
   it("offers the fast-bar rule after the last bench set and raises the max 2.5%", async () => {
@@ -1589,7 +1743,7 @@ describe("Optimal 8", () => {
     await findHead("Repeat Sled Starts");
     expect(screen.queryByText(headMatch("Heavy Sled Sprints"))).not.toBeInTheDocument();
     expect(screen.getAllByText(/^6 × 10 m/).length).toBeGreaterThan(0);
-    expect(names().indexOf("Drive Holds")).toBe(names().indexOf("Repeat Sled Starts") + 1);
+    expect(names().indexOf("Drive Holds + Punch-Position Holds")).toBe(names().indexOf("Repeat Sled Starts") + 1);
     cleanup();
 
     await mount({ program: "prep", start: "2026-08-24" });      // week 3
@@ -1597,16 +1751,17 @@ describe("Optimal 8", () => {
     await findHead("Heavy Sled Sprints");
     expect(screen.queryByText(headMatch("Repeat Sled Starts"))).not.toBeInTheDocument();
     expect(screen.getAllByText(/^4 × 20 m/).length).toBeGreaterThan(0);
-    expect(names().indexOf("Drive Holds")).toBe(names().indexOf("Heavy Sled Sprints") + 1);
+    expect(names().indexOf("Drive Holds + Punch-Position Holds")).toBe(names().indexOf("Heavy Sled Sprints") + 1);
   });
 
-  it("puts PREP's stance starts on Saturday, before the flying sprints", async () => {
+  it("puts PREP's stance starts on Saturday, then close and plant, before the flying sprints", async () => {
     await mount({ program: "prep", start: "2026-08-24" });
     fireEvent.click(screen.getByRole("button", { name: "SAT" }));
     await findHead("Flying Sprints");
     const names = Array.from(document.querySelectorAll("[data-flow-id^='S:']")).map((e) => e.getAttribute("data-flow-name"));
     expect(names.indexOf("Stance Starts")).toBeGreaterThanOrEqual(0);
-    expect(names.indexOf("Stance Starts") + 1).toBe(names.indexOf("Flying Sprints"));
+    expect(names.indexOf("Stance Starts") + 1).toBe(names.indexOf("Close and Plant"));
+    expect(names.indexOf("Close and Plant") + 1).toBe(names.indexOf("Flying Sprints"));
   });
 
   it("puts the movement session on Wednesday and Saturday evenings in the build", async () => {
@@ -1689,7 +1844,11 @@ describe("Optimal 8", () => {
     // and guide.md itself, with its contents
     expect(screen.getByText("CONTENTS")).toBeInTheDocument();
     expect(screen.getAllByText("WHAT TO DO TODAY").length).toBeGreaterThan(0);
-    expect(screen.getByText(/Open the app. TODAY is the whole day in one list/)).toBeInTheDocument();
+    expect(screen.getByText(/Open the app. It shows one thing at a time/)).toBeInTheDocument();
+    // and guide-fuel.md after it, in the same document
+    expect(screen.getAllByText("THE FOOD GUIDE — PLAIN ENGLISH").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("FIGHT DAY").length).toBeGreaterThan(0);
+    expect(screen.getByText(/stir 15 g of collagen into the bottle/)).toBeInTheDocument();
   });
 
   it("names the tests on the weeks that carry them", async () => {
@@ -1827,7 +1986,7 @@ describe("Optimal 8", () => {
     cleanup();
     await mount({ camp: true, campStart: weekStart(1) });
     fireEvent.click(screen.getByRole("button", { name: "SUN" }));
-    fireEvent.click(await findHead("Core, L-Sit, Lever, Hands"));
+    fireEvent.click(await findHead("Core, Carries, L-Sit, Lever, Face Pulls, Hands"));
     expect(await screen.findByText("Tuck front lever")).toBeInTheDocument();
     // the L-sit, the lever and the knuckle hold are bodyweight at their levels
     const camp = loggers("bw");
@@ -1859,15 +2018,22 @@ describe("Optimal 8", () => {
     await waitFor(() => expect(screen.queryByLabelText(/^Tick Heavy Sled Sprints/)).not.toBeInTheDocument());
   });
 
-  it("prescribes the same hollow block in both modes", async () => {
+  it("prescribes the hollow block — on parallettes, five minutes and no planche leans in the camp", async () => {
     for (const camp of [false, true]) {
       await mount(camp ? { camp: true, campStart: weekStart(1) } : {});
       fireEvent.click(await screen.findByText("The hollow block"));
       expect(await screen.findByText("Hollow hold")).toBeInTheDocument();
       expect(screen.getByText("Arch hold")).toBeInTheDocument();
-      expect(screen.getByText("Handstand")).toBeInTheDocument();
       expect(screen.getAllByText("2 × 20 s").length).toBe(2);
-      expect(screen.getByText(/4 min · level/)).toBeInTheDocument();
+      if (camp) {
+        expect(screen.getByText("Handstand — on parallettes")).toBeInTheDocument();
+        expect(screen.getByText(/3 min · level/)).toBeInTheDocument();
+        expect(screen.getByText("5 MIN")).toBeInTheDocument();
+      } else {
+        expect(screen.getByText("Handstand")).toBeInTheDocument();
+        expect(screen.getByText(/4 min · level/)).toBeInTheDocument();
+      }
+      expect(screen.queryByText("Planche leans")).not.toBeInTheDocument();
       cleanup();
     }
   });

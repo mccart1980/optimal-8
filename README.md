@@ -42,7 +42,7 @@ tabs are **TODAY · WEEK · COOK · SHOP · TRACK · IRON · PLAN · GUIDE · SE
   sachet 1; the bottle check; the two feeds at the break times with 500 ml each;
   the urine checks at ten and four; the 300 ml top-ups; the on-site reminders;
   the lunch breath practice; the three o'clock; the 5pm load on load days; the
-  evening (the easy thirty, the movement session or the microdose on their days,
+  evening (the easy thirty and the movement session on their days,
   RANGE, the hollow block, the sit, the review), ending at dinner; dinner with
   300 ml; the casein half an hour before lights out on its nights; the last
   drink at 20:00; lights out. Saturday, Sunday and Friday run their own orders
@@ -408,20 +408,38 @@ Optimal 8 Fighter. With a fight date of **Saturday 13 March 2027** it runs
 
 ## THE EDGE — PREP and CAMP
 
-Seven additions, on by default, each on the weeks the documents give it:
+Six additions, on by default, each on the weeks the documents give it:
 Tuesday speed after the shuttles (PREP 11–13, camp 6–8), cluster sets with a
-20-second pin-rest timer (PREP week 8, camp week 4), plyometric contacts up by
-half (PREP 11–13, camp 6–8), the evening power microdose on Monday and
-Wednesday, rounds past the fight (PREP seven in 11–13; camp eight, eight, ten),
-the Wednesday easy thirty, and the sauna four evenings a week (PREP 11–13,
-camp 6–8).
+20-second pin-rest timer (PREP week 8, camp week 4), more plyometric contacts
+(PREP 11–13, camp 6–8 — depth jumps held at 4 × 4), rounds past the fight
+(PREP seven in 11–13; camp eight, eight, ten), the Wednesday easy thirty, and
+the sauna four evenings a week (PREP 11–13, camp 6–8).
 
 **The guardrail.** When the morning check records a second yellow (or worse)
 in a week, the additions come off for the rest of that week — no Tuesday speed
 or Wednesday thirty, the clusters as straight sets, the contacts back to base,
-no microdoses, six rounds, the sauna twice — and TODAY says "The edge is off
-this week: two yellow mornings". It comes back the next Monday. **THE EDGE**
-in settings turns it off by hand.
+six rounds, the sauna twice — and TODAY says "The edge is off this week: two
+yellow mornings". Tuesday's **jump check** (three countermovement jumps, the
+best height logged) more than 7% under its four-week average counts as one of
+the two. It comes back the next Monday. **THE EDGE** in settings turns it off
+by hand.
+
+**The tendon gate**, separately from the colours: Achilles or knee at 3 or
+more on Sunday's check turns next week's depth jumps into loaded drop jumps;
+a hamstring at 3 or more takes next week's flying sprints out.
+
+**The ballistic loads.** The week-1 and week-10 profiles (camp week 5) add
+the bench throw (20–50% of the bench) and the trap bar jump (10–40% of the
+trap bar) at four loads. The profile works out power — load × mean speed —
+and the bench throw and trap bar jump rows load at the peak-power load until
+the next profile. The base sessions show the output at the easy-zone heart
+rate as a four-week trend.
+
+**Fight day.** The session start is the bell, and the food runs back from it:
+with the making-weight switch on, 1.25–1.5 litres for every kilo lost and
+low-fibre carbs every two hours; three hours out the last proper meal; an
+hour out half the bottle and a banana, and the caffeine; the March fight's
+bicarbonate only as trialled; sips with electrolytes through the rounds.
 
 ## What v1.5 changed
 

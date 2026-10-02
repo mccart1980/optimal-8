@@ -4,7 +4,7 @@ import { Sheet } from "./im-ui.jsx";
 import { DocView } from "./mdview.jsx";
 import { seasonLabel, dateSpan, CAMP_BLOCKS } from "./season.js";
 import { prepEmphasis, prepTests } from "./prep.js";
-import { VEL_LIFTS, PROFILE_LOADS, VEL_PHASES, fitLine, targetFor, TYPICAL } from "./velocity.js";
+import { VEL_LIFTS, PROFILE_LOADS, VEL_PHASES, fitLine, targetFor, TYPICAL, BALLISTIC, ballisticOf, BALLISTIC_DEFAULT, powerRows, peakPower } from "./velocity.js";
 
 /* ================================================================
    THE SEASON — the whole plan as one dated strip
@@ -86,7 +86,7 @@ export function SeasonView({ season, st, current, program, onProgram, moved }) {
 /* ================================================================
    THE GUIDE — the plain-English page, and what this week is
    ================================================================ */
-export function GuideView({ md, blockName, emphasis, tests, after, phase, next }) {
+export function GuideView({ md, md2, blockName, emphasis, tests, after, phase, next }) {
   const line = { fontSize: 19, color: C.chalk, marginTop: 12, paddingTop: 12, borderTop: "1px solid " + C.line, lineHeight: 1.5 };
   return (
     <div>
@@ -110,7 +110,7 @@ export function GuideView({ md, blockName, emphasis, tests, after, phase, next }
         </div>
       </Card>
       {after || null}
-      <DocView md={md} accent={C.brass} big />
+      <DocView md={md2 ? md + "\n\n" + md2 : md} accent={C.brass} big />
     </div>);
 }
 
@@ -121,27 +121,34 @@ export function ProfileTool({ profiles, setProfiles, maxes, dayIso, onClose }) {
   const [lift, setLift] = useState("squat");
   const P = profiles || {};
   const cur = P[lift] || { points: [] };
-  const work = num(maxes[lift]) || num(maxes["cw_" + lift]) || null;
-  const pts = PROFILE_LOADS.map((pc, i) => (cur.points && cur.points[i]) || { load: pc, speed: "" });
+  const bal = ballisticOf(lift);
+  const of = bal ? bal.of : lift;
+  const work = num(maxes[of]) || num(maxes["cw_" + of]) || null;
+  const loads = bal ? bal.loads : PROFILE_LOADS;
+  const pts = loads.map((pc, i) => (cur.points && cur.points[i]) || { load: pc, speed: "" });
   const put = (i, field, val) => {
     const next = pts.slice(); next[i] = Object.assign({}, next[i], { [field]: val });
     setProfiles(Object.assign({}, P, { [lift]: { points: next, drawn: dayIso } }));
   };
-  const line = fitLine(pts);
+  const line = bal ? null : fitLine(pts);
+  const pw = bal ? powerRows(pts, work) : null;
+  const peak = bal ? peakPower(P, lift, work) : null;
   return (
-    <Sheet title="LOAD-VELOCITY PROFILE" sub="FIVE LOADS · TWO REPS EACH · THE WATCH RECORDING" colour={C.brass} onClose={onClose}>
+    <Sheet title="LOAD-VELOCITY PROFILE" sub={bal ? "FOUR LOADS · TWO REPS EACH · THE WATCH RECORDING" : "FIVE LOADS · TWO REPS EACH · THE WATCH RECORDING"} colour={C.brass} onClose={onClose}>
       <Card ac={C.brass}>
         <Note c={C.chalk} s={{ marginTop: 0 }}>
-          Two reps at each load, as fast as the bar will move, and the mean speed from the watch typed in beside it. The line the five points draw is what every phase target is read off from then on.
+          {bal ? "Two reps at each load, as fast as it will go, and the mean speed from the watch typed in beside it. Power is load times speed; the load with the highest number is the one the rows use until the next profile."
+            : "Two reps at each load, as fast as the bar will move, and the mean speed from the watch typed in beside it. The line the five points draw is what every phase target is read off from then on."}
         </Note>
       </Card>
       <Card>
         <Lab>Lift</Lab>
         <Seg opts={VEL_LIFTS.map((x) => [x.id, x.n.split(" ")[0].toUpperCase()])} val={lift} on={setLift} c={C.brass} />
-        {work ? <Note>Working max {work} kg — the loads below are percentages of it.</Note> : <Note>No working max for this lift yet. The percentages still draw the line.</Note>}
+        <div style={{ marginTop: 8 }}><Seg opts={BALLISTIC.map((x) => [x.id, x.n.toUpperCase()])} val={lift} on={setLift} c={C.oxide} /></div>
+        {work ? <Note>{bal ? (of === "bench" ? "Bench " : "Trap bar ") : "Working max "}{work} kg — the loads below are percentages of it.</Note> : <Note>No working max for this lift yet. The percentages still draw the line.</Note>}
       </Card>
       <Card>
-        <Eye c={C.brass}>The five loads</Eye>
+        <Eye c={C.brass}>The {bal ? "four" : "five"} loads</Eye>
         {pts.map((pt, i) => (
           <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-end", padding: "9px 0", borderBottom: "1px solid " + C.line }}>
             <div style={{ flex: 1 }}><Lab>load (%)</Lab><Fld v={pt.load} on={(v) => put(i, "load", v)} ph="%" /></div>
@@ -150,8 +157,22 @@ export function ProfileTool({ profiles, setProfiles, maxes, dayIso, onClose }) {
                 {work && num(pt.load) != null ? Math.round(work * num(pt.load) / 100 / 2.5) * 2.5 : "—"}
               </div></div>
             <div style={{ flex: 1 }}><Lab>speed (m/s)</Lab><Fld v={pt.speed} on={(v) => put(i, "speed", v)} ph="m/s" /></div>
+            {bal ? <div style={{ flex: 1 }}><Lab>power</Lab>
+              <div style={Object.assign({}, mno, { fontSize: 18, fontWeight: 700, color: peak && pw[i].power === peak.power && pw[i].pct === peak.pct ? C.moss : C.ash, minHeight: 48, display: "flex", alignItems: "center", justifyContent: "center" })}>
+                {pw[i].power == null ? "—" : pw[i].power}
+              </div></div> : null}
           </div>))}
       </Card>
+      {bal ? (
+        <Card ac={peak ? C.moss : C.line}>
+          <Eye c={peak ? C.moss : C.ash}>The peak-power load</Eye>
+          <div data-testid="peak-power" style={Object.assign({}, mno, { fontSize: 26, fontWeight: 700, color: peak ? C.moss : C.ash })}>
+            {peak ? peak.pct + "%" + (peak.kg != null ? " · " + peak.kg + " kg" : "") : BALLISTIC_DEFAULT[lift] + "% until a speed is entered"}
+          </div>
+          <Note>{bal.n} rows load from this until the next profile.</Note>
+          {cur.drawn ? <Note>Last drawn {fmtDate(cur.drawn)}.</Note> : null}
+        </Card>
+      ) : (
       <Card ac={line ? C.moss : C.line}>
         <Eye c={line ? C.moss : C.ash}>The targets this draws</Eye>
         {VEL_PHASES.map((ph) => { const t = targetFor(P, lift, ph.id);
@@ -165,7 +186,7 @@ export function ProfileTool({ profiles, setProfiles, maxes, dayIso, onClose }) {
             </div>); })}
         <Note c={line ? C.chalk : C.ash}>{line ? "Drawn from your own five points" + (line.r2 != null ? " · fit " + Math.round(line.r2 * 100) + "%" : "") + "." : "Typical numbers, until two or more speeds are entered."}</Note>
         {cur.drawn ? <Note>Last drawn {fmtDate(cur.drawn)}.</Note> : null}
-      </Card>
+      </Card>)}
       <Btn on={onClose} c={C.brass} fill s={{ width: "100%" }}>DONE — IT'S SAVED</Btn>
     </Sheet>);
 }

@@ -56,8 +56,12 @@ function parse(md) {
 export function DocView({ md, accent, big }) {
   const z = big ? 1.35 : 1;
   const sz = (n) => Math.round(n * z * 10) / 10;
-  const blocks = useMemo(() => parse(md), [md]);
-  const toc = useMemo(() => blocks.filter((b) => b.t === "h" && b.lvl === 2).map((b) => ({ id: slug(b.s), s: b.s })), [blocks]);
+  /* two documents joined into one share heading names, so every id is
+     made unique in the order it appears */
+  const blocks = useMemo(() => { const seen = {};
+    return parse(md).map((b) => { if (b.t !== "h") return b; const s0 = slug(b.s); seen[s0] = (seen[s0] || 0) + 1;
+      return Object.assign({}, b, { id: s0 + (seen[s0] > 1 ? "-" + seen[s0] : "") }); }); }, [md]);
+  const toc = useMemo(() => blocks.filter((b) => b.t === "h" && b.lvl === 2).map((b) => ({ id: b.id, s: b.s })), [blocks]);
   const [showToc, setShowToc] = useState(true);
   const wrap = useRef(null);
   const go = (id) => { const el = wrap.current && wrap.current.querySelector("#doc-" + id); if (el && el.scrollIntoView) el.scrollIntoView({ behavior: "smooth", block: "start" }); };
@@ -79,7 +83,7 @@ export function DocView({ md, accent, big }) {
         {blocks.map((b, k) => {
           if (b.t === "h") {
             const size = sz(b.lvl === 1 ? 26 : b.lvl === 2 ? 21 : 17);
-            return <div key={k} id={b.lvl === 2 ? "doc-" + slug(b.s) : undefined} style={Object.assign({}, dsp, { fontSize: size, fontWeight: 800, letterSpacing: 1.1, color: b.lvl <= 2 ? C.chalk : ac, marginTop: k ? (b.lvl <= 2 ? 26 : 16) : 0, marginBottom: 8, lineHeight: 1.15, scrollMarginTop: 96 })}>{inline(b.s, k)}</div>;
+            return <div key={k} id={b.lvl === 2 ? "doc-" + b.id : undefined} style={Object.assign({}, dsp, { fontSize: size, fontWeight: 800, letterSpacing: 1.1, color: b.lvl <= 2 ? C.chalk : ac, marginTop: k ? (b.lvl <= 2 ? 26 : 16) : 0, marginBottom: 8, lineHeight: 1.15, scrollMarginTop: 96 })}>{inline(b.s, k)}</div>;
           }
           if (b.t === "hr") return <div key={k} style={{ height: 1, background: C.line, margin: "18px 0" }} />;
           if (b.t === "ul") return <ul key={k} style={{ margin: "6px 0 6px 0", paddingLeft: 18 }}>{b.items.map((it, j) => <li key={j} style={Object.assign({}, bdy, { fontSize: sz(15), color: C.chalk, lineHeight: 1.55, marginBottom: 5 })}>{inline(it, k + "-" + j)}</li>)}</ul>;

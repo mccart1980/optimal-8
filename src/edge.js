@@ -1,30 +1,34 @@
 /* ================================================================
-   THE EDGE — seven additions, on by default, and the one thing that
+   THE EDGE — six additions, on by default, and the one thing that
    puts them back.
 
    PREP and CAMP both carry it. Each program's data module says which
    weeks each addition runs in (prepEdge, campEdge); this module holds
-   the words, the two evening rows, and the guardrail: two yellow
-   mornings in the same week and the seven come off for the rest of
-   that week. Not the program — the additions. They come back on the
-   Monday, because the count starts again.
+   the words, the evening row, and the guardrail: two yellow mornings in
+   the same week — Tuesday's jump check more than 7% under its four-week
+   average counts as one — and the six come off for the rest of that
+   week. Not the program — the additions. They come back on the Monday,
+   because the count starts again. The tendon gate runs beside it,
+   separately from the colours.
    ================================================================ */
 
 export const EDGE_YELLOWS = 2;
 export const EDGE_OFF_LINE = "The edge is off this week: two yellow mornings";
 
 export const EDGE_INTRO =
-  "Seven additions, on by default. None of them is grinding volume; every one is more high-quality exposure at a recovery cost the monitoring can see.";
+  "Six additions, on by default. None of them is grinding volume; every one is more high-quality exposure at a recovery cost the monitoring can see.";
 
 export const EDGE_GUARDRAIL =
-  "Two yellow mornings on the strap in the same week — resting heart rate five over, or HRV twelve percent under — and the seven come off for the rest of that week. Not the program: the additions. Tuesday's speed and the Wednesday thirty go first; the clusters become straight sets; the contacts drop back; the microdoses stop; the rounds go back to six.";
+  "Two yellow mornings on the strap in the same week — resting heart rate five over, or HRV twelve percent under — and the six come off for the rest of that week. Not the program: the additions. Tuesday's speed and the Wednesday thirty go first; the clusters become straight sets; the contacts drop back; the rounds go back to six.";
+
+export const TENDON_GATE =
+  "Separately from the strap: Achilles or knee at 3 or more on Sunday's check means no depth jumps the following week, and a hamstring at 3 or more means no flying sprints — a sore tendon doesn't show on HRV. And Tuesday's jump check more than 7% under its four-week average counts as a yellow, toward the two that take the Edge off.";
 
 export const EDGE_ITEMS = {
   prep: [
     "Speed twice a week — three flying twenties on Tuesday after the shuttles, weeks 11–13.",
     "Cluster sets in the heavy block — week 8: five sets of two-plus-two at 87–90%, twenty seconds on the pins between the pairs.",
-    "Plyometric contacts up by half in weeks 11–13 — depth jumps 5 × 5, box jumps 4 × 3, side bounds 4 × 4.",
-    "Evening power microdoses Monday and Wednesday, five minutes before RANGE.",
+    "More plyometric contacts in weeks 11–13 — box jumps 4 × 3 and side bounds 4 × 4; depth jumps held at 4 × 4.",
     "Rounds past the fight — seven in weeks 11–13.",
     "The Wednesday easy thirty — a second base session, walk or run, nose only.",
     "Sauna four times a week in weeks 11–13 — Sunday, Tuesday, Thursday and Saturday evenings.",
@@ -32,13 +36,36 @@ export const EDGE_ITEMS = {
   camp: [
     "Speed twice a week — three flying twenties on Tuesday after the shuttles, weeks 6–8.",
     "Cluster sets in the build block — week 4: five sets of two-plus-two at 87%, twenty seconds on the pins between the pairs.",
-    "Plyometric contacts up by half in weeks 6–8 — depth jumps 5 × 5, box jumps 4 × 3, side bounds 4 × 4.",
-    "Evening power microdoses Monday and Wednesday, five minutes before RANGE.",
+    "More plyometric contacts in weeks 6–8 — box jumps 4 × 3 and side bounds 4 × 4; depth jumps held at 4 × 4.",
     "Rounds past the fight — eight in weeks 6 and 7, ten once in week 8.",
     "The Wednesday easy thirty — a second base session, walk or run, nose only.",
     "Sauna four times a week in weeks 6–8 — Sunday, Tuesday, Thursday and Saturday evenings.",
   ],
 };
+
+/* ---------------- the tendon gate and the jump check ---------------- */
+export const TENDON_LIMIT = 3;
+export const JUMP_DROP = 0.07;
+/* Last Sunday's joint scores, read into next week's prescription:
+   Achilles or knee at 3 or more — no depth jumps; hamstring at 3 or more —
+   no flying sprints. */
+export function tendonGate(scores) {
+  const n = (x) => (x == null || x === "" || isNaN(Number(x)) ? null : Number(x));
+  const ach = n(scores && scores.ach), kn = n(scores && scores.kn), ham = n(scores && scores.ham);
+  return {
+    noDepth: (ach != null && ach >= TENDON_LIMIT) || (kn != null && kn >= TENDON_LIMIT),
+    noFlying: ham != null && ham >= TENDON_LIMIT,
+  };
+}
+/* Tuesday's best jump against the average of the four Tuesdays before it:
+   more than 7% under is a yellow. Null until there is a number to read. */
+export function jumpYellow(best, previous) {
+  const b = Number(best);
+  const prev = (previous || []).map(Number).filter((x) => x > 0).slice(-4);
+  if (!(b > 0) || !prev.length) return false;
+  const avg = prev.reduce((a, x) => a + x, 0) / prev.length;
+  return b < avg * (1 - JUMP_DROP);
+}
 
 /* The day the edge comes off from: the index (Monday 0) of the second
    yellow morning in the week, or -1 while there has not been one. A red
@@ -52,17 +79,7 @@ export function edgeCutIndex(levels) {
   return -1;
 }
 
-/* ---------------- the two evening rows ---------------- */
-export const MICRODOSE = {
-  n: "The power microdose",
-  tag: "5 MIN · BEFORE RANGE",
-  rows: [
-    { n: "Pogo hops", s: "3 × 15", how: "Bouncing on the balls of the feet, legs almost straight, quick off the floor." },
-    { n: "Tuck jumps", s: "3 × 3", how: "Jump, knees to the chest, land soft, reset." },
-  ],
-  why: "Nothing tired, nothing at the end of a set that's slower than the start. Rate of force development is built by how often the nervous system is asked; five exposures a week beats three. Joints under four on the check.",
-};
-
+/* ---------------- the evening row ---------------- */
 export const EASY_THIRTY = {
   n: "The Wednesday easy thirty",
   tag: "30 MIN · NOSE ONLY",

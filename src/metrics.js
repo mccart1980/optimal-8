@@ -236,9 +236,9 @@ export function sleepWeek(morning, days) {
    chart only compares speeds at the same load, because a speed at a
    different weight isn't the same measurement.
    ================================================================ */
-export const BAR_SPEED_ITEMS = { squat: "squat", bench: "bench", tbdl: "tbdl", pushpress: "pp", c_squat: "cw_squat", c_tbdl: "cw_tbdl", c_pushpress: "cw_pp" };
+export const BAR_SPEED_ITEMS = { squat: "squat", bench: "bench", tbdl: "tbdl", pushpress: "pp", c_squat: "cw_squat", c_tbdl: "cw_tbdl", c_bench: "cw_bench", c_pushpress: "cw_pp" };
 export const BAR_SPEED_LIFTS = [["squat", "Back Squat"], ["bench", "Flat Bench"], ["tbdl", "Trap Bar Deadlift"], ["pp", "Push Press"]];
-const WORK_OF = { cw_squat: "squat", cw_tbdl: "tbdl", cw_pp: "pp" };
+const WORK_OF = { cw_squat: "squat", cw_tbdl: "tbdl", cw_bench: "bench", cw_pp: "pp" };
 
 export const parseKey = (k) => { const m = String(k).match(/^m(C|\d+)w(\d+)-([a-z0-9]+)-(.+)$/); return m ? { macro: m[1], week: Number(m[2]), day: m[3], id: m[4] } : null; };
 

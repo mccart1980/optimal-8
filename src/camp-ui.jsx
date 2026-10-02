@@ -4,7 +4,7 @@ import {
   CAMP_L, campRxFor, campRow, campDatesLabel, campDayLabel, CPH,
   CAMP_TABLE_NOTE, CAMP_TEST_INTRO, CAMP_TARGETS, WORKING_WEIGHT_RULE, CAMP_INTRO, CAMP_PHILOSOPHY,
   FIGHT_WEEK_INTRO, FIGHT_WEEK_ROWS, FIGHT_WEEK_FOOD, FIGHT_WEEK_AFTER,
-  scoredWeeks, campTestWeeks, PHASE_NAME, OUTPUT_RULE, CAMP_RULES,
+  scoredWeeks, campTestWeeks, PHASE_NAME, OUTPUT_RULE, CAMP_RULES, campBench,
 } from "./camp.js";
 
 /* ================================================================
@@ -68,6 +68,7 @@ export function CampWeekCard({ start, rx }) {
       <Row k="Monday base" val={r.mon} />
       <Row k="Tuesday engine 1" val={r.tue} />
       <Row k="Wednesday trap bar" val={rx.tb ? rx.tb.sc : "—"} />
+      <Row k="Wednesday bench" val={campBench(rx.w) ? campBench(rx.w).sc : rx.w === 9 ? "bench throws 3 × 3" : "—"} />
       <Row k="The lift phase" val={rx.tb ? PHASE_NAME[rx.tb.phase] : rx.sq ? PHASE_NAME[rx.sq.phase] : "—"} />
       <Row k="Sled" val={r.sled} />
       <Row k="Nordics (Wed)" val={r.nor} />
@@ -82,7 +83,7 @@ export function CampWeekCard({ start, rx }) {
       <Row k="Friday" val="Sleep — no alarm" />
       <Row k="Calisthenics" val={rx.tp ? "holds only" : rx.dl ? "half sets" : "at your levels"} />
       <Row k="Sauna" val={!rx.sauna ? "—" : rx.sauna4 && rx.edge ? "15–20 min, four times — Sun, Tue, Thu, Sat" : "15–20 min, twice a week"} />
-      <Row k="The edge" val={rx.edge ? [rx.speed ? "Tuesday speed" : "", rx.tb && rx.tb.phase === "cluster" ? "clusters" : "", rx.micro ? "microdoses" : "", rx.thirty ? "the Wednesday thirty" : ""].filter(Boolean).join(" · ") || "—" : "off"} />
+      <Row k="The edge" val={rx.edge ? [rx.speed ? "Tuesday speed" : "", rx.tb && rx.tb.phase === "cluster" ? "clusters" : "", rx.thirty ? "the Wednesday thirty" : ""].filter(Boolean).join(" · ") || "—" : "off"} />
       {rx.reset ? <Note c={C.brass} bold>Reset week: the working weights reset with a set of 3 that's hard but leaves two in you — trap bar Wednesday, squat Saturday.</Note> : null}
       {rx.sim && rx.sim.scored ? <Note c={C.oxide} bold>SCORED — round one's output and round six's. Round six divided by round one is the fade.</Note> : null}
       <Note>{OUTPUT_RULE}</Note>
@@ -150,7 +151,7 @@ export function CampNumbers({ start, log, maxes, onSetMax }) {
   const testRow = (id) => TEST_WEEKS.map((w) => [w, get(w, "tue", id)]);
   const TESTED = [["c_burst1", "Burst 1 — peak power"], ["c_burst10", "Burst 10 — peak power"], ["c_jump", "Broad jump (m)"], ["c_throw", "Rotational throw (m)"],
     ["c_bolt", "BOLT (s)"], ["c_rhr", "Resting heart rate"]];
-  const WORK = [["cw_squat", "Back Squat"], ["cw_tbdl", "Trap Bar Deadlift"], ["cw_pp", "Push Press"]];
+  const WORK = [["cw_squat", "Back Squat"], ["cw_tbdl", "Trap Bar Deadlift"], ["cw_bench", "Bench Press"], ["cw_pp", "Push Press"]];
   return (
     <div>
       <Card ac={C.brass}>

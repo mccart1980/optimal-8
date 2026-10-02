@@ -93,3 +93,48 @@ export const adjustLoad = (kg, verdict) => (kg == null || !verdict || !verdict.p
 /* the rep that ends the set */
 export const stopLine = (fast) => "Rack it when a rep is " + (fast ? STOP_FAST : STOP_STRENGTH) + "% slower than the first — the rep count is a ceiling.";
 export const stopPct = (fast) => (fast ? STOP_FAST : STOP_STRENGTH);
+
+/* the phase a camp week reads its targets at: the hand-over week and the
+   easy week at the accumulation speeds, the build block heavy, the peak
+   and the sharpen week fast */
+export const campPhaseOfWeek = (w) => (w <= 1 || w === 5 ? "accum" : w <= 4 ? "intens" : "convert");
+
+/* ================================================================
+   THE BALLISTIC LOADS
+
+   The bench throw and the trap bar jump are loaded for power, not by
+   feel. In the week-1 and week-10 profiles (camp week 5) both go at four
+   loads, two reps each; power is load times mean speed, and the load
+   with the highest number is the one used until the next profile.
+   ================================================================ */
+export const BALLISTIC = [
+  { id: "bthrow", n: "Bench throw", of: "bench", loads: [20, 30, 40, 50] },
+  { id: "tbjump", n: "Trap bar jump", of: "tbdl", loads: [10, 20, 30, 40] },
+];
+export const ballisticOf = (id) => BALLISTIC.find((x) => x.id === id) || null;
+/* the loads before a profile has been drawn: about a third of the bench,
+   a fifth of the trap bar */
+export const BALLISTIC_DEFAULT = { bthrow: 30, tbjump: 20 };
+
+/* Power at each load — load in kg when the lift's weight is known, else the
+   percentage, which ranks the loads the same way — and the peak. */
+export function powerRows(points, workKg) {
+  return (points || []).map((p) => {
+    const pct = num(p.load), speed = num(p.speed);
+    const kg = pct != null && workKg ? r25(workKg * pct / 100) : null;
+    const power = pct != null && speed != null ? Math.round((kg != null ? kg : pct) * speed * 10) / 10 : null;
+    return { pct, kg, speed, power };
+  });
+}
+export function peakPower(profiles, id, workKg) {
+  const p = profiles && profiles[id];
+  const rows = powerRows(p && p.points, workKg).filter((r) => r.power != null);
+  if (!rows.length) return null;
+  const best = rows.reduce((a, r) => (r.power > a.power ? r : a), rows[0]);
+  return Object.assign({ drawn: (p && p.drawn) || null }, best);
+}
+/* the percentage the rows load from: the peak-power load, or the default */
+export const ballisticPct = (profiles, id) => {
+  const pk = peakPower(profiles, id, null);
+  return pk ? pk.pct : BALLISTIC_DEFAULT[id];
+};
