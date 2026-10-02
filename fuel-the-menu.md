@@ -41,6 +41,8 @@ Carbohydrate is matched to the work: dense and fast around the sessions (bananas
 
 The bottle is the constant; the carb is whatever sits best at that hour. Nothing with fibre or fat this close to a session.
 
+**Tuesday, Thursday and Saturday — the tendon days — add collagen:** 15 g of collagen or gelatin powder stirred into the bottle, with a small glass of orange juice (about 150 ml, about 65 kcal) for the vitamin C. Taken 30–60 minutes before the jumps and the tendon holds, it gives the tendons more of the material they rebuild from. The evidence is early; the cost is small.
+
 ## BREAKFAST · ~570 kcal (BIG on Wednesday, Saturday, Sunday: ~710)
 
 | Option | What | kcal · P · C · F |
@@ -131,6 +133,18 @@ Steak on the two heavy days. Salmon twice a week if you'll eat it — the one li
 
 ---
 
+## FIGHT DAY — WEIGH-IN TO BELL
+
+**If you cut any weight for the weigh-in,** the hours between the scale and the bell are for putting it back. Drink 1.25–1.5 litres for every kilo lost, an electrolyte sachet in every litre, sipped steadily, not gulped. Eat low-fibre carbohydrate — rice, bagels, white pasta, bananas, rice cakes with honey — about a gram per kilo of bodyweight every hour or two until three hours out. Nothing new, nothing fatty, nothing fibrous.
+
+**If you didn't cut,** eat the day as a normal Saturday and drink to the alarms.
+
+**Three hours out:** the last proper meal — a rice pouch, chicken, a banana. **One hour out:** half the bottle and a banana, or rice cakes and honey. **The warm-up and between rounds:** sips of water with electrolytes, nothing else.
+
+**Caffeine:** about 240 mg — a strong coffee or a caffeine tablet — an hour before the bell, only if your blood pressure is in the normal range and you've used it before a hard session in camp. Never for the first time on fight night. It's the one night the noon caffeine rule doesn't apply.
+
+**Sodium bicarbonate:** for the March fight only, and only if it's been trialled on a Sunday simulation in camp first. The dose is large and stomach upset is common; fight night is no place to find out.
+
 ## THE PHASES — WHAT THE APP CHANGES, AND WHEN
 
 | Phase | Daily average | The change |
@@ -144,7 +158,7 @@ Steak on the two heavy days. Salmon twice a week if you'll eat it — the one li
 
 The mince pot and the sweet potato cooked separately, weighed once, cooked, in the COOK tab; four mince-only tubs for the wraps. Twelve eggs boiled Sunday, nine Wednesday — a week in the shell. Two bagels, a tin and a pack of rice cakes live in the work bag. Prawns and cod: buy frozen, cook from frozen in ten minutes; scallops fresh, seared two minutes a side. Wraps rolled the night before, in a cool bag with a freezer block.
 
-Weekly on top of the standing list, as you use them: bagels 10 · wholemeal wraps 10 · rice cakes 2 packs · raisins or sultanas 500 g · apples 7 · tuna 4 tins · beans 2 tins · potatoes 2 kg · frozen prawns 1 kg · cod or salmon 2 × 250 g · scallops when you want them · dates a small bag.
+Weekly on top of the standing list, as you use them: bagels 10 · wholemeal wraps 10 · rice cakes 2 packs · raisins or sultanas 500 g · apples 7 · tuna 4 tins · beans 2 tins · potatoes 2 kg · frozen prawns 1 kg · cod or salmon 2 × 250 g · scallops when you want them · dates a small bag · collagen or gelatin powder 300 g · orange juice 1 litre.
 
 ## HYDRATION — THE SHORT VERSION
 

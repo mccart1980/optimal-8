@@ -19,7 +19,7 @@ Optimal 8 Fighter's sessions, your calisthenics, RANGE, the tendon block, Iron M
 | 3 | 12–18 Oct | Accumulate | Slow lowering 4 × 6 @ 72%. Base 55. Tue bursts · Thu threshold · Sun 6 × 3, 90 s. |
 | 4 | 19–25 Oct | Accumulate | Normal tempo 5 × 5 @ 75%. Base 60. Tue 4 × 4 · Thu 40-s repeats 2 × 6 · Sun 6 × 3, 90 s. |
 | 5 | 26 Oct–1 Nov | Accumulate — lighter, tests | 3 × 5 @ 70%. Base 45. Tue retests then easy · Thu nasal test then easy · Sun 20-minute test · range and flexibility tests · tape · photos. |
-| 6 | 2–8 Nov | Intensify | Paused 4 × 4 @ 80%. Base 45. Tue 4 × 4 · Thu bursts · Sun 6 × 3, 60 s. Sauna starts. |
+| 6 | 2–8 Nov | Intensify | Paused 4 × 4 @ 80%. Base 45. Tue 4 × 4 · Thu bursts · Sun 6 × 3, 60 s. Sauna starts. Bench press in; ring dips rotate out. |
 | 7 | 9–15 Nov | Intensify | Paused 4 × 3 @ 84%. Tue bursts · Thu threshold · Sun 6 × 3, 60 s. |
 | 8 | 16–22 Nov | Intensify | Fast in clusters 5 × (2+2) @ 87–90%. Tue 4 × 4 · Thu 40-s repeats 2 × 6 · Sun 6 × 3, 60 s. |
 | 9 | 23–29 Nov | Intensify — MAX SINGLE | Wed trap bar max, Sat squat max, Sun bench max first thing; then 2 × 2 @ 88%. Push press skipped. Tue bursts · Thu bursts · Sun 6 × 3, 60 s. |
@@ -46,6 +46,8 @@ The calendar gives percentages because you need a number to load the bar with. T
 
 **Your profile, week 1.** On Wednesday of week 1, after the sled: trap bar at five loads — 50, 60, 70, 80, 85% of your current working max — two reps each, fast, the watch recording. On Saturday, the squat the same way, then bench and push press at four loads. Spleeft draws the line for each lift; that line is what the targets below read off. Redraw the profiles in week 10 after the max singles. The numbers below are typical; yours replace them the day the profile is drawn.
 
+**The ballistic loads.** The bench throw and the trap bar jump are loaded for power, not by feel. In the week-1 and week-10 profiles, do both at four loads — the bench throw at about 20, 30, 40 and 50% of your bench, the trap bar jump at 10, 20, 30 and 40% of the trap bar working weight — two reps each, the watch recording. Power is load times speed: the load with the highest number is the one you use until the next profile.
+
 | Phase | Squat | Trap bar | Bench | Push press |
 |---|---|---|---|---|
 | Accumulate, 70–75% | 0.65–0.75 m/s | 0.60–0.70 | 0.50–0.60 | 0.90–1.10 |
@@ -65,13 +67,17 @@ On waking, lying still: one minute on the strap, resting heart rate and HRV into
 
 Two yellows in a row on HRV alone: Tuesday's or Thursday's hard session becomes the easy 20 minutes and the base is unchanged. Recalibrate the baselines at the start of weeks 6 and 11.
 
+**The jump check — Tuesday.** Three countermovement jumps after the warm-up, the best height logged. More than 7% under your four-week average counts as a yellow. It reads tired legs and a tired nervous system, which the strap can't.
+
+**The tendon gate — Sunday.** Achilles or knee at 3 or more out of 10 on the weekly check: no depth jumps the following week — loaded drop jumps instead. Hamstring at 3 or more: no flying sprints the following week. It runs separately from the colours, because a sore tendon doesn't show on HRV.
+
 ---
 
 ## THE ENGINE — PROGRESSED ON THE ERG, NOT ON FEEL
 
 Every conditioning session has a number from last time, and the number is the target.
 
-- **Base (Monday, the easy hour):** the average heart rate stays in 65–75% of peak; the output at that heart rate is what should rise. Log both. A higher output at the same heart rate is the base getting deeper — that's the whole point of five weeks of it.
+- **Base (Monday, the easy hour):** the average heart rate stays in 65–75% of peak; the output at that heart rate is what should rise. Log both. A higher output at the same heart rate is the base getting deeper — that's the whole point of five weeks of it. Judge it on a four-week trend, never one ride: morning heart rate moves three to five beats with sleep, heat and stress, and that swamps a week's change. Up across each four weeks is right. Flat for four weeks: check the sleep line and the yellow days first; if they're clean, hold the minutes and keep it nasal.
 - **4-minute intervals:** the average output across the four; beat it by 1–2% each time, never by more.
 - **40-second repeats:** the output of the last repeat against the first — the decrement. It should shrink.
 - **Repeat bursts:** the sixteenth burst against the first. Same.
@@ -89,12 +95,12 @@ The camp inherits every one of these numbers as its week-1 starting line.
 | Day | Session | Time |
 |---|---|---|
 | Monday | 3:30 · BASE — easy nasal ride or run, 45–60 min · neck · hands · ring rows | ~60–75 min |
-| Tuesday | 3:30 · POWER + ENGINE 1 — crawls, jumps, pistol line, the interval session, the settle, trunk, the Achilles hold | ~60 min |
-| Wednesday | 3:30 · STRENGTH — sled, the trap bar in its phase, bench throw, ring dips, chins and the muscle-up line, Nordics, neck holds · evening, weeks 1–5: THE MOVEMENT SESSION | ~60 min |
-| Thursday | 3:30 · THROWS + ENGINE 2 — crawls, throws and landmine, split squat, Spanish squat hold, the second conditioning session, the settle, neck, hands · weeks 1–5: the size block | ~65 min (~77 in weeks 1–5) |
+| Tuesday | 3:30 · POWER + ENGINE 1 — the jump check, jumps, pistol line, the interval session, the settle, trunk, the Achilles hold | ~60 min |
+| Wednesday | 3:30 · STRENGTH — sled, the trap bar in its phase, the bench (throws in weeks 1–5, the press from week 6), ring dips in weeks 1–5, chins and the muscle-up line, Nordics, neck holds · evening, weeks 1–5: THE MOVEMENT SESSION | ~60 min |
+| Thursday | 3:30 · THROWS + ENGINE 2 — throws and landmine, split squat, Spanish squat hold, the second conditioning session, the settle, neck, hands, band catch · weeks 1–5: the size block | ~68 min (~83 in weeks 1–5) |
 | Friday | SLEEP. No alarm. | — |
-| Saturday | 8:30 · THE LONG SESSION — get-ups, build-ups, sprints, reactive jumps, side bounds, the squat in its phase, push press, the four throws · evening: THE MOVEMENT SESSION | ~90 min |
-| Sunday | 8:30 · THE ROUNDS — get-ups, throws, the 6 × 3, the post-max sit, core with the L-sit and lever, hands, weekly check · weeks 1–5: the size add-on · then the easy hour, and the sauna from week 6 | ~80 min |
+| Saturday | 8:30 · THE LONG SESSION — get-ups, build-ups, stance starts, close and plant, sprints, reactive jumps, side bounds, the squat in its phase, push press · evening: THE MOVEMENT SESSION | ~80 min |
+| Sunday | 8:30 · THE ROUNDS — throws, the 6 × 3, the post-max sit, core with suitcase carries, the L-sit, the lever and face pulls, hands, weekly check · weeks 1–5: hammer curls · then the easy hour, and the sauna from week 6 | ~80 min |
 | Every day | On waking: the strap, the sighs, the one thing, the morning five, the check · evening: RANGE 20 min, the skill block Mon–Thu, the sit, the review | ~50 min |
 
 About seven hours in the gym a week and three and a half at home in the build; seven and three after. Weeks 5, 10 and 14 are lighter.
@@ -149,9 +155,11 @@ Rings hung at hip height, hang beneath them with the body straight and heels on 
 
 Fresh legs, so the power dose goes first. Then the week's first hard conditioning session. Then the trunk, because the trunk is what turns leg drive into hand speed.
 
-**1 · 0:00 — WARM-UP · 8 min**
+**1 · 0:00 — WARM-UP · 7 min**
 
-3 easy minutes on the bike → band pull-aparts × 20 → goblet squats × 8 → push-ups × 10 → 90/90 hip switches × 5 each way → pogo hops × 20 → bear crawls, 2 minutes: on hands and feet, knees an inch off the floor, back flat as a table, opposite hand and foot together, 10 metres forward and 10 back, four times, slow.
+3 easy minutes on the bike → band pull-aparts × 20 → goblet squats × 8 → push-ups × 10 → 90/90 hip switches × 5 each way → pogo hops × 20.
+
+**THE JUMP CHECK · 1 min** — three countermovement jumps: hands on hips, dip and jump straight up as high as you can, land soft, reset between each. Film them in slow motion on the jump app and log the best height. More than 7% under your four-week average counts as a yellow (the Readiness page) — it reads tired legs and a tired nervous system, which the strap can't.
 
 **2 · 0:08 — POWER DOSE · JUMPS · 8 min · rest 90 s**
 
@@ -199,7 +207,7 @@ Seated calf raise, up on the balls of the feet, pause, down slow, twelve times �
 
 The heavy morning, and the lift changes its shape by block — slow lowering in accumulation, paused then fast in intensification, contrast in conversion. Every rep moves with intent; the watch says how fast, and the set ends at the velocity threshold on the Loading page. A grinding rep ends the set.
 
-**1 · 0:00 — WARM-UP · 6 min** — Tuesday's warm-up without the crawls, then trap bar warm-up sets: bar × 5, 50% × 3, 70% × 2 of working.
+**1 · 0:00 — WARM-UP · 6 min** — Tuesday's warm-up, then trap bar warm-up sets: bar × 5, 50% × 3, 70% × 2 of working.
 
 **2 · 0:06 — HEAVY SLED · runs from the calendar · rest 2½ min · 12 min — even weeks: REPEAT SLED STARTS**
 
@@ -207,9 +215,9 @@ Load the sled with 40–60% of bodyweight, lean in at about 45°, sprint 20 metr
 
 **Even-numbered weeks** (not the easy and test weeks): the long runs become REPEAT SLED STARTS — six heavy runs of ten metres with thirty seconds' rest. Forward pressure repeated on a clock, which is the shape of a pressure fight against a man who keeps resetting. Same load as the long runs.
 
-**3 · 0:18 — DRIVE HOLDS · 3 × 10 seconds · rest 60 s · 3 min**
+**3 · 0:18 — DRIVE HOLDS + PUNCH-POSITION HOLDS · 3 rounds · 4 min**
 
-Load the sled so it won't move — or use a wall — and from your boxing stance drive into it as hard as you can for ten seconds, through the rear leg, the trunk braced, breathing out. Three times. This is the clinch against a heavier man: the strength to hold your ground under ninety kilos is an isometric, and this is the only place it's trained.
+Drive hold, 10 seconds: load the sled so it won't move — or use a wall — and from your boxing stance drive into it as hard as you can, through the rear leg, the trunk braced, breathing out. Then, while the legs recover, the punch-position hold, 4 seconds each hand: in your stance, a wrapped fist against a padded wall or a Smith-machine bar locked at shoulder height, the arm just short of straight and the wrist dead straight, and punch into it as hard as you can without anything moving. Thirty seconds, and the next round. The drive hold is the clinch against a heavier man; the punch hold is strength in the exact position your fist is in when it lands — isometric strength builds mainly at the angle you train it, so it's trained at that angle.
 
 **4 · 0:21 — TRAP BAR DEADLIFT · sets from the table · rest 2½ min (3 in the contrast block) · 12 min**
 
@@ -217,13 +225,15 @@ Stand inside the bar, grip the handles, flat back, drive the floor away. Nothing
 
 The phases, block by block: **SLOW LOWERING (weeks 1–3)** — lower the bar to the floor over a full five seconds, touch, and drive up fast. Builds tissue and the tendon stiffness sprinting needs; sore in week 1, then not. **NORMAL TEMPO (weeks 4–5)** — down under control, up fast, the volume at its highest. **PAUSED (weeks 6–7)** — lower normally, stop dead an inch off the floor for three seconds, then drive. **FAST, IN CLUSTERS (week 8)** — five sets of two-plus-two at 87–90%: two reps, the bar down on the pins or the floor for twenty seconds, two more; three minutes between sets. More heavy reps at full speed than straight sets can give; the watch polices every one, and a rep under the threshold ends the set. **MAX SINGLE (week 9)** — the ramp as on the Saturday page, pins set, then the back-off sets. **EASY (week 10)** — 2 × 3 at 65%, fast; the profile redrawn. **CONTRAST (weeks 11–13)** — 2 × 2 at the calendar's percentage, fast, then straight into the jump circuit (Saturday's page describes it) with trap bar jumps as the loaded jump. **TEST WEEK (week 14)** — 2 × 2 at 80%; the heavy triple on test day.
 
-**5 · 0:33 — BENCH THROW · 4 × 3 · rest 90 s · 6 min**
+**5 · 0:33 — THE BENCH · 8–12 min**
 
-Smith machine, light bar — about a third of what you'd bench. Lower to the chest, press so hard the bar leaves your hands, catch it, reset. Whatever weight flies highest. No Smith machine: a 4–6 kg medicine ball thrown off the chest at a wall, 4 × 5. The punch-speed lift.
+**Weeks 1–5 — BENCH THROW, 4 × 3, rest 90 s.** Smith machine, light bar, at your peak-power load from the profile (the Loading page). Lower to the chest, press so hard the bar leaves your hands, catch it, reset. No Smith machine: a 4–6 kg medicine ball thrown off the chest at a wall, 4 × 5. The punch-speed lift.
 
-**6 · 0:39 — RING DIPS · 3 sets at your level · rest 90 s · 6 min**
+**From week 6 — BENCH PRESS, then the throws.** Warm-up sets: bar × 10, 40% × 5, 60% × 3, 75% × 2. Pins at chest height, no collars — you're alone. Weeks 6–7 PAUSED: 3 × 3 at 80%, then 84%, the bar dead still on the chest for 2 seconds, then drive. Week 8 FAST: 4 × 2 at 87%. Week 9: none on Wednesday — the bench max is Sunday. Week 10: 2 × 3 at 65%, fast. Weeks 11–13 CONTRAST: 2 reps at 85% → rest 20 seconds → 3 bench throws → rest 2½ minutes; three rounds. Week 14: 2 × 2 at 80%. In weeks 6–10 the bench throws follow, 3 × 3. Upper-body strength was the thinnest thing in this program, and you don't test a lift you don't train.
 
-Support at the top of the rings, arms locked, rings still; lower until the shoulders are level with the elbows, press up, turning the palms forward at the top. Bar dips and the support hold below it (Calisthenics page). Pressing through a shoulder that has to stabilise itself — the cuff and serratus work that keeps a guard up. Elbow pain is a stop sign, not a challenge.
+**6 · 0:41 — RING DIPS · weeks 1–5 · 3 sets at your level · rest 90 s · 6 min**
+
+Support at the top of the rings, arms locked, rings still; lower until the shoulders are level with the elbows, press up, turning the palms forward at the top. Bar dips and the support hold below it (Calisthenics page). Pressing through a shoulder that has to stabilise itself — the cuff and serratus work that keeps a guard up. Elbow pain is a stop sign, not a challenge. From week 6 the bench press does the pressing; the dips come back in the first block of the next Prep.
 
 **7 · 0:45 — WEIGHTED CHIN-UPS · 3 × 5, then the MUSCLE-UP LINE, 2 sets · rest 90 s · 8 min**
 
@@ -243,7 +253,7 @@ Kneel with the heels anchored under something solid. Body straight from knees to
 
 The third power dose — the rotational throw and the loaded punch — then the only loaded single-leg lift, the tendon hold, and the second conditioning session, always a different quality from Tuesday's. Then the neck and hands again.
 
-**1 · 0:00 — WARM-UP · 8 min** — Tuesday's warm-up, crawls included, then three easy throws of each at half effort.
+**1 · 0:00 — WARM-UP · 8 min** — Tuesday's warm-up, then three easy throws of each at half effort.
 
 **2 · 0:08 — POWER DOSE · THROWS + LANDMINE · 8 min · 45 s between sets**
 
@@ -281,9 +291,11 @@ Every session ends with the 60-second settle.
 
 **7 · 1:02 — HANDS · 4 min** — as Monday.
 
-**8 · 1:06 — THE SIZE BLOCK · weeks 1–5 only · 12 min** — the Size Block page: lateral raises, rear-delt flies, curls, three sets each, a rep or two in the tank.
+**8 · 1:06 — BAND DECELERATION CATCH · 2 × 8 per arm · 2 min** — as Monday. Twice a week, because the muscles that brake your arm have to keep up with your punching.
 
-**Done · ~1:06 (~1:18 in weeks 1–5).** Tonight: RANGE, the skill block, the sit.
+**9 · 1:08 — THE SIZE BLOCK · weeks 1–5 only · 15 min** — the Size Block page: lateral raises, rear-delt flies, curls, shrugs, three sets each, a rep or two in the tank.
+
+**Done · ~1:08 (~1:23 in weeks 1–5).** Tonight: RANGE, the skill block, the sit.
 
 ---
 
@@ -293,9 +305,9 @@ No alarm. Tomorrow is the long session and Sunday is the rounds, and the best th
 
 ---
 
-## SATURDAY · THE LONG SESSION · 8:30 · ~90 min
+## SATURDAY · THE LONG SESSION · 8:30 · ~80 min
 
-Fed and rested, no shift after it, Friday's sleep in front of it. Speed first, then reactive power, then the squat in its phase, then the push press, then the throws. Fuel it: porridge two hours before, half the bottle and a banana twenty minutes before.
+Fed and rested, Friday's sleep in front of it. Speed first, then reactive power, then the squat in its phase, then the push press. Fuel it: porridge two hours before, half the bottle and a banana twenty minutes before.
 
 **1 · 0:00 — WARM-UP · 16 min**
 
@@ -303,25 +315,25 @@ Turkish get-up, 2 per side, light — lie on your back with a kettlebell pressed
 
 90/90 hip switches × 5 each way. Hip airplanes × 5 per side — stand on one leg holding the rack, hinge the chest to horizontal, rotate the chest toward the floor and then up. Cossack squats × 6 per side. Leg swings × 10 each way. Pogo hops 2 × 20. Then the sprint build-ups — never skipped: one 20-metre run at 60%, one at 75%, one at 90%.
 
-**2 · 0:16 — STANCE STARTS, THEN FLYING SPRINTS · 17 min**
+**2 · 0:16 — STANCE STARTS, CLOSE AND PLANT, FLYING SPRINTS · 19 min**
 
-STANCE STARTS first: from your boxing stance, three ten-metre sprints, the first step explosive off the rear foot, 90 seconds between. Against a taller man the fight is decided in the first two metres, every time he moves; this is that, trained. Then the flying sprints — runs from the calendar, rest 2½–3 min:
+STANCE STARTS first: from your boxing stance, three ten-metre sprints, the first step explosive off the rear foot, 90 seconds between. Against a taller man the fight is decided in the first two metres, every time he moves; this is that, trained. Then CLOSE AND PLANT, three: from your stance, sprint five metres and stop into your stance in one or two steps, dead still for two seconds, balanced and ready to punch; walk back, 60 seconds between. Closing the distance and braking into position is the movement a pressure fighter repeats most, and this is the braking, trained. Then the flying sprints — runs from the calendar, rest 2½–3 min:
 
-Jog-build for 10–15 metres, then 20 metres absolutely flat out. Walk back, full rest — speed, not cardio. Curved treadmill, outdoors, or a treadmill on an 8–12% incline at 12–15 km/h for 8–10 seconds with the safety clip on. Week 1: build-ups, then three runs at 90% — no flat-out sprint until week 2. Weeks 5, 10 and 14: at 90%. Yellow day: 3 runs at 90%.
+Jog-build for 10–15 metres, then 20 metres absolutely flat out. Walk back, full rest — speed, not cardio. Curved treadmill, outdoors, or a treadmill on an 8–12% incline at 12–15 km/h for 8–10 seconds with the safety clip on. Week 1: build-ups, then three runs at 90% — no flat-out sprint until week 2. Weeks 5, 10 and 14: at 90%. Yellow day: 3 runs at 90%. Hamstring at 3 or more on Sunday's check: no flying sprints this week.
 
 **3 · 0:33 — REACTIVE JUMPS · 8 min · rest 2 min**
 
-Weeks 1–10: LOADED DROP JUMPS, 3 × 4 — a hex dumbbell in each hand, 8–12 kg, dip fast into a quarter squat, let both dumbbells go at the bottom and jump straight up as high as you can, empty-handed; land soft on clear floor. Weeks 11–13: DEPTH JUMPS, 5 × 5 — step off a 30–40 cm box and, the instant the feet touch, jump as high as you can, shortest possible time on the floor. Stop the set the moment a jump is lower than the last.
+Weeks 1–10: LOADED DROP JUMPS, 3 × 4 — a hex dumbbell in each hand, 8–12 kg, dip fast into a quarter squat, let both dumbbells go at the bottom and jump straight up as high as you can, empty-handed; land soft on clear floor. Weeks 11–13: DEPTH JUMPS, 4 × 4 — step off a 30–40 cm box and, the instant the feet touch, jump as high as you can, shortest possible time on the floor. Stop the set the moment a jump is lower than the last. Achilles or knee at 3 or more on Sunday's check: loaded drop jumps instead of depth jumps, that week.
 
 **4 · 0:41 — SIDE BOUNDS · 3 × 4 per side · rest 90 s · 6 min** — weeks 11–13: 4 × 4 per side
 
-Stand on one leg, jump sideways as far as you can, land on the other and stick it dead still for 2 seconds. Weeks 11–13: no stick — bounce straight back the other way. The sideways push-off that cuts a ring off.
+Stand on one leg, jump as far as you can, land on the other and stick it dead still for 2 seconds — straight sideways on odd weeks, forward-and-across at 45 degrees on even weeks, the angle you cut a ring off at. Weeks 11–13: no stick — bounce straight back the other way. The sideways push-off that cuts a ring off.
 
 **5 · 0:47 — BACK SQUAT · sets from the table · rest 3 min · PINS SET · 16 min**
 
 Warm-up sets first: 40% × 3, 60% × 2, 75% × 1 of working. Bar on the back, break at the hips and knees together, sit to just below parallel, drive up. Pins set just below your lowest position, every set — you're alone.
 
-The same phases as the trap bar: **weeks 1–3 slow lowering** — five seconds down, drive up fast; **weeks 4–5 normal tempo**, the volume at its highest; **weeks 6–7 paused** — three seconds dead still at the bottom, then drive; **week 8 fast, in clusters — five sets of two-plus-two at 87–90%, twenty seconds on the pins between the pairs**; **week 9 MAX SINGLE** — after the warm-up sets, 50% × 5 → 65% × 3 → 75% × 2 → 85% × 1 → 92% × 1 → one attempt at 100–102% of your working max, a second only if the first flew, pins set, no exceptions, then the back-off sets at 85% of the new number; **week 10 easy**, the profile redrawn; **weeks 11–13 CONTRAST** — each set is 2 reps at the calendar's percentage, fast, then rest 20 seconds, box jumps × 3, rest 20, trap bar jumps × 3 (a trap bar loaded to 20% of its working weight, jump with it, land soft), rest 20, band-assisted jumps × 3 (a heavy band looped over the top of the rack and tucked under the armpits so it pulls you upward), then 3 minutes' rest, three rounds — two in week 13 — the round ending the moment jump height drops; **week 14** — nothing on Saturday morning but the warm-up and build-ups; the max is test day.
+The same phases as the trap bar: **weeks 1–3 slow lowering** — five seconds down, drive up fast; **weeks 4–5 normal tempo**, the volume at its highest; **weeks 6–7 paused** — three seconds dead still at the bottom, then drive; **week 8 fast, in clusters — five sets of two-plus-two at 87–90%, twenty seconds on the pins between the pairs**; **week 9 MAX SINGLE** — after the warm-up sets, 50% × 5 → 65% × 3 → 75% × 2 → 85% × 1 → 92% × 1 → one attempt at 100–102% of your working max, a second only if the first flew, pins set, no exceptions, then the back-off sets at 85% of the new number; **week 10 easy**, the profile redrawn; **weeks 11–13 CONTRAST** — each set is 2 reps at the calendar's percentage, fast, then rest 20 seconds, box jumps × 3, rest 20, trap bar jumps × 3 (a trap bar at your peak-power load from the profile, jump with it, land soft), rest 20, band-assisted jumps × 3 (a heavy band looped over the top of the rack and tucked under the armpits so it pulls you upward), then 3 minutes' rest, three rounds — two in week 13 — the round ending the moment jump height drops; **week 14** — nothing on Saturday morning but the warm-up and build-ups; the max is test day.
 
 Lower-body maximal strength is the best predictor there is of how hard trained boxers hit. Twelve weeks builds some, expresses all of it, and the contrast block is where it becomes speed.
 
@@ -329,21 +341,19 @@ Lower-body maximal strength is the best predictor there is of how hard trained b
 
 Bar on the front of the shoulders, quick shallow knee dip, drive it overhead with the legs and punch it to lockout. Legs, braced trunk, hands — the route a punch takes. Loaded like the other lifts: fast, two in reserve; weeks 11–13 at 85%; week 9 skipped (the squat max is enough); week 14 at 70%.
 
-**7 · 1:11 — THE FOUR PUNCH THROWS · 2 rounds · 12 min**
-
-Medicine ball — 5–6 kg for the shot-put in the build and heavy blocks, 3–5 kg for the rest; if it isn't flying, it's too heavy. 45 seconds between exercises, 90 between rounds. Rotational shot-put × 4 per side — ball at the shoulder, stance side-on to the wall, drive off the back hip, flat and hard. Downward diagonal throw × 4 per side — ball high outside the shoulder, driven down and across toward the opposite hip, back foot pivoting. Hook throw × 4 per side — ball at chest height in bent arms, pivot hard off the lead leg and sling it sideways into the wall. Landmine punch × 5 per side — one end of a barbell in a corner, the other at your shoulder in your stance, drive the hips and punch it up and away, never a slow press. Straights are forward drive, hooks are rotation; all four get trained.
-
-**Done · ~1:25.** THE MOVEMENT SESSION this evening, then RANGE. Bed early: tomorrow is the rounds. Saturday's 5pm carb feed loads it.
+**Done · ~1:15.** THE MOVEMENT SESSION this evening, then RANGE. Bed early: tomorrow is the rounds. Saturday's 5pm carb feed loads it.
 
 ---
 
 ## SUNDAY · THE ROUNDS · 8:30 · ~75 min
 
-The session the camp is for. Fed and rested — porridge two hours before, half the bottle and a banana twenty minutes before, electrolytes in the bottle. Throws first, fresh; then the rounds; then the corner, trained; then the core. The easy hour this afternoon, and the sauna in weeks 5–10.
+The session the camp is for. Fed and rested — porridge two hours before, half the bottle and a banana twenty minutes before, electrolytes in the bottle. Throws first, fresh; then the rounds; then the corner, trained; then the core. The easy hour this afternoon, and the sauna from week 6.
 
-**1 · 0:00 — WARM-UP · 14 min** — Turkish get-ups, 2 per side, then Tuesday's warm-up without the crawls, then broad jumps 3 × 2, medicine-ball chest passes 3 × 3 as hard as you can, 3 × 10-second bike sprints with a minute between, three easy throws of each of the four.
+**1 · 0:00 — WARM-UP · 11 min** — Tuesday's warm-up, then broad jumps 3 × 2, medicine-ball chest passes 3 × 3 as hard as you can, 3 × 10-second bike sprints with a minute between, three easy throws of each of the four.
 
-**2 · 0:14 — THE FOUR PUNCH THROWS · 2 rounds · 12 min** — as Saturday.
+**2 · 0:11 — THE FOUR PUNCH THROWS · 2 rounds · 12 min**
+
+Medicine ball — 5–6 kg for the shot-put in the build and heavy blocks, 3–5 kg for the rest; if it isn't flying, it's too heavy. 45 seconds between exercises, 90 between rounds. Rotational shot-put × 4 per side — ball at the shoulder, stance side-on to the wall, drive off the back hip, flat and hard. Downward diagonal throw × 4 per side — ball high outside the shoulder, driven down and across toward the opposite hip, back foot pivoting. Hook throw × 4 per side — ball at chest height in bent arms, pivot hard off the lead leg and sling it sideways into the wall. Landmine punch × 5 per side — one end of a barbell in a corner, the other at your shoulder in your stance, drive the hips and punch it up and away, never a slow press. Straights are forward drive, hooks are rotation; all four get trained. Fresh, first thing — the only throws of the weekend, so every one is at full speed.
 
 **3 · 0:26 — THE 6 × 3 SIMULATION · rest from the table · 24–28 min**
 
@@ -355,17 +365,17 @@ Weeks 1, 5 and 14: the 20-MINUTE TEST instead (week 1: then three easy rounds to
 
 **4 · 0:54 — THE POST-MAX SIT · 3 min** — straight off the last round: sit, eyes closed, heart at 170-plus, find the breath at the nostrils. Write down the seconds it took. The corner, trained.
 
-**5 · 0:57 — CORE, L-SIT, LEVER, HANDS · rest 60 s · 12 min**
+**5 · 0:57 — CORE, CARRIES, L-SIT, LEVER, FACE PULLS, HANDS · rest 60 s · 15 min**
 
-Hanging leg raises, 3 × 8–12. The L-sit line, 3 sets at your level — the tuck L-sit between two boxes to start (Calisthenics page). Side plank reach-through, 2 × 10 per side. Tuck front lever, 3 holds — hang from the bar, pull the shoulder blades down, knees to the chest, body horizontal, face up; ten seconds to start; the three elbow laws apply. Then the hands, as Monday.
+Hanging leg raises, 3 × 8–12. The L-sit line, 3 sets at your level — the tuck L-sit between two boxes to start (Calisthenics page). Suitcase carries, 2 each side — one heavy dumbbell or kettlebell in one hand, walk 30 metres tall without leaning or letting the hips shift, switch hands; heavy enough that staying upright is the work. Your trunk learning to stay stiff when something heavy pulls you sideways — what keeps rotation feeding the punch, and what holds your ground when a heavier man leans on you. Tuck front lever, 3 holds — hang from the bar, pull the shoulder blades down, knees to the chest, body horizontal, face up; ten seconds to start; the three elbow laws apply. Face pulls, 3 × 15 — rope on a high cable or the band on the door anchor, elbows high, squeeze the back of the shoulders: the back of the shoulder brakes every punch you throw. Then the hands, as Monday.
 
 **6 · 1:09 — WEEKLY CHECK · 2 min · write these down**
 
-Bodyweight · waist · resting heart rate · green / yellow / red days · joints complaining (hips, shoulders, elbows, wrists, knees, Achilles, 0–10) · hours of sleep averaged · lights-out time averaged · energy 1–10 · home-block evenings done.
+Bodyweight · waist · resting heart rate · green / yellow / red days · joints complaining (hips, shoulders, elbows, wrists, knees, Achilles, hamstrings, 0–10) · hours of sleep averaged · lights-out time averaged · energy 1–10 · home-block evenings done.
 
-Three yellows in a week: next week runs at the table's numbers minus one set on everything and the interval sessions at 90%.
+Three yellows in a week: next week runs at the table's numbers minus one set on everything and the interval sessions at 90%. Achilles or knee at 3 or more: no depth jumps next week. Hamstring at 3 or more: no flying sprints next week. That's the tendon gate, and it runs whatever the strap says.
 
-**Done · ~1:11 (weeks 1–5: ~1:19 with the size add-on — face pulls 3 × 15 and hammer curls 3 × 10 after the lever).** RANGE tonight, and the easy hour this afternoon — 30–40 minutes easy, nose only, bike or walk, four-plus hours after the session. Weeks 6–10: sauna, 15–20 minutes, twice a week; weeks 11–13: four times — Sunday, Tuesday, Thursday and Saturday evenings — the full heat-acclimation dose, with the hydration schedule's sauna line every time — heat acclimation over three weeks raises blood volume and endurance the way nothing else this cheap does. Never straight from the sauna into cold.
+**Done · ~1:11 (weeks 1–5: ~1:14 with the size add-on — hammer curls 3 × 10 after the face pulls).** RANGE tonight, and the easy hour this afternoon — 30–40 minutes easy, nose only, bike or walk, four-plus hours after the session. Weeks 6–10: sauna, 15–20 minutes, twice a week; weeks 11–13: four times — Sunday, Tuesday, Thursday and Saturday evenings — the full heat-acclimation dose, with the hydration schedule's sauna line every time — heat acclimation over three weeks raises blood volume and endurance the way nothing else this cheap does. Never straight from the sauna into cold.
 
 ---
 
@@ -395,27 +405,27 @@ You named movement and flexibility as the thing holding you back. RANGE is the d
 
 ---
 
-## THE SIZE BLOCK · weeks 1–5 only · 12 min Thursday, 8 min Sunday
+## THE SIZE BLOCK · weeks 1–5 only · 15 min Thursday, 4 min Sunday
 
 Five weeks is the block where size is being built — volume up, calories up, the lifts at 70–75% — so five weeks is where direct arm and shoulder work earns its place. It comes out at week 6 when the lifts go heavy, and it does not go into the camp. Every set stops a rep or two short of failure; nothing here is a grind, and nothing here is allowed to cost Saturday.
 
-**Thursday, after the hands:** lean-away lateral raise, 3 × 12–15 — hold the rack with one hand and lean away, raise a dumbbell out to shoulder height with the other; rear-delt fly, 3 × 15 — bent over flat, small dumbbells out to the sides, little fingers leading; EZ-bar or dumbbell curls, 3 × 8–12 — elbows still, full stretch at the bottom, no swing. Rest 60–75 seconds.
+**Thursday, after the band catch:** lean-away lateral raise, 3 × 12–15 — hold the rack with one hand and lean away, raise a dumbbell out to shoulder height with the other; rear-delt fly, 3 × 15 — bent over flat, small dumbbells out to the sides, little fingers leading; EZ-bar or dumbbell curls, 3 × 8–12 — elbows still, full stretch at the bottom, no swing; trap bar shrugs, 3 × 10–12 — stand inside the bar, shrug straight up, pause 1–2 seconds at the top, lower slow, never roll the shoulders; the traps are part of the look, and they back up the neck. Rest 60–75 seconds.
 
-**Sunday, after the lever:** face pulls, 3 × 15 — rope on a high cable or the band on the door anchor, elbows high, squeeze the back of the shoulders; hammer curls, 3 × 10. Rest 60 seconds.
+**Sunday, after the face pulls in the core block:** hammer curls, 3 × 10. Rest 60 seconds.
 
-That's forty minutes a week of the look, in the block that builds it, with the food to match. The compound lifts, the rings and the muscle-up line carry the rest.
+That's under twenty minutes a week of the look, in the block that builds it, with the food to match. The compound lifts, the rings and the muscle-up line carry the rest.
 
 ---
 
 ## CALISTHENICS — THE LINES AND THE LEVELS
 
-The five lines you're already running, at the levels you've reached, in the same slots. The handstand and the planche leans are in the home skill block, Monday to Thursday, at your level, as prescribed.
+The five lines you're already running, at the levels you've reached, in the same slots. The handstand is in the home skill block, Monday to Thursday, at your level, on parallettes. The planche leans are gone: they bend the wrist further back than anything else in the program and give a puncher nothing back.
 
 **You own a level when you hit the top of its target for the prescribed sets on two occasions running.** Adding reps at a level always comes before adding difficulty. Reps in the tank on every set. Weeks 5, 10 and 14: half the sets. Any elbow or wrist at 4 or above on the weekly check: holds only the following week.
 
 **RING ROWS** — Monday: ring rows 3 × 8 → 3 × 12 near horizontal → feet-elevated rows 3 × 8 → 3 × 12 → archer rows 3 × 5 per side → 3 × 8.
 
-**RING DIPS** — Wednesday: bar dips 3 × 5 (bench dips if not there yet) → 3 × 10 → ring support hold 3 × 20 s → 3 × 40 s → ring dip negatives 3 × 5 at 5 s → ring dips 3 × 5–8 → 3 × 10 → weighted.
+**RING DIPS** — Wednesday, weeks 1–5 (the bench press takes over from week 6): bar dips 3 × 5 (bench dips if not there yet) → 3 × 10 → ring support hold 3 × 20 s → 3 × 40 s → ring dip negatives 3 × 5 at 5 s → ring dips 3 × 5–8 → 3 × 10 → weighted.
 
 **THE MUSCLE-UP LINE** — Wednesday, 2 sets: chest-to-bar pull-ups 2 × 5 → 2 × 8 → muscle-up negatives 2 × 3 at 5 s → 2 × 5 → bar muscle-ups with a band 2 × 3 → strict 2 × 5.
 
@@ -498,17 +508,13 @@ Write the numbers down. If nothing has moved by week 5, the holds aren't long en
 
 ---
 
-### THE EVENING POWER MICRODOSE · Monday and Wednesday · 5 min · before RANGE
-
-Pogo hops 3 × 15 — bouncing on the balls of the feet, legs almost straight, quick off the floor. Tuck jumps 3 × 3 — jump, knees to the chest, land soft, reset. Nothing tired, nothing at the end of a set that's slower than the start. Rate of force development is built by how often the nervous system is asked; five exposures a week beats three.
-
 ### THE WEDNESDAY EASY THIRTY · before the movement session in the build, on its own after
 
 Thirty minutes easy, nose only, walk or run, conversational. The second base session of the week — the hard sessions get their recovery from the easy ones, and you had one; elite endurance has three.
 
-### THE SKILL BLOCK · Monday to Thursday · 6 min · after RANGE, before the sit
+### THE SKILL BLOCK · Monday to Thursday · 5 min · after RANGE, before the sit
 
-Wrist circles × 10 each way, then palms flat on the floor and rock × 10. Hollow hold, 2 × 20 seconds — on your back, lower back pressed into the floor, arms overhead, legs straight and lifted, one shallow banana. Arch hold, 2 × 20 seconds — face down, arms and legs lifted. Handstand at your current level, 3 minutes — the Calisthenics page. Planche leans, Tuesday and Thursday, 3 × 15 seconds — push-up position, shoulders forward past the wrists, arms locked, body rigid.
+Wrist circles × 10 each way. Hollow hold, 2 × 20 seconds — on your back, lower back pressed into the floor, arms overhead, legs straight and lifted, one shallow banana. Arch hold, 2 × 20 seconds — face down, arms and legs lifted. Handstand at your current level, 3 minutes, on parallettes — hands round the bars, wrists straight, the way your wrist is when a punch lands — the Calisthenics page.
 
 **THE SIT · after the skill block · 12–20 min, then THE REVIEW · 2 min** — exactly as Iron Mind runs them: the stage sit, the clean-cycle count, the three spoken questions, then bed.
 
@@ -536,21 +542,24 @@ Skill. Hitting hard on contact, snap and retraction, distance, timing, the guard
 
 ## THE EDGE — THE REINS OFF, AND THE ONE THING THAT PUTS THEM BACK
 
-Seven additions, on by default, that turn this from a program into a professional camp's density on a scaffolder's clock. None of them is grinding volume; every one is more high-quality exposure at a recovery cost the monitoring can see.
+Six additions, on by default, that turn this from a program into a professional camp's density in the same hours. None of them is grinding volume; every one is more high-quality exposure at a recovery cost the monitoring can see.
 
 1. **Speed twice a week** — three flying twenties on Tuesday after the shuttles, from week 11. Build-ups every time. The Nordics never miss.
 2. **Cluster sets in the heavy block** — five sets of two-plus-two at 87–90%, twenty seconds on the pins between the pairs. Pins set; the velocity rule ends the set.
-3. **Plyometric contacts up by half** in weeks 11–13 — depth jumps 5 × 5, box jumps 4 × 3, side bounds 4 × 4. The tendon block runs twice a week each — the Spanish hold on Tuesday and Thursday, the Achilles hold on Tuesday and Thursday — and the output rule is law.
-4. **Evening power microdoses** Monday and Wednesday, five minutes before RANGE. Joints under four on the check.
-5. **Rounds past the fight** — seven in the convert block. Scored; the fade governs.
-6. **The Wednesday easy thirty** — a second base session, walk or run, nose only. Easy, or it comes out.
-7. **Sauna four times a week** in weeks 11–13. The hydration schedule's sauna line, every time.
+3. **More plyometric contacts** in weeks 11–13 — box jumps 4 × 3 and side bounds 4 × 4; depth jumps held at 4 × 4, because sixteen clean landings beat twenty-five tired ones. The tendon block runs twice a week, the tendon gate applies, and the output rule is law.
+4. **Rounds past the fight** — seven in the convert block. Scored; the fade governs.
+5. **The Wednesday easy thirty** — a second base session, walk or run, nose only. Easy, or it comes out.
+6. **Sauna four times a week** in weeks 11–13. The hydration schedule's sauna line, every time.
 
-**THE GUARDRAIL.** Two yellow mornings on the strap in the same week — resting heart rate five over, or HRV twelve percent under — and the seven come off for the rest of that week. Not the program: the additions. Tuesday's speed and the Wednesday thirty go first; the clusters become straight sets; the contacts drop back; the microdoses stop; the rounds go back to six. The base program is what keeps you training. The edge is what makes you dangerous, and it's only worth having if you're standing on the day.
+**THE GUARDRAIL.** Two yellow mornings on the strap in the same week — resting heart rate five over, or HRV twelve percent under — and the six come off for the rest of that week. Not the program: the additions. Tuesday's speed and the Wednesday thirty go first; the clusters become straight sets; the contacts drop back; the rounds go back to six. The base program is what keeps you training. The edge is what makes you dangerous, and it's only worth having if you're standing on the day.
+
+**THE TENDON GATE AND THE JUMP CHECK.** Separately from the strap: Achilles or knee at 3 or more on Sunday's check means no depth jumps the following week, and a hamstring at 3 or more means no flying sprints — a sore tendon doesn't show on HRV. And Tuesday's jump check more than 7% under its four-week average counts as a yellow, toward the two that take the Edge off.
 
 ---
 
 ## THE THINKING (read at home, not in the gym)
+
+**What the October audit changed, and why.** Every major system was run back over this program — block periodization, conjugate, Sheiko, autoregulation, Easy Strength, triphasic, Charlie Francis, the shock method, velocity training, ALTIS and the deceleration research, Joel Jamieson, the HIIT and polarized research, the UFC Performance Institute and the boxing research. Out, because they weren't earning their minutes: Saturday's tired throws (Thursday and Sunday throw fresh), the evening microdoses (explosive work already runs five days a week), the warm-up crawls, Sunday's get-ups and the planche leans. In, because each fills a real gap: braking into your stance, strength in the punch position, loaded sideways trunk stiffness, a jump check that reads what the strap can't, the arm-braking work twice a week, the back of the shoulder all year, a bench press you're trained on before you're tested on it, and shrugs in the size weeks. Depth jumps came down to sixteen clean contacts, and a tendon gate went in. Sheiko's lesson was taken without Sheiko's volume: you get strong at what you practise, and you don't test a lift you don't train.
 
 **Why the six pressure-fighter additions.** You fight forward, non-stop, against men who are heavier, taller and mobile. That's four physical problems: crossing the distance a taller man keeps, again and again (stance starts, repeat sled starts, shuttle bursts); holding your ground when a heavier man leans on you (drive holds — an isometric, and the one quality the program had no exercise for); taking bigger punches (the neck at four sets of the rapid brace); and hitting up and in with more force at the same speed (the heavier ball, the landmine punch with the step-in). Fifteen minutes a week, nothing dropped, and none of it replaces what your coach does with distance, angles and the guard — it gives him a body that can get there, stay there and keep hitting.
 
@@ -558,7 +567,7 @@ Seven additions, on by default, that turn this from a program into a professiona
 
 **Why the bar speed replaces the percentages.** A percentage is a guess about today from a number measured weeks ago. A velocity is a measurement of today. With the watch on your wrist the guess is no longer necessary, and the set that ends at a 20% slowdown is the set that built strength without building fatigue — that finding is as solid as anything in the field.
 
-**Why the strap gates the day.** The daily check asks you how you feel; the strap tells you how you are. On a program built on 3:30 alarms, a scaffold and five hard days a week, the morning the two disagree is the morning that matters, and the numbers win.
+**Why the strap gates the day.** The daily check asks you how you feel; the strap tells you how you are. On a program built on 3:30 alarms and five hard days a week, the morning the two disagree is the morning that matters, and the numbers win.
 
 **Why movement gets two sessions and a daily dose.** You said it holds you back, and for a boxer stiff hips and shoulders cost power directly — a hip that can't turn sends the force through the back and knee instead. RANGE finds the range with long holds and end-range strength; the movement session teaches the body to use it under control; the tests every five weeks make it a number. By the camp, this is done, and the camp doesn't have to spend a minute on it.
 
