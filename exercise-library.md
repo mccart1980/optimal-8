@@ -32,6 +32,12 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **WRIST CIRCLES** — Hands clasped or loose, circle your wrists ten times each way, slowly.
 
+**BEAR CRAWLS** — On hands and feet, knees an inch off the floor and staying there, back flat as a table, opposite hand and foot moving together in small steps. Ten metres forward, ten metres backward.
+
+**BREATHE DOWN** — On your back, feet up on a chair or a bench, five slow breaths: in through the nose for 4, out for 8. Also called down-regulate.
+
+**PHYSIOLOGICAL SIGH** — A full breath in through the nose, a short second sip on top, one long slow exhale through the mouth.
+
 ## POWER, JUMPS AND SPEED
 
 **JUMP CHECK** — Three jumps straight up: hands on hips, a quick dip, jump as high as you can, land soft. Film them in slow motion on the jump app and log the best height. The app compares it to your average.
@@ -92,6 +98,12 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **NORDIC CURLS** — Kneel with your heels held under something solid. Keeping your body straight from knees to head, lower yourself forward as slowly as you can, catch yourself with your hands, push back up.
 
+**ROMANIAN DEADLIFT** — Bar at your hips, soft knees. Push your hips back until the bar reaches mid-shin with a flat back, then stand back up by driving the hips through.
+
+**CHEST-SUPPORTED ROW** — Lie chest-down on an incline bench with a dumbbell in each hand. Row until your elbows pass your body, pause one second at the top, lower slowly.
+
+**CLAP PUSH-UP** — A push-up driven so hard your hands leave the floor. Clap once, land on soft elbows and go straight into the next one.
+
 ## CALISTHENICS
 
 **RING ROWS** — Hang under rings set at hip height, body straight, heels on the floor. Pull your chest up to the rings, pause, lower slowly. Feet up on a box makes it harder; archer rows pull mostly with one arm.
@@ -143,6 +155,12 @@ Every exercise, session, test and move in the program, in two or three plain lin
 **NECK PERTURBATION HOLD** — A band around your head, anchored to the rack. Hold your neck still while you tug the band in small random pulses with your hand. Your head doesn't move.
 
 **FACE PULLS** — A rope on a high cable, or a band on a door anchor. Pull it to your face with your elbows high, squeeze the backs of your shoulders, return slowly.
+
+**SIDE PLANK REACH-THROUGH** — In a side plank, thread your top arm under your body, then rotate open to the ceiling.
+
+**SIDE-LYING EXTERNAL ROTATION** — Lie on your side, top elbow glued to your ribs, and rotate a light dumbbell from your belly up toward the ceiling, then lower slowly.
+
+**PRONE T RAISE** — Lie face down on an incline bench, arms hanging. Raise them out to the sides in a T, thumbs up, then lower slowly.
 
 ## THROWS
 
@@ -263,3 +281,5 @@ Every exercise, session, test and move in the program, in two or three plain lin
 **LOAD-VELOCITY PROFILE** — The main lift at four or five loads, two fast reps each, with the watch recording. The app draws your line and sets your bar-speed targets from it.
 
 **TAPE, WEIGHT AND PHOTOS** — Weigh first thing; tape arms, shoulders and waist; photos front, side and back in the same light.
+
+**MID-THIGH PULL** — Only with a force plate: stand on it holding a fixed bar at mid-thigh and pull up as hard as you can for a few seconds; nothing moves. Log the peak force.

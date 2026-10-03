@@ -77,7 +77,7 @@ export const Chip = ({ children, c, s }) => <span style={Object.assign({}, mno, 
 export const Note = ({ children, c, bold, s }) => <div style={Object.assign({}, bdy, { fontSize: 18, color: c || C.ash, lineHeight: 1.5, marginTop: 8, fontWeight: bold ? 600 : 400 }, s)}>{children}</div>;
 export const Seg = ({ opts, val, on, c }) => (
   <div style={{ display: "flex", gap: 5 }}>
-    {opts.map((o) => <button key={o[0]} onClick={() => on(o[0])} style={Object.assign({}, dsp, { flex: 1, fontSize: 16, fontWeight: 700, letterSpacing: .6, padding: "11px 4px", borderRadius: 4, cursor: "pointer", minHeight: 48,
+    {opts.map((o) => <button key={o[0]} onClick={() => on(o[0])} style={Object.assign({}, dsp, { flex: 1, fontSize: 18, fontWeight: 700, letterSpacing: .6, padding: "11px 4px", borderRadius: 4, cursor: "pointer", minHeight: 52,
       background: val === o[0] ? (o[2] || c || C.brass) : "transparent", color: val === o[0] ? C.ink : C.ash, border: "1px solid " + (val === o[0] ? (o[2] || c || C.brass) : C.line) })}>{o[1]}</button>)}
   </div>);
 

@@ -29,36 +29,27 @@ version in the background.
 
 ## ONE APP — THE FUEL APP LIVES IN HERE NOW
 
-Fuel · Optimal 8 has been merged into this app, and this is the only app. The
-tabs are **TODAY · WEEK · COOK · SHOP · TRACK · IRON · PLAN · GUIDE · SETTINGS**.
+Fuel · Optimal 8 has been merged into this app, and this is the only app. There
+are four tabs: **TODAY · PROGRESS · FOOD · MORE**.
 
-- **TODAY is one timeline.** Every item of the day — mind, body, food, drink —
-  is one row with a time, sorted by the clock, with no sections by type. A
-  weekday at a 03:30 session runs: 03:00 the strap numbers, then 500 ml of
-  water; the sighs, the one thing, the morning five, the check; 03:10 half the
-  bottle and the chosen carb; 03:30 the gym bottle and the session; the other
-  half the moment it ends (04:35 on a 65-minute session); breakfast a quarter of
-  an hour later with 300 ml and the creatine; work start and the litre with
-  sachet 1; the bottle check; the two feeds at the break times with 500 ml each;
-  the urine checks at ten and four; the 300 ml top-ups; the on-site reminders;
-  the lunch breath practice; the three o'clock; the 5pm load on load days; the
-  evening (the easy thirty and the movement session on their days,
-  RANGE, the hollow block, the sit, the review), ending at dinner; dinner with
-  300 ml; the casein half an hour before lights out on its nights; the last
-  drink at 20:00; lights out. Saturday, Sunday and Friday run their own orders
-  the same way, with the sauna and the easy hour on their days, and Sunday's
-  weekly rows — the weekly check, BOLT, the life review, the audit, the life
-  test and the photos — close Sunday's timeline. The top of TODAY carries the
-  food phase, what's eaten against the day, and the water against the target.
-- **COOK** and **SHOP** are the fuel app's, unchanged.
-- **TRACK → REFEREE** is the fuel app's referee — weight, waist, arm and
+- **TODAY** is one thing at a time — see *TODAY — one thing at a time* below.
+- **PROGRESS** holds the dashboard, the tests, the charts, the weekly-check
+  history and the referee.
+- **FOOD** holds the menu (each feed's options and swaps), COOK, SHOP and
+  the water for the day.
+- **MORE** holds PLAN (every document, this week's map and the season
+  strip), the GUIDE, the Iron library (breathe, sit, hardship, life, season,
+  Hell Week) and SETTINGS.
+
+- **COOK** and **SHOP** are the fuel app's, unchanged, under FOOD.
+- **PROGRESS → REFEREE** is the fuel app's referee — weight, waist, arm and
   shoulder, the charts, and the feedback-loop rules read off your numbers — next
   to the dashboard, which now reads bodyweight and waist from it.
-- **PLAN** holds every document: PREP, CAMP, FIGHTER, IRON MIND v5 and v4.2,
+- **MORE → PLAN** holds every document: PREP, CAMP, FIGHTER, IRON MIND v5 and v4.2,
   and the four fuel documents.
-- **GUIDE** is one plain-English guide with one live panel: this week's block,
+- **MORE → GUIDE** is one plain-English guide with one live panel: this week's block,
   the food phase, the tests this week, and the next feed.
-- **SETTINGS** is one set: the program, the start date, the fight date, the
+- **MORE → SETTINGS** is one set: the program, the start date, the fight date, the
   making-weight switch, the break times and the session length per weekday,
   text size, THE EDGE, the units. The fuel phase is read off the app's one
   season.
@@ -88,7 +79,7 @@ tests), convert 12–15, test week 16 — the same sessions, loads and rules, wi
 a second normal-tempo week in accumulation and a second contrast week in
 conversion.
 
-**WEEK → THE SEASON** shows the whole plan as a dated strip: every prep week
+**MORE → PLAN → THE SEASON** shows the whole plan as a dated strip: every prep week
 with its emphasis, test day, every camp week, the fight, then the two easy
 weeks. Move the fight date and it re-dates from the fight backwards and says
 how many weeks changed and which.
@@ -151,12 +142,12 @@ weeks 6 and 11.
 
 ## THE ENGINE
 
-Every conditioning row shows the number from the last session of that type and
-the target the document sets for it, then logs this one.
+Every conditioning card logs its output; PROGRESS charts it against the last
+session of the same type.
 
 ## THE GUIDE
 
-Its own tab: **guide.md** in large text with a table of contents, and a live
+Under MORE: **guide.md** in large text with a table of contents, and a live
 panel at the top saying what this week's block is, what its emphasis is, and
 which tests fall in it.
 
@@ -168,42 +159,49 @@ background behind it. **Settings → Text size** has three steps that scale the
 whole app, and the phone's own text-size setting is read as well — the two
 multiply.
 
-## TODAY — one guided flow
+## THE EXERCISE LIBRARY
 
-TODAY is a single list. Every item of the day appears on it exactly once, in
-the order it happens: the morning, the session, the site, lunch, the evening.
-The item you are on is open with its timer or its fields; everything finished
-is collapsed above it with a tick, everything still to come is collapsed
-below. One **NEXT** button moves down the list, and the flow remembers where
-you were and reopens there.
+**exercise-library.md** says what every exercise, test, conditioning session
+and move is, in two or three plain lines. Every card in the app shows its
+entry under the name, always — no tap, no link. A row finds its entry by the
+entry's name, the names in its brackets or either side of a slash, or its
+"also called" names; `src/library.js` holds the short list of rows the
+documents name differently ("Rear-foot-elevated split squat") and the rows
+that are two or three entries at once ("Hands", "Neck").
 
-The **session start time** sits at the top. Every clock time on the list is
-computed from it: the morning runs back from it, the session runs forward.
+`npm run build` runs `src/library.test.jsx` first: it walks every card of
+PREP, CAMP, the Fighter and the two easy weeks, in every week, and stops the
+build if any of them has no entry.
 
-- **MORNING** — resting heart rate and HRV; three physiological sighs on one
-  guided 30-second screen; the one thing, four prompts, no typing; the morning
-  five, five rows under a single running timer; and the check, four yes/no taps
-  that resolve the day GREEN, YELLOW or RED with the day's adjustment on one
-  line.
-- **SESSION** — the running order, step by step, with the loads, the rest timer
-  between sets and the 60-second settle in its one place after the last
-  interval. On Sunday it closes with the weekly check and the BOLT score.
-- **ON SITE** — one row that opens the reminders: nose breathing, the reset,
-  one job at a time, seven breaths, the phone rule. No timers.
-- **LUNCH** — one row: the breath practice for your stage, which opens the
-  pacer preset and comes back.
-- **EVENING** — RANGE, move by move under the running timer; the hollow block
-  (every evening but Friday); the sit, which opens the timer for your stage;
-  the review; then casein and lights out. Weekends add the easy hour, and in
-  weeks 4–9 of camp mode the sauna.
+## TODAY — one thing at a time
 
-Finishing the last item shows the day as **DONE**, with the streak.
+TODAY opens on one large **NOW** card: the item's name, its library entry,
+its prescription, only the fields that item needs, and a big **DONE**.
+Under it, one line: **NEXT**, with its time. The header is one line —
+*Prep · Week 1 · Build* — with the day's progress bar under it.
 
-The **IRON** tab is a library, not a to-do list: the breath pacer and every
-preset, the sit timers, the walking practice, the hardship ladder with the cold
-and heat timers, the five tests, the floor and Hell Week. Nothing on it is
-listed on TODAY — TODAY opens the tool it needs from inside the flow and
-returns when it is done.
+**WHOLE DAY** opens the full timeline in four collapsible chapters —
+MORNING, GYM, THE DAY, EVENING — for looking ahead; tapping a row makes it
+NOW. The day strip, the session start and the session notes live there
+too. TODAY always opens on NOW.
+
+- **THE GYM** runs one card per exercise, advanced with **NEXT**: the name,
+  the library entry, the prescription on one line (sets × reps · the
+  weight in kg · rest), and a row of big set buttons. Tapping a set starts
+  the rest timer: a full-screen countdown that buzzes at the end.
+  **ADJUST** opens the weight and reps of a set that went differently. The
+  bar-speed field is on the first work set of the main lifts only;
+  bodyweight lines show reps and level, never kilos. **SESSION LIST**
+  shows the session with ticks. The warm-up is one card with a checklist.
+  Paired and round-based work — the drive and punch holds, the contrast
+  circuits, the bench contrast, the punch throws, the rounds — is one card
+  with a guided round timer that shows each part and says it out loud.
+- **THE EVENING** — RANGE, the skill block, the movement session and the
+  morning five run one move per card, the move's library entry on it, a
+  timer for each hold, and the next move starting by itself. The sit opens
+  its own timer.
+- Tests appear only on the day they fall, as ordinary cards with their own
+  entry.
 
 ## Where your data lives
 
@@ -285,8 +283,8 @@ The logger follows the exercise, not the other way round.
 - **Bodyweight plus a load** — the weighted chin-up and the Achilles hold — logs
   that load as **+kg** beside your bodyweight, so what is written down is the
   added weight and not a total that means nothing next block.
-- **Barbell, trap bar, dumbbell and sled work** keeps the weight field, with the
-  percentage of your max already filled in.
+- **Barbell, trap bar, dumbbell and sled work** keeps the weight, with the
+  percentage of your max already worked out in kilos on each set button.
 
 The same rule runs in both programs and in Camp Mode's calisthenics rows.
 
@@ -506,7 +504,7 @@ code.
 npm install     # once
 npm run dev     # local dev server
 npm test        # smoke tests (vitest + jsdom)
-npm run build   # production build into dist/
+npm run build   # the library check, then the production build into dist/
 npm run icons   # regenerate the app icons from scripts/generate-icons.mjs
 ```
 
@@ -536,8 +534,12 @@ npm run icons   # regenerate the app icons from scripts/generate-icons.mjs
   tests, the life review and the audit, the sleep protocol, the fight-week mind.
 - `src/life-ui.jsx` — IRON → SEASON and IRON → LIFE, and the bodies of TODAY's
   life, Sunday and night rows.
-- `src/today.jsx` — TODAY's guided flow: the row shell, the running timer that
-  steps through a list of moves, the four yes/no taps and the NEXT button.
+- `src/now.jsx` — TODAY's pieces: the card head (name, library entry,
+  prescription), the set buttons, the checklist, the move runner for the
+  evening, and the whole day's chapters. `src/today.jsx` — the numbered lines
+  and the check's four taps.
+- `src/library.js` — exercise-library.md read into entries, and the matching
+  of a row's name to its entry. `src/library.test.jsx` is the build check.
 - `src/prep.js` — PREP as data: the fourteen-week calendar row by row, the lift
   phases, the engine sessions with their targets, the seven session pages, the
   movement session, the size block, the three flexibility tests, and the two

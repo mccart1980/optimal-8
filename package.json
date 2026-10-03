@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vitest run src/library.test.jsx && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "icons": "node scripts/generate-icons.mjs"
+    "icons": "node scripts/generate-icons.mjs",
+    "test:library": "vitest run src/library.test.jsx"
   },
   "dependencies": {
     "react": "^19.2.8",
