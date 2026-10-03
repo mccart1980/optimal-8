@@ -132,6 +132,44 @@ describe("TODAY — one thing at a time", () => {
     expect(within(runner).getByTestId("move-clock").textContent).toBe("0:30");
   });
 
+  it("looks ahead to another day and another week from the top of TODAY", async () => {
+    await mount(SAT);   // PREP week 1, Saturday
+    fireEvent.click(screen.getByRole("button", { name: "WED" }));
+    // another day opens on its session, every row with its prescription
+    const gymOf = () => screen.getByText("GYM").closest("[data-chapter]");
+    expect(within(gymOf()).getByText("Trap Bar Deadlift")).toBeInTheDocument();
+    expect(within(gymOf()).getByText("3 × 5 · 125 kg · Rest 2:30")).toBeInTheDocument();
+    expect(screen.getByTestId("day-label").textContent).toBe("WED 7 JAN");
+    expect(screen.getByTestId("app-title").textContent).toBe("Prep · Week 1 · Build");
+    // a week on, the same day
+    fireEvent.click(screen.getByRole("button", { name: "Next week" }));
+    expect(screen.getByTestId("app-title").textContent).toBe("Prep · Week 2 · Build");
+    expect(within(gymOf()).getByText("4 × 5 · 130 kg · Rest 2:30")).toBeInTheDocument();
+    // any week, from the week line
+    fireEvent.click(screen.getByRole("button", { name: "Pick a week" }));
+    fireEvent.click(within(screen.getByTestId("week-picker")).getByRole("button", { name: "Week 9" }));
+    expect(screen.getByTestId("app-title").textContent).toBe("Prep · Week 9 · Heavy");
+    expect(within(gymOf()).getByText(/^5 × \(2\+2\) · 157\.5 kg/)).toBeInTheDocument();
+    // and back
+    fireEvent.click(screen.getByRole("button", { name: "◀ BACK TO TODAY" }));
+    expect(screen.getByTestId("app-title").textContent).toBe("Prep · Week 1 · Build");
+    expect(screen.getByTestId("now-label").textContent).toMatch(/^NOW · /);
+  });
+
+  it("opens a row from another day as its card, and leaves today's NOW where it was", async () => {
+    await mount(SAT);
+    const first = screen.getByTestId("card-name").textContent;
+    fireEvent.click(screen.getByRole("button", { name: "THU" }));
+    fireEvent.click(within(screen.getByText("GYM").closest("[data-chapter]")).getByText("Split Squat, Rear Foot Elevated"));
+    expect(screen.getByTestId("now-label").textContent).toMatch(/^THU · /);
+    expect(screen.getByTestId("card-name").textContent).toBe("Split Squat, Rear Foot Elevated");
+    expect(screen.getByTestId("card-lib").textContent).toBe(libFor("Split squat, rear foot elevated")[0].text);
+    // the TODAY tab, tapped on TODAY, comes back to today
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "TODAY" }));
+    expect(screen.getByTestId("now-label").textContent).toMatch(/^NOW · /);
+    expect(screen.getByTestId("card-name").textContent).toBe(first);
+  });
+
   it("has four tabs", async () => {
     await mount(SAT);
     const nav = screen.getByRole("navigation", { name: "Tabs" });

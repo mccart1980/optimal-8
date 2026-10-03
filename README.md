@@ -181,9 +181,17 @@ Under it, one line: **NEXT**, with its time. The header is one line —
 *Prep · Week 1 · Build* — with the day's progress bar under it.
 
 **WHOLE DAY** opens the full timeline in four collapsible chapters —
-MORNING, GYM, THE DAY, EVENING — for looking ahead; tapping a row makes it
-NOW. The day strip, the session start and the session notes live there
-too. TODAY always opens on NOW.
+MORNING, GYM, THE DAY, EVENING — each row with its time and prescription;
+tapping a row makes it NOW. The session start and the session notes live
+there too. TODAY always opens on NOW.
+
+**Looking at another day or week.** The top of TODAY is the week line with
+◀ and ▶ either side — a week back, a week on — and the seven days under it.
+Tap a day to look at it: it opens on its whole day with the session open,
+every exercise with its prescription, and tapping one shows its card.
+Tap the week line itself for every week of the program at once. Looking
+somewhere else never moves today's NOW; **◀ BACK TO TODAY**, or the TODAY
+tab, comes straight back.
 
 - **THE GYM** runs one card per exercise, advanced with **NEXT**: the name,
   the library entry, the prescription on one line (sets × reps · the

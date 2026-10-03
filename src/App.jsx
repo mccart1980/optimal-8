@@ -1440,7 +1440,7 @@ function Today(props) {
     calis, taper, rangeWeek, campLabel, peakHR,
     morning, setMorning, weekDates, st, imRec, setTick, imStreak, imWeek,
     checkA, setCheckA, readNow, openTool, sound, flowAt, setFlowAt, goIron, photoPrompt,
-    imWks, setWkOn, oneThingOf, setDay, dayStrip,
+    imWks, setWkOn, oneThingOf,
     fday, setFday, menu, cook, fuelPhase,
   } = props;
 
@@ -1454,9 +1454,13 @@ function Today(props) {
         chimed.current[shownIso + x.id] = 1; beep(660, 200); setTimeout(() => beep(880, 350), 220); buzz([120, 60, 120]); }); }, 20000);
     return () => clearInterval(id);
   }, [isToday, sound, beep, shownIso]);
-  const [whole, setWhole] = useState(false);
+  /* Today opens on NOW. Any other day is being looked at, not done, so it
+     opens on the whole day with the session open. */
+  const [whole, setWhole] = useState(!isToday);
   const [list, setList] = useState(false);
   const [open, setOpen] = useState({});
+  /* a row picked from the whole day: shown as the card even when ticked */
+  const [pick, setPick] = useState(null);
 
   const rx = rxFor(week, day);
   const own = sessFor(day, rx) || S[day] || S.mon;
@@ -1772,11 +1776,14 @@ function Today(props) {
       : x.t < startMin ? "MORNING" : !noSess && x.t <= sessEnd ? "GYM" : "THE DAY"; });
 
   /* ---------------- NOW ---------------- */
-  const curStored = flowAt[dk];
-  const curIdx = (() => { if (curStored) { const i = all.findIndex((x) => x.id === curStored); if (i >= 0 && !all[i].done) return i; }
+  /* only today remembers where it was; looking at another day never moves it */
+  const curStored = isToday ? flowAt[dk] : null;
+  const curIdx = (() => {
+    if (pick) { const i = all.findIndex((x) => x.id === pick); if (i >= 0) return i; }
+    if (curStored) { const i = all.findIndex((x) => x.id === curStored); if (i >= 0 && !all[i].done) return i; }
     return all.findIndex((x) => !x.done); })();
   const cur = curIdx >= 0 ? all[curIdx] : null;
-  const go = (id) => setFlowAt(Object.assign({}, flowAt, { [dk]: id }));
+  const go = (id) => { setPick(id); if (isToday) setFlowAt(Object.assign({}, flowAt, { [dk]: id })); };
   const nextAfter = (i) => all.slice(i + 1).find((x) => !x.done) || all.find((x, j) => j !== i && !x.done) || null;
   const nxt = cur ? nextAfter(curIdx) : null;
   const finish = () => { if (!cur) return; cur.mark(true); const n = nextAfter(curIdx); go(n ? n.id : null); buzz(30); };
@@ -1794,15 +1801,18 @@ function Today(props) {
 
   if (whole) {
     const chapters = ["MORNING", "GYM", "THE DAY", "EVENING"];
+    /* today opens the chapter you are in; another day opens its session */
+    const openFirst = isToday ? (cur && cur.chapter) : "GYM";
+    const isOpen = (ch) => (open[ch] !== undefined ? open[ch] : ch === openFirst);
     return (
       <div data-testid="whole-day">
+        {isToday ? null : <div data-testid="day-label" style={Object.assign({}, dsp, { fontSize: T2, fontWeight: 800, letterSpacing: 1, color: C.chalk, marginBottom: 10 })}>{fmtDate(shownIso).toUpperCase()}</div>}
         {progress}
-        <BigBtn on={() => setWhole(false)} c={C.brass} fill s={{ marginBottom: 14 }}>◀ NOW</BigBtn>
+        {isToday ? <BigBtn on={() => setWhole(false)} c={C.brass} fill s={{ marginBottom: 14 }}>◀ NOW</BigBtn> : null}
         {chapters.map((ch) => (
-          <Chapter key={ch} title={ch} items={all.filter((x) => x.chapter === ch)} open={open[ch] !== undefined ? open[ch] : ch === (cur && cur.chapter)}
-            onToggle={() => setOpen(Object.assign({}, open, { [ch]: !(open[ch] !== undefined ? open[ch] : ch === (cur && cur.chapter)) }))}
-            onPick={(it) => { go(it.id); setWhole(false); }} onTick={(it) => it.mark(!it.done)} curId={cur && cur.id} />))}
-        {dayStrip}
+          <Chapter key={ch} title={ch} items={all.filter((x) => x.chapter === ch)} open={isOpen(ch)}
+            onToggle={() => setOpen(Object.assign({}, open, { [ch]: !isOpen(ch) }))}
+            onPick={(it) => { go(it.id); setWhole(false); }} onTick={(it) => it.mark(!it.done)} curId={isToday && cur ? cur.id : null} />))}
         <div style={{ border: "1px solid " + C.line, borderRadius: 8, padding: 14, background: C.card, marginTop: 10 }}>
           <Input label={noSess ? "WAKE" : fightDayOf(rx, day) ? "THE BELL" : "SESSION START"} v={startStr} on={(val) => { const n = Object.assign({}, log); n[startKey] = { w: val }; setLog(n); }} ph={hhmm(clock.def)} type="text" />
           <label style={{ display: "block", marginTop: 12 }}>
@@ -1820,7 +1830,7 @@ function Today(props) {
       {cur ? (
         <div data-testid="now-card" data-flow-id={cur.id} style={{ background: C.card, border: "2px solid " + (cur.colour || C.brass), borderRadius: 12, padding: 18, marginBottom: 12 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, marginBottom: 10 }}>
-            <span style={Object.assign({}, mno, { fontSize: T3, color: cur.colour || C.brass, letterSpacing: 1.2 })}>NOW · {cur.clock}{gymAt >= 0 ? " · " + (gymAt + 1) + " OF " + gymAll.length : ""}</span>
+            <span data-testid="now-label" style={Object.assign({}, mno, { fontSize: T3, color: cur.colour || C.brass, letterSpacing: 1.2 })}>{isToday ? "NOW" : DSH[day]} · {cur.clock}{gymAt >= 0 ? " · " + (gymAt + 1) + " OF " + gymAll.length : ""}</span>
             {gymAt >= 0 ? <button onClick={() => setList(!list)} style={Object.assign({}, mno, { background: "transparent", border: "1px solid " + C.line, color: C.ash, fontSize: T3, borderRadius: 6, minHeight: 48, padding: "6px 12px", cursor: "pointer" })}>{list ? "CLOSE" : "SESSION LIST"}</button> : null}
           </div>
           {list && gymAt >= 0 ? (
@@ -2741,6 +2751,7 @@ export default function App() {
   const [loaded, setLoaded] = useState(false);
   const [tab, setTab] = useState("today");
   const [selDay, setSelDay] = useState(null);
+  const [weekPick, setWeekPick] = useState(false);
   const [view, setViewRaw] = useState(null);
   const [proto, setProto] = useState(null);
   const [plates, setPlates] = useState(null);
@@ -3295,6 +3306,14 @@ export default function App() {
   const noMaxes = loaded && !MODE.camp && !num(maxes.squat) && !num(maxes.bench);
   const noCampWork = loaded && MODE.camp && !num(maxes.cw_squat) && !num(maxes.cw_tbdl);
   const dayAc = (k) => { const sx = sessFor(k, rxFor(shown.week)); return sx ? sx.ac : C.ash; };
+  /* Looking at another day or another week from the top of TODAY. The
+     day you are on comes back as plain today, so its NOW is the one that
+     remembers where you were. */
+  const atDay = (w, k) => (w === current.week && shown.macro === current.macro && k === today ? null : { macro: shown.macro, week: w, day: k });
+  const goWeek = (w) => { setSelDay(atDay(Math.max(1, Math.min(L, w)), shown.day)); setWeekPick(false); };
+  const goDay = (k) => { setSelDay(atDay(shown.week, k)); setWeekPick(false); };
+  const navBtn = (dis) => Object.assign({}, dsp, { flexShrink: 0, width: 48, height: 48, fontSize: 20, fontWeight: 800, borderRadius: 6, cursor: dis ? "default" : "pointer",
+    background: "transparent", color: dis ? C.line : C.chalk, border: "2px solid " + (dis ? C.line : C.ash) });
 
   return (
     <div className="o8-root" style={Object.assign({}, bdy, { background: C.ink, minHeight: "100vh", color: C.chalk, "--o8-zoom": zoom })}>
@@ -3324,10 +3343,40 @@ export default function App() {
 
       <div style={{ borderBottom: "1px solid " + C.line, background: C.slab, position: "sticky", top: 0, zIndex: 30, paddingTop: "env(safe-area-inset-top)" }}>
         <div style={{ borderTop: "3px solid " + P.ac }} />
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, padding: "12px 16px", paddingLeft: "max(16px, env(safe-area-inset-left))", paddingRight: "max(16px, env(safe-area-inset-right))", maxWidth: 640, margin: "0 auto" }}>
-          <h1 data-testid="app-title" style={Object.assign({}, dsp, { margin: 0, fontSize: 22, fontWeight: 800, letterSpacing: 1, lineHeight: 1.2, color: C.chalk, minWidth: 0, overflowWrap: "anywhere" })}>{headerTitle}</h1>
-          {tab === "today" && selDay ? <button onClick={() => setSelDay(null)} style={Object.assign({}, mno, { flexShrink: 0, background: "transparent", border: "1px solid " + C.moss, borderRadius: 6, color: C.moss, fontSize: 18, minHeight: 48, padding: "6px 10px", cursor: "pointer" })}>◀ {DSH[today]}</button> : null}
-        </div>
+        {tab === "today" ? (
+          <div style={{ maxWidth: 640, margin: "0 auto", padding: "8px 16px 10px", paddingLeft: "max(16px, env(safe-area-inset-left))", paddingRight: "max(16px, env(safe-area-inset-right))" }}>
+            {/* the week: back a week, the week (tap it for any week), on a week */}
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <button onClick={() => goWeek(shown.week - 1)} disabled={shown.week <= 1} aria-label="Previous week" style={navBtn(shown.week <= 1)}>◀</button>
+              <h1 style={{ margin: 0, flex: 1, minWidth: 0 }}>
+                <button onClick={() => setWeekPick(!weekPick)} aria-expanded={weekPick} aria-label="Pick a week"
+                  style={Object.assign({}, dsp, { width: "100%", minHeight: 48, background: "transparent", border: "none", cursor: "pointer", padding: "4px 0", fontSize: 22, fontWeight: 800, letterSpacing: 1, lineHeight: 1.2, color: C.chalk, overflowWrap: "anywhere" })}>
+                  <span data-testid="app-title">{shortTitle(shown.week)}</span><span aria-hidden="true" style={{ color: C.ash }}> ▾</span>
+                </button>
+              </h1>
+              <button onClick={() => goWeek(shown.week + 1)} disabled={shown.week >= L} aria-label="Next week" style={navBtn(shown.week >= L)}>▶</button>
+            </div>
+            {weekPick ? (
+              <div data-testid="week-picker" style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 6, marginTop: 8 }}>
+                {Array.from({ length: L }, (_, i) => i + 1).map((w) => { const on = w === shown.week, now = w === current.week;
+                  return <button key={w} onClick={() => goWeek(w)} aria-label={"Week " + w}
+                    style={Object.assign({}, dsp, { minHeight: 48, fontSize: 20, fontWeight: 800, borderRadius: 6, cursor: "pointer",
+                      background: on ? C.brass : "transparent", color: on ? C.ink : now ? C.moss : C.chalk, border: "2px solid " + (on ? C.brass : now ? C.moss : C.line) })}>{w}</button>; })}
+              </div>) : null}
+            {/* the days of that week */}
+            <div style={{ display: "flex", gap: 4, marginTop: 8 }}>
+              {DAYS.map((k) => { const active = shown.day === k, isNow = k === today && shown.week === current.week && shown.macro === current.macro;
+                return <button key={k} onClick={() => goDay(k)} aria-pressed={active}
+                  style={Object.assign({}, dsp, { flex: 1, minWidth: 0, fontSize: 18, fontWeight: 800, padding: "8px 0", borderRadius: 6, cursor: "pointer", minHeight: 48,
+                    background: active ? dayAc(k) : "transparent", color: active ? C.ink : isNow ? C.moss : C.chalk, border: "2px solid " + (active ? dayAc(k) : isNow ? C.moss : C.line) })}>{DSH[k]}</button>; })}
+            </div>
+            {isToday ? null : (
+              <button onClick={() => { setSelDay(null); setWeekPick(false); }} style={Object.assign({}, dsp, { width: "100%", marginTop: 8, minHeight: 48, fontSize: 20, fontWeight: 800, letterSpacing: 1, borderRadius: 6, cursor: "pointer", background: C.moss, color: C.ink, border: "2px solid " + C.moss })}>◀ BACK TO TODAY</button>)}
+          </div>
+        ) : (
+          <div style={{ padding: "12px 16px", paddingLeft: "max(16px, env(safe-area-inset-left))", paddingRight: "max(16px, env(safe-area-inset-right))", maxWidth: 640, margin: "0 auto" }}>
+            <h1 style={Object.assign({}, dsp, { margin: 0, fontSize: 22, fontWeight: 800, letterSpacing: 1, lineHeight: 1.2, color: C.chalk, overflowWrap: "anywhere" })}><span data-testid="app-title">{headerTitle}</span></h1>
+          </div>)}
       </div>
 
       <div style={{ padding: "16px 16px 200px", maxWidth: 640, margin: "0 auto" }}>
@@ -3346,14 +3395,7 @@ export default function App() {
                 <Today key={dk} {...todayProps} photoPrompt={shownPhotoDay
                   ? { done: !!(photosShown.front || photosShown.side || photosShown.back),
                       open: () => { setPhotoDate(shownIso); setTab("track"); setTrackSub("photos"); } }
-                  : null}
-                  dayStrip={(
-                    <div style={{ display: "flex", gap: 4, margin: "4px 0 10px" }}>
-                      {DAYS.map((k) => { const active = shown.day === k && shown.week === current.week && shown.macro === current.macro;
-                        return <button key={k} onClick={() => setSelDay(k === today ? null : { macro: current.macro, week: current.week, day: k })}
-                          style={Object.assign({}, dsp, { flex: 1, fontSize: 18, fontWeight: 700, padding: "8px 0", borderRadius: 6, cursor: "pointer", minHeight: 52,
-                            background: active ? dayAc(k) : "transparent", color: active ? C.ink : (k === today ? C.moss : C.ash), border: "1px solid " + (active ? dayAc(k) : k === today ? C.moss : C.line) })}>{DSH[k]}</button>; })}
-                    </div>)} />
+                  : null} />
               </div>) : null}
             {tab === "track" ? <Track current={current} maxes={maxes} onSetMax={onSetMax} maxHist={maxHist} log={log} body={body} addBody={addBody} done={done} L={L} IM={IM} calis={calis} camp={MODE.camp} title={headerTitle}
               rangeWeeks={rangeTestWeeks} rangeGet={rangeGet} campStart={campStart}
@@ -3428,7 +3470,7 @@ export default function App() {
       <TimerDock T={T} />
       <nav aria-label="Tabs" style={{ position: "fixed", left: 0, right: 0, bottom: 0, zIndex: 50, background: C.slab, borderTop: "1px solid " + C.line, paddingBottom: "env(safe-area-inset-bottom)" }}>
         <div style={{ display: "flex", maxWidth: 640, margin: "0 auto" }}>
-          {TABS.map((x) => <button key={x[0]} onClick={() => { setTab(x[0]); setProto(null); }} aria-current={tab === x[0] ? "page" : undefined}
+          {TABS.map((x) => <button key={x[0]} onClick={() => { if (x[0] === "today" && tab === "today") { setSelDay(null); setWeekPick(false); } setTab(x[0]); setProto(null); }} aria-current={tab === x[0] ? "page" : undefined}
             style={Object.assign({}, dsp, { flex: 1, fontSize: 20, fontWeight: 800, letterSpacing: 1, background: "transparent", border: "none", borderTop: "4px solid " + (tab === x[0] ? P.ac : "transparent"), color: tab === x[0] ? C.chalk : C.ash, padding: "14px 2px 16px", cursor: "pointer", minHeight: 64 })}>{x[1]}</button>)}
         </div>
       </nav>

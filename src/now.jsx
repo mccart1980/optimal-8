@@ -175,6 +175,7 @@ export function Chapter({ title, items, open, onToggle, onPick, onTick, curId })
           <button onClick={() => onPick(it)} style={{ flex: 1, minWidth: 0, textAlign: "left", background: "transparent", border: "none", cursor: "pointer", padding: "4px 0", minHeight: 48 }}>
             <span style={Object.assign({}, mno, { display: "block", fontSize: T3, color: it.id === curId ? C.brass : C.ash })}>{it.clock}{it.id === curId ? " · NOW" : ""}</span>
             <span style={Object.assign({}, bdy, { display: "block", fontSize: T3, fontWeight: 700, color: it.done ? C.ash : C.chalk, lineHeight: 1.35 })}>{it.n}</span>
+            {it.s ? <span data-row-pres style={Object.assign({}, mno, { display: "block", fontSize: T3, color: it.done ? C.ash : C.brass, lineHeight: 1.35, marginTop: 2 })}>{it.s}</span> : null}
           </button>
         </div>)) : null}
     </div>);
