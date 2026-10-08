@@ -49,7 +49,7 @@ are four tabs: **TODAY · PROGRESS · FOOD · MORE**.
   and the four fuel documents.
 - **MORE → GUIDE** is one plain-English guide with one live panel: this week's block,
   the food phase, the tests this week, and the next feed.
-- **MORE → SETTINGS** is one set: the program, the start date, the fight date, the
+- **MORE → SETTINGS** is one set: Fight booked? and its answers, the
   making-weight switch, the break times and the session length per weekday,
   text size, THE EDGE, the units. The fuel phase is read off the app's one
   season.
@@ -59,33 +59,45 @@ are four tabs: **TODAY · PROGRESS · FOOD · MORE**.
   list, referee history, break times and session lengths come across. This
   app's own EXPORT now carries all of it.
 
-## THE SEASON
+## THE SEASON — BUILT FROM YOUR ANSWERS
 
-One optional **fight date** in settings dates everything, backwards from the
-fight:
+**MORE → SETTINGS → Fight booked?** is the season builder (season-builder.md).
 
-- **CAMP** is the ten weeks that end on it — foundation 1, build 3, easy and
-  tests 1, peak 3, sharpen 1, fight week.
-- **PREP** runs to test day on the Saturday before the camp starts: fourteen
-  weeks when there are fourteen, otherwise as many as there are, with the
-  document's calendar truncated from the front so the weeks nearest the camp
-  are the ones that survive.
-- **TRANSITION** is the two easy weeks after the fight. The app offers them on
-  TODAY the day the fight is behind you.
+- **No:** Prep's 16-week cycle, on repeat (P1–P14 with P4b and P12b). Optimal 8
+  Fighter is still there as the classic.
+- **Yes:** the date, the rounds and minutes, the rest between rounds (1 minute
+  unless you change it), the weigh-in (the day before or on the day), how fit
+  you are right now (low, moderate, good) and one emphasis (none, power,
+  strength, durability).
 
-With no fight date, PREP runs its **sixteen-week form**: accumulate 1–6 (week 6
-lighter, with the tests), intensify 7–11 (max week 10, week 11 easy with the
-tests), convert 12–15, test week 16 — the same sessions, loads and rules, with
-a second normal-tempo week in accumulation and a second contrast week in
-conversion.
+The app counts whole training weeks from the Monday the plan starts to the
+fight week and builds the season out of the two master programs and nothing
+else: Prep fitted by the N table, then the full ten-week camp, when the fight
+is 11 or more weeks away; the camp shortened from the front at 6–10 weeks (7–10
+from low fitness); the short-notice camp with its engine weeks below that; the
+transition after the fight — one week after a fight of 9 minutes or less, two
+after a longer one, and on until the strap says you're back — then Prep. The
+format, the conditioning pairs, starting fitness, engine-first, the emphasis,
+the tendon ramp and the standing rules (the pre-camp check in the week before
+every camp, the sauna at most twice a week, no dehydration cuts) are applied
+exactly as the document writes them.
 
-**MORE → PLAN → THE SEASON** shows the whole plan as a dated strip: every prep week
-with its emphasis, test day, every camp week, the fight, then the two easy
-weeks. Move the fight date and it re-dates from the fight backwards and says
-how many weeks changed and which.
+**Change any answer and press RE-PLAN:** the plan starts again from today's
+Monday (or the next one), every week already lived keeps the plan it was lived
+under, and one line says what changed. The first scored rounds check the
+fitness you entered — a fade under 75% reads low, 75–84% moderate, 85% or more
+good — and correct it from the next Monday.
 
-The **Program** selector picks what runs today — PREP, CAMP, or **OPTIMAL 8
-FIGHTER**, which is the classic program, untouched.
+**MORE → PLAN → THE SEASON** shows the whole plan as a dated strip; tap a week
+to open it. **THIS WEEK** shows the camp's week table in the document's own
+words.
+
+**The proof.** `npm run build` runs season-builder.md's five tests first and
+stops if any fails: the March fight reproduces Optimal 8 · Camp's week table and
+session pages; no fight gives the 16-week cycle; the 28 November fight
+reproduces Worked Example 1 week by week; Prep with 14 weeks is Optimal 8 ·
+Prep and with 4 weeks P4, P7, P8, P14; and a scan of every generated week finds
+no exercise, load or session type outside the three documents.
 
 ## PREP, AS THE DOCUMENT WRITES IT
 
@@ -99,13 +111,15 @@ The calendar's weekly emphasis drives the session, not the other way round:
 - **Tuesday and Thursday** run the session types the calendar names, and never
   the same quality twice in a week.
 - **Sunday's rounds** rest 90 seconds in accumulation and 60 from week 6.
-- **The size block** is on Thursday and Sunday in the accumulation weeks, and
-  nowhere else.
+- **The size block** runs all through Prep on Thursday and Sunday — three sets
+  in weeks 1–5, two in weeks 6–13, none in the test week — with the overhead
+  triceps extension (rope pushdowns in a week after an elbow at 4 or more), and
+  never in a camp.
 - **The movement session** is a guided 30-minute timer on Wednesday and Saturday
   evenings in accumulation, Saturday evenings after.
 - **The carb top-up** is on TODAY at 17:00 on Monday and Thursday in
   accumulation, with its options.
-- **The sauna** comes in from week 6.
+- **The sauna** comes in from week 6, twice a week, never more.
 - **The tests** fall on the weeks that carry them, and the three flexibility
   tests — knee to wall, toe touch, seated rotation — sit with the four range
   tests, each with its target.
@@ -170,15 +184,19 @@ documents name differently ("Rear-foot-elevated split squat") and the rows
 that are two or three entries at once ("Hands", "Neck").
 
 `npm run build` runs `src/library.test.jsx` first: it walks every card of
-PREP, CAMP, the Fighter and the two easy weeks, in every week, and stops the
-build if any of them has no entry.
+every season the builder makes — Prep, every camp shape, the week before a
+camp, the transition — and the Fighter, and stops the build if any of them has
+no entry. The October library dropped seven entries only the classic Fighter
+still names (bear crawls, breathe down, the Romanian deadlift, the
+chest-supported row, the clap push-up, the side plank reach-through, the
+mid-thigh pull); those Fighter rows show the Fighter's own words.
 
 ## TODAY — one thing at a time
 
 TODAY opens on one large **NOW** card: the item's name, its library entry,
 its prescription, only the fields that item needs, and a big **DONE**.
 Under it, one line: **NEXT**, with its time. The header is one line —
-*Prep · Week 1 · Build* — with the day's progress bar under it.
+*Prep · Week 1 · P1 · Build* — with the day's progress bar under it.
 
 **WHOLE DAY** opens the full timeline in four collapsible chapters —
 MORNING, GYM, THE DAY, EVENING — each row with its time and prescription;

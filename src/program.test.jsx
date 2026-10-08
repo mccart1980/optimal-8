@@ -4,7 +4,7 @@ import { sessionCatalog } from "./App.jsx";
 /* The programs' content, read off the cards the gym runs. The rebuild
    changed how a session is shown, never what is in it. */
 const CAT = sessionCatalog();
-const day = (program, week, d, o) => CAT.filter((c) => c.program === program && c.week === week && c.day === d
+const day = (program, week, d, o) => CAT.filter((c) => c.main && c.program === program && c.week === week && c.day === d
   && (o && o.edge === false ? c.edge === false : c.edge !== false) && !!c.lastTen === !!(o && o.lastTen)).map((c) => c);
 const names = (...a) => day(...a).map((c) => c.n);
 const before = (arr, a, b) => arr.indexOf(a) >= 0 && arr.indexOf(b) >= 0 && arr.indexOf(a) < arr.indexOf(b);

@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { C, dsp, bdy, mno, num, fmtDate, Card, Eye, Lab, Fld, Btn, Chip, Note, Seg } from "./ui.jsx";
+import { C, dsp, bdy, mno, num, fmtDate, addDays, Card, Eye, Lab, Fld, Btn, Chip, Note, Seg } from "./ui.jsx";
 import { Sheet } from "./im-ui.jsx";
 import { DocView } from "./mdview.jsx";
-import { seasonLabel, dateSpan, CAMP_BLOCKS } from "./season.js";
-import { prepEmphasis, prepTests } from "./prep.js";
+import { rowDates } from "./builder.js";
 import { VEL_LIFTS, PROFILE_LOADS, VEL_PHASES, fitLine, targetFor, TYPICAL, BALLISTIC, ballisticOf, BALLISTIC_DEFAULT, powerRows, peakPower } from "./velocity.js";
 
 /* ================================================================
@@ -13,73 +12,55 @@ const BLOCK_C = { ACCUMULATE: C.moss, INTENSIFY: C.oxide, CONVERT: C.brass, "TES
   FOUNDATION: C.moss, BUILD: C.oxide, "EASY + TESTS": C.cobalt, PEAK: C.brass, SHARPEN: C.violet, "FIGHT WEEK": C.oxide,
   TRANSITION: C.moss };
 
-export function SeasonView({ season, st, current, program, onProgram, moved }) {
-  const rows = season.rows;
-  const nowMon = (r) => r.program === (program === "transition" ? "transition" : program === "camp" ? "camp" : "prep");
-  let lastBlock = null;
+const PROG_C = { prep: C.moss, camp: C.brass, transition: C.cobalt, pre: C.violet };
+const PROG_N = { prep: "PREP", camp: "CAMP", transition: "TRANSITION", pre: "BEFORE THE CAMP" };
+const rowBlock = (r) => (r.program === "prep" ? (r.doc <= 5 ? "ACCUMULATE" : r.doc <= 10 ? "INTENSIFY" : r.doc <= 13 ? "CONVERT" : "TEST WEEK")
+  : r.program === "camp" ? ({ F1: "FOUNDATION", F: "FOUNDATION", B1: "BUILD", B2: "BUILD", B3: "BUILD", E: "EASY + TESTS", P1: "PEAK", P2: "PEAK", P3: "PEAK", E1: "ENGINE", E2: "ENGINE", S: "SHARPEN", FW: "FIGHT WEEK" })[r.id]
+  : r.program === "pre" ? "BEFORE WEEK 1" : "TRANSITION");
+
+export function SeasonView({ season, st, current, classic, dayIso, openWeek }) {
+  const s = st.season || {};
+  const rows = season.rows.filter((r) => r.mon >= addDays(dayIso, -7 * 20)).slice(0, 60);
+  let lastHead = null;
   return (
     <div>
       <Card ac={C.brass}>
         <Eye c={C.brass}>The season</Eye>
-        {season.fight ? (
-          <div>
-            <div style={Object.assign({}, dsp, { fontSize: 30, fontWeight: 800, letterSpacing: 1.3, color: C.chalk, lineHeight: 1.05 })}>FIGHT · {fmtDate(season.fight).toUpperCase()}</div>
-            <div style={Object.assign({}, bdy, { fontSize: 18, color: C.chalk, marginTop: 10, lineHeight: 1.5 })}>
-              Prep ends {fmtDate(season.testDay)} on test day · camp starts {fmtDate(season.campStart)}.
-            </div>
-            <div style={Object.assign({}, bdy, { fontSize: 16, color: C.ash, marginTop: 6, lineHeight: 1.5 })}>
-              {season.prepWeeks} prep {season.prepWeeks === 1 ? "week" : "weeks"}{season.truncated ? ", the first " + season.truncated + " of the calendar cut from the front" : ""} · 10 camp weeks · 2 easy weeks after.
-            </div>
-          </div>) : (
-          <div>
-            <div style={Object.assign({}, dsp, { fontSize: 28, fontWeight: 800, letterSpacing: 1.3, color: C.chalk })}>NO FIGHT DATE</div>
-            <div style={Object.assign({}, bdy, { fontSize: 18, color: C.chalk, marginTop: 10, lineHeight: 1.5 })}>
-              Prep runs its sixteen-week form: accumulate 1–6, intensify 7–11, convert 12–15, test week 16. Set a fight date in settings and everything re-dates from it backwards.
-            </div>
-          </div>)}
+        {classic ? (
+          <div style={Object.assign({}, dsp, { fontSize: 28, fontWeight: 800, letterSpacing: 1.3, color: C.chalk })}>OPTIMAL 8 FIGHTER</div>
+        ) : s.booked && s.fight ? (
+          <div style={Object.assign({}, dsp, { fontSize: 30, fontWeight: 800, letterSpacing: 1.3, color: C.chalk, lineHeight: 1.05 })}>FIGHT · {fmtDate(s.fight).toUpperCase()}</div>
+        ) : (
+          <div style={Object.assign({}, dsp, { fontSize: 28, fontWeight: 800, letterSpacing: 1.3, color: C.chalk })}>NO FIGHT BOOKED</div>)}
+        <div style={Object.assign({}, bdy, { fontSize: 18, color: C.chalk, marginTop: 10, lineHeight: 1.5 })}>
+          {classic ? "The classic program, on its own clock. Settings → Fight booked? builds a season."
+            : s.booked ? s.rounds + " × " + s.mins + " · " + s.rest + " s rest · weigh-in " + (s.weighIn === "day" ? "on the day" : "the day before") + " · " + s.fitness + " fitness · emphasis " + s.emphasis
+            : "Prep's 16-week cycle, on repeat. Settings → Fight booked? builds a camp."}
+        </div>
+        {st.planNote ? <Note c={C.brass}>{st.planNote}</Note> : null}
       </Card>
 
-      {moved && moved.length ? (
-        <Card ac={C.oxide}>
-          <Eye c={C.oxide}>The date moved</Eye>
-          <div style={Object.assign({}, bdy, { fontSize: 18, color: C.chalk, lineHeight: 1.5 })}>
-            {moved.length} {moved.length === 1 ? "week" : "weeks"} changed: {moved.slice(0, 6).map((r) => seasonLabel(r)).join(", ")}{moved.length > 6 ? " and " + (moved.length - 6) + " more" : ""}.
-          </div>
-        </Card>) : null}
-
-      {rows.map((r, i) => {
-        const isNow = nowMon(r) && r.week === current.week;
-        const head = r.block !== lastBlock ? (lastBlock = r.block) : null;
-        const c = BLOCK_C[r.block] || C.ash;
+      {rows.map((r) => {
+        const isNow = r.mac === current.macro && r.kw === current.week;
+        const head = PROG_N[r.program] + (r.program === "camp" ? " · " + fmtDate(r.camp.fight) : r.program === "prep" && r.cycle ? " · CYCLE " + r.cycle : "");
+        const showHead = head + r.plan !== lastHead ? (lastHead = head + r.plan) : null;
+        const c = PROG_C[r.program] || C.ash;
         return (
-          <div key={r.program + r.week}>
-            {head ? <div style={Object.assign({}, mno, { fontSize: 14, fontWeight: 700, letterSpacing: 2, color: c, padding: "16px 2px 8px" })}>{r.block}</div> : null}
-            <Card ac={isNow ? c : C.line} s={{ padding: "12px 13px", opacity: isNow ? 1 : .82 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10 }}>
-                <span style={Object.assign({}, dsp, { fontSize: 20, fontWeight: 800, letterSpacing: 1.1, color: C.chalk })}>{seasonLabel(r)}</span>
-                <span style={Object.assign({}, mno, { fontSize: 14, color: c, whiteSpace: "nowrap" })}>{isNow ? "THIS WEEK" : ""}</span>
-              </div>
-              <div style={Object.assign({}, mno, { fontSize: 15, color: C.ash, marginTop: 4 })}>{dateSpan(r)}</div>
-              {r.program === "prep" ? (
-                <div style={Object.assign({}, bdy, { fontSize: 16, color: C.chalk, marginTop: 7, lineHeight: 1.5 })}>{prepEmphasis(r.doc)}</div>) : null}
+          <div key={r.mac + r.kw}>
+            {showHead ? <div style={Object.assign({}, mno, { fontSize: 14, fontWeight: 700, letterSpacing: 2, color: c, padding: "16px 2px 8px" })}>{head}</div> : null}
+            <Card ac={isNow ? c : C.line} s={{ padding: "12px 13px", opacity: isNow ? 1 : r.sun < dayIso ? .7 : .88 }}>
+              <button onClick={() => openWeek && openWeek(r)} style={{ display: "block", width: "100%", textAlign: "left", background: "transparent", border: "none", padding: 0, cursor: "pointer" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10 }}>
+                  <span style={Object.assign({}, dsp, { fontSize: 20, fontWeight: 800, letterSpacing: 1.1, color: C.chalk })}>{r.program === "transition" ? "T" + r.idx : r.id} · {rowBlock(r)}</span>
+                  <span style={Object.assign({}, mno, { fontSize: 14, color: c, whiteSpace: "nowrap" })}>{isNow ? "THIS WEEK" : ""}</span>
+                </div>
+                <div style={Object.assign({}, mno, { fontSize: 15, color: C.ash, marginTop: 4 })}>{rowDates(r)}</div>
+                {r.preCamp ? <div style={Object.assign({}, bdy, { fontSize: 16, color: C.violet, marginTop: 6 })}>The pre-camp check — bloods and blood pressure</div> : null}
+                {r.program === "prep" && r.doc === 14 ? <div style={Object.assign({}, bdy, { fontSize: 16, color: C.cobalt, marginTop: 6 })}>Test day {fmtDate(addDays(r.mon, 5))}</div> : null}
+                {r.program === "camp" && r.id === "FW" ? <div style={Object.assign({}, bdy, { fontSize: 16, color: C.oxide, marginTop: 6 })}>FIGHT {fmtDate(r.camp.fight)}</div> : null}
+              </button>
             </Card>
-            {r.program === "prep" && i < rows.length - 1 && rows[i + 1].program === "camp" ? (
-              <Card ac={C.cobalt} s={{ padding: "12px 13px" }}>
-                <div style={Object.assign({}, dsp, { fontSize: 22, fontWeight: 800, letterSpacing: 1.3, color: C.cobalt })}>TEST DAY</div>
-                <div style={Object.assign({}, mno, { fontSize: 15, color: C.ash, marginTop: 4 })}>{fmtDate(season.testDay)}</div>
-              </Card>) : null}
-            {r.program === "camp" && r.week === 10 ? (
-              <Card ac={C.oxide} s={{ padding: "12px 13px" }}>
-                <div style={Object.assign({}, dsp, { fontSize: 22, fontWeight: 800, letterSpacing: 1.3, color: C.oxide })}>FIGHT</div>
-                <div style={Object.assign({}, mno, { fontSize: 15, color: C.ash, marginTop: 4 })}>{fmtDate(season.fight)}</div>
-              </Card>) : null}
           </div>); })}
-
-      <Card>
-        <Eye>Running now</Eye>
-        <Seg opts={[["prep", "PREP"], ["camp", "CAMP"], ["fighter", "FIGHTER"]]} val={program === "transition" ? "prep" : program} on={onProgram} c={C.brass} />
-        <Note>The season above is the plan; this is the program the app is running today.</Note>
-      </Card>
     </div>);
 }
 

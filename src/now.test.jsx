@@ -45,7 +45,7 @@ describe("TODAY — one thing at a time", () => {
 
   it("opens on one NOW card with a NEXT line, the day's line and a progress bar", async () => {
     await mount(SAT);
-    expect(screen.getByTestId("app-title").textContent).toBe("Prep · Week 1 · Build");
+    expect(screen.getByTestId("app-title").textContent).toBe("Prep · Week 1 · P1 · Build");
     expect(screen.getByTestId("day-progress")).toBeInTheDocument();
     expect(screen.getAllByTestId("now-card")).toHaveLength(1);
     expect(screen.getByTestId("next-line").textContent).toMatch(/^NEXT · \d\d:\d\d · .+/);
@@ -140,19 +140,19 @@ describe("TODAY — one thing at a time", () => {
     expect(within(gymOf()).getByText("Trap Bar Deadlift")).toBeInTheDocument();
     expect(within(gymOf()).getByText("3 × 5 · 125 kg · Rest 2:30")).toBeInTheDocument();
     expect(screen.getByTestId("day-label").textContent).toBe("WED 7 JAN");
-    expect(screen.getByTestId("app-title").textContent).toBe("Prep · Week 1 · Build");
+    expect(screen.getByTestId("app-title").textContent).toBe("Prep · Week 1 · P1 · Build");
     // a week on, the same day
     fireEvent.click(screen.getByRole("button", { name: "Next week" }));
-    expect(screen.getByTestId("app-title").textContent).toBe("Prep · Week 2 · Build");
+    expect(screen.getByTestId("app-title").textContent).toBe("Prep · Week 2 · P2 · Build");
     expect(within(gymOf()).getByText("4 × 5 · 130 kg · Rest 2:30")).toBeInTheDocument();
     // any week, from the week line
     fireEvent.click(screen.getByRole("button", { name: "Pick a week" }));
     fireEvent.click(within(screen.getByTestId("week-picker")).getByRole("button", { name: "Week 9" }));
-    expect(screen.getByTestId("app-title").textContent).toBe("Prep · Week 9 · Heavy");
+    expect(screen.getByTestId("app-title").textContent).toBe("Prep · Week 9 · P8 · Heavy");
     expect(within(gymOf()).getByText(/^5 × \(2\+2\) · 157\.5 kg/)).toBeInTheDocument();
     // and back
     fireEvent.click(screen.getByRole("button", { name: "◀ BACK TO TODAY" }));
-    expect(screen.getByTestId("app-title").textContent).toBe("Prep · Week 1 · Build");
+    expect(screen.getByTestId("app-title").textContent).toBe("Prep · Week 1 · P1 · Build");
     expect(screen.getByTestId("now-label").textContent).toMatch(/^NOW · /);
   });
 

@@ -1,10 +1,9 @@
 /* ================================================================
    THE PROGRAM
 
-   One selector decides which program is running, and every screen —
-   the header, TODAY, WEEK, TRACK, PLAN, the timers — reads it from
-   here. `st.program` is the switch; `st.camp` is the old Camp Mode
-   flag, still honoured for settings saved before the switch existed.
+   The season decides which program a week runs — Prep, the camp, the
+   transition — and Optimal 8 Fighter is the classic, picked in
+   Settings when no fight is booked. These are their names.
    ================================================================ */
 
 export const PROGRAM_NAME = {
@@ -13,16 +12,6 @@ export const PROGRAM_NAME = {
   fighter: "OPTIMAL 8 FIGHTER",
   transition: "TRANSITION",
 };
-
-export function programOf(st) {
-  const p = st && st.program;
-  if (p === "prep" || p === "camp" || p === "transition") return p;
-  return st && st.camp ? "camp" : "fighter";
-}
-
-/* The settings patch that switches programs, so the old flag never
-   disagrees with the new one. */
-export const programPatch = (program) => ({ program, camp: program === "camp" });
 
 /* "[PROGRAM NAME] · WEEK n · [BLOCK]". The Fighter's weeks run inside a
    macrocycle, so its line is the name and the week. */

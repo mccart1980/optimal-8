@@ -1,12 +1,12 @@
 /* ================================================================
-   THE EDGE — six additions, on by default, and the one thing that
+   THE EDGE — five additions, on by default, and the one thing that
    puts them back.
 
    PREP and CAMP both carry it. Each program's data module says which
    weeks each addition runs in (prepEdge, campEdge); this module holds
    the words, the evening row, and the guardrail: two yellow mornings in
    the same week — Tuesday's jump check more than 7% under its four-week
-   average counts as one — and the six come off for the rest of that
+   average counts as one — and the five come off for the rest of that
    week. Not the program — the additions. They come back on the Monday,
    because the count starts again. The tendon gate runs beside it,
    separately from the colours.
@@ -16,10 +16,10 @@ export const EDGE_YELLOWS = 2;
 export const EDGE_OFF_LINE = "The edge is off this week: two yellow mornings";
 
 export const EDGE_INTRO =
-  "Six additions, on by default. None of them is grinding volume; every one is more high-quality exposure at a recovery cost the monitoring can see.";
+  "Five additions, on by default. None of them is grinding volume; every one is more high-quality exposure at a recovery cost the monitoring can see.";
 
 export const EDGE_GUARDRAIL =
-  "Two yellow mornings on the strap in the same week — resting heart rate five over, or HRV twelve percent under — and the six come off for the rest of that week. Not the program: the additions. Tuesday's speed and the Wednesday thirty go first; the clusters become straight sets; the contacts drop back; the rounds go back to six.";
+  "Two yellow mornings on the strap in the same week — resting heart rate five over, or HRV twelve percent under — and the five come off for the rest of that week. Not the program: the additions. Tuesday's speed and the Wednesday thirty go first; the clusters become straight sets; the contacts drop back; the rounds go back to six.";
 
 export const TENDON_GATE =
   "Separately from the strap: Achilles or knee at 3 or more on Sunday's check means no depth jumps the following week, and a hamstring at 3 or more means no flying sprints — a sore tendon doesn't show on HRV. And Tuesday's jump check more than 7% under its four-week average counts as a yellow, toward the two that take the Edge off.";
@@ -31,7 +31,6 @@ export const EDGE_ITEMS = {
     "More plyometric contacts in weeks 11–13 — box jumps 4 × 3 and side bounds 4 × 4; depth jumps held at 4 × 4.",
     "Rounds past the fight — seven in weeks 11–13.",
     "The Wednesday easy thirty — a second base session, walk or run, nose only.",
-    "Sauna four times a week in weeks 11–13 — Sunday, Tuesday, Thursday and Saturday evenings.",
   ],
   camp: [
     "Speed twice a week — three flying twenties on Tuesday after the shuttles, weeks 6–8.",
@@ -39,7 +38,6 @@ export const EDGE_ITEMS = {
     "More plyometric contacts in weeks 6–8 — box jumps 4 × 3 and side bounds 4 × 4; depth jumps held at 4 × 4.",
     "Rounds past the fight — eight in weeks 6 and 7, ten once in week 8.",
     "The Wednesday easy thirty — a second base session, walk or run, nose only.",
-    "Sauna four times a week in weeks 6–8 — Sunday, Tuesday, Thursday and Saturday evenings.",
   ],
 };
 
@@ -87,11 +85,11 @@ export const EASY_THIRTY = {
   why: "The second base session of the week — the hard sessions get their recovery from the easy ones. Easy, or it comes out.",
 };
 
-export const SAUNA_EDGE = "Fifteen to twenty minutes — the full heat-acclimation dose, four evenings this week: Sunday, Tuesday, Thursday and Saturday. The hydration schedule's sauna line every time. Never straight from the sauna into cold.";
 export const SAUNA_BASE = "Fifteen to twenty minutes, twice a week — Sunday and one weekday evening. Heat acclimation raises blood volume and endurance the way nothing else this cheap does. Never straight from the sauna into cold.";
 
-/* the evenings a sauna week puts the sauna on */
-export const saunaDays = (rx) => (!rx || !rx.sauna ? [] : rx.edge && rx.sauna4 ? ["tue", "thu", "sat", "sun"] : ["wed", "sun"]);
+/* the evenings a sauna week puts the sauna on: at most twice a week,
+   everywhere — Sunday and one weekday evening */
+export const saunaDays = (rx) => (!rx || !rx.sauna ? [] : ["wed", "sun"]);
 
 /* the cluster timer: two reps, twenty seconds on the pins, two more */
 export const clusterTimer = (sets, pct, lift) => ({

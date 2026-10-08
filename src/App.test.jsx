@@ -94,16 +94,16 @@ describe("Optimal 8", () => {
     await camp();
 
     nav("WEEK");
-    expect(await screen.findByText("The ten weeks — every number, every week, with dates")).toBeInTheDocument();
+    expect(await screen.findByText("The camp — every number, every week, with dates")).toBeInTheDocument();
     expect(screen.getByText("4–10 Jan")).toBeInTheDocument();
     expect(screen.getByText("22–28 Feb")).toBeInTheDocument();
     expect(screen.getByText("1–7 Mar")).toBeInTheDocument();
-    expect(screen.getByText("8–14 Mar")).toBeInTheDocument();
+    expect(screen.getByText("8–13 Mar")).toBeInTheDocument();
     expect(screen.queryByText("15–21 Mar")).not.toBeInTheDocument();
+    expect(screen.getAllByText("FIGHT-DAY REHEARSAL — Sunday 7 March").length).toBeGreaterThan(0);
 
-    expect(screen.getByText("Fight week — fight on Saturday 13 Mar")).toBeInTheDocument();
-    expect(screen.getByText("SAT 13 Mar")).toBeInTheDocument();
-    expect(screen.getByText(/Round six is a place you've already been/)).toBeInTheDocument();
+    expect(screen.getByText("Fight week — the fight on Saturday 2027-03-13")).toBeInTheDocument();
+    expect(screen.getByText(/The last round is a place you've already been/)).toBeInTheDocument();
   });
 
   it("puts the camp document on the PLAN tab", async () => {
@@ -301,82 +301,66 @@ describe("Optimal 8", () => {
   };
   const DAYNAMES = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 
-  it("moves camp day one from settings, and reads a mid-week date back to its Monday", async () => {
-    await mount({ camp: true, program: "camp", campStart: "2026-09-07", start: "2026-08-31" });
+  it("asks Fight booked?, re-plans from the next Monday, keeps the plan before, and says what changed in one line", async () => {
+    await mount({ program: "prep", start: "2026-08-31" });
     nav("SETTINGS");
-    const lab = await screen.findByText("Camp day one — the Monday week 1 starts on");
-    const field = lab.parentElement.querySelector("input");
-    expect(field.value).toBe("2026-09-07");
-    fireEvent.change(field, { target: { value: "2026-09-30" } });     // a Wednesday
-    await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-settings")).campStart).toBe("2026-09-28"));
+    expect(await screen.findByText("Fight booked?")).toBeInTheDocument();
+    expect(screen.queryByText("Program")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "YES" }));
+    fireEvent.change(screen.getByText("The date").parentElement.querySelector("input"), { target: { value: "2026-11-28" } });
+    fireEvent.change(screen.getByText("Rounds").parentElement.querySelector("input"), { target: { value: "3" } });
+    fireEvent.change(screen.getByText("Minutes a round").parentElement.querySelector("input"), { target: { value: "2" } });
+    fireEvent.click(screen.getByRole("button", { name: "LOW" }));
+    fireEvent.click(screen.getByRole("button", { name: "DURABILITY" }));
+    fireEvent.click(screen.getByRole("button", { name: /RE-PLAN FROM/ }));
+    await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-settings")).plans.length).toBe(2));
+    const st = JSON.parse(localStorage.getItem("o8s-settings"));
+    expect(st.plans[0].from).toBe("2026-08-31");
+    expect(st.plans[1].from).toBe("2026-09-14");
+    expect(st.plans[1].inputs).toMatchObject({ booked: true, fight: "2026-11-28", rounds: 3, mins: 2, rest: 60, fitness: "low", emphasis: "durability", weighIn: "before" });
+    expect(st.planNote).toMatch(/^fight booked no → yes · date .+ · rounds 6 → 3 · minutes 3 → 2 · fitness good → low · emphasis none → durability\. From /);
+    expect(screen.getAllByText(st.planNote).length).toBeGreaterThan(0);
   });
 
-  it("hands camp day one to the fight date when there is one", async () => {
-    await mount({ camp: true, program: "camp", fightDate: "2027-03-13" });
-    nav("SETTINGS");
-    const lab = await screen.findByText("Camp day one — the Monday week 1 starts on");
-    // it is shown, not typed into, and it says where it comes from
-    expect(lab.parentElement.querySelector("input")).toBeNull();
-    expect(within(lab.parentElement).getByText(/Mon,? 4 Jan/)).toBeInTheDocument();
-    expect(screen.getByText(/Move the fight date to move camp day one/)).toBeInTheDocument();
-  });
-
-  it("dates the season backwards from the fight", async () => {
+  it("dates the season from the plan: Prep fitted, test day, the camp, the fight, the transition", async () => {
     await season({ program: "prep", fightDate: "2027-03-13", start: "2026-09-28" });
-
     expect(await screen.findByText(/FIGHT · SAT,? 13 MAR/i)).toBeInTheDocument();
-    // prep hands over on the Saturday before the camp, and the camp is the ten weeks to the fight
-    expect(screen.getByText(/Prep ends \w{3},? 2 Jan/)).toBeInTheDocument();
-    expect(screen.getByText(/camp starts \w{3},? 4 Jan/)).toBeInTheDocument();
-    expect(screen.getByText(/14 prep weeks/)).toBeInTheDocument();
-
-    // the whole plan is on the strip: prep, test day, camp, fight, the two easy weeks
-    expect(screen.getByText("PREP WK 1")).toBeInTheDocument();
-    expect(screen.getByText("PREP WK 14")).toBeInTheDocument();
-    expect(screen.getByText("TEST DAY")).toBeInTheDocument();
-    expect(screen.getByText("CAMP WK 1")).toBeInTheDocument();
-    expect(screen.getByText("FIGHT")).toBeInTheDocument();
-    expect(screen.getByText("TRANSITION WK 2")).toBeInTheDocument();
+    expect(screen.getAllByText("P1 · ACCUMULATE").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("P14 · TEST WEEK").length).toBeGreaterThan(0);
+    expect(screen.getByText(/Test day \w{3},? 2 Jan/)).toBeInTheDocument();
+    // the week before the camp carries the pre-camp check
+    expect(screen.getAllByText("The pre-camp check — bloods and blood pressure").length).toBeGreaterThan(0);
+    expect(screen.getByText("F · FOUNDATION")).toBeInTheDocument();
+    expect(screen.getByText("FW · FIGHT WEEK")).toBeInTheDocument();
+    expect(screen.getByText(/^FIGHT \w{3},? 13 Mar/)).toBeInTheDocument();
+    expect(screen.getByText("T2 · TRANSITION")).toBeInTheDocument();
   });
 
-  it("truncates PREP from the front when there is less room", async () => {
-    // ten weeks of room instead of fourteen
+  it("fits Prep by the N table when there is less room", async () => {
+    // ten Prep weeks of room: P3 to P10, P13, P14
     await season({ program: "prep", fightDate: "2027-03-13", start: "2026-10-26" });
-    expect(await screen.findByText(/10 prep weeks/)).toBeInTheDocument();
-    expect(screen.getByText(/the first 4 of the calendar cut from the front/)).toBeInTheDocument();
-    expect(screen.getByText("PREP WK 10")).toBeInTheDocument();
-    expect(screen.queryByText("PREP WK 11")).not.toBeInTheDocument();
+    await screen.findAllByText("P3 · ACCUMULATE");
+    const labels = Array.from(document.querySelectorAll("span")).map((e) => e.textContent).filter((t) => /^(P\d+b?|F|F1) · /.test(t));
+    expect(labels.slice(0, labels.indexOf("F · FOUNDATION"))).toEqual(["P3 · ACCUMULATE", "P4 · ACCUMULATE", "P5 · ACCUMULATE", "P6 · INTENSIFY", "P7 · INTENSIFY",
+      "P8 · INTENSIFY", "P9 · INTENSIFY", "P10 · INTENSIFY", "P13 · CONVERT", "P14 · TEST WEEK"]);
   });
 
-  it("runs PREP in its sixteen-week form with no fight date", async () => {
+  it("runs Prep's 16-week cycle with no fight", async () => {
     await season({ program: "prep" });
-    expect(await screen.findByText("NO FIGHT DATE")).toBeInTheDocument();
-    expect(screen.getByText("PREP WK 16")).toBeInTheDocument();
-    expect(screen.queryByText("PREP WK 17")).not.toBeInTheDocument();
-    // the blocks the sixteen-week form names
-    ["ACCUMULATE", "INTENSIFY", "CONVERT", "TEST WEEK"].forEach((n) => expect(screen.getAllByText(n).length).toBeGreaterThan(0));
+    expect(await screen.findByText("NO FIGHT BOOKED")).toBeInTheDocument();
+    expect(screen.getAllByText("P4b · ACCUMULATE").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("P12b · CONVERT").length).toBeGreaterThan(0);
+    ["ACCUMULATE", "INTENSIFY", "CONVERT", "TEST WEEK"].forEach((n) => expect(screen.getAllByText(new RegExp(n)).length).toBeGreaterThan(0));
   });
 
-  it("re-dates the season when the fight date moves, and says which weeks changed", async () => {
-    await season({ program: "prep", fightDate: "2027-03-20", prevFight: "2027-03-13", start: "2026-09-28" });
-    expect(await screen.findByText(/The date moved/i)).toBeInTheDocument();
-    expect(screen.getByText(/weeks changed/)).toBeInTheDocument();
-    expect(screen.getByText(/camp starts \w{3},? 11 Jan/)).toBeInTheDocument();
-  });
-
-  /* ================================================================
-     ONE PROGRAM SELECTOR — the header, TODAY, WEEK, TRACK, PLAN and the
-     timers all read the program that is switched on
-     ================================================================ */
-
-  it("reads CAMP and the Fighter off the same selector, and the old camp flag with it", async () => {
+  it("reads the program off the season, and the classic Fighter off its own clock", async () => {
     vi.setSystemTime(new Date(2026, 8, 30, 9, 0, 0));
     await mount({ program: "camp", camp: true, campStart: "2026-09-28" });
-    await waitFor(() => expect(title()).toBe("CAMP · WEEK 1 · FOUNDATION"));
+    await waitFor(() => expect(title()).toBe("CAMP · WEEK 1 · F · FOUNDATION"));
     cleanup();
-    // settings saved before the switch existed: the camp flag alone still means CAMP
+    // settings saved before the season builder: the camp flag alone still means a camp
     await mount({ camp: true, program: "fighter", campStart: "2026-09-07" });
-    await waitFor(() => expect(title()).toBe("CAMP · WEEK 4 · BUILD"));
+    await waitFor(() => expect(title()).toBe("CAMP · WEEK 4 · B3 · BUILD"));
     cleanup();
     await mount({ start: "2026-09-14" });
     await waitFor(() => expect(title()).toBe("FIGHTER · WEEK 3 · BUILD"));

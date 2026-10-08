@@ -384,3 +384,26 @@ export function trend(rows, dir) {
     good: flat || delta == null ? null : dir === "down" ? delta < 0 : delta > 0,
   };
 }
+
+/* ================================================================
+   THE STRAP EXIT — the transition runs on until the strap says you're
+   back: resting heart rate within 3 beats of baseline and HRV within 10%
+   of its average, three mornings running. A week with no numbers in it
+   can't hold the transition open.
+   ================================================================ */
+export function strapBackBy(morning, st, isoDay) {
+  const m = morning || {};
+  const ds = Object.keys(m).filter((d) => d <= isoDay && d > addDaysIso(isoDay, -7) && (num(m[d].rhr) != null || num(m[d].hrv) != null)).sort();
+  if (!ds.length) return true;
+  const b = baseline(m, st);
+  const ok = (d) => { const rhr = num(m[d].rhr), hrv = num(m[d].hrv), avgH = rolling7(m, "hrv", d).avg;
+    return rhr != null && b.rhr != null && Math.abs(rhr - b.rhr) <= 3 && hrv != null && avgH != null && Math.abs(hrv - avgH) <= avgH * 0.1; };
+  let run = 0;
+  for (let i = 0; i < ds.length; i++) {
+    if (!ok(ds[i])) { run = 0; continue; }
+    run = run > 0 && addDaysIso(ds[i - 1], 1) === ds[i] ? run + 1 : 1;
+    if (run >= 3) return true;
+  }
+  return false;
+}
+function addDaysIso(s, n) { const p = String(s).split("-").map(Number); const d = new Date(Date.UTC(p[0], p[1] - 1, p[2] + n)); return d.toISOString().slice(0, 10); }

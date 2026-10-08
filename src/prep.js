@@ -155,15 +155,18 @@ wk(14, { ph: "test", sc: "2 × 2 @ 80%", sets: 2, reps: 2, pct: 80, base: 45, e1
   nasal: 1, burstTest: 1, tests: 1, tape: 1, photos: 1, pp: { sets: 3, reps: 3, pct: 70 },
   em: "TEST WEEK. Light. Tue burst decrement then easy · Wed 2 × 2 @ 80% · Thu nasal test then 4 × 3 at fight pace · Sat TEST DAY · Sun the 20-minute test, range and flexibility tests, tape, photos." });
 
+/* the size block runs all through Prep: full in weeks 1–5, half dose in
+   weeks 6–13, none in week 14 */
+Object.keys(R).forEach((d) => { R[d].size = d <= 5 ? "full" : d <= 13 ? "half" : null; });
 export const PREP_ROWS = R;
 
 /* THE EDGE, for a PREP week. On, the week runs every addition its row
    carries: the clusters in week 8; Tuesday's speed, more contacts (depth
-   jumps held at 4 × 4), seven rounds and the sauna four times in weeks
-   11–13; the Wednesday thirty every week. Off — two yellow mornings, or
+   jumps held at 4 × 4) and seven rounds in weeks 11–13; the Wednesday
+   thirty every week. The sauna is twice a week, Edge or not. Off — two yellow mornings, or
    the switch in settings — the base program. */
 export function prepEdge(rx, on) {
-  const o = Object.assign({}, rx, { edge: !!on, speed: false, sauna4: !!rx.edgeWin, thirty: !!on });
+  const o = Object.assign({}, rx, { edge: !!on, speed: false, thirty: !!on });
   if (!on) return o;
   if (rx.cluster) Object.assign(o, { ph: "cluster", sc: "5 × (2+2) @ 87–90%", sets: 5, reps: "2+2", pct: 87 });
   if (rx.edgeWin) Object.assign(o, { speed: true, box: [4, 3], bsets: 4, sim: rx.sim ? 7 : rx.sim });
@@ -197,6 +200,8 @@ export const BENCH_CUE = {
 export const boundAngle = (w) => (w % 2 === 0 ? "45" : "side");
 
 export const prepRx = (doc) => R[doc] || R[1];
+/* the size block's sets: three in the volume weeks, two after */
+export const sizeSets = (rx) => (rx.size === "half" ? 2 : 3);
 export const prepEmphasis = (doc) => (R[doc] || R[1]).em;
 /* even-numbered weeks, not the easy and test weeks: the long sled runs
    become repeat sled starts */
@@ -265,15 +270,16 @@ export const MOVE_ROW_OF = [0, 1, 1, 1, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 6];
 export const moveTonight = (rx, day) => (day === "sat" ? true : day === "wed" ? !!rx.move : false);
 
 export const CARB_TOPUP = "Carb top-up at 17:00 — the fuel app has the number. Only in the accumulation block.";
-export const SAUNA_PREP = "Fifteen to twenty minutes, Sunday and one weekday evening. Never straight from the sauna into cold.";
+export const SAUNA_PREP = "Fifteen to twenty minutes, twice a week — Sunday and one weekday evening — never more, and never without the hydration schedule's sauna line. Never straight from the sauna into cold.";
 
-/* ---------- the two easy weeks after a fight ---------- */
-export const TRANSITION_INTRO = "Two easy weeks. Base rides, the movement session, calisthenics at half sets, nothing above 70%, no sprints, no rounds. The adaptation from the camp lands here, and skipping it is how the next block starts flat.";
+/* ---------- the transition after a fight ---------- */
+export const TRANSITION_INTRO = "One week after a fight of 9 minutes or less, two after a longer one. The first three days: RANGE, the sit and walking. Then easy: base rides, the movement session, calisthenics at half sets, nothing above 70%, no sprints, no rounds. It runs on until the strap says you're back.";
 export const TRANSITION_RULES = [
-  "Nothing above 70% of a working weight, and every set two reps short.",
-  "No sprints, no depth jumps, no rounds, no maximal anything.",
-  "Calisthenics at half the sets, holds where an elbow or a wrist is complaining.",
-  "The base rides stay easy and nasal. RANGE and the sit do not stop.",
+  "The first three days: RANGE, the sit and walking. Nothing else.",
+  "Then easy: base rides, the movement session, calisthenics at half sets.",
+  "Nothing above 70%, no sprints, no rounds.",
+  "The morning after the fight, the one question from Iron Mind.",
+  "It runs on until the strap says you're back: resting heart rate within 3 beats of baseline and HRV within 10% of its average, three mornings running. Then the next fight's plan, or Prep.",
 ];
 
 /* ================================================================
@@ -307,6 +313,9 @@ export const PS = {
   /* ---------------- MONDAY ---------------- */
   mon: { n: "MONDAY", t: "Base · neck · hands · band deceleration catch · ring rows", m: (rx) => rx.base + 24, ac: C.moss, free: 0, box: 1,
     intro: "The low day in a high/low week, and it has to stay low. The base decides how fast you recover between exchanges, and it is the floor that lets Tuesday and Thursday be as hard as they are.", b: [
+    { L: "Y", n: "The Pre-Camp Check", m: 0, hide: (rx) => !rx.preCamp, rxLine: () => "this week — bloods and blood pressure",
+      items: [{ n: "Pre-camp check", s: "full blood count, lipids, liver and kidneys · blood pressure", cue: "A blood test — full blood count, lipids, liver and kidneys — and a blood-pressure reading. Book it with your GP or a private clinic and tick it off when it's done. A resting ECG once a year.", id: "p_precamp", k: "chk" }],
+      why: "Standing rule 5: before every camp, in the week before the camp's first Monday." },
     { L: "A", n: "Base — easy, nose only", m: (rx) => rx.base, star: 1, eng: 1, engKey: "base", baseTrend: "p_base_out",
       timer: (rx) => ({ kind: "z2", opt: { min: rx.base, label: "EASY — NOSE ONLY · 65–75% OF PEAK" }, title: "BASE" }),
       rxLine: (rx) => rx.base + " min at 65–75% of peak",
@@ -402,13 +411,13 @@ export const PS = {
       items: (rx) => [{ n: "Trap bar deadlift", s: rx.sc, cue: PREP_PHASE_CUE[rx.lift] + " Stand inside the bar, grip the handles, flat back, drive the floor away. Nothing passes over your body and a rep you are not sure of goes down, not up.", id: "tbdl", k: "wr", mk: "tbdl", pct: rx.pct, sets: rx.sets, reps: rx.reps }],
       w: (rx) => PREP_PHASE_CUE[rx.lift],
       why: (rx) => PREP_PHASE_WHY[rx.lift], tr: 1 },
-    { L: "L", n: "Bench Press", m: (rx) => (prepBench(rx.d) && prepBench(rx.d).ph === "contrast" ? 10 : 8), star: 1, hard: 1, mainLift: "bench", vel: "bench",
-      hide: (rx) => !prepBench(rx.d),
-      pres: (rx) => ({ sc: prepBench(rx.d).sc, pct: prepBench(rx.d).pct }),
+    { L: "L", n: "Bench Press", m: (rx) => (prepBench(rx.benchDoc || rx.d) && prepBench(rx.benchDoc || rx.d).ph === "contrast" ? 10 : 8), star: 1, hard: 1, mainLift: "bench", vel: "bench",
+      hide: (rx) => !prepBench(rx.benchDoc || rx.d),
+      pres: (rx) => ({ sc: prepBench(rx.benchDoc || rx.d).sc, pct: prepBench(rx.benchDoc || rx.d).pct }),
       rest: "Rest 2:30", rt: 150,
-      timer: (rx) => (prepBench(rx.d).ph === "contrast" ? { kind: "contrast", opt: { rounds: 3, rest: 150, items: ["BENCH PRESS — 2 @ 85%", "BENCH THROW ×3"] }, title: "BENCH CONTRAST" } : null),
-      rxLine: (rx) => prepBench(rx.d).sc,
-      items: (rx) => { const bp = prepBench(rx.d);
+      timer: (rx) => (prepBench(rx.benchDoc || rx.d).ph === "contrast" ? { kind: "contrast", opt: { rounds: 3, rest: 150, items: ["BENCH PRESS — 2 @ 85%", "BENCH THROW ×3"] }, title: "BENCH CONTRAST" } : null),
+      rxLine: (rx) => prepBench(rx.benchDoc || rx.d).sc,
+      items: (rx) => { const bp = prepBench(rx.benchDoc || rx.d);
         return [{ n: "Bench press", s: bp.sc, cue: BENCH_CUE[bp.ph] + " Warm-up sets: bar × 10, 40% × 5, 60% × 3, 75% × 2. Pins at chest height, no collars — you're alone.", id: "bench", k: "wr", mk: "bench", pct: bp.pct, sets: bp.sets, reps: bp.reps }]
           .concat(bp.ph === "contrast" ? [{ n: "Bench throw", s: "3 after each pair · rest 20 s before", cue: "Smith machine, at your peak-power load from the profile. Lower to the chest, press so hard the bar leaves your hands, catch it, reset.", id: "throw", k: "wr", mk: "bench", pct: rx.btPct, sets: 3, reps: 3 }] : []); },
       w: "A grinding rep ends the set.",
@@ -436,7 +445,7 @@ export const PS = {
       why: "The third neck dose of the week. In camp the neck is the cheapest insurance there is." }] },
 
   /* ---------------- THURSDAY ---------------- */
-  thu: { n: "THURSDAY", t: "Throws + Engine 2 — throws and landmine, split squat, the Spanish hold, the second session, neck, hands, band catch", m: (rx) => (rx.size ? 83 : 68), ac: C.brass, box: 1,
+  thu: { n: "THURSDAY", t: "Throws + Engine 2 — throws and landmine, split squat, the Spanish hold, the second session, neck, hands, band catch, the size block", m: (rx) => (rx.size === "half" ? 79 : rx.size && !rx.testWeek ? 86 : 68), ac: C.brass, box: 1,
     intro: "The third power dose, then the only loaded single-leg lift, the tendon hold, and the second conditioning session — always a different quality from Tuesday's.", b: [
     { L: "A", n: "Warm-up", m: 8, p: "P_WU", rxLine: () => "8 min · Tuesday's warm-up, then three easy throws of each at half effort",
       items: [{ n: "Three easy throws of each", s: "at half effort", cue: "A maximal rotational throw is the one movement in the morning nothing in the warm-up has rehearsed.", id: "p_easythrows", k: "chk" }] },
@@ -475,13 +484,17 @@ export const PS = {
     { L: "K", n: "Band Deceleration Catch", m: 2, rxLine: () => "2 × 8 per arm",
       items: [{ n: "Band deceleration catch", s: "2 × 8 per arm", cue: "As Monday: a light band anchored behind you at shoulder height, the end in your hand, in your stance. Punch the arm out fast; the band snatches it back — brake it hard and stop it dead in the last third of the return.", id: "p_decel_thu", k: "chk" }],
       why: "Twice a week, because the muscles that brake your arm have to keep up with your punching." },
-    { L: "I", n: "The Size Block", m: 15, hide: (rx) => !rx.size, rest: "Rest 60–75 s", rt: 70,
-      rxLine: () => "three sets each, a rep or two in the tank",
-      items: [{ n: "Lean-away lateral raise", s: "3 × 12–15", cue: "Hold the rack with one hand and lean away, raise a dumbbell out to shoulder height with the other.", id: "p_lat", k: "wr", sets: 3, reps: "12–15" },
-        { n: "Rear-delt fly", s: "3 × 15", cue: "Bent over flat, small dumbbells out to the sides, little fingers leading.", id: "p_rdf", k: "wr", sets: 3, reps: 15 },
-        { n: "Curls", s: "3 × 8–12", cue: "EZ-bar or dumbbells, elbows still, full stretch at the bottom, no swing.", id: "p_curl", k: "wr", sets: 3, reps: "8–12" },
-        { n: "Trap bar shrugs", s: "3 × 10–12", cue: "Stand inside the bar, shrug straight up, pause 1–2 seconds at the top, lower slow, never roll the shoulders.", id: "p_shrug", k: "wr", sets: 3, reps: "10–12" }],
-      why: "Five weeks is the block where size is being built — volume up, calories up, the lifts at 70–75%. It comes out at week 6." }] },
+    { L: "I", n: "The Size Block", m: (rx) => (rx.size === "half" ? 11 : 18), hide: (rx) => !rx.size || rx.testWeek, rest: "Rest 60–75 s", rt: 70,
+      rxLine: (rx) => (rx.size === "half" ? "two sets each — half dose" : "three sets each") + ", a rep or two in the tank",
+      items: (rx) => { const n = sizeSets(rx);
+        return [{ n: "Lean-away lateral raise", s: n + " × 12–15", cue: "Hold the rack with one hand and lean away, raise a dumbbell out to shoulder height with the other.", id: "p_lat", k: "wr", sets: n, reps: "12–15" },
+          { n: "Rear-delt fly", s: n + " × 15", cue: "Bent over flat, small dumbbells out to the sides, little fingers leading.", id: "p_rdf", k: "wr", sets: n, reps: 15 },
+          { n: "Curls", s: n + " × 8–12", cue: "EZ-bar or dumbbells, elbows still, full stretch at the bottom, no swing.", id: "p_curl", k: "wr", sets: n, reps: "8–12" },
+          rx.elbow4
+            ? { n: "Rope pushdowns", s: n + " × 10–12", cue: "An elbow at 4 or more on Sunday's check: rope pushdowns instead of the overhead extension this week. Elbows tucked, push the rope down, spread the ends, let it back up slowly.", id: "p_tri", k: "wr", sets: n, reps: "10–12" }
+            : { n: "Overhead triceps extension", s: n + " × 10–12", cue: "A rope on a high cable facing away, or one dumbbell held in both hands; elbows pointing at the ceiling, lower behind your head to a full stretch, extend. The triceps are most of the upper arm, and the stretched position grows them best.", id: "p_tri", k: "wr", sets: n, reps: "10–12" },
+          { n: "Trap bar shrugs", s: n + " × 10–12", cue: "Stand inside the bar, shrug straight up, pause 1–2 seconds at the top, lower slow, never roll the shoulders.", id: "p_shrug", k: "wr", sets: n, reps: "10–12" }]; },
+      why: "Prep is the everyday program, so it's where the look gets built: full dose in the volume weeks, half dose in the heavy and fast weeks so it's kept without costing the main lifts, nothing in test week. It never goes into a camp." }] },
 
   /* ---------------- FRIDAY ---------------- */
   fri: { n: "FRIDAY", t: "Sleep", m: 0, ac: C.moss, sleep: 1, free: 1,
@@ -589,8 +602,8 @@ export const PS = {
         { n: "Face pulls", s: "3 × 15", cue: "Rope on a high cable or the band on the door anchor, elbows high, squeeze the back of the shoulders.", id: "p_face", k: "wr", sets: 3, reps: 15 },
         { n: "Hands", s: "knuckle hold 3 × 20 s · band wrist extension 2 × 15", cue: "On your fists on a mat, the wrist dead straight.", id: "hands_sun", k: "wr", sets: 3, reps: 20 }],
       why: "The suitcase carry is your trunk learning to stay stiff when something heavy pulls you sideways; the back of the shoulder brakes every punch you throw." },
-    { L: "S", n: "Hammer Curls", m: 4, hide: (rx) => !rx.size, rest: "Rest 60 s", rt: 60, rxLine: () => "3 × 10",
-      items: [{ n: "Hammer curls", s: "3 × 10", cue: "Elbows still, no swing.", id: "p_ham", k: "wr", sets: 3, reps: 10 }] },
+    { L: "S", n: "Hammer Curls", m: 4, hide: (rx) => !rx.size || rx.testWeek, rest: "Rest 60 s", rt: 60, rxLine: (rx) => sizeSets(rx) + " × 10",
+      items: (rx) => [{ n: "Hammer curls", s: sizeSets(rx) + " × 10", cue: "Elbows still, no swing.", id: "p_ham", k: "wr", sets: sizeSets(rx), reps: 10 }] },
     { L: "I", n: "Weekly Check", m: 2, review: 1, rangeTests: 1, flexTests: 1,
       items: [{ n: "Bodyweight", s: "kg", id: "wr_bw", k: "out", u: "kg" }, { n: "Waist", s: "cm", id: "pwr_waist", k: "out", u: "cm" },
         { n: "Resting heart rate", s: "bpm", id: "wr_rhr", k: "out", u: "bpm" },
@@ -607,25 +620,29 @@ export const PS = {
 };
 
 /* ---------------- THE TRANSITION ---------------- */
+const WALK = { n: "THE FIRST THREE DAYS", t: "RANGE, the sit and walking", m: 30, ac: C.moss, b: [
+    { L: "Y", n: "The Pre-Camp Check", m: 0, hide: (rx) => !rx.preCamp, rxLine: () => "this week — bloods and blood pressure",
+      items: [{ n: "Pre-camp check", s: "full blood count, lipids, liver and kidneys · blood pressure", cue: "A blood test — full blood count, lipids, liver and kidneys — and a blood-pressure reading. Book it with your GP or a private clinic and tick it off when it's done. A resting ECG once a year.", id: "t_precamp", k: "chk" }],
+      why: "Standing rule 5: before every camp, in the week before the camp's first Monday." },
+  { L: "A", n: "Transition week", m: 30, rxLine: () => "a walk — then RANGE and the sit tonight",
+    items: [{ n: "Walking", s: "as long as it's easy", cue: "Three days of only RANGE, the sit and walking. Nothing heavier, nothing faster.", id: "t_walk", k: "chk" }] }] };
+const BASE_T = (n) => ({ n, t: "Base, easy", m: 45, ac: C.moss, b: [
+    { L: "Y", n: "The Pre-Camp Check", m: 0, hide: (rx) => !rx.preCamp, rxLine: () => "this week — bloods and blood pressure",
+      items: [{ n: "Pre-camp check", s: "full blood count, lipids, liver and kidneys · blood pressure", cue: "A blood test — full blood count, lipids, liver and kidneys — and a blood-pressure reading. Book it with your GP or a private clinic and tick it off when it's done. A resting ECG once a year.", id: "t_precamp", k: "chk" }],
+      why: "Standing rule 5: before every camp, in the week before the camp's first Monday." },
+  { L: "A", n: "Base — easy, nose only", m: 40, eng: 1,
+    timer: () => ({ kind: "z2", opt: { min: 40, label: "EASY — NOSE ONLY" }, title: "BASE" }), rxLine: () => "40 min at 65–75% of peak",
+    items: [{ n: "Average heart rate", s: "65–75% of peak", id: "c_base", k: "out", u: "bpm" }] }] });
 export const TS = {
-  mon: { n: "MONDAY", t: "Base, easy", m: 50, ac: C.moss, b: [
-    { L: "A", n: "Base — easy, nose only", m: 40, eng: 1,
-      timer: () => ({ kind: "z2", opt: { min: 40, label: "EASY — NOSE ONLY" }, title: "BASE" }), rxLine: () => "40 min at 65–75% of peak",
-      items: [{ n: "Average heart rate", s: "65–75% of peak", id: "c_base", k: "out", u: "bpm" }] },
-    { L: "B", n: "Ring Rows", m: 5, cal: "ringrow", rest: "Rest 60 s", rt: 60, rxLine: () => "half the sets, at your level",
-      items: [{ n: "Ring rows — at your level", s: "2 sets", id: "ringrow", k: "wr", sets: 2, reps: "at your level" }] }] },
+  mon: BASE_T("MONDAY"),
   tue: { n: "TUESDAY", t: "Sleep", m: 0, ac: C.moss, sleep: 1, free: 1, b: [] },
-  wed: { n: "WEDNESDAY", t: "Easy lifting — nothing above 70%", m: 45, ac: C.moss, b: [
+  wed: { n: "WEDNESDAY", t: "Calisthenics at half sets", m: 20, ac: C.moss, b: [
     { L: "A", n: "Warm-up", m: 6, p: "GEN" },
-    { L: "B", n: "Trap Bar Deadlift", m: 12, mainLift: "tbdl", pres: () => ({ sc: "2 × 5 @ 70%", pct: 70 }),
-      rest: "Rest 2:00", rt: 120, rxLine: () => "2 × 5 @ 70%",
-      items: [{ n: "Trap bar deadlift", s: "2 × 5 @ 70%", cue: "Two reps short of hard on every set.", id: "tbdl", k: "wr", mk: "tbdl", pct: 70, sets: 2, reps: 5 }] },
+    { L: "B", n: "Ring Rows", m: 5, cal: "ringrow", rest: "Rest 60 s", rt: 60, rxLine: () => "half the sets, at your level",
+      items: [{ n: "Ring rows — at your level", s: "2 sets", id: "ringrow", k: "wr", sets: 2, reps: "at your level" }] },
     { L: "C", n: "Ring Dips", m: 6, cal: "ringdip", rest: "Rest 90 s", rt: 90, rxLine: () => "half the sets, at your level",
       items: [{ n: "Ring dips — at your level", s: "2 sets", id: "ringdip", k: "wr", sets: 2, reps: "at your level" }] }] },
-  thu: { n: "THURSDAY", t: "Base, easy", m: 45, ac: C.moss, b: [
-    { L: "A", n: "Base — easy, nose only", m: 40, eng: 1,
-      timer: () => ({ kind: "z2", opt: { min: 40, label: "EASY — NOSE ONLY" }, title: "BASE" }), rxLine: () => "40 min at 65–75% of peak",
-      items: [{ n: "Average heart rate", s: "65–75% of peak", id: "c_base", k: "out", u: "bpm" }] }] },
+  thu: BASE_T("THURSDAY"),
   fri: { n: "FRIDAY", t: "Sleep", m: 0, ac: C.moss, sleep: 1, free: 1, b: [] },
   sat: { n: "SATURDAY", t: "The movement session and a walk", m: 60, ac: C.violet, free: 1, b: [
     { L: "A", n: "Easy walk or ride", m: 40, eng: 1,
@@ -641,4 +658,5 @@ export const TS = {
 };
 
 export const prepSess = (day) => PS[day] || null;
-export const transitionSess = (day) => TS[day] || null;
+/* the first three days after the fight are walking days */
+export const transitionSess = (day, rx) => (rx && rx.w === 1 && (day === "mon" || day === "tue" || day === "wed") ? Object.assign({}, WALK, { n: { mon: "MONDAY", tue: "TUESDAY", wed: "WEDNESDAY" }[day] }) : TS[day] || null);

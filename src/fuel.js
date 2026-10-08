@@ -450,17 +450,18 @@ export const mlOf = (r, checks) => (r.check ? ((checks || {})[r.check] === "dark
 
 /* ================================================================
    FIGHT DAY — WEIGH-IN TO BELL. The session start is the bell; every
-   row runs back from it. With the making-weight switch on, the hours
-   between the scale and the bell put the weight back: 1.25–1.5 litres
-   for every kilo lost with a sachet in every litre, and low-fibre carbs
-   every hour or two until three hours out. Without it, the day eats as
-   a normal Saturday. Then the same for both: the last proper meal three
+   row runs back from it. No water cuts, ever. Weighed in the day before,
+   the hours between the scale and the bell are for topping up:
+   1.25–1.5 litres for every kilo under your normal morning weight with
+   a sachet in every litre, and low-fibre carbs every hour or two until
+   three hours out. Weighed in on the day, the day eats as a normal
+   Saturday and drinks to the alarms. Then the same for both: the last proper meal three
    hours out, half the bottle and a banana an hour out, caffeine an hour
    out, and sips with electrolytes through the warm-up and the rounds.
    Bicarbonate is for the March fight only, after a trial.
    ================================================================ */
 export const FIGHT_DAY = {
-  rehydrate: "Drink 1.25–1.5 litres for every kilo lost, an electrolyte sachet in every litre, sipped steadily, not gulped.",
+  rehydrate: "Drink 1.25–1.5 litres for every kilo you're under your normal morning weight, an electrolyte sachet in every litre, sipped steadily, not gulped. No water cuts, ever — any weight comes off through food, in the weeks before.",
   caffeine: "About 240 mg — a strong coffee or a caffeine tablet. Only with blood pressure in the normal range, and only after using it before a hard session in camp; never for the first time on fight night. The noon caffeine rule doesn't apply tonight.",
   bicarb: "The March fight only, and only after a trial on a Sunday simulation in camp — the dose and timing trialled. The dose is large and stomach upset is common; fight night is no place to find out.",
   sips: "Sips of water with electrolytes through the warm-up and between rounds, nothing else.",
@@ -470,12 +471,12 @@ function fightDayPlan(o) {
   const feed = (id, t, b, extra) => rows.push(Object.assign({ id, kind: "feed", t, b, base: b, key: b, slot: null, big: false, pickId: null, blk: B[b], crit: 0, note: "", sub: "", ml: 0 }, extra || {}));
   const water = (id, t, ml, n, extra) => rows.push(Object.assign({ id: "w-" + id, kind: "water", t, ml, n }, extra || {}));
   water("wake", wake + 1, 500, "500 ml water on waking", { cre: 1 });
-  if (o.cut) {
-    water("rehyd", wake + 5, 0, "Put the weight back — 1.25–1.5 litres for every kilo lost", { sachet: "A SACHET IN EVERY LITRE", note: FIGHT_DAY.rehydrate });
+  if (o.weighIn !== "day") {
+    water("rehyd", wake + 5, 0, "Top up — 1.25–1.5 litres for every kilo under your normal morning weight", { sachet: "A SACHET IN EVERY LITRE", note: FIGHT_DAY.rehydrate });
     let n = 0;
     for (let t = wake + 30; t <= last - 60; t += 120) feed("f-fcarb" + (n ? "-" + n : ""), t, "fcarb", { ml: 0, note: n ? "" : "Every hour or two until three hours out." }), n++;
   } else {
-    feed("f-breakfast", wake + 15, "porridgeb", { slot: "breakfast", ml: 300, wnote: "300 ml water with it.", note: "A normal Saturday until three hours out — drink to the alarms." });
+    feed("f-breakfast", wake + 15, "porridgeb", { slot: "breakfast", ml: 300, wnote: "300 ml water with it.", note: "Weighed in on the day: eat the day as a normal Saturday and drink to the alarms." });
     if (tMin("11:30") <= last - 60) feed("f-lunch", tMin("11:30"), "batchbig", { slot: "lunch", ml: 500, wnote: "500 ml water with it." });
     if (tMin("14:30") <= last - 60) feed("f-lunch-1", tMin("14:30"), "batch", { slot: "lunch", ml: 500, wnote: "500 ml water with it." });
   }
