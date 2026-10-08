@@ -48,9 +48,11 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **FLYING SPRINTS** — Jog and build up speed over 10–15 metres, then sprint the next 20 metres absolutely flat out. Walk back and rest fully, 2½–3 minutes. Also called flying 20s.
 
-**LOADED DROP JUMPS** — Hold a hex dumbbell in each hand, 8–12 kg. Dip fast into a quarter squat, let the dumbbells drop straight down, and jump as high as you can empty-handed. Land soft and step away from the weights.
+**DROP LANDINGS** — Step off a 20–30 cm box — step, don't jump — and land on both feet, soft and silent: hips back, knees in line with your toes. Hold the landing dead still for two seconds. No jump: this teaches your knees and tendons to absorb.
 
-**DEPTH JUMPS** — Step off a 30–40 cm box — step, don't jump. The instant your feet touch the floor, jump straight up as high as you can. Spend as little time on the floor as possible.
+**LOW-BOX DEPTH JUMPS** — Step off a 20 cm box. The instant your feet touch the floor, jump straight up as high as you can, spending as little time on the floor as possible. Land soft. The step between drop landings and full depth jumps.
+
+**DEPTH JUMPS** — Step off a 30–40 cm box — step, don't jump. The instant your feet touch the floor, jump straight up as high as you can. Spend as little time on the floor as possible. Only once the low-box version is clean.
 
 **SIDE BOUNDS** — Stand on one leg, jump sideways as far as you can, land on the other leg and hold it dead still for two seconds. On 45° weeks, jump forward and across at an angle instead. In the fast weeks there's no hold — bounce straight back the other way.
 
@@ -76,7 +78,7 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **BENCH PRESS** — Lie on the bench, feet flat, shoulder blades squeezed together. Lower the bar to your chest and press it back up. Paused: hold it still on your chest for two seconds. Pins at chest height, no collars.
 
-**BENCH THROW** — On a Smith machine with a light bar: lower it to your chest, then press so hard the bar leaves your hands. Catch it and reset. No Smith machine: throw a 4–6 kg medicine ball off your chest at a wall.
+**BENCH THROW** — On a Smith machine with its safety stops set so the bar rests on them a couple of centimetres above your chest. Light bar: lower it to the stops, throw it so hard it leaves your hands, catch it with soft elbows, and lower it back to the stops. A missed catch lands on the stops, never on you. No Smith machine with adjustable stops: throw a 4–6 kg medicine ball off your chest at a wall.
 
 **BENCH CONTRAST** — Two heavy bench presses, rest twenty seconds, then three bench throws. The heavy reps wake the muscles up so the throws go faster.
 
@@ -84,7 +86,7 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **CLUSTER SETS** — Two reps, rest the bar on the pins or the floor for twenty seconds, two more reps. That's one set. It lets you do more heavy reps at full speed.
 
-**MAX SINGLE** — Work up to the heaviest single lift of the day in small jumps, following the app's ramp. Pins set, every time.
+**TOP TRIPLE** — After the warm-up ramp, do sets of three, adding 2.5–5% each time, until a set of three is hard but you could have done one or two more. Stop there. Safety pins set, always. The app turns it into your working max. Never a true max.
 
 **SPLIT SQUAT, REAR FOOT ELEVATED** — Back foot up on a bench behind you, a dumbbell in each hand. Drop straight down until your back knee nearly touches the floor, then drive up through your front heel. Weaker leg first.
 
@@ -188,13 +190,13 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **THRESHOLD** — Eight minutes at the hardest pace you could hold for half an hour (short phrases only), three minutes easy, then eight minutes again.
 
-**ROUNDS ON THE ERG** — Three-minute rounds on the bike or SkiErg at the pace you could hold for the whole fight, one minute's rest between. Log the first and the last round.
+**ROUNDS ON THE ERG** — Three-minute rounds on the bike or SkiErg at the pace you could hold for the whole fight, one minute's rest between. Log the first and the last round. Rounds past your fight stop early if one drops below three-quarters of round one, or your posture goes.
 
 **FIGHT-PACE ROUNDS** — Four three-minute rounds at fight pace, one minute's rest. Sharp, then stop.
 
-**THE ROUNDS (FIGHT SIMULATION)** — Your fight, on the machines. Each round is split into thirds — SkiErg, then assault bike, then medicine-ball slams (or the bag) — at your fight's round length, with your fight's rest between rounds. A minute each for 3-minute rounds, forty seconds each for 2-minute rounds. Log the first round and the last.
+**THE ROUNDS (FIGHT SIMULATION)** — Your fight, on the machines. Each round is split into thirds — SkiErg, then assault bike, then medicine-ball slams (or the bag) — at your fight's round length, with your fight's rest between rounds. A minute each for 3-minute rounds, forty seconds each for 2-minute rounds. Log the first round and the last. Your fight's rounds are always finished; rounds past them stop early if one drops below three-quarters of round one, or your posture goes.
 
-**THE DOUBLE** — The ceiling for a short fight: one round more than your fight, five minutes easy, then your fight's rounds again. Same stations, same rest. Log the first round and the last.
+**THE DOUBLE** — The ceiling for a short fight: one round more than your fight, five minutes easy, then your fight's rounds again. Same stations, same rest. Log the first round and the last. The stop rule covers everything past your fight's rounds.
 
 **THE FIGHT-DAY REHEARSAL** — Six days before the fight: get up when you'll get up on fight day, eat what you'll eat when you'll eat it, do the warm-up you'll do, then your fight's rounds at fight pace, at the hour the fight is on, with the corner minute in every rest. Anything that goes wrong today, fix before the day.
 
@@ -279,4 +281,4 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **THE MOVEMENT SESSION** — Thirty minutes at home, slow and controlled: breathe down, loaded joint circles, a slow Turkish get-up, the squat flow, the hip flow and the shoulder flow. The app times each move.
 
-**TRANSITION WEEK** — The week or two after a fight. Three days of only RANGE, the sit and walking; then easy base rides, the movement session and calisthenics at half sets. Nothing heavier than 70%, no sprints, no rounds.
+**TRANSITION WEEK** — The week or two after a fight. Three days of only RANGE, the sit and walking; then easy base rides, the movement session and calisthenics at half sets. Nothing heavier than 70%, no sprints, no rounds. First, if you were stopped or dropped, or have any headache, fogginess, dizziness or sensitivity to light: a doctor clears you before any training.

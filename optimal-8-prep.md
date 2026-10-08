@@ -4,7 +4,7 @@
 
 Optimal 8 Fighter's sessions, your calisthenics, RANGE, the tendon block, Iron Mind underneath — reorganised into three blocks with one job each instead of fourteen weeks of the same week, loaded by the bar speed on your wrist instead of by percentages of a stale number, gated each morning by the numbers on the strap, with the engine progressed on the erg readings, and with the two things you asked for built in where they belong: a movement session twice a week through the build and once a week after, and a size block that runs all through Prep — full dose in the build, half dose after — because Prep is the everyday program and the look belongs here, not in a camp.
 
-**The three blocks.** Weeks 1–5 ACCUMULATE — volume, base, tissue, size, movement; week 5 lighter, with tests. Weeks 6–10 INTENSIFY — heavy, paused then fast, the max single in week 9, week 10 easy with tests. Weeks 11–14 CONVERT — contrast, reactive jumps, top speed, repeat bursts, rounds at fight rest, and the test week at the end. Then the camp.
+**The three blocks.** Weeks 1–5 ACCUMULATE — volume, base, tissue, size, movement; week 5 lighter, with tests. Weeks 6–10 INTENSIFY — heavy, paused then fast, the top triples in week 9, week 10 easy with tests. Weeks 11–14 CONVERT — contrast, reactive jumps, top speed, repeat bursts, rounds at fight rest, and the test week at the end. Then the camp.
 
 **Honest ceiling, stated up front.** Against running Optimal 8 as it stands, this adds perhaps five to ten percent to where the camp starts and a materially better aerobic base. It is not magic. The best programs are simple and executed without a missed sleep, a skipped feed or a fudged easy week; the program is a third of the result.
 
@@ -19,15 +19,15 @@ Optimal 8 Fighter's sessions, your calisthenics, RANGE, the tendon block, Iron M
 | 3 | 12–18 Oct | Accumulate | Slow lowering 4 × 6 @ 72%. Base 55. Tue bursts · Thu threshold · Sun 6 × 3, 90 s. |
 | 4 | 19–25 Oct | Accumulate | Normal tempo 5 × 5 @ 75%. Base 60. Tue 4 × 4 · Thu 40-s repeats 2 × 6 · Sun 6 × 3, 90 s. |
 | 5 | 26 Oct–1 Nov | Accumulate — lighter, tests | 3 × 5 @ 70%. Base 45. Tue retests then easy · Thu nasal test then easy · Sun 20-minute test · range and flexibility tests · tape · photos. |
-| 6 | 2–8 Nov | Intensify | Paused 4 × 4 @ 80%. Base 45. Tue 4 × 4 · Thu bursts · Sun 6 × 3, 60 s. Sauna starts. Bench press in; ring dips rotate out. |
+| 6 | 2–8 Nov | Intensify | Paused 4 × 4 @ 80%. Base 45. Tue 4 × 4 · Thu bursts · Sun 6 × 3, 60 s. Sauna starts. Bench press in; ring dips rotate out. Low-box depth jumps replace the drop landings. |
 | 7 | 9–15 Nov | Intensify | Paused 4 × 3 @ 84%. Tue bursts · Thu threshold · Sun 6 × 3, 60 s. |
 | 8 | 16–22 Nov | Intensify | Fast in clusters 5 × (2+2) @ 87–90%. Tue 4 × 4 · Thu 40-s repeats 2 × 6 · Sun 6 × 3, 60 s. |
-| 9 | 23–29 Nov | Intensify — MAX SINGLE | Wed trap bar max, Sat squat max, Sun bench max first thing; then 2 × 2 @ 88%. Push press skipped. Tue bursts · Thu bursts · Sun 6 × 3, 60 s. |
+| 9 | 23–29 Nov | Intensify — TOP TRIPLES | Wed trap bar and bench top triples, Sat squat top triple, each then 2 × 2 @ 85% of the new working max. Push press skipped. Tue bursts · Thu bursts · Sun 6 × 3, 60 s. |
 | 10 | 30 Nov–6 Dec | EASY + TESTS | 2 × 3 @ 65% fast; working weights reset; profiles redrawn. Tue retests then easy · Thu nasal test then easy · Sun 6 × 3 scored · range and flexibility tests · tape · photos. |
 | 11 | 7–13 Dec | Convert | Contrast 2 × 2 @ 85% + the circuit; depth jumps begin. Tue bursts · Thu 40-s repeats 2 × 6 · Sun 6 × 3, 60 s. |
 | 12 | 14–20 Dec | Convert | Contrast 2 × 2 @ 87% + circuit. Tue 4 × 4 · Thu rounds on the erg 6 × 3 · Sun 6 × 3, 60 s. |
 | 13 | 21–27 Dec | Convert — Christmas week, volume down 25% | Contrast 2 × 2 @ 88% + circuit, 2 rounds. Tue bursts 1 × 8 · Thu 40-s repeats × 6 · Sun 6 × 3 scored — the last read. |
-| 14 | 28 Dec–3 Jan | TEST WEEK | Light. Tue burst decrement then easy · Wed 2 × 2 @ 80% · Thu nasal test then 4 × 3 at fight pace · Sat 2 Jan TEST DAY · Sun 3 Jan the 20-minute test, range and flexibility tests, tape, photos. |
+| 14 | 28 Dec–3 Jan | TEST WEEK | Light. Tue burst decrement then easy · Wed trap bar and bench top triples · Thu nasal test, then the 20-minute test · Sat 2 Jan TEST DAY — speed and power, then the squat top triple · Sun 3 Jan easy hour, range and flexibility tests, tape, photos. |
 | — | 4 Jan–13 Mar | THE CAMP | Foundation 4–10 Jan · Build 11–31 Jan · Easy + tests 1–7 Feb · Peak 8–28 Feb · Sharpen 1–7 Mar · Fight week 8–13 Mar · FIGHT Saturday 13 March. Working weights reset off test day; the foundation block is one week, not two. If the date moves, the last three rows move with it. |
 
 Sled runs on Wednesday: weeks 1–5: 4 · weeks 6–9 and 11–13: 5 · weeks 10 and 14: 3. Nordics on Wednesday: 3 × 4 in week 1, 3 × 5 from week 2, 2 × 3 in weeks 5, 10 and 14. Sprints on Saturday: build-ups and 3 runs at 90% in week 1, then 4, 5, 5 · weeks 5, 10 and 14 at 90% · weeks 6–9 and 11–13: 5 runs.
@@ -38,13 +38,13 @@ Sled runs on Wednesday: weeks 1–5: 4 · weeks 6–9 and 11–13: 5 · weeks 10
 
 The calendar gives percentages because you need a number to load the bar with. The watch decides whether the number was right. Three rules, and they replace the fast-bar rule for the whole preparation.
 
-**1 · The first work set sets the day.** Every main lift has a velocity target for its phase, from your own profile (below). Load the bar to the calendar's percentage and do the first work set. Mean velocity within 0.05 m/s of target: stay. More than 0.05 slower: take 5% off for the remaining sets — the strap and the watch have just told you something the daily check missed. More than 0.05 faster: add 2.5% for the remaining sets, and the same load next week.
+**1 · The first work set sets the day.** Every main lift has a velocity target for its phase, from your own profile (below). Load the bar to the calendar's percentage and do the first work set. Read the average of its two fastest reps. Within 0.05 m/s of target: stay. More than 0.05 slower: take 5% off for the remaining sets — one slow reading is enough to come down. More than 0.05 faster: stay at today's load; if the same lift comes up more than 0.05 fast again next session, add 2.5% from then on. Coming down on one reading is safe; going up on one reading is chasing the watch's noise. Same setup every time — the watch on the same wrist, the same depth, the same tempo — or the numbers don't compare.
 
 **2 · The set ends at the threshold.** Strength sets: the set is over when a rep is 20% slower than the set's first rep. Fast and contrast sets: 10%. The watch alerts; you rack it. Rep counts are ceilings.
 
-**3 · No maxes except week 9 and test day.** Two max exposures in fourteen weeks, both with pins, both after a warm-up ramp, both followed by a reset of every working weight.
+**3 · No true maxes, ever.** The heaviest work is a top triple — a set of three that's hard but leaves one or two reps in you — in week 9 and in test week, on pins, after the warm-up ramp. That weight × 1.08 resets the working max. For a fighter a one-rep max is only a number to set loads with; the top triple and your bar-speed profile set them without the risk of failing a lift alone.
 
-**Your profile, week 1.** On Wednesday of week 1, after the sled: trap bar at five loads — 50, 60, 70, 80, 85% of your current working max — two reps each, fast, the watch recording. On Saturday, the squat the same way, then bench and push press at four loads. Spleeft draws the line for each lift; that line is what the targets below read off. Redraw the profiles in week 10 after the max singles. The numbers below are typical; yours replace them the day the profile is drawn.
+**Your profile, week 1.** On Wednesday of week 1, after the sled: trap bar at five loads — 50, 60, 70, 80, 85% of your current working max — two reps each, fast, the watch recording. On Saturday, the squat the same way, then bench and push press at four loads. Spleeft draws the line for each lift; that line is what the targets below read off. Redraw the profiles in week 10 after the top triples. The numbers below are typical; yours replace them the day the profile is drawn.
 
 **The ballistic loads.** The bench throw and the trap bar jump are loaded for power, not by feel. In the week-1 and week-10 profiles, do both at four loads — the bench throw at about 20, 30, 40 and 50% of your bench, the trap bar jump at 10, 20, 30 and 40% of the trap bar working weight — two reps each, the watch recording. Power is load times speed: the load with the highest number is the one you use until the next profile.
 
@@ -52,7 +52,7 @@ The calendar gives percentages because you need a number to load the bar with. T
 |---|---|---|---|---|
 | Accumulate, 70–75% | 0.65–0.75 m/s | 0.60–0.70 | 0.50–0.60 | 0.90–1.10 |
 | Intensify, 80–87% | 0.40–0.55 | 0.40–0.50 | 0.30–0.40 | 0.70–0.85 |
-| Max single, 100% | 0.25–0.30 | 0.25–0.30 | 0.15–0.20 | 0.50 |
+| Top triple, about 90% (first rep) | 0.35–0.42 | 0.33–0.40 | 0.22–0.28 | — |
 | Convert, contrast 85–88% | 0.40–0.45, the jumps fast | 0.40–0.45 | 0.30–0.35 | 0.70 |
 
 ---
@@ -69,7 +69,7 @@ Two yellows in a row on HRV alone: Tuesday's or Thursday's hard session becomes 
 
 **The jump check — Tuesday.** Three countermovement jumps after the warm-up, the best height logged. More than 7% under your four-week average counts as a yellow. It reads tired legs and a tired nervous system, which the strap can't.
 
-**The tendon gate — Sunday.** Achilles or knee at 3 or more out of 10 on the weekly check: no depth jumps the following week — loaded drop jumps instead. Hamstring at 3 or more: no flying sprints the following week. It runs separately from the colours, because a sore tendon doesn't show on HRV.
+**The tendon gate — Sunday.** Achilles or knee at 3 or more out of 10 on the weekly check: no reactive jumps the following week — no drop landings, no depth jumps — while the Spanish squat hold and the Achilles hold carry on, because holds are what a sore tendon needs. Hamstring at 3 or more: no flying sprints the following week, and the Nordics only if they're pain-free. When it's back under 3, the jumps restart one stage down for a week (depth jumps → low-box depth jumps → drop landings). And at any time: a jump, sprint or hold that hurts more than 3 out of 10 while you're doing it, or leaves the tendon worse the next morning, stops for that day. Still there after two weeks: a physio looks at it. The gate runs separately from the colours, because a sore tendon doesn't show on HRV.
 
 ---
 
@@ -82,7 +82,7 @@ Every conditioning session has a number from last time, and the number is the ta
 - **40-second repeats:** the output of the last repeat against the first — the decrement. It should shrink.
 - **Repeat bursts:** the sixteenth burst against the first. Same.
 - **Threshold:** the output held for the two eights.
-- **Rounds:** the fade — round six over round one — scored in weeks 2, 10 and 13. From 90-second rest in accumulation to 60 from week 6.
+- **Rounds:** the fade — round six over round one — scored in weeks 2, 10 and 13. From 90-second rest in accumulation to 60 from week 6. Rounds past the fight are capacity work, not punishment: if one drops below 75% of round one's output, or your posture goes, that round is the last.
 - **The 20-minute test:** weeks 1, 5 and 14. Distance and peak heart rate.
 - **Recovery heart rate:** the drop at 60 seconds on every settle. It should grow.
 
@@ -105,7 +105,7 @@ The camp inherits every one of these numbers as its week-1 starting line.
 
 About seven hours in the gym a week and three and a half at home in the build; seven and three after. Weeks 5, 10 and 14 are lighter.
 
-**The rules that don't change.** No maxes except week 9 and test day. The output rule: every explosive set ends the moment the output drops. The velocity rule on every main lift. Easy means easy — the base and the easy hour at 65–75% of peak, nose only. Cold water out; sauna in from week 6, twice a week, never more. Bed by half past eight, Sunday to Wednesday. Nothing new after week 10 — the camp must know every exercise in it before it starts.
+**The rules that don't change.** No true maxes, ever — the heaviest work is a top triple, in week 9 and test week, on pins. The output rule: every explosive set ends the moment the output drops. The velocity rule on every main lift. Easy means easy — the base and the easy hour at 65–75% of peak, nose only. Cold water out; sauna in from week 6, twice a week, never more. Bed by half past eight, Sunday to Wednesday. Nothing new after week 10 — the camp must know every exercise in it before it starts.
 
 ---
 
@@ -115,11 +115,11 @@ About seven hours in the gym a week and three and a half at home in the build; s
 
 **Week 5 (26 Oct–1 Nov, lighter):** Tuesday — burst decrement, broad jump, throw, BOLT. Thursday — nasal threshold. Sunday — the 20-minute test instead of the rounds; range and flexibility tests; tape; photos.
 
-**Week 10 (30 Nov–6 Dec, easy):** working weights reset off week 9's max singles, and the profiles redrawn Wednesday and Saturday. Tuesday — burst decrement, broad jump, throw, BOLT. Thursday — nasal threshold. Sunday — 6 × 3 scored; range and flexibility tests; tape; photos.
+**Week 10 (30 Nov–6 Dec, easy):** working weights reset off week 9's top triples, and the profiles redrawn Wednesday and Saturday. Tuesday — burst decrement, broad jump, throw, BOLT. Thursday — nasal threshold. Sunday — 6 × 3 scored; range and flexibility tests; tape; photos.
 
-**Week 14 — TEST DAY, Saturday 2 January:** most explosive first, full recovery between everything. Flying 20 m, three attempts, timed. Depth jump, three attempts, filmed. Diagonal throw and shot-put throw, three per side. Back squat max single, pins. Bench max single, pins, no collars. Trap bar heavy triple × 1.08. Tape and bodyweight. Sunday 3 January — the 20-minute test; the range and flexibility tests. The camp's working weights come off these numbers on Monday.
+**Week 14 — TEST WEEK, 28 December to 3 January**, spread so no single day carries everything. Tuesday 29 — the burst decrement, then easy. Wednesday 30 — the trap bar and bench top triples: sets of three going up until one is hard but leaves one or two in you, pins set; each × 1.08 is the new working max. Thursday 31 — the nasal threshold, then the 20-minute test. **Saturday 2 January — TEST DAY:** most explosive first, full recovery between everything. Flying 20 m, three attempts, timed. Depth jump, three attempts from the box you've trained on, filmed. Diagonal throw and shot-put throw, three per side. Then the squat top triple. Tape and bodyweight. Sunday 3 January — the easy hour, the range and flexibility tests, the photos. The camp's working weights come off these numbers on Monday.
 
-**Targets over fourteen weeks:** working weights +8–12% · jump and throw +8% · 20-minute distance +10–12% · fade 8–12 points better · burst decrement halved · recovery heart rate up 10 beats · BOLT +10 seconds · every range and flexibility test moved, the deep squat and the 90/90 passed.
+**Targets over fourteen weeks:** working weights +8–12% · jump and throw +8% · 20-minute distance +10–12% · fade 8–12 points better · burst decrement halved · recovery heart rate up 10 beats · BOLT +10 seconds · every range and flexibility test moved, the deep squat and the 90/90 passed. Typical responses, not promises — yours will be your own, and the numbers are how you find out.
 
 ---
 
@@ -223,13 +223,13 @@ Drive hold, 10 seconds: load the sled so it won't move — or use a wall — and
 
 Stand inside the bar, grip the handles, flat back, drive the floor away. Nothing passes over your body and a rep you're not sure of goes down, not up — the one heavy lift safe to do alone at this hour.
 
-The phases, block by block: **SLOW LOWERING (weeks 1–3)** — lower the bar to the floor over a full five seconds, touch, and drive up fast. Builds tissue and the tendon stiffness sprinting needs; sore in week 1, then not. **NORMAL TEMPO (weeks 4–5)** — down under control, up fast, the volume at its highest. **PAUSED (weeks 6–7)** — lower normally, stop dead an inch off the floor for three seconds, then drive. **FAST, IN CLUSTERS (week 8)** — five sets of two-plus-two at 87–90%: two reps, the bar down on the pins or the floor for twenty seconds, two more; three minutes between sets. More heavy reps at full speed than straight sets can give; the watch polices every one, and a rep under the threshold ends the set. **MAX SINGLE (week 9)** — the ramp as on the Saturday page, pins set, then the back-off sets. **EASY (week 10)** — 2 × 3 at 65%, fast; the profile redrawn. **CONTRAST (weeks 11–13)** — 2 × 2 at the calendar's percentage, fast, then straight into the jump circuit (Saturday's page describes it) with trap bar jumps as the loaded jump. **TEST WEEK (week 14)** — 2 × 2 at 80%; the heavy triple on test day.
+The phases, block by block: **SLOW LOWERING (weeks 1–3)** — lower the bar to the floor over a full five seconds, touch, and drive up fast. Builds tissue and the tendon stiffness sprinting needs; sore in week 1, then not. **NORMAL TEMPO (weeks 4–5)** — down under control, up fast, the volume at its highest. **PAUSED (weeks 6–7)** — lower normally, stop dead an inch off the floor for three seconds, then drive. **FAST, IN CLUSTERS (week 8)** — five sets of two-plus-two at 87–90%: two reps, the bar down on the pins or the floor for twenty seconds, two more; three minutes between sets. More heavy reps at full speed than straight sets can give; the watch polices every one, and a rep under the threshold ends the set. **TOP TRIPLE (week 9)** — the ramp as on the Saturday page, pins set, up to a set of three that's hard but leaves one or two in you; × 1.08 is the new working max; then 2 × 2 at 85% of it. **EASY (week 10)** — 2 × 3 at 65%, fast; the profile redrawn. **CONTRAST (weeks 11–13)** — 2 × 2 at the calendar's percentage, fast, then straight into the jump circuit (Saturday's page describes it) with trap bar jumps as the loaded jump. **TEST WEEK (week 14)** — the top triple again, no back-off sets.
 
 **5 · 0:33 — THE BENCH · 8–12 min**
 
-**Weeks 1–5 — BENCH THROW, 4 × 3, rest 90 s.** Smith machine, light bar, at your peak-power load from the profile (the Loading page). Lower to the chest, press so hard the bar leaves your hands, catch it, reset. No Smith machine: a 4–6 kg medicine ball thrown off the chest at a wall, 4 × 5. The punch-speed lift.
+**Weeks 1–5 — BENCH THROW, 4 × 3, rest 90 s.** Smith machine, with its safety stops set so the bar rests on them a couple of centimetres above your chest when you lie under it. Light bar, at your peak-power load from the profile (the Loading page). Lower the bar to the stops, throw it so hard it leaves your hands, catch it with soft elbows, lower it back to the stops. A missed catch lands on the stops, never on you. No Smith machine with adjustable stops: a 4–6 kg medicine ball thrown off the chest at a wall, 4 × 5. The punch-speed lift.
 
-**From week 6 — BENCH PRESS, then the throws.** Warm-up sets: bar × 10, 40% × 5, 60% × 3, 75% × 2. Pins at chest height, no collars — you're alone. Weeks 6–7 PAUSED: 3 × 3 at 80%, then 84%, the bar dead still on the chest for 2 seconds, then drive. Week 8 FAST: 4 × 2 at 87%. Week 9: none on Wednesday — the bench max is Sunday. Week 10: 2 × 3 at 65%, fast. Weeks 11–13 CONTRAST: 2 reps at 85% → rest 20 seconds → 3 bench throws → rest 2½ minutes; three rounds. Week 14: 2 × 2 at 80%. In weeks 6–10 the bench throws follow, 3 × 3. Upper-body strength was the thinnest thing in this program, and you don't test a lift you don't train.
+**From week 6 — BENCH PRESS, then the throws.** Warm-up sets: bar × 10, 40% × 5, 60% × 3, 75% × 2. Pins at chest height, no collars — you're alone. Weeks 6–7 PAUSED: 3 × 3 at 80%, then 84%, the bar dead still on the chest for 2 seconds, then drive. Week 8 FAST: 4 × 2 at 87%. Week 9: the top triple — sets of three going up until one is hard but leaves one or two in you, pins set; × 1.08 is the new working max; then 2 × 2 at 85% of it. Week 10: 2 × 3 at 65%, fast. Weeks 11–13 CONTRAST: 2 reps at 85% → rest 20 seconds → 3 bench throws → rest 2½ minutes; three rounds. Week 14: the top triple again, no back-off sets. In weeks 6–10 the bench throws follow, 3 × 3. Upper-body strength was the thinnest thing in this program, and you don't test a lift you don't train.
 
 **6 · 0:41 — RING DIPS · weeks 1–5 · 3 sets at your level · rest 90 s · 6 min**
 
@@ -271,7 +271,7 @@ A thick band around the back of both knees, anchored to the rack in front of you
 
 **5 · 0:26 — ENGINE 2 · 24–28 min · the table says which**
 
-Tempo intervals (week 1): 10 × 1 minute hard-but-controlled — about 70% of flat out, breathing hard but never gasping — with 1 minute easy between. Aerobic power without the cost; the bridge from base to the hard work. **Weeks 1, 5, 10 and 14: the NASAL THRESHOLD TEST first** — eight minutes nose only, pace up every two minutes until the mouth has to open; log the pace and the honest half — did it open because it had to, or because you caved — then run the session one round short.
+Tempo intervals (week 1): 10 × 1 minute hard-but-controlled — about 70% of flat out, breathing hard but never gasping — with 1 minute easy between. Aerobic power without the cost; the bridge from base to the hard work. **Weeks 1, 5, 10 and 14: the NASAL THRESHOLD TEST first** — eight minutes nose only, pace up every two minutes until the mouth has to open; log the pace and the honest half — did it open because it had to, or because you caved — then run the session one round short; in week 14, the 20-minute test instead of the session.
 
 Threshold (weeks 3 and 7): 2 × 8 minutes at the hardest pace you could hold for half an hour — sentences impossible, short phrases possible — with 3 easy minutes between. The pace of a hard round, held.
 
@@ -279,9 +279,9 @@ Threshold (weeks 3 and 7): 2 × 8 minutes at the hardest pace you could hold for
 
 Repeat bursts (the weeks the calendar puts them here): as Tuesday's page.
 
-Rounds on the erg (week 12): 6 × 3 minutes on the bike or SkiErg at fight pace — the output you can hold across all seven — 60 seconds between. Write down round 1 and round 6.
+Rounds on the erg (week 12): 6 × 3 minutes on the bike or SkiErg at fight pace — the output you can hold across all six — 60 seconds between. Write down round 1 and round 6.
 
-Fight-pace rounds (week 14): 4 × 3 minutes at the pace you held in week 13, 60 seconds between, and stop. Sharp, not tired.
+Test week (week 14): the nasal threshold test, then the 20-minute test — five easy minutes, then the most distance you can cover in 20 minutes on the machine you always use. Log the distance and the highest heart rate.
 
 Easy (weeks 5 and 10): 20 minutes conversational.
 
@@ -323,7 +323,7 @@ Jog-build for 10–15 metres, then 20 metres absolutely flat out. Walk back, ful
 
 **3 · 0:33 — REACTIVE JUMPS · 8 min · rest 2 min**
 
-Weeks 1–10: LOADED DROP JUMPS, 3 × 4 — a hex dumbbell in each hand, 8–12 kg, dip fast into a quarter squat, let both dumbbells go at the bottom and jump straight up as high as you can, empty-handed; land soft on clear floor. Weeks 11–13: DEPTH JUMPS, 4 × 4 — step off a 30–40 cm box and, the instant the feet touch, jump as high as you can, shortest possible time on the floor. Stop the set the moment a jump is lower than the last. Achilles or knee at 3 or more on Sunday's check: loaded drop jumps instead of depth jumps, that week.
+Weeks 1–5: DROP LANDINGS, 3 × 4 — step off a 20–30 cm box, land on both feet soft and silent, hips back and knees over your toes, and hold it dead still for two seconds. No jump: this teaches your knees and tendons to absorb. Weeks 6–10: LOW-BOX DEPTH JUMPS, 3 × 4 — step off a 20 cm box and, the instant your feet touch, jump straight up as high as you can. Weeks 11–13: DEPTH JUMPS, 4 × 4 — the same off a 30–40 cm box, shortest possible time on the floor. Stop the set the moment a jump is lower than the last, a landing is loud, or your knees cave in. Achilles or knee at 3 or more on Sunday's check: no reactive jumps that week — the tendon holds carry on.
 
 **4 · 0:41 — SIDE BOUNDS · 3 × 4 per side · rest 90 s · 6 min** — weeks 11–13: 4 × 4 per side
 
@@ -333,13 +333,13 @@ Stand on one leg, jump as far as you can, land on the other and stick it dead st
 
 Warm-up sets first: 40% × 3, 60% × 2, 75% × 1 of working. Bar on the back, break at the hips and knees together, sit to just below parallel, drive up. Pins set just below your lowest position, every set — you're alone.
 
-The same phases as the trap bar: **weeks 1–3 slow lowering** — five seconds down, drive up fast; **weeks 4–5 normal tempo**, the volume at its highest; **weeks 6–7 paused** — three seconds dead still at the bottom, then drive; **week 8 fast, in clusters — five sets of two-plus-two at 87–90%, twenty seconds on the pins between the pairs**; **week 9 MAX SINGLE** — after the warm-up sets, 50% × 5 → 65% × 3 → 75% × 2 → 85% × 1 → 92% × 1 → one attempt at 100–102% of your working max, a second only if the first flew, pins set, no exceptions, then the back-off sets at 85% of the new number; **week 10 easy**, the profile redrawn; **weeks 11–13 CONTRAST** — each set is 2 reps at the calendar's percentage, fast, then rest 20 seconds, box jumps × 3, rest 20, trap bar jumps × 3 (a trap bar at your peak-power load from the profile, jump with it, land soft), rest 20, band-assisted jumps × 3 (a heavy band looped over the top of the rack and tucked under the armpits so it pulls you upward), then 3 minutes' rest, three rounds — two in week 13 — the round ending the moment jump height drops; **week 14** — nothing on Saturday morning but the warm-up and build-ups; the max is test day.
+The same phases as the trap bar: **weeks 1–3 slow lowering** — five seconds down, drive up fast; **weeks 4–5 normal tempo**, the volume at its highest; **weeks 6–7 paused** — three seconds dead still at the bottom, then drive; **week 8 fast, in clusters — five sets of two-plus-two at 87–90%, twenty seconds on the pins between the pairs**; **week 9 TOP TRIPLE** — after the warm-up sets, 50% × 5 → 65% × 3 → 75% × 2 → 85% × 1, then sets of three going up 2.5–5% at a time until one is hard but leaves one or two in you — pins set, no exceptions; that weight × 1.08 is your new working max; then 2 × 2 at 85% of it, fast; **week 10 easy**, the profile redrawn; **weeks 11–13 CONTRAST** — each set is 2 reps at the calendar's percentage, fast, then rest 20 seconds, box jumps × 3, rest 20, trap bar jumps × 3 (a trap bar at your peak-power load from the profile, jump with it, land soft), rest 20, band-assisted jumps × 3 (a heavy band looped over the top of the rack and tucked under the armpits so it pulls you upward), then 3 minutes' rest, three rounds — two in week 13 — the round ending the moment jump height drops; **week 14** — test day: the speed and power tests, then the top triple, as week 9 without the back-off sets.
 
 Lower-body maximal strength is the best predictor there is of how hard trained boxers hit. Twelve weeks builds some, expresses all of it, and the contrast block is where it becomes speed.
 
 **6 · 1:03 — PUSH PRESS · 3 × 3 · rest 2 min · 8 min**
 
-Bar on the front of the shoulders, quick shallow knee dip, drive it overhead with the legs and punch it to lockout. Legs, braced trunk, hands — the route a punch takes. Loaded like the other lifts: fast, two in reserve; weeks 11–13 at 85%; week 9 skipped (the squat max is enough); week 14 at 70%.
+Bar on the front of the shoulders, quick shallow knee dip, drive it overhead with the legs and punch it to lockout. Legs, braced trunk, hands — the route a punch takes. Loaded like the other lifts: fast, two in reserve; weeks 11–13 at 85%; week 9 skipped (the squat top triple is enough); week 14 none.
 
 **Done · ~1:15.** THE MOVEMENT SESSION this evening, then RANGE. Bed early: tomorrow is the rounds. Saturday's 5pm carb feed loads it.
 
@@ -359,9 +359,9 @@ Medicine ball — 5–6 kg for the shot-put in the build and heavy blocks, 3–5
 
 Six rounds of three minutes through week 10; seven in weeks 11–13. The rest shortens by block — 90 seconds in accumulation, 60 from week 6. Each round: minute 1 on the SkiErg → minute 2 on the assault bike → minute 3 medicine-ball slams — a 5–8 kg ball overhead and driven into the floor, caught on the bounce, hard and continuous — or, if the gym has a bag, bag work, hard and technically clean.
 
-Rule 1: relaxed jaw, shoulders down. Finish a round with your traps by your ears and it doesn't count. Rule 2: every rest is the CORNER MINUTE — two physiological sighs the second the round ends (a full breath in through the nose, a short second sip on top, one long slow exhale through the mouth, twice), then nose only, in for 3 and out for 6, stood up, hands off the knees. Hands-on-knees gasping keeps you revved and starts the next round behind. Rule 3: on scored weeks write down round one's output and round six's. Round six divided by round one is the fade.
+Rule 1: relaxed jaw, shoulders down. Finish a round with your traps by your ears and it doesn't count. Rule 2: every rest is the CORNER MINUTE — two physiological sighs the second the round ends (a full breath in through the nose, a short second sip on top, one long slow exhale through the mouth, twice), then nose only, in for 3 and out for 6, stood up, hands off the knees. Hands-on-knees gasping keeps you revved and starts the next round behind. Rule 3: on scored weeks write down round one's output and round six's. Round six divided by round one is the fade. Rule 4: rounds past the fight — the seventh, in weeks 11–13 — are capacity work, not punishment. If one drops below 75% of round one's output, or your posture goes, that round is the last; the fade is scored on the last round you finished.
 
-Weeks 1, 5 and 14: the 20-MINUTE TEST instead (week 1: then three easy rounds to learn the stations). Scored weeks: 2, 10 and 13.
+Weeks 1 and 5: the 20-MINUTE TEST instead (week 1: then three easy rounds to learn the stations). Week 14: no session — the easy hour, then the range and flexibility tests, the photos and the weekly check; the next block starts tomorrow. Scored weeks: 2, 10 and 13.
 
 **4 · 0:54 — THE POST-MAX SIT · 3 min** — straight off the last round: sit, eyes closed, heart at 170-plus, find the breath at the nostrils. Write down the seconds it took. The corner, trained.
 
@@ -373,7 +373,7 @@ Hanging leg raises, 3 × 8–12. The L-sit line, 3 sets at your level — the tu
 
 Bodyweight · waist · resting heart rate · green / yellow / red days · joints complaining (hips, shoulders, elbows, wrists, knees, Achilles, hamstrings, 0–10) · hours of sleep averaged · lights-out time averaged · energy 1–10 · home-block evenings done.
 
-Three yellows in a week: next week runs at the table's numbers minus one set on everything and the interval sessions at 90%. Achilles or knee at 3 or more: no depth jumps next week. Hamstring at 3 or more: no flying sprints next week. That's the tendon gate, and it runs whatever the strap says.
+Three yellows in a week: next week runs at the table's numbers minus one set on everything and the interval sessions at 90%. Achilles or knee at 3 or more: no reactive jumps next week, the tendon holds carry on. Hamstring at 3 or more: no flying sprints next week, Nordics only if pain-free. That's the tendon gate, and it runs whatever the strap says.
 
 **Done · ~1:11 (~1:14 with the size add-on — hammer curls after the face pulls: 3 × 10 in weeks 1–5, 2 × 10 in weeks 6–13).** RANGE tonight, and the easy hour this afternoon — 30–40 minutes easy, nose only, bike or walk, four-plus hours after the session. Weeks 6–13: sauna, 15–20 minutes, twice a week — Sunday and one weekday evening — never more, and never without the hydration schedule's sauna line — heat acclimation over three weeks raises blood volume and endurance the way nothing else this cheap does. Never straight from the sauna into cold.
 
@@ -558,13 +558,15 @@ Five additions, on by default, that turn this from a program into a professional
 
 **THE GUARDRAIL.** Two yellow mornings on the strap in the same week — resting heart rate five over, or HRV twelve percent under — and the five come off for the rest of that week. Not the program: the additions. Tuesday's speed and the Wednesday thirty go first; the clusters become straight sets; the contacts drop back; the rounds go back to six. The base program is what keeps you training. The edge is what makes you dangerous, and it's only worth having if you're standing on the day.
 
-**THE TENDON GATE AND THE JUMP CHECK.** Separately from the strap: Achilles or knee at 3 or more on Sunday's check means no depth jumps the following week, and a hamstring at 3 or more means no flying sprints — a sore tendon doesn't show on HRV. And Tuesday's jump check more than 7% under its four-week average counts as a yellow, toward the two that take the Edge off.
+**THE TENDON GATE AND THE JUMP CHECK.** Separately from the strap: Achilles or knee at 3 or more on Sunday's check means no reactive jumps the following week, with the tendon holds carried on, and a hamstring at 3 or more means no flying sprints — a sore tendon doesn't show on HRV. And Tuesday's jump check more than 7% under its four-week average counts as a yellow, toward the two that take the Edge off.
 
 ---
 
 ## THE THINKING (read at home, not in the gym)
 
 **What the October audit changed, and why.** Every major system was run back over this program — block periodization, conjugate, Sheiko, autoregulation, Easy Strength, triphasic, Charlie Francis, the shock method, velocity training, ALTIS and the deceleration research, Joel Jamieson, the HIIT and polarized research, the UFC Performance Institute and the boxing research. Out, because they weren't earning their minutes: Saturday's tired throws (Thursday and Sunday throw fresh), the evening microdoses (explosive work already runs five days a week), the warm-up crawls, Sunday's get-ups and the planche leans. In, because each fills a real gap: braking into your stance, strength in the punch position, loaded sideways trunk stiffness, a jump check that reads what the strap can't, the arm-braking work twice a week, the back of the shoulder all year, a bench press you're trained on before you're tested on it, and shrugs in the size weeks. Depth jumps came down to sixteen clean contacts, and a tendon gate went in. Sheiko's lesson was taken without Sheiko's volume: you get strong at what you practise, and you don't test a lift you don't train.
+
+**What the October review changed, and why.** An outside review read the documents line by line and found four safety points worth taking. The dumbbell-release jumps went: dropped dumbbells bounce and roll, and you land where they fell — the reactive slot now climbs from drop landings to low-box depth jumps to full depth jumps. The bench throw now runs off the Smith machine's safety stops, so a missed catch lands on them, not on you. The true maxes went: for a fighter a one-rep max only sets loads, and the top triple with the bar-speed profile does that without the risk of failing a lift alone. And the tendon gate was fixed: a sore tendon gets its jumping taken away and its holds kept, not a different jump. Two rules tightened with them — the bar-speed rule now comes down on one slow reading but goes up only on two fast ones, because one reading is inside the watch's noise; and rounds past the fight stop if they fall below three-quarters of round one, because they're capacity work, not punishment.
 
 **Why the six pressure-fighter additions.** You fight forward, non-stop, against men who are heavier, taller and mobile. That's four physical problems: crossing the distance a taller man keeps, again and again (stance starts, repeat sled starts, shuttle bursts); holding your ground when a heavier man leans on you (drive holds — an isometric, and the one quality the program had no exercise for); taking bigger punches (the neck at four sets of the rapid brace); and hitting up and in with more force at the same speed (the heavier ball, the landmine punch with the step-in). Fifteen minutes a week, nothing dropped, and none of it replaces what your coach does with distance, angles and the guard — it gives him a body that can get there, stay there and keep hitting.
 
@@ -578,6 +580,6 @@ Five additions, on by default, that turn this from a program into a professional
 
 **Why the size block runs all through Prep and never in a camp.** Prep is the everyday program, so it's where the look gets built: full dose in the volume weeks with the food to match, half dose in the heavy and fast weeks so it's kept without costing the main lifts. A camp is for sharpening whatever is lacking; the size work stops there and picks up again after.
 
-**Why the max single is week 9 and the test is week 14.** Two maximal exposures in fourteen weeks, each after a ramp, each followed by a reset. The first re-aims the intensification block; the second aims the camp.
+**Why there are no true maxes.** A one-rep max is a number for setting loads, and for a fighter it's nothing more. A top triple with one or two reps in reserve, read through the bar-speed profile, sets the same loads without the risk of failing a lift alone under the bar. Two heavy exposures in fourteen weeks — week 9 re-aims the heavy block, test week aims the camp — and neither one is a max.
 
-**What this hands the camp.** Working weights ten percent higher and drawn from a max measured a week earlier. An aerobic base built over five weeks and maintained over nine. Rounds already run at fight rest with a fade on the board. Tendons that have had fourteen weeks of holds and slow lowering. Hips and shoulders that pass the tests. A foundation block the camp can cut to a week. That's the difference between a camp that starts from where you are and one that starts from where you could be.
+**What this hands the camp.** Working weights ten percent higher and drawn from test week's top triples. An aerobic base built over five weeks and maintained over nine. Rounds already run at fight rest with a fade on the board. Tendons that have had fourteen weeks of holds and slow lowering. Hips and shoulders that pass the tests. A foundation block the camp can cut to a week. That's the difference between a camp that starts from where you are and one that starts from where you could be.

@@ -59,7 +59,7 @@ Weeks are counted in whole training weeks, Monday to Sunday, from the Monday the
 
 **What never changes:** the sharpen week and fight week are always the last two; the peak block is never shorter than two weeks, and P3 — the last hard week — is always in it.
 
-**How a kept week runs:** exactly as the master writes it — the same sessions, loads and order — with four exceptions: the rounds follow your fight's format (the Format section); the conditioning follows the format's pairs; the strength and power doses follow engine-first and your emphasis; and the tests run in week 1, in the easy week if it's kept, and in the sharpen week. With no easy week, the working weights carry through the camp unchanged. Repeat sled starts fall on the camp's even-numbered weeks, counted from its first week.
+**How a kept week runs:** exactly as the master writes it — the same sessions, loads and order — with four exceptions: the rounds follow your fight's format (the Format section); the conditioning follows the format's pairs; the strength and power doses follow engine-first and your emphasis; and the tests: in the camp's first week the burst test opens Tuesday's session and the nasal test opens Thursday's, unless the camp follows a Prep test week, which has just measured both; the easy week, if it's kept, and the sharpen week run their retests as the master writes them. With no easy week, the working weights carry through the camp unchanged. Repeat sled starts fall on the camp's even-numbered weeks, counted from its first week.
 
 **Fight not on a Saturday:** fight week slides — the activation two days out, nothing the day before, the rehearsal six days out.
 
@@ -82,7 +82,7 @@ When the fight is closer than the shortest camp:
 
 - **Conditioning:** Tuesday and Thursday from the format's pairs (E1 uses P1's pair, E2 uses P3's). Sunday's rounds: one past the fight in E1, the ceiling in E2, at fight rest. With only one engine week, it's one past the fight.
 - **Strength at its hold dose:** trap bar, squat and bench press, 2 × 3 at 85%, fast.
-- **Power as written:** Tuesday's jumps; Saturday's stance starts, close and plant and flying sprints. Loaded drop jumps, never depth jumps. Thursday's and Sunday's throws.
+- **Power as written:** Tuesday's jumps; Saturday's stance starts, close and plant and flying sprints. Low-box depth jumps — drop landings from low fitness — never full depth jumps. Thursday's and Sunday's throws.
 - **Unchanged:** neck, hands, Nordics, the tendon holds and RANGE.
 
 ---
@@ -106,6 +106,8 @@ When the fight is closer than the shortest camp:
 
 **Scored weeks:** week 1, the last build week, the easy week if kept, and P3. The fade is the last round's output divided by the first.
 
+**The stop rule.** Rounds past the fight are capacity work, not punishment. Your fight's own rounds are always finished. After them — and the whole second set of the double — if a round drops below 75% of round one's output, or your posture goes (traps up by your ears, hands on your knees in the rest), that round is the last. The fade is scored on the last round finished. The same rule runs Thursday's rounds on the erg.
+
 **Thursday's rounds on the erg** (in the master's B3 and P2) run at your round length: R + 1 rounds in B3, R + 2 in P2.
 
 **The sharpen week's fight-pace rounds** (Thursday): two-thirds of R, rounded up, never fewer than three — 6 → 4, 3 → 3.
@@ -117,7 +119,7 @@ When the fight is closer than the shortest camp:
 
 | Week | Tuesday | Thursday |
 |---|---|---|
-| F1 / F | as the master's week 1: 4-minute intervals (burst test first in week 1) | as the master's week 1: tempo intervals (nasal test first in week 1) |
+| F1 / F | as the master's week 1: 4-minute intervals | as the master's week 1: tempo intervals |
 | Build | repeat bursts | 40-second repeats |
 | Easy + tests | as the master | as the master |
 | P1 | 4-minute intervals | repeat bursts |
@@ -136,7 +138,7 @@ When the fight is closer than the shortest camp:
 | Foundation | two weeks: F1 at two-thirds dose, then F | one week, F | one week, F |
 | Engine-first | on | off | off |
 | The tendon ramp | on | off | off |
-| Working weights | checked before week 1 | checked before week 1, unless a test day was in the last three weeks | test day's numbers |
+| Working weights | checked before week 1 | checked before week 1, unless a test week was in the last three weeks | test week's numbers |
 
 **Two-thirds dose (F1):**
 
@@ -148,7 +150,7 @@ When the fight is closer than the shortest camp:
 **The tendon ramp (low fitness):**
 
 - Flying sprints at 90% for the camp's first two weeks; flat out from week 3.
-- No depth jumps before week 4 — loaded drop jumps until then.
+- Reactive jumps: drop landings in the camp's first two weeks, low-box depth jumps from week 3, full depth jumps not before week 4.
 - Nordics ramp 2 × 3, 2 × 4, 3 × 4, then the camp's numbers.
 
 **The working-weight check:** on each of the squat, trap bar and bench press, work up to a set of 3 that's hard but leaves two more in you. That weight × 1.08 is the working max every percentage reads from.
@@ -159,7 +161,7 @@ When the fight is closer than the shortest camp:
 - The broad jump and the rotational throw.
 - The 20-minute test, which sets your heart-rate zones.
 
-**Straight after a Prep test week**, the app sets good fitness and uses test day's numbers.
+**Straight after a Prep test week**, the app sets good fitness and uses test week's numbers.
 
 **The tests correct the answer:** the first scored simulation's fade under 75% means low, 75–84% moderate, 85% or more good. If it disagrees with what you entered, the app says so in one line and adjusts from the next Monday.
 
@@ -195,18 +197,18 @@ On automatically from low fitness, and in every short-notice camp. It doesn't ad
 | **None** | — | — |
 | **Power** | One more round of Saturday's contrast circuit (one more set of reactive jumps in weeks without contrast); one more set of each of Thursday's throws; Tuesday's box jumps at 4 × 3 all camp | Trap bar and squat, one set each |
 | **Strength** | One more set of trap bar, squat and bench press, at the top of the week's load (+2.5%) | Tuesday's broad jumps one set; Saturday's reactive jumps one set; the contrast circuit one round. In a camp under 8 weeks the app warns: "Strength takes longer than this camp has — power is the better pick." |
-| **Durability** | Neck holds on Saturday after the squat (four neck days a week); the Spanish squat hold and the Achilles hold add 2.5 kg whenever the last hold was solid; one more set of Nordics, Copenhagen planks and suitcase carries; loaded drop jumps instead of depth jumps all camp, at the same sets and reps; the Edge's extra contacts don't apply | Side bounds one set; push press one set; broad jumps one set |
+| **Durability** | Neck holds on Saturday after the squat (four neck days a week); the Spanish squat hold and the Achilles hold add 2.5 kg whenever the last hold was solid; one more set of Nordics, Copenhagen planks and suitcase carries; low-box depth jumps instead of full depth jumps all camp, at the same sets and reps; the Edge's extra contacts don't apply | Side bounds one set; push press one set; broad jumps one set |
 
 ---
 
 ## YOUR STANDING RULES — EVERY PROGRAM, EVERY WEEK
 
 1. **Three genuinely hard conditioning sessions a week at most** — Tuesday, Thursday, Sunday. Everything else easy.
-2. **The tendon ramp** in every camp from low fitness, and **the tendon gate** every Sunday: Achilles or knee at 3 or more out of 10 means no depth jumps next week; hamstring at 3 or more means no flying sprints.
+2. **The tendon ramp** in every camp from low fitness, and **the tendon gate** every Sunday: Achilles or knee at 3 or more out of 10 means no reactive jumps next week, with the tendon holds carried on; hamstring at 3 or more means no flying sprints next week, and Nordics only if they're pain-free. Back under 3, the jumps restart one stage down for a week. Any jump, sprint or hold that hurts more than 3 out of 10 while you do it, or is worse the next morning, stops that day; still there after two weeks, a physio looks at it.
 3. **Hydration is the rule, not a guide.** The sauna at most twice a week, never without the water.
 4. **No dehydration cuts, ever.** If there's weight to make, it comes off through food, half a percent of bodyweight a week at most.
 5. **Before every camp:** bloods — full blood count, lipids, liver and kidneys — and blood pressure. A resting ECG once a year. The app puts this in the week before the camp's first Monday.
-6. **No maxes in camp. Friday sleeps. The strap gates every day**, and two yellow mornings in a week take the Edge off.
+6. **No true maxes, ever — the heaviest work is a top triple, on pins. Friday sleeps. The strap gates every day**, and two yellow mornings in a week take the Edge off.
 7. **The Edge** starts from the first peak or engine week in a camp from low fitness or at short notice, and the tendon ramp overrides it.
 
 ---
@@ -223,9 +225,9 @@ Prep's fourteen weeks are **P1 to P14** as Optimal 8 · Prep writes them.
 | Weeks 1–16 | P1 · P2 · P3 · P4 · P4b · P5 · P6 · P7 · P8 · P9 · P10 · P11 · P12 · P12b · P13 · P14 |
 |---|---|
 
-That's accumulate in weeks 1–6 (week 6 lighter, with tests), intensify in weeks 7–11 (max singles in week 10, week 11 easy with tests), convert in weeks 12–15, and the test week in week 16.
+That's accumulate in weeks 1–6 (week 6 lighter, with tests), intensify in weeks 7–11 (top triples in week 10, week 11 easy with tests), convert in weeks 12–15, and the test week in week 16.
 
-Test day is week 16's Saturday. The next cycle starts the Monday after, its working weights reset from test day. The size block runs full in weeks 1–6, at half dose in weeks 7–15, and not at all in week 16.
+Test day is week 16's Saturday. The next cycle starts the Monday after, its working weights reset from test week. The size block runs full in weeks 1–6, at half dose in weeks 7–15, and not at all in week 16.
 
 **Before a camp:** Prep runs from the end of the transition (or from today) to the Sunday before the camp starts. Its length in weeks, N, decides which weeks run:
 
@@ -272,6 +274,8 @@ Test day is week 16's Saturday. The next cycle starts the Monday after, its work
 - Then easy: base rides, the movement session, calisthenics at half sets, nothing above 70%, no sprints, no rounds.
 - The morning after the fight, the one question from Iron Mind.
 
+**First, the head check.** If you were stopped or dropped, or have any symptoms after the fight — headache, fogginess, feeling slowed down, dizziness, sensitivity to light or noise — see a doctor before any training, and nothing hard until you're cleared and symptom-free. A medical suspension overrides everything here. A severe or worsening headache, repeated vomiting, confusion or drowsiness is A&E, straight away. The app asks the morning after the fight, and the transition doesn't start until you've answered.
+
 **It runs on until the strap says you're back:** resting heart rate within 3 beats of baseline and HRV within 10% of its average, three mornings running. Then the next fight's plan, or Prep.
 
 ---
@@ -288,11 +292,11 @@ Entered: fight Saturday 28 November 2026 · 3 rounds × 2 minutes · 1 minute's 
 
 | Wk | Dates | Block | Mon base | Tuesday | Wednesday | Thursday | Saturday | Sunday rounds | Nordics |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | 12–18 Oct | F1 · two-thirds | 30 min | BURST TEST, then 4-min intervals 2 × 4 at 90% | sled 3 runs · trap bar slow lowering 2 × 5 @ 72% · bench 2 × 5 @ 72%, 5 s down · easy 25 | NASAL TEST, then tempo 6 × 1 min | build-ups + 2 × 20 m @ 90% · squat 2 × 5 @ 72%, 5 s down · loaded drop jumps 2 × 4 | 3 × 2 at 90 s — SCORED, the baseline | 3 × 3 |
-| 2 | 19–25 Oct | F | 45 min | 4-min intervals 4 × 4 | repeat sled starts · trap bar 2 × 5 @ 72%, 5 s down · bench 2 × 5 @ 72% · easy 40 · sauna begins | tempo 10 × 1 min | stance starts, close and plant, 4 × 20 m @ 90% · squat 2 × 5 @ 72%, 5 s down · drop jumps 3 × 4 | 3 × 2 at 60 s | 3 × 4 |
-| 3 | 26 Oct–1 Nov | B2 · build | 45 min | REPEAT BURSTS 2 × 8 · shuttles begin | sled 5 runs · trap bar PAUSED 2 × 3 @ 82% · bench paused 2 × 3 @ 82% · easy 40 | 40-s repeats 2 × 6 | 5 × 20 m flat out · squat paused 2 × 3 @ 82% · drop jumps 3 × 4 | 4 × 2 at 60 s — SCORED | 4 × 4 |
-| 4 | 2–8 Nov | P1 · peak | 45 min | 4-min intervals 4 × 4 · speed (Edge) | sled, repeat starts · trap bar CONTRAST 2 rounds @ 85% · bench contrast 2 rounds @ 85% · easy 40 | REPEAT BURSTS 2 × 8 | 5 × 20 m · squat CONTRAST 2 rounds @ 85% · drop jumps 4 × 4 | 5 × 2 at 60 s | 4 × 5 |
-| 5 | 9–15 Nov | P3 · last hard week | 45 min | 40-s repeats 2 × 6 · speed (Edge) | sled 5 runs · trap bar contrast 2 rounds @ 88% · bench contrast 2 rounds @ 88% · easy 40 | REPEAT BURSTS 2 × 8 | 5 × 20 m · squat contrast 2 rounds @ 88% · drop jumps 4 × 4 | THE DOUBLE: 4 × 2, 5 min easy, 3 × 2 — SCORED, the last read | 4 × 5 |
+| 1 | 12–18 Oct | F1 · two-thirds | 30 min | BURST TEST, then 4-min intervals 2 × 4 at 90% | sled 3 runs · trap bar slow lowering 2 × 5 @ 72% · bench 2 × 5 @ 72%, 5 s down · easy 25 | NASAL TEST, then tempo 6 × 1 min | build-ups + 2 × 20 m @ 90% · squat 2 × 5 @ 72%, 5 s down · drop landings 2 × 4 | 3 × 2 at 90 s — SCORED, the baseline | 3 × 3 |
+| 2 | 19–25 Oct | F | 45 min | 4-min intervals 4 × 4 | repeat sled starts · trap bar 2 × 5 @ 72%, 5 s down · bench 2 × 5 @ 72% · easy 40 · sauna begins | tempo 10 × 1 min | stance starts, close and plant, 4 × 20 m @ 90% · squat 2 × 5 @ 72%, 5 s down · drop landings 3 × 4 | 3 × 2 at 60 s | 3 × 4 |
+| 3 | 26 Oct–1 Nov | B2 · build | 45 min | REPEAT BURSTS 2 × 8 · shuttles begin | sled 5 runs · trap bar PAUSED 2 × 3 @ 82% · bench paused 2 × 3 @ 82% · easy 40 | 40-s repeats 2 × 6 | 5 × 20 m flat out · squat paused 2 × 3 @ 82% · low-box depth jumps 3 × 4 | 4 × 2 at 60 s — SCORED | 4 × 4 |
+| 4 | 2–8 Nov | P1 · peak | 45 min | 4-min intervals 4 × 4 · speed (Edge) | sled, repeat starts · trap bar CONTRAST 2 rounds @ 85% · bench contrast 2 rounds @ 85% · easy 40 | REPEAT BURSTS 2 × 8 | 5 × 20 m · squat CONTRAST 2 rounds @ 85% · low-box depth jumps 4 × 4 | 5 × 2 at 60 s | 4 × 5 |
+| 5 | 9–15 Nov | P3 · last hard week | 45 min | 40-s repeats 2 × 6 · speed (Edge) | sled 5 runs · trap bar contrast 2 rounds @ 88% · bench contrast 2 rounds @ 88% · easy 40 | REPEAT BURSTS 2 × 8 | 5 × 20 m · squat contrast 2 rounds @ 88% · low-box depth jumps 4 × 4 | THE DOUBLE: 4 × 2, 5 min easy, 3 × 2 — SCORED, the last read | 4 × 5 |
 | 6 | 16–22 Nov | S · sharpen | 30 min | RETESTS, then bursts 1 × 8 | sled 3 runs · trap bar 2 × 2 @ 80% fast · bench throws 3 × 3 · chins 2 × 5 | 3 × 2 at fight pace, 60 s | SPEED MICRODOSE, 25 min | THE REHEARSAL — 3 × 2 at fight time, Sunday 22 Nov | 2 × 3 |
 | 7 | 23–28 Nov | FW · fight week | 20 min easy | SPEED MICRODOSE, 25 min | nothing | ACTIVATION, 20 min | — | — | — |
 
@@ -304,7 +308,7 @@ Friday 27 November: weigh-in, feet up. **Saturday 28 November: the fight.**
 - The Spanish squat and Achilles holds add 2.5 kg whenever the last hold was solid.
 - One more set of Copenhagen planks and suitcase carries.
 - Side bounds, push press and broad jumps at two sets.
-- Loaded drop jumps instead of depth jumps.
+- Low-box depth jumps instead of full depth jumps.
 
 The sauna runs twice a week in weeks 2–5. Everything else — the neck, the hands, the band catch, the throws and the landmine, the split squat, the trunk, the calisthenics at your levels, RANGE, the movement session, the evening routine, the food and the hydration — runs as the camp writes it.
 
@@ -317,8 +321,8 @@ The sauna runs twice a week in weeks 2–5. Everything else — the neck, the ha
 | Dates | What runs |
 |---|---|
 | Mon 30 Nov – Sun 6 Dec | **The transition** — one week after a 3 × 2, longer if the strap isn't back |
-| Mon 7 Dec – Sun 3 Jan | **Prep, four weeks:** P4 (7–13 Dec, normal tempo 5 × 5 @ 75%, the size block full) · P7 (14–20 Dec, paused 4 × 3 @ 84%; the bench press starts at 80%) · P8 (21–27 Dec, fast in clusters at 87–90%, Christmas week at three-quarters volume) · P14 (28 Dec – 3 Jan, the test week — test day Saturday 2 January, the 20-minute test Sunday 3 January) |
-| Mon 4 Jan – Sat 13 Mar | **The camp — the master, ten weeks**, good fitness off test day, as Optimal 8 · Camp writes it |
+| Mon 7 Dec – Sun 3 Jan | **Prep, four weeks:** P4 (7–13 Dec, normal tempo 5 × 5 @ 75%, the size block full) · P7 (14–20 Dec, paused 4 × 3 @ 84%; the bench press starts at 80%) · P8 (21–27 Dec, fast in clusters at 87–90%, Christmas week at three-quarters volume) · P14 (28 Dec – 3 Jan, the test week — the 20-minute test Thursday 31 December, test day Saturday 2 January) |
+| Mon 4 Jan – Sat 13 Mar | **The camp — the master, ten weeks**, good fitness off test week, as Optimal 8 · Camp writes it |
 
 ---
 
