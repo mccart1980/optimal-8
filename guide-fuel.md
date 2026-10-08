@@ -41,7 +41,7 @@ Weigh on Sunday. Tape every four to six weeks: arms, shoulders, waist. The app's
 **Top-up** — the 5pm carb feed that loads tomorrow. **Batch / batch big** — the mince and sweet potato tub, standard or larger. **The bottle** — the UFIT 50 g, split around the session. **Casein** — slow protein before bed. **Surplus** — eating a bit more than you burn, on purpose, to build. **Phase** — which block of the training you're in. **Sachet** — the electrolytes.
 
 ## FIGHT DAY
-Weighed in light? Drink a litre and a half for every kilo you lost, with a sachet in every litre, sipped. Eat plain carbs — rice, bagels, bananas, rice cakes and honey — every hour or two until three hours out. Three hours out: a pouch, chicken, a banana. One hour out: half the bottle and a banana. Nothing new on fight day. Caffeine an hour before the bell only if you've used it in camp and your blood pressure's normal.
+No water cuts, ever — any weight comes off through food, weeks before. Weighed in the day before and under your normal morning weight? Drink a litre and a half for every kilo under, with a sachet in every litre, sipped. Eat plain carbs — rice, bagels, bananas, rice cakes and honey — every hour or two until three hours out. Three hours out: a pouch, chicken, a banana. One hour out: half the bottle and a banana. Nothing new on fight day. Caffeine an hour before the bell only if you've used it in camp and your blood pressure's normal.
 
 ## THREE RULES
 1. The bottle round every session.

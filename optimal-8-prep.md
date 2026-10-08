@@ -2,7 +2,7 @@
 
 **The block between the program and the camp. Monday 28 September to test day on Saturday 2 January, then the camp from Monday 4 January to the fight on Saturday 13 March. Its only job: hand the camp a body that is already at the camp's week-3 level on the camp's first day — stronger, more explosive, aerobically deeper, and moving better than it has in years.**
 
-Optimal 8 Fighter's sessions, your calisthenics, RANGE, the tendon block, Iron Mind underneath — reorganised into three blocks with one job each instead of fourteen weeks of the same week, loaded by the bar speed on your wrist instead of by percentages of a stale number, gated each morning by the numbers on the strap, with the engine progressed on the erg readings, and with the two things you asked for built in where they belong: a movement session twice a week through the build and once a week after, and a size block in the five weeks where size is what's being built.
+Optimal 8 Fighter's sessions, your calisthenics, RANGE, the tendon block, Iron Mind underneath — reorganised into three blocks with one job each instead of fourteen weeks of the same week, loaded by the bar speed on your wrist instead of by percentages of a stale number, gated each morning by the numbers on the strap, with the engine progressed on the erg readings, and with the two things you asked for built in where they belong: a movement session twice a week through the build and once a week after, and a size block that runs all through Prep — full dose in the build, half dose after — because Prep is the everyday program and the look belongs here, not in a camp.
 
 **The three blocks.** Weeks 1–5 ACCUMULATE — volume, base, tissue, size, movement; week 5 lighter, with tests. Weeks 6–10 INTENSIFY — heavy, paused then fast, the max single in week 9, week 10 easy with tests. Weeks 11–14 CONVERT — contrast, reactive jumps, top speed, repeat bursts, rounds at fight rest, and the test week at the end. Then the camp.
 
@@ -97,15 +97,15 @@ The camp inherits every one of these numbers as its week-1 starting line.
 | Monday | 3:30 · BASE — easy nasal ride or run, 45–60 min · neck · hands · ring rows | ~60–75 min |
 | Tuesday | 3:30 · POWER + ENGINE 1 — the jump check, jumps, pistol line, the interval session, the settle, trunk, the Achilles hold | ~60 min |
 | Wednesday | 3:30 · STRENGTH — sled, the trap bar in its phase, the bench (throws in weeks 1–5, the press from week 6), ring dips in weeks 1–5, chins and the muscle-up line, Nordics, neck holds · evening, weeks 1–5: THE MOVEMENT SESSION | ~60 min |
-| Thursday | 3:30 · THROWS + ENGINE 2 — throws and landmine, split squat, Spanish squat hold, the second conditioning session, the settle, neck, hands, band catch · weeks 1–5: the size block | ~68 min (~83 in weeks 1–5) |
+| Thursday | 3:30 · THROWS + ENGINE 2 — throws and landmine, split squat, Spanish squat hold, the second conditioning session, the settle, neck, hands, band catch · the size block (full in weeks 1–5, half dose in weeks 6–13) | ~68 min (~86 in weeks 1–5, ~79 in weeks 6–13) |
 | Friday | SLEEP. No alarm. | — |
 | Saturday | 8:30 · THE LONG SESSION — get-ups, build-ups, stance starts, close and plant, sprints, reactive jumps, side bounds, the squat in its phase, push press · evening: THE MOVEMENT SESSION | ~80 min |
-| Sunday | 8:30 · THE ROUNDS — throws, the 6 × 3, the post-max sit, core with suitcase carries, the L-sit, the lever and face pulls, hands, weekly check · weeks 1–5: hammer curls · then the easy hour, and the sauna from week 6 | ~80 min |
+| Sunday | 8:30 · THE ROUNDS — throws, the 6 × 3, the post-max sit, core with suitcase carries, the L-sit, the lever and face pulls, hands, weekly check · hammer curls (weeks 1–13) · then the easy hour, and the sauna from week 6 | ~80 min |
 | Every day | On waking: the strap, the sighs, the one thing, the morning five, the check · evening: RANGE 20 min, the skill block Mon–Thu, the sit, the review | ~50 min |
 
 About seven hours in the gym a week and three and a half at home in the build; seven and three after. Weeks 5, 10 and 14 are lighter.
 
-**The rules that don't change.** No maxes except week 9 and test day. The output rule: every explosive set ends the moment the output drops. The velocity rule on every main lift. Easy means easy — the base and the easy hour at 65–75% of peak, nose only. Cold water out; sauna in from week 6. Bed by half past eight, Sunday to Wednesday. Nothing new after week 10 — the camp must know every exercise in it before it starts.
+**The rules that don't change.** No maxes except week 9 and test day. The output rule: every explosive set ends the moment the output drops. The velocity rule on every main lift. Easy means easy — the base and the easy hour at 65–75% of peak, nose only. Cold water out; sauna in from week 6, twice a week, never more. Bed by half past eight, Sunday to Wednesday. Nothing new after week 10 — the camp must know every exercise in it before it starts.
 
 ---
 
@@ -249,7 +249,7 @@ Kneel with the heels anchored under something solid. Body straight from knees to
 
 ---
 
-## THURSDAY · THROWS + ENGINE 2 · ~65 min (weeks 1–5: ~77 with the size block)
+## THURSDAY · THROWS + ENGINE 2 · ~68 min (with the size block: ~86 in weeks 1–5, ~79 in weeks 6–13)
 
 The third power dose — the rotational throw and the loaded punch — then the only loaded single-leg lift, the tendon hold, and the second conditioning session, always a different quality from Tuesday's. Then the neck and hands again.
 
@@ -293,9 +293,9 @@ Every session ends with the 60-second settle.
 
 **8 · 1:06 — BAND DECELERATION CATCH · 2 × 8 per arm · 2 min** — as Monday. Twice a week, because the muscles that brake your arm have to keep up with your punching.
 
-**9 · 1:08 — THE SIZE BLOCK · weeks 1–5 only · 15 min** — the Size Block page: lateral raises, rear-delt flies, curls, shrugs, three sets each, a rep or two in the tank.
+**9 · 1:08 — THE SIZE BLOCK · 18 min in weeks 1–5 · 11 min in weeks 6–13 · none in week 14** — the Size Block page: lateral raises, rear-delt flies, curls, overhead triceps extensions, shrugs. Three sets each in weeks 1–5, two from week 6; a rep or two in the tank.
 
-**Done · ~1:08 (~1:23 in weeks 1–5).** Tonight: RANGE, the skill block, the sit.
+**Done · ~1:08 (~1:26 in weeks 1–5, ~1:19 in weeks 6–13).** Tonight: RANGE, the skill block, the sit.
 
 ---
 
@@ -375,7 +375,7 @@ Bodyweight · waist · resting heart rate · green / yellow / red days · joints
 
 Three yellows in a week: next week runs at the table's numbers minus one set on everything and the interval sessions at 90%. Achilles or knee at 3 or more: no depth jumps next week. Hamstring at 3 or more: no flying sprints next week. That's the tendon gate, and it runs whatever the strap says.
 
-**Done · ~1:11 (weeks 1–5: ~1:14 with the size add-on — hammer curls 3 × 10 after the face pulls).** RANGE tonight, and the easy hour this afternoon — 30–40 minutes easy, nose only, bike or walk, four-plus hours after the session. Weeks 6–10: sauna, 15–20 minutes, twice a week; weeks 11–13: four times — Sunday, Tuesday, Thursday and Saturday evenings — the full heat-acclimation dose, with the hydration schedule's sauna line every time — heat acclimation over three weeks raises blood volume and endurance the way nothing else this cheap does. Never straight from the sauna into cold.
+**Done · ~1:11 (~1:14 with the size add-on — hammer curls after the face pulls: 3 × 10 in weeks 1–5, 2 × 10 in weeks 6–13).** RANGE tonight, and the easy hour this afternoon — 30–40 minutes easy, nose only, bike or walk, four-plus hours after the session. Weeks 6–13: sauna, 15–20 minutes, twice a week — Sunday and one weekday evening — never more, and never without the hydration schedule's sauna line — heat acclimation over three weeks raises blood volume and endurance the way nothing else this cheap does. Never straight from the sauna into cold.
 
 ---
 
@@ -405,15 +405,21 @@ You named movement and flexibility as the thing holding you back. RANGE is the d
 
 ---
 
-## THE SIZE BLOCK · weeks 1–5 only · 15 min Thursday, 4 min Sunday
+## THE SIZE BLOCK · all Prep · full dose in weeks 1–5, half dose in weeks 6–13, none in week 14
 
-Five weeks is the block where size is being built — volume up, calories up, the lifts at 70–75% — so five weeks is where direct arm and shoulder work earns its place. It comes out at week 6 when the lifts go heavy, and it does not go into the camp. Every set stops a rep or two short of failure; nothing here is a grind, and nothing here is allowed to cost Saturday.
+Prep is the everyday program — the one you run whenever there's no fight — so it's where the look gets built. Full dose in the volume weeks, when the food is up and the lifts are at 70–75%; half dose in the heavy and fast weeks, so the size is kept without costing the main lifts; nothing in test week. It never goes into a camp: a camp is for sharpening. Every set stops a rep or two short of failure; nothing here is a grind, and nothing here is allowed to cost Saturday.
 
-**Thursday, after the band catch:** lean-away lateral raise, 3 × 12–15 — hold the rack with one hand and lean away, raise a dumbbell out to shoulder height with the other; rear-delt fly, 3 × 15 — bent over flat, small dumbbells out to the sides, little fingers leading; EZ-bar or dumbbell curls, 3 × 8–12 — elbows still, full stretch at the bottom, no swing; trap bar shrugs, 3 × 10–12 — stand inside the bar, shrug straight up, pause 1–2 seconds at the top, lower slow, never roll the shoulders; the traps are part of the look, and they back up the neck. Rest 60–75 seconds.
+**Thursday, after the band catch** — three sets each in weeks 1–5, two sets each in weeks 6–13, rest 60–75 seconds:
 
-**Sunday, after the face pulls in the core block:** hammer curls, 3 × 10. Rest 60 seconds.
+- **Lean-away lateral raise, 12–15** — hold the rack with one hand and lean away, raise a dumbbell out to shoulder height with the other.
+- **Rear-delt fly, 15** — bent over flat, small dumbbells out to the sides, little fingers leading.
+- **EZ-bar or dumbbell curls, 8–12** — elbows still, full stretch at the bottom, no swing.
+- **Overhead triceps extension, 10–12** — a rope on a high cable facing away, or one dumbbell held in both hands; elbows pointing at the ceiling, lower behind your head to a full stretch, extend. The triceps are most of the upper arm, and the stretched position grows them best. An elbow at 4 or more on Sunday's check: rope pushdowns instead that week.
+- **Trap bar shrugs, 10–12** — stand inside the bar, shrug straight up, pause 1–2 seconds at the top, lower slow, never roll the shoulders; the traps are part of the look, and they back up the neck.
 
-That's under twenty minutes a week of the look, in the block that builds it, with the food to match. The compound lifts, the rings and the muscle-up line carry the rest.
+**Sunday, after the face pulls in the core block:** hammer curls, 3 × 10 in weeks 1–5, 2 × 10 in weeks 6–13. Rest 60 seconds.
+
+About twenty-five minutes a week of the look in the build and fifteen after, with the food to match. The compound lifts, the rings and the muscle-up line carry the rest.
 
 ---
 
@@ -542,16 +548,15 @@ Skill. Hitting hard on contact, snap and retraction, distance, timing, the guard
 
 ## THE EDGE — THE REINS OFF, AND THE ONE THING THAT PUTS THEM BACK
 
-Six additions, on by default, that turn this from a program into a professional camp's density in the same hours. None of them is grinding volume; every one is more high-quality exposure at a recovery cost the monitoring can see.
+Five additions, on by default, that turn this from a program into a professional camp's density in the same hours. None of them is grinding volume; every one is more high-quality exposure at a recovery cost the monitoring can see.
 
 1. **Speed twice a week** — three flying twenties on Tuesday after the shuttles, from week 11. Build-ups every time. The Nordics never miss.
 2. **Cluster sets in the heavy block** — five sets of two-plus-two at 87–90%, twenty seconds on the pins between the pairs. Pins set; the velocity rule ends the set.
 3. **More plyometric contacts** in weeks 11–13 — box jumps 4 × 3 and side bounds 4 × 4; depth jumps held at 4 × 4, because sixteen clean landings beat twenty-five tired ones. The tendon block runs twice a week, the tendon gate applies, and the output rule is law.
 4. **Rounds past the fight** — seven in the convert block. Scored; the fade governs.
 5. **The Wednesday easy thirty** — a second base session, walk or run, nose only. Easy, or it comes out.
-6. **Sauna four times a week** in weeks 11–13. The hydration schedule's sauna line, every time.
 
-**THE GUARDRAIL.** Two yellow mornings on the strap in the same week — resting heart rate five over, or HRV twelve percent under — and the six come off for the rest of that week. Not the program: the additions. Tuesday's speed and the Wednesday thirty go first; the clusters become straight sets; the contacts drop back; the rounds go back to six. The base program is what keeps you training. The edge is what makes you dangerous, and it's only worth having if you're standing on the day.
+**THE GUARDRAIL.** Two yellow mornings on the strap in the same week — resting heart rate five over, or HRV twelve percent under — and the five come off for the rest of that week. Not the program: the additions. Tuesday's speed and the Wednesday thirty go first; the clusters become straight sets; the contacts drop back; the rounds go back to six. The base program is what keeps you training. The edge is what makes you dangerous, and it's only worth having if you're standing on the day.
 
 **THE TENDON GATE AND THE JUMP CHECK.** Separately from the strap: Achilles or knee at 3 or more on Sunday's check means no depth jumps the following week, and a hamstring at 3 or more means no flying sprints — a sore tendon doesn't show on HRV. And Tuesday's jump check more than 7% under its four-week average counts as a yellow, toward the two that take the Edge off.
 
@@ -571,7 +576,7 @@ Six additions, on by default, that turn this from a program into a professional 
 
 **Why movement gets two sessions and a daily dose.** You said it holds you back, and for a boxer stiff hips and shoulders cost power directly — a hip that can't turn sends the force through the back and knee instead. RANGE finds the range with long holds and end-range strength; the movement session teaches the body to use it under control; the tests every five weeks make it a number. By the camp, this is done, and the camp doesn't have to spend a minute on it.
 
-**Why the size block is five weeks and no more.** Direct arm and shoulder work belongs in a volume block with the food to match, and nowhere else in a fighter's year. Five weeks, out at week 6, not in the camp.
+**Why the size block runs all through Prep and never in a camp.** Prep is the everyday program, so it's where the look gets built: full dose in the volume weeks with the food to match, half dose in the heavy and fast weeks so it's kept without costing the main lifts. A camp is for sharpening whatever is lacking; the size work stops there and picks up again after.
 
 **Why the max single is week 9 and the test is week 14.** Two maximal exposures in fourteen weeks, each after a ramp, each followed by a reset. The first re-aims the intensification block; the second aims the camp.
 

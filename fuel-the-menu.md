@@ -135,9 +135,11 @@ Steak on the two heavy days. Salmon twice a week if you'll eat it — the one li
 
 ## FIGHT DAY — WEIGH-IN TO BELL
 
-**If you cut any weight for the weigh-in,** the hours between the scale and the bell are for putting it back. Drink 1.25–1.5 litres for every kilo lost, an electrolyte sachet in every litre, sipped steadily, not gulped. Eat low-fibre carbohydrate — rice, bagels, white pasta, bananas, rice cakes with honey — about a gram per kilo of bodyweight every hour or two until three hours out. Nothing new, nothing fatty, nothing fibrous.
+**No water cuts, ever.** If there's weight to make, it comes off through food in the weeks before, half a percent of bodyweight a week at most — dehydration on top of hard training is the combination to avoid.
 
-**If you didn't cut,** eat the day as a normal Saturday and drink to the alarms.
+**Weighed in the day before:** the hours between the scale and the bell are for topping up. Drink 1.25–1.5 litres for every kilo you're under your normal morning weight, an electrolyte sachet in every litre, sipped steadily, not gulped. Eat low-fibre carbohydrate — rice, bagels, white pasta, bananas, rice cakes with honey — about a gram per kilo of bodyweight every hour or two until three hours out. Nothing new, nothing fatty, nothing fibrous.
+
+**Weighed in on the day:** eat the day as a normal Saturday and drink to the alarms.
 
 **Three hours out:** the last proper meal — a rice pouch, chicken, a banana. **One hour out:** half the bottle and a banana, or rice cakes and honey. **The warm-up and between rounds:** sips of water with electrolytes, nothing else.
 

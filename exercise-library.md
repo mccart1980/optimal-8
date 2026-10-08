@@ -32,12 +32,6 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **WRIST CIRCLES** — Hands clasped or loose, circle your wrists ten times each way, slowly.
 
-**BEAR CRAWLS** — On hands and feet, knees an inch off the floor and staying there, back flat as a table, opposite hand and foot moving together in small steps. Ten metres forward, ten metres backward.
-
-**BREATHE DOWN** — On your back, feet up on a chair or a bench, five slow breaths: in through the nose for 4, out for 8. Also called down-regulate.
-
-**PHYSIOLOGICAL SIGH** — A full breath in through the nose, a short second sip on top, one long slow exhale through the mouth.
-
 ## POWER, JUMPS AND SPEED
 
 **JUMP CHECK** — Three jumps straight up: hands on hips, a quick dip, jump as high as you can, land soft. Film them in slow motion on the jump app and log the best height. The app compares it to your average.
@@ -98,12 +92,6 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **NORDIC CURLS** — Kneel with your heels held under something solid. Keeping your body straight from knees to head, lower yourself forward as slowly as you can, catch yourself with your hands, push back up.
 
-**ROMANIAN DEADLIFT** — Bar at your hips, soft knees. Push your hips back until the bar reaches mid-shin with a flat back, then stand back up by driving the hips through.
-
-**CHEST-SUPPORTED ROW** — Lie chest-down on an incline bench with a dumbbell in each hand. Row until your elbows pass your body, pause one second at the top, lower slowly.
-
-**CLAP PUSH-UP** — A push-up driven so hard your hands leave the floor. Clap once, land on soft elbows and go straight into the next one.
-
 ## CALISTHENICS
 
 **RING ROWS** — Hang under rings set at hip height, body straight, heels on the floor. Pull your chest up to the rings, pause, lower slowly. Feet up on a box makes it harder; archer rows pull mostly with one arm.
@@ -156,12 +144,6 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **FACE PULLS** — A rope on a high cable, or a band on a door anchor. Pull it to your face with your elbows high, squeeze the backs of your shoulders, return slowly.
 
-**SIDE PLANK REACH-THROUGH** — In a side plank, thread your top arm under your body, then rotate open to the ceiling.
-
-**SIDE-LYING EXTERNAL ROTATION** — Lie on your side, top elbow glued to your ribs, and rotate a light dumbbell from your belly up toward the ceiling, then lower slowly.
-
-**PRONE T RAISE** — Lie face down on an incline bench, arms hanging. Raise them out to the sides in a T, thumbs up, then lower slowly.
-
 ## THROWS
 
 **ROTATIONAL SHOT-PUT THROW** — Medicine ball at your shoulder, side-on to a wall in your stance. Drive off your back hip and put the ball into the wall hard and flat, like a straight punch.
@@ -186,6 +168,10 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **TRAP BAR SHRUGS** — Stand inside the trap bar, arms straight. Shrug your shoulders straight up toward your ears, hold one or two seconds, lower slowly. Don't roll them.
 
+**OVERHEAD TRICEPS EXTENSION** — A rope on a high cable with your back to it, or one dumbbell held in both hands. Elbows pointing at the ceiling, lower behind your head to a full stretch, then straighten your arms. Keep your elbows still.
+
+**ROPE PUSHDOWNS** — A rope on a high cable. Elbows tucked at your sides, push the rope down until your arms are straight, spreading the ends at the bottom, then let it back up slowly.
+
 ## CONDITIONING
 
 **EASY BASE (RIDE OR RUN)** — Steady and easy the whole way, breathing through your nose. If you can't talk in full sentences, slow down. Stay in the heart-rate zone the app shows.
@@ -206,7 +192,11 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **FIGHT-PACE ROUNDS** — Four three-minute rounds at fight pace, one minute's rest. Sharp, then stop.
 
-**THE ROUNDS (6 × 3 SIMULATION)** — Each three-minute round: minute one on the SkiErg, minute two on the assault bike, minute three ball slams (or the bag). One minute in your corner between rounds. Log round one and the last round.
+**THE ROUNDS (FIGHT SIMULATION)** — Your fight, on the machines. Each round is split into thirds — SkiErg, then assault bike, then medicine-ball slams (or the bag) — at your fight's round length, with your fight's rest between rounds. A minute each for 3-minute rounds, forty seconds each for 2-minute rounds. Log the first round and the last.
+
+**THE DOUBLE** — The ceiling for a short fight: one round more than your fight, five minutes easy, then your fight's rounds again. Same stations, same rest. Log the first round and the last.
+
+**THE FIGHT-DAY REHEARSAL** — Six days before the fight: get up when you'll get up on fight day, eat what you'll eat when you'll eat it, do the warm-up you'll do, then your fight's rounds at fight pace, at the hour the fight is on, with the corner minute in every rest. Anything that goes wrong today, fix before the day.
 
 **THE CORNER MINUTE** — Every rest between rounds: two big sighs the second the round ends (in through the nose, sip a little more on top, long slow breath out), then breathe through your nose, in for 3 and out for 6, standing, hands off your knees.
 
@@ -282,4 +272,11 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **TAPE, WEIGHT AND PHOTOS** — Weigh first thing; tape arms, shoulders and waist; photos front, side and back in the same light.
 
-**MID-THIGH PULL** — Only with a force plate: stand on it holding a fixed bar at mid-thigh and pull up as hard as you can for a few seconds; nothing moves. Log the peak force.
+
+**WORKING-WEIGHT CHECK** — Warm up, then add weight set by set until a set of 3 is hard but you could have done two more. Stop there and type the weight in. The app works out every load from it. Not a max.
+
+**PRE-CAMP CHECK** — In the week before a camp: a blood test (full blood count, lipids, liver and kidneys) and a blood-pressure reading. Book it with your GP or a private clinic and tick it off when it's done.
+
+**THE MOVEMENT SESSION** — Thirty minutes at home, slow and controlled: breathe down, loaded joint circles, a slow Turkish get-up, the squat flow, the hip flow and the shoulder flow. The app times each move.
+
+**TRANSITION WEEK** — The week or two after a fight. Three days of only RANGE, the sit and walking; then easy base rides, the movement session and calisthenics at half sets. Nothing heavier than 70%, no sprints, no rounds.

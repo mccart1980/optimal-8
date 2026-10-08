@@ -36,17 +36,18 @@ About seven and a half hours in the gym a week at peak and three at home. Week 5
 3. Nothing new in camp. Every exercise here you own from Prep; only the loads, the rounds and the dates change.
 4. The sixth round is trained as the eighth. In the peak block every round session goes two past the fight, and once, in the last hard week, four past.
 5. Sleep is the first session of every day. In bed by half past eight, Sunday to Wednesday.
-6. Cold water stays out of camp. The sauna comes in from week 2, four times a week in the peak.
+6. Cold water stays out of camp. The sauna comes in from week 2, twice a week, never more.
 7. The bag is skill, not conditioning. Conditioning is measured on the erg, where the number can't lie.
 8. Easy means easy. Monday's base, the Wednesday thirty and the easy hour are nasal and conversational, or they're stealing from Tuesday and Sunday.
 9. The fight-day rehearsal is Sunday 7 March. Same wake time, same meals, same warm-up, six rounds at fight time of day.
 10. The fade is the number. Round six's output divided by round one's.
+11. Before every camp: bloods — full blood count, lipids, liver and kidneys — and blood pressure. No dehydration cuts, ever: if there's weight to make, it comes off through food.
 
 ---
 
 ## THE TEN WEEKS — EVERY NUMBER, EVERY WEEK, WITH DATES
 
-**The blocks.** Week 1 FOUNDATION — one week of slow lowering and base off the test-day numbers. Weeks 2–4 BUILD — paused, then fast in clusters; the rounds at fight rest. Week 5 EASY + TESTS. Weeks 6–8 PEAK — contrast, depth jumps, top speed twice a week, repeat bursts, eight rounds, the sauna four times. Week 9 SHARPEN. Week 10 FIGHT WEEK.
+**The blocks.** Week 1 FOUNDATION — one week of slow lowering and base off the test-day numbers. Weeks 2–4 BUILD — paused, then fast in clusters; the rounds at fight rest. Week 5 EASY + TESTS. Weeks 6–8 PEAK — contrast, depth jumps, top speed twice a week, repeat bursts, eight rounds, the sauna. Week 9 SHARPEN. Week 10 FIGHT WEEK.
 
 | Wk | Dates | Block | Mon BASE | Tue ENGINE 1 | Wed trap bar · phase · sets | Thu ENGINE 2 | Sat sprints · squat | Sun ROUNDS | Nordics (Wed) |
 |---|---|---|---|---|---|---|---|---|---|
@@ -55,9 +56,9 @@ About seven and a half hours in the gym a week at peak and three at home. Week 5
 | 3 | 18–24 Jan | Build | 45 min | 4 × 4 min hard · shuttles begin | paused · 4 × 3 @ 82% | threshold 2 × 8 | 5 × 20 m · 4 × 3 @ 82% paused | 6 × 3, 60 s | 3 × 5 |
 | 4 | 25–31 Jan | Build | 45 min | REPEAT BURSTS 2 × 8 | FAST, IN CLUSTERS · 5 × (2+2) @ 87% · repeat sled starts | ROUNDS ON THE ERG 7 × 3, 60 s | 5 × 20 m · 5 × (2+2) @ 87% fast | 6 × 3 SIM — SCORED, 60 s | 3 × 5 |
 | 5 | 1–7 Feb | EASY + TESTS | 30 min | 20 min easy · RETESTS first | reset working weights · 2 × 3 @ 65% fast · profiles redrawn | 20 min easy · NASAL TEST first | 3 × 20 m @ 90% · 2 × 3 @ 65% | 6 × 3 SIM — SCORED, 60 s | 2 × 3 |
-| 6 | 8–14 Feb | Peak | 45 min | REPEAT BURSTS 2 × 8 · speed twice | CONTRAST · 3 × 2 @ 85% + the circuit · repeat sled starts | 40-s repeats 2 × 6 | 5 × 20 m · CONTRAST 3 × 2 @ 85% + circuit, 3 rounds · depth jumps 4 × 4 | 8 × 3, 60 s · sauna × 4 | 3 × 5 |
-| 7 | 15–21 Feb | Peak | 45 min | 4 × 4 min hard · speed twice | contrast · 3 × 2 @ 87% + circuit | ROUNDS ON THE ERG 8 × 3, 60 s | 5 × 20 m · CONTRAST 3 × 2 @ 87% + circuit · depth jumps 4 × 4 | 8 × 3, 60 s · sauna × 4 | 3 × 5 |
-| 8 | 22–28 Feb | Peak, last hard week | 45 min | REPEAT BURSTS 2 × 8 · speed twice | contrast · 3 × 2 @ 88% + circuit, 2 rounds · repeat sled starts | REPEAT BURSTS 2 × 8 | 5 × 20 m · CONTRAST 3 × 2 @ 88% + circuit, 2 rounds · depth jumps 4 × 4 | 10 × 3 SIM — SCORED (last read), 60 s · sauna × 4 | 3 × 5 |
+| 6 | 8–14 Feb | Peak | 45 min | REPEAT BURSTS 2 × 8 · speed twice | CONTRAST · 3 × 2 @ 85% + the circuit · repeat sled starts | 40-s repeats 2 × 6 | 5 × 20 m · CONTRAST 3 × 2 @ 85% + circuit, 3 rounds · depth jumps 4 × 4 | 8 × 3, 60 s | 3 × 5 |
+| 7 | 15–21 Feb | Peak | 45 min | 4 × 4 min hard · speed twice | contrast · 3 × 2 @ 87% + circuit | ROUNDS ON THE ERG 8 × 3, 60 s | 5 × 20 m · CONTRAST 3 × 2 @ 87% + circuit · depth jumps 4 × 4 | 8 × 3, 60 s | 3 × 5 |
+| 8 | 22–28 Feb | Peak, last hard week | 45 min | REPEAT BURSTS 2 × 8 · speed twice | contrast · 3 × 2 @ 88% + circuit, 2 rounds · repeat sled starts | REPEAT BURSTS 2 × 8 | 5 × 20 m · CONTRAST 3 × 2 @ 88% + circuit, 2 rounds · depth jumps 4 × 4 | 10 × 3 SIM — SCORED (last read), 60 s | 3 × 5 |
 | 9 | 1–7 Mar | SHARPEN | 30 min | RETESTS, then bursts 1 × 8 | 2 × 2 @ 80% fast, bench throws, chins, Nordics 2 × 3 | 4 × 3 min at fight pace, 60 s | SPEED MICRODOSE 25 min | FIGHT-DAY REHEARSAL — Sunday 7 March | 2 × 3 |
 | 10 | 8–13 Mar | FIGHT WEEK | 20 min easy | SPEED MICRODOSE 25 min | — | ACTIVATION 20 min | FIGHT — Saturday 13 March | — |
 
@@ -285,7 +286,7 @@ Lower-body maximal strength is the best predictor there is of how hard trained b
 
 Bar on the front of the shoulders, quick shallow knee dip, drive it overhead with the legs and punch it to lockout. Legs, braced trunk, hands — the route a punch takes. Loaded like the other lifts: fast, two in reserve; weeks 6–8 at 85%; week 9 at 70%.
 
-**Done · ~1:15.** THE MOVEMENT SESSION this evening, then RANGE, and the sauna in the peak weeks. Bed early: tomorrow is the rounds. Saturday's 5pm carb feed loads it.
+**Done · ~1:15.** THE MOVEMENT SESSION this evening, then RANGE. Bed early: tomorrow is the rounds. Saturday's 5pm carb feed loads it.
 
 ---
 
@@ -319,7 +320,7 @@ Bodyweight · waist · resting heart rate · green / yellow / red days · joints
 
 Three yellows in a week: next week runs at the table's numbers minus one set on everything and the interval sessions at 90%. Achilles or knee at 3 or more: no depth jumps next week. Hamstring at 3 or more: no flying sprints next week. That's the tendon gate, and it runs whatever the strap says.
 
-**Done · ~1:11.** RANGE tonight, and the easy hour this afternoon — 30–40 minutes easy, nose only, bike or walk, four-plus hours after the session. Weeks 2–5: sauna, 15–20 minutes, twice a week; weeks 6–8: four times — Sunday, Tuesday, Thursday and Saturday evenings — the full heat-acclimation dose, with the hydration schedule's sauna line every time — heat acclimation over three weeks raises blood volume and endurance the way nothing else this cheap does. Never straight from the sauna into cold.
+**Done · ~1:11.** RANGE tonight, and the easy hour this afternoon — 30–40 minutes easy, nose only, bike or walk, four-plus hours after the session. Weeks 2–8: sauna, 15–20 minutes, twice a week — Sunday and one weekday evening — never more, and never without the hydration schedule's sauna line — heat acclimation over three weeks raises blood volume and endurance the way nothing else this cheap does. Never straight from the sauna into cold.
 
 ---
 
@@ -473,16 +474,15 @@ Skill. Hitting hard on contact, snap and retraction, distance, timing, the guard
 
 ## THE EDGE — THE REINS OFF, AND THE ONE THING THAT PUTS THEM BACK
 
-Six additions, on by default, that give this camp a professional camp's density in the same hours. None of them is grinding volume; every one is more high-quality exposure at a recovery cost the monitoring can see.
+Five additions, on by default, that give this camp a professional camp's density in the same hours. None of them is grinding volume; every one is more high-quality exposure at a recovery cost the monitoring can see.
 
 1. **Speed twice a week** — three flying twenties on Tuesday after the shuttles, from week 6. Build-ups every time. The Nordics never miss.
 2. **Cluster sets in the build block** — week 4: five sets of two-plus-two at 87%, twenty seconds on the pins between the pairs. Pins set; the velocity rule ends the set.
 3. **More plyometric contacts** in weeks 6–8 — box jumps 4 × 3 and side bounds 4 × 4; depth jumps held at 4 × 4, because sixteen clean landings beat twenty-five tired ones. The tendon block runs twice a week, the tendon gate applies, and the output rule is law.
 4. **Rounds past the fight** — eight in weeks 6 and 7, ten once in week 8. Scored; the fade governs.
 5. **The Wednesday easy thirty** — a second base session, walk or run, nose only. Easy, or it comes out.
-6. **Sauna four times a week** in weeks 6–8. The hydration schedule's sauna line, every time.
 
-**THE GUARDRAIL.** Two yellow mornings on the strap in the same week — resting heart rate five over, or HRV twelve percent under — and the six come off for the rest of that week. Not the program: the additions. Tuesday's speed and the Wednesday thirty go first; the clusters become straight sets; the contacts drop back; the rounds go back to six. The base program is what keeps you training. The edge is what makes you dangerous, and it's only worth having if you're standing on the day.
+**THE GUARDRAIL.** Two yellow mornings on the strap in the same week — resting heart rate five over, or HRV twelve percent under — and the five come off for the rest of that week. Not the program: the additions. Tuesday's speed and the Wednesday thirty go first; the clusters become straight sets; the contacts drop back; the rounds go back to six. The base program is what keeps you training. The edge is what makes you dangerous, and it's only worth having if you're standing on the day.
 
 **THE TENDON GATE AND THE JUMP CHECK.** Separately from the strap: Achilles or knee at 3 or more on Sunday's check means no depth jumps the following week, and a hamstring at 3 or more means no flying sprints — a sore tendon doesn't show on HRV. And Tuesday's jump check more than 7% under its four-week average counts as a yellow, toward the two that take the Edge off.
 

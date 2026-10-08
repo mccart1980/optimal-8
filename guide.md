@@ -26,16 +26,23 @@ The app works out every weight for you. Load the bar to the number it shows.
 - **40-second repeats** — flat out for 40, easy for 80, six times. The last three are meant to hurt.
 - **Bursts** — flat out for 6–8 seconds, easy for 40, sixteen times in two sets.
 - **Threshold** — the hardest pace you could hold for half an hour, twice for 8 minutes.
-- **Rounds** — 3 minutes on, 1 minute off, six times. That's the fight.
+- **Rounds** — your fight, on the machines: your round length, your number of rounds, your rest. In the build and the peak you go past the fight on purpose.
 - After every hard session: sit on the bike, eyes closed, one minute. Type your heart rate at the end of it.
 
 ## THE BLOCKS — WHAT THIS PART OF THE YEAR IS FOR
-- **Build** (the first five or six weeks) — more reps, lighter weights, long slow lowering, longer easy rides, the size block, movement twice a week. You get bigger and fitter. It feels easy. It isn't.
+- **Build** (the first five or six weeks) — more reps, lighter weights, long slow lowering, longer easy rides, the size block at full dose (half dose after this block), movement twice a week. You get bigger and fitter. It feels easy. It isn't.
 - **Heavy** (the middle) — fewer reps, heavier bar, paused reps then fast reps, a max week near the end. You get strong.
 - **Fast** (the last four) — heavy doubles straight into jumps, sprints at top speed, rounds at fight rest. Strength becomes speed.
 - **Test week** — light, then test day. Every number gets measured and every weight resets.
-- **Camp** — ten weeks to the fight. The app switches to it on the date you gave it.
-- **After a fight** — two easy weeks. Don't skip them.
+- **Camp** — up to ten weeks to the fight, shorter if the fight is closer. The app builds it from what you enter under Fight booked? in Settings.
+- **After a fight** — one easy week after a short fight, two after a long one, and until your morning numbers are back to normal. Don't skip it.
+
+## SETTING A FIGHT
+Settings → **Fight booked?**
+- **No:** the app runs Prep, your everyday program, in 16-week cycles.
+- **Yes:** type in the date, the rounds and minutes (like 3 × 2), the rest between rounds, when you weigh in, how fit you are right now (low, moderate or good), and whether you want a little extra on power, strength or durability — or nothing extra.
+
+The app builds everything from that. The engine always comes first. Change anything and it re-plans from today, and tells you in one line what changed. Your first scored rounds tell the app how fit you really are, and it adjusts.
 
 ## LIGHTER WEEKS
 The app marks them. Everything is lighter on purpose. Do not add anything. This is where the gains actually land.
@@ -50,7 +57,7 @@ Every evening: RANGE (the app times each stretch), the hollow and arch holds and
 The other app. Half the bottle and a banana twenty minutes before you train, the other half after. The 5pm feeds on Tuesday, Friday and Saturday are the ones that never move. Drink when the alarm says.
 
 ## WORDS YOU'LL SEE
-**Working weight** — the heaviest weight you could do the set with and still have two reps left. **Slow lowering** — five seconds down. **Paused** — stop dead at the bottom for three seconds. **Contrast** — a heavy double, then jumps. **Fade** — round six divided by round one; the number the whole thing is aimed at. **Recovery heart rate** — how far your heart rate drops in the minute after the last interval; higher is fitter. **HRV** — how much the gap between heartbeats varies; a bigger number than your usual means you're recovered, a smaller one means you're not. **BOLT** — how long you can comfortably hold your breath after a normal exhale. **Threshold** — the fastest pace you could keep for half an hour. **Close and plant** — sprint five metres from your stance and stop dead in your stance. **Jump check** — three jumps on Tuesday that tell the app how fresh your legs are. **Peak-power load** — the weight for the bench throw and the trap bar jump where the watch shows the most power; the app works it out from the profile.
+**Working weight** — the heaviest weight you could do the set with and still have two reps left. **Slow lowering** — five seconds down. **Paused** — stop dead at the bottom for three seconds. **Contrast** — a heavy double, then jumps. **Fade** — round six divided by round one; the number the whole thing is aimed at. **Recovery heart rate** — how far your heart rate drops in the minute after the last interval; higher is fitter. **HRV** — how much the gap between heartbeats varies; a bigger number than your usual means you're recovered, a smaller one means you're not. **BOLT** — how long you can comfortably hold your breath after a normal exhale. **Threshold** — the fastest pace you could keep for half an hour. **Close and plant** — sprint five metres from your stance and stop dead in your stance. **Jump check** — three jumps on Tuesday that tell the app how fresh your legs are. **Peak-power load** — the weight for the bench throw and the trap bar jump where the watch shows the most power; the app works it out from the profile. **Engine-first** — when your fitness is low, the lifting drops to two sets so the conditioning gets the time; your strength holds on it. **Emphasis** — a little extra on one thing, never at the cost of the engine. **The double** — one round more than your fight, five minutes easy, then your fight's rounds again.
 
 ## IF SOMETHING'S WRONG
 **Tuesday's three jumps** more than 7% down on your average: the app counts it as a yellow. **Achilles or knee at 3 out of 10 or more on Sunday:** no depth jumps next week — the app swaps in the loaded drop jumps. **Hamstring at 3 or more:** no flying sprints next week. **Elbow or wrist at 4 or more:** the calisthenics go to holds next week. **A hamstring twinge on the sprint build-ups:** no sprints that day. **Three yellow mornings in a row:** the app makes it a red day. Don't argue with any of it.
