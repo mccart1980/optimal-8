@@ -3,6 +3,7 @@ import campMd from "../optimal-8-camp.md?raw";
 import prepMd from "../optimal-8-prep.md?raw";
 import builderMd from "../season-builder.md?raw";
 import { sessionCatalog, seasonWeeks } from "./App.jsx";
+import { GRID } from "./proof-grid.js";
 
 /* ================================================================
    THE PROOF, CONTINUED — the session pages the builder generates.
@@ -10,8 +11,12 @@ import { sessionCatalog, seasonWeeks } from "./App.jsx";
    3 · Worked Example 1's pages: two-thirds, engine-first, durability
    5 · nothing invented: every exercise, load and session type in every
        generated week is written in Prep, the Camp or season-builder.md
+   6 · the safety corrections, on the pages: no released-weight jump, no
+       true max, no full depth jumps before the tendon ramp allows them —
+       every fitness level, format and emphasis, and the Fighter too
    ================================================================ */
-const CAT = sessionCatalog(null).filter((c) => c.program !== "fighter");
+const ALL = sessionCatalog(null);
+const CAT = ALL.filter((c) => c.program !== "fighter");
 const cards = (set, week, day, edge) => CAT.filter((c) => c.set === set && c.row === "camp" && c.week === week && c.day === day && c.edge === (edge !== false));
 const pres = (set, week, day, name) => { const c = cards(set, week, day).find((x) => x.n === name); return c ? c.pres : null; };
 const has = (set, week, day, name) => cards(set, week, day).some((x) => x.n === name);
@@ -40,7 +45,8 @@ describe("proof 1 — the master camp's session pages", () => {
       expect(pres("master", w, "tue", "Copenhagen plank")).toMatch(/^2 × 30 s per side/);
       expect(pres("master", w, "tue", "Seated calf raise")).toMatch(/^3 × 12/);
     });
-    expect(has("master", 1, "tue", "THE BURST TEST")).toBe(true);
+    /* the camp test week hands on: the burst decrement was measured there */
+    expect(has("master", 1, "tue", "THE BURST TEST")).toBe(false);
     expect(has("master", 5, "tue", "THE RETESTS")).toBe(false);
   });
   it("Wednesday: the sled, the drive holds through week 8, the trap bar and bench in their phases, chins, Nordics, neck holds", () => {
@@ -75,7 +81,7 @@ describe("proof 1 — the master camp's session pages", () => {
       expect(pres("master", w, "sat", "Stance Starts")).toMatch(/^3 × 10 m/);
       expect(pres("master", w, "sat", "Close and Plant")).toMatch(/^3 × 5 m/);
       expect(pres("master", w, "sat", "Flying Sprints")).toMatch(new RegExp("^" + (w === 1 ? 4 : w === 5 ? 3 : 5) + " × 20 m"));
-      expect(pres("master", w, "sat", w >= 6 ? "Depth Jumps" : "Loaded Drop Jumps")).toMatch(w >= 6 ? /^4 × 4/ : /^3 × 4/);
+      expect(pres("master", w, "sat", w >= 6 ? "Depth Jumps" : "Low-Box Depth Jumps")).toMatch(w >= 6 ? /^4 × 4 · 30–40 cm box/ : /^3 × 4 · 20 cm box/);
       expect(cards("master", w, "sat").find((c) => /^Side Bounds/.test(c.n)).pres).toMatch(new RegExp("^" + (w >= 6 ? 4 : 3) + " × 4 per side"));
       expect(pres("master", w, "sat", "Push Press")).toMatch(/^3 × 3|^2 × 3/);
     });
@@ -126,6 +132,7 @@ describe("proof 3 — Worked Example 1's session pages", () => {
       expect(pres("example1", w, "sun", "Suitcase carries")).toMatch(w === 1 ? /^2 × 30 m/ : /^3 × 30 m/);
       expect(pres("example1", w, "tue", "Spanish Squat Hold")).toMatch(/\+2\.5 kg if the last hold was solid/);
       expect(has("example1", w, "sat", "Depth Jumps")).toBe(false);
+      expect(has("example1", w, "sat", w <= 2 ? "Drop Landings" : "Low-Box Depth Jumps")).toBe(true);
     });
     expect(has("example1", 6, "sat", "Neck — holds only")).toBe(false);
   });
@@ -170,7 +177,7 @@ const SAID_AS = {
   "EASY BIKE (WARM-UP)": "3 easy minutes on the bike", "BAND PULL-APARTS": "band pull aparts", "PUSH-UPS": "push ups",
   "90/90 HIP SWITCHES": "90/90 hip switches", "MEDICINE-BALL CHEST PASSES": "medicine ball chest passes", "BIKE SPRINTS (10 SECONDS)": "10 second bike sprints",
   "SPRINT BUILD-UPS": "build ups", "JUMP CHECK": "the jump check", "HEAVY SLED PUSH": "heavy sled", "PUNCH-POSITION HOLD": "punch position hold",
-  "SQUAT CONTRAST CIRCUIT": "jump circuit", "BENCH CONTRAST": "bench throws", "CLUSTER SETS": "clusters", "MAX SINGLE": "max single",
+  "SQUAT CONTRAST CIRCUIT": "jump circuit", "BENCH CONTRAST": "bench throws", "CLUSTER SETS": "clusters", "TOP TRIPLE": "top triple",
   "SPLIT SQUAT, REAR FOOT ELEVATED": "split squat, rear foot elevated", "WEIGHTED CHIN-UPS": "weighted chin ups", "MUSCLE-UP LINE": "muscle up line",
   "HANDSTAND (ON PARALLETTES)": "handstand", "AB WHEEL ROLLOUTS": "ab wheel rollouts", "SUITCASE CARRY": "suitcase carries",
   "NECK FOUR-DIRECTION HOLDS": "four direction holds", "NECK RAPID TENSE": "rapid tense", "NECK PERTURBATION HOLD": "perturbation hold",
@@ -181,12 +188,12 @@ const SAID_AS = {
   "THE FOUR RANGE TESTS": "range tests", "THE THREE FLEXIBILITY TESTS": "flexibility tests", "WORKING-WEIGHT CHECK": "working weight check",
   "PRE-CAMP CHECK": "pre camp check", "TRANSITION WEEK": "the transition", "LEAN-AWAY LATERAL RAISE": "lean away lateral raise", "REAR-DELT FLY": "rear delt fly",
   "PUSH-UP AND CHIN-UP TESTS": "push ups, chins", "PLANK AND COPENHAGEN TESTS": "plank, copenhagen", "THE MOVEMENT SESSION": "the movement session",
-  "TRAP BAR JUMPS": "trap bar jumps", "BAND-ASSISTED JUMPS": "band assisted jumps", "LOADED DROP JUMPS": "loaded drop jumps", "SIDE BOUNDS": "side bounds",
+  "TRAP BAR JUMPS": "trap bar jumps", "BAND-ASSISTED JUMPS": "band assisted jumps", "DROP LANDINGS": "drop landings", "LOW-BOX DEPTH JUMPS": "low box depth jumps", "SIDE BOUNDS": "side bounds",
   "SHUTTLE BURSTS": "shuttle bursts", "ACTIVATION": "activation", "SPEED MICRODOSE": "speed microdose", "THE DOUBLE": "the double",
 };
 const SESSION_SAID = { vo2: "4 minute intervals", rz: "repeat bursts", rz1: "bursts 1 × 8", lac: "40 second repeats", lac2: "40 s repeats 2 × 6", tempo: "tempo",
   thr: "threshold", erg: "rounds on the erg", erg8: "rounds on the erg", ergrounds: "rounds on the erg", fp: "fight pace", fightpace: "fight pace",
-  easy: "20 minutes conversational", mod: "moderate" };
+  easy: "20 minutes conversational", mod: "moderate", t20: "20 minute test" };
 
 describe("proof 5 — nothing invented", () => {
   it("every exercise on every generated card is a library entry the three documents name", () => {
@@ -227,5 +234,64 @@ describe("proof 5 — nothing invented", () => {
       if (id === "T" || id === "PRE") return;
       expect(DOCS.indexOf(id)).toBeGreaterThanOrEqual(0);
     });
+  });
+});
+
+/* ---------------- 6 · the safety corrections, on the pages ---------------- */
+const RELEASED = /drop jump|dumbbells go|let (both|the) dumbbells|hex (db|dumbbell)|released weight/i;
+const TRUE_MAX = /max single|maximal single|1RM|one-rep max|100–102%|attempt at 100/i;
+/* "never a true max", "no true maxes" — the only way a true max is said */
+const trueMaxSaid = (t) => (String(t).match(/.{0,12}true max/gi) || []).some((m) => !/(never a|no) true max/i.test(m));
+const scanPages = (cat) => {
+  const bad = new Set();
+  cat.forEach((c) => {
+    const t = [c.n, c.pres, c.say].join(" | ");
+    const where = (c.set || c.program) + " · " + (c.id || "w" + c.week) + " · " + c.day + " · " + c.n;
+    if (RELEASED.test(t)) bad.add(where + " — released weight");
+    if (TRUE_MAX.test(t) || trueMaxSaid(t)) bad.add(where + " — true max");
+  });
+  return [...bad].sort();
+};
+describe("proof 6 — no released weights, no true maxes, no depth jumps before the ramp allows them", () => {
+  it("no page in any program says a released-weight jump or a true max — the Fighter included", () => {
+    expect(scanPages(ALL)).toEqual([]);
+  }, 300000);
+
+  it("every fitness level, format and emphasis: the pages climb drop landings → low-box depth jumps → depth jumps only as the ramp allows", () => {
+    /* one season per fitness × emphasis × short or long format × camp length */
+    const grid = GRID.filter((g) => [[3, 2], [6, 3]].some((f) => f[0] === g.rounds && f[1] === g.mins) && [2, 4, 6, 7, 10, 13].indexOf(g.weeks) >= 0)
+      .map((g) => ({ set: g.fitness + "/" + g.emphasis + "/" + g.rounds + "x" + g.mins + "/" + g.weeks, plans: g.plans, today: g.today, g }));
+    expect(grid.length).toBe(3 * 4 * 2 * 6);
+    const cat = sessionCatalog(null, grid);
+    expect(scanPages(cat)).toEqual([]);
+    const bad = new Set();
+    cat.filter((c) => c.row === "camp" && /^Depth Jumps$|^Depth jump$/.test(c.n)).forEach((c) => {
+      const g = grid.find((x) => x.set === c.set).g;
+      if (g.fitness === "low" && c.week < 4) bad.add(c.set + " · week " + c.week + " · depth jumps before week 4");
+      if (/^E\d/.test(c.id)) bad.add(c.set + " · " + c.id + " · depth jumps in an engine week");
+      if (g.emphasis === "durability" && !/^(S|FW)$/.test(c.id)) bad.add(c.set + " · " + c.id + " · depth jumps under durability");
+    });
+    cat.filter((c) => c.row === "camp" && c.set.indexOf("low/") === 0 && c.week <= 2 && c.day === "sat" && /Jump|Landing/.test(c.n) && /^(Drop Landings|Low-Box Depth Jumps|Depth Jumps)$/.test(c.n))
+      .forEach((c) => { if (c.n !== "Drop Landings") bad.add(c.set + " · week " + c.week + " · " + c.n + " in the first two weeks from low fitness"); });
+    cat.filter((c) => c.row === "prep" && c.n === "Depth Jumps").forEach((c) => { if (!/^P1[1-3]b?$/.test(c.id)) bad.add(c.set + " · " + c.id + " · depth jumps in Prep"); });
+    expect([...bad].sort()).toEqual([]);
+  }, 300000);
+
+  it("the bench throw shows the safety-stops set-up from its library entry, wherever it is", () => {
+    const rows = ALL.filter((c) => /bench throw/i.test(c.n + " " + (c.rows || []).map((r) => r.n).join(" ")));
+    expect(rows.length).toBeGreaterThan(0);
+    rows.forEach((c) => expect((c.lib || []).some((e) => e.n === "BENCH THROW" && /safety stops/.test(e.text))).toBe(true));
+  });
+
+  it("week 9 and test week are top triples: the TOP TRIPLE entry, the back-off at 85% of the new working max in week 9, none in test week", () => {
+    const cyc = CAT.filter((c) => c.set === "cycle" && c.edge);
+    const p9 = cyc.filter((c) => c.id === "P9"), p14 = cyc.filter((c) => c.id === "P14");
+    ["wed", "sat"].forEach((d) => expect(p9.filter((c) => c.day === d && c.kind === "top").length).toBe(d === "wed" ? 2 : 1));
+    p9.filter((c) => c.kind === "top").forEach((c) => expect((c.lib || []).some((e) => e.n === "TOP TRIPLE")).toBe(true));
+    expect(p9.some((c) => c.day === "wed" && c.n === "Trap bar deadlift" && /^2 × 2 · 85% of the new working max/.test(c.pres))).toBe(true);
+    expect(p14.filter((c) => c.day === "wed" && c.kind === "top").length).toBe(2);
+    expect(p14.some((c) => c.day === "wed" && c.kind === "lift" && /Trap bar|Bench press/.test(c.n))).toBe(false);
+    expect(p14.filter((c) => c.day === "sat" && c.kind === "top").length).toBe(1);
+    expect(p14.filter((c) => c.day === "sun" && c.kind !== "review").length).toBe(0);
   });
 });

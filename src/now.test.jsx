@@ -1,6 +1,6 @@
 import React from "react";
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { render, screen, waitFor, fireEvent, within } from "@testing-library/react";
+import { render, screen, waitFor, fireEvent, within, cleanup as cleanupApp } from "@testing-library/react";
 import App from "./App.jsx";
 import { libFor, LIBRARY } from "./library.js";
 
@@ -178,6 +178,115 @@ describe("TODAY — one thing at a time", () => {
     expect(screen.getByTestId("food-menu")).toBeInTheDocument();
     fireEvent.click(within(nav).getByText("MORE"));
     expect(screen.getByRole("button", { name: "SETTINGS" })).toBeInTheDocument();
+  });
+});
+
+/* ================================================================
+   THE SAFETY CORRECTIONS, ON THE CARDS
+   ================================================================ */
+const settingsKey = () => JSON.parse(localStorage.getItem("o8s-maxes") || "{}");
+describe("the safety corrections, on the cards", () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    localStorage.clear();
+    localStorage.setItem("o8s-migrated", "true");
+    localStorage.setItem("o8s-maxes", JSON.stringify({ squat: 140, bench: 100, tbdl: 180, pp: 70 }));
+  });
+  afterEach(() => vi.useRealTimers());
+
+  it("week 9's top triple: the ramp off the working max, the triple × 1.08 as the new working max, the back-off at 85% of it", async () => {
+    await mount(new Date(2026, 2, 11, 6, 0, 0));   // P9's Wednesday
+    expect(screen.getByTestId("app-title").textContent).toBe("Prep · Week 10 · P9 · Heavy");
+    pick("Trap bar deadlift — top triple");
+    const card = screen.getByTestId("now-card");
+    expect(within(card).getAllByTestId("card-lib")[0].textContent).toMatch(/^TOP TRIPLE|After the warm-up ramp, do sets of three/);
+    expect(within(card).getByTestId("top-ramp").textContent).toBe("RAMP · 90 kg × 5 · 117.5 kg × 3 · 135 kg × 2 · 152.5 kg × 1");
+    fireEvent.change(within(card).getByLabelText("HEAVIEST CLEAN TRIPLE (KG)"), { target: { value: "160" } });
+    fireEvent.click(within(card).getByRole("button", { name: "WORKING MAX · 160 × 1.08 = 172.5 KG" }));
+    expect(settingsKey().tbdl).toBe(172.5);
+    /* the back-off sets read the new working max */
+    fireEvent.click(screen.getByRole("button", { name: "WHOLE DAY" }));
+    expect(within(screen.getByText("GYM").closest("[data-chapter]")).getByText("2 × 2 · 147.5 kg · Rest 2:30")).toBeInTheDocument();
+  });
+
+  it("the velocity rule: the mean of the two fastest reps; 5% off on one slow reading; 2.5% on only after two fast sessions running", async () => {
+    await mount(WED);
+    pick("Trap Bar Deadlift");
+    const speed = () => screen.getByLabelText(/^SET 1 · MEAN OF ITS TWO FASTEST REPS \(M\/S\) · TARGET 0\.65$/);
+    fireEvent.change(speed(), { target: { value: "0.55" } });
+    expect(screen.getByTestId("bar-verdict").textContent).toBe("TAKE 5% OFF · 120 KG");
+    fireEvent.change(speed(), { target: { value: "0.75" } });
+    expect(screen.getByTestId("bar-verdict").textContent).toBe("STAY");
+    expect(screen.queryByRole("button", { name: /ADD 2\.5% FROM NOW ON/ })).not.toBeInTheDocument();
+  });
+
+  it("adds 2.5% when the same lift was fast at its previous session too", async () => {
+    localStorage.setItem("o8s-log", JSON.stringify({ "mPw1-mon-x": { v1: "0.80", vt: 0.65, vl: "tbdl", vd: "2026-01-05" } }));
+    await mount(WED);
+    pick("Trap Bar Deadlift");
+    fireEvent.change(screen.getByLabelText(/MEAN OF ITS TWO FASTEST REPS/), { target: { value: "0.75" } });
+    expect(screen.getByTestId("bar-verdict").textContent).toBe("ADD 2.5% · 127.5 KG");
+    fireEvent.click(screen.getByRole("button", { name: "ADD 2.5% FROM NOW ON · 185 KG" }));
+    expect(settingsKey().tbdl).toBe(185);
+  });
+
+  it("a jump that hurts more than 3 out of 10 stops for the day", async () => {
+    await mount(SAT);
+    pick("Drop Landings");
+    expect(screen.getByTestId("card-pres").textContent).toMatch(/^3 × 4 · 20–30 cm box/);
+    fireEvent.click(screen.getByRole("button", { name: "Hurts more than 3 out of 10: stop it for today" }));
+    expect(screen.getByTestId("card-name").textContent).not.toBe("Drop Landings");
+    pick("Drop Landings");
+    expect(screen.getByTestId("pain-stopped").textContent).toMatch(/^STOPPED FOR TODAY/);
+    expect(document.querySelector("[data-set-mode]")).toBeNull();
+  });
+
+  it("the sauna, twice a week at most: a week the program puts it in has no weekend sauna of your own", async () => {
+    const water = () => { fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByText("FOOD")); fireEvent.click(screen.getByRole("button", { name: "WATER" })); };
+    await mount(SAT);   // P1: no sauna in the program
+    water();
+    expect(screen.getByRole("button", { name: "SAUNA TODAY" })).toBeInTheDocument();
+    cleanupApp();
+    await mount(new Date(2026, 1, 21, 6, 0, 0));   // P6's Saturday: the sauna is Wednesday and Sunday
+    water();
+    expect(screen.queryByRole("button", { name: "SAUNA TODAY" })).not.toBeInTheDocument();
+  });
+});
+
+describe("the stop rule, on the rounds", () => {
+  const camp = { booked: true, fight: "2027-03-13", rounds: 6, mins: 3, rest: 60, weighIn: "before", fitness: "good", emphasis: "none" };
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    localStorage.clear();
+    localStorage.setItem("o8s-migrated", "true");
+  });
+  afterEach(() => vi.useRealTimers());
+  const at10 = () => mount(new Date(2027, 1, 28, 6, 0, 0), { program: "prep", plans: [{ from: "2027-01-04", made: "2026-12-31", inputs: camp }], season: camp, fightDate: "2027-03-13" });
+
+  it("past the fight, a round under 75% of round one is the last: the rest come off, and the fade is scored on it", async () => {
+    await at10();   // week 8, the ten rounds once
+    pick("The 10 × 3 Simulation");
+    fireEvent.click(screen.getByRole("button", { name: "▶ START THE ROUNDS" }));
+    fireEvent.click(screen.getByRole("button", { name: "MINIMISE" }));
+    expect(screen.getByRole("button", { name: "Close timer" })).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText("ROUND 1 OUTPUT (SKIERG M / BIKE CAL)"), { target: { value: "100" } });
+    fireEvent.change(screen.getByLabelText("ROUND 7 OUTPUT"), { target: { value: "80" } });
+    expect(screen.queryByTestId("stop-verdict")).not.toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText("ROUND 8 OUTPUT"), { target: { value: "70" } });
+    expect(screen.getByTestId("stop-verdict").textContent).toMatch(/^ROUND 8 WAS THE LAST — THE REST ARE OFF/);
+    expect(screen.queryByLabelText("ROUND 9 OUTPUT")).not.toBeInTheDocument();
+    expect(screen.getByLabelText("LAST ROUND OUTPUT (SKIERG M / BIKE CAL)").value).toBe("70");
+    expect(screen.queryByRole("button", { name: "Close timer" })).not.toBeInTheDocument();
+  });
+
+  it("the posture gone — FORM GONE — makes that round the last", async () => {
+    await at10();
+    pick("The 10 × 3 Simulation");
+    fireEvent.change(screen.getByLabelText("ROUND 1 OUTPUT (SKIERG M / BIKE CAL)"), { target: { value: "100" } });
+    fireEvent.click(screen.getByRole("button", { name: "Form gone in round 7" }));
+    expect(screen.getByTestId("stop-verdict").textContent).toMatch(/^ROUND 7 WAS THE LAST/);
+    fireEvent.change(screen.getByLabelText("ROUND 7 OUTPUT"), { target: { value: "90" } });
+    expect(screen.getByLabelText("LAST ROUND OUTPUT (SKIERG M / BIKE CAL)").value).toBe("90");
   });
 });
 

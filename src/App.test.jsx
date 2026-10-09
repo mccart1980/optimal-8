@@ -380,6 +380,9 @@ describe("Optimal 8", () => {
     expect(screen.getByText("CONTENTS")).toBeInTheDocument();
     expect(screen.getAllByText("WHAT TO DO TODAY").length).toBeGreaterThan(0);
     expect(screen.getByText(/Open the app. It shows one thing at a time/)).toBeInTheDocument();
+    // "Setting a fight", as the new guide writes it
+    expect(screen.getAllByText("SETTING A FIGHT").length).toBeGreaterThan(0);
+    expect(screen.getByText(/The app builds everything from that\. The engine always comes first\./)).toBeInTheDocument();
     // and guide-fuel.md after it, in the same document
     expect(screen.getAllByText("THE FOOD GUIDE — PLAIN ENGLISH").length).toBeGreaterThan(0);
     expect(screen.getAllByText("FIGHT DAY").length).toBeGreaterThan(0);

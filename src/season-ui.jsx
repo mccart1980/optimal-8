@@ -16,7 +16,7 @@ const PROG_C = { prep: C.moss, camp: C.brass, transition: C.cobalt, pre: C.viole
 const PROG_N = { prep: "PREP", camp: "CAMP", transition: "TRANSITION", pre: "BEFORE THE CAMP" };
 const rowBlock = (r) => (r.program === "prep" ? (r.doc <= 5 ? "ACCUMULATE" : r.doc <= 10 ? "INTENSIFY" : r.doc <= 13 ? "CONVERT" : "TEST WEEK")
   : r.program === "camp" ? ({ F1: "FOUNDATION", F: "FOUNDATION", B1: "BUILD", B2: "BUILD", B3: "BUILD", E: "EASY + TESTS", P1: "PEAK", P2: "PEAK", P3: "PEAK", E1: "ENGINE", E2: "ENGINE", S: "SHARPEN", FW: "FIGHT WEEK" })[r.id]
-  : r.program === "pre" ? "BEFORE WEEK 1" : "TRANSITION");
+  : r.program === "pre" ? "BEFORE WEEK 1" : r.hold ? "THE HEAD CHECK" : "TRANSITION");
 
 export function SeasonView({ season, st, current, classic, dayIso, openWeek }) {
   const s = st.season || {};
@@ -51,7 +51,7 @@ export function SeasonView({ season, st, current, classic, dayIso, openWeek }) {
             <Card ac={isNow ? c : C.line} s={{ padding: "12px 13px", opacity: isNow ? 1 : r.sun < dayIso ? .7 : .88 }}>
               <button onClick={() => openWeek && openWeek(r)} style={{ display: "block", width: "100%", textAlign: "left", background: "transparent", border: "none", padding: 0, cursor: "pointer" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10 }}>
-                  <span style={Object.assign({}, dsp, { fontSize: 20, fontWeight: 800, letterSpacing: 1.1, color: C.chalk })}>{r.program === "transition" ? "T" + r.idx : r.id} · {rowBlock(r)}</span>
+                  <span style={Object.assign({}, dsp, { fontSize: 20, fontWeight: 800, letterSpacing: 1.1, color: C.chalk })}>{r.hold ? "HOLD" : r.program === "transition" ? "T" + r.idx : r.id} · {rowBlock(r)}</span>
                   <span style={Object.assign({}, mno, { fontSize: 14, color: c, whiteSpace: "nowrap" })}>{isNow ? "THIS WEEK" : ""}</span>
                 </div>
                 <div style={Object.assign({}, mno, { fontSize: 15, color: C.ash, marginTop: 4 })}>{rowDates(r)}</div>
@@ -157,6 +157,7 @@ export function ProfileTool({ profiles, setProfiles, maxes, dayIso, onClose }) {
       <Card ac={line ? C.moss : C.line}>
         <Eye c={line ? C.moss : C.ash}>The targets this draws</Eye>
         {VEL_PHASES.map((ph) => { const t = targetFor(P, lift, ph.id);
+          if (!t) return null;
           return (
             <div key={ph.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "9px 0", borderBottom: "1px solid " + C.line }}>
               <span style={{ flex: 1, minWidth: 0 }}>

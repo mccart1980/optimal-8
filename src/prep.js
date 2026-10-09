@@ -1,12 +1,13 @@
 import { C } from "./ui.jsx";
 import { clusterTimer } from "./edge.js";
+import { jumpOf, JUMP_GATE_LINE, TOP_CUE, STOP_RULE } from "./safety.js";
 
 /* ================================================================
    OPTIMAL 8 · PREP — as data
 
    Three blocks with one job each: ACCUMULATE (volume, base, tissue,
-   size, movement), INTENSIFY (heavy, paused then fast, the max
-   single), CONVERT (contrast, reactive jumps, top speed, rounds at
+   size, movement), INTENSIFY (heavy, paused then fast, the top
+   triples), CONVERT (contrast, reactive jumps, top speed, rounds at
    fight rest), then the test week. Every prescription below is read
    off the document's fourteen-week calendar by its row number, so a
    truncated PREP and the sixteen-week form both load the same rows.
@@ -22,10 +23,10 @@ export const PREP_PHASE_NAME = {
   paused: "PAUSED · 3 s hold",
   fast: "FAST",
   cluster: "FAST, IN CLUSTERS · 20 s on the pins",
-  max: "MAX SINGLE · pins set",
+  top: "TOP TRIPLE · pins set",
   easy: "EASY · fast",
   contrast: "CONTRAST + the jump circuit",
-  test: "TEST WEEK",
+  test: "TEST WEEK · the top triple",
 };
 export const PREP_PHASE_CUE = {
   slow: "Lower the bar to the floor over a full five seconds, touch, and drive up fast. Count it: five seconds down, every rep.",
@@ -33,10 +34,10 @@ export const PREP_PHASE_CUE = {
   paused: "Lower normally, stop dead an inch off the floor for three seconds, then drive. Count the three seconds.",
   fast: "No pause: down under control, up as fast as the bar will move. The set ends the moment the bar slows.",
   cluster: "Two reps, the bar down on the pins or the floor for twenty seconds, two more; three minutes between sets. The watch polices every one, and a rep under the threshold ends the set.",
-  max: "After the warm-up ramp, one attempt at 100–102% of the working max, a second only after the first flew. Pins set, no exceptions.",
+  top: "The ramp, pins set, up to a set of three that's hard but leaves one or two in you; × 1.08 is the new working max; then 2 × 2 at 85% of it.",
   easy: "Two sets of three at 65%, fast. Nothing heavy, nothing near failure.",
   contrast: "The sets at the calendar's percentage, fast, then straight into the jump circuit. Heavy wakes the system up; fast uses it.",
-  test: "Two doubles at 80%. The heavy triple is test day.",
+  test: "The top triple again, no back-off sets.",
 };
 export const PREP_PHASE_WHY = {
   slow: "Builds tissue and the tendon stiffness sprinting needs; sore in week 1, then not.",
@@ -44,10 +45,10 @@ export const PREP_PHASE_WHY = {
   paused: "The position force starts from, owned.",
   fast: "The nervous system taught to fire.",
   cluster: "More heavy reps at full speed than straight sets can give.",
-  max: "One of two maximal exposures in the whole preparation, each after a ramp, each followed by a reset of every working weight.",
+  top: "No true maxes, ever. Two heavy exposures in fourteen weeks — week 9 re-aims the heavy block, test week aims the camp — and neither one is a max.",
   easy: "The week the adaptation lands. Nothing is added.",
   contrast: "Where strength becomes speed.",
-  test: "Light, so test day reads the truth.",
+  test: "Test week aims the camp: the top triples reset every working weight.",
 };
 
 /* ---------- the engine sessions ---------- */
@@ -70,10 +71,10 @@ export const PENG = {
     tgt: "The average output across the ten. Aerobic power without the cost." },
   thr: { n: "THRESHOLD", d: "2 × 8 minutes at the hardest pace you could hold for half an hour, 3 easy minutes between",
     tgt: "The output held across the two eights." },
-  ergrounds: { n: "ROUNDS ON THE ERG", d: "6 × 3 minutes at fight pace, 60 seconds between",
+  ergrounds: { n: "ROUNDS ON THE ERG", d: "6 × 3 minutes on the bike or SkiErg at fight pace — the output you can hold across all six — 60 seconds between",
     tgt: "Round one and round six. Round six over round one is the fade." },
-  fightpace: { n: "FIGHT-PACE ROUNDS", d: "4 × 3 minutes at the pace held in week 13, 60 seconds between, and stop",
-    tgt: "Sharp, not tired. The pace from week 13, held." },
+  t20: { n: "THE 20-MINUTE TEST", d: "Five easy minutes, then the most distance you can cover in 20 minutes on the machine you always use. Log the distance and the highest heart rate.",
+    tgt: "The engine's ceiling, against week 1 and week 5." },
   easy: { n: "EASY", d: "20 minutes conversational", tgt: "Nothing else." },
 };
 export const PENG_MENU = ["mod", "vo2", "lac", "rz", "tempo", "thr", "ergrounds", "easy"];
@@ -106,54 +107,64 @@ export const PPROTO = {
 /* ---------- the calendar, row by row ---------- */
 /* ph: the lift phase · sc: the line the week is loaded from · base: Monday's
    minutes · e1/e2: Tuesday's and Thursday's engine · rest: the rounds' rest ·
-   sled/nor/spr: the three counts the calendar carries. */
+   sled/nor/spr: the three counts the calendar carries · bk and em: the
+   calendar's own Block and emphasis cells, word for word · jump: the
+   reactive slot — drop landings in weeks 1–5, low-box depth jumps in
+   weeks 6–10, depth jumps in weeks 11–13. */
 const R = {};
+const jumpFor = (d) => (d <= 5 ? "land" : d <= 10 ? "lowbox" : "depth");
 const wk = (d, o) => { R[d] = Object.assign({ d, sled: 5, nor: [3, 5], spr: 5, sets: 4, reps: 3, pct: 80, rest: 60,
-  sim: 6, split: 3, jump: "drop", js: [3, 4], bound: "stick", box: [3, 3], bsets: 3, pp: { sets: 3, reps: 3, pct: 75 } }, o); };
+  sim: 6, split: 3, jump: jumpFor(d), js: [3, 4], bound: "stick", box: [3, 3], bsets: 3, pp: { sets: 3, reps: 3, pct: 75 } }, o); };
 
-wk(1, { ph: "slow", sc: "3 × 5 @ 70%", sets: 3, reps: 5, pct: 70, base: 45, e1: "mod", e2: "tempo", rest: 90, sim: 0, t20: 1,
-  sled: 4, nor: [3, 4], spr: 0, size: 1, move: 1, carb: 1, profile: 1, nasal: 1, burstTest: 1,
+wk(1, { bk: "Accumulate", ph: "slow", sc: "3 × 5 @ 70%", sets: 3, reps: 5, pct: 70, base: 45, e1: "mod", e2: "tempo", rest: 90, sim: 0, t20: "sun", easyRounds: 3,
+  sled: 4, nor: [3, 4], spr: 0, size: 1, move: 1, carb: 1, profile: 1, nasal: 1, burstTest: 1, satTests: 1,
   em: "Baselines and the load-velocity profiles. Slow lowering 3 × 5 @ 70%. Base 45. Tue 4 × 3 moderate · Thu tempo · Sun 20-minute test." });
-wk(2, { ph: "slow", sc: "4 × 5 @ 72%", sets: 4, reps: 5, pct: 72, base: 50, e1: "vo2", e2: "lac", rest: 90, scored: 1,
+wk(2, { bk: "Accumulate", ph: "slow", sc: "4 × 5 @ 72%", sets: 4, reps: 5, pct: 72, base: 50, e1: "vo2", e2: "lac", rest: 90, scored: 1,
   sled: 4, spr: 4, size: 1, move: 1, carb: 1,
   em: "Slow lowering 4 × 5 @ 72%. Base 50. Tue 4 × 4 · Thu 40-s repeats × 6 · Sun 6 × 3 scored, 90 s — baseline fade." });
-wk(3, { ph: "slow", sc: "4 × 6 @ 72%", sets: 4, reps: 6, pct: 72, base: 55, e1: "rz", e2: "thr", rest: 90,
+wk(3, { bk: "Accumulate", ph: "slow", sc: "4 × 6 @ 72%", sets: 4, reps: 6, pct: 72, base: 55, e1: "rz", e2: "thr", rest: 90,
   sled: 4, spr: 5, size: 1, move: 1, carb: 1,
   em: "Slow lowering 4 × 6 @ 72%. Base 55. Tue bursts · Thu threshold · Sun 6 × 3, 90 s." });
-wk(4, { ph: "normal", sc: "5 × 5 @ 75%", sets: 5, reps: 5, pct: 75, base: 60, e1: "vo2", e2: "lac2", rest: 90,
+wk(4, { bk: "Accumulate", ph: "normal", sc: "5 × 5 @ 75%", sets: 5, reps: 5, pct: 75, base: 60, e1: "vo2", e2: "lac2", rest: 90,
   sled: 4, spr: 5, size: 1, move: 1, carb: 1,
   em: "Normal tempo 5 × 5 @ 75%. Base 60. Tue 4 × 4 · Thu 40-s repeats 2 × 6 · Sun 6 × 3, 90 s." });
-wk(5, { ph: "normal", sc: "3 × 5 @ 70%", sets: 3, reps: 5, pct: 70, base: 45, e1: "easy", e2: "easy", rest: 90, sim: 0, t20: 1,
+wk(5, { bk: "Accumulate — lighter, tests", ph: "normal", sc: "3 × 5 @ 70%", sets: 3, reps: 5, pct: 70, base: 45, e1: "easy", e2: "easy", rest: 90, sim: 0, t20: "sun",
   sled: 4, nor: [2, 3], spr: 0, sprEasy: 1, size: 1, move: 1, carb: 1, light: 1, half: 1, split: 2,
-  nasal: 1, burstTest: 1, tests: 1, tape: 1, photos: 1, bolt: 1,
-  em: "Lighter. 3 × 5 @ 70%. Base 45. Tue retests then easy · Thu nasal test then easy · Sun 20-minute test · range and flexibility tests · tape · photos." });
-wk(6, { ph: "paused", sc: "4 × 4 @ 80%", sets: 4, reps: 4, pct: 80, base: 45, e1: "vo2", e2: "rz", rest: 60, sauna: 1,
-  em: "Paused 4 × 4 @ 80%. Base 45. Tue 4 × 4 · Thu bursts · Sun 6 × 3, 60 s. Sauna starts. Bench press in; ring dips rotate out." });
-wk(7, { ph: "paused", sc: "4 × 3 @ 84%", sets: 4, reps: 3, pct: 84, base: 45, e1: "rz", e2: "thr", rest: 60, sauna: 1,
+  nasal: 1, burstTest: 1, retests: 1, tests: 1, tape: 1, photos: 1, bolt: 1,
+  em: "3 × 5 @ 70%. Base 45. Tue retests then easy · Thu nasal test then easy · Sun 20-minute test · range and flexibility tests · tape · photos." });
+wk(6, { bk: "Intensify", ph: "paused", sc: "4 × 4 @ 80%", sets: 4, reps: 4, pct: 80, base: 45, e1: "vo2", e2: "rz", rest: 60, sauna: 1,
+  em: "Paused 4 × 4 @ 80%. Base 45. Tue 4 × 4 · Thu bursts · Sun 6 × 3, 60 s. Sauna starts. Bench press in; ring dips rotate out. Low-box depth jumps replace the drop landings." });
+wk(7, { bk: "Intensify", ph: "paused", sc: "4 × 3 @ 84%", sets: 4, reps: 3, pct: 84, base: 45, e1: "rz", e2: "thr", rest: 60, sauna: 1,
   em: "Paused 4 × 3 @ 84%. Tue bursts · Thu threshold · Sun 6 × 3, 60 s." });
 /* week 8 runs the clusters; with the edge off, straight sets */
-wk(8, { ph: "fast", sc: "4 × 3 @ 87% — straight sets", sets: 4, reps: 3, pct: 87, base: 45, e1: "vo2", e2: "lac2", rest: 60, sauna: 1, cluster: 1,
+wk(8, { bk: "Intensify", ph: "fast", sc: "4 × 3 @ 87% — straight sets", sets: 4, reps: 3, pct: 87, base: 45, e1: "vo2", e2: "lac2", rest: 60, sauna: 1, cluster: 1,
   em: "Fast in clusters 5 × (2+2) @ 87–90%. Tue 4 × 4 · Thu 40-s repeats 2 × 6 · Sun 6 × 3, 60 s." });
-wk(9, { ph: "max", sc: "MAX SINGLE → 2 × 2 @ 88%", sets: 2, reps: 2, pct: 88, base: 45, e1: "rz", e2: "rz", rest: 60,
-  sauna: 1, maxWeek: 1, maxBe: 1, noPP: 1,
-  em: "MAX SINGLE. Wed trap bar max, Sat squat max, Sun bench max first thing; then 2 × 2 @ 88%. Push press skipped. Tue bursts · Thu bursts · Sun 6 × 3, 60 s." });
-wk(10, { ph: "easy", sc: "2 × 3 @ 65% — fast", sets: 2, reps: 3, pct: 65, base: 45, e1: "easy", e2: "easy", rest: 60, scored: 1,
+/* week 9: the top triples — Wednesday the trap bar and the bench,
+   Saturday the squat — each then 2 × 2 at 85% of the new working max */
+wk(9, { bk: "Intensify — TOP TRIPLES", ph: "top", sc: "TOP TRIPLE, then 2 × 2 @ 85% of the new working max", sets: 2, reps: 2, pct: 85, base: 45, e1: "rz", e2: "rz", rest: 60,
+  sauna: 1, top: "backoff", noPP: 1,
+  em: "Wed trap bar and bench top triples, Sat squat top triple, each then 2 × 2 @ 85% of the new working max. Push press skipped. Tue bursts · Thu bursts · Sun 6 × 3, 60 s." });
+wk(10, { bk: "EASY + TESTS", ph: "easy", sc: "2 × 3 @ 65% — fast", sets: 2, reps: 3, pct: 65, base: 45, e1: "easy", e2: "easy", rest: 60, scored: 1,
   sled: 3, nor: [2, 3], spr: 0, sprEasy: 1, light: 1, half: 1, split: 2, sauna: 1,
-  profile: 1, reset: 1, nasal: 1, burstTest: 1, tests: 1, tape: 1, photos: 1, bolt: 1,
-  em: "EASY + TESTS. 2 × 3 @ 65% fast; working weights reset; profiles redrawn. Tue retests then easy · Thu nasal test then easy · Sun 6 × 3 scored · range and flexibility tests · tape · photos." });
-wk(11, { ph: "contrast", sc: "2 × 2 @ 85% + the circuit", sets: 2, reps: 2, pct: 85, base: 45, e1: "rz", e2: "lac2", rest: 60,
-  jump: "depth", js: [4, 4], bound: "cont", cr: 3, sauna: 1, edgeWin: 1, pp: { sets: 3, reps: 3, pct: 85 },
+  profile: 1, reset: 1, nasal: 1, burstTest: 1, retests: 1, tests: 1, tape: 1, photos: 1, bolt: 1,
+  em: "2 × 3 @ 65% fast; working weights reset; profiles redrawn. Tue retests then easy · Thu nasal test then easy · Sun 6 × 3 scored · range and flexibility tests · tape · photos." });
+wk(11, { bk: "Convert", ph: "contrast", sc: "2 × 2 @ 85% + the circuit", sets: 2, reps: 2, pct: 85, base: 45, e1: "rz", e2: "lac2", rest: 60,
+  js: [4, 4], bound: "cont", cr: 3, sauna: 1, edgeWin: 1, pp: { sets: 3, reps: 3, pct: 85 },
   em: "Contrast 2 × 2 @ 85% + the circuit; depth jumps begin. Tue bursts · Thu 40-s repeats 2 × 6 · Sun 6 × 3, 60 s." });
-wk(12, { ph: "contrast", sc: "2 × 2 @ 87% + the circuit", sets: 2, reps: 2, pct: 87, base: 45, e1: "vo2", e2: "ergrounds", rest: 60,
-  jump: "depth", js: [4, 4], bound: "cont", cr: 3, sauna: 1, edgeWin: 1, pp: { sets: 3, reps: 3, pct: 85 },
+wk(12, { bk: "Convert", ph: "contrast", sc: "2 × 2 @ 87% + the circuit", sets: 2, reps: 2, pct: 87, base: 45, e1: "vo2", e2: "ergrounds", rest: 60,
+  js: [4, 4], bound: "cont", cr: 3, sauna: 1, edgeWin: 1, pp: { sets: 3, reps: 3, pct: 85 },
   em: "Contrast 2 × 2 @ 87% + circuit. Tue 4 × 4 · Thu rounds on the erg 6 × 3 · Sun 6 × 3, 60 s." });
-wk(13, { ph: "contrast", sc: "2 × 2 @ 88% + the circuit", sets: 2, reps: 2, pct: 88, base: 45, e1: "rz1", e2: "lac", rest: 60,
-  jump: "depth", js: [4, 4], bound: "cont", cr: 2, sauna: 1, edgeWin: 1, scored: 1, xmas: 1, pp: { sets: 3, reps: 3, pct: 85 },
-  em: "Christmas week, volume down 25%. Contrast 2 × 2 @ 88% + circuit, 2 rounds. Tue bursts 1 × 8 · Thu 40-s repeats × 6 · Sun 6 × 3 scored — the last read." });
-wk(14, { ph: "test", sc: "2 × 2 @ 80%", sets: 2, reps: 2, pct: 80, base: 45, e1: "easy", e2: "fightpace", rest: 60, sim: 0, t20: 1,
-  sled: 3, nor: [2, 3], spr: 0, sprEasy: 1, light: 1, half: 1, split: 2, testWeek: 1,
-  nasal: 1, burstTest: 1, tests: 1, tape: 1, photos: 1, pp: { sets: 3, reps: 3, pct: 70 },
-  em: "TEST WEEK. Light. Tue burst decrement then easy · Wed 2 × 2 @ 80% · Thu nasal test then 4 × 3 at fight pace · Sat TEST DAY · Sun the 20-minute test, range and flexibility tests, tape, photos." });
+wk(13, { bk: "Convert — Christmas week, volume down 25%", ph: "contrast", sc: "2 × 2 @ 88% + the circuit", sets: 2, reps: 2, pct: 88, base: 45, e1: "rz1", e2: "lac", rest: 60,
+  js: [4, 4], bound: "cont", cr: 2, sauna: 1, edgeWin: 1, scored: 1, xmas: 1, pp: { sets: 3, reps: 3, pct: 85 },
+  em: "Contrast 2 × 2 @ 88% + circuit, 2 rounds. Tue bursts 1 × 8 · Thu 40-s repeats × 6 · Sun 6 × 3 scored — the last read." });
+/* week 14: the test week, spread so no single day carries everything —
+   Tuesday the burst decrement, Wednesday the trap bar and bench top
+   triples, Thursday the nasal threshold and the 20-minute test, Saturday
+   test day with the squat top triple, Sunday no session */
+wk(14, { bk: "TEST WEEK", ph: "test", sc: "the top triple, no back-off sets", sets: 0, reps: 3, pct: null, base: 45, e1: "easy", e2: "t20", rest: 60, sim: 0, t20: "thu",
+  sled: 3, nor: [2, 3], spr: 0, sprEasy: 1, light: 1, half: 1, split: 2, testWeek: 1, top: "test", noPP: 1, sunOff: 1,
+  nasal: 1, burstTest: 1, tests: 1, tape: 1, photos: 1, pp: null,
+  em: "Light. Tue burst decrement then easy · Wed trap bar and bench top triples · Thu nasal test, then the 20-minute test · Sat 2 Jan TEST DAY — speed and power, then the squat top triple · Sun 3 Jan easy hour, range and flexibility tests, tape, photos." });
 
 /* the size block runs all through Prep: full in weeks 1–5, half dose in
    weeks 6–13, none in week 14 */
@@ -175,24 +186,31 @@ export function prepEdge(rx, on) {
 
 /* THE BENCH, week by week. Weeks 1–5 the bench throw and the ring dips;
    from week 6 the press in its phases, with the throws behind it through
-   week 10 and inside the contrast after. Week 9's bench max is Sunday. */
+   week 10 and inside the contrast after. Week 9 is the top triple, then
+   2 × 2 at 85% of the new working max; week 14 the top triple again, no
+   back-off sets. */
 const BENCH = {
   6: { ph: "paused", sc: "PAUSED · 3 × 3 @ 80%", sets: 3, reps: 3, pct: 80 },
   7: { ph: "paused", sc: "PAUSED · 3 × 3 @ 84%", sets: 3, reps: 3, pct: 84 },
   8: { ph: "fast", sc: "FAST · 4 × 2 @ 87%", sets: 4, reps: 2, pct: 87 },
+  9: { ph: "top", sc: "TOP TRIPLE, then 2 × 2 @ 85% of the new working max", sets: 2, reps: 2, pct: 85, top: "backoff" },
   10: { ph: "fast", sc: "2 × 3 @ 65% — fast", sets: 2, reps: 3, pct: 65 },
   11: { ph: "contrast", sc: "CONTRAST · 3 rounds · 2 @ 85% + 3 bench throws", sets: 3, reps: 2, pct: 85 },
   12: { ph: "contrast", sc: "CONTRAST · 3 rounds · 2 @ 85% + 3 bench throws", sets: 3, reps: 2, pct: 85 },
   13: { ph: "contrast", sc: "CONTRAST · 3 rounds · 2 @ 85% + 3 bench throws", sets: 3, reps: 2, pct: 85 },
-  14: { ph: "fast", sc: "2 × 2 @ 80%", sets: 2, reps: 2, pct: 80 },
+  14: { ph: "top", sc: "the top triple, no back-off sets", sets: 0, reps: 3, pct: null, top: "test" },
 };
 export const prepBench = (d) => BENCH[d] || null;
 /* the bench throw: 4 × 3 in weeks 1–5, 3 × 3 behind the press in weeks
    6–10, inside the contrast after */
 export const prepThrow = (d) => (d <= 5 ? [4, 3] : d <= 10 ? [3, 3] : null);
+/* the bench throw's set-up: the Smith machine's safety stops */
+export const BENCH_THROW_CUE = "Smith machine, with its safety stops set so the bar rests on them a couple of centimetres above your chest when you lie under it. Light bar, at your peak-power load from the profile. Lower the bar to the stops, throw it so hard it leaves your hands, catch it with soft elbows, lower it back to the stops. A missed catch lands on the stops, never on you.";
+export const BENCH_THROW_NOTE = "No Smith machine with adjustable stops: a 4–6 kg medicine ball thrown off the chest at a wall, 4 × 5.";
 export const BENCH_CUE = {
   paused: "PAUSED — the bar dead still on the chest for two seconds, then drive.",
   fast: "FAST — down under control, up as fast as the bar will move.",
+  top: "TOP TRIPLE — sets of three going up until one is hard but leaves one or two in you, pins set; × 1.08 is the new working max.",
   contrast: "CONTRAST — 2 reps at 85%, rest 20 seconds, 3 bench throws, rest 2½ minutes. Three rounds.",
 };
 /* side bounds: straight sideways on odd weeks, forward-and-across at 45°
@@ -208,14 +226,24 @@ export const prepEmphasis = (doc) => (R[doc] || R[1]).em;
 export const prepRepeatSled = (rx) => rx.d % 2 === 0 && !rx.light;
 /* the shot-put ball by block: build and heavy 5–6 kg, the fast block 3–5 kg */
 const shotBall = (rx) => (rx.d <= 10 ? "5–6 kg" : "3–5 kg");
+/* THE TOP TRIPLE, on the lift that runs it: weeks 9 and 14. The heaviest
+   clean triple is logged; × 1.08 is the new working max, and week 9's
+   back-off sets read off it. Never a true max. */
+export const topItem = (name, mk, id) => ({ n: name + " — top triple", s: "sets of three, up to one that's hard but leaves one or two in you · pins set",
+  cue: TOP_CUE, id, k: "top", mk });
+/* week 9's back-off sets, at 85% of the new working max */
+const BACKOFF_SC = "2 × 2 @ 85% of the new working max";
 
 /* the tests each row carries, as one line */
 export function prepTests(doc) {
   const rx = prepRx(doc), out = [];
   if (rx.profile) out.push("the load-velocity profiles");
   if (rx.burstTest) out.push("the burst decrement");
+  if (rx.retests || rx.satTests) out.push("the broad jump and the throw");
+  if (rx.satTests) out.push("push-ups, chins, plank and Copenhagen");
   if (rx.nasal) out.push("the nasal threshold");
   if (rx.t20) out.push("the 20-minute test");
+  if (rx.top) out.push("the top triples");
   if (rx.scored) out.push("the rounds, scored");
   if (rx.tests) out.push("the four range tests and the three flexibility tests");
   if (rx.tape) out.push("tape");
@@ -273,8 +301,9 @@ export const CARB_TOPUP = "Carb top-up at 17:00 — the fuel app has the number.
 export const SAUNA_PREP = "Fifteen to twenty minutes, twice a week — Sunday and one weekday evening — never more, and never without the hydration schedule's sauna line. Never straight from the sauna into cold.";
 
 /* ---------- the transition after a fight ---------- */
-export const TRANSITION_INTRO = "One week after a fight of 9 minutes or less, two after a longer one. The first three days: RANGE, the sit and walking. Then easy: base rides, the movement session, calisthenics at half sets, nothing above 70%, no sprints, no rounds. It runs on until the strap says you're back.";
+export const TRANSITION_INTRO = "First, the head check. Then one week after a fight of 9 minutes or less, two after a longer one. The first three days: RANGE, the sit and walking. Then easy: base rides, the movement session, calisthenics at half sets, nothing above 70%, no sprints, no rounds. It runs on until the strap says you're back.";
 export const TRANSITION_RULES = [
+  "First, the head check. If you were stopped or dropped, or have any symptoms after the fight — headache, fogginess, feeling slowed down, dizziness, sensitivity to light or noise — see a doctor before any training, and nothing hard until you're cleared and symptom-free. A medical suspension overrides everything here. A severe or worsening headache, repeated vomiting, confusion or drowsiness is A&E, straight away. The app asks the morning after the fight, and the transition doesn't start until you've answered.",
   "The first three days: RANGE, the sit and walking. Nothing else.",
   "Then easy: base rides, the movement session, calisthenics at half sets.",
   "Nothing above 70%, no sprints, no rounds.",
@@ -301,12 +330,12 @@ export function prepEngTimer(key) {
     if (e === "rz1") return { kind: "rz", opt: { sets: 1 }, title: "REPEAT BURSTS · ONE SET" };
     if (e === "tempo") return { kind: "tempo", opt: { reps: rx.nasal && key === "e2" ? 9 : 10 }, title: "TEMPO INTERVALS" };
     if (e === "thr") return { kind: "thr", opt: {}, title: "THRESHOLD" };
-    if (e === "ergrounds") return { kind: "ergrounds", opt: { rounds: 6, rest: 60 }, title: "ROUNDS ON THE ERG" };
-    if (e === "fightpace") return { kind: "ergrounds", opt: { rounds: 4, rest: 60 }, title: "FIGHT-PACE ROUNDS" };
+    if (e === "ergrounds") return { kind: "ergrounds", opt: { rounds: 6, rest: 60, R: 6 }, title: "ROUNDS ON THE ERG" };
+    if (e === "t20") return { kind: "z2", opt: { min: 20, label: "20-MIN TEST — MAXIMUM DISTANCE" }, title: "20-MIN TEST" };
     return { kind: "z2", opt: { min: 20, label: "EASY — CONVERSATIONAL" }, title: "EASY" };
   };
 }
-const engMin = (key) => (rx) => (rx[key] === "easy" ? 20 : rx[key] === "ergrounds" || rx[key] === "lac2" ? 28 : 24);
+const engMin = (key) => (rx) => (rx[key] === "easy" ? 20 : rx[key] === "t20" ? 25 : rx[key] === "ergrounds" || rx[key] === "lac2" ? 28 : 24);
 const engName = (key) => (rx) => (PENG[rx[key]] || PENG.easy).n;
 
 export const PS = {
@@ -359,10 +388,14 @@ export const PS = {
     { L: "K", n: "Spanish Squat Hold", m: 3, p: "SPAN", rest: "Rest 30 s", rt: 30, rxLine: () => "3 × 30 seconds",
       items: [{ n: "Spanish squat hold", s: "3 × 30 seconds · rest 30 s", cue: "As Thursday: a thick band around the back of both knees, anchored to the rack in front of you at knee height; lean back into it so the shins stay vertical, sit to a half squat, hold dead still.", id: "p_spanish_tue", k: "wr", sets: 3, reps: 30 }],
       why: "The tendon block runs twice a week now, because the jumps do." },
-    { L: "X", n: "Burst Decrement Test", m: 6, hide: (rx) => !rx.burstTest, star: 1,
+    { L: "X", n: "Burst Decrement Test", m: (rx) => (rx.retests ? 12 : 6), hide: (rx) => !rx.burstTest, star: 1,
       timer: () => ({ kind: "bursttest", title: "BURST DECREMENT" }), rxLine: () => "10 bursts of 6 s — the tenth against the first",
-      items: [{ n: "First burst", s: "write it down", id: "p_burst1", k: "out", u: "output" },
-        { n: "Tenth burst", s: "the tenth against the first", id: "p_burst10", k: "out", u: "output" }],
+      items: (rx) => [{ n: "First burst", s: "write it down", id: "p_burst1", k: "out", u: "output" },
+        { n: "Tenth burst", s: "the tenth against the first", id: "p_burst10", k: "out", u: "output" }]
+        /* weeks 5 and 10: the retests — burst decrement, broad jump, throw, BOLT */
+        .concat(rx.retests ? [{ n: "Broad jump", s: "best of three", cue: "Two-foot jump forward for distance, stick the landing dead still. Three attempts, best one counts.", id: "p_rt_jump", k: "out", u: "metres" },
+          { n: "Rotational throw", s: "best of three per side", cue: "Medicine ball at the shoulder, side-on to the wall, drive off the back hip. Three per side, best distance.", id: "p_rt_throw", k: "out", u: "metres" },
+          { n: "BOLT", s: "time to the first clear urge", cue: "Breathe normally, then breathe out normally, pinch your nose, and time how long until you feel the first clear urge to breathe.", id: "p_rt_bolt", k: "out", u: "seconds" }] : []),
       why: "The decrement halving over the preparation is the flurry holding up." },
     { L: "D", n: (rx) => engName("e1")(rx), m: engMin("e1"), star: 1, hard: 1, eng: 1, engKey: "e1",
       timer: prepEngTimer("e1"), rxLine: (rx) => (PENG[rx.e1] || PENG.easy).d,
@@ -408,7 +441,8 @@ export const PS = {
       rest: (rx) => (rx.lift === "contrast" || rx.lift === "cluster" ? "Rest 3:00" : "Rest 2:30"), rt: (rx) => (rx.lift === "contrast" || rx.lift === "cluster" ? 180 : 150),
       timer: (rx) => (rx.lift === "cluster" ? clusterTimer(rx.sets, "87–90%", "TRAP BAR") : null),
       rxLine: (rx) => rx.sc,
-      items: (rx) => [{ n: "Trap bar deadlift", s: rx.sc, cue: PREP_PHASE_CUE[rx.lift] + " Stand inside the bar, grip the handles, flat back, drive the floor away. Nothing passes over your body and a rep you are not sure of goes down, not up.", id: "tbdl", k: "wr", mk: "tbdl", pct: rx.pct, sets: rx.sets, reps: rx.reps }],
+      items: (rx) => (rx.top ? [topItem("Trap bar deadlift", "tbdl", "tbdl_top")] : [])
+        .concat(rx.top === "test" ? [] : [{ n: "Trap bar deadlift", s: rx.top ? BACKOFF_SC : rx.sc, cue: PREP_PHASE_CUE[rx.lift] + " Stand inside the bar, grip the handles, flat back, drive the floor away. Nothing passes over your body and a rep you are not sure of goes down, not up.", id: "tbdl", k: "wr", mk: "tbdl", pct: rx.pct, sets: rx.sets, reps: rx.reps }]),
       w: (rx) => PREP_PHASE_CUE[rx.lift],
       why: (rx) => PREP_PHASE_WHY[rx.lift], tr: 1 },
     { L: "L", n: "Bench Press", m: (rx) => (prepBench(rx.benchDoc || rx.d) && prepBench(rx.benchDoc || rx.d).ph === "contrast" ? 10 : 8), star: 1, hard: 1, mainLift: "bench", vel: "bench",
@@ -418,14 +452,15 @@ export const PS = {
       timer: (rx) => (prepBench(rx.benchDoc || rx.d).ph === "contrast" ? { kind: "contrast", opt: { rounds: 3, rest: 150, items: ["BENCH PRESS — 2 @ 85%", "BENCH THROW ×3"] }, title: "BENCH CONTRAST" } : null),
       rxLine: (rx) => prepBench(rx.benchDoc || rx.d).sc,
       items: (rx) => { const bp = prepBench(rx.benchDoc || rx.d);
-        return [{ n: "Bench press", s: bp.sc, cue: BENCH_CUE[bp.ph] + " Warm-up sets: bar × 10, 40% × 5, 60% × 3, 75% × 2. Pins at chest height, no collars — you're alone.", id: "bench", k: "wr", mk: "bench", pct: bp.pct, sets: bp.sets, reps: bp.reps }]
-          .concat(bp.ph === "contrast" ? [{ n: "Bench throw", s: "3 after each pair · rest 20 s before", cue: "Smith machine, at your peak-power load from the profile. Lower to the chest, press so hard the bar leaves your hands, catch it, reset.", id: "throw", k: "wr", mk: "bench", pct: rx.btPct, sets: 3, reps: 3 }] : []); },
+        return (bp.top ? [topItem("Bench press", "bench", "bench_top")] : [])
+          .concat(bp.top === "test" ? [] : [{ n: "Bench press", s: bp.top ? BACKOFF_SC : bp.sc, cue: BENCH_CUE[bp.ph] + " Warm-up sets: bar × 10, 40% × 5, 60% × 3, 75% × 2. Pins at chest height, no collars — you're alone.", id: "bench", k: "wr", mk: "bench", pct: bp.pct, sets: bp.sets, reps: bp.reps }])
+          .concat(bp.ph === "contrast" ? [{ n: "Bench throw", s: "3 after each pair · rest 20 s before", cue: BENCH_THROW_CUE, id: "throw", k: "wr", mk: "bench", pct: rx.btPct, sets: 3, reps: 3 }] : []); },
       w: "A grinding rep ends the set.",
       why: "Upper-body strength was the thinnest thing in this program, and you don't test a lift you don't train." },
     { L: "D", n: "Bench Throw (Smith)", m: (rx) => (rx.d <= 5 ? 6 : 4), star: 1, hard: 1, rest: "Rest 90 s", rt: 90, hide: (rx) => !prepThrow(rx.d),
       rxLine: (rx) => prepThrow(rx.d).join(" × ") + " @ your peak-power load",
-      items: (rx) => [{ n: "Bench throw", s: prepThrow(rx.d).join(" × "), cue: "Smith machine, light bar, at your peak-power load from the profile. Lower to the chest, press so hard the bar leaves your hands, catch it, reset.", id: "throw", k: "wr", mk: "bench", pct: rx.btPct, sets: prepThrow(rx.d)[0], reps: 3 }],
-      note: "No Smith machine? A 4–6 kg medicine ball thrown off the chest at a wall, 4 × 5.",
+      items: (rx) => [{ n: "Bench throw", s: prepThrow(rx.d).join(" × "), cue: BENCH_THROW_CUE, id: "throw", k: "wr", mk: "bench", pct: rx.btPct, sets: prepThrow(rx.d)[0], reps: 3 }],
+      note: BENCH_THROW_NOTE,
       w: OUTPUT_RULE, why: "The punch-speed lift." },
     { L: "E", n: "Ring Dips", m: 6, cal: "ringdip", rest: "Rest 90 s", rt: 90, rxLine: () => "3 sets at your level", hide: (rx) => rx.d > 5,
       items: (rx) => [{ n: "Ring dips — at your level", s: (rx.half ? 2 : 3) + " sets", cue: "Support at the top, arms locked, rings still; lower until the shoulders are level with the elbows, press up, turning the palms forward at the top.", id: "ringdip", k: "wr", sets: rx.half ? 2 : 3, reps: "at your level" }],
@@ -436,9 +471,10 @@ export const PS = {
       items: (rx) => [{ n: "Weighted chin-up", s: (rx.half ? 2 : 3) + " × 5", cue: "Palms away, weight on a belt or a dumbbell between the feet, from a dead hang, chin over the bar, lower under control.", id: "chin", k: "wr", sets: rx.half ? 2 : 3, reps: 5 },
         { n: "The muscle-up line — at your level", s: (rx.half ? 1 : 2) + " sets", cue: "Chest-to-bar pull-ups at the first level, explosive, the bar touching the chest, climbing through negatives to the strict muscle-up.", id: "muscleup", k: "wr", sets: rx.half ? 1 : 2, reps: "at your level" }],
       why: "Pulling strength protects the shoulders that throw; the muscle-up is pulling power, the quality that snaps a hand back." },
-    { L: "G", n: "Nordic Curls", m: 6, hard: 1, rest: "Rest 2:00", rt: 120,
-      rxLine: (rx) => rx.nor[0] + " × " + rx.nor[1],
-      items: (rx) => [{ n: "Nordic curl", s: rx.nor[0] + " × " + rx.nor[1], cue: "Heels anchored, body straight from knees to head, lower forward as slowly as you can, catch yourself with your hands, push back up. Stop the set the moment the lower back rounds.", id: "nordic", k: "wr", sets: rx.nor[0], reps: rx.nor[1] }],
+    { L: "G", n: "Nordic Curls", m: 6, hard: 1, rest: "Rest 2:00", rt: 120, painIf: (rx) => !!rx.nordicPF,
+      rxLine: (rx) => rx.nor[0] + " × " + rx.nor[1] + (rx.nordicPF ? " · only if pain-free" : ""),
+      items: (rx) => [{ n: "Nordic curl", s: rx.nor[0] + " × " + rx.nor[1] + (rx.nordicPF ? " · only if pain-free" : ""), cue: "Heels anchored, body straight from knees to head, lower forward as slowly as you can, catch yourself with your hands, push back up. Stop the set the moment the lower back rounds.", id: "nordic", k: "wr", sets: rx.nor[0], reps: rx.nor[1] }],
+      w: (rx) => (rx.nordicPF ? "Hamstring at 3 or more on Sunday's check: the Nordics only if they're pain-free." : "Stop the set the moment the lower back rounds."),
       why: "A hamstring on a Saturday sprint is the second-commonest way a preparation ends. Wednesday, so the soreness is gone before Saturday." },
     { L: "H", n: "Neck — holds only", m: 5, p: "P_NECK",
       items: [{ n: "Four-direction holds", s: "3 × 10 s each direction", cue: "Press your palm hard against your forehead and push your head into it; the head never moves. Then the back of the head, then each side.", id: "p_neck_wed", k: "chk" }],
@@ -468,12 +504,18 @@ export const PS = {
       timer: () => ({ kind: "nasal", title: "NASAL THRESHOLD" }), rxLine: () => "8 min nose only, the pace up every 2 minutes",
       items: [{ n: "Pace at the moment the mouth opened", s: "write it down", id: "p_nasal", k: "out", u: "pace" },
         { n: "The honest half", s: "did it open because it had to", id: "p_nasal_h", k: "out", u: "had to / caved" }],
-      why: "Then the session that follows runs one round short." },
+      why: (rx) => (rx.e2 === "t20" ? "Week 14: the nasal threshold test, then the 20-minute test instead of the session." : "Then the session that follows runs one round short.") },
     { L: "E", n: (rx) => engName("e2")(rx), m: engMin("e2"), star: 1, hard: 1, eng: 1, engKey: "e2",
       timer: prepEngTimer("e2"), rxLine: (rx) => (PENG[rx.e2] || PENG.easy).d,
-      items: (rx) => [{ n: "Output", s: "write it down", id: "p_e2", k: "out", u: "output" }],
+      items: (rx) => (rx.e2 === "t20"
+        ? [{ n: "Distance", s: "the engine's ceiling", id: "bike20", k: "out", u: "distance (m)" },
+          { n: "Peak heart rate", s: "the highest you saw — it sets your heart-rate zones", id: "bike20hr", k: "out", u: "bpm" }]
+        : rx.e2 === "ergrounds"
+          ? [{ n: "Round 1 output", s: "write it down", id: "p_erg_rd1", k: "out", u: "output" },
+            { n: "Round 6 output", s: "write it down", id: "p_erg_rd6", k: "out", u: "output" }]
+          : [{ n: "Output", s: "write it down", id: "p_e2", k: "out", u: "output" }]),
       rules: (rx) => ((PENG[rx.e2] || {}).rule ? [(PENG[rx.e2] || {}).rule] : null),
-      why: "Always a different quality from Tuesday's.", tr: 1 },
+      why: (rx) => (rx.e2 === "t20" ? "Test week: the 20-minute test sets the heart-rate zones every easy session in the camp is paced from." : "Always a different quality from Tuesday's."), tr: 1 },
     { L: "F", n: "The 60-Second Settle", m: 1, settle: 1, timer: () => ({ kind: "settle", title: "THE SETTLE" }),
       rxLine: () => "60 seconds — log the seconds to land",
       items: [{ n: "Seconds to land on the breath", s: "write it down", cue: "Stay on the bike. Eyes closed, heart pounding, find the breath at the nostrils.", id: "settle2", k: "out", u: "seconds" }] },
@@ -511,6 +553,11 @@ export const PS = {
       items: [{ n: "Squat at five loads", s: "50 · 60 · 70 · 80 · 85% — two reps each", cue: "Two reps at each load, as fast as the bar will move, the watch recording the mean speed.", id: "p_prof_sq", k: "chk" },
         { n: "Bench and push press at four loads", s: "50 · 60 · 70 · 80%", cue: "The same again on the bench and the push press. The lines replace the typical numbers.", id: "p_prof_bp", k: "chk" },
         { n: "Bench throw at four loads", s: "20 · 30 · 40 · 50% of the bench — two reps each", cue: "Two throws at each load, the watch recording the mean speed. Power is load times speed: the load with the highest number is the one you throw until the next profile.", id: "p_prof_bt", k: "chk" }] },
+    /* week 1, Saturday 3 Oct: the broad jump and the rotational throw, fresh */
+    { L: "W", n: "Broad Jump and Throw Tests", m: 6, star: 1, hide: (rx) => !rx.satTests, prepTest: 1, rxLine: () => "best of three each",
+      items: [{ n: "Broad jump", s: "best of three", cue: "Two-foot jump forward for distance, stick the landing dead still. Three attempts, best one counts.", id: "p_jump", k: "out", u: "metres" },
+        { n: "Rotational throw", s: "best of three per side", cue: "Medicine ball at the shoulder, side-on to the wall, drive off the back hip. Three per side, best distance.", id: "p_throw", k: "out", u: "metres" }],
+      why: "Week 1's baselines. The camp inherits every one of these numbers as its week-1 starting line." },
     { L: "S", n: "Stance Starts", m: 3, star: 1, hard: 1, hide: (rx) => !!rx.testWeek, rest: "Rest 90 s", rt: 90, rxLine: () => "3 × 10 m from your stance",
       items: [{ n: "Stance start 10 m", s: "3 × 10 m", cue: "From your boxing stance, three ten-metre sprints, the first step explosive off the rear foot, 90 seconds between.", id: "p_stance", k: "chk" }],
       why: "Against a taller man the fight is decided in the first two metres, every time he moves; this is that, trained." },
@@ -522,11 +569,14 @@ export const PS = {
       items: (rx) => [{ n: "Flying sprint 20 m", s: rx.spr ? rx.spr + " runs" : "3 runs at 90%", cue: "Jog-build for 10–15 metres, then 20 metres absolutely flat out. Walk back, full rest — speed, not cardio.", id: "p_sprint", k: "chk" }],
       w: "A hamstring twinge on the build-ups ends the sprints for the day.",
       why: "Top speed is the quality that fades first and costs least to keep." },
-    { L: "C", n: (rx) => (rx.jump === "depth" ? "Depth Jumps" : "Loaded Drop Jumps"), m: 8, star: 1, hard: 1, hide: (rx) => !!rx.testWeek,
-      rest: "Rest 2:00", rt: 120, rxLine: (rx) => rx.js[0] + " × " + rx.js[1],
-      items: (rx) => [{ n: rx.jump === "depth" ? "Depth jump" : "Loaded drop jump", s: rx.js[0] + " × " + rx.js[1],
-        cue: rx.jump === "depth" ? "Step off a 30–40 cm box and, the instant the feet touch, jump as high as you can — the shortest possible time on the floor." : "A hex dumbbell in each hand, 8–12 kg, dip fast into a quarter squat, let both go at the bottom and jump straight up as high as you can, empty-handed; land soft on clear floor.", id: "p_react", k: "chk" }],
-      w: "Stop the set the moment a jump is lower than the last." },
+    /* the reactive slot: drop landings in weeks 1–5, low-box depth jumps in
+       weeks 6–10, depth jumps in weeks 11–13; none the week after an
+       Achilles or knee at 3 or more */
+    { L: "C", n: (rx) => jumpOf(rx.jump).n, m: 8, star: 1, hard: 1, hide: (rx) => !!rx.testWeek || !!rx.noJumps,
+      rest: "Rest 2:00", rt: 120, rxLine: (rx) => rx.js[0] + " × " + rx.js[1] + " · " + jumpOf(rx.jump).box,
+      items: (rx) => [{ n: jumpOf(rx.jump).item, s: rx.js[0] + " × " + rx.js[1] + " · " + jumpOf(rx.jump).box, cue: jumpOf(rx.jump).cue, id: "p_react", k: "chk" }],
+      w: (rx) => jumpOf(rx.jump).w,
+      why: (rx) => (rx.restart ? "Back under 3 on Sunday's check: the jumps restart one stage down for a week. " : "") + JUMP_GATE_LINE },
     { L: "D", n: (rx) => (boundAngle(rx.d) === "45" ? "Side Bounds — 45°" : "Side Bounds — straight sideways"), m: 6, hard: 1, hide: (rx) => !!rx.testWeek, rest: "Rest 90 s", rt: 90, rxLine: (rx) => rx.bsets + " × 4 per side",
       items: (rx) => [{ n: boundAngle(rx.d) === "45" ? "Side bound — forward-and-across at 45°" : "Side bound — straight sideways", s: rx.bsets + " × 4 per side",
         cue: "Stand on one leg, jump " + (boundAngle(rx.d) === "45" ? "forward-and-across at 45 degrees, the angle you cut a ring off at," : "straight sideways") + " as far as you can, land on the other" + (rx.bound === "cont" ? " and bounce straight back the other way — no stick." : " and stick it dead still for two seconds."), id: "p_bound", k: "chk" }],
@@ -535,7 +585,8 @@ export const PS = {
       mainLift: "squat", vel: "squat", phase: 1, hide: (rx) => !!rx.testWeek,
       pres: (rx) => ({ sc: rx.sc, pct: rx.pct }), rest: "Rest 3:00", rt: 180, rxLine: (rx) => rx.sc,
       timer: (rx) => (rx.lift === "cluster" ? clusterTimer(rx.sets, "87–90%", "BACK SQUAT") : null),
-      items: (rx) => [{ n: "Back squat", s: rx.sc, cue: PREP_PHASE_CUE[rx.lift] + " Warm-up sets first: 40% × 3, 60% × 2, 75% × 1 of working. Bar on the back, break at the hips and knees together, sit to just below parallel, drive up. Pins set just below your lowest position, every set.", id: "squat", k: "wr", mk: "squat", pct: rx.pct, sets: rx.sets, reps: rx.reps }]
+      items: (rx) => (rx.top ? [topItem("Back squat", "squat", "squat_top")] : [])
+        .concat([{ n: "Back squat", s: rx.top ? BACKOFF_SC + ", fast" : rx.sc, cue: PREP_PHASE_CUE[rx.lift] + " Warm-up sets first: 40% × 3, 60% × 2, 75% × 1 of working. Bar on the back, break at the hips and knees together, sit to just below parallel, drive up. Pins set just below your lowest position, every set.", id: "squat", k: "wr", mk: "squat", pct: rx.pct, sets: rx.sets, reps: rx.reps }])
         .concat(rx.lift === "contrast" ? [{ n: "The jump circuit", s: rx.cr + " rounds", cue: "After each double: rest 20 s, box jumps × 3, rest 20, trap bar jumps × 3, rest 20, band-assisted jumps × 3, then 3 minutes. The round ends the moment jump height drops.", id: "p_circuit", k: "chk" },
           { n: "Trap bar jump", s: "× 3 a round @ your peak-power load", cue: "A trap bar at your peak-power load from the profile, jump with it, land soft.", id: "p_tbjump", k: "wr", mk: "tbdl", pct: rx.tjPct, sets: rx.cr, reps: 3 }] : []),
       w: (rx) => PREP_PHASE_CUE[rx.lift], why: (rx) => PREP_PHASE_WHY[rx.lift] },
@@ -544,29 +595,32 @@ export const PS = {
       rest: "Rest 2:00", rt: 120, rxLine: (rx) => rx.pp.sets + " × " + rx.pp.reps + " @ " + rx.pp.pct + "%",
       items: (rx) => [{ n: "Push press", s: rx.pp.sets + " × " + rx.pp.reps + " @ " + rx.pp.pct + "%", cue: "Bar on the front of the shoulders, quick shallow knee dip, drive it overhead with the legs and punch it to lockout.", id: "pushpress", k: "wr", mk: "pp", pct: rx.pp.pct, sets: rx.pp.sets, reps: rx.pp.reps }],
       why: "Legs, braced trunk, hands — the route a punch takes." },
-    /* ---- test day, week 14 ---- */
+    /* week 1, Saturday 3 Oct: push-ups, chins, plank, Copenhagen — last, so
+       nothing explosive comes after them */
+    { L: "V", n: "Push-Up, Chin-Up, Plank and Copenhagen Tests", m: 10, hide: (rx) => !rx.satTests, prepTest: 1, rxLine: () => "as many as you can · as long as you can",
+      items: [{ n: "Push-up test", s: "as many as you can — chest to a fist, two seconds down", id: "p_t_pushup", k: "out", u: "reps" },
+        { n: "Chin-up test", s: "as many as you can — from a dead hang", id: "p_t_chin", k: "out", u: "reps" },
+        { n: "Plank test", s: "as long as you can with good form", id: "p_t_plank", k: "out", u: "seconds" },
+        { n: "Copenhagen test", s: "as long as you can with good form, per side", id: "p_t_copen", k: "out", u: "seconds" }],
+      why: "Week 1's baselines." },
+    /* ---- test day, week 14's Saturday: most explosive first, then the
+       squat top triple ---- */
     { L: "T", n: "TEST DAY", m: 70, hide: (rx) => !rx.testWeek, star: 1, prepTest: 1,
       rxLine: () => "most explosive first, full recovery between everything",
-      items: [{ n: "Flying sprint 20 m", s: "3 attempts, best time", id: "p_t_sprint", k: "out", u: "s" },
-        { n: "Depth jump rebound", s: "3 attempts, filmed", id: "p_t_jump", k: "out", u: "cm" },
-        { n: "Diagonal throw", s: "3 per side, best distance", id: "p_t_diag", k: "out", u: "m" },
-        { n: "Shot-put throw", s: "3 per side, best distance", id: "p_t_shot", k: "out", u: "m" },
-        { n: "Back squat max single", s: "pins set", id: "p_t_squat", k: "out", u: "kg", max: "squat" },
-        { n: "Bench max single", s: "pins, no collars", id: "p_t_bench", k: "out", u: "kg", max: "bench" },
-        { n: "Trap bar heavy triple", s: "× 1.08 sets the trap bar max", id: "p_t_tb", k: "out", u: "kg", max: "tbdl", est: 1.08 },
-        { n: "Bodyweight", s: "kg", id: "p_t_bw", k: "out", u: "kg" },
-        { n: "Waist", s: "cm", id: "p_t_waist", k: "out", u: "cm" }],
-      why: "The camp's working weights come off these numbers on Monday." }] },
+      items: (rx) => (rx.noFlying ? [] : [{ n: "Flying sprint 20 m", s: "three attempts, timed", id: "p_t_sprint", k: "out", u: "s" }])
+        .concat(rx.noJumps ? [] : [{ n: "Depth jump", s: "three attempts from the " + (rx.depthTrained === false ? "20 cm" : "30–40 cm") + " box you've trained on, filmed", id: "p_t_jump", k: "out", u: "cm" }])
+        .concat([{ n: "Diagonal throw", s: "three per side, best distance", id: "p_t_diag", k: "out", u: "m" },
+          { n: "Shot-put throw", s: "three per side, best distance", id: "p_t_shot", k: "out", u: "m" },
+          topItem("Back squat", "squat", "p_t_squat"),
+          { n: "Bodyweight", s: "kg", id: "p_t_bw", k: "out", u: "kg" },
+          { n: "Waist", s: "cm", id: "p_t_waist", k: "out", u: "cm" }]),
+      why: "The camp's working weights come off these numbers on Monday — Wednesday's trap bar and bench top triples and today's squat, each × 1.08." }] },
 
   /* ---------------- SUNDAY ---------------- */
   sun: { n: "SUNDAY", t: "The rounds — throws, the 6 × 3, the post-max sit, core with suitcase carries, the L-sit, the lever and face pulls, hands, weekly check", m: 75, ac: C.brass, free: 1,
     intro: "The session the camp is for. Fed and rested. Throws first, fresh; then the rounds; then the corner, trained; then the core.", b: [
-    { L: "A", n: "Warm-up", m: 11, p: "P_SUNWU", rxLine: () => "11 min · Tuesday's warm-up, the power prep and the practice throws" },
-    { L: "M", n: "Bench Max Single", m: 12, star: 1, hard: 1, hide: (rx) => !rx.maxBe, mainLift: "bench", maxUI: 1, rest: "Rest 2:30–3:00", rt: 165,
-      ramp: { n: "Bench warm-up sets", pcts: [[40, 5], [60, 3]] },
-      items: [{ n: "Bench — max single", s: "pins · no collars · first, straight after the warm-up", id: "p_benchmax", k: "chk" }],
-      why: "Week 9, first thing, fresh, with pins — the bench you've trained since week 6. Write the new max down.", tr: 2 },
-    { L: "B", n: "The Four Punch Throws", m: 12, star: 1, p: "P_VEC", rest: "45 s between exercises · 90 s between rounds", rt: 45,
+    { L: "A", n: "Warm-up", m: 11, p: "P_SUNWU", hide: (rx) => !!rx.sunOff, rxLine: () => "11 min · Tuesday's warm-up, the power prep and the practice throws" },
+    { L: "B", n: "The Four Punch Throws", m: 12, star: 1, p: "P_VEC", hide: (rx) => !!rx.sunOff, rest: "45 s between exercises · 90 s between rounds", rt: 45,
       timer: () => ({ kind: "vec", opt: { rounds: 2 }, title: "PUNCH THROWS" }), rxLine: () => "2 rounds",
       items: (rx) => [{ n: "Rotational shot-put", s: "2 rounds · 4 per side @ " + shotBall(rx), cue: "A " + shotBall(rx) + " ball at the shoulder, stance side-on to the wall, drive off the back hip, flat and hard.", id: "p_throws_sun", k: "chk" },
         { n: "Downward diagonal throw", s: "4 per side", cue: "Ball high outside the shoulder, driven down and across toward the opposite hip, back foot pivoting.", id: "p_diag_sun", k: "chk" },
@@ -574,27 +628,37 @@ export const PS = {
         { n: "Landmine punch", s: "5 per side", cue: "One end of a barbell in a corner, the other at your shoulder in your stance, drive the hips and punch it up and away, never a slow press.", id: "p_lm_sun", k: "chk" }],
       w: OUTPUT_RULE,
       why: "Fresh, first thing — the only throws of the weekend, so every one is at full speed. Straights are forward drive, hooks are rotation; all four get trained." },
-    { L: "X", n: "The 20-Minute Test", m: 25, star: 1, hard: 1, hide: (rx) => !rx.t20,
+    { L: "X", n: "The 20-Minute Test", m: 25, star: 1, hard: 1, hide: (rx) => rx.t20 !== "sun",
       timer: () => ({ kind: "z2", opt: { min: 20, label: "20-MIN TEST — MAXIMUM DISTANCE" }, title: "20-MIN TEST" }),
       rxLine: () => "5 easy minutes, then 20 minutes for the most distance you can",
       items: [{ n: "Distance", s: "the engine's ceiling", cue: "Five easy minutes, then 20 minutes for the most distance you can on the erg you will use all preparation. No pacing plan — go and find out.", id: "bike20", k: "out", u: "distance (m)" },
         { n: "Peak heart rate", s: "the highest you saw", cue: "Every easy session from here is paced at 65–75% of it.", id: "bike20hr", k: "out", u: "bpm" }],
       why: "The engine's ceiling and your peak heart rate. Every easy session is paced off it.", tr: 2 },
+    /* week 1: after the 20-minute test, three easy rounds to learn the stations */
+    { L: "R", n: "Three Easy Rounds", m: 14, hide: (rx) => !rx.easyRounds, sim: 1, learn: 1,
+      timer: (rx) => ({ kind: "csim", opt: { rounds: rx.easyRounds, rest: rx.rest, mins: 3, pace: 1 }, title: "THREE EASY ROUNDS" }),
+      rxLine: (rx) => rx.easyRounds + " × 3 min, easy · rest " + rx.rest + " s · to learn the stations",
+      items: [{ n: "Minute 1", s: "SkiErg", k: "txt" }, { n: "Minute 2", s: "Assault bike", k: "txt" },
+        { n: "Minute 3", s: "Med-ball slams, or bag work", k: "txt" }],
+      why: "Week 1: then three easy rounds to learn the stations." },
     { L: "C", n: (rx) => "The " + rx.sim + " × 3 Simulation", m: 28, star: 1, sim: 1, hard: 1, hide: (rx) => !rx.sim,
-      timer: (rx) => ({ kind: "csim", opt: { rounds: rx.sim, rest: rx.rest }, title: "THE ROUNDS" }),
+      timer: (rx) => ({ kind: "csim", opt: { rounds: rx.sim, rest: rx.rest, R: 6 }, title: "THE ROUNDS" }),
       rxLine: (rx) => rx.sim + " × 3 min · rest " + rx.rest + " s" + (rx.scored ? " · SCORED" : ""),
+      stopRule: (rx) => (rx.sim > 6 ? { R: 6, total: rx.sim } : null),
       items: (rx) => [{ n: "Minute 1", s: "SkiErg", k: "txt" }, { n: "Minute 2", s: "Assault bike", k: "txt" },
         { n: "Minute 3", s: "Med-ball slams, or bag work, hard and technically clean", k: "txt" },
         { n: "Round 1 output", s: rx.scored ? "SCORED WEEK — write it down" : "write it down", id: "c_fs_rd1", k: "out", u: "SkiErg m / bike cal" },
-        { n: "Last round output", s: "round six divided by round one is the fade", id: "c_fs_rd6", k: "out", u: "SkiErg m / bike cal" }],
-      rules: ["Relaxed jaw, shoulders down. Finish a round with your traps by your ears and it does not count.", CORNER],
+        { n: "Last round output", s: rx.sim > 6 ? "the last round finished divided by round one is the fade" : "round six divided by round one is the fade", id: "c_fs_rd6", k: "out", u: "SkiErg m / bike cal" }],
+      rules: (rx) => ["Relaxed jaw, shoulders down. Finish a round with your traps by your ears and it does not count.", CORNER,
+        "On scored weeks write down round one's output and round six's. Round six divided by round one is the fade."]
+        .concat(rx.sim > 6 ? ["Rounds past the fight — the seventh, in weeks 11–13 — are capacity work, not punishment. If one drops below 75% of round one's output, or your posture goes, that round is the last; the fade is scored on the last round you finished."] : []),
       recovery: 1,
       why: "Six rounds of three minutes through week 10; seven in weeks 11–13. The rest shortens by block — 90 seconds in accumulation, 60 from week 6.", tr: 2 },
-    { L: "D", n: "The Post-Max Sit", m: 3, hide: (rx) => !rx.sim && !rx.t20,
+    { L: "D", n: "The Post-Max Sit", m: 3, hide: (rx) => !rx.sim && rx.t20 !== "sun",
       timer: () => ({ kind: "postmax", title: "POST-MAX SIT" }), rxLine: () => "3 min — straight off the last round",
       items: [{ n: "Seconds to settle onto the breath", s: "write it down", cue: "Straight off the last round: sit, eyes closed, heart at 170-plus, find the breath at the nostrils.", id: "postmax", k: "out", u: "seconds" }],
       why: "The corner, trained." },
-    { L: "E", n: "Core, Carries, L-Sit, Lever, Face Pulls, Hands", m: 15, cal: "lsit", rest: "Rest 60 s", rt: 60,
+    { L: "E", n: "Core, Carries, L-Sit, Lever, Face Pulls, Hands", m: 15, cal: "lsit", rest: "Rest 60 s", rt: 60, hide: (rx) => !!rx.sunOff,
       items: (rx) => [{ n: "Hanging leg raise", s: "3 × 8–12", cue: "Hang from a bar, lift the legs to hip height or above, no swinging.", id: "hlr", k: "wr", sets: 3, reps: "8–12" },
         { n: "The L-sit line — at your level", s: (rx.half ? 2 : 3) + " sets", cue: "The tuck L-sit between two boxes to start; the line climbs one leg at a time to the full L-sit.", id: "lsit", k: "wr", sets: rx.half ? 2 : 3, reps: "at your level" },
         { n: "Suitcase carries", s: "2 × 30 m each side", cue: "One heavy dumbbell or kettlebell in one hand, walk 30 metres tall without leaning or letting the hips shift, switch hands; heavy enough that staying upright is the work.", id: "p_suitcase", k: "wr", sets: 2, reps: "30 m/side" },
@@ -616,7 +680,7 @@ export const PS = {
         { n: "Lights-out time, averaged", s: "what time the light went off", id: "wr_lights", k: "out", u: "e.g. 20:30" },
         { n: "Energy", s: "1–10", id: "wr_en", k: "out", u: "1–10" },
         { n: "Evenings you did RANGE", s: "0–7", id: "wr_home", k: "out", u: "0–7" }],
-      note: "Three yellows in a week: next week runs at the table's numbers minus one set on everything and the interval sessions at 90%." }] },
+      note: "Three yellows in a week: next week runs at the table's numbers minus one set on everything and the interval sessions at 90%. Achilles or knee at 3 or more: no reactive jumps next week, the tendon holds carry on. Hamstring at 3 or more: no flying sprints next week, Nordics only if pain-free. That's the tendon gate, and it runs whatever the strap says." }] },
 };
 
 /* ---------------- THE TRANSITION ---------------- */
@@ -658,5 +722,8 @@ export const TS = {
 };
 
 export const prepSess = (day) => PS[day] || null;
-/* the first three days after the fight are walking days */
-export const transitionSess = (day, rx) => (rx && rx.w === 1 && (day === "mon" || day === "tue" || day === "wed") ? Object.assign({}, WALK, { n: { mon: "MONDAY", tue: "TUESDAY", wed: "WEDNESDAY" }[day] }) : TS[day] || null);
+/* the first three days after the fight are walking days; a week the head
+   check holds has no session at all — nothing until a doctor has cleared
+   you */
+export const transitionSess = (day, rx) => (rx && rx.hold ? null
+  : rx && rx.w === 1 && (day === "mon" || day === "tue" || day === "wed") ? Object.assign({}, WALK, { n: { mon: "MONDAY", tue: "TUESDAY", wed: "WEDNESDAY" }[day] }) : TS[day] || null);

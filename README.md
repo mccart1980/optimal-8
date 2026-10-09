@@ -92,12 +92,24 @@ good — and correct it from the next Monday.
 to open it. **THIS WEEK** shows the camp's week table in the document's own
 words.
 
-**The proof.** `npm run build` runs season-builder.md's five tests first and
-stops if any fails: the March fight reproduces Optimal 8 · Camp's week table and
-session pages; no fight gives the 16-week cycle; the 28 November fight
-reproduces Worked Example 1 week by week; Prep with 14 weeks is Optimal 8 ·
-Prep and with 4 weeks P4, P7, P8, P14; and a scan of every generated week finds
-no exercise, load or session type outside the three documents.
+**After the fight, the head check.** The morning after the fight, the first
+row of TODAY asks "Stopped, dropped, or any symptoms?" with the symptom list.
+YES shows the doctor and A&E text and holds the transition — the weeks show as
+HOLD on the season strip — until you tap that a doctor has cleared you; the
+transition starts the Monday after. NO starts it. Unanswered, it keeps asking
+and the transition waits.
+
+**The proof.** `npm run build` runs six tests first and stops if any fails:
+6 × 3 at 60 s, good fitness, no emphasis, the fight on Saturday 13 March 2027
+from Monday 4 January reproduces Optimal 8 · Camp's week table and session
+pages; no fight gives the 16-week cycle; the 28 November fight (3 × 2, 60 s,
+low, durability, from Monday 12 October) reproduces Worked Example 1 week by
+week; Prep with 14 weeks is Optimal 8 · Prep and with 4 weeks P4, P7, P8, P14;
+a scan of every generated week finds no exercise, load or session type outside
+the three documents; and a scan of every generated week — every fitness level,
+format and emphasis, at every camp length, and the Fighter's pages too — finds
+no released-weight jump, no true max, and no full depth jumps before the tendon
+ramp allows them.
 
 ## PREP, AS THE DOCUMENT WRITES IT
 
@@ -105,7 +117,9 @@ The calendar's weekly emphasis drives the session, not the other way round:
 
 - **The trap bar and the squat** move through their phases — slow lowering with
   the five-second cue, normal tempo, paused with the three-second hold, fast,
-  the max single with its ramp, easy, contrast with the jump circuit, test week.
+  the top triples in week 9 (then 2 × 2 at 85% of the new working max), easy,
+  contrast with the jump circuit, and test week spread over the week as the
+  tests page spreads it.
   The phase is named on the block and the cue is on the lift.
 - **Monday's base** grows with the calendar, 45 to 60 minutes.
 - **Tuesday and Thursday** run the session types the calendar names, and never
@@ -131,14 +145,16 @@ read at each. The app fits the line and takes the phase targets off it,
 replacing the document's typical numbers. Redraw it in the weeks the document
 says — week 1 and week 10 put the profile on the session itself.
 
-On every main lift's **first work set** the logger asks for the speed and
-answers with one of three things:
+On every main lift's **first work set** the logger asks for the mean of its
+two fastest reps and answers:
 
 - **STAY** — within 0.05 m/s of target, the load was right.
-- **TAKE 5% OFF** — more than 0.05 slower. The remaining sets are recalculated
-  and the new weight is on them.
-- **ADD 2.5%** — more than 0.05 faster. The remaining sets go up, and so does
-  next week.
+- **TAKE 5% OFF** — more than 0.05 slower. One slow reading is enough: the
+  remaining sets are recalculated and the new weight is on them.
+- **STAY**, fast — more than 0.05 faster, today's load stays.
+- **ADD 2.5%** — more than 0.05 faster *and* the same lift was more than 0.05
+  fast at its previous session too. The remaining sets go up, and one tap puts
+  2.5% on the working max from then on.
 
 The row carries the stop threshold with it: 20% slower than the set's first rep
 on strength sets, 10% on fast and contrast sets. The rep count is a ceiling.
@@ -432,25 +448,48 @@ Optimal 8 Fighter. With a fight date of **Saturday 13 March 2027** it runs
 
 ## THE EDGE — PREP and CAMP
 
-Six additions, on by default, each on the weeks the documents give it:
-Tuesday speed after the shuttles (PREP 11–13, camp 6–8), cluster sets with a
-20-second pin-rest timer (PREP week 8, camp week 4), more plyometric contacts
-(PREP 11–13, camp 6–8 — depth jumps held at 4 × 4), rounds past the fight
-(PREP seven in 11–13; camp eight, eight, ten), the Wednesday easy thirty, and
-the sauna four evenings a week (PREP 11–13, camp 6–8).
+Five additions, on by default, each on the weeks the documents give it and
+listed under the switch in settings: Tuesday speed after the shuttles (PREP
+from week 11, camp from week 6), cluster sets with a 20-second pin-rest timer
+(PREP's heavy block, camp week 4), more plyometric contacts (PREP 11–13, camp
+6–8 — depth jumps held at 4 × 4), rounds past the fight (PREP seven in the
+convert block; camp eight, eight, ten), and the Wednesday easy thirty. The
+sauna is not an addition: twice a week at most, everywhere — a week the
+program puts it in has no weekend sauna of your own on top.
 
 **The guardrail.** When the morning check records a second yellow (or worse)
 in a week, the additions come off for the rest of that week — no Tuesday speed
 or Wednesday thirty, the clusters as straight sets, the contacts back to base,
-six rounds, the sauna twice — and TODAY says "The edge is off this week: two
-yellow mornings". Tuesday's **jump check** (three countermovement jumps, the
-best height logged) more than 7% under its four-week average counts as one of
-the two. It comes back the next Monday. **THE EDGE** in settings turns it off
-by hand.
+the rounds back to the fight's — and TODAY says "The edge is off this week:
+two yellow mornings". Tuesday's **jump check** (three countermovement jumps,
+the best height logged) more than 7% under its four-week average counts as one
+of the two. It comes back the next Monday. **THE EDGE** in settings turns it
+off by hand.
 
-**The tendon gate**, separately from the colours: Achilles or knee at 3 or
-more on Sunday's check turns next week's depth jumps into loaded drop jumps;
-a hamstring at 3 or more takes next week's flying sprints out.
+## THE SAFETY RULES
+
+- **No released weights.** The reactive slot climbs from drop landings to
+  low-box depth jumps to depth jumps — PREP weeks 1–5, 6–10 and 11–13; the camp
+  low-box through week 5 and depth jumps in the peak; from low fitness drop
+  landings for the camp's first two weeks, low-box from week 3, full depth jumps
+  not before week 4; engine weeks and the durability emphasis never full depth
+  jumps. Optimal 8 Fighter climbs the same stages (1–5, 6–10, 11–16).
+- **The bench throw** runs off the Smith machine's safety stops: every row with
+  a bench throw carries its library entry with the set-up.
+- **No true maxes.** Week 9 and test week are top triples: the card shows the
+  ramp off your working max, you log the heaviest clean triple, and the app sets
+  the working max to triple × 1.08 and loads the 2 × 2 back-off at 85% of it.
+  Test week's triples are the camp's working weights too. The Fighter's weeks 4
+  and 9, and its test day, are top triples as well.
+- **The tendon gate.** Achilles or knee at 3 or more on Sunday: no reactive
+  jumps next week, the holds carry on; back under 3, the jumps restart one stage
+  down for a week. Hamstring at 3 or more: no flying sprints next week, and the
+  Nordics marked "only if pain-free". Every jump, sprint and hold card has a
+  HURTS MORE THAN 3/10 button that ends that exercise for the day.
+- **The stop rule.** On the simulations and the rounds on the erg, once the
+  fight's own rounds are done, the card logs each round: a round under 75% of
+  round one, or a FORM GONE tap, is the last — the timer closes, the post-max
+  sit follows, and the fade is scored on that round.
 
 **The ballistic loads.** The week-1 and week-10 profiles (camp week 5) add
 the bench throw (20–50% of the bench) and the trap bar jump (10–40% of the
@@ -459,11 +498,14 @@ and the bench throw and trap bar jump rows load at the peak-power load until
 the next profile. The base sessions show the output at the easy-zone heart
 rate as a four-week trend.
 
-**Fight day.** The session start is the bell, and the food runs back from it:
-with the making-weight switch on, 1.25–1.5 litres for every kilo lost and
-low-fibre carbs every two hours; three hours out the last proper meal; an
-hour out half the bottle and a banana, and the caffeine; the March fight's
-bicarbonate only as trialled; sips with electrolytes through the rounds.
+**Fight day.** The session start is the bell, and the food runs back from it,
+following the weigh-in answer: weighed in the day before, 1.25–1.5 litres for
+every kilo under your normal morning weight with a sachet in every litre, and
+low-fibre carbs every hour or two until three hours out; weighed in on the day,
+the day eats as a normal Saturday and drinks to the alarms. Then for both:
+three hours out the last proper meal; an hour out half the bottle and a
+banana, and the caffeine; the March fight's bicarbonate only as trialled; sips
+with electrolytes through the rounds. No water cuts, ever.
 
 ## What v1.5 changed
 
@@ -570,8 +612,13 @@ npm run icons   # regenerate the app icons from scripts/generate-icons.mjs
   phases, the engine sessions with their targets, the seven session pages, the
   movement session, the size block, the three flexibility tests, and the two
   easy weeks after a fight.
-- `src/season.js` — the season: the camp's ten weeks off the fight date, PREP's
-  weeks off the camp, the sixteen-week form, the dated strip and what moved.
+- `src/builder.js` — the season builder: the plans laid end to end, the
+  decision and shortening tables, Prep fitted by the N table, every camp week's
+  prescription, the head check's hold and the transition.
+- `src/safety.js` — the safety rules every program shares: the reactive slot's
+  stages, the top triple, the stop rule, the pain stop, the head check.
+- `src/builder.test.js`, `src/proof.test.jsx` and `src/proof-grid.js` — the six
+  proof tests the build runs first.
 - `src/velocity.js` — the load-velocity line, the phase targets it draws, the
   first-work-set verdict and the stop thresholds.
 - `src/season-ui.jsx` — the SEASON strip, the GUIDE tab and the profile screen.

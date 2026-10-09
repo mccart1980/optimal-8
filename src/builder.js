@@ -1,6 +1,7 @@
 import { iso, mondayOf, parseISO, addDays } from "./ui.jsx";
 import { campMaster, campBenchMaster, campEdge } from "./camp.js";
-import { prepRx, prepEdge, prepBench } from "./prep.js";
+import { prepRx, prepEdge } from "./prep.js";
+import { lowerStage } from "./safety.js";
 
 /* ================================================================
    THE SEASON BUILDER — season-builder.md, as code.
@@ -17,7 +18,7 @@ import { prepRx, prepEdge, prepBench } from "./prep.js";
      · 11+ weeks     — Prep fitted by the N table, then the full camp
      · 6–10 (7–10)   — the camp, shortened from the front
      · under 6 (7)   — the short-notice camp
-     · after a fight — the transition, then Prep
+     · after a fight — the head check, the transition, then Prep
    Each week of the result is a ROW: { program, id, mon, sun, ... }.
    The week's prescription is campWeekRx / prepWeekRx below, read off
    the master week the row names, with only the changes these pages
@@ -104,9 +105,11 @@ export const transitionWeeks = (inp) => (fightMinutes(inp) <= 9 ? 1 : 2);
 function prepRows(ids, segIdx, extra) {
   const hasDoc = (d) => ids.some((x) => prepIdInfo(x).doc === d);
   let benchEarlyDone = hasDoc(6);
+  /* test day's depth jump is from the box you've trained on */
+  const depthTrained = ids.some((x) => { const d = prepIdInfo(x).doc; return d >= 11 && d <= 13; });
   return ids.map((id, i) => {
     const inf = prepIdInfo(id);
-    const r = Object.assign({ program: "prep", id, doc: inf.doc, plus: inf.plus, p88: inf.p88, seg: segIdx, segLen: ids.length }, extra || {});
+    const r = Object.assign({ program: "prep", id, doc: inf.doc, plus: inf.plus, p88: inf.p88, seg: segIdx, segLen: ids.length, depthTrained }, extra || {});
     r.profile = i === 0 || inf.doc === 10 || (inf.doc === 14 && !hasDoc(10));
     if (!benchEarlyDone && inf.doc >= 6 && inf.doc <= 13) { r.benchEarly = 1; benchEarlyDone = true; }
     r.size = inf.doc <= 5 ? "full" : inf.doc <= 13 ? "half" : null;
@@ -114,24 +117,43 @@ function prepRows(ids, segIdx, extra) {
   });
 }
 
+/* THE TRANSITION after a fight, week by week from the Monday after fight
+   week: { mon, hold } while the head check holds it, then the transition
+   — one week after a fight of 9 minutes or less, two after a longer one —
+   and on until the strap says you're back, for the weeks that have
+   happened.
+   The head check: the app asks the morning after the fight, and the
+   transition doesn't start until it's answered. Yes — stopped, dropped or
+   any symptoms — and it doesn't start until a doctor has cleared you: the
+   weeks up to the clearance (or, uncleared or unanswered, up to this one)
+   are held. No, and it starts. */
+function transitionPlan(fight, finp, ctx) {
+  const tw = transitionWeeks(finp);
+  const out = [];
+  let mon = addDays(monOf(fight), 7);
+  const h = ctx.head ? ctx.head(fight) : null;
+  const unanswered = !!ctx.head && !h && addDays(fight, 1) <= ctx.today;
+  if ((h && h.a === "yes") || unanswered) {
+    const clearMon = h && h.cleared ? planStartFor(h.cleared) : null;
+    while (clearMon ? mon < clearMon : mon <= ctx.todayMon) { out.push({ mon, hold: 1 }); mon = addDays(mon, 7); if (out.length > 52) break; }
+  }
+  let k = 0;
+  while (k < tw || (mon <= ctx.todayMon && !ctx.strapBack(addDays(mon, -1)))) {
+    out.push({ mon, idx: ++k, tw }); mon = addDays(mon, 7); if (k > 12) break;
+  }
+  return { weeks: out, end: mon, tw };
+}
+const transitionRow = (t, fight) => (t.hold
+  ? { program: "transition", id: "HOLD", hold: 1, idx: 0, tw: 0, fight }
+  : { program: "transition", id: "T", idx: t.idx, tw: t.tw, fight });
+
 /* One plan's rows, from its own Monday. ctx carries what came before:
-   the last fight and when its transition ends, and the row before. */
+   the last fight and its transition, and the row before. */
 function genPlan(plan, ctx, horizon) {
   const inp = Object.assign({}, FIGHT_DEFAULTS, plan.inputs || {});
   const rows = [];
   let cur = plan.from;
   const push = (r) => { rows.push(Object.assign({ mon: cur, sun: addDays(cur, 6), plan: plan.from }, r)); cur = addDays(cur, 7); };
-  const transition = (fight, finp, startIdx) => {
-    const tw = transitionWeeks(finp);
-    let k = startIdx || 0;
-    const tStart = addDays(monOf(fight), 7);
-    if (cur < tStart) cur = tStart;
-    /* one week after a short fight, two after a longer one — and on until
-       the strap says you're back, for the weeks that have happened */
-    while (k < tw || (cur <= ctx.todayMon && !ctx.strapBack(addDays(cur, -1)))) {
-      push({ program: "transition", id: "T", idx: ++k, tw, fight }); if (k > 12) break;
-    }
-  };
   const cycles = () => {
     let c = 0;
     do { prepRows(CYCLE16, ++c, { cycle: c }).forEach((r) => push(r)); } while (cur <= horizon);
@@ -139,12 +161,13 @@ function genPlan(plan, ctx, horizon) {
 
   /* a transition carried over from the last plan's fight */
   let afterFight = false;
-  if (ctx.prevFight && ctx.tEnd > cur) {
-    afterFight = true;
-    const tw = transitionWeeks(ctx.prevFightInp);
-    let k = ctx.tIdxAt(cur);
-    while (cur < ctx.tEnd || (cur <= ctx.todayMon && !ctx.strapBack(addDays(cur, -1)) && k < 12)) push({ program: "transition", id: "T", idx: ++k, tw, fight: ctx.prevFight });
-  } else if (ctx.prevFight && ctx.tEnd === cur) afterFight = true;
+  if (ctx.prevFight) {
+    const tp = transitionPlan(ctx.prevFight, ctx.prevFightInp, ctx);
+    if (tp.end > cur) {
+      afterFight = true;
+      tp.weeks.filter((t) => t.mon >= cur).forEach((t) => { cur = t.mon; push(transitionRow(t, ctx.prevFight)); });
+    } else if (tp.end === cur) afterFight = true;
+  }
 
   if (plan.inputs && plan.inputs.classic && !plan.inputs.booked) return { rows, classic: true };
   const booked = !!(inp.booked && inp.fight && monOf(inp.fight) >= cur);
@@ -153,23 +176,28 @@ function genPlan(plan, ctx, horizon) {
   const fightMon = monOf(inp.fight);
   const M = weeksBetween(cur, fightMon) + 1;
   let fitness = inp.fitness;
-  let lastBefore = ctx.lastRow;
+  let lastBefore = rows.length ? rows[rows.length - 1] : ctx.lastRow;
   let filler = false;
   if (M >= 11) {
     const N = M - 10;
     const segs = prepLayout(N);
     if (segs.length) segs.forEach((ids, si) => prepRows(ids, si + 1, { fitted: 1 }).forEach((r) => push(r)));
     else {
+      /* 1–3 weeks: straight after a fight, the transition's easy weeks run
+         on until the camp; otherwise those weeks run as P1, P2 and P3 */
       filler = true;
       for (let k = 0; k < N; k++) {
-        if (afterFight) { const last = rows[rows.length - 1]; push({ program: "transition", id: "T", idx: (last && last.program === "transition" ? last.idx : ctx.tIdxAt(cur)) + 1, tw: transitionWeeks(ctx.prevFightInp || inp), fight: ctx.prevFight, runOn: 1 }); }
+        if (afterFight) { const last = rows[rows.length - 1]; push({ program: "transition", id: "T", idx: (last && last.program === "transition" ? last.idx : 0) + 1, tw: transitionWeeks(ctx.prevFightInp || inp), fight: ctx.prevFight, runOn: 1 }); }
         else push(Object.assign(prepRows(["P1", "P2", "P3"].slice(k, k + 1), 1, { filler: 1 })[0], { profile: k === 0 }));
       }
     }
     if (rows.length) lastBefore = rows[rows.length - 1];
   }
+  /* a re-plan inside a camp that is already running carries it on: no
+     week before, no checks, no week-1 tests — those were the camp's */
+  const continuation = !rows.length && !!(lastBefore && lastBefore.program === "camp" && lastBefore.id !== "FW" && addDays(lastBefore.mon, 7) === cur);
   /* straight after a Prep test week, the app sets good fitness and uses
-     test day's numbers */
+     test week's numbers */
   const afterTest = !!(lastBefore && lastBefore.program === "prep" && lastBefore.doc === 14 && addDays(lastBefore.mon, 7) === cur);
   if (afterTest) fitness = "good";
   const lay = campLayout(weeksBetween(cur, fightMon) + 1, fitness);
@@ -177,33 +205,46 @@ function genPlan(plan, ctx, horizon) {
   /* the working-weight checks, the broad jump and throw, the 20-minute
      test: before week 1 if there's time, otherwise in week 1 */
   const testDayRecent = ctx.lastTestDay && (parseISO(cur) - parseISO(ctx.lastTestDay)) / 86400000 <= 21;
-  const needChecks = !afterTest && (fitness === "low" || (fitness === "moderate" && !testDayRecent));
-  const preRow = !rows.length && !filler && plan.made && plan.made < plan.from;
+  const needChecks = !afterTest && !continuation && (fitness === "low" || (fitness === "moderate" && !testDayRecent));
+  const preRow = !rows.length && !filler && !continuation && plan.made && plan.made < plan.from;
   const checks = needChecks ? (preRow ? "pre" : "week1") : null;
+  /* the week-1 tests: the burst test opens Tuesday and the nasal test
+     opens Thursday, unless the camp follows a Prep test week, which has
+     just measured both. Good fitness is test week's numbers: a camp from
+     good fitness with nothing before it in the season is the camp Prep's
+     test week hands on — Optimal 8 · Camp itself. */
+  const offTestWeek = afterTest || (fitness === "good" && !lastBefore && !rows.length);
+  const weekOneTests = !offTestWeek && !continuation;
   const ef = fitness === "low" || lay.short;
   const firstEdge = (fitness === "low" || lay.short) ? ids.findIndex((x) => /^(P|E\d)/.test(x)) : 0;
   const lastBuild = ids.reduce((a, x, i) => (/^B/.test(x) ? i : a), -1);
   const sIdx = ids.indexOf("S");
   const lastHard = (sIdx >= 0 ? sIdx : ids.indexOf("FW")) - 1;
+  /* the pre-camp check in the week before the camp's first Monday — or,
+     when that week has already gone, in week 1 */
+  const preInWeek1 = !continuation && !rows.length && !preRow && !offTestWeek;
   const camp = { R: Number(inp.rounds) || 6, mins: Number(inp.mins) || 3, rest: Number(inp.rest) || 60, fitness, entered: inp.fitness,
     emphasis: inp.emphasis || "none", ef, short: lay.short, firstEdge: firstEdge < 0 ? n : firstEdge, lastBuild, lastHard, n, ids,
-    fight: inp.fight, weighIn: inp.weighIn || "before", checks, afterTest };
+    fight: inp.fight, weighIn: inp.weighIn || "before", checks, afterTest, weekOneTests, continuation, preInWeek1 };
   if (rows.length) rows[rows.length - 1].preCamp = 1;
-  const pre = preRow ? { program: "pre", id: "PRE", mon: addDays(plan.from, -7), sun: addDays(plan.from, -1), plan: plan.from, preCamp: 1, camp } : null;
+  const pre = preRow ? { program: "pre", id: "PRE", mon: addDays(plan.from, -7), sun: addDays(plan.from, -1), plan: plan.from, made: plan.made, preCamp: 1, camp } : null;
   const campStart = cur;
   ids.forEach((id, i) => push({ program: "camp", id, idx: i + 1, campStart, camp }));
-  transition(inp.fight, inp, 0);
+  /* after the fight: the head check, the transition, then Prep */
+  transitionPlan(inp.fight, inp, ctx).weeks.forEach((t) => { cur = t.mon; push(transitionRow(t, inp.fight)); });
   cycles();
   return { rows: pre ? [pre].concat(rows) : rows };
 }
 
 /* The whole season. plans: [{ from, made, inputs }], oldest first.
-   strapBack(isoDay): were the morning numbers back by that day? */
+   strapBack(isoDay): were the morning numbers back by that day?
+   head(fightIso): the head check's answer { a: "yes"|"no", cleared }. */
 export function buildSeason(o) {
   const plans = (o.plans || []).filter((p) => p && p.from).slice().sort((a, b) => (a.from < b.from ? -1 : a.from > b.from ? 1 : 0));
   const today = o.today || iso(new Date());
   const todayMon = monOf(today);
   const strapBack = o.strapBack || (() => true);
+  const head = o.head || null;
   const horizon = addDays(todayMon, 7 * 26);
   let rows = [], classic = false;
   plans.forEach((plan, i) => {
@@ -213,41 +254,40 @@ export function buildSeason(o) {
     const lastRow = before[before.length - 1] || null;
     const fights = before.filter((r) => r.program === "camp" && r.camp.fight < plan.from).map((r) => r.camp);
     const pf = fights.length ? fights[fights.length - 1] : null;
-    const tRows = before.filter((r) => r.program === "transition");
     const tests = before.filter((r) => r.program === "prep" && r.doc === 14);
-    let tEnd = null;
-    if (pf) {
-      const tw = transitionWeeks({ rounds: pf.R, mins: pf.mins });
-      let end = addDays(monOf(pf.fight), 7 * (1 + tw));
-      /* a transition that ran on in the rows before keeps its length */
-      const lastT = tRows.filter((r) => r.fight === pf.fight).slice(-1)[0];
-      if (lastT && addDays(lastT.mon, 7) > end) end = addDays(lastT.mon, 7);
-      tEnd = end;
-    }
     const ctx = {
-      todayMon, strapBack, lastRow,
-      prevFight: pf ? pf.fight : null, prevFightInp: pf ? { rounds: pf.R, mins: pf.mins } : null, tEnd,
-      tIdxAt: (mon) => Math.max(0, weeksBetween(addDays(monOf(pf.fight), 7), mon)),
+      today, todayMon, strapBack, head, lastRow,
+      prevFight: pf ? pf.fight : null, prevFightInp: pf ? { rounds: pf.R, mins: pf.mins } : null,
       lastTestDay: tests.length ? addDays(tests[tests.length - 1].mon, 5) : null,
     };
     const g = genPlan(plan, ctx, horizon);
     let mine = g.rows;
     classic = !!g.classic && !mine.length;
-    const preMon = mine.length && mine[0].program === "pre" ? mine[0].mon : plan.from;
-    rows = rows.filter((r) => r.mon < preMon);
+    const pre = mine.length && mine[0].program === "pre" ? mine[0] : null;
+    if (pre) {
+      /* the week before the camp lands on a week already under way: the
+         days before the plan was made keep the week they were lived under */
+      const lived = rows.find((r) => r.mon === pre.mon);
+      if (lived && pre.made > pre.mon) {
+        if (lived.program === "pre") { if (lived.under) { pre.under = lived.under; pre.made = lived.made; } }
+        else pre.under = lived;
+      }
+    }
+    rows = rows.filter((r) => r.mon < (pre ? pre.mon : plan.from));
     if (next) {
-      const nextCut = next.made && next.made < next.from ? addDays(next.from, -7) : next.from;
       mine = mine.filter((r) => r.mon < next.from);
-      /* the next plan's week-before-camp takes the week it needs */
-      if (nextCut < next.from) mine = mine.filter((r) => r.mon < nextCut || r.program !== "pre");
     }
     rows = rows.concat(mine);
   });
   /* the key week of each row: counted per program across the whole
-     season, so a week's log never lands on another week */
+     season, so a week's log never lands on another week — a week a
+     re-plan landed on mid-week is counted where it was lived */
   const mac = { prep: "P", camp: "C", transition: "T", pre: "B" };
   const cnt = {};
-  rows.forEach((r, i) => { const m = mac[r.program]; cnt[m] = (cnt[m] || 0) + 1; r.mac = m; r.kw = cnt[m]; r.seq = i; });
+  /* the weeks the head check holds are counted on their own, so the
+     transition's weeks keep their keys whenever the answer comes */
+  const tag = (r, i) => { const m = r.hold ? "H" : mac[r.program]; cnt[m] = (cnt[m] || 0) + 1; r.mac = m; r.kw = cnt[m]; r.seq = i; };
+  rows.forEach((r, i) => { if (r.under) { tag(r.under, i); r.under.overlaid = 1; } tag(r, i); });
   return { rows, classic, today, todayMon };
 }
 
@@ -260,7 +300,11 @@ export function rowDates(row) {
   return a.getMonth() === b.getMonth() ? a.getDate() + "–" + dm(b) : dm(a) + "–" + dm(b);
 }
 export const rowOn = (season, isoDay) => { const m = monOf(isoDay); return season.rows.find((r) => r.mon === m) || null; };
-export const rowByKey = (season, mac, kw) => season.rows.find((r) => r.mac === mac && r.kw === kw) || null;
+/* the row a day was lived under: the week's own, or — before a re-plan
+   made mid-week — the one it replaced */
+export const rowForDay = (season, isoDay) => { const r = rowOn(season, isoDay); return r && r.under && isoDay < r.made ? r.under : r; };
+export const rowByKey = (season, mac, kw) => season.rows.find((r) => r.mac === mac && r.kw === kw)
+  || (season.rows.find((r) => r.under && r.under.mac === mac && r.under.kw === kw) || {}).under || null;
 
 /* ================================================================
    THE CAMP WEEK — the master week, changed only as these pages say
@@ -294,17 +338,21 @@ export function campWeekRx(row, edgeOn) {
   const low = c.fitness === "low";
   Object.assign(rx, { id, cw: row.idx, n: c.n, R, mins: c.mins, rest: c.rest, split: Math.round(c.mins * 60 / 3),
     block: BLOCK_LABEL[id], ph: PH_OF[id], ef, emphasis: beforeS ? c.emphasis : "none", fitness: c.fitness,
-    fightIso: c.fight, weighIn: c.weighIn, campStart: row.campStart, preCamp: !!row.preCamp });
+    fightIso: c.fight, weighIn: c.weighIn, campStart: row.campStart, preCamp: !!row.preCamp || (!!c.preInWeek1 && i === 0) });
   if (c.n === 10 && c.ids.join() === MASTER_10.join()) rx.master = 1;
+  /* the master week's own reactive jump, for the table */
+  rx.mjump = rx.jump;
   /* fight week slides with the fight's weekday */
   rx.fightDay = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"][parseISO(c.fight).getDay()];
   rx.rehearsal = addDays(c.fight, -6);
   rx.activation = addDays(c.fight, -2);
 
-  /* the engine weeks: P1's or P3's week, with the strength at its hold dose */
+  /* the engine weeks: P1's or P3's week, with the strength at its hold
+     dose and the power as written — low-box depth jumps, drop landings
+     from low fitness, never full depth jumps */
   if (EW) {
-    const hold = (n) => ({ sc: "2 × 3 @ 85% — fast", sets: 2, reps: 3, pct: 85, phase: "fast", hold: 1 });
-    Object.assign(rx, { tb: hold(), sq: hold(), cr: null, cpct: null, jump: "AEL", js: [4, 4], engine: 1,
+    const hold = () => ({ sc: "2 × 3 @ 85% — fast", sets: 2, reps: 3, pct: 85, phase: "fast", hold: 1 });
+    Object.assign(rx, { tb: hold(), sq: hold(), cr: null, cpct: null, jump: low ? "land" : "lowbox", js: [4, 4], engine: 1,
       pp: { sc: "2 × 3", sets: 2, reps: 3, pct: 85 } });
     rx.bench = { sc: "2 × 3 @ 85% — fast", sets: 2, reps: 3, pct: 85, phase: "fast" };
   } else rx.bench = campBenchMaster(w);
@@ -331,12 +379,12 @@ export function campWeekRx(row, edgeOn) {
   /* the conditioning pairs */
   if (EW) { const pr = short ? SHORT_PAIRS[id] : MASTER_PAIRS[id]; rx.eng1 = pr[0]; rx.eng2 = pr[1]; }
   else if (short && SHORT_PAIRS[id]) { rx.eng1 = SHORT_PAIRS[id][0]; rx.eng2 = SHORT_PAIRS[id][1]; }
-  if (FW || S || E) { /* as the master */ }
 
-  /* ---- the tests: week 1, the easy week, the sharpen week ---- */
-  if (!(i === 0 && (id === "F" || F1))) { if (id === "F" || F1) { delete rx.tests; rx.nasal = 0; } }
-  if (i === 0 && EW) { rx.tests = { tue: "burst" }; rx.nasal = 1; }
-  if (i === 0 && /^B|^P/.test(id)) { rx.tests = { tue: "burst" }; rx.nasal = 1; }
+  /* ---- the tests: in the camp's first week the burst test opens
+     Tuesday's session and the nasal test opens Thursday's, unless the
+     camp follows a Prep test week; the easy week and the sharpen week
+     run their retests as the master writes them ---- */
+  if (i === 0 && c.weekOneTests && !S && !FW && !E) { rx.tests = Object.assign({}, rx.tests, { tue: "burst" }); rx.nasal = 1; }
   if (c.checks === "week1" && i === 0 && !S && !FW) rx.checks = 1;
 
   /* ---- the sauna: from the camp's second week to the last hard week ---- */
@@ -390,15 +438,21 @@ export function campWeekRx(row, edgeOn) {
   } else if (em === "durability") {
     rx.neckSat = 1; rx.holdsPlus = 1; rx.noContacts = 1;
     rx.copen += 1; rx.suit += 1;
-    if (rx.jump === "DEPTH") rx.jump = "AEL";
+    /* low-box depth jumps instead of full depth jumps all camp, at the
+       same sets and reps */
+    rx.jump = lowerStage(rx.jump, "lowbox");
     rx.bsets = floor2(rx.bsets - 1); rx.broad = floor2(rx.broad - 1);
     if (rx.pp) rx.pp = Object.assign({}, rx.pp, { sets: floor2(rx.pp.sets - 1) });
   }
 
-  /* ---- the tendon ramp, from low fitness ---- */
+  /* ---- the tendon ramp, from low fitness: flying sprints at 90% for the
+     camp's first two weeks; drop landings in the first two weeks, low-box
+     depth jumps from week 3, full depth jumps not before week 4; the
+     Nordics 2 × 3, 2 × 4, 3 × 4, then the camp's numbers ---- */
   if (low && !S && !FW) {
     if (row.idx <= 2 && rx.spr) rx.spr = Object.assign({}, rx.spr, { pct: 90 });
-    if (row.idx < 4 && rx.jump === "DEPTH") rx.jump = "AEL";
+    if (row.idx <= 2) rx.jump = "land";
+    else if (row.idx === 3) rx.jump = lowerStage(rx.jump, "lowbox");
     const ramp = [[2, 3], [2, 4], [3, 4]][row.idx - 1];
     if (ramp && rx.nor) rx.nor = ramp.slice();
     rx.ramp = 1;
@@ -423,17 +477,21 @@ export function rowRx(row, edgeOn) {
   if (row.program === "camp") return campWeekRx(row, edgeOn);
   if (row.program === "prep") return prepWeekRx(row, edgeOn);
   if (row.program === "pre") return preWeekRx(row);
-  return { w: row.idx, ph: "trans", trans: 1, doc: row.idx, tw: row.tw, runOn: !!row.runOn || row.idx > row.tw, preCamp: !!row.preCamp };
+  if (row.hold) return { w: 0, ph: "trans", trans: 1, hold: 1, doc: 0, tw: 0, fight: row.fight, preCamp: !!row.preCamp };
+  return { w: row.idx, ph: "trans", trans: 1, doc: row.idx, tw: row.tw, fight: row.fight, runOn: !!row.runOn || row.idx > row.tw, preCamp: !!row.preCamp };
 }
 
 /* ================================================================
    THE PREP WEEK — the document's row, as the N table keeps it
    ================================================================ */
 const q34 = (n) => Math.max(1, Math.round(n * 0.75));
+const D3 = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const dayMonth = (isoDay) => { const d = parseISO(isoDay); return d.getDate() + " " + D3[d.getMonth()]; };
 export function prepWeekRx(row, edgeOn) {
   const base = prepRx(row.doc);
   let rx = prepEdge(base, edgeOn !== false);
-  rx = Object.assign({}, rx, { id: row.id, doc: row.doc, size: row.size, profile: row.profile ? 1 : 0, reset: base.reset && row.doc === 10 ? 1 : 0, preCamp: !!row.preCamp });
+  rx = Object.assign({}, rx, { id: row.id, doc: row.doc, size: row.size, profile: row.profile ? 1 : 0, reset: base.reset && row.doc === 10 ? 1 : 0, preCamp: !!row.preCamp,
+    depthTrained: row.depthTrained !== false });
   if (row.plus) {
     const pct = rx.pct + row.plus;
     rx = Object.assign({}, rx, { pct, sc: rx.sc.replace(/@ \d+(\.\d+)?%/, "@ " + pct + "%"),
@@ -443,19 +501,26 @@ export function prepWeekRx(row, edgeOn) {
     em: base.em.replace(/@ 87%/, "@ 88%") + " P12 again at 88%, depth jumps 4 × 4." });
   if (row.benchEarly) rx = Object.assign({}, rx, { benchDoc: 6, em: rx.em + " The bench press starts this week at P6's load, 80%." });
   else rx = Object.assign({}, rx, { benchDoc: row.doc });
+  /* test day's depth jumps are from the box you've trained on */
+  if (row.doc === 14 && row.depthTrained === false) rx = Object.assign({}, rx, { jump: "lowbox" });
+  /* test week names its own Saturday and Sunday */
+  if (row.doc === 14) rx = Object.assign({}, rx, { em: rx.em.replace("Sat 2 Jan", "Sat " + dayMonth(addDays(row.mon, 5))).replace("Sun 3 Jan", "Sun " + dayMonth(addDays(row.mon, 6))) });
   /* the bar-speed profiles: the Prep's first week, P10 if kept, else P14 */
   if (row.profile && !base.profile) rx.em = rx.em + " Load-velocity profiles drawn this week.";
   /* the Christmas rule: the week with 25 December in it at three-quarters
      volume, intensity kept — P13 is already written that way */
   const xmas = containsDate(row.mon, "12-25");
   if (xmas && row.doc !== 13) {
-    rx = Object.assign({}, rx, { xmas: 1, vol34: 1, sets: q34(rx.sets), sled: q34(rx.sled), nor: [q34(rx.nor[0]), rx.nor[1]],
+    rx = Object.assign({}, rx, { xmas: 1, vol34: 1, sets: rx.sets ? q34(rx.sets) : rx.sets, sled: q34(rx.sled), nor: [q34(rx.nor[0]), rx.nor[1]],
       js: [q34(rx.js[0]), rx.js[1]], box: [q34(rx.box[0]), rx.box[1]], bsets: q34(rx.bsets), split: q34(rx.split),
       spr: rx.spr ? q34(rx.spr) : rx.spr, pp: rx.pp ? Object.assign({}, rx.pp, { sets: q34(rx.pp.sets) }) : rx.pp,
       cr: rx.cr ? q34(rx.cr) : rx.cr,
       sc: rx.sc.replace(/^(\d+)/, (m) => String(q34(Number(m)))),
       em: rx.em + " Christmas week: three-quarters volume, intensity kept." });
-  } else if (!xmas && row.doc === 13) rx = Object.assign({}, rx, { em: rx.em.replace(/^Christmas week, volume down 25%\. /, "") });
+  }
+  /* P13 is written as Christmas week; anywhere else its numbers stand and
+     the block is the convert block's */
+  rx.bk = xmas || row.doc !== 13 ? base.bk : "Convert";
   rx.xmasWeek = xmas;
   return rx;
 }

@@ -19,24 +19,28 @@ export const VEL_LIFTS = [
 /* The loads the document asks for, as percentages of the working max. */
 export const PROFILE_LOADS = [50, 60, 70, 80, 85];
 
-/* The phases a target is read at, and the percentage each one sits at. */
+/* The phases a target is read at, and the percentage each one sits at.
+   No true maxes: the heaviest phase is the top triple, about 90% on its
+   first rep. */
 export const VEL_PHASES = [
   { id: "accum", n: "Accumulate", pct: 72, line: "70–75%" },
   { id: "intens", n: "Intensify", pct: 84, line: "80–87%" },
-  { id: "max", n: "Max single", pct: 100, line: "100%" },
+  { id: "top", n: "Top triple", pct: 90, line: "about 90% (first rep)" },
   { id: "convert", n: "Convert · contrast", pct: 86, line: "85–88%" },
 ];
 
-/* the document's typical numbers, until a profile replaces them */
+/* the document's typical numbers, until a profile replaces them — the
+   push press has no top triple, so no top-triple target */
 export const TYPICAL = {
-  squat: { accum: [0.65, 0.75], intens: [0.40, 0.55], max: [0.25, 0.30], convert: [0.40, 0.45] },
-  tbdl: { accum: [0.60, 0.70], intens: [0.40, 0.50], max: [0.25, 0.30], convert: [0.40, 0.45] },
-  bench: { accum: [0.50, 0.60], intens: [0.30, 0.40], max: [0.15, 0.20], convert: [0.30, 0.35] },
-  pp: { accum: [0.90, 1.10], intens: [0.70, 0.85], max: [0.50, 0.50], convert: [0.70, 0.70] },
+  squat: { accum: [0.65, 0.75], intens: [0.40, 0.55], top: [0.35, 0.42], convert: [0.40, 0.45] },
+  tbdl: { accum: [0.60, 0.70], intens: [0.40, 0.50], top: [0.33, 0.40], convert: [0.40, 0.45] },
+  bench: { accum: [0.50, 0.60], intens: [0.30, 0.40], top: [0.22, 0.28], convert: [0.30, 0.35] },
+  pp: { accum: [0.90, 1.10], intens: [0.70, 0.85], top: null, convert: [0.70, 0.70] },
 };
 
-/* the phase a prep week is in */
-export const phaseOfWeek = (doc) => (doc <= 5 ? "accum" : doc === 9 ? "max" : doc <= 10 ? "intens" : doc === 14 ? "convert" : "convert");
+/* the phase a prep week is in: week 9's back-off sets sit in the
+   intensify band; test week has nothing but the top triples */
+export const phaseOfWeek = (doc) => (doc <= 5 ? "accum" : doc <= 10 ? "intens" : doc <= 13 ? "convert" : "top");
 
 /* ---------- the line ---------- */
 /* Least squares through (load %, mean speed). Two points are enough to
@@ -62,6 +66,7 @@ export function fitLine(points) {
 /* The target for one lift in one phase: from the profile when there is
    one, from the document's typical numbers when there is not. */
 export function targetFor(profiles, lift, phase) {
+  if ((TYPICAL[lift] || TYPICAL.squat)[phase] === null) return null;
   const p = profiles && profiles[lift];
   const line = p && p.points ? fitLine(p.points) : null;
   const ph = VEL_PHASES.find((x) => x.id === phase) || VEL_PHASES[0];
@@ -75,16 +80,33 @@ export const VEL_BAND = 0.05;
 export const STOP_STRENGTH = 20;   /* % slower than the set's first rep */
 export const STOP_FAST = 10;
 
-/* Mean velocity within 0.05 m/s of target: stay. More than 0.05
-   slower: 5% off the remaining sets. More than 0.05 faster: 2.5% on,
-   and the same load next week. */
-export function verdictFor(speed, target) {
-  const s = num(speed), t = num(target);
-  if (s == null || t == null) return null;
-  const d = Math.round((s - t) * 100) / 100;
+/* The first work set's reading: the mean of its two fastest reps.
+   Within 0.05 m/s of target: stay. More than 0.05 slower: take 5% off
+   the remaining sets — one slow reading is enough to come down. More
+   than 0.05 faster: stay at today's load; only if the same lift was
+   also more than 0.05 fast at its previous session, add 2.5% from then
+   on — going up on one reading is chasing the watch's noise. */
+const diff = (speed, target) => { const s = num(speed), t = num(target); return s == null || t == null ? null : Math.round((s - t) * 100) / 100; };
+export const isFast = (speed, target) => { const d = diff(speed, target); return d != null && d > VEL_BAND; };
+export function verdictFor(speed, target, prevFast) {
+  const d = diff(speed, target);
+  if (d == null) return null;
   if (d < -VEL_BAND) return { kind: "down", pct: -5, d, line: "TAKE 5% OFF", why: "the remaining sets, recalculated" };
-  if (d > VEL_BAND) return { kind: "up", pct: 2.5, d, line: "ADD 2.5%", why: "the remaining sets, and the same load next week" };
+  if (d > VEL_BAND && prevFast) return { kind: "up", pct: 2.5, d, line: "ADD 2.5%", why: "fast at its last session too: 2.5% on, from now on" };
+  if (d > VEL_BAND) return { kind: "fast", pct: 0, d, line: "STAY", why: "fast today — fast again next session, and 2.5% goes on" };
   return { kind: "stay", pct: 0, d, line: "STAY", why: "the load was right" };
+}
+/* The same lift's reading at its previous session: the latest logged
+   first work set of that lift before this day, with the target it was
+   read against. */
+export function prevReading(log, lift, beforeIso, exceptKey) {
+  let best = null;
+  Object.keys(log || {}).forEach((k) => {
+    const e = log[k];
+    if (!e || k === exceptKey || e.vl !== lift || e.v1 == null || e.v1 === "" || e.vt == null || !e.vd || !(e.vd < beforeIso)) return;
+    if (!best || e.vd > best.vd) best = e;
+  });
+  return best;
 }
 
 /* the load the remaining sets are done at */

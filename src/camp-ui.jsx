@@ -5,6 +5,7 @@ import {
   FIGHT_WEEK_INTRO, FIGHT_WEEK_FOOD, FIGHT_WEEK_AFTER, PHASE_NAME, OUTPUT_RULE, CAMP_RULES, campBench, liftLine, daysOut,
 } from "./camp.js";
 import { rowDates } from "./builder.js";
+import { jumpOf } from "./safety.js";
 
 /* ================================================================
    CAMP — the views the camp needs that the Fighter hasn't got: the
@@ -81,7 +82,7 @@ export function CampWeekCard({ rx, dates }) {
       <Row k="Thursday engine 2" val={r.thu} />
       <Row k="Saturday sprints" val={rx.spr ? (rx.spr.micro ? "the speed microdose" : rx.spr.n + " × 20 m" + (rx.spr.pct < 100 ? " @ 90%" : "")) : "—"} />
       <Row k="Saturday squat" val={rx.sq ? liftLine(rx.sq) : "—"} />
-      <Row k="Reactive jumps" val={rx.tp || rx.fightWeek ? "—" : (rx.jump === "AEL" ? "Loaded drop jumps " : "Depth jumps ") + rx.js[0] + " × " + rx.js[1]} />
+      <Row k="Reactive jumps" val={rx.tp || rx.fightWeek ? "—" : rx.noJumps ? "none — the tendon gate" : jumpOf(rx.jump).n + " " + rx.js[0] + " × " + rx.js[1] + (rx.restart ? " · one stage down" : "")} />
       <Row k="Box jumps · side bounds" val={rx.tp || rx.fightWeek ? "—" : rx.box[0] + " × " + rx.box[1] + " · " + rx.bsets + " × 4 per side"} />
       <Row k="Push press" val={rx.pp ? rx.pp.sets + " × " + rx.pp.reps + " @ " + rx.pp.pct + "%" : "—"} />
       <Row k="Punch throws" val={rx.vec + " rounds"} />
@@ -137,10 +138,13 @@ export function FightWeekTable({ rx }) {
 }
 
 /* ---------------- the working weight on a main lift ---------------- */
+/* The working weight: test week's number, or reset in week 5 with a set
+   of 3 that's hard with two in you — × 1.08 is the working max. Day to
+   day the bar speed moves it: 5% off on one slow reading, 2.5% on only
+   after two fast sessions running. */
 export function CampWorkPanel({ id, name, kg, onSet, reset, week }) {
   const [inp, setInp] = useState("");
-  const step = id === "cw_pp" ? 2.5 : 5;
-  const bump = (dir) => { if (!kg) return; onSet(Math.round(kg * (dir > 0 ? 1.025 : 0.975) / step) * step, (dir > 0 ? "+2.5% · camp wk " : "−2.5% · camp wk ") + week); };
+  const val = num(inp) ? r25(num(inp) * (reset ? 1.08 : 1)) : null;
   return (
     <div style={{ background: C.ink, border: "1px solid " + C.brass, borderRadius: 5, padding: 12, marginBottom: 11 }}>
       <Eye c={C.brass} s={{ marginBottom: 4 }}>{name} — working weight</Eye>
@@ -148,14 +152,9 @@ export function CampWorkPanel({ id, name, kg, onSet, reset, week }) {
         <span style={Object.assign({}, mno, { fontSize: 26, fontWeight: 700, color: kg ? C.brass : C.ash })}>{kg ? kg + " kg" : "not set"}</span>
         <span style={Object.assign({}, mno, { fontSize: 9, color: C.ash, letterSpacing: 1 })}>NO MAXES, EVER, IN CAMP</span>
       </div>
-      {kg ? (
-        <div style={{ display: "flex", gap: 6, marginTop: 10 }}>
-          <Btn small c={C.moss} fill s={{ flex: 2 }} on={() => bump(1)}>LAST REP AS FAST AS THE FIRST · +2.5%</Btn>
-          <Btn small c={C.oxide} s={{ flex: 1 }} on={() => bump(-1)}>IT GROUND · −2.5%</Btn>
-        </div>) : null}
       <div style={{ display: "flex", gap: 8, alignItems: "flex-end", marginTop: 10 }}>
-        <div style={{ flex: 1 }}><Lab>{reset ? "Today's set of 3 (kg)" : "Set it by hand (kg)"}</Lab><Fld v={inp} on={setInp} ph="kg" /></div>
-        <Btn c={C.brass} fill dis={!num(inp)} on={() => { const k = num(inp); if (!k) return; onSet(r25(k), (reset ? "reset · set of 3 · camp wk " : "by hand · camp wk ") + week); setInp(""); }}>SAVE</Btn>
+        <div style={{ flex: 1 }}><Lab>{reset ? "Today's set of 3 (kg) — × 1.08 is the working max" : "Set it by hand (kg)"}</Lab><Fld v={inp} on={setInp} ph="kg" /></div>
+        <Btn c={C.brass} fill dis={!val} on={() => { if (!val) return; onSet(val, (reset ? "reset · set of 3 × 1.08 · camp wk " : "by hand · camp wk ") + week); setInp(""); }}>SAVE{val ? " · " + val + " KG" : ""}</Btn>
       </div>
     </div>);
 }

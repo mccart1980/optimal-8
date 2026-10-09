@@ -5,10 +5,21 @@ import builderMd from "../season-builder.md?raw";
 import { buildSeason, rowRx, rowDates, CYCLE16, prepLayout, campLayout } from "./builder.js";
 import { campRow } from "./camp.js";
 import { prepEmphasis } from "./prep.js";
+import { GRID } from "./proof-grid.js";
 
 /* ================================================================
-   THE PROOF — season-builder.md's five tests. `npm run build` runs
-   this file first and stops if any of it fails.
+   THE PROOF — the six tests. `npm run build` runs this file and
+   proof.test.jsx first and stops if any of either fails.
+     1 · 6 × 3, 60 s, good, no emphasis, fight Sat 13 Mar 2027, plan
+         from Mon 4 Jan 2027: Optimal 8 · Camp's week table
+     2 · no fight: the 16-week cycle
+     3 · fight Sat 28 Nov 2026, 3 × 2, 60 s, low, durability, plan from
+         Mon 12 Oct 2026: Worked Example 1, week by week
+     4 · Prep with 14 weeks is Optimal 8 · Prep; with 4, P4 P7 P8 P14
+     5 · nothing outside the three documents (proof.test.jsx)
+     6 · no released-weight jump, no true max, no full depth jumps
+         before the tendon ramp allows them — every fitness, format and
+         emphasis (here the prescriptions; proof.test.jsx the pages)
    ================================================================ */
 
 /* the rows of the first markdown table after a heading that matches */
@@ -29,23 +40,39 @@ const campRows = (s) => s.rows.filter((r) => r.program === "camp");
 
 /* ---------------- 1 · the master camp ---------------- */
 describe("proof 1 — the master camp, week for week", () => {
-  const s = buildSeason({ plans: [plan("2027-01-04", "2027-01-04", { fight: "2027-03-13", rounds: 6, mins: 3, rest: 60, fitness: "good", emphasis: "none", weighIn: "before" })], today: "2027-01-04" });
-  const rows = campRows(s);
+  const master = (made) => buildSeason({ plans: [plan("2027-01-04", made, { fight: "2027-03-13", rounds: 6, mins: 3, rest: 60, fitness: "good", emphasis: "none", weighIn: "before" })], today: made });
   const doc = tableAfter(campMd, /^## THE TEN WEEKS/);
 
-  it("is the ten master weeks, in order, from Monday 4 January", () => {
-    expect(rows.map((r) => r.id)).toEqual(["F", "B1", "B2", "B3", "E", "P1", "P2", "P3", "S", "FW"]);
-    expect(rows[0].mon).toBe("2027-01-04");
-    expect(doc.length).toBe(10);
+  ["2027-01-04", "2026-12-31"].forEach((made) => {
+    const s = master(made), rows = campRows(s);
+    it("is the ten master weeks, in order, from Monday 4 January (planned " + made + ")", () => {
+      expect(rows.map((r) => r.id)).toEqual(["F", "B1", "B2", "B3", "E", "P1", "P2", "P3", "S", "FW"]);
+      expect(rows[0].mon).toBe("2027-01-04");
+      expect(doc.length).toBe(10);
+    });
+    it("reproduces every cell of the document's week table (planned " + made + ")", () => {
+      let prev = null;
+      rows.forEach((r, i) => {
+        const rx = rowRx(r, true), t = campRow(rx, prev), d = doc[i];
+        expect([String(r.idx), rowDates(r), rx.block, t.mon, t.tue, t.wed, t.thu, t.sat, t.sun, t.nor].slice(0, d.length)).toEqual(d);
+        prev = rx;
+      });
+    });
   });
 
-  it("reproduces every cell of the document's week table", () => {
-    let prev = null;
-    rows.forEach((r, i) => {
-      const rx = rowRx(r, true), t = campRow(rx, prev), d = doc[i];
-      expect([String(r.idx), rowDates(r), rx.block, t.mon, t.tue, t.wed, t.thu, t.sat, t.sun, t.nor].slice(0, d.length)).toEqual(d);
-      prev = rx;
-    });
+  it("is the camp test week hands on: no week-1 burst or nasal test, test week's working weights", () => {
+    const w1 = rowRx(campRows(master("2026-12-31"))[0], true);
+    expect(w1.tests && w1.tests.tue).toBeFalsy(); expect(w1.nasal).toBeFalsy(); expect(w1.checks).toBeFalsy();
+  });
+
+  it("puts the pre-camp check in the week before it, 28 December–3 January", () => {
+    const pre = master("2026-12-31").rows[0];
+    expect(pre.program).toBe("pre"); expect(pre.mon).toBe("2026-12-28");
+    const rx = rowRx(pre); expect(rx.preCamp).toBe(1); expect(rx.checks).toBe(0);
+  });
+
+  it("climbs the reactive slot as the camp writes it: low-box depth jumps in weeks 1–5, depth jumps in weeks 6–8", () => {
+    campRows(master("2026-12-31")).slice(0, 8).forEach((r) => expect(rowRx(r, true).jump).toBe(r.idx <= 5 ? "lowbox" : "depth"));
   });
 });
 
@@ -64,6 +91,16 @@ describe("proof 2 — no fight: the 16-week cycle, on repeat", () => {
     const p4 = rowRx(s.rows[3], true), p4b = rowRx(s.rows[4], true), p12b = rowRx(s.rows[13], true);
     expect(p4.pct).toBe(75); expect(p4b.pct).toBe(77.5); expect(p4b.sc).toBe("5 × 5 @ 77.5%");
     expect(p12b.pct).toBe(88); expect(p12b.js).toEqual([4, 4]); expect(p12b.jump).toBe("depth");
+  });
+  it("climbs the reactive slot: drop landings in weeks 1–5, low-box depth jumps in 6–10, depth jumps in 11–13", () => {
+    s.rows.slice(0, 16).filter((r) => r.doc <= 13).forEach((r) => expect(rowRx(r, true).jump).toBe(r.doc <= 5 ? "land" : r.doc <= 10 ? "lowbox" : "depth"));
+  });
+  it("runs week 9 and test week as top triples, test week spread as the tests page spreads it", () => {
+    const p9 = rowRx(s.rows.find((r) => r.id === "P9"), true), p14 = rowRx(s.rows.find((r) => r.id === "P14"), true);
+    expect(p9.ph).toBe("top"); expect(p9.top).toBe("backoff"); expect([p9.sets, p9.reps, p9.pct]).toEqual([2, 2, 85]); expect(p9.noPP).toBe(1);
+    expect(p14.ph).toBe("test"); expect(p14.top).toBe("test"); expect(p14.sets).toBe(0); expect(p14.pct).toBe(null);
+    expect(p14.e2).toBe("t20"); expect(p14.t20).toBe("thu"); expect(p14.sunOff).toBe(1); expect(p14.burstTest).toBe(1); expect(p14.nasal).toBe(1);
+    expect(p14.em).toMatch(/Sat 30 Jan TEST DAY/); expect(p14.em).toMatch(/Sun 31 Jan easy hour/);
   });
   it("runs the size block full in weeks 1–6, half in 7–15, none in 16", () => {
     expect(s.rows.slice(0, 16).map((r) => r.size)).toEqual(["full", "full", "full", "full", "full", "full",
@@ -149,7 +186,9 @@ describe("proof 3 — Worked Example 1, week by week", () => {
         else { expect(rx.sq.sets).toBe(Number(sq[1])); expect(rx.sq.reps).toBe(Number(sq[3])); }
         expect(rx.sq.pct).toBe(Number(sq[4]));
       }
-      if (/drop jumps (\d+) × (\d+)/.test(sat)) { expect(rx.jump).toBe("AEL"); expect(rx.js).toEqual(n(sat, /drop jumps (\d+) × (\d+)/)); }
+      if (/drop landings (\d+) × (\d+)/.test(sat)) { expect(rx.jump).toBe("land"); expect(rx.js).toEqual(n(sat, /drop landings (\d+) × (\d+)/)); }
+      if (/low-box depth jumps (\d+) × (\d+)/.test(sat)) { expect(rx.jump).toBe("lowbox"); expect(rx.js).toEqual(n(sat, /low-box depth jumps (\d+) × (\d+)/)); }
+      expect(rx.jump === "depth").toBe(false);
       if (/SPEED MICRODOSE/.test(sat)) expect(rx.spr.micro).toBe(1);
       /* Sunday */
       const sm = sun.match(/^(\d+) × (\d+) at (\d+) s/);
@@ -168,7 +207,7 @@ describe("proof 3 — Worked Example 1, week by week", () => {
       expect(rx.neckSat).toBe(1); expect(rx.holdsPlus).toBe(1);
       expect(rx.copen).toBe(3); expect(rx.suit).toBe(3);
       expect(rx.bsets).toBe(2); expect(rx.pp.sets).toBe(2); expect(rx.broad).toBe(2);
-      expect(rx.jump).toBe("AEL");
+      expect(rx.jump).toBe(r.idx <= 2 ? "land" : "lowbox");
       expect(!!rx.sauna).toBe(r.idx >= 2);
     });
     ["S", "FW"].forEach((id) => { const rx = rowRx(rows.find((r) => r.id === id), true); expect(rx.neckSat).toBeFalsy(); expect(rx.sauna).toBeFalsy(); });
@@ -193,11 +232,12 @@ describe("proof 4 — Prep fitted by the N table", () => {
       expect(rowDates(r)).toBe(d[1]);
       expect(rx.doc).toBe(i + 1);
       const lm = em.match(/(\d+) × (\d+|\(2\+2\)) @ (\d+)/);
-      const L = Object.assign({}, rx, i === 7 ? rx : {});
-      expect(String(L.sets)).toBe(lm[1]); expect(String(L.reps).replace("2+2", "(2+2)")).toBe(lm[2]); expect(L.pct).toBe(Number(lm[3]));
+      /* test week loads nothing: the top triples set the working maxes */
+      if (!lm) { expect(r.doc).toBe(14); expect(rx.sets).toBe(0); expect(rx.pct).toBe(null); expect(em).toMatch(/top triple/); }
+      else { expect(String(rx.sets)).toBe(lm[1]); expect(String(rx.reps).replace("2+2", "(2+2)")).toBe(lm[2]); expect(rx.pct).toBe(Number(lm[3])); }
       const base = em.match(/Base (\d+)/); if (base) expect(rx.base).toBe(Number(base[1]));
       const sun = em.match(/Sun 6 × 3(?: scored)?, (\d+) s/); if (sun) { expect(rx.rest).toBe(Number(sun[1])); expect(rx.sim).toBeGreaterThan(0); }
-      if (/Sun 20-minute test|20-minute test,|the 20-minute test/.test(em)) expect(rx.t20).toBe(1);
+      if (/Sun 20-minute test|20-minute test,|the 20-minute test/.test(em)) expect(rx.t20).toBe(/Sun 20-minute test/.test(em) ? "sun" : "thu");
       expect(!!rx.scored).toBe(/scored/.test(em));
       expect(rx.em).toBe(prepEmphasis(r.doc) + (i === 0 ? "" : ""));
     });
@@ -239,4 +279,74 @@ describe("proof 4 — Prep fitted by the N table", () => {
     expect(prepLayout(20).map((x) => x.length)).toEqual([16, 4]);
     expect(prepLayout(3)).toEqual([]);
   });
+});
+
+/* ---------------- the transition and the head check ---------------- */
+describe("the transition, with the head check", () => {
+  const ex1 = plan("2026-10-12", "2026-10-08", { fight: "2026-11-28", rounds: 3, mins: 2, rest: 60, weighIn: "before", fitness: "low", emphasis: "durability" });
+  const after = (head, today) => buildSeason({ plans: [ex1], today, head }).rows.filter((r) => r.mon >= "2026-11-30").slice(0, 4);
+  it("runs one week after a fight of 9 minutes or less, two after a longer one, then Prep", () => {
+    expect(after(null, "2026-12-02").map((r) => r.id)).toEqual(["T", "P1", "P2", "P3"]);
+    const long = buildSeason({ plans: [plan("2026-10-12", "2026-10-08", { fight: "2026-11-28", rounds: 6, mins: 3, fitness: "low" })], today: "2026-12-02" });
+    expect(long.rows.filter((r) => r.mon >= "2026-11-30").slice(0, 3).map((r) => r.id)).toEqual(["T", "T", "P1"]);
+  });
+  it("holds the transition until the head check is answered; NO starts it", () => {
+    expect(after(() => null, "2026-12-08").map((r) => r.id)).toEqual(["HOLD", "HOLD", "T", "P1"]);
+    expect(after(() => ({ a: "no", at: "2026-11-29" }), "2026-12-08").map((r) => r.id)).toEqual(["T", "P1", "P2", "P3"]);
+  });
+  it("YES holds it until a doctor has cleared you, then starts it the Monday after", () => {
+    expect(after(() => ({ a: "yes", at: "2026-11-29" }), "2026-12-15").map((r) => r.id)).toEqual(["HOLD", "HOLD", "HOLD", "T"]);
+    expect(after(() => ({ a: "yes", at: "2026-11-29", cleared: "2026-12-09" }), "2026-12-15").map((r) => r.id)).toEqual(["HOLD", "HOLD", "T", "P1"]);
+  });
+  it("keeps the transition's own week keys whatever the answer", () => {
+    const held = buildSeason({ plans: [ex1], today: "2026-12-08", head: () => null }).rows;
+    expect(held.filter((r) => r.hold).map((r) => r.mac + r.kw)).toEqual(["H1", "H2"]);
+    expect(held.find((r) => r.id === "T").mac + held.find((r) => r.id === "T").kw).toBe("T1");
+  });
+});
+
+/* ---------------- re-planning ---------------- */
+describe("changing an input re-plans from today forward and keeps the history", () => {
+  const first = plan("2026-10-12", "2026-10-08", { fight: "2026-11-28", rounds: 3, mins: 2, rest: 60, fitness: "low", emphasis: "durability" });
+  const second = plan("2026-11-02", "2026-10-29", { fight: "2026-11-28", rounds: 3, mins: 2, rest: 60, fitness: "low", emphasis: "power" });
+  it("leaves every week before the re-plan as it was lived, and re-plans from the Monday after", () => {
+    const a = buildSeason({ plans: [first], today: "2026-10-29" }).rows, b = buildSeason({ plans: [first, second], today: "2026-10-29" }).rows;
+    const before = (rows) => rows.filter((r) => r.mon < "2026-11-02").map((r) => r.program + ":" + r.id + ":" + r.mac + r.kw);
+    expect(before(b)).toEqual(before(a));
+    /* the weeks left, by the tables — four from low fitness is the short-notice camp — carried on, not restarted: no week-1 tests */
+    const rest = b.filter((r) => r.mon >= "2026-11-02" && r.program === "camp");
+    expect(rest.map((r) => r.id)).toEqual(campLayout(4, "low").ids);
+    expect(rest[0].camp.emphasis).toBe("power"); expect(rowRx(rest[0], true).emphasis).toBe("power");
+    expect(rowRx(rest[0], true).nasal).toBeFalsy(); expect((rowRx(rest[0], true).tests || {}).tue).toBeFalsy();
+  });
+});
+
+/* ---------------- 6 · the safety scan, the prescriptions ---------------- */
+describe("proof 6 — no released weights, no true maxes, no depth jumps before the ramp allows them", () => {
+  it("scans every generated week, for every fitness level, format and emphasis", () => {
+    const bad = [];
+    let weeks = 0;
+    GRID.forEach((g) => [true, false].forEach((edge) => buildSeason({ plans: g.plans, today: g.today }).rows.forEach((r) => {
+      if (r.program === "prep" && (r.cycle || 1) > 1) return;
+      const rx = rowRx(r, edge); weeks++;
+      const where = g.fitness + "/" + g.emphasis + "/" + g.rounds + "x" + g.mins + "/" + g.weeks + "wk/" + r.program + ":" + r.id + "#" + (r.idx || r.doc);
+      /* the reactive slot is a stage, never a released weight */
+      if (rx.jump != null && ["land", "lowbox", "depth"].indexOf(rx.jump) < 0) bad.push(where + " jump " + rx.jump);
+      /* no true max anywhere in the week */
+      const txt = JSON.stringify(rx);
+      if (/max single|maxSq|maxBe|"max"|1RM|AEL|drop jump/i.test(txt)) bad.push(where + " " + (txt.match(/max single|maxSq|maxBe|"max"|1RM|AEL|drop jump/i) || [])[0]);
+      if (rx.jump !== "depth") return;
+      /* full depth jumps only where the ramp allows them */
+      if (r.program === "prep" && !(r.doc >= 11 && r.doc <= 13) && !(r.doc === 14 && r.depthTrained)) bad.push(where + " depth jumps in Prep week " + r.doc);
+      if (r.program === "camp") {
+        const c = r.camp;
+        if (c.fitness === "low" && r.idx < 4) bad.push(where + " depth jumps before week 4 from low fitness");
+        if (/^E\d/.test(r.id)) bad.push(where + " depth jumps in an engine week");
+        if (c.emphasis === "durability" && r.idx - 1 <= c.lastHard) bad.push(where + " depth jumps under the durability emphasis");
+      }
+      if (r.program === "transition" || r.program === "pre") bad.push(where + " depth jumps outside the program");
+    })));
+    expect(weeks).toBeGreaterThan(20000);
+    expect(bad.slice(0, 20)).toEqual([]);
+  }, 300000);
 });

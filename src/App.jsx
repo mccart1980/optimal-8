@@ -41,12 +41,16 @@ import {
   CAMP_DAILY_CHECK, WORKING_WEIGHT_RULE, SCORED_WEEKS_LINE,
   CAMP_EASY_HOUR, PHASE_NAME, campBench,
 } from "./camp.js";
-import { EDGE_OFF_LINE, EDGE_INTRO, EDGE_GUARDRAIL, TENDON_GATE, edgeCutIndex, tendonGate, jumpYellow, EASY_THIRTY, SAUNA_BASE, saunaDays } from "./edge.js";
+import { EDGE_OFF_LINE, EDGE_INTRO, EDGE_GUARDRAIL, EDGE_ITEMS, TENDON_GATE, edgeCutIndex, tendonGate, jumpYellow, EASY_THIRTY, SAUNA_BASE, saunaDays } from "./edge.js";
+import {
+  jumpOf, stageDown, JUMP_GATE_LINE, TOP_RAMP, topMax, TOP_NOT_MAX, STOP_PCT, stopRounds, stopState, PAIN_LINE, painRow,
+  HEAD_Q, HEAD_SYMPTOMS, HEAD_DOCTOR, HEAD_AE, HEAD_WHY, HEAD_CLEARED,
+} from "./safety.js";
 import { CampWeekTable, FightWeekTable, CampWorkPanel, CampNumbers, CampWeekCard } from "./camp-ui.jsx";
 import {
   PREP_INTRO, PREP_PHASE_NAME, PREP_PHASE_CUE, PENG, PENG_MENU, prepRx, prepEdge, prepEmphasis, prepTests,
   FLEX_TESTS, MOVE_INTRO, MOVE_STEPS, MOVE_ROWS, MOVE_ROW_OF, moveTonight, CARB_TOPUP,
-  TRANSITION_INTRO, TRANSITION_RULES, prepSess, transitionSess, PPROTO, prepBench,
+  TRANSITION_INTRO, TRANSITION_RULES, prepSess, transitionSess, PPROTO, prepBench, topItem,
 } from "./prep.js";
 import {
   buildSeason, rowOn, rowByKey, rowRx, rowDates, monOf as mondayIso, planStartFor, describeSeason, fitnessFromFade,
@@ -54,7 +58,7 @@ import {
 } from "./builder.js";
 import {
   VEL_LIFTS, PROFILE_LOADS, VEL_PHASES, fitLine, targetFor, verdictFor, adjustLoad,
-  phaseOfWeek, stopPct, VEL_BAND, campPhaseOfWeek, ballisticPct,
+  phaseOfWeek, stopPct, VEL_BAND, campPhaseOfWeek, ballisticPct, isFast, prevReading,
 } from "./velocity.js";
 import {
   morningFlag, recoveryDrop, easyZone, ergSlots, ergShapeFor, ergTotal, simFade, sleepWeek,
@@ -128,11 +132,11 @@ const defaultStart = () => { const t = new Date(); const dow = (t.getDay() + 6) 
    ================================================================ */
 const PH = {
   b1: { n: "BUILD", long: "BLOCK 1 · BUILD", ac: C.moss, vl: "25–30%",
-    note: "The most volume in the cycle — four sets of rows, three of split squats. Loaded drop jumps. Jump circuit at 2 rounds, punch throws at 3, Nordics ramping up. Week 1 finds your trap bar and push press numbers." },
+    note: "The most volume in the cycle — four sets of rows, three of split squats. Drop landings. Jump circuit at 2 rounds, punch throws at 3, Nordics ramping up. Week 1 finds your trap bar and push press numbers." },
   b2: { n: "FORCE", long: "BLOCK 2 · FORCE", ac: C.oxide, vl: "15–20%",
-    note: "Accessories drop to 3 sets and the bar gets heavier: the rests on the main lifts go to 2½ minutes for the heavy triples. Week 9's single is a direction check, not your real number — you're carrying fatigue." },
+    note: "Accessories drop to 3 sets and the bar gets heavier: the rests on the main lifts go to 2½ minutes for the heavy triples. Low-box depth jumps replace the drop landings. Week 9's top triple is a direction check, not your real number — you're carrying fatigue." },
   b3: { n: "VELOCITY", long: "BLOCK 3 · VELOCITY", ac: C.brass, vl: "10–15%",
-    note: "Everything gets faster. The jump circuit leads Saturday at 4 rounds with the band-assisted jump; the squat drops to 2×2 @ 88% behind it. Monday's bench and bench throws merge into one circuit. Depth jumps replace loaded drop jumps, side bounds go continuous, punch throws to 4 rounds, trap bar and push press to fast 3×3s at 80%, and Wednesday's pause squat becomes a speed squat. Speed fades fastest once you stop — so it's trained hardest right before the test." },
+    note: "Everything gets faster. The jump circuit leads Saturday at 4 rounds with the band-assisted jump; the squat drops to 2×2 @ 88% behind it. Monday's bench and bench throws merge into one circuit. Depth jumps replace the low-box depth jumps, side bounds go continuous, punch throws to 4 rounds, trap bar and push press to fast 3×3s at 80%, and Wednesday's pause squat becomes a speed squat. Speed fades fastest once you stop — so it's trained hardest right before the test." },
   taper: { n: "TAPER", long: "TAPER & TEST", ac: C.cobalt, vl: "≤10%",
     note: "Volume −40% then −60%. Intensity held. A deload drops intensity to restore you; a taper drops volume and keeps intensity, because fatigue sheds faster than fitness. Sprints and jumps stay in both weeks — reduce their volume, never their intent. Saturday of week 16 is test day." },
   hell: { n: "HELL WEEK", long: "HELL WEEK", ac: C.oxide, vl: "—",
@@ -146,7 +150,7 @@ Object.assign(PH, {
   accumulate: { n: "ACCUMULATE", long: "BLOCK 1 · ACCUMULATE", ac: C.moss, vl: "volume, base, tissue, size, movement",
     note: "Five weeks of volume, base, tissue and size. Slow lowering on the two big lifts, the base growing to an hour, the size block and the movement session twice a week. It feels easy. It is not." },
   intensify: { n: "INTENSIFY", long: "BLOCK 2 · INTENSIFY", ac: C.oxide, vl: "heavy, paused then fast",
-    note: "Five weeks of heavy work: paused reps, then fast reps, then the max single in week 9 and the reset that follows it. The size block comes out and the sauna goes in." },
+    note: "Five weeks of heavy work: paused reps, then fast reps, then the top triples in week 9 and the reset that follows it. The size block drops to two sets and the sauna goes in." },
   convert: { n: "CONVERT", long: "BLOCK 3 · CONVERT", ac: C.brass, vl: "contrast, reactive, top speed",
     note: "Contrast doubles straight into the jump circuit, depth jumps, top speed, repeat bursts and the rounds at fight rest. Where strength becomes speed." },
   prepTest: { n: "TEST WEEK", long: "TEST WEEK", ac: C.cobalt, vl: "light, then test day",
@@ -179,22 +183,27 @@ const SIMB = { 1: { rest: 45 }, 2: { rest: 90, max3: 1 }, 3: { rest: 60 }, 4: { 
 const R = {};
 const cal = { sc: "CALIBRATE — ramp to a 3RM @ RPE 8", cal: 1 };
 const tbB = (sc, s, r, p) => ({ sc, sets: s, reps: r, pct: p });
-const wk = (w, o) => { R[w] = Object.assign({ w, ph: phaseOf(w), bw: bwk(w), cpct: 85, vec: 3, jump: "AEL", js: [4, 4], bound: "stick", z2wed: 30, z2sun: 40, sled: 5, sprPct: 100, throw: [5, 3] }, o); };
+/* No released weights: the reactive slot climbs from drop landings
+   (weeks 1–5) to low-box depth jumps (6–10) to depth jumps (11–16) — the
+   stages Prep and the Camp climb — and the reload starts again at the
+   bottom. No true maxes: weeks 4 and 9 are top triples. */
+const fighterJump = (w) => (w <= 5 || w >= 17 ? "land" : w <= 10 ? "lowbox" : "depth");
+const wk = (w, o) => { R[w] = Object.assign({ w, ph: phaseOf(w), bw: bwk(w), cpct: 85, vec: 3, jump: fighterJump(w), js: [4, 4], bound: "stick", z2wed: 30, z2sun: 40, sled: 5, sprPct: 100, throw: [5, 3] }, o); };
 wk(1, { sc: "4 × 6 @ 75%", sets: 4, reps: 6, pct: 75, cr: 2, spr: 3, acc: 4, nor: [2, 3], tb: cal, pp: cal, eng: "vo2", sim: SIMB[1], cal: 1 });
 wk(2, { sc: "4 × 5 @ 78%", sets: 4, reps: 5, pct: 78, cr: 2, spr: 4, acc: 4, nor: [2, 4], tb: tbB("4 × 3 @ 80%", 4, 3, 80), pp: tbB("4 × 3 @ 82%", 4, 3, 82), eng: "lac", sim: SIMB[2] });
 wk(3, { sc: "4 × 5 @ 80%", sets: 4, reps: 5, pct: 80, cr: 2, spr: 5, acc: 4, nor: [3, 4], tb: tbB("4 × 3 @ 80%", 4, 3, 80), pp: tbB("4 × 3 @ 82%", 4, 3, 82), eng: "rz", sim: SIMB[3] });
-wk(4, { sc: "MAX SINGLE → 2 × 3 @ 85%", sets: 2, reps: 3, pct: 85, maxSq: 1, maxBe: 1, cr: 2, spr: 5, acc: 4, nor: [3, 5], tb: tbB("4 × 3 @ 80%", 4, 3, 80), pp: { bench: 1 }, eng: "vo2", sim: SIMB[4] });
+wk(4, { sc: "TOP TRIPLE → 2 × 3 @ 85%", sets: 2, reps: 3, pct: 85, topSq: 1, topBe: 1, cr: 2, spr: 5, acc: 4, nor: [3, 5], tb: tbB("4 × 3 @ 80%", 4, 3, 80), pp: { bench: 1 }, eng: "vo2", sim: SIMB[4] });
 wk(5, { sc: "2 × 5 @ 65% — deload", sets: 2, reps: 5, pct: 65, cr: 1, spr: 3, sprPct: 90, acc: 2, nor: [2, 3], tb: tbB("2 × 3 @ 65%", 2, 3, 65), pp: tbB("2 × 3 @ 65%", 2, 3, 65), vec: 2, js: [2, 4], eng: "easy", sim: SIMB[5], dl: 1, sled: 3 });
 wk(6, { sc: "4 × 4 @ 82%", sets: 4, reps: 4, pct: 82, cr: 3, spr: 3, acc: 3, nor: [3, 5], tb: tbB("4 × 3 @ 85%", 4, 3, 85), pp: tbB("4 × 3 @ 85%", 4, 3, 85), iso: 1, z2wed: 20, eng: "vo2", sim: SIMB[1] });
 wk(7, { sc: "4 × 3 @ 85%", sets: 4, reps: 3, pct: 85, cr: 3, spr: 4, acc: 3, nor: [3, 5], tb: tbB("4 × 3 @ 85%", 4, 3, 85), pp: tbB("4 × 3 @ 85%", 4, 3, 85), iso: 1, z2wed: 20, eng: "lac", sim: SIMB[2] });
 wk(8, { sc: "4 × 3 @ 87%", sets: 4, reps: 3, pct: 87, cr: 3, spr: 5, acc: 3, nor: [3, 5], tb: tbB("4 × 3 @ 85%", 4, 3, 85), pp: tbB("4 × 3 @ 85%", 4, 3, 85), iso: 1, z2wed: 20, eng: "rz", sim: SIMB[3] });
-wk(9, { sc: "MAX SINGLE → 2 × 2 @ 88%", sets: 2, reps: 2, pct: 88, maxSq: 1, maxBe: 1, mid: 1, cr: 2, spr: 5, acc: 3, nor: [3, 5], tb: tbB("3 × 2 @ 88%", 3, 2, 88), pp: { bench: 1 }, z2wed: 20, eng: "vo2", sim: SIMB[4] });
+wk(9, { sc: "TOP TRIPLE → 2 × 2 @ 88%", sets: 2, reps: 2, pct: 88, topSq: 1, topBe: 1, mid: 1, cr: 2, spr: 5, acc: 3, nor: [3, 5], tb: tbB("3 × 2 @ 88%", 3, 2, 88), pp: { bench: 1 }, z2wed: 20, eng: "vo2", sim: SIMB[4] });
 wk(10, { sc: "2 × 4 @ 65% — deload", sets: 2, reps: 4, pct: 65, cr: 1, spr: 3, sprPct: 90, acc: 2, nor: [2, 3], tb: tbB("2 × 3 @ 65%", 2, 3, 65), pp: tbB("2 × 3 @ 65%", 2, 3, 65), vec: 2, js: [2, 4], z2wed: 20, eng: "easy", sim: SIMB[5], dl: 1, sled: 3 });
 [11, 12, 13, 14].forEach((w, i) => wk(w, { sc: "JUMP CIRCUIT LEADS · 2 × 2 @ 88% after", sets: 2, reps: 2, pct: 88, cpct: 88, cr: 4, spr: [3, 4, 5, 5][i], acc: 3, nor: [3, 5],
-  tb: tbB("3 × 3 @ 80% — bar speed", 3, 3, 80), pp: tbB("3 × 3 @ 80% — bar speed", 3, 3, 80), vec: 4, jump: "DEPTH", js: [4, 5], bound: "cont",
+  tb: tbB("3 × 3 @ 80% — bar speed", 3, 3, 80), pp: tbB("3 × 3 @ 80% — bar speed", 3, 3, 80), vec: 4, jump: "depth", js: [4, 5], bound: "cont",
   eng: ["vo2", "lac", "rz", "vo2"][i], sim: [{ rest: 60 }, { rest: 45 }, { rest: 60 }, { rest: 60, tested: 1 }][i], upperC: 1, lowerLead: 1, bw: i + 1 }));
-wk(15, { sc: "2 × 2 @ 85%", sets: 2, reps: 2, pct: 85, cr: 2, spr: 3, acc: 2, nor: [2, 4], tb: tbB("2 × 2 @ 85%", 2, 2, 85), pp: tbB("2 × 2 @ 85%", 2, 2, 85), vec: 2, jump: "DEPTH", js: [2, 5], bound: "cont", eng: "rz3", sim: { rounds: 3, rest: 60 }, tp: 1 });
-wk(16, { sc: "1 × 2 @ 85%", sets: 1, reps: 2, pct: 85, bsc: "2 × 2 @ 85%", bsets: 2, cr: 1, spr: 3, acc: 1, nor: null, tb: tbB("1 × 2 @ 80%", 1, 2, 80), pp: null, vec: 2, jump: "DEPTH", js: [2, 3], bound: "cont", z2wed: 20, z2sun: 30, eng: "easy15", sim: SIMB[5], throw: [3, 3], tp: 1, test: 1 });
+wk(15, { sc: "2 × 2 @ 85%", sets: 2, reps: 2, pct: 85, cr: 2, spr: 3, acc: 2, nor: [2, 4], tb: tbB("2 × 2 @ 85%", 2, 2, 85), pp: tbB("2 × 2 @ 85%", 2, 2, 85), vec: 2, jump: "depth", js: [2, 5], bound: "cont", eng: "rz3", sim: { rounds: 3, rest: 60 }, tp: 1 });
+wk(16, { sc: "1 × 2 @ 85%", sets: 1, reps: 2, pct: 85, bsc: "2 × 2 @ 85%", bsets: 2, cr: 1, spr: 3, acc: 1, nor: null, tb: tbB("1 × 2 @ 80%", 1, 2, 80), pp: null, vec: 2, jump: "depth", js: [2, 3], bound: "cont", z2wed: 20, z2sun: 30, eng: "easy15", sim: SIMB[5], throw: [3, 3], tp: 1, test: 1 });
 wk(17, { sc: "NO OPTIMAL 8 VOLUME", hell: 1, eng: null, sim: SIMB[5] });
 wk(18, { sc: "2 × 5 @ 70% — reload", sets: 2, reps: 5, pct: 70, cr: 1, spr: 3, sprPct: 90, acc: 2, nor: [2, 3], tb: tbB("2 × 3 @ 65%", 2, 3, 65), pp: tbB("2 × 3 @ 65%", 2, 3, 65), vec: 2, js: [2, 4], eng: "easy", sim: SIMB[5], dl: 1, sled: 3, reload: 1 });
 const ENG2 = { 1: "lac", 2: "rz", 3: "vo2", 4: "lac", 5: "easy", 6: "lac", 7: "rz", 8: "vo2", 9: "lac", 10: "easy", 11: "lac", 12: "rz", 13: "vo2", 14: "lac", 15: "easy", 16: null, 17: null, 18: "easy" };
@@ -226,19 +235,21 @@ const SEASON = { s: null };
 const seasonRow = (mac, kw) => (SEASON.s ? rowByKey(SEASON.s, mac, kw) : null);
 const prevRow = (row) => (row && SEASON.s && row.seq > 0 ? SEASON.s.rows[row.seq - 1] : null);
 /* which program a row runs */
-const MAC_PROGRAM = { P: "prep", C: "camp", T: "transition", B: "camp" };
-/* Point MODE at a row's program before anything reads a prescription. */
+const MAC_PROGRAM = { P: "prep", C: "camp", T: "transition", H: "transition", B: "camp" };
+/* Point MODE at a row's program before anything reads a prescription.
+   The weeks the head check holds (H) are the transition's. The Fighter
+   keeps its macrocycle number, for the Sunday check it reads. */
 function setModeFor(mac) {
-  if (mac === "P" || mac === "C" || mac === "T" || mac === "B") {
-    Object.assign(MODE, { program: MAC_PROGRAM[mac], prep: mac === "P", camp: mac === "C" || mac === "B", trans: mac === "T", pre: mac === "B", mac, lastTen: false });
-  } else Object.assign(MODE, { program: "fighter", prep: false, camp: false, trans: false, pre: false, mac: null });
+  if (MAC_PROGRAM[mac]) {
+    Object.assign(MODE, { program: MAC_PROGRAM[mac], prep: mac === "P", camp: mac === "C" || mac === "B", trans: mac === "T" || mac === "H", pre: mac === "B", mac, fmac: null, lastTen: false });
+  } else Object.assign(MODE, { program: "fighter", prep: false, camp: false, trans: false, pre: false, mac: null, fmac: typeof mac === "number" ? mac : null });
 }
 const LASTTEN_INTRO = "Week table numbers stop; every lift goes to 2 sets at 70%, fast; no sprints, no depth jumps, no Nordics inside the last seven days; the jump circuit becomes box jumps only. The two power doses stay because they keep the nervous system sharp without costing anything. The last heavy thing you do is nine days out. The fuel plan's \"making weight\" section runs the food.";
 
 const lastTenRx = (rx) => {
   const two = "2 sets @ 70% — fast";
   return Object.assign({}, rx, {
-    sc: two, pct: 70, sets: 2, bsc: two, bsets: 2, maxSq: 0, maxBe: 0, upperC: 0,
+    sc: two, pct: 70, sets: 2, bsc: two, bsets: 2, topSq: 0, topBe: 0, upperC: 0,
     tb: { sc: two, sets: 2, reps: rx.tb && rx.tb.reps ? rx.tb.reps : 2, pct: 70 },
     pp: rx.pp && rx.pp.sc ? { sc: two, sets: 2, reps: rx.pp.reps || 2, pct: 70 } : rx.pp,
     pq: rx.pq ? { sc: two, sets: 2, reps: rx.pq.reps || 2, pct: 70, fast: 1 } : rx.pq,
@@ -250,32 +261,38 @@ const baseRxFor = (w) => R[w] || R[1];
    the week; the lift phase names what the bar does inside it. */
 const seasonRxFor = (mac, w, edge) => {
   const row = seasonRow(mac, w);
-  if (!row) return mac === "P" ? Object.assign({}, prepRx(1), { w, lift: "slow", ph: "accumulate", doc: 1, prep: 1, size: "full" }) : mac === "T" ? transRx(w) : { w, ph: "c1", pre: 1 };
+  if (!row) return mac === "P" ? Object.assign({}, prepRx(1), { w, lift: "slow", ph: "accumulate", doc: 1, prep: 1, size: "full" }) : mac === "T" || mac === "H" ? transRx(w) : { w, ph: "c1", pre: 1 };
   const rx = rowRx(row, edge);
   if (row.program === "prep") return gated(Object.assign({}, rx, { w, kw: w, lift: rx.ph, ph: prepPhaseOf(rx.doc), bw: null, prep: 1 }), "P", w);
   if (row.program === "camp" || row.program === "pre") return gated(Object.assign({}, rx, { kw: w }), "C", w);
   return Object.assign({}, rx, { kw: w });
 };
-/* THE TENDON GATE, from last Sunday's check, separately from the colours:
-   Achilles or knee at 3 or more — the depth jumps become loaded drop
-   jumps; hamstring at 3 or more — no flying sprints. And the ballistic
-   rows load at the peak-power load the last profile found. */
-const sundayScores = (mac, week) => {
-  /* the week before, whichever program it was */
-  const row = seasonRow(MODE.mac || mac, week), pr = row ? prevRow(row) : null;
-  const pm = pr ? pr.mac : mac, pw = pr ? pr.kw : week - 1;
-  if (!pr && week < 2) return {};
+/* THE TENDON GATE, from the Sunday check, separately from the colours:
+   Achilles or knee at 3 or more — no reactive jumps next week, the tendon
+   holds carried on; back under 3, the jumps restart one stage down for a
+   week. Hamstring at 3 or more — no flying sprints, and the Nordics only
+   if they're pain-free. And the ballistic rows load at the peak-power
+   load the last profile found. */
+const sundayScores = (mac, week, back) => {
+  /* the week `back` weeks before (one, unless asked), whichever program it was */
+  const n = back || 1;
+  let pm, pw;
+  const row = MAC_PROGRAM[MODE.mac || mac] ? seasonRow(MODE.mac || mac, week) : null;
+  if (row) { let pr = row; for (let i = 0; i < n && pr; i++) pr = prevRow(pr); if (!pr) return {}; pm = pr.mac; pw = pr.kw; }
+  else { if (week - n < 1) return {}; pm = mac; pw = week - n; }
   const pre = pm === "C" || pm === "B" ? "cwr_" : "wr_", at = (id) => (GATE.log["m" + pm + "w" + pw + "-sun-" + pre + id] || {}).w;
   return { ach: at("ach"), kn: at("kn"), ham: at("ham"), el: at("el") };
 };
 function gated(rx, mac, week) {
-  const g = tendonGate(sundayScores(mac, week));
+  const sc = sundayScores(mac, week), g = tendonGate(sc);
   const o = Object.assign({}, rx, { btPct: ballisticPct(GATE.profiles, "bthrow"), tjPct: ballisticPct(GATE.profiles, "tbjump") });
-  if (g.noDepth && /^depth$/i.test(String(rx.jump || ""))) Object.assign(o, { jump: mac === "C" ? "AEL" : "drop", js: [3, 4], gateDepth: 1 });
-  if (g.noFlying) Object.assign(o, { noFlying: 1, speed: false });
+  if (rx.jump) {
+    if (g.noJumps) Object.assign(o, { noJumps: 1 });
+    else if (tendonGate(sundayScores(mac, week, 2)).noJumps) Object.assign(o, { jump: stageDown(rx.jump), restart: 1 });
+  }
+  if (g.noFlying) Object.assign(o, { noFlying: 1, speed: false, nordicPF: 1 });
   /* an elbow at 4 or more: rope pushdowns instead of the overhead extension */
-  const el = Number(sundayScores(mac, week).el);
-  if (el >= 4) o.elbow4 = 1;
+  if (Number(sc.el) >= 4) o.elbow4 = 1;
   return o;
 }
 /* Tuesday's jump check: the best height against the four Tuesdays before */
@@ -303,7 +320,9 @@ const edgeOnFor = (week, day) => {
 };
 const rxFor = (w, day) => {
   if (MODE.mac) return seasonRxFor(MODE.mac, w, MODE.trans || MODE.pre ? true : edgeOnFor(w, day));
-  let rx = baseRxFor(w); if (MODE.lastTen) rx = lastTenRx(rx); return rx;
+  let rx = baseRxFor(w); if (MODE.lastTen) rx = lastTenRx(rx);
+  /* the Fighter's Sunday check gates its reactive jumps the same way */
+  return MODE.fmac != null ? gated(rx, MODE.fmac, w) : rx;
 };
 /* the running program's line for a week — the header, the day and the
    week map all read this one */
@@ -311,6 +330,7 @@ const titleFor = (week) => { const row = MODE.mac ? seasonRow(MODE.mac, week) : 
   return programTitle(MODE.program, row ? row.idx || week : week, (PH[rxFor(week).ph] || {}).n); };
 
 /* ---------- timer step builders ---------- */
+const STOP_STEP = "Past the fight: log this round on the card. Under " + STOP_PCT + "% of round one, or your posture gone, and it was the last.";
 function steps(kind, o) {
   const S = [], W = (l, s, c) => S.push({ l, s, t: "w", c }), Rs = (l, s, c) => S.push({ l, s, t: "r", c });
   o = o || {};
@@ -327,17 +347,19 @@ function steps(kind, o) {
   else if (kind === "bursttest") { for (let i = 1; i <= 10; i++) { W("BURST " + i + " OF 10 — FLAT OUT", 6, i === 1 ? "Write this one down." : i === 10 ? "Write this one down — the last against the first." : ""); if (i < 10) Rs("EASY · " + i + " OF 10 DONE", 30); } }
   else if (kind === "ergrounds") { const r = o.rounds || 7, rest = o.rest == null ? 60 : o.rest, len = (o.mins || 3) * 60;
     for (let i = 1; i <= r; i++) { W("ROUND " + i + " OF " + r + " — FIGHT PACE", len, i === 1 || i === r ? "Write this round's output down." : "");
-      if (i < r) Rs("THE CORNER MINUTE — 2 SIGHS, THEN NOSE ONLY, IN 3 OUT 6", rest, "Stood up, hands off the knees."); } }
+      if (i < r) Rs("THE CORNER MINUTE — 2 SIGHS, THEN NOSE ONLY, IN 3 OUT 6", rest, o.R && i > o.R ? STOP_STEP : "Stood up, hands off the knees."); } }
   else if (kind === "csim") { const rest = o.rest == null ? 60 : o.rest, third = Math.round((o.mins || 3) * 20);
     /* the double: one past the fight, five minutes easy, then the fight again */
     const parts = o.double ? [o.double.a, o.double.b] : [o.rounds || 6];
+    /* past the fight's own rounds — and the whole second set of the double — the stop rule watches every round */
+    const watched = (pi, i) => !!o.R && !o.pace && (pi > 0 || i > o.R);
     parts.forEach((r, pi) => {
-      if (pi > 0) Rs("FIVE MINUTES EASY — THEN THE FIGHT AGAIN", (o.double.easy || 5) * 60, "Easy, nose only. The second half is your fight's rounds.");
+      if (pi > 0) Rs("FIVE MINUTES EASY — THEN THE FIGHT AGAIN", (o.double.easy || 5) * 60, (watched(0, o.double.a) ? STOP_STEP + " " : "") + "Easy, nose only. The second half is your fight's rounds.");
       for (let i = 1; i <= r; i++) {
         const tag = (o.double ? (pi ? "SECOND · " : "FIRST · ") : "") + "RD " + i;
         if (o.pace) W((o.double ? tag : "ROUND " + i + " OF " + r) + " — FIGHT PACE", third * 3);
         else { W(tag + " · FIRST THIRD — SKIERG", third); W(tag + " · SECOND THIRD — ASSAULT BIKE", third); W(tag + " · LAST THIRD — MED-BALL SLAMS OR THE BAG", third); }
-        if (i < r) Rs("THE CORNER MINUTE — 2 SIGHS, THEN NOSE ONLY, IN 3 OUT 6", rest, "Stood up, hands off the knees. Relaxed jaw, shoulders down."); } }); }
+        if (i < r) Rs("THE CORNER MINUTE — 2 SIGHS, THEN NOSE ONLY, IN 3 OUT 6", rest, watched(pi, i) ? STOP_STEP : "Stood up, hands off the knees. Relaxed jaw, shoulders down."); } }); }
   else if (kind === "rz") { /* repeat bursts — the flurry, trained */
     const sets = o.sets == null ? 2 : o.sets, n = 8 - (o.short ? 1 : 0);
     for (let st = 1; st <= sets; st++) {
@@ -483,10 +505,10 @@ const S = {
     intro: "Upper strength and the first of the week's three power doses. Nothing is taken to failure.", b: [
     { L: "A", n: "Warm-up", m: 8, p: "SH" },
     { L: "B", n: "Bench Throw (Smith)", m: 11, star: 1, hard: 1, hide: (rx) => !!rx.upperC, rest: "Rest 2:00", rt: 120,
-      items: [{ n: "Bench throw", s: (rx) => rx.throw[0] + " × " + rx.throw[1] + " @ ~⅓ of bench max", cue: "On a Smith machine, bar light. Lower to your chest, then press so hard the bar leaves your hands at the top. Catch it, reset, repeat. The right weight is whatever flies highest — adjust until it does.", id: "throw", k: "wr", mk: "bench", pct: [30, 45], sets: (rx) => rx.throw[0], reps: (rx) => rx.throw[1] }],
+      items: [{ n: "Bench throw", s: (rx) => rx.throw[0] + " × " + rx.throw[1] + " @ ~⅓ of bench max", cue: "On a Smith machine with its safety stops set so the bar rests on them a couple of centimetres above your chest. Light bar: lower it to the stops, throw it so hard it leaves your hands, catch it with soft elbows, and lower it back to the stops. A missed catch lands on the stops, never on you.", id: "throw", k: "wr", mk: "bench", pct: [30, 45], sets: (rx) => rx.throw[0], reps: (rx) => rx.throw[1] }],
       w: "Stop the set the instant a throw is visibly lower than the last.",
-      why: "This is your punch-speed lift. A normal bench decelerates through its last third to protect the elbows; releasing the bar removes the brake. In weeks 11–14 it merges into the circuit below.",
-      note: "No Smith machine? Throw a 4–6 kg medicine ball off your chest at a wall, 5 × 5, as hard as you can.", tr: 2 },
+      why: "This is your punch-speed lift. A normal bench decelerates through its last third to protect the elbows; throwing the bar removes the brake, and the safety stops catch a missed one. In weeks 11–14 it merges into the circuit below.",
+      note: "No Smith machine with adjustable stops: throw a 4–6 kg medicine ball off your chest at a wall, 5 × 5, as hard as you can.", tr: 2 },
     { L: "C", n: "Power dose — box jumps", m: 6, star: 1, hard: 1, hide: (rx) => !!rx.test, rest: "Rest 60–90s", rt: 75,
       rxLine: () => "one minute of legs, then 3 × 3",
       items: [{ n: "First, one minute of legs", s: "pogo hops × 20 · bodyweight squats × 6 · two easy jumps onto a low step",
@@ -494,16 +516,16 @@ const S = {
         { n: "Box jump", s: "3 × 3", cue: "Choose the box by the landing, not the height — you should land on it in a quarter squat, knees soft, not folded to your chest. The training is the take-off; a higher box only makes you lift your knees faster. Quick dip, jump as high as you can, land soft on top, step down. Three perfect jumps, never three tired ones.", id: "boxjump", k: "chk" }],
       why: "Explosiveness responds to how often the nervous system is asked, not how much. Five minutes, three mornings a week." },
     { L: "D", n: (rx) => (rx.upperC ? "Upper Circuit — Bench + Throws" : "Bench Press"), m: 10, star: (rx) => !!rx.upperC, hard: 1, mainLift: "bench", fb: "bench",
-      pres: (rx) => ({ sc: rx.upperC ? "4 rounds · 2 @ 85%" : rx.maxBe ? rx.sets + " × " + rx.reps + " @ " + rx.pct + "%" : (rx.bsc || rx.sc), pct: rx.upperC ? 85 : rx.pct }),
+      pres: (rx) => ({ sc: rx.upperC ? "4 rounds · 2 @ 85%" : rx.topBe ? rx.sets + " × " + rx.reps + " @ " + rx.pct + "%" : (rx.bsc || rx.sc), pct: rx.upperC ? 85 : rx.pct }),
       rest: (rx) => (rx.upperC ? "20s between elements · rest 2:30 between rounds" : heavy79(rx) ? "Rest 2:30" : "Rest 2:00"),
       rt: (rx) => (rx.upperC || heavy79(rx) ? 150 : 120),
       timer: (rx) => (rx.upperC ? { kind: "contrast", opt: { rounds: 4, rest: 150, items: ["BENCH — 2 @ 85%", "BENCH THROW ×3", "CLAP PUSH-UP ×3"] }, title: "UPPER CIRCUIT" } : null),
       items: (rx) => (rx.upperC
         ? [{ n: "Bench", s: "2 @ 85% · 4 rounds", cue: "Heavy wakes the system up.", id: "bench", k: "wr", mk: "bench", pct: 85, sets: 4, reps: 2 }, { n: "Bench throw", s: "×3", cue: "Fast uses it.", id: "uc_throw", k: "chk" }, { n: "Clap push-up", s: "×3", cue: "Overspeed.", id: "uc_plyo", k: "chk" }]
-        : [{ n: "Bench press", s: rx.maxBe ? rx.sets + " × " + rx.reps + " @ " + rx.pct + "%" : (rx.bsc || rx.sc), cue: "Pins at chest height, no collars. Controlled down, drive up hard. If a rep grinds, that set is over.", id: "bench", k: "wr", mk: "bench", pct: rx.pct, sets: rx.bsets || rx.sets, reps: rx.reps }]),
-      w: "Pins at chest height. No collars, ever. Bench max singles happen on Sunday, fresh, first thing — never here.",
+        : [{ n: "Bench press", s: rx.topBe ? rx.sets + " × " + rx.reps + " @ " + rx.pct + "%" : (rx.bsc || rx.sc), cue: "Pins at chest height, no collars. Controlled down, drive up hard. If a rep grinds, that set is over.", id: "bench", k: "wr", mk: "bench", pct: rx.pct, sets: rx.bsets || rx.sets, reps: rx.reps }]),
+      w: "Pins at chest height. No collars, ever. The bench top triple happens on Sunday, fresh, first thing — never here.",
       note: (rx) => (rx.upperC ? "Weeks 11–14: steps 2 and 4 merge into one circuit, 4 rounds — 2 bench reps @ 85% → rest 20s → 3 bench throws → rest 20s → 3 clap push-ups → rest 2½ min."
-        : rx.maxBe ? "Max-single week: the bench max is Sunday morning, first thing. Today is the back-off work." : ""),
+        : rx.topBe ? "Top-triple week: the bench top triple is Sunday morning, first thing. Today is the back-off work." : ""),
       why: "Upper-body maximal force, which tracks punch impact in elite amateurs.", tr: 2 },
     { L: "E", n: "Ring Dips", m: 6, cal: "ringdip", rest: "Rest 90s", rt: 90, rxLine: () => "3 sets at your level",
       items: [{ n: "Ring dips — at your level", s: "3 sets", cue: "At the level most men start: support yourself at the top of a pair of rings, arms locked, rings still, then lower until your shoulders are level with your elbows and press back up, turning the rings so your palms face forward at the top.", id: "ringdip", k: "wr", sets: 3, reps: "at your level" }],
@@ -573,8 +595,8 @@ const S = {
     { L: "D", n: (rx) => (rx.pq && rx.pq.fast ? "Speed Squat" : "Pause Squat"), m: 10, hard: 1, mainLift: "squat", pres: (rx) => ({ sc: rx.pq.sc, pct: rx.pq.pct }), hide: (rx) => !rx.pq, rest: "Rest 2:00", rt: 120,
       ramp: { n: "Squat warm-up sets", pcts: [[40, 3], [60, 2]] },
       items: (rx) => [{ n: rx.pq.fast ? "Speed squat" : "Pause squat", s: rx.pq.sc, cue: rx.pq.fast ? "No pause. Every rep as fast as you can move it. Pins set." : "Bar on your back, sit to just below parallel and hold there, dead still, for a full two seconds — then drive up hard. Pins set.", id: "pausesq", k: "wr", mk: "squat", pct: rx.pq.pct, sets: rx.pq.sets, reps: rx.pq.reps }],
-      rxLine: (rx) => rx.pq.sc, w: (rx) => (rx.pq.fast ? "Pins set. Skipped on max-single weeks (4, 9) and in week 16."
-        : "Pins set. Skipped on max-single weeks (4, 9) and in week 16. This is a percentage of your back-squat max — and a paused triple at 75% is a hard triple, because a two-second pause takes 10–15% off what you can lift. That column never goes above 75%."),
+      rxLine: (rx) => rx.pq.sc, w: (rx) => (rx.pq.fast ? "Pins set. Skipped on top-triple weeks (4, 9) and in week 16."
+        : "Pins set. Skipped on top-triple weeks (4, 9) and in week 16. This is a percentage of your back-squat max — and a paused triple at 75% is a hard triple, because a two-second pause takes 10–15% off what you can lift. That column never goes above 75%."),
       why: "The second squat exposure — submaximal, paused, from the position rear-leg drive starts in. Saturday owns the heavy squat; this is at a weight you own.", tr: 2 },
     { L: "E", n: "Romanian Deadlift", m: 6, rest: "Rest 75s", rt: 75, rxLine: () => "3 × 6",
       items: [{ n: "Romanian deadlift", s: "3 × 6", cue: "Bar at your hips, soft knees, push your hips back until the bar reaches mid-shin with a flat back, stand back up by driving the hips through. Start around 60% of your trap bar max and add 2.5–5 kg a week while every rep still moves at the same speed.", id: "rdl", k: "wr", sets: 3, reps: 6 }],
@@ -641,20 +663,22 @@ const S = {
       w: "On a yellow day: 3 runs at 90%, never max.",
       why: "Sprinting flat-out is the single most explosive thing you can do, and regular top-speed running is also the best protection your hamstrings can get.",
       note: "Treadmill options, best first: curved self-powered → outdoors → treadmill on an 8–12% incline at 12–15 km/h for 8–10 seconds, safety clip on.", tr: 2 },
-    { L: "C", n: (rx) => (rx.jump === "AEL" ? "Loaded Drop Jumps" : "Depth Jumps"), m: 12, hard: 1, noTaper: 1, rest: "Rest 2:00", rt: 120,
-      items: [{ n: (rx) => (rx.jump === "AEL" ? "Loaded drop jump" : "Depth jump"), s: (rx) => rx.js[0] + " × " + rx.js[1] + (rx.jump === "AEL" ? " · hex DBs 8–12 kg each" : " · 30–40 cm box"),
-        cue: (rx) => (rx.jump === "AEL" ? "Hold a hex dumbbell in each hand. Dip fast into a quarter squat — at the bottom, let both dumbbells go — and jump straight up as high as you can, empty-handed. Land soft on clear floor, step away from the dumbbells, reset." : "Step off a 30–40 cm box, and the instant your feet touch, jump as high as you can. Shortest possible time on the floor."), id: "jump", k: "out", u: "height / quality" }],
-      rxLine: (rx) => rx.js[0] + " × " + rx.js[1], w: "Stop the set the moment a jump is lower than the last.",
-      why: (rx) => (rx.jump === "AEL" ? "You cannot eccentrically overload a jump with bodyweight; this does, at lower joint cost than a higher box." : "Weeks 11–14: reactive strength, concentrated before the peak."), tr: 2 },
+    { L: "C", n: (rx) => jumpOf(rx.jump).n, m: 12, hard: 1, noTaper: 1, rest: "Rest 2:00", rt: 120, hide: (rx) => !!rx.noJumps,
+      items: [{ n: (rx) => jumpOf(rx.jump).item, s: (rx) => rx.js[0] + " × " + rx.js[1] + " · " + jumpOf(rx.jump).box,
+        cue: (rx) => jumpOf(rx.jump).cue, id: "jump", k: "out", u: "height / quality" }],
+      rxLine: (rx) => rx.js[0] + " × " + rx.js[1], w: (rx) => jumpOf(rx.jump).w,
+      why: (rx) => (rx.restart ? "Back under 3 on Sunday's check: the jumps restart one stage down for a week. " : "")
+        + (rx.jump === "depth" ? "Weeks 11–16: reactive strength, concentrated before the peak." : rx.jump === "lowbox" ? "Weeks 6–10: the step between drop landings and full depth jumps." : "Weeks 1–5: no jump — this teaches your knees and tendons to absorb.")
+        + " " + JUMP_GATE_LINE, tr: 2 },
     { L: "D", n: "Side Bounds", m: 7, rest: "Rest 90s", rt: 90,
       items: [{ n: (rx) => (rx.bound === "stick" ? "Side bound — stick the landing" : "Side bound — continuous"), s: "3 × 4/side",
         cue: (rx) => (rx.bound === "stick" ? "Stand on one leg, jump sideways as far as you can, land on the other leg and stick the landing dead still for 2 seconds." : "Weeks 11–14: no stick — bounce straight back the other way."), id: "latbound", k: "chk" }],
       why: "The sideways push-off is how you cut the ring off. Nothing else in the week trains it.", tr: 2 },
-    { L: "E", n: "Back Squat", m: 17, star: 1, hard: 1, mainLift: "squat", maxUI: 1, fb: "squat",
+    { L: "E", n: "Back Squat", m: 17, star: 1, hard: 1, mainLift: "squat", fb: "squat",
       rest: (rx) => (heavy79(rx) ? "Rest 3:00" : "Rest 2:30"), rt: (rx) => (heavy79(rx) ? 180 : 150),
       ramp: { n: "Squat warm-up sets — here, not at the start of the session", pcts: [[40, 3], [60, 2], [75, 1]],
         why: "Forty minutes of sprinting and jumping keeps you warm; it doesn't keep the squat pattern rehearsed." },
-      items: [{ n: "Back squat", s: (rx) => rx.sc, cue: "Bar on your back, break at the hips and knees together, sit to just below parallel, drive up hard. Every rep fast on the way up; a grinding rep ends the set.", id: "squat", k: "wr", mk: "squat", pct: (rx) => rx.pct, sets: (rx) => rx.sets, reps: (rx) => rx.reps }],
+      items: (rx) => (rx.topSq ? [topItem("Back squat", "squat", "squat_top")] : []).concat([{ n: "Back squat", s: rx.topSq ? rx.sets + " × " + rx.reps + " @ " + rx.pct + "% of the new working max" : rx.sc, cue: "Bar on your back, break at the hips and knees together, sit to just below parallel, drive up hard. Every rep fast on the way up; a grinding rep ends the set.", id: "squat", k: "wr", mk: "squat", pct: rx.pct, sets: rx.sets, reps: rx.reps }]),
       w: "Pins set — just below your lowest position on every set over 80%.",
       why: "Lower-body maximal strength is the strongest single predictor of punch force in trained boxers.", tr: 3 },
     { L: "F", n: "The Jump Circuit", m: (rx) => (rx.lowerLead ? 22 : 18), star: 1, hard: 1, rt: 165, rest: "20s between elements · rest 2:30–3:00 between rounds",
@@ -673,18 +697,18 @@ const S = {
     { L: "G", n: "Push Press", m: 10, hard: 1, mainLift: "pp", calib: "pp", fb: "pp", hide: (rx) => !rx.pp || !rx.pp.sc, rest: "Rest 2:00", rt: 120,
       items: (rx) => [{ n: "Push press", s: rx.pp.sc, cue: "Bar on the front of your shoulders. Quick shallow knee dip, then drive the bar overhead with your LEGS and punch it to lockout. Down under control.", id: "pushpress", k: "wr", mk: "pp", pct: rx.pp.pct, sets: rx.pp.sets, reps: rx.pp.reps }],
       why: "Legs → braced trunk → hands. The same route a punch takes, and the heaviest thing your shoulders and traps see all week — which is why the traps and shoulders don't need a size block.",
-      note: "Weeks 4 and 9: skipped. The squat max is enough maximal work for one day." }] },
+      note: "Weeks 4 and 9: skipped. The squat top triple is enough heavy work for one day." }] },
 
   /* ---------------- SUNDAY ---------------- */
-  sun: { n: "SUNDAY", t: "★ Get-ups · Punch Throws · Nordics · Fight Rounds · Post-Max Sit · Core + L-Sit · Lever", m: (rx) => (rx.test ? 44 : rx.maxBe ? 92 : rx.sim.skip ? 56 : 80), ac: C.brass, free: 1, box: 1,
+  sun: { n: "SUNDAY", t: "★ Get-ups · Punch Throws · Nordics · Fight Rounds · Post-Max Sit · Core + L-Sit · Lever", m: (rx) => (rx.test ? 44 : rx.topBe ? 92 : rx.sim.skip ? 56 : 80), ac: C.brass, free: 1, box: 1,
     intro: "Second free morning. Punches, then the week's hamstring work while the legs are fresh, then rounds, core and hands. No pressing today on purpose so Monday's bench gets 42 hours. Same fuelling as Saturday. (Week 16: the warm-up, the 20-minute test and the weekly check. Nothing else. Stretch at home.)", b: [
     { L: "A", n: "Warm-up — get-ups first", m: 14, p: "SUNWU", rxLine: () => "14 min · get-ups 2/side, then Tuesday's warm-up and the practice throws", note: "Turkish get-ups, then Tuesday's warm-up without the crawls, plus: broad jumps 3 × 2 · med-ball chest passes 3 × 3 as hard as you can · 3 × 10-second bike sprints with a minute between · then three EASY practice throws of each of the four throws.",
       items: [{ n: GETUP_N, s: "2 per side, light", cue: GETUP_S + " Start with 8–12 kg; 16 is the working weight; 24 is the test.", id: "getup", k: "chk" }],
       why: GETUP_WHY },
-    { L: "B", n: "Bench Max Single", m: 12, star: 1, hard: 1, hide: (rx) => !rx.maxBe, mainLift: "bench", maxUI: 1, rest: "Rest 2:30–3:00", rt: 165,
+    { L: "B", n: "Bench Top Triple", m: 12, star: 1, hard: 1, hide: (rx) => !rx.topBe, mainLift: "bench", rest: "Rest 2:30–3:00", rt: 165,
       ramp: { n: "Bench warm-up sets", pcts: [[40, 5], [60, 3]] },
-      items: [{ n: "Bench — max single", s: "pins · no collars · first, straight after the warm-up", id: "benchmax", k: "chk" }],
-      why: "Weeks 4 and 9 only, and it happens here — Sunday, first thing, fresh, with pins. Bench warm-up sets (bar × 10, 40% × 5, 60% × 3) before the ramp. Write the new max down.", tr: 2 },
+      items: [topItem("Bench press", "bench", "benchtop")],
+      why: "Weeks 4 and 9 only, and it happens here — Sunday, first thing, fresh, with pins and no collars. Bench warm-up sets (bar × 10, 40% × 5, 60% × 3) before the ramp. The heaviest clean triple × 1.08 is the new working max. " + TOP_NOT_MAX, tr: 2 },
     { L: "C", n: "The Four Punch Throws", m: 16, star: 1, p: "VEC", hide: (rx) => !!rx.test, rest: "45s between exercises · 90s between rounds", rt: 45,
       timer: (rx) => ({ kind: "vec", opt: { rounds: rx.vec }, title: "PUNCH THROWS" }),
       items: [{ n: "Med-ball rotational shot-put", s: "4/side — your straight right", cue: "Ball at your shoulder, boxing stance side-on to a wall. Drive off the back hip and put the ball into the wall as hard as you can, flat and hard like a punch. A few from a lower crouch for the body-shot version.", id: "mbshot", k: "out", u: "best distance (m)" },
@@ -803,6 +827,18 @@ const ENGINE_KINDS = { z2: 1, vo2: 1, lac: 1, mod: 1, tempo: 1, thr: 1, rz: 1, e
 const NOT_A_MOVE = /^(bar|\d+%|\d+\s*m\s*@|loading|set-up|the hold|it should|weak side|straight knee|slow beats fast|plus|then|three things|if you skip)/i;
 const cleanName = (s) => String(s || "").replace(/\s+[—–]\s+at your level\s*$/i, "").trim();
 const firstLib = (...names) => { for (const n of names) { const l = n ? libFor(n) : null; if (l) return l; } return null; };
+/* a top triple's card carries the TOP TRIPLE entry and the lift's own */
+const topLib = (...names) => [].concat(libFor("top triple") || [], firstLib(...names) || []);
+/* every row with a bench throw in it carries the BENCH THROW entry: the
+   safety stops it's set up on */
+const BENCH_THROW_LIB = LIBRARY.find((e) => e.n === "BENCH THROW") || null;
+const withBenchThrow = (c, rx) => {
+  const has = (l) => (l || []).some((e) => e === BENCH_THROW_LIB);
+  const names = [c.n, c.item ? v(c.item.n, rx) : ""].concat((c.parts || []).map((p) => p.n));
+  if (!BENCH_THROW_LIB || has(c.lib)) return c;
+  if (names.some((n) => /bench throw/i.test(String(n || ""))) || (c.parts || []).some((p) => has(p.lib))) c.lib = (c.lib || []).concat([BENCH_THROW_LIB]);
+  return c;
+};
 
 function gymCards(blocks, rx, o) {
   o = o || {};
@@ -867,7 +903,8 @@ function gymCards(blocks, rx, o) {
     }
     /* a block of tests, each its own card */
     if (b.prepTest) {
-      its.forEach((it, j) => out.push(Object.assign({}, base, { key: b.L + ":" + j, kind: "out", n: v(it.n, rx), pres: v(it.s, rx), item: it, lib: libFor(v(it.n, rx)), outs: [it] })));
+      its.forEach((it, j) => out.push(Object.assign({}, base, { key: b.L + ":" + j, kind: it.k === "top" ? "top" : "out", n: v(it.n, rx), pres: v(it.s, rx), item: it,
+        lib: it.k === "top" ? topLib(v(it.n, rx)) : libFor(v(it.n, rx)), outs: it.k === "top" ? [] : [it] })));
       return;
     }
     /* nothing but the block itself */
@@ -886,11 +923,13 @@ function gymCards(blocks, rx, o) {
       /* a calisthenics line's own row reads its level; the block's other exercises read their own */
       if (b.cal && (single || LINE_OF[it.id] === b.cal || it.id === b.cal)) pres = [row.work, row.load, row.rest].filter(Boolean).join(" · ");
       else pres = [p[0] || v(it.s, rx), kg ? kg.join("–") + " kg" : p[1], bwp && o.bw ? Math.round(o.bw * bwp[0] / 100) + "–" + Math.round(o.bw * bwp[1] / 100) + " kg " + (it.bwl || "") : "", rest].filter(Boolean).join(" · ");
-      out.push(Object.assign({}, base, { key: single ? b.L : b.L + ":" + j, kind: it.k === "wr" ? "lift" : it.k === "out" ? "out" : "chk",
-        n: nm, pres, item: it, kg, lib: firstLib(nm, itn), outs: it.k === "out" ? [it] : [], first: j === 0, lastOfBlock: j === its.length - 1 }));
+      out.push(Object.assign({}, base, { key: single ? b.L : b.L + ":" + j, kind: it.k === "wr" ? "lift" : it.k === "out" ? "out" : it.k === "top" ? "top" : "chk",
+        n: nm, pres, item: it, kg, lib: it.k === "top" ? topLib(nm, itn) : firstLib(nm, itn), outs: it.k === "out" ? [it] : [],
+        /* the first work set is the first after a top triple */
+        first: j === Math.max(0, its.findIndex((x) => x.k !== "top")), lastOfBlock: j === its.length - 1 }));
     });
   });
-  return out;
+  return out.map((c) => withBenchThrow(c, rx));
 }
 
 /* Every card of every day of the four programs, for the library check:
@@ -904,7 +943,7 @@ function gymCards(blocks, rx, o) {
 export const CATALOG_SEASONS = (() => {
   const P = (from, made, inputs) => ({ from, made, inputs: Object.assign({ booked: true, rounds: 6, mins: 3, rest: 60, weighIn: "before", fitness: "good", emphasis: "none" }, inputs) });
   const out = [
-    { set: "master", main: true, plans: [P("2027-01-04", "2027-01-04", { fight: "2027-03-13" })], today: "2027-01-04" },
+    { set: "master", main: true, plans: [P("2027-01-04", "2026-12-31", { fight: "2027-03-13" })], today: "2026-12-31" },
     { set: "cycle", main: true, plans: [P("2026-01-05", "2026-01-05", { booked: false })], today: "2026-01-05" },
     { set: "example1", plans: [P("2026-10-12", "2026-10-08", { fight: "2026-11-28", rounds: 3, mins: 2, fitness: "low", emphasis: "durability" })], today: "2026-10-08" },
     { set: "example2", plans: [P("2026-10-12", "2026-10-08", { fight: "2026-11-28", rounds: 3, mins: 2, fitness: "low", emphasis: "durability" }), P("2026-12-07", "2026-12-02", { fight: "2027-03-13", fitness: "low" })], today: "2026-12-02" },
@@ -921,23 +960,33 @@ export const CATALOG_SEASONS = (() => {
   return out;
 })();
 
+/* Everything a block says on its page, for the proof's scans: its name,
+   its lines, every item's name, prescription and cue, its rules and notes */
+const sayOf = (c, rx) => {
+  const b = c.b || {}, out = [c.n, c.pres];
+  [b.n, b.rxLine, b.w, b.why, b.note].forEach((x) => out.push(v(x, rx)));
+  (v(b.items, rx) || []).forEach((it) => out.push(v(it.n, rx), v(it.s, rx), v(it.cue, rx)));
+  (v(b.rules, rx) || []).forEach((r) => out.push(r));
+  return out.filter((x) => x != null && x !== "").map(String).join(" | ");
+};
 /* Every card of every day of every program, for the library check:
-   { program, week, day, n, lib, rows }. `rows` are the moves inside a
-   warm-up or a round card, each with its own entry. */
-export function sessionCatalog(only) {
+   { program, week, day, n, lib, rows, say }. `rows` are the moves inside
+   a warm-up or a round card, each with its own entry. `seasons` walks
+   other seasons in place of the catalog's own (and no Fighter). */
+export function sessionCatalog(only, seasons) {
   const keepM = Object.assign({}, MODE), keepS = SEASON.s, keepC = SEASON.classic, keepE = Object.assign({}, EDGE);
   const out = [];
   const push = (program, w, day, rx, extra) => {
     if (program === "fighter" && day === "sat" && rx.test) {
-      TESTS.filter((t) => !t.sun).forEach((t) => out.push(Object.assign({ program, week: w, day, n: t.n, lib: libFor(t.n), rows: [] }, extra)));
+      TESTS.filter((t) => !t.sun).forEach((t) => out.push(Object.assign({ program, week: w, day, n: t.n, lib: /top triple/i.test(t.n) ? topLib(t.n) : libFor(t.n), rows: [], say: t.n + " | " + t.d }, extra)));
       return;
     }
     gymCards(realBlocks(day, rx), rx).forEach((c, i) => out.push(Object.assign({ program, week: w, day, edge: program === "prep" || program === "camp" ? EDGE.manual : null, lastTen: !!MODE.lastTen, i, n: c.n, kind: c.kind, lib: c.lib, pres: c.pres,
-      rows: (c.list || []).filter((r) => r.move).concat(c.parts || []) }, extra)));
+      rows: (c.list || []).filter((r) => r.move).concat(c.parts || []), say: sayOf(c, rx) }, extra)));
   };
   try {
     EDGE.ready = {}; SEASON.classic = false;
-    CATALOG_SEASONS.filter((x) => !only || only.indexOf(x.set) >= 0).forEach((cs) => [true, false].forEach((edge) => {
+    (seasons || CATALOG_SEASONS.filter((x) => !only || only.indexOf(x.set) >= 0)).forEach((cs) => [true, false].forEach((edge) => {
       EDGE.manual = edge;
       SEASON.s = buildSeason({ plans: cs.plans, today: cs.today });
       const rows = SEASON.s.rows.filter((r) => r.program !== "prep" || (r.cycle || 1) === 1);
@@ -953,7 +1002,7 @@ export function sessionCatalog(only) {
     setModeFor(null);
     {
       const runF = (weeks, lastTen) => { MODE.lastTen = !!lastTen; weeks.forEach((w) => DAYS.forEach((day) => { const rx = rxFor(w, day); if (rx.hell) return; push("fighter", w, day, rx, { main: true, set: "fighter" }); })); };
-      if (!only) { runF(Array.from({ length: 18 }, (_, i) => i + 1)); runF(Array.from({ length: 16 }, (_, i) => i + 1), true); }
+      if (!only && !seasons) { runF(Array.from({ length: 18 }, (_, i) => i + 1)); runF(Array.from({ length: 16 }, (_, i) => i + 1), true); }
     }
   } finally {
     Object.assign(MODE, keepM); SEASON.s = keepS; SEASON.classic = keepC; Object.assign(EDGE, keepE);
@@ -963,9 +1012,9 @@ export function sessionCatalog(only) {
 
 /* One generated week's prescriptions, for the proof's scan: every row
    of every season the catalog walks, with its rx. */
-export function seasonWeeks() {
+export function seasonWeeks(seasons) {
   const out = [];
-  CATALOG_SEASONS.forEach((cs) => [true, false].forEach((edge) => {
+  (seasons || CATALOG_SEASONS).forEach((cs) => [true, false].forEach((edge) => {
     const s = buildSeason({ plans: cs.plans, today: cs.today });
     s.rows.filter((r) => r.program !== "prep" || (r.cycle || 1) === 1).forEach((r) => out.push({ set: cs.set, row: r, rx: rowRx(r, edge) }));
   }));
@@ -988,8 +1037,8 @@ const TESTS = [
   { id: "jump", n: "Depth jump rebound", u: "cm", dir: "up", d: "3 attempts, best height — phone slow-motion or jump mat", tgt: "+3–5%" },
   { id: "mbdiag", n: "Diagonal throw (overhand)", u: "m", dir: "up", d: "3/side, best distance", tgt: "+3–5%" },
   { id: "mbshot", n: "Shot-put (straight)", u: "m", dir: "up", d: "3/side, best distance", tgt: "+3–5%" },
-  { id: "squat", n: "Back squat — max single", u: "kg", dir: "up", d: "pins", max: "squat", tgt: "+3–6%" },
-  { id: "bench", n: "Flat bench — max single", u: "kg", dir: "up", d: "pins, no collars", max: "bench", tgt: "+3–6%" },
+  { id: "squat", n: "Back squat — top triple", u: "kg", dir: "up", d: "pins · the heaviest clean triple, one or two left in you — × 1.08 is the new working max", max: "squat", est: 1.08, tgt: "+3–6%" },
+  { id: "bench", n: "Flat bench — top triple", u: "kg", dir: "up", d: "pins, no collars · the heaviest clean triple, one or two left in you — × 1.08 is the new working max", max: "bench", est: 1.08, tgt: "+3–6%" },
   { id: "imtp", n: "Mid-thigh pull peak force", u: "N", dir: "up", d: "only if your gym has a force plate — otherwise leave blank", tgt: "+3–6%", opt: 1 },
   { id: "tb3rm", n: "Trap bar 3RM", u: "kg", dir: "up", d: "hard triple × 1.08 sets the trap bar max", max: "tbdl", est: 1.08, tgt: "+3–6%" },
   { id: "bike20", n: "20-min bike test (distance)", u: "m", dir: "up", d: "Sunday of week 1 and week 16", tgt: "+3–5%", sun: 1 },
@@ -1198,7 +1247,6 @@ const setsSummary = (e, mode, secs) => {
   if (e.w) return e.w + (e.r ? " × " + e.r : "");
   return "";
 };
-const RAMP = [[50, 5], [65, 3], [75, 2], [85, 1], [92, 1]];
 
 /* Shoulders, elbows or wrists at 4 or above on last Sunday's check take
    every calisthenics line to holds this week. The row and the panel read
@@ -1334,7 +1382,7 @@ const parseHHMM = (s, fallback) => { const m = String(s || "").match(/^\s*(\d{1,
 function dayClock(week, day, log, dk) {
   const rx = rxFor(week, day);
   const own = sessFor(day, rx) || S[day] || S.mon;
-  const noSess = !rx.hell && ((MODE.camp && !sessFor(day, rx)) || sleepDay(day, rx));
+  const noSess = !rx.hell && (!!rx.hold || (MODE.camp && !sessFor(day, rx)) || sleepDay(day, rx));
   const def = noSess ? 5 * 60 : START_MIN(own);
   const startStr = (log[dk + "-start"] || {}).w || hhmm(def);
   const lt = lightsTarget(day);
@@ -1380,28 +1428,73 @@ function setsOf(card, rx) {
   return null;
 }
 
-function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, startTimer, autoRest, calis, st, openTool, onSetMax, weekDates }) {
+/* the working maxes the day's top triples set: the back-off sets read
+   them the moment the triple is logged */
+const topsOn = (log, dk) => { const o = {}; Object.keys(log || {}).forEach((k) => { if (k.indexOf(dk + "-") !== 0) return; const e = log[k];
+  if (e && e.top && e.mk && num(e.est)) o[e.mk] = num(e.est); }); return o; };
+
+function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, startTimer, stopTimer, autoRest, calis, st, openTool, onSetMax, weekDates, onPainStop }) {
   const b = card.b, it = card.item;
-  const key = (id) => "m" + macro + "w" + week + "-" + day + "-" + id;
-  const prevW = (id) => log["m" + macro + "w" + (week - 1) + "-" + day + "-" + id];
+  const dkey = "m" + macro + "w" + week + "-" + day;
+  const key = (id) => dkey + "-" + id;
   const setE = (id, e) => { const n = Object.assign({}, log); n[key(id)] = e; setLog(n); };
-  const patch = (id, f, val) => setE(id, Object.assign({}, log[key(id)], { [f]: val }));
   const yellow = ready === "Y", red = ready === "R";
-  const calc = (mk, pct) => { const m = num(maxes[mk]); if (!m || pct == null) return null; const adj = yellow ? 0.93 : 1;
+  const tops = topsOn(log, dkey);
+  const workMax = (mk) => tops[mk] || num(maxes[mk]);
+  const calc = (mk, pct) => { const m = workMax(mk); if (!m || pct == null) return null; const adj = yellow ? 0.93 : 1;
     const lo = Array.isArray(pct) ? pct[0] : pct, hi = Array.isArray(pct) ? pct[1] : pct; const a = r25(m * lo / 100 * adj), z = r25(m * hi / 100 * adj); return a === z ? [a] : [a, z]; };
   const engKind = b.eng ? (b.engKey === "base" ? "base" : rx[b.engKey || "eng"]) : null;
   const engDay = (weekDates && weekDates[DAYS.indexOf(day)]) || null;
   const patchOut = (id, val) => setE(id, Object.assign({}, log[key(id)], { w: val }, engKind ? { kind: engKind, d: engDay } : {}));
   const restSecs = Number(card.rt) || 60;
   const startRest = () => startTimer({ kind: "rest", opt: { secs: restSecs }, title: "REST" });
-  const mainLift = v(b.mainLift, rx);
-  const isMaxWeek = mainLift && !!b.maxUI && ((mainLift === "squat" && rx.maxSq) || (mainLift === "bench" && rx.maxBe));
   const needsCal = b.calib && card.first !== false && ((rx.cal && rx[b.calib === "tbdl" ? "tb" : "pp"] && rx[b.calib === "tbdl" ? "tb" : "pp"].cal) || !num(maxes[b.calib]));
-  const [maxIn, setMaxIn] = useState(""), [calIn, setCalIn] = useState("");
+  const [calIn, setCalIn] = useState("");
   const ticks = (log[key("wu_" + card.key)] || {}).t || {};
+  /* a jump, sprint or hold that hurts more than 3 out of 10 stops for the day */
+  const painable = painRow(card.lib) || (card.parts || []).some((p) => painRow(p.lib)) || !!(b.painIf && b.painIf(rx));
+  const painKey = "pain_" + card.key;
+  const painStopped = painable && !!(log[key(painKey)] || {}).stop;
 
   const outs = (card.outs || []).map((o) => (
     <Input key={o.id} label={((card.outs.length > 1 || !o.u ? v(o.n, rx) + (o.u ? " (" + o.u + ")" : "") : o.u) || "output").toUpperCase()} v={(log[key(o.id)] || {}).w} on={(val) => patchOut(o.id, val)} />));
+
+  /* THE STOP RULE: past the fight's own rounds — and the whole second set
+     of the double — a round under 75% of round one, or the posture gone,
+     is the last; the rest come off, and the fade is scored on it */
+  const sr = (card.kind === "round" || card.kind === "eng") && b.stopRule ? b.stopRule(rx) : null;
+  let stopUI = null;
+  if (sr) {
+    const rounds = stopRounds(sr.R, sr.total, sr.double);
+    const ol = card.outs || [];
+    const firstId = ol[0] ? ol[0].id : null, lastId = ol.length > 1 ? ol[ol.length - 1].id : null;
+    const pk = "past_" + card.key, pe = log[key(pk)] || {}, past = pe.p || [];
+    const r1 = firstId ? num((log[key(firstId)] || {}).w) : null;
+    const stt = stopState(r1, past, pe.form, rounds);
+    const write = (p, form) => {
+      const n = Object.assign({}, log);
+      n[key(pk)] = form == null ? { p } : { p, form };
+      const s2 = stopState(r1, p, form, rounds);
+      if (s2.done && lastId && s2.last != null) n[key(lastId)] = Object.assign({}, log[key(lastId)], { w: String(s2.last) }, engKind ? { kind: engKind, d: engDay } : {});
+      setLog(n);
+      if (s2.done && s2.why !== "all" && stopTimer) stopTimer();
+    };
+    const upto = stt.done ? (stt.stopAt >= 0 ? stt.stopAt + 1 : rounds.length) : stt.next + 1;
+    stopUI = (
+      <div data-testid="stop-rule" style={{ marginTop: 16, background: C.ink, border: "1px solid " + (stt.done && stt.why !== "all" ? C.oxide : C.line), borderRadius: 8, padding: 12 }}>
+        <div style={Object.assign({}, mno, { fontSize: T3, color: C.brass, letterSpacing: 1, lineHeight: 1.4 })}>PAST THE FIGHT · UNDER {STOP_PCT}% OF ROUND ONE, OR THE POSTURE GONE, AND THAT ROUND IS THE LAST</div>
+        {r1 ? null : <div style={Object.assign({}, mno, { fontSize: T3, color: C.ash, marginTop: 8 })}>ROUND ONE'S OUTPUT FIRST</div>}
+        {rounds.slice(0, upto).map((rd, i) => (
+          <div key={rd.k} style={{ display: "flex", gap: 8, alignItems: "flex-end" }}>
+            <div style={{ flex: 2 }}><Input label={rd.label + " OUTPUT"} v={past[i]} on={(val) => { const p = past.slice(); p[i] = val; write(p, pe.form); }} /></div>
+            <div style={{ flex: 1 }}><BigBtn on={() => write(past.slice(), pe.form === i ? null : i)} c={C.oxide} fill={pe.form === i} label={"Form gone in " + rd.label.toLowerCase()} s={{ minHeight: 56, padding: "8px 6px", fontSize: T3 }}>FORM GONE</BigBtn></div>
+          </div>))}
+        {stt.done && stt.why !== "all" ? (
+          <div data-testid="stop-verdict" style={Object.assign({}, dsp, { fontSize: T2, fontWeight: 800, letterSpacing: 1, color: C.oxide, marginTop: 12, lineHeight: 1.25 })}>
+            {rounds[stt.stopAt].label} WAS THE LAST — THE REST ARE OFF. THE POST-MAX SIT NEXT; THE FADE IS SCORED ON THIS ROUND.
+          </div>) : null}
+      </div>);
+  }
 
   let body = null;
   if (card.kind === "warm") {
@@ -1414,6 +1507,26 @@ function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, st
         {tm && !(red && b.hard) ? <BigBtn on={() => startTimer(tm)} c={C.oxide} fill s={{ marginTop: 16 }}>▶ START{card.kind === "round" ? " THE ROUNDS" : ""}</BigBtn> : null}
         {b.profile ? <BigBtn on={() => openTool({ kind: "profile" })} c={C.brass} s={{ marginTop: 12 }}>DRAW THE PROFILE</BigBtn> : null}
         {outs}
+        {stopUI}
+      </div>);
+  } else if (card.kind === "top") {
+    /* THE TOP TRIPLE: the ramp off the working max, then sets of three up
+       to one that's hard with one or two left; that weight × 1.08 is the
+       working max, and the back-off sets read it straight away. Never a
+       true max. In Prep's test week it is the camp's working weight too. */
+    const mk = it.mk, wm = num(maxes[mk]), cur = log[key(it.id)] || {};
+    const triple = num(cur.w), est = triple ? topMax(triple) : null;
+    const also = MODE.prep && rx.testWeek ? ["cw_" + mk] : [];
+    const saved = est != null && num(maxes[mk]) === est;
+    body = (
+      <div data-testid="top-triple">
+        <div data-testid="top-ramp" style={Object.assign({}, mno, { fontSize: T3, color: C.chalk, lineHeight: 1.6, marginTop: 14 })}>
+          {"RAMP · " + TOP_RAMP.map((r) => (wm ? r25(wm * r[0] / 100) + " kg" : r[0] + "%") + " × " + r[1]).join(" · ")}
+        </div>
+        <div style={Object.assign({}, mno, { fontSize: T3, color: C.brass, lineHeight: 1.5, marginTop: 8 })}>THEN SETS OF THREE, +2.5–5% EACH, TO ONE THAT'S HARD WITH ONE OR TWO LEFT · PINS SET</div>
+        <Input label="HEAVIEST CLEAN TRIPLE (KG)" v={cur.w} on={(val) => setE(it.id, Object.assign({}, cur, { w: val, top: 1, mk, est: topMax(num(val)) }))} />
+        {est ? <BigBtn on={() => onSetMax(mk, est, "top triple × 1.08 · " + macro + week, also)} c={C.oxide} fill={!saved} s={{ marginTop: 10 }}>
+          {saved ? "SAVED · WORKING MAX " + est + " KG" : "WORKING MAX · " + triple + " × 1.08 = " + est + " KG"}</BigBtn> : null}
       </div>);
   } else if (card.kind === "lift" || setsOf(card, rx)) {
     const so = setsOf(card, rx);
@@ -1425,8 +1538,12 @@ function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, st
     const repNum = typeof so.reps === "number" ? String(so.reps) : (String(so.reps || "").match(/^\d+(\+\d+)?/) || [""])[0];
     const velLift = b.vel && (it.mk === b.vel || it.mk === "cw_" + b.vel) && it.id !== "throw" && it.id !== "c_benchthrow" ? b.vel : null;
     const velT = velLift ? targetFor(st && st.profiles, velLift, rx.camp ? campPhaseOfWeek(rx.w) : phaseOfWeek(rx.doc || rx.w)) : null;
-    const verdict = velT ? verdictFor(cur.v1, velT.v) : null;
-    const afterKg = velT && verdict && verdict.pct && auto ? adjustLoad(auto[0], verdict) : null;
+    /* the same lift at its previous session: fast then too, and today's
+       fast reading adds 2.5% */
+    const prev = velT ? prevReading(log, velLift, engDay || "9999-12-31", key(id)) : null;
+    const verdict = velT ? verdictFor(cur.v1, velT.v, !!(prev && isFast(prev.v1, prev.vt))) : null;
+    const afterKg = velT && verdict && verdict.pct && auto && !(verdict.kind === "up" && cur.bumped) ? adjustLoad(auto[0], verdict) : null;
+    const wmNow = it.mk ? workMax(it.mk) : null;
     const defW = (i) => { if (md === "bw") return ""; for (let k = i - 1; k >= 0; k--) if (rows[k] && rows[k].w) return rows[k].w;
       if (i > 0 && afterKg != null) return String(afterKg); return md === "add" || !auto ? "" : String(auto[0]); };
     const put = (i, p) => { const next = rows.slice(); while (next.length < so.n) next.push({}); next[i] = Object.assign({}, next[i], p); setE(id, Object.assign({}, cur, { sets: next })); };
@@ -1438,12 +1555,19 @@ function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, st
     const label = (i) => { const r = rows[i] || {}; const reps = r.r != null && r.r !== "" ? r.r : repNum; const w = md === "bw" ? "" : (r.w != null && r.w !== "" ? r.w : defW(i));
       const rs = reps ? reps + (sec ? " s" : "") : (sec ? "hold" : "go");
       return md === "bw" ? rs : w ? (md === "add" ? "+" : "") + w + " kg × " + rs : rs; };
-    /* the bar speed: the main lifts' first work set, and nowhere else */
-    const speedOn = card.first !== false && (velT || (md === "kg" && BAR_SPEED_ITEMS[id] && (mainLift || b.vel)));
+    /* the bar speed: the main lifts' first work set, and nowhere else —
+       the mean of its two fastest reps */
+    const speedOn = card.first !== false && (velT || (md === "kg" && BAR_SPEED_ITEMS[id] && (v(b.mainLift, rx) || b.vel)));
+    const vcol = verdict ? (verdict.kind === "down" ? C.oxide : verdict.kind === "up" ? C.moss : C.brass) : C.line;
     const speed = speedOn ? (
-      <div data-testid="bar-speed" style={{ background: C.ink, border: "1px solid " + (verdict ? (verdict.kind === "down" ? C.oxide : verdict.kind === "up" ? C.moss : C.brass) : C.line), borderRadius: 8, padding: 12 }}>
-        <Input label={"SET 1 · BAR SPEED (M/S)" + (velT ? " · TARGET " + velT.v : "")} v={velT ? cur.v1 : cur.bs} on={(val) => setE(id, Object.assign({}, cur, velT ? { v1: val } : { bs: val }))} ph="m/s" />
-        {verdict ? <div style={Object.assign({}, dsp, { fontSize: 22, fontWeight: 800, letterSpacing: 1.2, marginTop: 10, color: verdict.kind === "down" ? C.oxide : verdict.kind === "up" ? C.moss : C.brass })}>{verdict.line}{afterKg != null ? " · " + afterKg + " KG" : ""}</div> : null}
+      <div data-testid="bar-speed" style={{ background: C.ink, border: "1px solid " + vcol, borderRadius: 8, padding: 12 }}>
+        <Input label={"SET 1 · MEAN OF ITS TWO FASTEST REPS (M/S)" + (velT ? " · TARGET " + velT.v : "")} v={velT ? cur.v1 : cur.bs}
+          on={(val) => setE(id, Object.assign({}, cur, velT ? { v1: val, vt: velT.v, vl: velLift, vd: engDay } : { bs: val }))} ph="m/s" />
+        {verdict ? <div data-testid="bar-verdict" style={Object.assign({}, dsp, { fontSize: 22, fontWeight: 800, letterSpacing: 1.2, marginTop: 10, color: vcol })}>{verdict.line}{afterKg != null ? " · " + afterKg + " KG" : ""}</div> : null}
+        {verdict ? <div style={Object.assign({}, mno, { fontSize: T3, color: C.ash, marginTop: 4, lineHeight: 1.4 })}>{verdict.why}</div> : null}
+        {verdict && verdict.kind === "up" && it.mk && wmNow ? (cur.bumped
+          ? <div style={Object.assign({}, mno, { fontSize: T3, color: C.moss, marginTop: 8 })}>WORKING MAX UP 2.5% · {cur.bumped} KG</div>
+          : <BigBtn on={() => { const kg = r25(wmNow * 1.025); onSetMax(it.mk, kg, "bar speed fast two sessions running · " + macro + week); setE(id, Object.assign({}, cur, { bumped: kg })); }} c={C.moss} s={{ marginTop: 10 }}>ADD 2.5% FROM NOW ON · {r25(wmNow * 1.025)} KG</BigBtn>) : null}
       </div>) : null;
     const adjust = (
       <div>
@@ -1460,24 +1584,17 @@ function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, st
         <SetButtons n={so.n} sets={rows} label={label} onTap={tap} adjust={adjust} speed={speed} />
       </div>);
   } else if (card.kind === "out" || card.kind === "review") {
-    /* a test that sets a max: test day's lifts, and the working-weight
-       checks — the set of 3 × 1.08 is the working max */
+    /* a test that sets a working max: the working-weight checks and test
+       day's triples — the set of 3 × 1.08 is the working max */
     const saves = (card.outs || []).filter((o) => o.max && num((log[key(o.id)] || {}).w)).map((o) => {
       const kg = o.est ? r25(num(log[key(o.id)].w) * o.est) : num(log[key(o.id)].w);
-      return <BigBtn key={"sv" + o.id} on={() => onSetMax(o.max, kg, (o.est ? "working-weight check" : "test day") + " · " + macro + week)} c={C.oxide} s={{ marginTop: 10 }}>{num(maxes[o.max]) === kg ? "SAVED · " + kg + " KG" : (/^cw_/.test(o.max) ? "SAVE AS WORKING MAX · " : "SAVE AS MAX · ") + kg + " KG"}</BigBtn>; });
+      return <BigBtn key={"sv" + o.id} on={() => onSetMax(o.max, kg, (o.est ? "working-weight check" : "test day") + " · " + macro + week)} c={C.oxide} s={{ marginTop: 10 }}>{num(maxes[o.max]) === kg ? "SAVED · " + kg + " KG" : "SAVE AS WORKING MAX · " + kg + " KG"}</BigBtn>; });
     body = <div>{outs}{saves}</div>;
   }
 
-  /* the max single and the calibration, on the lift that needs them */
-  const mainMax = mainLift ? num(maxes[mainLift]) : null;
+  /* the calibration and the working weight, on the lift that needs them */
   const extra = (
     <div>
-      {isMaxWeek && card.first !== false ? (
-        <div style={{ marginTop: 14 }}>
-          {mainMax ? <div style={Object.assign({}, mno, { fontSize: T3, color: C.chalk, lineHeight: 1.6 })}>{RAMP.map((r) => r25(mainMax * r[0] / 100) + "×" + r[1]).join(" · ")} · <span style={{ color: C.brass }}>{r25(mainMax)}–{r25(mainMax * 1.02)}×1</span></div> : null}
-          <Input label="TODAY'S SINGLE (KG)" v={maxIn} on={setMaxIn} />
-          <BigBtn on={() => { const k = num(maxIn); if (!k) return; onSetMax(mainLift, k, "max single · wk " + week); setMaxIn(""); }} c={C.oxide} fill dis={!num(maxIn)} s={{ marginTop: 10 }}>SAVE AS MAX</BigBtn>
-        </div>) : null}
       {needsCal ? (
         <div style={{ marginTop: 14 }}>
           <Input label="3RM TODAY (KG)" v={calIn} on={setCalIn} />
@@ -1485,11 +1602,18 @@ function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, st
         </div>) : null}
       {b.work && card.first !== false && (!num(maxes[b.work]) || rx.reset) ? <CampWorkPanel id={b.work} name={liftName(b.work)} kg={num(maxes[b.work])} onSet={(kg, src) => onSetMax(b.work, kg, src)} reset={!!rx.reset} week={week} /> : null}
     </div>);
+  const pain = painable ? (painStopped ? (
+    <div data-testid="pain-stopped" style={{ marginTop: 16, border: "2px solid " + C.oxide, borderRadius: 8, padding: 12 }}>
+      <div style={Object.assign({}, dsp, { fontSize: T2, fontWeight: 800, letterSpacing: 1, color: C.oxide })}>STOPPED FOR TODAY</div>
+      <div style={Object.assign({}, bdy, { fontSize: T3, color: C.chalk, marginTop: 6, lineHeight: 1.5 })}>{PAIN_LINE}</div>
+    </div>) : (
+    <BigBtn on={() => (onPainStop ? onPainStop() : setE(painKey, { stop: 1 }))} c={C.oxide} label="Hurts more than 3 out of 10: stop it for today" s={{ marginTop: 16 }}>HURTS MORE THAN 3/10 · STOP IT</BigBtn>)) : null;
   return (
     <div data-gym-card={card.key}>
       <CardHead name={card.n} lib={card.lib} pres={card.pres} />
-      {extra}
-      {body}
+      {painStopped ? null : extra}
+      {painStopped ? null : body}
+      {pain}
     </div>);
 }
 
@@ -1501,6 +1625,7 @@ const shortTitle = (week) => {
   const ph = PH[rxFor(week).ph] || {};
   const row = MODE.mac ? seasonRow(MODE.mac, week) : null;
   if (row && row.program === "pre") return "Camp · Before Week 1";
+  if (row && row.hold) return "Transition · On hold · The head check";
   const block = MODE.prep ? PREP_PLAIN[ph.n] || titleCase(ph.n) : MODE.camp ? titleCase(rxFor(week).block || "") : MODE.trans ? "Easy" : titleCase(ph.n);
   return [prog, "Week " + (row ? row.idx || week : week), row && row.id && row.program !== "transition" ? row.id : null, block].filter(Boolean).join(" · ");
 };
@@ -1515,7 +1640,7 @@ function Today(props) {
     morning, setMorning, weekDates, st, imRec, setTick, imStreak, imWeek,
     checkA, setCheckA, readNow, openTool, sound, flowAt, setFlowAt, goIron, photoPrompt,
     imWks, setWkOn, oneThingOf,
-    fday, setFday, menu, cook, fuelPhase,
+    fday, setFday, menu, cook, fuelPhase, stopTimer, setHead,
   } = props;
 
   /* the feed chime: a feed or a drink due now, while the app is open */
@@ -1542,7 +1667,8 @@ function Today(props) {
   const effReady = sparPrev && !swapped ? "R" : ready;
   const dk = dayKey(macro, week, day), dl = done[dk] || [];
   const yellow = effReady === "Y";
-  const calc = (mk, pctv) => { const m = num(maxes[mk]); if (!m || pctv == null) return null; const adj = yellow ? 0.93 : 1;
+  const tops = topsOn(log, dk);
+  const calc = (mk, pctv) => { const m = tops[mk] || num(maxes[mk]); if (!m || pctv == null) return null; const adj = yellow ? 0.93 : 1;
     const lo = Array.isArray(pctv) ? pctv[0] : pctv, hi = Array.isArray(pctv) ? pctv[1] : pctv;
     const a = r25(m * lo / 100 * adj), z = r25(m * hi / 100 * adj); return a === z ? [a] : [a, z]; };
   const markL = (L, val) => { const cur = done[dk] || []; const has = cur.indexOf(L) >= 0; if (!!val === has) return;
@@ -1570,9 +1696,12 @@ function Today(props) {
   const startKey = dk + "-start";
   const fd = fday || {};
   const fticks = fd.f || {}, fchecks = fd.c || {};
-  const progSauna = (MODE.prep || MODE.camp) && saunaDays(rx).indexOf(day) >= 0;
+  /* the sauna, twice a week at most, everywhere: a week the program puts
+     it in twice has no room for a weekend one of your own */
+  const weekProgSauna = (MODE.prep || MODE.camp) && saunaDays(rx).length > 0;
+  const progSauna = weekProgSauna && saunaDays(rx).indexOf(day) >= 0;
   const weekendDay = day === "sat" || day === "sun";
-  const sauna = progSauna || (weekendDay && !!fd.sauna);
+  const sauna = progSauna || (weekendDay && !!fd.sauna && !weekProgSauna);
   const ftick = (id, val) => setFday({ f: Object.assign({}, fticks, { [id]: !!val }) });
   const moveOf = (l, s) => { const n = moveName(l); return { n, lib: libFor(n), desc: moveHow(l), pres: secsLabel(s), s }; };
 
@@ -1588,6 +1717,38 @@ function Today(props) {
     Object.assign(fromLib("the morning five"), { runner: MORNING_FIVE.map((m) => moveOf(m.l, m.s)) }));
   const mCheck = im("m-check", C.cobalt, "The check", "4 yes / no", 1, "check",
     { input: () => <CheckTaps qs={CHECK_Q} answers={checkA} setAnswers={setCheckA} result={readNow.level} line={READY_LINE[readNow.level]} /> });
+
+  /* ---------------- THE HEAD CHECK ----------------
+     The morning after a fight, the first row of the day. Asked every
+     morning until it's answered; YES holds the transition until a doctor
+     has cleared you, NO starts it. */
+  const headItem = (() => {
+    if (!SEASON.s || SEASON.classic || !setHead) return null;
+    const fights = SEASON.s.rows.filter((r) => r.program === "camp" && r.id === "FW").map((r) => r.camp.fight)
+      .filter((f, i, a) => a.indexOf(f) === i && addDays(f, 1) <= shownIso).sort();
+    const f = fights[fights.length - 1]; if (!f) return null;
+    const a = (st.head || {})[f] || null;
+    const open = !a || (a.a === "yes" && !a.cleared);
+    if (shownIso !== addDays(f, 1) && !open) return null;
+    const ans = (rec) => { setHead(f, rec); buzz(30); };
+    return { id: "m-head", colour: C.oxide, n: "The head check", s: HEAD_Q, mins: 1, done: !open, mark: () => {},
+      desc: [HEAD_SYMPTOMS, HEAD_WHY],
+      input: () => (
+        <div data-testid="head-check">
+          {a && a.a === "yes" ? (
+            <div style={{ marginTop: 14 }}>
+              <div data-testid="head-doctor" style={Object.assign({}, bdy, { fontSize: T3, fontWeight: 700, color: C.chalk, lineHeight: 1.5 })}>{HEAD_DOCTOR}</div>
+              <div data-testid="head-ae" style={Object.assign({}, bdy, { fontSize: T3, fontWeight: 700, color: C.oxide, lineHeight: 1.5, marginTop: 10 })}>{HEAD_AE}</div>
+              {a.cleared ? <div style={Object.assign({}, mno, { fontSize: T3, color: C.moss, marginTop: 12 })}>CLEARED {fmtDate(a.cleared).toUpperCase()} · THE TRANSITION STARTS</div>
+                : <BigBtn on={() => ans(Object.assign({}, a, { cleared: shownIso }))} c={C.moss} s={{ marginTop: 14 }}>{HEAD_CLEARED.toUpperCase()}</BigBtn>}
+            </div>) : (
+            <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
+              <BigBtn on={() => ans({ a: "yes", at: shownIso })} c={C.oxide} fill={false} s={{ flex: 1 }}>YES</BigBtn>
+              <BigBtn on={() => ans({ a: "no", at: shownIso })} c={C.moss} fill={!!a && a.a === "no"} s={{ flex: 1 }}>NO</BigBtn>
+            </div>)}
+          {a && a.a === "no" ? <div style={Object.assign({}, mno, { fontSize: T3, color: C.moss, marginTop: 10 })}>NO · THE TRANSITION STARTS</div> : null}
+        </div>) };
+  })();
 
   /* ---------------- THE GYM ----------------
      The session as cards, one per exercise. A card is done when ticked;
@@ -1617,11 +1778,11 @@ function Today(props) {
     const tmap = (log[cardsKey] || {}).m || {};
     const tmark = (k, val) => { const n = Object.assign({}, log); n[cardsKey] = { m: Object.assign({}, tmap, { [k]: !!val }) }; setLog(n); };
     TESTS.filter((x) => !x.sun).forEach((t) => {
-      sessItems.push({ id: "T:" + t.id, colour: C.cobalt, n: t.n, s: t.d, mins: 8, lib: libFor(t.n), done: !!tmap[t.id], mark: (val) => tmark(t.id, val),
+      sessItems.push({ id: "T:" + t.id, colour: C.cobalt, n: t.n, s: t.d, mins: 8, lib: /top triple/i.test(t.n) ? topLib(t.n) : libFor(t.n), done: !!tmap[t.id], mark: (val) => tmark(t.id, val),
         input: () => (
           <div>
             <Input label={"RESULT (" + t.u.toUpperCase() + ")"} v={tg(t.id)} on={(val) => tput(t.id, val)} />
-            {t.max && num(tg(t.id)) ? <BigBtn on={() => onSetMax(t.max, t.est ? r25(num(tg(t.id)) * t.est) : num(tg(t.id)), "test day · M" + macro)} c={C.oxide} s={{ marginTop: 10 }}>SAVE AS MAX · {t.est ? r25(num(tg(t.id)) * t.est) : num(tg(t.id))} KG</BigBtn> : null}
+            {t.max && num(tg(t.id)) ? <BigBtn on={() => onSetMax(t.max, t.est ? r25(num(tg(t.id)) * t.est) : num(tg(t.id)), "test day · M" + macro)} c={C.oxide} s={{ marginTop: 10 }}>{t.est ? "SAVE AS WORKING MAX" : "SAVE AS MAX"} · {t.est ? r25(num(tg(t.id)) * t.est) : num(tg(t.id))} KG</BigBtn> : null}
           </div>) });
     });
     const tape0 = (log[tkey("tape")] || {}).v || {};
@@ -1642,9 +1803,17 @@ function Today(props) {
       const n = Object.assign({}, log); n[cardsKey] = { m }; setLog(n);
       markL(c.L, sibs.every((x) => m[x.key]));
     };
+    /* hurts more than 3 out of 10: the exercise stops for today */
+    const painStop = (c) => {
+      const sibs = cards.filter((x) => x.L === c.L);
+      const m = Object.assign({}, cardMap);
+      sibs.forEach((x) => { m[x.key] = x.key === c.key ? true : cardDone(x); });
+      const n = Object.assign({}, log); n[cardsKey] = { m }; n[dk + "-pain_" + c.key] = { stop: 1 }; setLog(n);
+      markL(c.L, sibs.every((x) => m[x.key]));
+    };
     const byL = {};
     cards.forEach((c) => {
-      const it = { id: "G:" + c.key, colour: own.ac, n: c.n, s: c.pres, mins: 0, gym: c, done: cardDone(c), mark: (val) => markCard(c, val), L: c.L };
+      const it = { id: "G:" + c.key, colour: own.ac, n: c.n, s: c.pres, mins: 0, gym: c, done: cardDone(c), mark: (val) => markCard(c, val), L: c.L, painStop: () => painStop(c) };
       if (c.kind === "review" && day === "sun") { it.lib = null; weekly.push(it); return; }
       (byL[c.L] = byL[c.L] || []).push(it);
       sessItems.push(it);
@@ -1836,7 +2005,8 @@ function Today(props) {
   lightsItem.t = lights;
   weekly.forEach((x) => { x.t = lights; });
 
-  const all = [mNumbers].concat(fuelItems.filter((x) => x.id === "w-wake"), [mSighs, mOne, mFive, mCheck],
+  if (headItem) headItem.t = wake - 1;
+  const all = (headItem ? [headItem] : []).concat([mNumbers], fuelItems.filter((x) => x.id === "w-wake"), [mSighs, mOne, mFive, mCheck],
     fuelItems.filter((x) => x.id !== "w-wake" && !x.anchor && x.id !== "w-sess" && x.t <= startMin),
     fuelItems.filter((x) => x.id === "w-sess"), sessItems,
     fuelItems.filter((x) => x.id !== "w-wake" && !x.anchor && x.id !== "w-sess" && x.t > startMin),
@@ -1860,12 +2030,16 @@ function Today(props) {
   const go = (id) => { setPick(id); if (isToday) setFlowAt(Object.assign({}, flowAt, { [dk]: id })); };
   const nextAfter = (i) => all.slice(i + 1).find((x) => !x.done) || all.find((x, j) => j !== i && !x.done) || null;
   const nxt = cur ? nextAfter(curIdx) : null;
-  const finish = () => { if (!cur) return; cur.mark(true); const n = nextAfter(curIdx); go(n ? n.id : null); buzz(30); };
+  const finish = () => { if (!cur) return;
+    /* the app sets the working max off a logged top triple */
+    if (cur.gym && cur.gym.kind === "top") { const e = log[dk + "-" + cur.gym.item.id] || {}, mk = cur.gym.item.mk, est = num(e.est);
+      if (est && num(maxes[mk]) !== est) onSetMax(mk, est, "top triple × 1.08 · " + macro + week, MODE.prep && rx.testWeek ? ["cw_" + mk] : []); }
+    cur.mark(true); const n = nextAfter(curIdx); go(n ? n.id : null); buzz(30); };
   const doneN = all.filter((x) => x.done).length;
   const pct = all.length ? Math.round(doneN / all.length * 100) : 0;
   const gymAll = sessItems.filter((x) => x.gym);
   const gymAt = cur && cur.gym ? gymAll.indexOf(cur) : -1;
-  const gp = { rx, week, macro, day, log, setLog, maxes, bw, ready: effReady, startTimer, autoRest, calis, st, openTool, onSetMax, weekDates };
+  const gp = { rx, week, macro, day, log, setLog, maxes, bw, ready: effReady, startTimer, stopTimer, autoRest, calis, st, openTool, onSetMax, weekDates };
 
   const progress = (
     <div data-testid="day-progress" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label="The day"
@@ -1915,7 +2089,8 @@ function Today(props) {
                   <span style={Object.assign({}, bdy, { flex: 1, fontSize: T3, fontWeight: 700, color: g === cur ? C.brass : g.done ? C.ash : C.chalk })}>{g.n}</span>
                 </button>))}
             </div>) : null}
-          {cur.gym ? <GymCard key={cur.id} card={cur.gym} {...gp} />
+          {cur.gym ? <GymCard key={cur.id} card={cur.gym} {...gp}
+              onPainStop={cur.painStop ? () => { cur.painStop(); const n = nextAfter(curIdx); go(n ? n.id : null); buzz(30); } : null} />
             : cur.runner ? (
               <div>
                 <CardHead name={cur.n} lib={cur.lib} pres={cur.s} colour={cur.colour} />
@@ -1976,14 +2151,14 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
         </div>
         <div style={{ display: "flex", gap: 2, marginTop: 14 }}>
           {wks.map((n) => { const r = rxFor(n), ph = PH[r.ph] || PH.c1; const sel = n === week; const dn = weekDoneMap && weekDoneMap[n];
-            return <div key={n} onClick={() => setView({ macro, week: n })} style={{ flex: 1, height: 30, borderRadius: 3, cursor: "pointer", background: sel ? ph.ac : (r.hell ? "rgba(194,78,51,.35)" : r.dl || r.reload ? "rgba(102,132,90,.35)" : r.test || r.tp ? "rgba(79,132,168,.45)" : (r.maxSq ? "rgba(210,160,71,.35)" : "rgba(138,149,158,.13)")), border: sel ? "none" : "1px solid " + C.line, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2 }}>
+            return <div key={n} onClick={() => setView({ macro, week: n })} style={{ flex: 1, height: 30, borderRadius: 3, cursor: "pointer", background: sel ? ph.ac : (r.hell ? "rgba(194,78,51,.35)" : r.dl || r.reload ? "rgba(102,132,90,.35)" : r.test || r.tp ? "rgba(79,132,168,.45)" : (r.topSq ? "rgba(210,160,71,.35)" : "rgba(138,149,158,.13)")), border: sel ? "none" : "1px solid " + C.line, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2 }}>
               <span style={Object.assign({}, mno, { fontSize: 7, color: sel ? C.ink : C.ash })}>{row ? (seasonRow(MODE.mac, n) || {}).id || n : n}</span>
               {dn != null ? <span style={{ width: 4, height: 4, borderRadius: 2, background: dn >= 1 ? C.moss : dn > 0 ? C.brass : "transparent" }} /> : null}
             </div>; })}
         </div>
         <div style={{ display: "flex", gap: 9, marginTop: 7, flexWrap: "wrap" }}>
           {(MODE.camp ? [["EASY + TESTS", "rgba(102,132,90,.6)"], ["SHARPEN / FIGHT WEEK", "rgba(79,132,168,.7)"]]
-            : [["MAX SINGLE", "rgba(210,160,71,.6)"], ["DELOAD", "rgba(102,132,90,.6)"], ["TEST", "rgba(79,132,168,.7)"]].concat(L > 16 ? [["HELL WEEK", "rgba(194,78,51,.6)"]] : [])).map((x) =>
+            : [["TOP TRIPLE", "rgba(210,160,71,.6)"], ["DELOAD", "rgba(102,132,90,.6)"], ["TEST", "rgba(79,132,168,.7)"]].concat(L > 16 ? [["HELL WEEK", "rgba(194,78,51,.6)"]] : [])).map((x) =>
             <span key={x[0]} style={Object.assign({}, mno, { fontSize: 8, color: C.ash, display: "flex", alignItems: "center", gap: 4 })}><span style={{ width: 9, height: 9, borderRadius: 2, background: x[1], display: "inline-block" }} />{x[0]}</span>)}
         </div>
         {isCur ? <Chip c={C.moss} s={{ marginTop: 12, display: "inline-block" }}>This is the current week</Chip>
@@ -2028,12 +2203,12 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
         {rx.hell ? <Note c={C.chalk}>Hell Week. Six flagship tests, one a day. No Optimal 8 volume — the IRON tab runs this week.</Note> : (
           <div>
             <Row k="Squat (Sat)" val={rx.sc} />
-            <Row k="Bench (Mon)" val={rx.upperC ? "Upper circuit · 4 × 2 @ 85%" : rx.maxBe ? rx.sets + " × " + rx.reps + " @ " + rx.pct + "% · max is Sunday" : (rx.bsc || rx.sc)} />
+            <Row k="Bench (Mon)" val={rx.upperC ? "Upper circuit · 4 × 2 @ 85%" : rx.topBe ? rx.sets + " × " + rx.reps + " @ " + rx.pct + "% · top triple is Sunday" : (rx.bsc || rx.sc)} />
             <Row k="Jump circuit" val={rx.cr + " round" + (rx.cr > 1 ? "s" : "") + " · 2 @ " + rx.cpct + "%" + (rx.ph === "b3" ? " · +assisted jump" : "")} />
             <Row k="Sprints" val={rx.spr + " × 20m" + (rx.sprPct < 100 ? " @ 90%" : "")} />
-            <Row k="Jumps (Sat)" val={(rx.jump === "AEL" ? "Loaded drop jump " : "Depth jump ") + rx.js[0] + " × " + rx.js[1]} />
+            <Row k="Jumps (Sat)" val={rx.noJumps ? "none — the tendon gate" : jumpOf(rx.jump).n + " " + rx.js[0] + " × " + rx.js[1] + (rx.restart ? " · one stage down" : "")} />
             <Row k="Trap bar" val={rx.tb.sc} />
-            <Row k="Push press" val={rx.pp && rx.pp.sc ? rx.pp.sc : rx.maxBe ? "skipped — squat max day" : "—"} />
+            <Row k="Push press" val={rx.pp && rx.pp.sc ? rx.pp.sc : rx.topBe ? "skipped — squat top-triple day" : "—"} />
             <Row k="Nordics" val={rx.nor ? rx.nor[0] + " × " + rx.nor[1] : "—"} />
             <Row k="Punch throws" val={rx.vec + " rounds"} />
             <Row k="Rows / split squat" val={(rx.acc <= 2 ? 2 : 3) + "–" + (rx.acc <= 2 ? 3 : 4) + " sets"} />
@@ -2044,7 +2219,7 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
             <Row k="Friday" val="Sleep — no alarm" />
             <Row k="The easy hour" val="30–40 min easy, nose only · Sat or Sun" />
             
-            <Row k="Max singles" val={rx.maxSq ? "Squat Sat · Bench Sun" : rx.test ? "TEST DAY" : "none"} />
+            <Row k="Top triples" val={rx.topSq ? "Squat Sat · Bench Sun" : rx.test ? "TEST DAY" : "none"} />
             {rx.pq && !rx.pq.fast ? <Note>The pause squat is a percentage of your back-squat max — and a paused triple at 75% is a hard triple, because a two-second pause takes 10–15% off what you can lift. That column never goes above 75%.</Note> : null}
             {rx.cal ? <Note c={C.brass} bold>Calibration week: ramp to a 3RM on the trap bar (Wed) and the push press (Sat). The app turns them into maxes.</Note> : null}
             {rx.mid ? <Note c={C.oxide} bold>Mid-check. Not your real numbers — you are fatigued. A direction check.</Note> : null}
@@ -2056,7 +2231,7 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
         const sess = sessFor(d, rx);
         const tot = rx.hell ? 0 : (!MODE.camp && d === "sat" && rx.test ? 1 : realBlocks(d, rx).length); const full = tot > 0 && n >= tot;
         const sl = sleepDay(d, rx);
-        const blank = MODE.camp && !sess;
+        const blank = (MODE.camp || MODE.trans) && !sess;
         const ac = sess ? sess.ac : C.ash;
         return (
           <Card key={d} ac={full ? C.moss : sl ? C.moss : ac} s={{ padding: 0, opacity: rx.hell ? .4 : blank ? .65 : 1 }}>
@@ -2066,7 +2241,7 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
                   <span style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 700, letterSpacing: 1.2, color: C.chalk })}>{(sess ? sess.n : DSH[d])}{row ? " · " + fmtDate(addDays(row.mon, di)) : ""}{sess && sess.pm ? " · PM" : ""}</span>
                   <span style={Object.assign({}, mno, { fontSize: 9.5, color: sl ? C.moss : ac })}>{rx.hell || sl || blank ? "—" : !MODE.camp && d === "sat" && rx.test ? "TEST DAY" : v(sess.m, rx) + " MIN"}</span>
                 </div>
-                <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.ash, marginTop: 3 })}>{sl ? "SLEEP. No alarm." + (d === "fri" ? " RANGE at home in the evening." : "") : blank ? campBlank(d, rx).h : !MODE.camp && d === "sat" && rx.test ? "Sprint · jump · throws · squat · bench · pull · tape" : sess.t}</div>
+                <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.ash, marginTop: 3 })}>{sl ? "SLEEP. No alarm." + (d === "fri" ? " RANGE at home in the evening." : "") : blank ? (MODE.camp ? campBlank(d, rx).h : "The head check holds the transition — nothing until a doctor has cleared you") : !MODE.camp && d === "sat" && rx.test ? "Sprint · jump · throws · squat · bench · pull · tape" : sess.t}</div>
               </span>
               <span style={Object.assign({}, mno, { fontSize: 10, color: full ? C.moss : n ? C.brass : C.ash, flexShrink: 0 })}>{tot ? n + "/" + tot : ""}</span>
             </button>
@@ -2469,6 +2644,8 @@ function Settings({ st, setSt, current, L, exportData, importData, IM, calis, se
             <Eye c={C.oxide}>The edge</Eye>
             <Toggle on={st.edge !== false} set={() => upd({ edge: st.edge === false })} c={C.oxide}
               n="THE EDGE" s={EDGE_INTRO + " Off, PREP and CAMP run the base program: no Tuesday speed, no Wednesday thirty, straight sets for the clusters, the contacts back, the rounds back to the fight's. The sauna is twice a week either way."} />
+            {EDGE_ITEMS[current && current.row && (current.row.program === "camp" || current.row.program === "pre") ? "camp" : "prep"].map((x, i) =>
+              <Note key={i} c={C.chalk}>{i + 1}. {x}</Note>)}
             <Note c={C.oxide}>{EDGE_GUARDRAIL} It comes back on the Monday.</Note>
             <Note>{TENDON_GATE}</Note>
           </div>) : null}
@@ -2999,8 +3176,10 @@ export default function App() {
      reads a prescription. */
   const dayIso = iso(new Date());
   const plans = st.plans || [];
-  const season = useMemo(() => buildSeason({ plans, today: dayIso, strapBack: (d) => strapBackBy(morning, st, d) }),
-    [JSON.stringify(plans), dayIso, morning, st.base]);
+  /* the head check's answers hold or start each transition */
+  const heads = st.head || {};
+  const season = useMemo(() => buildSeason({ plans, today: dayIso, strapBack: (d) => strapBackBy(morning, st, d), head: (f) => heads[f] || null }),
+    [JSON.stringify(plans), dayIso, morning, st.base, JSON.stringify(heads)]);
   SEASON.s = season;
   const classic = !plans.length || (!!season.classic && !rowOn(season, dayIso));
   SEASON.classic = classic;
@@ -3040,7 +3219,7 @@ export default function App() {
 
   /* The Monday a week falls on, whichever program is running. */
   const monOf = useCallback((mac, wk) => {
-    if (mac === "P" || mac === "T" || mac === "C" || mac === "B") {
+    if (MAC_PROGRAM[mac]) {
       const r = rowByKey(season, mac, wk);
       return r ? r.mon : mondayIso(dayIso);
     }
@@ -3048,7 +3227,10 @@ export default function App() {
   }, [season, st.start, st.macroBase, fighterL, dayIso]);
 
   const bw = num(body[0] && body[0].bw) || 80;
-  const onSetMax = (lift, kg, src) => { setMaxes(Object.assign({}, maxes, { [lift]: kg })); setMaxHist([{ d: new Date().toISOString().slice(0, 10), lift, kg, src, macro: current.macro, week: current.week }].concat(maxHist)); buzz([50, 30, 50]); };
+  /* `also`: the other lifts the same number sets — test week's top
+     triples are the camp's working weights too */
+  const onSetMax = (lift, kg, src, also) => { const ks = [lift].concat(also || []); const nx = Object.assign({}, maxes); ks.forEach((k) => { nx[k] = kg; }); setMaxes(nx);
+    setMaxHist(ks.map((k) => ({ d: new Date().toISOString().slice(0, 10), lift: k, kg, src, macro: current.macro, week: current.week })).concat(maxHist)); buzz([50, 30, 50]); };
   const addBody = (t) => setBody([Object.assign({ d: new Date().toISOString().slice(0, 10), m: current.macro }, t)].concat(body));
 
   const dk = dayKey(shown.macro, shown.week, shown.day);
@@ -3315,7 +3497,8 @@ export default function App() {
     swapped: !!swapMap[dk], setSwapped: (val) => setSwapMap(Object.assign({}, swapMap, { [dk]: val })),
     box: boxMap[dk] || "", setBox: (val) => setBoxMap(Object.assign({}, boxMap, { [dk]: val })),
     note: notes[dk] || "", setNote: (val) => setNotes(Object.assign({}, notes, { [dk]: val })),
-    openProto: setProto, startTimer: T.start, openPlates: setPlates, onSetMax, autoRest: st.autoRest,
+    openProto: setProto, startTimer: T.start, stopTimer: T.close, openPlates: setPlates, onSetMax, autoRest: st.autoRest,
+    setHead: (f, rec) => setSt(Object.assign({}, st, { head: Object.assign({}, st.head, { [f]: rec }) })),
     goIron: () => { setMoreSub("iron"); setTab("more"); setIsub("hell"); }, weekStats, addBody,
     calis, setCalis, taper: taperNow, checkA, setCheckA, readNow,
     openTool: (t) => setTool(t.kind === "rangetests" ? { kind: "rangetests", macro: shown.macro, week: shown.week } : t),
@@ -3366,9 +3549,10 @@ export default function App() {
     const planLen = ck.noSess ? 0 : realBlocks(today, ck.rx).filter((b) => !(b.review && today === "sun")).reduce((a, b) => a + (Number(v(b.m, ck.rx)) || 0) + (Number(b.tr) || 0), 0);
     const setL = num((st.len || {})[today]);
     const fd = fdays[dayIso] || {}, ticks = fd.f || {}, checks = fd.c || {};
-    const progSauna = (MODE.prep || MODE.camp) && saunaDays(ck.rx).indexOf(today) >= 0;
+    const weekProgSauna = (MODE.prep || MODE.camp) && saunaDays(ck.rx).length > 0;
+    const progSauna = weekProgSauna && saunaDays(ck.rx).indexOf(today) >= 0;
     const weekendDay = today === "sat" || today === "sun";
-    const sauna = progSauna || (weekendDay && !!fd.sauna);
+    const sauna = progSauna || (weekendDay && !!fd.sauna && !weekProgSauna);
     const phase = fuelPhaseOf(st, current.week, dayIso);
     const plan = fuelPlan({ day: today, phase, start: ck.S, len: ck.noSess ? 0 : (setL > 0 ? setL : planLen), session: !ck.noSess,
       breaks: st.breaks || DEFAULT_BREAKS(), lights: ck.lights, sauna, menu: menuAll.picks || {},
@@ -3376,7 +3560,7 @@ export default function App() {
     const feeds = plan.rows.filter((r) => r.kind === "feed");
     const sum = (xs) => xs.reduce((a, r) => ({ k: a.k + r.blk.kcal, p: a.p + r.blk.p, c: a.c + r.blk.c, f: a.f + r.blk.f }), { k: 0, p: 0, c: 0, f: 0 });
     const drunk = plan.rows.reduce((a, r) => a + (ticks[r.id] ? mlOf(r, checks) : 0), 0) + (ticks["w-easy"] ? EASY_WATER : 0);
-    return { plan, phase, checks, sauna, progSauna, weekendDay, total: sum(feeds), eaten: sum(feeds.filter((r) => ticks[r.id])), drunk };
+    return { plan, phase, checks, sauna, progSauna, weekProgSauna, weekendDay, total: sum(feeds), eaten: sum(feeds.filter((r) => ticks[r.id])), drunk };
   };
   const zoom = Math.round(devScale * stepScale(st.textSize) * 1000) / 1000;
   /* The two easy weeks are offered the moment the fight is behind you, and
@@ -3447,12 +3631,16 @@ export default function App() {
   const atDay = (w, k, mac) => { const m = mac == null ? shown.macro : mac; return w === current.week && m === current.macro && k === today ? null : { macro: m, week: w, day: k }; };
   /* the season's weeks run on from one program into the next */
   const shownSeg = shownRow ? segmentOf(shownRow) : null;
-  const goRow = (r) => { if (!r) return; setSelDay(atDay(r.kw, shown.day, r.mac)); setWeekPick(false); };
+  /* a re-plan made mid-week takes that week from the day it was made: the
+     days before it open under the week they were lived in */
+  const dayRow = (r, k) => { if (!r) return r; const top = r.overlaid ? season.rows.find((x) => x.under === r) || r : r;
+    return top.under && addDays(top.mon, DAYS.indexOf(k)) < top.made ? top.under : top; };
+  const goRow = (r) => { if (!r) return; const x = dayRow(r, shown.day); setSelDay(atDay(x.kw, shown.day, x.mac)); setWeekPick(false); };
   const goWeek = (w) => { if (shownRow) { goRow(seasonRow(shown.macro, w)); return; } setSelDay(atDay(Math.max(1, Math.min(L, w)), shown.day)); setWeekPick(false); };
   const stepWeek = (d) => { if (shownRow) { goRow(season.rows[shownRow.seq + d]); return; } goWeek(shown.week + d); };
   const atFirst = shownRow ? shownRow.seq <= 0 : shown.week <= 1;
   const atLast = shownRow ? shownRow.seq >= season.rows.length - 1 : shown.week >= L;
-  const goDay = (k) => { setSelDay(atDay(shown.week, k)); setWeekPick(false); };
+  const goDay = (k) => { const x = dayRow(shownRow, k); setSelDay(x ? atDay(x.kw, k, x.mac) : atDay(shown.week, k)); setWeekPick(false); };
   const navBtn = (dis) => Object.assign({}, dsp, { flexShrink: 0, width: 48, height: 48, fontSize: 20, fontWeight: 800, borderRadius: 6, cursor: dis ? "default" : "pointer",
     background: "transparent", color: dis ? C.line : C.chalk, border: "2px solid " + (dis ? C.line : C.ash) });
 
@@ -3503,7 +3691,7 @@ export default function App() {
                   const r = shownSeg ? shownSeg[i] : null;
                   return <button key={w} onClick={() => goWeek(w)} aria-label={"Week " + (r ? r.idx || i + 1 : w)}
                     style={Object.assign({}, dsp, { minHeight: 48, fontSize: 20, fontWeight: 800, borderRadius: 6, cursor: "pointer",
-                      background: on ? C.brass : "transparent", color: on ? C.ink : now ? C.moss : C.chalk, border: "2px solid " + (on ? C.brass : now ? C.moss : C.line) })}>{r ? (r.program === "transition" ? "T" + r.idx : r.id) : w}</button>; })}
+                      background: on ? C.brass : "transparent", color: on ? C.ink : now ? C.moss : C.chalk, border: "2px solid " + (on ? C.brass : now ? C.moss : C.line) })}>{r ? (r.hold ? "H" : r.program === "transition" ? "T" + r.idx : r.id) : w}</button>; })}
               </div>) : null}
             {/* the days of that week */}
             <div style={{ display: "flex", gap: 4, marginTop: 8 }}>
@@ -3560,7 +3748,7 @@ export default function App() {
                         </Card>))}
                     </div>)
                     : <DayFuel phase={F.phase} plan={F.plan} eaten={F.eaten} total={F.total} drunk={F.drunk} target={F.plan.target} notes={[]}
-                        sauna={F.sauna} setSauna={(val) => setTodayFday({ sauna: !!val })} showSauna={F.weekendDay && !F.progSauna}
+                        sauna={F.sauna} setSauna={(val) => setTodayFday({ sauna: !!val })} showSauna={F.weekendDay && !F.weekProgSauna}
                         rules={HYDRA_RULES} midBanana={!!MIDBANANA[F.phase] && today === "sun"} />; })() : null}
                 {foodSub === "cook" ? (
                   <div>
