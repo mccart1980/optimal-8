@@ -176,10 +176,143 @@ export const D = {
     feeds: [F("06:30", "porridgeb"), F("07:45", "halfban"), E("08:15", "★ THROWS · NORDICS · FIGHT ROUNDS · CORE · ~80 MIN", { sub: "Sim weeks: banana in the throws → Nordics gap. That one's extra, and it's the only extra." }), F("10:00", "half2ban", { crit: 1, note: "Within the hour after finishing." }), F("11:30", "batch"), F("14:30", "batch", { note: "If the easy hour is today, it's after this feed." }), F("17:00", "banana"), F("19:30", "pasta"), F("21:00", "casein", { note: "Half an hour before bed." })] },
 };
 
+/* ================================================================
+   MAKING WEIGHT — the food (weight-making.md). Step 0 is the menu as
+   printed; each step takes about 200–250 calories a day off, from the
+   feeds furthest from the hard sessions first, and includes every step
+   before it. The bottle, the 5pm loads, the protein in every feed, the
+   weekend feed after the session, Monday's and Wednesday's dinner, the
+   casein, the creatine, the collagen and the drinking never change.
+   ================================================================ */
+const POUCH = "Ben's Original rice pouch";
+const OATS = "Quaker Oat So Simple Golden Syrup";
+/* a card's ingredients with the step's changes: a new amount, or gone */
+const editI = (items, ed) => items.filter((x) => !(x[0] in ed) || ed[x[0]] !== null).map((x) => (x[0] in ed ? [x[0], ed[x[0]]] : x));
+const mk = (b, m, ed, tag, name) => Object.assign({}, b, { n: name || (b.n + (tag ? " — " + tag : "")), kcal: m[0], p: m[1], c: m[2], f: m[3], i: editI(b.i, ed || {}), stepped: 1 });
+/* HALF THE CARB, FEED BY FEED — mid-morning, lunch and dinner */
+export const HALF_CARB = {
+  batch:       [[415, 34, 36, 15], { "Sweet potato": "150g raw — half" }],
+  jacketbt:    [[405, 38, 58, 1], { "Baking potato": "150g" }],
+  jacketbe:    [[460, 27, 58, 12], { "Baking potato": "150g" }],
+  prawnrice:   [[370, 36, 42, 6], { [POUCH]: "half" }],
+  wraps:       [[400, 36, 45, 7], { "Wholemeal tortilla wraps": "1 × ~40g" }],
+  tunabagel:   [[485, 46, 45, 12], { Banana: null }, "TUNA & EGG BAGEL — NO BANANA"],
+  chickpouch:  [[430, 54, 36, 9], { [POUCH]: "half" }],
+  rctuna:      [[370, 35, 45, 6], { "Rice cakes": "3" }],
+  steak:       [[763, 74, 36, 37], { [POUCH]: "half" }],
+  chicken:     [[761, 87, 47, 23], { [POUCH]: "half" }],
+  pasta:       [[685, 76, 54, 19], { Pasta: "60g dry" }],
+  salmon:      [[765, 59, 41, 41], { [POUCH]: "half" }],
+  codprawns:   [[735, 92, 43, 19], { [POUCH]: "half" }],
+  scallops:    [[725, 72, 37, 23], { [POUCH]: "half" }],
+  steakjacket: [[735, 70, 58, 23], { "Baking potato": "150g" }],
+};
+/* the half-carb plate: printed for the standard portion; the BIG plate
+   (Saturday's dinner) takes the same carb off its BIG form */
+function halfOf(key, slot, big) {
+  const h = HALF_CARB[key], b0 = B[key];
+  if (!h) return blockOf(key, slot, big);
+  if (!big) return mk(b0, h[0], h[1], h[2] ? null : "HALF THE CARB", h[2]);
+  const bb = blockOf(key, slot, true), m = h[0];
+  return mk(bb, [bb.kcal + m[0] - b0.kcal, bb.p + m[1] - b0.p, bb.c + m[2] - b0.c, bb.f + m[3] - b0.f], h[1], "HALF THE CARB");
+}
+/* Breakfast: no honey (Step 1) · no banana (Step 3 Mon & Fri, Step 4
+   every day) · half the oats or the bagel (Step 4 Mon & Fri). C, the
+   overnight sachets, is A made cold. */
+const BF = {
+  porridge: { honey: [[509, 16, 89, 10], { Honey: null }], banana: [[404, 15, 62, 10], { Honey: null, Banana: null }, "NO HONEY, NO BANANA"],
+              half: [[267, 12, 37, 8], { Honey: null, Banana: null, [OATS]: "1 sachet · 36g" }, "ONE SACHET, NO BANANA"] },
+  appleraisin: { honey: null, banana: [[500, 15, 87, 10], { "Raisins or sultanas": null }, "NO RAISINS"],
+              half: [[363, 12, 62, 8], { "Raisins or sultanas": null, [OATS]: "1 sachet" }, "ONE SACHET, NO RAISINS"] },
+  eggbagelbf: { honey: [[568, 30, 72, 17], { Honey: null }], banana: [[463, 29, 45, 17], { Honey: null, Banana: null }, "NO HONEY, NO BANANA"],
+              half: [[348, 25, 23, 16], { Honey: null, Banana: null, "Plain bagel": "half" }, "HALF THE BAGEL, NO BANANA"] },
+  tunabagelbf: { honey: [[540, 35, 99, 2], { Honey: null }], banana: [[435, 34, 72, 2], { Honey: null, Bananas: "1" }, "NO HONEY, ONE BANANA"],
+              half: [[320, 30, 50, 1], { Honey: null, Bananas: "1", "Plain bagel": "half" }, "HALF THE BAGEL, ONE BANANA"] },
+};
+BF.oatscold = BF.porridge;
+function breakfastAt(key, big, day, step) {
+  const t = BF[key];
+  if (!t || step < 1) return { blk: blockOf(key, "breakfast", big), big };
+  const monFri = day === "mon" || day === "fri";
+  /* the BIG breakfasts: no honey through Step 3, standard size at Step 4 */
+  if (big && step < 4) {
+    const bb = blockOf(key, "breakfast", true), honey = bb.i.find((x) => x[0] === "Honey");
+    if (!t.honey || !honey || honey[1] === "none") return { blk: bb, big };
+    const b0 = B[key], m = t.honey[0];
+    return { blk: mk(bb, [bb.kcal - (b0.kcal - m[0]), bb.p - (b0.p - m[1]), bb.c - (b0.c - m[2]), bb.f - (b0.f - m[3])], { Honey: null }, "NO HONEY"), big };
+  }
+  const which = step >= 4 && monFri ? "half" : step >= 4 || (step >= 3 && monFri) ? "banana" : "honey";
+  const e = t[which];
+  return { blk: e ? mk(B[key], e[0], e[1], e[2] || "NO HONEY") : B[key], big: false };
+}
+
+/* THE TWO DAYS BEFORE AN ON-THE-DAY WEIGH-IN: Step 0, the low-fibre
+   options only. */
+export const LOW_FIBRE = {
+  pre: ["halfban", "halfrc"], breakfast: ["eggbagelbf", "tunabagelbf"], lunch: ["prawnrice", "tunabagel", "chickpouch"],
+  three: ["twoban", "onebagel", "rchoney"], five: ["topup", "bageltop", "potatotop"],
+  dinner: ["steak", "chicken", "pasta", "codprawns", "salmon", "scallops"], bed: null, post: ["half2ban", "halfrc4"],
+};
+const LF_EDIT = {
+  prawnrice: [{ Mushrooms: null, Passata: null }, "NO MUSHROOMS OR PASSATA"], chicken: [{ Mushrooms: null, Passata: null }, "NO MUSHROOMS OR PASSATA"],
+  pasta: [{ Mushrooms: null, Passata: null }, "NO MUSHROOMS OR PASSATA"], codprawns: [{ Passata: null }, "NO PASSATA"],
+  salmon: [{ Mushrooms: null }, "NO MUSHROOMS"], potatotop: [{ "Boiled potatoes": "400g, peeled" }, "POTATOES PEELED"],
+};
+export const lowFibreOpts = (slot) => (LOW_FIBRE[slot] === undefined ? SLOTS[slot].opts : LOW_FIBRE[slot] || SLOTS[slot].opts);
+
+/* The card a slot's option is on a day: the step's version, or the low-
+   fibre one. `w` is { step, day, role, lowFibre } — role "mid" or "lunch"
+   for the two mid-shift feeds. */
+export function stepBlockOf(key, slot, big, w) {
+  if (!w || !slot) return { blk: blockOf(key, slot, big), big };
+  if (w.lowFibre) {
+    const b = blockOf(key, slot, big), e = LF_EDIT[key];
+    return { blk: e ? Object.assign({}, b, { n: b.n + " — " + e[1], i: editI(b.i, e[0]) }) : b, big };
+  }
+  const st = w.step || 0, day = w.day;
+  if (slot === "breakfast") return breakfastAt(key, big, day, st);
+  if (slot === "lunch") {
+    /* Step 2: Saturday's mid-morning and lunch at standard portions */
+    const bg = big && !(st >= 2 && day === "sat");
+    const half = (w.role === "lunch" && st >= 2) || (w.role === "mid" && st >= 3);
+    return { blk: half ? halfOf(key, slot, bg) : blockOf(key, slot, bg), big: bg };
+  }
+  if (slot === "dinner") {
+    const half = ((day === "thu" || day === "sun") && st >= 2) || ((day === "tue" || day === "fri" || day === "sat") && st >= 3);
+    return { blk: half ? halfOf(key, slot, big) : blockOf(key, slot, big), big };
+  }
+  return { blk: blockOf(key, slot, big), big };
+}
+/* The feeds a step takes away: only the three o'clock (Step 1). */
+export const stepDrops = (step) => (step >= 1 ? { three: 1 } : {});
+
+/* THE LIGHT DAYS — the two days before a day-before weigh-in. This menu
+   replaces the whole day: no three o'clock, no 5pm load, no fruit, veg,
+   beans, oats, wholemeal, mushrooms or passata. */
+Object.assign(B, {
+  lighthalf:   { n: "HALF THE BOTTLE, NO CARB", kcal: 144, p: 25, c: 9, f: 0, bn: "The light days: half the bottle before and half after, no carb with it.", i: [["UFIT 50g", "half · 250ml"]] },
+  lightbf:     { n: "3 EGGS ON A WHITE BAGEL", kcal: 445, p: 28, c: 46, f: 17, i: [["Plain bagel", "1"], ["Eggs", "3"]] },
+  lightmid:    { n: "CHICKEN, PRAWNS OR TUNA + 2 RICE CAKES", kcal: 300, p: 45, c: 16, f: 6, i: [["Cooked chicken or prawns — or a tin of tuna", "150g"], ["Rice cakes", "2"]] },
+  lightlunch:  { n: "COD OR PRAWNS + HALF A POUCH", kcal: 330, p: 38, c: 36, f: 3, i: [["Cod or prawns", "150g"], [POUCH, "half"]] },
+  lightdinner: { n: "CHICKEN OR COD, 2 EGGS + HALF A POUCH", kcal: 625, p: 76, c: 37, f: 16, i: [["Chicken breast or cod", "250g"], ["Eggs", "2"], [POUCH, "half"]] },
+  /* the weigh-in day, afternoon or evening: small low-fibre feeds every
+     three hours, the last one two hours before you weigh in */
+  wieggs:      { n: "2 EGGS AND A RICE CAKE", kcal: 191, p: 13, c: 8, f: 11, i: [["Boiled eggs", "2"], ["Rice cake", "1"]] },
+  wihalf:      { n: "HALF THE BOTTLE", kcal: 144, p: 25, c: 9, f: 0, i: [["UFIT 50g", "half · 250ml"]] },
+  wichicken:   { n: "100 G CHICKEN OR A TIN OF TUNA", kcal: 150, p: 30, c: 0, f: 3, i: [["Cooked chicken breast — or a tin of tuna", "100g"]] },
+});
+const LIGHT_FEEDS = [F("03:10", "lighthalf", { slot: "pre", role: "pre", note: "Session days only." }), F("04:50", "lighthalf", { slot: "post", role: "post", note: "Straight after the session." }),
+  F("04:50", "lightbf", { slot: "breakfast" }), F("09:00", "lightmid", { slot: "lunch" }), F("12:30", "lightlunch", { slot: "lunch" }),
+  F("18:30", "lightdinner", { slot: "dinner" }), F("21:00", "casein", { slot: "bed" })];
+export const withCollagenNoOJ = (b) => Object.assign({}, b, { n: b.n + " + COLLAGEN", kcal: b.kcal + 54, p: b.p + 14,
+  i: b.i.concat([["Collagen or gelatin powder", "15 g, in water — no orange juice on the light days"]]) });
+const half = (b) => Object.assign({}, b, { n: b.n + " — HALF", kcal: Math.round(b.kcal / 2), p: Math.round(b.p / 2), c: Math.round(b.c / 2), f: Math.round(b.f / 2), i: b.i.map((x) => [x[0], "half of " + x[1]]) });
+
 /* The phase table's changes, applied to a day's feeds. */
-export function phaseFeeds(ph, day, feeds) {
+export function phaseFeeds(ph, day, feeds, weightOn) {
   if (!ph) return feeds;
-  if (ph === "build" && (day === "mon" || day === "thu")) {
+  /* while the weight plan is on, the build block's extra loads don't run */
+  if (ph === "build" && (day === "mon" || day === "thu") && !weightOn) {
     /* the 5pm load the two light days don't otherwise get */
     const at = feeds.findIndex((f) => f.b && tMin(f.t) > tMin("15:00"));
     const row = F("17:00", "topup", { crit: 1, note: "BUILD puts the 5pm load on Monday and Thursday as well." });
@@ -189,13 +322,6 @@ export function phaseFeeds(ph, day, feeds) {
     let out = feeds;
     if (day === "mon" || day === "wed" || day === "thu") out = out.filter((f) => f.b !== "twoban");
     if (day === "sat") out = out.map((f) => f.b === "batchbig" ? Object.assign({}, f, { b: "batch" }) : f);
-    return out;
-  }
-  if (ph === "cut") {
-    /* the making-weight section, in its order */
-    let out = feeds.filter((f) => f.b !== "casein");
-    out = out.map((f) => f.b === "batchbig" ? Object.assign({}, f, { b: "batch" }) : f);
-    if (day === "mon" || day === "thu") out = out.map((f) => f.b === "twoban" ? Object.assign({}, f, { b: "banana" }) : f);
     return out;
   }
   return feeds;
@@ -248,7 +374,8 @@ const within = (pts, days) => { if (!pts.length) return []; const last = parseIS
 const fmt = (v, dp) => (v > 0 ? "+" : "") + v.toFixed(dp == null ? 1 : dp);
 
 /* The three rules from THE FEEDBACK LOOP, read off the logged numbers. */
-export function verdicts(rows) {
+export const REFEREE_PAUSED = "Paused while you're making weight — the Sunday check does this job.";
+export function verdicts(rows, weightOn) {
   const kg = tapeSeries(rows, "kg"), waist = tapeSeries(rows, "waist");
   const arm = tapeSeries(rows, "arm"), sh = tapeSeries(rows, "shoulder");
   const out = [];
@@ -289,9 +416,12 @@ export function verdicts(rows) {
       read: "Needs six weeks of weekly weigh-ins." });
   }
 
-  /* 3 — bodyweight falling more than half a kilo a week */
+  /* 3 — bodyweight falling more than half a kilo a week; off while the
+     weight plan runs, because the Sunday check does that job */
   const four = within(kg, 28);
-  if (four.length >= 3) {
+  if (weightOn) {
+    out.push({ id: "falling", lit: false, paused: true, head: "Bodyweight falling more than 0.5 kg a week", act: "", read: REFEREE_PAUSED });
+  } else if (four.length >= 3) {
     const kgWk = tapeSlope(four);
     out.push({ id: "falling", lit: kgWk < -0.5,
       head: "Bodyweight falling more than 0.5 kg a week",
@@ -306,8 +436,9 @@ export function verdicts(rows) {
 }
 /* ================================================================
    THE PHASE TABLE — what the season changes about the food. The phase
-   is read off the app's one season (program, start, fight date and the
-   making-weight switch); the fuel app's own season settings are gone.
+   is read off the app's one season (program, start and fight date); the
+   fuel app's own season settings are gone. Making weight isn't a phase:
+   it's the step, on top of whichever phase it is (weight-making.md).
    ================================================================ */
 export const BASE_TARGET = { kcal: 3600, p: 245, c: 487, f: 78 };
 export const PHASES = {
@@ -320,11 +451,9 @@ export const PHASES = {
              r: ["The day as printed. Do not cut in the light weeks.", "Seven-round weeks keep the mid-session banana.", "Sauna weeks: the hydration schedule's sauna line."] },
   easy:    { n: "EASY WEEK", sub: "Camp", t: BASE_TARGET, c: FC.sage, chg: "Do not cut. Eating less because you are training less is how fights are lost.", r: ["Do not cut. The commonest way to lose a fight is eating less because you're training less."] },
   sharpen: { n: "SHARPEN", sub: "Camp", t: BASE_TARGET, c: FC.sage, chg: "Do not cut. Eating less because you are training less is how fights are lost.", r: ["Do not cut. The commonest way to lose a fight is eating less because you're training less."] },
-  fight:   { n: "FIGHT WEEK", sub: "", t: BASE_TARGET, c: FC.copper, r: ["The day as printed.", "Weigh-in day per the weight section."] },
+  fight:   { n: "FIGHT WEEK", sub: "", t: BASE_TARGET, c: FC.copper, r: ["The day as printed — or, making weight, your last step, then the light days.", "Weigh-in day as Making Weight writes it."] },
   trans:   { n: "TRANSITION", sub: "The two weeks after a fight", t: { kcal: 3300, p: 235, c: 420, f: 78 }, c: FC.frost, chg: "No three o'clock on Monday, Wednesday and Thursday; Saturday's big portion standard.",
              r: ["No three o'clock on Monday, Wednesday and Thursday; Saturday's big portion back to standard.", "Maintenance. Protein holds so the muscle does."] },
-  cut:     { n: "MAKING WEIGHT", sub: "Only when the limit demands it", t: { kcal: 3100, p: 200, c: 400, f: 70 }, c: FC.copper, chg: "Carbs off the light days, never protein, never the bottle, never the loads.",
-             r: ["Carbs off the light days, never protein, never the bottle, never the loads.", "Cut in order: the casein, then Saturday's BIG back to standard, then one of the three o'clock bananas on Monday and Thursday.", "Half a percent of bodyweight a week, no faster."] },
 };
 
 /* ================================================================
@@ -356,7 +485,9 @@ export const EASY_WATER = 500;
    with a feed is on the feed's row, and the rest are rows of their own.
    ================================================================ */
 export function fuelPlan(o) {
+  const W = o.w || null;
   if (o.fight) return fightDayPlan(o);
+  if (W && W.kind === "weighin") return weighInDayPlan(o);
   const day = o.day, weekend = day === "sat" || day === "sun", work = !weekend;
   const sess = !!o.session;
   const S = o.start, len = Number(o.len) || 0;
@@ -365,35 +496,50 @@ export function fuelPlan(o) {
   const wake = !sess ? S : weekend ? S - 120 : S - 30;
   const bf = !sess ? wake + 15 : weekend ? S - 105 : S + len + 15;
   const lights = o.lights;
+  const light = !!W && W.kind === "light", lowFibre = !!W && W.kind === "lowfibre";
+  const step = W && W.kind === "step" ? W.step || 0 : 0;
+  const drops = W && W.kind === "step" ? stepDrops(step) : {};
 
   const plan = D[day];
-  const feeds = phaseFeeds(o.phase, day, plan.feeds).filter((f) => f.b);
+  const feeds = (light ? LIGHT_FEEDS : phaseFeeds(o.phase, day, plan.feeds, !!W)).filter((f) => f.b);
   const seen = {}, rows = [];
   let lunchN = 0;
   feeds.forEach((f) => {
-    if (!sess && (f.b === "halfban" || f.b === "half" || f.b === "half2ban")) return;
-    const base = BASE_OF[f.b] || f.b, slot = slotOf(f.b);
+    if (!sess && (f.b === "halfban" || f.b === "half" || f.b === "half2ban" || f.b === "lighthalf")) return;
+    const fixed = !!f.slot;
+    const base = BASE_OF[f.b] || f.b, slot = f.slot || slotOf(f.b);
+    if (slot && drops[slot]) return;
     let pickId = null, key = base, nth = 0;
     if (slot) {
       nth = seen[slot] || 0; seen[slot] = nth + 1;
-      pickId = day + "-" + slot + (nth ? "-" + nth : "");
-      const chosen = picks[pickId];
-      if (chosen && SLOTS[slot].opts.indexOf(chosen) >= 0) key = chosen;
+      if (!fixed) {
+        pickId = day + "-" + slot + (nth ? "-" + nth : "");
+        const chosen = picks[pickId];
+        const allowed = lowFibre ? lowFibreOpts(slot) : SLOTS[slot].opts;
+        if (chosen && allowed.indexOf(chosen) >= 0) key = chosen;
+        else if (allowed.indexOf(key) < 0) key = allowed[0];
+      }
     }
-    const big = !!BIGKEY[f.b];
-    const blk = slot ? blockOf(key, slot, big) : B[key];
+    const role = slot === "lunch" ? (nth ? "lunch" : "mid") : null;
+    const wctx = W && !fixed && slot ? { step, day, role, lowFibre } : null;
+    let big = !!BIGKEY[f.b];
+    let blk;
+    if (fixed || !slot) blk = B[key];
+    else { const sb = stepBlockOf(key, slot, big, wctx); blk = sb.blk; big = sb.big; }
     let t;
-    if (f.b === "halfban") t = weekend ? S - 30 : S - 20;
-    else if (f.b === "half") t = S + len;
-    else if (f.b === "porridge" || f.b === "porridgeb") t = bf;
+    if (f.b === "halfban" || f.role === "pre") t = weekend ? S - 30 : S - 20;
+    else if (f.b === "half" || f.role === "post") t = S + len;
+    else if (slot === "breakfast") t = bf;
     else if (f.b === "half2ban") t = S + len + 15;
-    else if (f.b === "batch" || f.b === "batchbig") { const b = breaks[Math.min(lunchN, breaks.length - 1)]; lunchN++; t = work && b ? tMin(b) : tMin(f.t); }
+    else if (slot === "lunch") { const b = breaks[Math.min(lunchN, breaks.length - 1)]; lunchN++; t = work && b ? tMin(b) : tMin(light && weekend ? (lunchN === 1 ? "11:30" : "14:30") : f.t); }
     else if (f.b === "casein" && lights != null) t = lights - 30;
     else t = tMin(f.t);
     const id = "f-" + (slot ? slot + (nth ? "-" + nth : "") : f.b);
     const col = slot === "pre" && !!COLLAGEN_DAYS[day];
-    rows.push({ id, kind: "feed", t, b: f.b, base, key, slot, big, pickId, blk: col ? withCollagen(blk) : blk, crit: !!f.crit,
-      note: col ? COLLAGEN_NOTE : f.note || "", sub: f.sub || "", ml: 0, collagen: col });
+    const blk2 = col ? (light ? withCollagenNoOJ(blk) : withCollagen(blk)) : blk;
+    rows.push({ id, kind: "feed", t, b: f.b, base, key, slot, big, big0: !!BIGKEY[f.b], fixed, pickId, blk: blk2, crit: !!f.crit,
+      note: col ? (light ? "Collagen in water on a tendon day, without the orange juice." : COLLAGEN_NOTE) : f.note || "", sub: f.sub || "", ml: 0, collagen: col,
+      w: wctx, lowFibre });
   });
   const feedOf = (pred) => rows.find((r) => r.kind === "feed" && pred(r));
   const lunch = rows.filter((r) => r.slot === "lunch");
@@ -441,8 +587,10 @@ export function fuelPlan(o) {
     rows.push({ id: "w-sauna2", kind: "water", anchor: "sauna-after", ml: SAUNA_WATER.after, n: "500 ml after the sauna, with a second sachet", sachet: "A SECOND SACHET", note: "Twenty minutes in a sauna is half a litre gone." });
   }
   const target = (weekend ? 4000 : 4500) + (o.sauna ? 500 : 0);
-  return { rows, target, weekend, work, wake, call: plan.call, dayName: plan.n, star: plan.star, tag: plan.tag };
+  const call = light ? ["THE LIGHT DAYS", LIGHT_CALL] : plan.call;
+  return { rows, target, weekend, work, wake, call, dayName: light ? "THE LIGHT DAYS" : plan.n, star: plan.star, tag: plan.tag };
 }
+const LIGHT_CALL = "Low fibre and fewer carbs: this menu replaces the whole day. No three o'clock and no 5pm load. Salt as normal, creatine as normal, and every drink on the schedule.";
 
 /* The water a row carries once it is ticked. A dark urine check is 500 ml
    of its own, per the document. */
@@ -466,19 +614,73 @@ export const FIGHT_DAY = {
   bicarb: "The March fight only, and only after a trial on a Sunday simulation in camp — the dose and timing trialled. The dose is large and stomach upset is common; fight night is no place to find out.",
   sips: "Sips of water with electrolytes through the warm-up and between rounds, nothing else.",
 };
+/* The top-up line after a day-before weigh-in, worked out from the
+   fight-week Sunday average when the weight plan ran. */
+const topUpLine = (L) => (L && L.under != null
+  ? (L.under > 0 ? "You weighed in " + L.under.toFixed(1) + " kg under your fight-week Sunday average of " + L.fw.toFixed(1) + ": drink " + L.lo.toFixed(1) + "–" + L.hi.toFixed(1) + " litres, an electrolyte sachet in every litre, sipped steadily, not gulped."
+    : "You weighed in at or over your fight-week Sunday average of " + L.fw.toFixed(1) + ": drink to the alarms, a sachet in every litre.")
+  : null);
+const topUpHead = (L) => (L && L.under != null && L.under > 0 ? "Top up — " + L.lo.toFixed(1) + "–" + L.hi.toFixed(1) + " litres, sipped" : L && L.under != null ? "Top up — drink to the alarms" : "Top up — 1.25–1.5 litres for every kilo under your fight-week Sunday average");
+export const WEIGH_DEFAULT = { am: "09:00", before: "17:00", day: "09:00" };
+
+/* THE WEIGH-IN DAY, weighing in the day before (weight-making.md). Wake,
+   toilet, scales. A morning weigh-in: nothing to eat until it's done,
+   sip water to thirst. Later on: small low-fibre feeds every three hours,
+   the last two hours before, about 250 ml an hour; over the morning aim,
+   the small feeds halve. Then the FIGHT DAY rows. */
+function weighInDayPlan(o) {
+  const W = o.w, sess = !!o.session, weekend = o.day === "sat" || o.day === "sun";
+  const S = o.start, wake = !sess ? S : weekend ? S - 120 : S - 30;
+  const at = W.weighAt != null ? W.weighAt : tMin(WEIGH_DEFAULT[W.weighIn] || "17:00");
+  const lights = o.lights != null ? o.lights : tMin("21:30");
+  const rows = [];
+  const feed = (id, t, b, extra) => rows.push(Object.assign({ id, kind: "feed", t, b, base: b, key: b, slot: null, big: false, pickId: null, blk: B[b], crit: 0, note: "", sub: "", ml: 0 }, extra || {}));
+  const water = (id, t, ml, n, extra) => rows.push(Object.assign({ id: "w-" + id, kind: "water", t, ml, n }, extra || {}));
+  if (W.weighIn === "am") {
+    water("wake", wake + 1, 0, "Sip water to thirst until you've weighed in", { note: "Nothing to eat until you've weighed in. Take your after-weigh-in food and the bottle with you." });
+  } else {
+    water("wake", wake + 1, 0, "Sip water through the day — about 250 ml an hour", { note: "Small sips, all day, up to the weigh-in." });
+    const small = ["wieggs", "wihalf", "wichicken"], times = [];
+    for (let t = at - 120; t >= wake + 30; t -= 180) times.unshift(t);
+    times.forEach((t, i) => { const b = small[i % 3];
+      feed("f-wsmall" + (i ? "-" + i : ""), t, b, { blk: W.overAim ? half(B[b]) : B[b],
+        note: i === times.length - 1 ? "The last one, two hours before you weigh in." : W.overAim ? "Over the morning aim: half the small feed, and keep sipping." : "Small and low-fibre." }); });
+  }
+  water("weighin", at, 0, "The weigh-in", { weighin: 1, note: "Most shows give you a re-weigh within an hour or two if you're over." });
+  if (W.weighIn === "am") feed("f-after", at + 10, "half", { blk: B.half, note: "Your after-weigh-in food and the bottle — taken with you." });
+  water("rehyd", at + 15, 0, topUpHead(W.litres), { sachet: "A SACHET IN EVERY LITRE", cre: 1, note: topUpLine(W.litres) || FIGHT_DAY.rehydrate });
+  let n = 0;
+  for (let t = at + 30; t <= lights - 60; t += 120) feed("f-fcarb" + (n ? "-" + n : ""), t, "fcarb", { note: n ? "" : "Every hour or two from here until three hours before the bell." }), n++;
+  rows.sort((a, b) => a.t - b.t);
+  return { rows, target: 0, weekend, work: false, wake, call: ["WEIGH-IN DAY", W.weighIn === "am" ? "Wake, toilet, scales. Nothing to eat until you've weighed in; sip water to thirst. Then the top-up starts." : "Wake, toilet, scales. Small low-fibre feeds every three hours, the last two hours before you weigh in; sip about 250 ml an hour. Then the top-up starts."],
+    dayName: "WEIGH-IN DAY", star: 1, tag: "the weigh-in" };
+}
+
 function fightDayPlan(o) {
+  const W = o.w || null;
   const B0 = o.start, wake = Math.min(tMin("07:00"), B0 - 360), last = B0 - 180, rows = [];
   const feed = (id, t, b, extra) => rows.push(Object.assign({ id, kind: "feed", t, b, base: b, key: b, slot: null, big: false, pickId: null, blk: B[b], crit: 0, note: "", sub: "", ml: 0 }, extra || {}));
   const water = (id, t, ml, n, extra) => rows.push(Object.assign({ id: "w-" + id, kind: "water", t, ml, n }, extra || {}));
-  water("wake", wake + 1, 500, "500 ml water on waking", { cre: 1 });
-  if (o.weighIn !== "day") {
-    water("rehyd", wake + 5, 0, "Top up — 1.25–1.5 litres for every kilo under your normal morning weight", { sachet: "A SACHET IN EVERY LITRE", note: FIGHT_DAY.rehydrate });
-    let n = 0;
-    for (let t = wake + 30; t <= last - 60; t += 120) feed("f-fcarb" + (n ? "-" + n : ""), t, "fcarb", { ml: 0, note: n ? "" : "Every hour or two until three hours out." }), n++;
+  if (o.weighIn === "day" && W) {
+    /* making weight, weighing in on the day: nothing before the scales */
+    const at = W.weighAt != null ? W.weighAt : tMin(WEIGH_DEFAULT.day);
+    water("wake", wake + 1, 0, "Sips of water — nothing to eat until you've weighed in", { note: "Wake, toilet, scales. Then nothing to eat until the official scales; sip water." });
+    water("weighin", at, 0, "The weigh-in", { weighin: 1, note: "Most shows give you a re-weigh within an hour or two if you're over." });
+    const bt = at + 15;
+    feed("f-breakfast", bt, "eggbagelbf", { slot: "breakfast", blk: blockOf("eggbagelbf", "breakfast", true), ml: 300, cre: 1, wnote: "300 ml water with it, the creatine in it.", note: "Weighed in: eat the day as a normal Saturday, low-fibre, and drink to the alarms." });
+    if (tMin("11:30") >= bt + 120 && tMin("11:30") <= last - 60) feed("f-lunch", tMin("11:30"), "chickpouch", { slot: "lunch", blk: blockOf("chickpouch", "lunch", true), ml: 500, wnote: "500 ml water with it." });
+    if (tMin("14:30") >= bt + 120 && tMin("14:30") <= last - 60) feed("f-lunch-1", tMin("14:30"), "chickpouch", { slot: "lunch", ml: 500, wnote: "500 ml water with it." });
   } else {
-    feed("f-breakfast", wake + 15, "porridgeb", { slot: "breakfast", ml: 300, wnote: "300 ml water with it.", note: "Weighed in on the day: eat the day as a normal Saturday and drink to the alarms." });
-    if (tMin("11:30") <= last - 60) feed("f-lunch", tMin("11:30"), "batchbig", { slot: "lunch", ml: 500, wnote: "500 ml water with it." });
-    if (tMin("14:30") <= last - 60) feed("f-lunch-1", tMin("14:30"), "batch", { slot: "lunch", ml: 500, wnote: "500 ml water with it." });
+    water("wake", wake + 1, 500, "500 ml water on waking", { cre: 1 });
+    if (o.weighIn !== "day") {
+      water("rehyd", wake + 5, 0, W ? topUpHead(W.litres) : "Top up — 1.25–1.5 litres for every kilo under your normal morning weight", { sachet: "A SACHET IN EVERY LITRE", note: (W && topUpLine(W.litres)) || FIGHT_DAY.rehydrate });
+      let n = 0;
+      for (let t = wake + 30; t <= last - 60; t += 120) feed("f-fcarb" + (n ? "-" + n : ""), t, "fcarb", { ml: 0, note: n ? "" : "Every hour or two until three hours out." }), n++;
+    } else {
+      feed("f-breakfast", wake + 15, "porridgeb", { slot: "breakfast", ml: 300, wnote: "300 ml water with it.", note: "Weighed in on the day: eat the day as a normal Saturday and drink to the alarms." });
+      if (tMin("11:30") <= last - 60) feed("f-lunch", tMin("11:30"), "batchbig", { slot: "lunch", ml: 500, wnote: "500 ml water with it." });
+      if (tMin("14:30") <= last - 60) feed("f-lunch-1", tMin("14:30"), "batch", { slot: "lunch", ml: 500, wnote: "500 ml water with it." });
+    }
   }
   feed("f-fight3", last, "flast", { crit: 1, ml: 300, wnote: "300 ml water with it." });
   if (o.march) water("bicarb", B0 - 90, 0, "Sodium bicarbonate — the March fight, as trialled", { note: FIGHT_DAY.bicarb });

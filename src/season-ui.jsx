@@ -34,7 +34,7 @@ export function SeasonView({ season, st, current, classic, dayIso, openWeek }) {
           <div style={Object.assign({}, dsp, { fontSize: 28, fontWeight: 800, letterSpacing: 1.3, color: C.chalk })}>NO FIGHT BOOKED</div>)}
         <div style={Object.assign({}, bdy, { fontSize: 18, color: C.chalk, marginTop: 10, lineHeight: 1.5 })}>
           {classic ? "The classic program, on its own clock. Settings → Fight booked? builds a season."
-            : s.booked ? s.rounds + " × " + s.mins + " · " + s.rest + " s rest · weigh-in " + (s.weighIn === "day" ? "on the day" : "the day before") + " · " + s.fitness + " fitness · emphasis " + s.emphasis
+            : s.booked ? s.rounds + " × " + s.mins + " · " + s.rest + " s rest · weigh-in " + (s.weighIn === "day" ? "on the day" : s.weighIn === "am" ? "the day before, morning" : "the day before, afternoon or evening") + (Number(s.limit) > 0 ? " · limit " + s.limit + " kg" : "") + " · " + s.fitness + " fitness · emphasis " + s.emphasis
             : "Prep's 16-week cycle, on repeat. Settings → Fight booked? builds a camp."}
         </div>
         {st.planNote ? <Note c={C.brass}>{st.planNote}</Note> : null}

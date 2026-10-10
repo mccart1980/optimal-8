@@ -5,12 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vitest run src/builder.test.js src/proof.test.jsx src/library.test.jsx && vite build",
+    "build": "vitest run src/builder.test.js src/proof.test.jsx src/library.test.jsx src/weight.test.js src/weight-food.test.js src/weight-ui.test.jsx && vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "icons": "node scripts/generate-icons.mjs",
     "test:library": "vitest run src/library.test.jsx",
-    "test:proof": "vitest run src/builder.test.js src/proof.test.jsx"
+    "test:proof": "vitest run src/builder.test.js src/proof.test.jsx src/weight.test.js src/weight-food.test.js src/weight-ui.test.jsx"
   },
   "dependencies": {
     "react": "^19.2.8",

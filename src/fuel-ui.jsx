@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { C as M, dsp, bdy, mno, buzz, num, iso, parseISO } from "./ui.jsx";
-import { B, SHOP, AS_YOU_USE, YIELDS, PHASES, MEASURES, UPPER, WEEKLY, tapeSeries, verdicts, SLOTS, blockOf, hhmm, SACHET, CREATINE } from "./fuel.js";
+import { B, SHOP, AS_YOU_USE, YIELDS, PHASES, MEASURES, UPPER, WEEKLY, tapeSeries, verdicts, SLOTS, blockOf, stepBlockOf, lowFibreOpts, hhmm, SACHET, CREATINE } from "./fuel.js";
 
 /* ================================================================
    FUEL — the screens that came across from the fuel app: COOK, SHOP,
@@ -313,7 +313,7 @@ function Trend({ lines, unit }) {
     </svg>);
 }
 
-export function Referee({ tape, setTape, phase }) {
+export function Referee({ tape, setTape, phase, weightOn }) {
   const rows = (tape || []).slice().sort((a, b) => a.d < b.d ? -1 : 1);
   const [d, setD] = useState(iso(sundayOf(new Date())));
   const [f, setF] = useState({ kg: "", waist: "", arm: "", shoulder: "" });
@@ -334,7 +334,7 @@ export function Referee({ tape, setTape, phase }) {
   const drop = (date) => { setTape(rows.filter((r) => r.d !== date)); buzz(30); };
 
   const P = phase ? PHASES[phase] : null;
-  const V = verdicts(rows);
+  const V = verdicts(rows, weightOn);
   const lit = V.filter((v) => v.lit);
   const latest = (k) => { const p = tapeSeries(rows, k); return p.length ? p[p.length - 1].v : null; };
 
@@ -399,7 +399,7 @@ export function Referee({ tape, setTape, phase }) {
               <span style={Object.assign({}, mno, { fontSize: FS(9), fontWeight: 700, color: v.lit ? C.copper : C.ash, flexShrink: 0, marginTop: 2 })}>{v.lit ? "●" : "○"}</span>
               <span style={{ flex: 1, minWidth: 0 }}>
                 <div style={Object.assign({}, bdy, { fontSize: FS(13), fontWeight: 600, color: v.lit ? C.bone : C.ash })}>{v.head}</div>
-                <div style={Object.assign({}, mno, { fontSize: FS(10), color: v.lit ? C.honey : C.ash, marginTop: 3 })}>{v.read}</div>
+                <div data-testid={v.paused ? "referee-paused" : undefined} style={Object.assign({}, mno, { fontSize: FS(10), color: v.lit ? C.honey : C.ash, marginTop: 3 })}>{v.read}</div>
                 {v.lit ? <div style={Object.assign({}, bdy, { fontSize: FS(12.5), color: C.bone, marginTop: 5, lineHeight: 1.5 })}>{v.act}</div> : null}
               </span>
             </div>
@@ -439,8 +439,12 @@ const WaterChips = ({ row, checks }) => {
 /* A feed: what's on the plate, the cooked weights for the batch, the
    document's note, and the slot's matched options to swap to. */
 export function FeedBody({ row, cook, onPick, checks }) {
-  const bl = row.blk, S = row.slot ? SLOTS[row.slot] : null;
-  const opt = (k, first) => { const b = blockOf(k, row.slot, row.big), sel = k === row.key;
+  const bl = row.blk, S = row.slot && !row.fixed ? SLOTS[row.slot] : null;
+  /* making weight: every option at the day's step; the low-fibre days
+     offer only the low-fibre ones */
+  const allowed = S && row.lowFibre ? lowFibreOpts(row.slot) : null;
+  const okOpt = (k) => !allowed || allowed.indexOf(k) >= 0;
+  const opt = (k, first) => { const b = row.w ? stepBlockOf(k, row.slot, row.big0, row.w).blk : blockOf(k, row.slot, row.big), sel = k === row.key;
     return (
       <button key={k} onClick={() => { onPick(row.pickId, k === row.base ? null : k, k); buzz(20); }}
         aria-label={"Choose " + b.n}
@@ -478,12 +482,12 @@ export function FeedBody({ row, cook, onPick, checks }) {
             {S.t ? <span style={Object.assign({}, mno, { fontSize: FS(9), color: C.ash, marginBottom: 6 })}>{S.t}</span> : null}
           </div>
           {S.groups
-            ? S.groups.map((g, gi) => (
+            ? S.groups.filter((g) => g[1].some(okOpt)).map((g, gi) => (
                 <div key={g[0]} style={{ marginTop: gi ? 8 : 0 }}>
                   <Eye s={{ marginBottom: 2, color: C.frost }}>{g[0]}</Eye>
-                  {g[1].map((k, oi) => opt(k, oi === 0))}
+                  {g[1].filter(okOpt).map((k, oi) => opt(k, oi === 0))}
                 </div>))
-            : S.opts.map((k, oi) => opt(k, oi === 0))}
+            : S.opts.filter(okOpt).map((k, oi) => opt(k, oi === 0))}
           {S.note ? <Note s={{ fontStyle: "italic" }}>{S.note}</Note> : null}
         </div>) : null}
     </div>);

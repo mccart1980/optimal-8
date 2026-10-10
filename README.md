@@ -49,10 +49,18 @@ are four tabs: **TODAY · PROGRESS · FOOD · MORE**.
   and the four fuel documents.
 - **MORE → GUIDE** is one plain-English guide with one live panel: this week's block,
   the food phase, the tests this week, and the next feed.
-- **MORE → SETTINGS** is one set: Fight booked? and its answers, the
-  making-weight switch, the break times and the session length per weekday,
-  text size, THE EDGE, the units. The fuel phase is read off the app's one
-  season.
+- **MORE → SETTINGS** is one set: Fight booked? and its answers — the weigh-in
+  (the day before in the morning, the day before in the afternoon or evening,
+  or on the day) and the weight limit, tolerance and natural weight — the
+  break times and the session length per weekday, text size, THE EDGE, the
+  units. The fuel phase is read off the app's one season.
+- **MAKING WEIGHT** (weight-making.md) runs whenever the fight has a weight
+  limit: the scales first thing every morning, a line with an aim for every
+  Sunday, the Sunday check moving the food one step at most (Steps 0–4, every
+  food card at its step), the light days and the weigh-in day in fight week,
+  and off the day after the fight. Food only — never water, never extra
+  training; it never changes a session. Its eight proof tests run in the
+  build (`src/weight*.test.*`).
 - **Bringing the fuel app's data across:** SETTINGS → *The fuel app — bring it
   across* → IMPORT THE FUEL APP'S BACKUP, and pick the `.json` file the fuel app
   exported. Your chosen options, cooked-batch weights, saved ratios, shopping

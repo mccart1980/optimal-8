@@ -6,6 +6,7 @@ import { buildSeason, rowRx, rowDates, CYCLE16, prepLayout, campLayout } from ".
 import { campRow } from "./camp.js";
 import { prepEmphasis } from "./prep.js";
 import { GRID } from "./proof-grid.js";
+import { weightCfg, runPlan } from "./weight.js";
 
 /* ================================================================
    THE PROOF — the six tests. `npm run build` runs this file and
@@ -349,4 +350,28 @@ describe("proof 6 — no released weights, no true maxes, no depth jumps before 
     expect(weeks).toBeGreaterThan(20000);
     expect(bad.slice(0, 20)).toEqual([]);
   }, 300000);
+});
+
+/* ---------------- 6 · the weight plan ----------------
+   season-builder.md's test 6: Making Weight's proof tests, exactly — they
+   run in weight.test.js, weight-food.test.js and weight-ui.test.jsx, in the
+   build — and here, Worked Example 1 with its limit: the food runs by
+   Making Weight's worked example, the training untouched by it. */
+describe("proof 6 — the weight plan", () => {
+  const WE1 = { fight: "2026-11-28", rounds: 3, mins: 2, rest: 60, weighIn: "before", fitness: "low", emphasis: "durability" };
+  const strip = (s) => JSON.stringify(s.rows.map((r) => Object.assign({}, r, { inputs: undefined, under: undefined, camp: r.camp ? Object.assign({}, r.camp, { inputs: undefined }) : r.camp })));
+  it("Worked Example 1 with limit 76, tolerance 1, natural weight 80: the same seven weeks, week for week", () => {
+    const a = buildSeason({ plans: [plan("2026-10-12", "2026-10-08", WE1)], today: "2026-10-08" });
+    const b = buildSeason({ plans: [plan("2026-10-12", "2026-10-08", Object.assign({}, WE1, { limit: 76, tol: 1, natural: 80 }))], today: "2026-10-08" });
+    expect(campRows(b).map((r) => r.id)).toEqual(["F1", "F", "B2", "P1", "P3", "S", "FW"]);
+    expect(strip(b)).toBe(strip(a));
+    expect(builderMd).toMatch(/limit 76 kg, tolerance 1 kg, natural weight 80 kg \(the food runs by Making Weight's worked example; the training below is untouched by it\)/);
+  });
+  it("and its weight plan is Making Weight's worked example: ceiling 77.0, aims to 77.5, Step 2", () => {
+    const cfg = weightCfg(Object.assign({ booked: true }, WE1, { limit: 76, tol: 1, natural: 80 }));
+    const p = runPlan({ draws: [{ at: "2026-10-11", cfg }], weights: { "2026-10-11": 83.0 }, today: "2026-10-11" });
+    expect(p.line.C).toBe(77.0);
+    expect(p.line.aims.map((x) => Math.round(x * 10) / 10)).toEqual([81.1, 79.2, 78.8, 78.3, 77.9, 77.5]);
+    expect(p.line.firstStep).toBe(2);
+  });
 });
