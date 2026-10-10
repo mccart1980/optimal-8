@@ -449,10 +449,10 @@ You cannot get fitter this week. You can only get fresher or more tired. Every d
 | Tuesday 9 Mar | SPEED MICRODOSE · 25 min: warm-up, 3 × 20 m flying sprints at 90%, box jumps 2 × 3, rotational throws 2 × 3 per side, bench throws 3 × 3. Fast, nothing tired, done. |
 | Wednesday 10 Mar | Nothing. RANGE at half dose, the sit. |
 | Thursday 11 Mar | ACTIVATION · 20 min: Tuesday's warm-up, band pull-aparts and external rotations, three easy throws per side, two minutes of shadow boxing at pace, three physiological sighs, done. |
-| Friday 12 Mar | Weigh-in if there is one. Nothing else. Feet up. The rehearsal's meals. Bed early. |
+| Friday 12 Mar | Weigh-in if there is one — Making Weight's weigh-in day if you're making weight, the rehearsal's meals if not. Nothing else. Feet up. Bed early. |
 | Saturday 13 Mar | FIGHT. The warm-up you rehearsed. The corner minute in every rest. Round six is a place you've already been. |
 
-Food this week holds — the fuel plan's fight-week phase, and the making-weight phase only if you decided on it in week 1. The commonest way to lose a fight in the last week is to eat less because you're training less and arrive at the ring empty.
+Food this week holds — the day as printed, or, if you're making weight, your last step and then Making Weight's light days. The commonest way to lose a fight in the last week is to eat less because you're training less and arrive at the ring empty.
 
 **After the fight:** first, the head check. If you were stopped or dropped, or have any symptoms afterwards — headache, fogginess, feeling slowed down, dizziness, sensitivity to light or noise — see a doctor before any training, and don't train until you're cleared; a medical suspension overrides everything here. A severe or worsening headache, repeated vomiting, confusion or drowsiness is A&E, straight away. Then the two-week transition — three or four days of nothing but RANGE, the sit and walking, then two easy weeks — and Prep restarts when the strap says the numbers are back to baseline.
 
@@ -462,7 +462,7 @@ Food this week holds — the fuel plan's fight-week phase, and the making-weight
 
 The fuel plan's camp phases, Menu A or Menu B meal by meal, with the hydration schedule: the bottle around every session, the 5pm loads on Tuesday, Friday and Saturday, the batch through the day, casein before bed, the tape at weeks 5 and 9. Seven-round-plus weeks keep the mid-session banana; sauna days keep the hydration schedule's sauna line.
 
-**Weight:** weigh on the Sunday of week 1. Within 2% of the limit — do nothing but hold the food. Between 2% and 5% over — the fuel plan's making-weight phase from week 2, half a percent a week, never from protein, never the bottle, never the 5pm loads. More than 5% over — a decision in week 1: a different weight, because a camp that has to cut hard in the last fortnight arrives at the ring flat, and this program will not do that to you.
+**Weight:** if the fight has a weight limit, it goes in under Fight booked? and Making Weight runs the food — the scales every morning, an aim for every Sunday, one step of food up or down at each weekly check, the light days in fight week, never from protein, never the bottle, never the 5pm loads, and never water. If the limit can't be reached at a safe pace, the app says so the day you enter it and again two Sundays before fight week, while there's still time to change the weight — because a camp that has to cut hard in the last fortnight arrives at the ring flat, and this program will not do that to you.
 
 ---
 

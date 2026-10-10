@@ -7,7 +7,7 @@
 1. **Half the bottle and a carb twenty minutes before every session; the other half straight after.** Every day you train.
 2. **The 5pm load on Tuesday, Friday and Saturday never moves.** It's loading tomorrow's session. Low fat, low fibre, easy to move on.
 3. **Every feed, every day, whether you're hungry or not.** The plan is the plan; the tape is the referee.
-4. **The phase sets the amounts.** The app knows the block you're in and adds or removes a feed. Don't add anything back.
+4. **The phase sets the amounts — and the step, when you're making weight.** The app knows the block you're in and the step you're on, and adds, removes or trims a feed. Don't add anything back.
 5. **Drink when the alarm says.** The litre with a sachet at work start, empty by nine.
 
 ## THE DAY
@@ -135,11 +135,11 @@ Steak on the two heavy days. Salmon twice a week if you'll eat it — the one li
 
 ## FIGHT DAY — WEIGH-IN TO BELL
 
-**No water cuts, ever.** If there's weight to make, it comes off through food in the weeks before, half a percent of bodyweight a week at most — dehydration on top of hard training is the combination to avoid.
+**No water cuts, ever.** If there's weight to make, MAKING WEIGHT takes it off through food in the weeks before, and the light days and the weigh-in day are written there — dehydration on top of hard training is the combination to avoid.
 
-**Weighed in the day before:** the hours between the scale and the bell are for topping up. Drink 1.25–1.5 litres for every kilo you're under your normal morning weight, an electrolyte sachet in every litre, sipped steadily, not gulped. Eat low-fibre carbohydrate — rice, bagels, white pasta, bananas, rice cakes with honey — about a gram per kilo of bodyweight every hour or two until three hours out. Nothing new, nothing fatty, nothing fibrous.
+**Weighed in the day before:** the hours between the scale and the bell are for topping up. Drink 1.25–1.5 litres for every kilo you're under your fight-week Sunday average — your normal morning weight if you weren't making weight — an electrolyte sachet in every litre, sipped steadily, not gulped. Eat low-fibre carbohydrate — rice, bagels, white pasta, bananas, rice cakes with honey — about a gram per kilo of bodyweight every hour or two until three hours out. Nothing new, nothing fatty, nothing fibrous.
 
-**Weighed in on the day:** eat the day as a normal Saturday and drink to the alarms.
+**Weighed in on the day:** if you were making weight, nothing to eat before the scales, only sips of water; then eat the day as a normal Saturday, low-fibre, and drink to the alarms.
 
 **Three hours out:** the last proper meal — a rice pouch, chicken, a banana. **One hour out:** half the bottle and a banana, or rice cakes and honey. **The warm-up and between rounds:** sips of water with electrolytes, nothing else.
 
@@ -152,9 +152,9 @@ Steak on the two heavy days. Salmon twice a week if you'll eat it — the one li
 | Phase | Daily average | The change |
 |---|---|---|
 | BUILD (Prep accumulation) | ~3,900 | The 5pm load on Monday and Thursday as well. |
-| HEAVY · FAST · TEST WEEK · CAMP · SHARPEN · FIGHT WEEK | ~3,600 | The day as printed. Do not cut in the light weeks. |
+| HEAVY · FAST · TEST WEEK · CAMP · SHARPEN · FIGHT WEEK | ~3,600 | The day as printed. Do not cut in the light weeks — only the weight plan's step changes it. |
 | TRANSITION (two weeks after a fight) | ~3,300 | No three o'clock on Monday, Wednesday and Thursday; Saturday's big portion standard. |
-| MAKING WEIGHT (only if the limit demands it) | ~3,100 | Carbs off the light days, never protein, never the bottle, never the loads. Half a percent a week. |
+| MAKING WEIGHT (any fight with a weight limit) | ~3,350 to ~2,700 | The step the Sunday check sets — MAKING WEIGHT, Steps 1–4, each card showing its own portion. Never protein, never the bottle, never the loads. The build block's extra loads don't run. |
 
 ## THE BATCH, THE PREP, THE SHOP
 

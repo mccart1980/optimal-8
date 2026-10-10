@@ -12,7 +12,8 @@
    - **The date.** The app counts the weeks.
    - **The format:** rounds × minutes, e.g. 3 × 2 or 6 × 3.
    - **Rest between rounds:** 1 minute unless you change it.
-   - **Weigh-in:** the day before, or on the day. It sets the fight-day food.
+   - **Weigh-in:** the day before in the morning, the day before in the afternoon or evening, or on the day. It sets the fight-day food.
+   - **Weight limit, if there is one:** the limit, any tolerance, and your natural weight. Making Weight (weight-making.md) runs the food to it from the next Monday; blank means no weight plan. It never changes the training.
    - **How fit you are right now:** low, moderate or good. The first tests confirm or correct it.
    - **Emphasis:** none, power, strength or durability. One, or none.
 
@@ -206,7 +207,7 @@ On automatically from low fitness, and in every short-notice camp. It doesn't ad
 1. **Three genuinely hard conditioning sessions a week at most** — Tuesday, Thursday, Sunday. Everything else easy.
 2. **The tendon ramp** in every camp from low fitness, and **the tendon gate** every Sunday: Achilles or knee at 3 or more out of 10 means no reactive jumps next week, with the tendon holds carried on; hamstring at 3 or more means no flying sprints next week, and Nordics only if they're pain-free. Back under 3, the jumps restart one stage down for a week. Any jump, sprint or hold that hurts more than 3 out of 10 while you do it, or is worse the next morning, stops that day; still there after two weeks, a physio looks at it.
 3. **Hydration is the rule, not a guide.** The sauna at most twice a week, never without the water.
-4. **No dehydration cuts, ever.** If there's weight to make, it comes off through food, half a percent of bodyweight a week at most.
+4. **No dehydration cuts, ever.** Weight is made with food only, by Making Weight: below your natural weight, never faster than 1% of it a week, and nothing below its Step 4. The training never changes to make weight.
 5. **Before every camp:** bloods — full blood count, lipids, liver and kidneys — and blood pressure. A resting ECG once a year. The app puts this in the week before the camp's first Monday.
 6. **No true maxes, ever — the heaviest work is a top triple, on pins. Friday sleeps. The strap gates every day**, and two yellow mornings in a week take the Edge off.
 7. **The Edge** starts from the first peak or engine week in a camp from low fitness or at short notice, and the tendon ramp overrides it.
@@ -282,7 +283,7 @@ Test day is week 16's Saturday. The next cycle starts the Monday after, its work
 
 ## WORKED EXAMPLE 1 — SATURDAY 28 NOVEMBER · 3 × 2 · LOW FITNESS · DURABILITY
 
-Entered: fight Saturday 28 November 2026 · 3 rounds × 2 minutes · 1 minute's rest · weigh-in the day before · low fitness · durability. Plan starts Monday 12 October. Seven weeks from low fitness → **F1 · F · B2 · P1 · P3 · S · FW**, engine-first, the tendon ramp, the short-format pairs.
+Entered: fight Saturday 28 November 2026 · 3 rounds × 2 minutes · 1 minute's rest · weigh-in the day before, afternoon or evening · low fitness · durability · limit 76 kg, tolerance 1 kg, natural weight 80 kg (the food runs by Making Weight's worked example; the training below is untouched by it). Plan starts Monday 12 October. Seven weeks from low fitness → **F1 · F · B2 · P1 · P3 · S · FW**, engine-first, the tendon ramp, the short-format pairs.
 
 **Before week 1, 8–11 October:**
 
@@ -333,3 +334,4 @@ The sauna runs twice a week in weeks 2–5. Everything else — the neck, the ha
 3. **The short camp.** Fight Saturday 28 November 2026, 3 × 2, 1 minute's rest, low fitness, durability, plan starting Monday 12 October 2026: Worked Example 1, week by week.
 4. **Prep fitted.** Prep with 14 weeks: Optimal 8 · Prep, exactly. Prep with 4 weeks: P4, P7, P8, P14.
 5. **Nothing invented.** Not one exercise, load or session type in any generated week that isn't written in Prep, the Camp or these pages.
+6. **The weight plan.** Making Weight's proof tests, exactly — and with no weight limit, no trace of it anywhere.

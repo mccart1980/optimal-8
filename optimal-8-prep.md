@@ -536,7 +536,7 @@ Wrist circles × 10 each way. Hollow hold, 2 × 20 seconds — on your back, low
 
 This program eats like the Fuel — Optimal 8 Fighter plan, Menu A or Menu B meal by meal, with the hydration schedule: half the bottle and a banana before every session and the other half after, the carb feed at 5pm the evening before every hard morning and before the weekend sessions, the batch through the day, casein before bed, and the tape every fortnight. One change for the accumulation block: weeks 1–5 add a CARB TOP-UP at 17:00 on Monday and Thursday — the two days without one — because five weeks of volume, size work and a longer base are a building block and the surplus is allowed to be 300, not 190. From week 6 it comes back off. The tape at weeks 1, 5 and 10 decides.
 
-**Weight for March:** weigh on the Sunday of week 1 and again at test day. If the fight weight is more than 5% below test-day weight, the camp starts on the making-weight section from its first week; within 5%, the camp decides in its own week 1. Nothing about the March limit changes what you eat in these fourteen weeks.
+**Weight:** when a fight with a weight limit goes in under Fight booked?, Making Weight runs the food from the next Monday, wherever you are in Prep, and the build block's extra 5pm loads don't run while it's on. Nothing else in Prep changes.
 
 ---
 
