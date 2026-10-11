@@ -466,7 +466,10 @@ export function FeedBody({ row, cook, onPick, checks }) {
       {bl.cook ? (() => {
         const parts = [];
         if (cook && cook.mince) parts.push("cooked mince ≈ " + cook.mince[bl.cook] + " g");
-        if (cook && cook.potato) parts.push("cooked sweet potato ≈ " + cook.potato[bl.cook] + " g");
+        /* only a plate with sweet potato on it (the wraps replace it);
+           the half-carb plate's "150g raw — half" is half a standard portion */
+        const pot = bl.i.find((x) => x[0] === "Sweet potato");
+        if (cook && cook.potato && pot) parts.push("cooked sweet potato ≈ " + (/half/.test(pot[1]) ? Math.round(cook.potato.std / 2) : cook.potato[bl.cook]) + " g");
         return parts.length
           ? <div style={Object.assign({}, mno, { fontSize: FS(10.5), color: C.sage, marginTop: 8, lineHeight: 1.5 })}>{parts.join(" · ")}</div>
           : <Note s={{ fontStyle: "italic" }}>Weigh each pan once in COOK and this row shows what one portion of each looks like cooked.</Note>;

@@ -4,6 +4,8 @@ import { render, screen, waitFor, fireEvent, within } from "@testing-library/rea
 import App from "./App.jsx";
 import { buildSeason } from "./builder.js";
 import { weightCfg } from "./weight.js";
+import { FeedBody } from "./fuel-ui.jsx";
+import { stepBlockOf } from "./fuel.js";
 
 /* ================================================================
    MAKING WEIGHT, in the app — weight-making.md's worked example and
@@ -212,5 +214,27 @@ describe("proof 8 — no limit", () => {
     /* and the morning-weight half of the weigh-in choice never moves a week either */
     const c = buildSeason({ plans: plans(Object.assign({}, FIGHT, LIMIT, { weighIn: "am" })), today: "2026-10-12" });
     expect(strip(c).replace(/"weighIn":"am"/g, '"weighIn":"before"')).toBe(strip(a));
+  });
+});
+
+describe("the FOOD card's cooked weights", () => {
+  const COOK = { mince: { std: 160, big: 215 }, potato: { std: 245, big: 285 } };
+  const card = (key, w) => render(<FeedBody row={{ blk: stepBlockOf(key, "lunch", false, w).blk, slot: "lunch", key, base: key, fixed: 1 }} cook={COOK} onPick={() => {}} />);
+
+  it("MINCE WRAPS + BANANA, two wraps and one, shows the mince and never the sweet potato", () => {
+    [null, { step: 2, day: "mon", role: "lunch" }].forEach((w) => {
+      const { container, unmount } = card("wraps", w);
+      expect(container.textContent).toContain("cooked mince ≈ 160 g");
+      expect(container.textContent).not.toMatch(/cooked sweet potato/);
+      unmount();
+    });
+  });
+
+  it("BATCH on a half-carb step shows half the standard sweet potato", () => {
+    const { container, unmount } = card("batch", { step: 2, day: "mon", role: "lunch" });
+    expect(container.textContent).toContain("150g raw — half");
+    expect(container.textContent).toContain("cooked mince ≈ 160 g · cooked sweet potato ≈ 123 g");
+    unmount();
+    expect(card("batch", null).container.textContent).toContain("cooked sweet potato ≈ 245 g");
   });
 });
