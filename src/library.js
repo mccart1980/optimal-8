@@ -90,7 +90,6 @@ const ROW_NAMES = {
   "weighted chin-up + the muscle-up line": ["WEIGHTED CHIN-UPS", "MUSCLE-UP LINE"],
 
 
-  "three physiological sighs": "ACTIVATION",
   "weigh in": "TAPE, WEIGHT AND PHOTOS",
   "the weigh in": "TAPE, WEIGHT AND PHOTOS",
   "walking": "TRANSITION WEEK",
@@ -146,6 +145,7 @@ const ROW_NAMES = {
   "hand": ["KNUCKLE HOLD", "BAND WRIST EXTENSION"],
   "full neck block": ["NECK FOUR-DIRECTION HOLDS", "NECK RAPID TENSE", "NECK PERTURBATION HOLD"],
   "neck": ["NECK FOUR-DIRECTION HOLDS", "NECK RAPID TENSE", "NECK PERTURBATION HOLD"],
+  "neck — holds only": "NECK FOUR-DIRECTION HOLDS",
   "four direction hold": "NECK FOUR-DIRECTION HOLDS",
   "4 direction hold": "NECK FOUR-DIRECTION HOLDS",
   "rapid tense": "NECK RAPID TENSE",

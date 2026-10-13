@@ -119,17 +119,21 @@ describe("TODAY — one thing at a time", () => {
     expect(screen.getByTestId("timer-part").textContent).toMatch(/ROUND 1 · DRIVE HOLD/);
   });
 
-  it("runs RANGE one move per card, with the move's library entry and its own timer", async () => {
+  it("runs RANGE one card at a time, in home-routines.md's words: HOLD with a clock, REPS with none", async () => {
     await mount(SAT);
     fireEvent.click(screen.getByRole("button", { name: "WHOLE DAY" }));
     const ev = screen.getByText("EVENING").closest("[data-chapter]");
     fireEvent.click(within(ev).getByRole("button", { expanded: false }));
     fireEvent.click(within(ev).getByText("RANGE"));
-    const runner = screen.getByTestId("move-runner");
-    expect(within(runner).getByText("MOVE 1 OF 25")).toBeInTheDocument();
-    fireEvent.click(within(runner).getByRole("button", { name: "Next move" }));
-    expect(within(runner).getByText(libFor("Foam roller extensions")[0].text)).toBeInTheDocument();
-    expect(within(runner).getByTestId("move-clock").textContent).toBe("0:30");
+    const runner = screen.getByTestId("routine-runner");
+    expect(within(runner).getByText("CARD 1 OF 27")).toBeInTheDocument();
+    expect(within(runner).getByTestId("routine-name").textContent).toBe("SETTLE");
+    expect(within(runner).getByTestId("routine-clock").textContent).toBe("1:00");
+    fireEvent.click(within(runner).getByRole("button", { name: "Next card" }));
+    expect(within(runner).getByTestId("routine-name").textContent).toBe("FOAM ROLLER — ARCH OVER IT");
+    expect(within(runner).queryByText(libFor("Foam roller extensions")[0].text)).not.toBeInTheDocument();
+    expect(within(runner).queryByTestId("routine-clock")).not.toBeInTheDocument();
+    expect(within(runner).getByTestId("routine-dose").textContent).toBe("REPS 8");
   });
 
   it("looks ahead to another day and another week from the top of TODAY", async () => {

@@ -19,20 +19,20 @@ import {
 import {
   LINES, lineById, curLevel, ownedDate, levelText, levelPres, calMode, DEF_CALIS,
   CALIS_INTRO, CALIS_RULES, SLOW_LAWS, SLOW_WHY, SKILL_BLOCK, MODE_LINE,
-  FRONT_LEVER_LINE, BACK_LEVER_LINE, PLANCHE_LINE, SUNDAY_LEVER, skillRowsO8, SKILL_MINS_O8,
+  FRONT_LEVER_LINE, BACK_LEVER_LINE, PLANCHE_LINE, SUNDAY_LEVER, fighterSkillCards,
 } from "./calis.js";
 import {
   BreatheView, SitView, HardshipView, IronTrack,
   BreathTool, GuidedTool, SitTool, ColdTimer, HeatTimer, FloorTool,
 } from "./im-ui.jsx";
 import { Lines, CheckTaps } from "./today.jsx";
-import { CardHead, BigBtn, SetButtons, Input, Checklist, MoveRunner, Chapter, secsOf, T1, T2, T3 } from "./now.jsx";
-import { Pacer } from "./im-ui.jsx";
+import { CardHead, BigBtn, SetButtons, Input, Checklist, RoutineRunner, Chapter, T1, T2, T3 } from "./now.jsx";
+import { Sheet } from "./im-ui.jsx";
+import { SIGHS, MORNING_FIVE, RANGE_CARDS, FIGHT_WEEK_CARDS, KEEP_CARDS, MOVE_CARDS, skillCards, ROUTINE_MINS } from "./routines.js";
 import { SeasonView, GuideView, ProfileTool } from "./season-ui.jsx";
 import { programTitle, PROGRAM_NAME } from "./program.js";
 import {
-  isTestWeek, isKeepWeek, rangeTitle, rangeMins, RANGE_INTRO,
-  MORNING_FIVE, MORNING_FIVE_ROWS, stepsFor, moveName, moveHow, secsLabel,
+  isTestWeek, isKeepWeek, rangeTitle, RANGE_INTRO,
 } from "./range.js";
 import { RangeTests, RangeTrack } from "./range-ui.jsx";
 import {
@@ -49,7 +49,7 @@ import {
 import { CampWeekTable, FightWeekTable, CampWorkPanel, CampNumbers, CampWeekCard } from "./camp-ui.jsx";
 import {
   PREP_INTRO, PREP_PHASE_NAME, PREP_PHASE_CUE, PENG, PENG_MENU, prepRx, prepEdge, prepEmphasis, prepTests,
-  FLEX_TESTS, MOVE_INTRO, MOVE_STEPS, MOVE_ROWS, MOVE_ROW_OF, moveTonight, CARB_TOPUP,
+  FLEX_TESTS, MOVE_INTRO, moveTonight, CARB_TOPUP,
   TRANSITION_INTRO, TRANSITION_RULES, prepSess, transitionSess, PPROTO, prepBench, topItem,
 } from "./prep.js";
 import {
@@ -927,8 +927,10 @@ function gymCards(blocks, rx, o) {
       /* a calisthenics line's own row reads its level; the block's other exercises read their own */
       if (b.cal && (single || LINE_OF[it.id] === b.cal || it.id === b.cal)) pres = [row.work, row.load, row.rest].filter(Boolean).join(" · ");
       else pres = [p[0] || v(it.s, rx), kg ? kg.join("–") + " kg" : p[1], bwp && o.bw ? Math.round(o.bw * bwp[0] / 100) + "–" + Math.round(o.bw * bwp[1] / 100) + " kg " + (it.bwl || "") : "", rest].filter(Boolean).join(" · ");
+      /* the three sighs are home-routines.md's THREE BIG SIGHS, not a library entry */
+      const sighs = /physiological sighs/i.test(nm);
       out.push(Object.assign({}, base, { key: single ? b.L : b.L + ":" + j, kind: it.k === "wr" ? "lift" : it.k === "out" ? "out" : it.k === "top" ? "top" : "chk",
-        n: nm, pres, item: it, kg, lib: it.k === "top" ? topLib(nm, itn) : firstLib(nm, itn), outs: it.k === "out" ? [it] : [],
+        n: nm, pres, item: it, kg, lib: sighs ? null : it.k === "top" ? topLib(nm, itn) : firstLib(nm, itn), desc: sighs ? SIGHS.words : null, outs: it.k === "out" ? [it] : [],
         /* the first work set is the first after a top triple */
         first: j === Math.max(0, its.findIndex((x) => x.k !== "top")), lastOfBlock: j === its.length - 1 }));
     });
@@ -985,7 +987,7 @@ export function sessionCatalog(only, seasons) {
       TESTS.filter((t) => !t.sun).forEach((t) => out.push(Object.assign({ program, week: w, day, n: t.n, lib: /top triple/i.test(t.n) ? topLib(t.n) : libFor(t.n), rows: [], say: t.n + " | " + t.d }, extra)));
       return;
     }
-    gymCards(realBlocks(day, rx), rx).forEach((c, i) => out.push(Object.assign({ program, week: w, day, edge: program === "prep" || program === "camp" ? EDGE.manual : null, lastTen: !!MODE.lastTen, i, n: c.n, kind: c.kind, lib: c.lib, pres: c.pres,
+    gymCards(realBlocks(day, rx), rx).forEach((c, i) => out.push(Object.assign({ program, week: w, day, edge: program === "prep" || program === "camp" ? EDGE.manual : null, lastTen: !!MODE.lastTen, i, n: c.n, kind: c.kind, lib: c.lib, desc: c.desc || null, pres: c.pres,
       rows: (c.list || []).filter((r) => r.move).concat(c.parts || []), say: sayOf(c, rx) }, extra)));
   };
   try {
@@ -1368,16 +1370,13 @@ export const checkReady = (a) => {
    start time entered at the top.
    ================================================================ */
 
-/* the nine guided segments of the morning five, folded onto its five rows */
-const M5_ROW = [0, 1, 1, 2, 2, 3, 3, 4, 4];
 const CASEIN_LINE = "Thirty to forty grams of slow protein, the last thing before the light goes off.";
-/* RANGE's steps and its rows, built once per shape, so the running timer
-   behind them is never reset by a re-render above it. */
-const RANGE_CACHE = {};
-const rangeSteps = (rw) => { const k = isKeepWeek(rw) ? "keep" : "range";
-  if (!RANGE_CACHE[k]) { const steps = stepsFor(rw, false);
-    RANGE_CACHE[k] = { steps, rows: steps.map((m, i) => ({ id: "r" + i, n: moveName(m.l), s: secsLabel(m.s) })) }; }
-  return RANGE_CACHE[k]; };
+/* The evening's RANGE: twelve weeks of RANGE, then THE KEEP; camp's
+   fight week runs it at half dose. Each is home-routines.md's cards. */
+export const rangeRoutine = (rw, fightWeek) => (fightWeek
+  ? { n: "RANGE — FIGHT WEEK", cards: FIGHT_WEEK_CARDS, mins: ROUTINE_MINS.fight }
+  : isKeepWeek(rw) ? { n: rangeTitle(rw), cards: KEEP_CARDS, mins: ROUTINE_MINS.keep }
+  : { n: rangeTitle(rw), cards: RANGE_CARDS, mins: ROUTINE_MINS.range });
 const parseHHMM = (s, fallback) => { const m = String(s || "").match(/^\s*(\d{1,2})\s*[:.]?\s*(\d{2})\s*$/); if (!m) return fallback;
   const h = Number(m[1]), x = Number(m[2]); if (h > 23 || x > 59) return fallback; return h * 60 + x; };
 
@@ -1414,7 +1413,10 @@ function fuelPhaseOf(st, week, isoDay) {
 
 /* The movement session, guided, as a full screen. */
 function MoveTool({ sound, onClose }) {
-  return <Pacer steps={MOVE_STEPS} sound={sound} title="THE MOVEMENT SESSION" sub="30 MIN · NOTHING HERE IS RUSHED" colour={C.violet} onClose={onClose} />;
+  return (
+    <Sheet title="THE MOVEMENT SESSION" sub={ROUTINE_MINS.move + " MIN · NOTHING HERE IS RUSHED"} colour={C.violet} onClose={onClose}>
+      <RoutineRunner cards={MOVE_CARDS} sound={sound} colour={C.violet} />
+    </Sheet>);
 }
 
 /* ================================================================
@@ -1621,7 +1623,7 @@ function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, st
     <BigBtn on={() => (onPainStop ? onPainStop() : setE(painKey, { stop: 1 }))} c={C.oxide} label="Hurts more than 3 out of 10: stop it for today" s={{ marginTop: 16 }}>HURTS MORE THAN 3/10 · STOP IT</BigBtn>)) : null;
   return (
     <div data-gym-card={card.key}>
-      <CardHead name={card.n} lib={card.lib} pres={card.pres} />
+      <CardHead name={card.n} lib={card.lib} desc={card.desc} pres={card.pres} />
       {painStopped ? null : extra}
       {painStopped ? null : body}
       {pain}
@@ -1654,6 +1656,8 @@ function Today(props) {
     fday, setFday, menu, cook, fuelPhase, stopTimer, setHead, wt,
   } = props;
 
+  /* the log as it is now, for writes from inside a running timer */
+  const logRef = useRef(log); logRef.current = log;
   /* the feed chime: a feed or a drink due now, while the app is open */
   const chimeRows = useRef([]), chimed = useRef({});
   const beep = useBeep(sound);
@@ -1714,18 +1718,25 @@ function Today(props) {
   const weekendDay = day === "sat" || day === "sun";
   const sauna = progSauna || (weekendDay && !!fd.sauna && !weekProgSauna);
   const ftick = (id, val) => setFday({ f: Object.assign({}, fticks, { [id]: !!val }) });
-  const moveOf = (l, s) => { const n = moveName(l); return { n, lib: libFor(n), desc: moveHow(l), pres: secsLabel(s), s }; };
+  /* a routine remembers its card for the day: leaving and coming back
+     returns to it */
+  const rtKey = (id) => dk + "-rt-" + id;
+  const routine = (cards) => ({ runner: cards });
 
   /* ---------------- MORNING ---------------- */
   const mNumbers = im("m-numbers", C.cobalt, "Resting heart rate and HRV", "", 1, "mnum",
     { input: () => { const rec = morning[shownIso] || {};
         const put = (f, val) => setMorning(Object.assign({}, morning, { [shownIso]: Object.assign({}, rec, { [f]: val }) }));
         return <div>{MORNING_FIELDS.map((f) => <Input key={f.id} label={f.n.toUpperCase() + " (" + f.u.toUpperCase() + ")"} v={rec[f.id]} on={(val) => put(f.id, val)} />)}</div>; } });
-  const mSighs = im("m-sighs", C.moss, "Three physiological sighs", "× 3 · 30 seconds", 1, "sighs",
-    Object.assign(fromLib("physiological sigh"), { tool: { label: "▶ START · 30 SECONDS", run: () => openTool({ kind: "breath", id: "sigh3" }) } }));
+  const mSighs = im("m-sighs", C.moss, "Three physiological sighs", SIGHS.amt, 1, "sighs",
+    { desc: SIGHS.words, tool: { label: "▶ START · 30 SECONDS", run: () => openTool({ kind: "breath", id: "sigh3" }) } });
   const mOne = im("m-onething", C.moss, "The one thing", "4 questions · 60 seconds", 1, "onething", { desc: ONE_THING_Q });
-  const mFive = im("m-five", C.moss, "The morning five", "5 joints · 5 min", 5, "morning5",
-    Object.assign(fromLib("the morning five"), { runner: MORNING_FIVE.map((m) => moveOf(m.l, m.s)) }));
+  /* the morning five: one card, five rows to tick, no clocks */
+  const m5Key = dk + "-m5", m5Ticks = (log[m5Key] || {}).t || {};
+  const mFive = im("m-five", C.moss, "The morning five", "5 rows · tick each as you finish it", 5, "morning5",
+    { desc: MORNING_FIVE.words,
+      input: () => <Checklist rows={MORNING_FIVE.rows.map((r) => ({ n: r.n, text: r.text }))} ticks={m5Ticks}
+        onTick={(i) => { const n = Object.assign({}, log); n[m5Key] = { t: Object.assign({}, m5Ticks, { [i]: !m5Ticks[i] }) }; setLog(n); buzz(20); }} /> });
   const mCheck = im("m-check", C.cobalt, "The check", "4 yes / no", 1, "check",
     { input: () => <CheckTaps qs={CHECK_Q} answers={checkA} setAnswers={setCheckA} result={readNow.level} line={READY_LINE[readNow.level]} /> });
   /* MAKING WEIGHT: the scales start the morning, while the plan is on */
@@ -1992,20 +2003,16 @@ function Today(props) {
       input: () => <Input label="AVERAGE HEART RATE" v={evl.hr} on={(val) => { const n = Object.assign({}, log); n[ek] = Object.assign({}, log[ek], { hr: val }); setLog(n); }} /> });
   }
   if ((MODE.prep && moveTonight(rx, day)) || (MODE.camp && !rx.fightWeek && (day === "sat" || (day === "wed" && rx.move)))) {
-    ev.push(im("ev-move", C.violet, "The movement session", "30 min", 30, "move", { runner: MOVE_STEPS.map((m) => moveOf(m.l, m.s)) }));
+    ev.push(im("ev-move", C.violet, "The movement session", ROUTINE_MINS.move + " min", ROUTINE_MINS.move, "move", routine(MOVE_CARDS)));
   }
-  const RG = rangeSteps(rw);
-  ev.push(im("ev-range", C.violet, rangeTitle(rw), rangeMins(rw) + " min", rangeMins(rw), "mobility", { runner: RG.steps.map((m) => moveOf(m.l, m.s)) }));
+  const RG = rangeRoutine(rw, MODE.camp && !!rx.fightWeek);
+  ev.push(im("ev-range", C.violet, RG.n, RG.mins + " min", RG.mins, "mobility", routine(RG.cards)));
   if (DAYS.indexOf(day) <= 3) {
     const hs = curLevel(calis, "handstand");
     const o8 = MODE.prep || MODE.camp;
-    const rows = o8 ? skillRowsO8(hs) : [SKILL_BLOCK.wrists,
-      Object.assign({}, SKILL_BLOCK.handstand, { s: "4 min · level " + hs.l, how: hs.what }),
-      SKILL_BLOCK.hollow, SKILL_BLOCK.arch];
-    if (!o8 && (day === "tue" || day === "thu")) rows.push(SKILL_BLOCK.planche);
-    const skMins = o8 ? SKILL_MINS_O8 : SKILL_BLOCK.mins;
-    ev.push(im("ev-skill", C.brass, "The hollow block", skMins + " min", skMins, "skill",
-      { runner: rows.map((r) => ({ n: r.n, lib: libFor(r.n), desc: r.how, pres: r.s, s: secsOf(r.s, 60) })) }));
+    const sk = o8 ? skillCards(hs) : fighterSkillCards(hs, day === "tue" || day === "thu");
+    const skMins = o8 ? ROUTINE_MINS.skill : SKILL_BLOCK.mins;
+    ev.push(im("ev-skill", C.brass, "The skill block", skMins + " min", skMins, "skill", routine(sk)));
   }
   const sitItem = im("ev-sit", C.violet, "The sit", sitP.mins + " min" + (FW ? " · " + (fw === 24 ? "counting only" : "count and follow") : dayAfter ? " · counting only" : ""), sitP.mins, "sit",
     { desc: howLine(FW ? FW.s : (MED_STAGE[med] || MED_STAGE[1]).line),
@@ -2069,6 +2076,9 @@ function Today(props) {
     if (cur.gym && cur.gym.kind === "top") { const e = log[dk + "-" + cur.gym.item.id] || {}, mk = cur.gym.item.mk, est = num(e.est);
       if (est && num(maxes[mk]) !== est) onSetMax(mk, est, "top triple × 1.08 · " + macro + week, MODE.prep && rx.testWeek ? ["cw_" + mk] : []); }
     cur.mark(true); const n = nextAfter(curIdx); go(n ? n.id : null); buzz(30); };
+  /* BACK: the item before this one in the day's order, done or not —
+     opened as it was, its inputs editable, nothing unticked */
+  const back = () => { if (curIdx > 0) { go(all[curIdx - 1].id); setList(false); buzz(20); } };
   const doneN = all.filter((x) => x.done).length;
   const pct = all.length ? Math.round(doneN / all.length * 100) : 0;
   const gymAll = sessItems.filter((x) => x.gym);
@@ -2127,13 +2137,17 @@ function Today(props) {
               onPainStop={cur.painStop ? () => { cur.painStop(); const n = nextAfter(curIdx); go(n ? n.id : null); buzz(30); } : null} />
             : cur.runner ? (
               <div>
-                <CardHead name={cur.n} lib={cur.lib} pres={cur.s} colour={cur.colour} />
-                <MoveRunner key={cur.id} moves={cur.runner} sound={sound} colour={cur.colour} />
+                <CardHead name={cur.n} desc={cur.desc} pres={cur.s} colour={cur.colour} />
+                <RoutineRunner key={dk + cur.id} cards={cur.runner} sound={sound} colour={cur.colour} at={(log[rtKey(cur.id)] || {}).i}
+                  onAt={(i) => { const n = Object.assign({}, logRef.current); n[rtKey(cur.id)] = { i }; setLog(n); }} />
               </div>)
             : <CardHead name={cur.n} lib={cur.lib} desc={cur.desc} pres={cur.s} colour={cur.colour} />}
           {cur.input ? cur.input() : null}
           {cur.tool ? <BigBtn on={cur.tool.run} c={cur.colour || C.brass} s={{ marginTop: 16 }}>{cur.tool.label}</BigBtn> : null}
-          <BigBtn on={finish} c={C.moss} fill s={{ marginTop: 18, minHeight: 80, fontSize: 28 }}>{cur.gym ? "NEXT" : "DONE"}</BigBtn>
+          <div style={{ display: "flex", gap: 8, marginTop: 18 }}>
+            <BigBtn on={back} c={C.ash} dis={curIdx <= 0} label="Back to the item before" s={{ flex: 1, minHeight: 80, fontSize: 22 }}>◀ BACK</BigBtn>
+            <BigBtn on={finish} c={C.moss} fill s={{ flex: 2, minHeight: 80, fontSize: 28 }}>{cur.gym ? "NEXT" : "DONE"}</BigBtn>
+          </div>
         </div>) : (
         <div data-testid="now-card" style={{ background: C.card, border: "2px solid " + C.moss, borderRadius: 12, padding: 18, marginBottom: 12 }}>
           <div style={Object.assign({}, dsp, { fontSize: T1, fontWeight: 800, letterSpacing: 2, color: C.moss })}>DONE</div>
@@ -3464,17 +3478,6 @@ export default function App() {
       open: (t) => setTool(t.kind === "rangetests" ? { kind: "rangetests", macro: current.macro, week: current.week } : t),
       floorOpen: () => setTool({ kind: "floor" }),
       goHell: () => { setMoreSub("iron"); setTab("more"); setIsub("hell"); },
-      /* The home skill block — Monday to Thursday, after RANGE. The same
-         block in both modes, prescribed, never optional: the wrists, the
-         handstand at the level you are on, the two shapes, and the planche
-         leans on Tuesday and Thursday. */
-      skill: (() => { const i = DAYS.indexOf(todayKey()); const hs = curLevel(calis, "handstand");
-        const o8 = MODE.prep || MODE.camp;
-        const rows = o8 ? skillRowsO8(hs) : [SKILL_BLOCK.wrists,
-          Object.assign({}, SKILL_BLOCK.handstand, { s: "4 min · level " + hs.l, how: hs.what }),
-          SKILL_BLOCK.hollow, SKILL_BLOCK.arch];
-        if (!o8 && (i === 1 || i === 3)) rows.push(SKILL_BLOCK.planche);
-        return { show: i >= 0 && i <= 3, n: SKILL_BLOCK.n, mins: o8 ? SKILL_MINS_O8 : SKILL_BLOCK.mins, rows }; })(),
     };
   }, [st, imStart, imDay, imSit, imHard, imWk, imWeek, dayIso, weekMonday, hwLog, taperNow, calis, rangeWeek, oneThingOf, fightWeekNow]);
 

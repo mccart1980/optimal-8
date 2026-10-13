@@ -43,16 +43,18 @@ export const SKILL_BLOCK = {
     how: "A push-up position, then shift the shoulders forward past the wrists as far as they'll go, arms locked, body rigid." },
 };
 
-/* PREP's and CAMP's skill block: five minutes, the wrists without the
-   rocks, the handstand on parallettes, the two shapes. The planche leans
-   are gone — they bend the wrist further back than anything else and give
-   a puncher nothing back. */
-export const skillRowsO8 = (hs) => [
-  { id: "sk_wrists", n: "Wrists", s: "10 each way", how: "Wrist circles × 10 each way." },
-  { id: "sk_handstand", n: "Handstand — on parallettes", s: "3 min · level " + hs.l,
-    how: (hs.what ? hs.what + ". " : "") + "On parallettes, hands round the bars, wrists straight — the way your wrist is when a punch lands." },
-  SKILL_BLOCK.hollow, SKILL_BLOCK.arch];
-export const SKILL_MINS_O8 = 5;
+/* PREP's and CAMP's skill block is home-routines.md's (routines.js).
+   The Fighter's own block, as the same kind of cards: the wrists as
+   reps, the handstand and the shapes as holds, one card a hold. */
+export const fighterSkillCards = (hs, leans) => {
+  const B = SKILL_BLOCK;
+  const hold = (r, n, secs, k, of) => ({ n: (n + (of > 1 ? " — " + k + " OF " + of : "")).toUpperCase(), kind: "hold", secs, amt: secs + " s", words: r.how });
+  return [{ n: "WRISTS", kind: "reps", amt: "10 EACH WAY + 10 ROCKS", words: B.wrists.how },
+    Object.assign(hold(B.handstand, "Handstand", 240, 1, 1), { level: "LEVEL " + hs.l + (hs.what ? " — " + hs.what : "") }),
+    hold(B.hollow, "Hollow hold", 20, 1, 2), hold(B.hollow, "Hollow hold", 20, 2, 2),
+    hold(B.arch, "Arch hold", 20, 1, 2), hold(B.arch, "Arch hold", 20, 2, 2)]
+    .concat(leans ? [1, 2, 3].map((k) => hold(B.planche, "Planche leans", 15, k, 3)) : []);
+};
 
 /* ---------- the seven lines ---------- */
 export const LINES = [

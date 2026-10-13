@@ -96,56 +96,94 @@ export function Checklist({ rows, ticks, onTick }) {
 }
 
 /* ================================================================
-   THE MOVE RUNNER — the evening, one move per card.
+   THE ROUTINE RUNNER — the morning and evening routines, one card at a
+   time, each card exactly as home-routines.md writes it: the name, its
+   own words, then one line — HOLD with a clock, or the reps with none.
 
-   Each move has its own timer; when it runs out the phone buzzes and
-   the next move comes up and starts by itself. Nothing to tap between
-   moves.
+   A HOLD card gives 8 seconds of GET SET with the card on screen, then
+   the clock; "at halfway" in its words buzzes once at halfway; at zero
+   it buzzes and the next card comes up. A REPS card has no clock and
+   never moves on by itself: DONE ▶ does. ◀ and ▶ are on every card.
+   `at` is the card the day is on (cards.length is DONE); `onAt` keeps it.
    ================================================================ */
-export function MoveRunner({ moves, sound, colour, onFinish, label }) {
-  const [s, setS] = useState({ i: 0, left: moves.length ? moves[0].s : 0, run: false, done: false });
+export const GET_SET = 8;
+export function RoutineRunner({ cards, sound, colour, at, onAt, label }) {
+  const n = cards.length;
+  const start = Math.max(0, Math.min(n, Number(at) || 0));
+  const [s, setS0] = useState({ i: start, ph: "idle", left: start < n && cards[start].kind === "hold" ? cards[start].secs : 0, half: false, armed: false });
   const ref = useRef(s); ref.current = s;
+  /* the ref moves with every change, so a timer tick never reads a stale card */
+  const setS = (x) => { ref.current = x; setS0(x); };
   const end = useRef(0);
+  const keep = useRef(onAt); keep.current = onAt;
   const ctx = useRef(null);
   const beep = useCallback((f, ms) => { if (!sound) return; try {
     if (!ctx.current) ctx.current = new (window.AudioContext || window.webkitAudioContext)();
     const c = ctx.current, o = c.createOscillator(), g = c.createGain(); o.frequency.value = f; o.connect(g); g.connect(c.destination);
     const t = c.currentTime; g.gain.setValueAtTime(.3, t); g.gain.exponentialRampToValueAtTime(.0001, t + ms / 1000); o.start(t); o.stop(t + ms / 1000 + .03);
   } catch (e) {} }, [sound]);
+  /* a card coming up: a HOLD card gets its GET SET once the routine is going */
+  const show = (k, armed) => {
+    const i = Math.max(0, Math.min(n, k)), c = cards[i];
+    if (keep.current) keep.current(i);
+    if (c && c.kind === "hold" && armed) { end.current = Date.now() + GET_SET * 1000; setS({ i, ph: "set", left: GET_SET, half: false, armed }); }
+    else setS({ i, ph: "idle", left: c && c.kind === "hold" ? c.secs : 0, half: false, armed });
+  };
   useEffect(() => {
-    if (!s.run) return undefined;
+    if (s.ph !== "set" && s.ph !== "run") return undefined;
     const id = setInterval(() => {
-      const cur = ref.current; if (!cur.run) return;
+      const cur = ref.current, c = cards[cur.i]; if (!c || (cur.ph !== "set" && cur.ph !== "run")) return;
       const rem = Math.ceil((end.current - Date.now()) / 1000);
-      if (rem > 0) { if (rem !== cur.left) setS(Object.assign({}, cur, { left: rem })); return; }
-      const n = cur.i + 1;
+      if (cur.ph === "set") {
+        if (rem > 0) { if (rem !== cur.left) setS(Object.assign({}, cur, { left: rem })); return; }
+        end.current = Date.now() + c.secs * 1000; beep(660, 120);
+        setS(Object.assign({}, cur, { ph: "run", left: c.secs, half: false })); return;
+      }
+      if (rem > 0) {
+        const patch = {};
+        if (c.halfway && !cur.half && rem <= c.secs / 2) { patch.half = true; buzz(200); beep(740, 150); }
+        if (rem !== cur.left) patch.left = rem;
+        if (Object.keys(patch).length) setS(Object.assign({}, cur, patch));
+        return;
+      }
       buzz([120, 60, 120]); beep(880, 250);
-      if (n < moves.length) { end.current = Date.now() + moves[n].s * 1000; setS({ i: n, left: moves[n].s, run: true, done: false }); }
-      else { setS({ i: n, left: 0, run: false, done: true }); if (onFinish) onFinish(); }
+      show(cur.i + 1, true);
     }, 250);
     return () => clearInterval(id);
-  }, [s.run, s.i]);
-  const go = () => { const cur = ref.current; if (cur.done) return;
-    if (cur.run) setS(Object.assign({}, cur, { run: false }));
-    else { end.current = Date.now() + cur.left * 1000; setS(Object.assign({}, cur, { run: true })); beep(660, 80); } };
-  const jump = (k) => { const n = Math.max(0, Math.min(moves.length - 1, k)); end.current = Date.now() + moves[n].s * 1000;
-    setS({ i: n, left: moves[n].s, run: ref.current.run, done: false }); };
+  }, [s.ph, s.i]);
+  const go = () => { const cur = ref.current, c = cards[cur.i]; if (!c) return;
+    if (cur.ph === "set" || cur.ph === "run") { setS(Object.assign({}, cur, { ph: cur.ph === "set" ? "pset" : "pause", left: Math.max(0, Math.ceil((end.current - Date.now()) / 1000)) })); return; }
+    if (cur.ph === "pause" || cur.ph === "pset") { end.current = Date.now() + cur.left * 1000; setS(Object.assign({}, cur, { ph: cur.ph === "pset" ? "set" : "run", armed: true })); return; }
+    end.current = Date.now() + GET_SET * 1000; setS(Object.assign({}, cur, { ph: "set", left: GET_SET, half: false, armed: true })); beep(660, 80); };
   const col = colour || C.violet;
-  if (!moves.length) return null;
-  const m = moves[Math.min(s.i, moves.length - 1)];
+  if (!n) return null;
+  if (s.i >= n) return (
+    <div data-testid="routine-runner" style={{ marginTop: 14 }}>
+      <div data-testid="routine-done" style={Object.assign({}, dsp, { fontSize: T1, fontWeight: 800, letterSpacing: 2, color: C.moss })}>{label || "DONE"}</div>
+      <BigBtn on={() => show(n - 1, false)} c={C.ash} s={{ marginTop: 12 }}>◀ BACK TO THE LAST CARD</BigBtn>
+    </div>);
+  const c = cards[s.i], hold = c.kind === "hold";
+  const going = s.ph === "set" || s.ph === "run";
+  const setting = s.ph === "set" || s.ph === "pset";
   return (
-    <div data-testid="move-runner" style={{ marginTop: 14 }}>
-      <div style={Object.assign({}, mno, { fontSize: T3, color: col, letterSpacing: 1 })}>{s.done ? (label || "DONE") : "MOVE " + (s.i + 1) + " OF " + moves.length}</div>
-      {s.done ? null : (
-        <div style={{ background: C.ink, border: "2px solid " + col, borderRadius: 10, padding: 16, marginTop: 8 }}>
-          <CardHead name={m.n} lib={m.lib} desc={m.desc} pres={m.pres} colour={col} />
-          <div data-testid="move-clock" style={Object.assign({}, mno, { fontSize: 72, fontWeight: 700, color: C.chalk, textAlign: "center", lineHeight: 1, marginTop: 18 })}>{mmss(s.left)}</div>
-          <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
-            <BigBtn on={() => jump(s.i - 1)} c={C.ash} dis={s.i === 0} s={{ flex: 1 }} label="Previous move">◀</BigBtn>
-            <BigBtn on={go} c={col} fill={!s.run} s={{ flex: 3 }}>{s.run ? "PAUSE" : "START"}</BigBtn>
-            <BigBtn on={() => (s.i + 1 < moves.length ? jump(s.i + 1) : (setS({ i: moves.length, left: 0, run: false, done: true }), onFinish && onFinish()))} c={C.ash} s={{ flex: 1 }} label="Next move">▶</BigBtn>
-          </div>
-        </div>)}
+    <div data-testid="routine-runner" data-routine-card={s.i + 1} data-kind={c.kind} style={{ marginTop: 14 }}>
+      <div style={Object.assign({}, mno, { fontSize: T3, color: col, letterSpacing: 1 })}>{"CARD " + (s.i + 1) + " OF " + n}</div>
+      <div style={{ background: C.ink, border: "2px solid " + col, borderRadius: 10, padding: 16, marginTop: 8 }}>
+        <h3 data-testid="routine-name" style={Object.assign({}, dsp, { margin: 0, fontSize: T1, fontWeight: 800, letterSpacing: 1, lineHeight: 1.1, color: C.chalk, overflowWrap: "anywhere" })}>{c.n}</h3>
+        <p data-testid="routine-words" style={Object.assign({}, bdy, { margin: "10px 0 0", fontSize: T3, lineHeight: 1.5, color: C.chalk })}>{c.words}</p>
+        {c.level ? <p data-testid="routine-level" style={Object.assign({}, mno, { margin: "10px 0 0", fontSize: T3, lineHeight: 1.5, color: col })}>{c.level}</p> : null}
+        <div data-testid="routine-dose" style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 10, marginTop: 14 }}>
+          <span style={Object.assign({}, mno, { fontSize: T2, fontWeight: 700, color: col, letterSpacing: 1 })}>{hold ? (setting ? "GET SET" : "HOLD") : "REPS " + c.amt}</span>
+          {hold ? <span data-testid="routine-clock" style={Object.assign({}, mno, { fontSize: 64, fontWeight: 700, color: setting ? C.ash : C.chalk, lineHeight: 1 })}>{mmss(s.left)}</span> : null}
+        </div>
+        <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
+          <BigBtn on={() => show(s.i - 1, s.armed)} c={C.ash} dis={s.i === 0} s={{ flex: 1 }} label="Previous card">◀</BigBtn>
+          {hold
+            ? <BigBtn on={go} c={col} fill={!going} s={{ flex: 3 }}>{going ? "PAUSE" : s.ph === "idle" ? "▶ START" : "GO ON"}</BigBtn>
+            : <BigBtn on={() => { buzz(30); show(s.i + 1, true); }} c={C.moss} fill s={{ flex: 3, fontSize: 28 }} label="Done, next card">DONE ▶</BigBtn>}
+          <BigBtn on={() => show(s.i + 1, s.armed)} c={C.ash} s={{ flex: 1 }} label="Next card">▶</BigBtn>
+        </div>
+      </div>
     </div>);
 }
 

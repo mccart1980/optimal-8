@@ -265,35 +265,6 @@ export const FLEX_TESTS = [
 
 /* ---------- the movement session ---------- */
 export const MOVE_INTRO = "The second dose. RANGE finds the range with long holds and end-range strength; this moves the whole body through it under control, slowly, so the range becomes range you can use.";
-export const MOVE_STEPS = [
-  { k: "out", l: "BREATHE DOWN — ON YOUR BACK, FEET ON A CHAIR · FIVE BREATHS, IN 4, OUT 8", s: 120 },
-  { k: "seg", l: "SHOULDER CIRCLES, LOADED — A 4–8 KG BELL IN THE HAND, ARM STRAIGHT, TRUNK STILL · THREE EACH WAY EACH SIDE", s: 120 },
-  { k: "seg", l: "HIP CIRCLES ON ONE LEG — KNEE UP, OUT, ROUND AND DOWN · THREE EACH WAY EACH SIDE", s: 120 },
-  { k: "seg", l: "CAT-CAMEL × 10, THEN HAND BEHIND HEAD, ELBOW TO THE CEILING × 8 PER SIDE", s: 120 },
-  { k: "seg", l: "THE GET-UP, SLOW — TWO PER SIDE, A LIGHT BELL, EVERY POSITION HELD FIVE SECONDS", s: 360 },
-  { k: "seg", l: "DEEP SQUAT HOLD — HEELS DOWN, ELBOWS PRYING THE KNEES OUT", s: 60 },
-  { k: "seg", l: "SQUAT-TO-STAND × 6 — HOLD THE TOES, SINK CHEST UP, STRAIGHTEN, SINK AGAIN", s: 60 },
-  { k: "seg", l: "COSSACK SQUATS × 6 PER SIDE — 3-SECOND PAUSE AT THE BOTTOM", s: 90 },
-  { k: "seg", l: "OVERHEAD SQUAT HOLD WITH THE STICK · 3 × 20 SECONDS — ARMS STRAIGHT, STICK BEHIND THE EARS", s: 150 },
-  { k: "seg", l: "90/90 SWITCHES × 5 EACH WAY, NO HANDS", s: 60 },
-  { k: "seg", l: "THE INTERNAL-ROTATION LIFT × 8 PER SIDE, 3-SECOND HOLDS", s: 60 },
-  { k: "seg", l: "PIGEON · 60 SECONDS PER SIDE — CHEST FOLDING OVER THE SHIN, BREATHING OUT", s: 120 },
-  { k: "seg", l: "HIP AIRPLANES × 5 PER SIDE, ACTIVE", s: 60 },
-  { k: "seg", l: "HANG FROM THE BAR", s: 45 },
-  { k: "seg", l: "KETTLEBELL ARM BAR · 30 SECONDS PER SIDE", s: 60 },
-  { k: "seg", l: "BAND PULL-APARTS × 20, THEN EXTERNAL ROTATIONS × 15 PER ARM", s: 75 },
-  { k: "out", l: "STAND TALL, EYES CLOSED — FEEL WHERE THE BODY IS", s: 60 },
-];
-export const MOVE_ROWS = [
-  { id: "mv0", n: "Breathe down", s: "2 min" },
-  { id: "mv1", n: "Joint circles, loaded", s: "6 min" },
-  { id: "mv2", n: "The get-up, slow", s: "6 min" },
-  { id: "mv3", n: "The squat flow", s: "6 min" },
-  { id: "mv4", n: "The hip flow", s: "5 min" },
-  { id: "mv5", n: "The shoulder flow", s: "4 min" },
-  { id: "mv6", n: "Stand", s: "1 min" },
-];
-export const MOVE_ROW_OF = [0, 1, 1, 1, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 6];
 /* Wednesday and Saturday evenings in the accumulation block, Saturday after */
 export const moveTonight = (rx, day) => (day === "sat" ? true : day === "wed" ? !!rx.move : false);
 

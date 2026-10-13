@@ -13,7 +13,9 @@ import { sessionCatalog } from "./App.jsx";
    classic, still names (bear crawls, breathe down, the Romanian
    deadlift, the chest-supported row, the clap push-up, the side plank
    reach-through, the mid-thigh pull). Those Fighter rows show the
-   Fighter's own words instead, and are the only rows allowed through. */
+   Fighter's own words instead, and are the only rows allowed through,
+   with the activation's three sighs, which show home-routines.md's
+   THREE BIG SIGHS words and no library entry. */
 const FIGHTER_ONLY = [
   "fighter · Chest-Supported Row",
   "fighter · Mid-thigh pull peak force",
@@ -22,6 +24,7 @@ const FIGHTER_ONLY = [
   "fighter · Upper Circuit — Bench + Throws · Clap push-up",
   "fighter · Warm-up · Back on the floor, feet on a bench",
   "fighter · Warm-up · Bear crawls · 2 min",
+  "camp · Three physiological sighs",
 ];
 describe("the exercise library covers every session row", () => {
   const cat = sessionCatalog().filter((c) => c.kind !== "review");
