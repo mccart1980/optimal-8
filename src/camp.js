@@ -563,7 +563,7 @@ export const CS = {
     b: [
     { L: "A", n: "Warm-up", m: 7, p: "C_WU", rxLine: () => "7 min · bike, bands, squats, push-ups, hips, pogos" },
     { L: "J", n: "The Jump Check", m: 1, jumpCheck: 1, hide: (rx) => !!rx.fightWeek, rxLine: () => "3 countermovement jumps — the best height",
-      items: [{ n: "Countermovement jump — best of three", s: "3 jumps · log the best height", cue: "Hands on hips, dip and jump straight up as high as you can, land soft, reset between each. Film them in slow motion on the jump app and log the best height.", id: "c_jumpchk", k: "out", u: "best height (cm)" }],
+      items: [{ n: "Countermovement jump — best of three", s: "3 jumps · log the best height", cue: "No arm swing, dip and jump straight up as high as you can, land soft, reset between each. Measure them with the jump mode in Spleeft, set up the same way every week, and log the best height.", id: "c_jumpchk", k: "out", u: "best height (cm)" }],
       why: "It reads tired legs and a tired nervous system, which the strap can't." },
     { L: "T", n: (rx) => testTitle[rx.tests.tue], m: 18, star: 1, hard: 1, hide: (rx) => !isTest(rx, "tue"),
       timer: () => ({ kind: "bursttest", title: "BURST TEST · 10 × 6 s" }),

@@ -112,7 +112,7 @@ Fresh legs, so the power dose goes first. Then the week's first hard conditionin
 
 3 easy minutes on the bike → band pull-aparts × 20 → goblet squats × 8 → push-ups × 10 → 90/90 hip switches × 5 each way → pogo hops × 20.
 
-**THE JUMP CHECK · 1 min** — three countermovement jumps: hands on hips, dip and jump straight up as high as you can, land soft, reset between each. Film them in slow motion on the jump app and log the best height. More than 7% under your four-week average counts as a yellow (Prep's Readiness page) — it reads tired legs and a tired nervous system, which the strap can't.
+**THE JUMP CHECK · 1 min** — three countermovement jumps: no arm swing, dip and jump straight up as high as you can, land soft, reset between each. Measure them with the jump mode in Spleeft, set up the same way every week, and log the best height. More than 7% under your four-week average counts as a yellow (Prep's Readiness page) — it reads tired legs and a tired nervous system, which the strap can't.
 
 **2 · 0:08 — POWER DOSE · JUMPS · 8 min · rest 90 s**
 

@@ -338,7 +338,7 @@ export const PS = {
     intro: "Fresh legs, so the power dose goes first. Then the week's first hard conditioning session, then the trunk, because the trunk is what turns leg drive into hand speed.", b: [
     { L: "A", n: "Warm-up", m: 7, p: "P_WU", rxLine: () => "7 min · bike, bands, squats, push-ups, hips, pogos" },
     { L: "J", n: "The Jump Check", m: 1, jumpCheck: 1, rxLine: () => "3 countermovement jumps — the best height",
-      items: [{ n: "Countermovement jump — best of three", s: "3 jumps · log the best height", cue: "Hands on hips, dip and jump straight up as high as you can, land soft, reset between each. Film them in slow motion on the jump app and log the best height.", id: "p_jumpchk", k: "out", u: "best height (cm)" }],
+      items: [{ n: "Countermovement jump — best of three", s: "3 jumps · log the best height", cue: "No arm swing, dip and jump straight up as high as you can, land soft, reset between each. Measure them with the jump mode in Spleeft, set up the same way every week, and log the best height.", id: "p_jumpchk", k: "out", u: "best height (cm)" }],
       why: "It reads tired legs and a tired nervous system, which the strap can't." },
     { L: "B", n: "Power dose — jumps", m: 8, star: 1, hard: 1, rest: "Rest 90 s", rt: 90,
       rxLine: (rx) => "broad jumps 3 × 2 · box jumps " + rx.box[0] + " × " + rx.box[1] + (rx.d >= 11 ? " · shuttle bursts × 6" : ""),
