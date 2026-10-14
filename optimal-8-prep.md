@@ -97,10 +97,10 @@ The camp inherits every one of these numbers as its week-1 starting line.
 | Monday | 3:30 · BASE — easy nasal ride or run, 45–60 min · neck · hands · ring rows | ~60–75 min |
 | Tuesday | 3:30 · POWER + ENGINE 1 — the jump check, jumps, pistol line, the interval session, the settle, trunk, the Achilles hold | ~60 min |
 | Wednesday | 3:30 · STRENGTH — sled, the trap bar in its phase, the bench (throws in weeks 1–5, the press from week 6), ring dips in weeks 1–5, chins and the muscle-up line, Nordics, neck holds · evening, weeks 1–5: THE MOVEMENT SESSION | ~60 min |
-| Thursday | 3:30 · THROWS + ENGINE 2 — throws and landmine, split squat, Spanish squat hold, the second conditioning session, the settle, neck, hands, band catch · the size block (full in weeks 1–5, half dose in weeks 6–13) | ~68 min (~86 in weeks 1–5, ~79 in weeks 6–13) |
+| Thursday | 3:30 · THROWS + ENGINE 2 — throws and landmine, split squat, Spanish squat hold, the second conditioning session, the settle, neck, hands, band catch · the size block (full in weeks 1–5, half dose in weeks 6–13) · evening: the easy thirty, then the sauna in weeks 6–13 | ~68 min (~86 in weeks 1–5, ~79 in weeks 6–13) |
 | Friday | SLEEP. No alarm. | — |
 | Saturday | 8:30 · THE LONG SESSION — get-ups, build-ups, stance starts, close and plant, sprints, reactive jumps, side bounds, the squat in its phase, push press · evening: THE MOVEMENT SESSION | ~80 min |
-| Sunday | 8:30 · THE ROUNDS — throws, the 6 × 3, the post-max sit, core with suitcase carries, the L-sit, the lever and face pulls, hands, weekly check · hammer curls (weeks 1–13) · then the easy hour, and the sauna from week 6 | ~80 min |
+| Sunday | 8:30 · THE ROUNDS — throws, the 6 × 3, the post-max sit, core with suitcase carries, the L-sit, the lever and face pulls, hands, weekly check · hammer curls (weeks 1–13) · then the easy hour, then the sauna from week 6 | ~80 min |
 | Every day | On waking: the strap, the sighs, the one thing, the morning five, the check · evening: RANGE 20 min, the skill block Mon–Thu, the sit, the review | ~50 min |
 
 About seven hours in the gym a week and three and a half at home in the build; seven and three after. Weeks 5, 10 and 14 are lighter.
@@ -295,7 +295,7 @@ Every session ends with the 60-second settle.
 
 **9 · 1:08 — THE SIZE BLOCK · 18 min in weeks 1–5 · 11 min in weeks 6–13 · none in week 14** — the Size Block page: lateral raises, rear-delt flies, curls, overhead triceps extensions, shrugs. Three sets each in weeks 1–5, two from week 6; a rep or two in the tank.
 
-**Done · ~1:08 (~1:26 in weeks 1–5, ~1:19 in weeks 6–13).** Tonight: RANGE, the skill block, the sit.
+**Done · ~1:08 (~1:26 in weeks 1–5, ~1:19 in weeks 6–13).** Tonight: the easy thirty, then the sauna in weeks 6–13, RANGE, the skill block, the sit.
 
 ---
 
@@ -347,7 +347,7 @@ Bar on the front of the shoulders, quick shallow knee dip, drive it overhead wit
 
 ## SUNDAY · THE ROUNDS · 8:30 · ~75 min
 
-The session the camp is for. Fed and rested — porridge two hours before, half the bottle and a banana twenty minutes before, electrolytes in the bottle. Throws first, fresh; then the rounds; then the corner, trained; then the core. The easy hour this afternoon, and the sauna from week 6.
+The session the camp is for. Fed and rested — porridge two hours before, half the bottle and a banana twenty minutes before, electrolytes in the bottle. Throws first, fresh; then the rounds; then the corner, trained; then the core. The easy hour this afternoon, then the sauna from week 6.
 
 **1 · 0:00 — WARM-UP · 11 min** — Tuesday's warm-up, then broad jumps 3 × 2, medicine-ball chest passes 3 × 3 as hard as you can, 3 × 10-second bike sprints with a minute between, three easy throws of each of the four.
 
@@ -375,7 +375,7 @@ Bodyweight · waist · resting heart rate · green / yellow / red days · joints
 
 Three yellows in a week: next week runs at the table's numbers minus one set on everything and the interval sessions at 90%. Achilles or knee at 3 or more: no reactive jumps next week, the tendon holds carry on. Hamstring at 3 or more: no flying sprints next week, Nordics only if pain-free. That's the tendon gate, and it runs whatever the strap says.
 
-**Done · ~1:11 (~1:14 with the size add-on — hammer curls after the face pulls: 3 × 10 in weeks 1–5, 2 × 10 in weeks 6–13).** RANGE tonight, and the easy hour this afternoon — 30–40 minutes easy, nose only, bike or walk, four-plus hours after the session. Weeks 6–13: sauna, 15–20 minutes, twice a week — Sunday and one weekday evening — never more, and never without the hydration schedule's sauna line — heat acclimation over three weeks raises blood volume and endurance the way nothing else this cheap does. Never straight from the sauna into cold.
+**Done · ~1:11 (~1:14 with the size add-on — hammer curls after the face pulls: 3 × 10 in weeks 1–5, 2 × 10 in weeks 6–13).** RANGE tonight, and the easy hour this afternoon — 30–40 minutes easy, nose only, bike or walk, four-plus hours after the session. Weeks 6–13: sauna, 15–20 minutes, twice a week — today straight after the easy hour, and Thursday evening straight after the easy thirty — never more, and never without the hydration schedule's sauna line — heat acclimation over three weeks raises blood volume and endurance the way nothing else this cheap does. Never straight from the sauna into cold.
 
 ---
 
@@ -514,9 +514,9 @@ Write the numbers down. If nothing has moved by week 5, the holds aren't long en
 
 ---
 
-### THE WEDNESDAY EASY THIRTY · before the movement session in the build, on its own after
+### THE THURSDAY EASY THIRTY · first thing in the evening, the sauna straight after it in weeks 6–13
 
-Thirty minutes easy, nose only, walk or run, conversational. The second base session of the week — the hard sessions get their recovery from the easy ones, and you had one; elite endurance has three.
+Thirty minutes easy, nose only, walk or run, conversational. The second base session of the week — the hard sessions get their recovery from the easy ones, and you had one; elite endurance has three. Thursday, because Friday has no alarm and no session: it costs no sleep and takes nothing from a hard day. The morning's session leaves your legs heavier, so go by the strap and your nose, not the speed, and walk if you need to. The sauna comes after it, never before.
 
 ### THE SKILL BLOCK · Monday to Thursday · 5 min · after RANGE, before the sit
 
@@ -554,9 +554,9 @@ Five additions, on by default, that turn this from a program into a professional
 2. **Cluster sets in the heavy block** — five sets of two-plus-two at 87–90%, twenty seconds on the pins between the pairs. Pins set; the velocity rule ends the set.
 3. **More plyometric contacts** in weeks 11–13 — box jumps 4 × 3 and side bounds 4 × 4; depth jumps held at 4 × 4, because sixteen clean landings beat twenty-five tired ones. The tendon block runs twice a week, the tendon gate applies, and the output rule is law.
 4. **Rounds past the fight** — seven in the convert block. Scored; the fade governs.
-5. **The Wednesday easy thirty** — a second base session, walk or run, nose only. Easy, or it comes out.
+5. **The Thursday easy thirty** — a second base session, walk or run, nose only. Easy, or it comes out.
 
-**THE GUARDRAIL.** Two yellow mornings on the strap in the same week — resting heart rate five over, or HRV twelve percent under — and the five come off for the rest of that week. Not the program: the additions. Tuesday's speed and the Wednesday thirty go first; the clusters become straight sets; the contacts drop back; the rounds go back to six. The base program is what keeps you training. The edge is what makes you dangerous, and it's only worth having if you're standing on the day.
+**THE GUARDRAIL.** Two yellow mornings on the strap in the same week — resting heart rate five over, or HRV twelve percent under — and the five come off for the rest of that week. Not the program: the additions. Tuesday's speed and the Thursday thirty go first; the clusters become straight sets; the contacts drop back; the rounds go back to six. The base program is what keeps you training. The edge is what makes you dangerous, and it's only worth having if you're standing on the day.
 
 **THE TENDON GATE AND THE JUMP CHECK.** Separately from the strap: Achilles or knee at 3 or more on Sunday's check means no reactive jumps the following week, with the tendon holds carried on, and a hamstring at 3 or more means no flying sprints — a sore tendon doesn't show on HRV. And Tuesday's jump check more than 7% under its four-week average counts as a yellow, toward the two that take the Edge off.
 

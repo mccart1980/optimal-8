@@ -78,7 +78,7 @@ export function CampWeekCard({ rx, dates }) {
       <Row k="The lift phase" val={rx.tb ? PHASE_NAME[rx.tb.phase] : rx.sq ? PHASE_NAME[rx.sq.phase] : "—"} />
       <Row k="Sled" val={r.sled} />
       <Row k="Nordics (Wed)" val={r.nor} />
-      <Row k="Wednesday easy" val={rx.thirty ? (rx.wedEasy || 30) + " min, nose only" : "—"} />
+      <Row k="Thursday easy" val={rx.thirty ? (rx.wedEasy || 30) + " min, nose only" : "—"} />
       <Row k="Thursday engine 2" val={r.thu} />
       <Row k="Saturday sprints" val={rx.spr ? (rx.spr.micro ? "the speed microdose" : rx.spr.n + " × 20 m" + (rx.spr.pct < 100 ? " @ 90%" : "")) : "—"} />
       <Row k="Saturday squat" val={rx.sq ? liftLine(rx.sq) : "—"} />
@@ -89,9 +89,9 @@ export function CampWeekCard({ rx, dates }) {
       <Row k="Sunday rounds" val={r.sun} />
       <Row k="Friday" val="Sleep — no alarm" />
       <Row k="Calisthenics" val={rx.tp ? "holds only" : rx.dl ? "half sets" : "at your levels"} />
-      <Row k="Sauna" val={!rx.sauna ? "—" : "15–20 min, twice a week — Sunday and one weekday evening"} />
+      <Row k="Sauna" val={!rx.sauna ? "—" : "15–20 min, twice a week — Thursday after the easy thirty, Sunday after the easy hour"} />
       <Row k="Emphasis" val={rx.emphasis && rx.emphasis !== "none" ? rx.emphasis : "none"} />
-      <Row k="The edge" val={rx.edge ? [rx.speed ? "Tuesday speed" : "", rx.tb && rx.tb.phase === "cluster" ? "clusters" : "", rx.thirty ? "the Wednesday easy session" : ""].filter(Boolean).join(" · ") || "—" : "off"} />
+      <Row k="The edge" val={rx.edge ? [rx.speed ? "Tuesday speed" : "", rx.tb && rx.tb.phase === "cluster" ? "clusters" : "", rx.thirty ? "the Thursday easy session" : ""].filter(Boolean).join(" · ") || "—" : "off"} />
       {rx.twoThirds ? <Note c={C.brass} bold>Two-thirds dose: every set and interval count down by a third, the intervals at 90%, the rounds at 90 seconds' rest. Loads as written.</Note> : null}
       {rx.ef ? <Note c={C.brass}>Engine-first: the lifts at two work sets, the engine gets the time.</Note> : null}
       {rx.reset ? <Note c={C.brass} bold>Reset week: the working weights reset with a set of 3 that's hard but leaves two in you — trap bar Wednesday, squat Saturday.</Note> : null}

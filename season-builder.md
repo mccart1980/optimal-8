@@ -177,7 +177,7 @@ On automatically from low fitness, and in every short-notice camp. It doesn't ad
 - **The engine gets the time:**
   - One round more in the build and peak simulations (the table above).
   - 40-second repeats always 2 × 6, and repeat bursts always 2 × 8.
-  - The Wednesday easy thirty becomes forty.
+  - The Thursday easy thirty becomes forty.
   - Monday's base stays at its 45-minute cap.
 
 ---
@@ -293,11 +293,11 @@ Entered: fight Saturday 28 November 2026 · 3 rounds × 2 minutes · 1 minute's 
 
 | Wk | Dates | Block | Mon base | Tuesday | Wednesday | Thursday | Saturday | Sunday rounds | Nordics |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | 12–18 Oct | F1 · two-thirds | 30 min | BURST TEST, then 4-min intervals 2 × 4 at 90% | sled 3 runs · trap bar slow lowering 2 × 5 @ 72% · bench 2 × 5 @ 72%, 5 s down · easy 25 | NASAL TEST, then tempo 6 × 1 min | build-ups + 2 × 20 m @ 90% · squat 2 × 5 @ 72%, 5 s down · drop landings 2 × 4 | 3 × 2 at 90 s — SCORED, the baseline | 3 × 3 |
-| 2 | 19–25 Oct | F | 45 min | 4-min intervals 4 × 4 | repeat sled starts · trap bar 2 × 5 @ 72%, 5 s down · bench 2 × 5 @ 72% · easy 40 · sauna begins | tempo 10 × 1 min | stance starts, close and plant, 4 × 20 m @ 90% · squat 2 × 5 @ 72%, 5 s down · drop landings 3 × 4 | 3 × 2 at 60 s | 3 × 4 |
-| 3 | 26 Oct–1 Nov | B2 · build | 45 min | REPEAT BURSTS 2 × 8 · shuttles begin | sled 5 runs · trap bar PAUSED 2 × 3 @ 82% · bench paused 2 × 3 @ 82% · easy 40 | 40-s repeats 2 × 6 | 5 × 20 m flat out · squat paused 2 × 3 @ 82% · low-box depth jumps 3 × 4 | 4 × 2 at 60 s — SCORED | 4 × 4 |
-| 4 | 2–8 Nov | P1 · peak | 45 min | 4-min intervals 4 × 4 · speed (Edge) | sled, repeat starts · trap bar CONTRAST 2 rounds @ 85% · bench contrast 2 rounds @ 85% · easy 40 | REPEAT BURSTS 2 × 8 | 5 × 20 m · squat CONTRAST 2 rounds @ 85% · low-box depth jumps 4 × 4 | 5 × 2 at 60 s | 4 × 5 |
-| 5 | 9–15 Nov | P3 · last hard week | 45 min | 40-s repeats 2 × 6 · speed (Edge) | sled 5 runs · trap bar contrast 2 rounds @ 88% · bench contrast 2 rounds @ 88% · easy 40 | REPEAT BURSTS 2 × 8 | 5 × 20 m · squat contrast 2 rounds @ 88% · low-box depth jumps 4 × 4 | THE DOUBLE: 4 × 2, 5 min easy, 3 × 2 — SCORED, the last read | 4 × 5 |
+| 1 | 12–18 Oct | F1 · two-thirds | 30 min | BURST TEST, then 4-min intervals 2 × 4 at 90% | sled 3 runs · trap bar slow lowering 2 × 5 @ 72% · bench 2 × 5 @ 72%, 5 s down | NASAL TEST, then tempo 6 × 1 min · easy 25 | build-ups + 2 × 20 m @ 90% · squat 2 × 5 @ 72%, 5 s down · drop landings 2 × 4 | 3 × 2 at 90 s — SCORED, the baseline | 3 × 3 |
+| 2 | 19–25 Oct | F | 45 min | 4-min intervals 4 × 4 | repeat sled starts · trap bar 2 × 5 @ 72%, 5 s down · bench 2 × 5 @ 72% | tempo 10 × 1 min · easy 40 · sauna begins | stance starts, close and plant, 4 × 20 m @ 90% · squat 2 × 5 @ 72%, 5 s down · drop landings 3 × 4 | 3 × 2 at 60 s | 3 × 4 |
+| 3 | 26 Oct–1 Nov | B2 · build | 45 min | REPEAT BURSTS 2 × 8 · shuttles begin | sled 5 runs · trap bar PAUSED 2 × 3 @ 82% · bench paused 2 × 3 @ 82% | 40-s repeats 2 × 6 · easy 40 | 5 × 20 m flat out · squat paused 2 × 3 @ 82% · low-box depth jumps 3 × 4 | 4 × 2 at 60 s — SCORED | 4 × 4 |
+| 4 | 2–8 Nov | P1 · peak | 45 min | 4-min intervals 4 × 4 · speed (Edge) | sled, repeat starts · trap bar CONTRAST 2 rounds @ 85% · bench contrast 2 rounds @ 85% | REPEAT BURSTS 2 × 8 · easy 40 | 5 × 20 m · squat CONTRAST 2 rounds @ 85% · low-box depth jumps 4 × 4 | 5 × 2 at 60 s | 4 × 5 |
+| 5 | 9–15 Nov | P3 · last hard week | 45 min | 40-s repeats 2 × 6 · speed (Edge) | sled 5 runs · trap bar contrast 2 rounds @ 88% · bench contrast 2 rounds @ 88% | REPEAT BURSTS 2 × 8 · easy 40 | 5 × 20 m · squat contrast 2 rounds @ 88% · low-box depth jumps 4 × 4 | THE DOUBLE: 4 × 2, 5 min easy, 3 × 2 — SCORED, the last read | 4 × 5 |
 | 6 | 16–22 Nov | S · sharpen | 30 min | RETESTS, then bursts 1 × 8 | sled 3 runs · trap bar 2 × 2 @ 80% fast · bench throws 3 × 3 · chins 2 × 5 | 3 × 2 at fight pace, 60 s | SPEED MICRODOSE, 25 min | THE REHEARSAL — 3 × 2 at fight time, Sunday 22 Nov | 2 × 3 |
 | 7 | 23–28 Nov | FW · fight week | 20 min easy | SPEED MICRODOSE, 25 min | nothing | ACTIVATION, 20 min | — | — | — |
 
@@ -311,7 +311,7 @@ Friday 27 November: weigh-in, feet up. **Saturday 28 November: the fight.**
 - Side bounds, push press and broad jumps at two sets.
 - Low-box depth jumps instead of full depth jumps.
 
-The sauna runs twice a week in weeks 2–5. Everything else — the neck, the hands, the band catch, the throws and the landmine, the split squat, the trunk, the calisthenics at your levels, RANGE, the movement session, the evening routine, the food and the hydration — runs as the camp writes it.
+The sauna runs twice a week in weeks 2–5: Thursday straight after the easy session, Sunday straight after the easy hour. Everything else — the neck, the hands, the band catch, the throws and the landmine, the split squat, the trunk, the calisthenics at your levels, RANGE, the movement session, the evening routine, the food and the hydration — runs as the camp writes it.
 
 ---
 

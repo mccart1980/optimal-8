@@ -166,8 +166,8 @@ describe("proof 3 — Worked Example 1, week by week", () => {
         else { expect(rx.bench.sets).toBe(Number(bm[1])); expect(rx.bench.reps).toBe(Number(bm[3])); }
         expect(rx.bench.pct).toBe(Number(bm[4]));
       }
-      if (/easy (\d+)/.test(wed)) expect(rx.wedEasy).toBe(n(wed, /easy (\d+)/)[0]);
-      expect(rx.sauna === "starts").toBe(/sauna begins/.test(wed));
+      /* the easy session and the sauna's start live on Thursday now */
+      expect(/easy \d+|sauna begins/.test(wed)).toBe(false);
       if (/bench throws 3 × 3 · chins 2 × 5/.test(wed)) { expect(rx.tp).toBe(1); expect(rx.tb.sets + "×" + rx.tb.reps + "@" + rx.tb.pct).toBe("2×2@80"); }
       /* Thursday */
       expect(!!rx.nasal).toBe(/NASAL TEST/.test(thu));
@@ -176,6 +176,8 @@ describe("proof 3 — Worked Example 1, week by week", () => {
       if (/40-s repeats 2 × 6/.test(thu)) expect(rx.eng2).toBe("lac2");
       if (/at fight pace/.test(thu)) { expect(rx.eng2).toBe("fp"); expect([rx.fpR.rounds, rx.fpR.mins, rx.fpR.rest]).toEqual(n(thu, /(\d+) × (\d+) at fight pace, (\d+) s/)); }
       if (/ACTIVATION/.test(thu)) expect(rx.fightWeek).toBe(1);
+      if (/easy (\d+)/.test(thu)) expect(rx.wedEasy).toBe(n(thu, /easy (\d+)/)[0]);
+      expect(rx.sauna === "starts").toBe(/sauna begins/.test(thu));
       /* Saturday */
       if (/(\d+) × 20 m/.test(sat)) {
         expect(rx.spr.n).toBe(n(sat, /(\d+) × 20 m/)[0]);

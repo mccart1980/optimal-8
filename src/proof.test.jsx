@@ -183,7 +183,7 @@ const SAID_AS = {
   "NECK FOUR-DIRECTION HOLDS": "four direction holds", "NECK RAPID TENSE": "rapid tense", "NECK PERTURBATION HOLD": "perturbation hold",
   "ROTATIONAL SHOT-PUT THROW": "rotational shot put", "MEDICINE-BALL SLAMS": "medicine ball slams", "EZ-BAR OR DUMBBELL CURLS": "curls", "CURLS": "curls",
   "EASY BASE (RIDE OR RUN)": "easy nasal ride or run", "MODERATE INTERVALS": "moderate intervals", "THE ROUNDS (FIGHT SIMULATION)": "simulation",
-  "EASY HOUR / WEDNESDAY EASY THIRTY": "the easy hour", "SAUNA": "sauna", "THE 20-MINUTE TEST": "20 minute test", "BURST DECREMENT TEST": "burst decrement",
+  "EASY HOUR / THURSDAY EASY THIRTY": "the easy hour", "SAUNA": "sauna", "THE 20-MINUTE TEST": "20 minute test", "BURST DECREMENT TEST": "burst decrement",
   "BROAD JUMP AND THROW TESTS": "broad jump and the rotational throw", "LOAD-VELOCITY PROFILE": "load velocity profile", "TAPE, WEIGHT AND PHOTOS": "tape",
   "THE FOUR RANGE TESTS": "range tests", "THE THREE FLEXIBILITY TESTS": "flexibility tests", "WORKING-WEIGHT CHECK": "working weight check",
   "PRE-CAMP CHECK": "pre camp check", "TRANSITION WEEK": "the transition", "LEAN-AWAY LATERAL RAISE": "lean away lateral raise", "REAR-DELT FLY": "rear delt fly",

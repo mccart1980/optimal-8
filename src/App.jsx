@@ -1982,18 +1982,27 @@ function Today(props) {
   const ev = [];
   const weekend = MODE.camp ? (day === "sun" && !!rx.sim) : (day === "sat" || day === "sun");
   const saunaWater = (a) => fuelItems.find((x) => x.anchor === a);
-  if (progSauna) {
-    if (saunaWater("sauna-before")) ev.push(saunaWater("sauna-before"));
-    ev.push(im("ev-sauna", C.oxide, "Sauna", "15–20 min · twice this week, never more", 20, "sauna", fromLib("sauna")));
-    if (saunaWater("sauna-after")) ev.push(saunaWater("sauna-after"));
-  } else if (sauna) {
-    const a = saunaWater("sauna-before"), b = saunaWater("sauna-after");
-    if (a) { a.mins = 20; ev.push(a); } if (b) ev.push(b);
-  }
-  if ((MODE.prep || MODE.camp) && rx.thirty && day === "wed") {
+  /* the sauna and its two water rows: in PREP and CAMP straight after the
+     easy session or the easy hour, never before them; the classic
+     Fighter's own weekend sauna keeps its place at the top of the evening */
+  const saunaRows = () => {
+    const out = [];
+    if (progSauna) {
+      if (saunaWater("sauna-before")) out.push(saunaWater("sauna-before"));
+      out.push(im("ev-sauna", C.oxide, "Sauna", "15–20 min · twice this week, never more", 20, "sauna", fromLib("sauna")));
+      if (saunaWater("sauna-after")) out.push(saunaWater("sauna-after"));
+    } else if (sauna) {
+      const a = saunaWater("sauna-before"), b = saunaWater("sauna-after");
+      if (a) { a.mins = 20; out.push(a); } if (b) out.push(b);
+    }
+    return out;
+  };
+  const o8Evening = MODE.prep || MODE.camp;
+  if (!o8Evening) saunaRows().forEach((x) => ev.push(x));
+  if (o8Evening && rx.thirty && day === "thu") {
     const em = rx.wedEasy || 30;
-    ev.push(im("ev-thirty", C.moss, em === 30 ? "The easy thirty" : "The Wednesday easy session", em + " min · nose only" + (em === 40 ? " · engine-first" : ""), em, "thirty",
-      Object.assign(fromLib("wednesday easy thirty"), { tool: { label: "▶ START · " + em + " MIN", run: () => startTimer({ kind: "z2", opt: { min: em, label: "EASY — NOSE ONLY" }, title: em === 30 ? "THE EASY THIRTY" : "THE EASY " + em }) } })));
+    ev.push(im("ev-thirty", C.moss, em === 30 ? "The easy thirty" : "The Thursday easy session", em + " min · nose only" + (em === 40 ? " · engine-first" : ""), em, "thirty",
+      Object.assign(fromLib("thursday easy thirty"), { tool: { label: "▶ START · " + em + " MIN", run: () => startTimer({ kind: "z2", opt: { min: em, label: "EASY — NOSE ONLY" }, title: em === 30 ? "THE EASY THIRTY" : "THE EASY " + em }) } })));
   }
   if (weekend) {
     const EH = MODE.camp ? CAMP_EASY_HOUR : EASY_HOUR;
@@ -2002,6 +2011,7 @@ function Today(props) {
       done: !!evl.ok, mark: (val) => { const n = Object.assign({}, log); n[ek] = Object.assign({}, evl, { ok: !!val, d: val ? day : null }); setLog(n); ftick("w-easy", val); },
       input: () => <Input label="AVERAGE HEART RATE" v={evl.hr} on={(val) => { const n = Object.assign({}, log); n[ek] = Object.assign({}, log[ek], { hr: val }); setLog(n); }} /> });
   }
+  if (o8Evening) saunaRows().forEach((x) => ev.push(x));
   if ((MODE.prep && moveTonight(rx, day)) || (MODE.camp && !rx.fightWeek && (day === "sat" || (day === "wed" && rx.move)))) {
     ev.push(im("ev-move", C.violet, "The movement session", ROUTINE_MINS.move + " min", ROUTINE_MINS.move, "move", routine(MOVE_CARDS)));
   }
@@ -2235,7 +2245,7 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
           <Row k="Sled · Nordics · sprints" val={rx.sled + " × 20 m · " + rx.nor[0] + " × " + rx.nor[1] + " · " + (rx.spr || "90% only")} />
           <Row k="Size block" val={rx.size === "full" ? "Thursday and Sunday — three sets" : rx.size === "half" ? "Thursday and Sunday — two sets" : "none this week"} />
           <Row k="Movement session" val={rx.move ? "Wednesday and Saturday evenings" : "Saturday evenings"} />
-          <Row k="Sauna" val={rx.sauna ? "twice — Sunday and one weekday evening" : "—"} />
+          <Row k="Sauna" val={rx.sauna ? "twice — Thursday after the easy thirty, Sunday after the easy hour" : "—"} />
           <Row k="Tests" val={prepTests(rx.doc).join(" · ") || "none"} />
         </Card>) : null}
       {MODE.trans ? (
@@ -2714,7 +2724,7 @@ function Settings({ st, setSt, current, L, exportData, importData, IM, calis, se
             <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
             <Eye c={C.oxide}>The edge</Eye>
             <Toggle on={st.edge !== false} set={() => upd({ edge: st.edge === false })} c={C.oxide}
-              n="THE EDGE" s={EDGE_INTRO + " Off, PREP and CAMP run the base program: no Tuesday speed, no Wednesday thirty, straight sets for the clusters, the contacts back, the rounds back to the fight's. The sauna is twice a week either way."} />
+              n="THE EDGE" s={EDGE_INTRO + " Off, PREP and CAMP run the base program: no Tuesday speed, no Thursday thirty, straight sets for the clusters, the contacts back, the rounds back to the fight's. The sauna is twice a week either way."} />
             {EDGE_ITEMS[current && current.row && (current.row.program === "camp" || current.row.program === "pre") ? "camp" : "prep"].map((x, i) =>
               <Note key={i} c={C.chalk}>{i + 1}. {x}</Note>)}
             <Note c={C.oxide}>{EDGE_GUARDRAIL} It comes back on the Monday.</Note>

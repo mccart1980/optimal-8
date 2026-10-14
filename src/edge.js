@@ -19,7 +19,7 @@ export const EDGE_INTRO =
   "Five additions, on by default. None of them is grinding volume; every one is more high-quality exposure at a recovery cost the monitoring can see.";
 
 export const EDGE_GUARDRAIL =
-  "Two yellow mornings on the strap in the same week — resting heart rate five over, or HRV twelve percent under — and the five come off for the rest of that week. Not the program: the additions. Tuesday's speed and the Wednesday thirty go first; the clusters become straight sets; the contacts drop back; the rounds go back to six.";
+  "Two yellow mornings on the strap in the same week — resting heart rate five over, or HRV twelve percent under — and the five come off for the rest of that week. Not the program: the additions. Tuesday's speed and the Thursday thirty go first; the clusters become straight sets; the contacts drop back; the rounds go back to six.";
 
 export const TENDON_GATE =
   "Separately from the strap: Achilles or knee at 3 or more on Sunday's check means no reactive jumps the following week, with the tendon holds carried on, and a hamstring at 3 or more means no flying sprints — a sore tendon doesn't show on HRV. And Tuesday's jump check more than 7% under its four-week average counts as a yellow, toward the two that take the Edge off.";
@@ -30,14 +30,14 @@ export const EDGE_ITEMS = {
     "Cluster sets in the heavy block — five sets of two-plus-two at 87–90%, twenty seconds on the pins between the pairs. Pins set; the velocity rule ends the set.",
     "More plyometric contacts in weeks 11–13 — box jumps 4 × 3 and side bounds 4 × 4; depth jumps held at 4 × 4, because sixteen clean landings beat twenty-five tired ones. The tendon block runs twice a week, the tendon gate applies, and the output rule is law.",
     "Rounds past the fight — seven in the convert block. Scored; the fade governs.",
-    "The Wednesday easy thirty — a second base session, walk or run, nose only. Easy, or it comes out.",
+    "The Thursday easy thirty — a second base session, walk or run, nose only. Easy, or it comes out.",
   ],
   camp: [
     "Speed twice a week — three flying twenties on Tuesday after the shuttles, from week 6. Build-ups every time. The Nordics never miss.",
     "Cluster sets in the build block — week 4: five sets of two-plus-two at 87%, twenty seconds on the pins between the pairs. Pins set; the velocity rule ends the set.",
     "More plyometric contacts in weeks 6–8 — box jumps 4 × 3 and side bounds 4 × 4; depth jumps held at 4 × 4, because sixteen clean landings beat twenty-five tired ones. The tendon block runs twice a week, the tendon gate applies, and the output rule is law.",
     "Rounds past the fight — eight in weeks 6 and 7, ten once in week 8. Scored; the fade governs.",
-    "The Wednesday easy thirty — a second base session, walk or run, nose only. Easy, or it comes out.",
+    "The Thursday easy thirty — a second base session, walk or run, nose only. Easy, or it comes out.",
   ],
 };
 
@@ -81,17 +81,18 @@ export function edgeCutIndex(levels) {
 
 /* ---------------- the evening row ---------------- */
 export const EASY_THIRTY = {
-  n: "The Wednesday easy thirty",
+  n: "The Thursday easy thirty",
   tag: "30 MIN · NOSE ONLY",
   s: "Thirty minutes easy, nose only, walk or run, conversational.",
   why: "The second base session of the week — the hard sessions get their recovery from the easy ones. Easy, or it comes out.",
 };
 
-export const SAUNA_BASE = "Fifteen to twenty minutes, twice a week — Sunday and one weekday evening. Heat acclimation raises blood volume and endurance the way nothing else this cheap does. Never straight from the sauna into cold.";
+export const SAUNA_BASE = "Fifteen to twenty minutes, twice a week — Thursday straight after the easy thirty, Sunday straight after the easy hour, never before them. Heat acclimation raises blood volume and endurance the way nothing else this cheap does. Never straight from the sauna into cold.";
 
 /* the evenings a sauna week puts the sauna on: at most twice a week,
-   everywhere — Sunday and one weekday evening */
-export const saunaDays = (rx) => (!rx || !rx.sauna ? [] : ["wed", "sun"]);
+   everywhere — Thursday straight after the easy session, Sunday straight
+   after the easy hour */
+export const saunaDays = (rx) => (!rx || !rx.sauna ? [] : ["thu", "sun"]);
 
 /* the cluster timer: two reps, twenty seconds on the pins, two more */
 export const clusterTimer = (sets, pct, lift) => ({

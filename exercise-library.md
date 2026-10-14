@@ -206,9 +206,9 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **THE POST-MAX SIT** — Straight after the last round: sit, eyes closed, and bring your breathing back to your nose. Note how many seconds it took.
 
-**EASY HOUR / WEDNESDAY EASY THIRTY** — An easy walk, ride or run at chatting pace, breathing through your nose. Easy enough that it helps you recover.
+**EASY HOUR / THURSDAY EASY THIRTY** — An easy walk, ride or run at chatting pace, breathing through your nose. Easy enough that it helps you recover.
 
-**SAUNA** — 15–20 minutes. 500 ml of water before, 500 ml with a sachet after. Never straight into cold.
+**SAUNA** — 15–20 minutes, straight after the easy session or the easy hour, never before it. 500 ml of water before, 500 ml with a sachet after. Never straight into cold.
 
 **SPEED MICRODOSE** — Fight-week sharpener, 25 minutes: warm-up, three 20-metre sprints at 90%, a few box jumps and throws. Fast, nothing tiring, done.
 

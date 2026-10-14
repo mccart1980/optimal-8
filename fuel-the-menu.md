@@ -158,7 +158,7 @@ Steak on the two heavy days. Salmon twice a week if you'll eat it — the one li
 
 ## THE BATCH, THE PREP, THE SHOP
 
-The mince pot and the sweet potato cooked separately, weighed once, cooked, in the COOK tab; four mince-only tubs for the wraps. Twelve eggs boiled Sunday, nine Wednesday — a week in the shell. Two bagels, a tin and a pack of rice cakes live in the work bag. Prawns and cod: buy frozen, cook from frozen in ten minutes; scallops fresh, seared two minutes a side. Wraps rolled the night before, in a cool bag with a freezer block.
+The mince pot and the sweet potato cooked separately, weighed once, cooked, in FOOD → COOK; four mince-only tubs for the wraps. Twelve eggs boiled Sunday, nine Wednesday — a week in the shell. Two bagels, a tin and a pack of rice cakes live in the work bag. Prawns and cod: buy frozen, cook from frozen in ten minutes; scallops fresh, seared two minutes a side. Wraps rolled the night before, in a cool bag with a freezer block.
 
 Weekly on top of the standing list, as you use them: bagels 10 · wholemeal wraps 10 · rice cakes 2 packs · raisins or sultanas 500 g · apples 7 · tuna 4 tins · beans 2 tins · potatoes 2 kg · frozen prawns 1 kg · cod or salmon 2 × 250 g · scallops when you want them · dates a small bag · collagen or gelatin powder 300 g · orange juice 1 litre.
 

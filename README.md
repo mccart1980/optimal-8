@@ -461,13 +461,13 @@ listed under the switch in settings: Tuesday speed after the shuttles (PREP
 from week 11, camp from week 6), cluster sets with a 20-second pin-rest timer
 (PREP's heavy block, camp week 4), more plyometric contacts (PREP 11–13, camp
 6–8 — depth jumps held at 4 × 4), rounds past the fight (PREP seven in the
-convert block; camp eight, eight, ten), and the Wednesday easy thirty. The
+convert block; camp eight, eight, ten), and the Thursday easy thirty. The
 sauna is not an addition: twice a week at most, everywhere — a week the
 program puts it in has no weekend sauna of your own on top.
 
 **The guardrail.** When the morning check records a second yellow (or worse)
 in a week, the additions come off for the rest of that week — no Tuesday speed
-or Wednesday thirty, the clusters as straight sets, the contacts back to base,
+or Thursday thirty, the clusters as straight sets, the contacts back to base,
 the rounds back to the fight's — and TODAY says "The edge is off this week:
 two yellow mornings". Tuesday's **jump check** (three countermovement jumps,
 the best height logged) more than 7% under its four-week average counts as one

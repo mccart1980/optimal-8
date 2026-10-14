@@ -29,7 +29,7 @@ The training runs in blocks and the food follows it. The app knows which block y
 If a feed appears or disappears, that's why. Don't add anything back.
 
 ## THE BATCH
-Cook the mince pot and the sweet potato separately. Weigh each once, cooked, in the COOK tab: type what went in raw and what it weighs cooked, and it tells you how many grams is one portion. Serve by those two numbers from then on.
+Cook the mince pot and the sweet potato separately. Weigh each once, cooked: tap FOOD at the bottom, then COOK, the second button along the top. Type what went in raw and what it weighs cooked, and it tells you how many grams is one portion. Serve by those two numbers from then on.
 
 ## DRINKING
 The alarms. **The litre bottle with a sachet at work start, empty by nine** — that's the one that matters. Five hundred with each feed, three hundred in the gaps, nothing big after eight. Check the colour at ten and four: pale straw is right; dark means drink now and a second sachet today.

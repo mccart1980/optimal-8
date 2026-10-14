@@ -173,7 +173,7 @@ export const PREP_ROWS = R;
 
 /* THE EDGE, for a PREP week. On, the week runs every addition its row
    carries: the clusters in week 8; Tuesday's speed, more contacts (depth
-   jumps held at 4 × 4) and seven rounds in weeks 11–13; the Wednesday
+   jumps held at 4 × 4) and seven rounds in weeks 11–13; the Thursday
    thirty every week. The sauna is twice a week, Edge or not. Off — two yellow mornings, or
    the switch in settings — the base program. */
 export function prepEdge(rx, on) {
@@ -269,7 +269,7 @@ export const MOVE_INTRO = "The second dose. RANGE finds the range with long hold
 export const moveTonight = (rx, day) => (day === "sat" ? true : day === "wed" ? !!rx.move : false);
 
 export const CARB_TOPUP = "Carb top-up at 17:00 — the fuel app has the number. Only in the accumulation block.";
-export const SAUNA_PREP = "Fifteen to twenty minutes, twice a week — Sunday and one weekday evening — never more, and never without the hydration schedule's sauna line. Never straight from the sauna into cold.";
+export const SAUNA_PREP = "Fifteen to twenty minutes, twice a week — Sunday straight after the easy hour, and Thursday evening straight after the easy thirty — never more, and never without the hydration schedule's sauna line. Never straight from the sauna into cold.";
 
 /* ---------- the transition after a fight ---------- */
 export const TRANSITION_INTRO = "First, the head check. Then one week after a fight of 9 minutes or less, two after a longer one. The first three days: RANGE, the sit and walking. Then easy: base rides, the movement session, calisthenics at half sets, nothing above 70%, no sprints, no rounds. It runs on until the strap says you're back.";

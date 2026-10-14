@@ -39,7 +39,7 @@ export const CAMP_RULES = [
   "Sleep is the first session of every day. In bed by half past eight, Sunday to Wednesday.",
   "Cold water stays out of camp. The sauna comes in from week 2, twice a week, never more.",
   "The bag is skill, not conditioning. Conditioning is measured on the erg, where the number can't lie.",
-  "Easy means easy. Monday's base, the Wednesday thirty and the easy hour are nasal and conversational, or they're stealing from Tuesday and Sunday.",
+  "Easy means easy. Monday's base, the Thursday thirty and the easy hour are nasal and conversational, or they're stealing from Tuesday and Sunday.",
   "The fight-day rehearsal is Sunday 7 March. Same wake time, same meals, same warm-up, six rounds at fight time of day.",
   "The fade is the number. Round six's output divided by round one's.",
   "Before every camp: bloods — full blood count, lipids, liver and kidneys — and blood pressure. No dehydration cuts, ever: if there's weight to make, it comes off through food.",
@@ -250,7 +250,7 @@ export const campMaster = (w) => JSON.parse(JSON.stringify(CW[Math.max(1, Math.m
    carry — inside the Edge's window, which a camp from low fitness or at
    short notice opens at its first peak or engine week; off — two yellow
    mornings, or the switch in settings — the base program: no Tuesday
-   speed, no Wednesday thirty, straight sets for the clusters, the
+   speed, no Thursday thirty, straight sets for the clusters, the
    contacts back, the rounds back to the fight's. Depth jumps hold at
    4 × 4 either way. The durability emphasis keeps the contacts out. */
 export function campEdge(rx, on) {
@@ -491,7 +491,7 @@ export const CAMP_EASY_HOUR = {
   why: "Active recovery for legs that have just done the rounds, and the aerobic base that the base day alone doesn't carry.",
   tag: "SUNDAY AFTERNOON · NOSE ONLY",
 };
-export const SAUNA_LINE = "Weeks 2–8: sauna, 15–20 minutes, twice a week — Sunday and one weekday evening — never more, and never without the hydration schedule's sauna line. Never straight from the sauna into cold.";
+export const SAUNA_LINE = "Weeks 2–8: sauna, 15–20 minutes, twice a week — Sunday straight after the easy hour, and Thursday evening straight after the easy thirty — never more, and never without the hydration schedule's sauna line. Never straight from the sauna into cold.";
 
 /* ================================================================
    THE SEVEN PAGES, in running order, exactly as written
