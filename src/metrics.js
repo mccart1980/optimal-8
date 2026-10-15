@@ -143,6 +143,29 @@ export const recoveryBand = (d) => (d == null ? null : d >= 30 ? "excellent" : d
    outside it gets a quiet note, never an alarm.
    ================================================================ */
 export const easyZone = (peak) => { const p = num(peak); return p == null ? null : [Math.round(p * 0.65), Math.round(p * 0.75)]; };
+/* the one peak: the highest of the number typed into the easy-zone panel
+   and every 20-minute test's peak heart rate on file — any program, any
+   week, any day, the week before camp included. Under 120 or over 230 is
+   a typo and counts for nothing. */
+export const PEAK_LO = 120, PEAK_HI = 230;
+export const peakOk = (v) => { const n = num(v); return n != null && n >= PEAK_LO && n <= PEAK_HI ? n : null; };
+export function peakHeartRate(log, typed) {
+  let best = peakOk(typed);
+  Object.keys(log || {}).forEach((k) => {
+    if (!/^m[^-]+-[a-z0-9]+-(c_)?bike20hr$/.test(k)) return;
+    const n = peakOk((log[k] || {}).w); if (n != null && (best == null || n > best)) best = n;
+  });
+  return best;
+}
+/* an easy session's timer: the z2 timer, never the 20-minute test's */
+export const isEasyTimer = (tm) => !!tm && tm.kind === "z2" && tm.title !== "20-MIN TEST" && !/^20-MIN TEST/.test((tm.opt && tm.opt.label) || "");
+/* the label an easy timer runs under, with the zone in it */
+export function easyTimer(tm, zone) {
+  if (!zone || !isEasyTimer(tm)) return tm;
+  const range = zone[0] + "–" + zone[1] + " BPM", lab = (tm.opt && tm.opt.label) || "ZONE 2 — CONVERSATIONAL";
+  const label = / · 65–75% OF PEAK$/.test(lab) ? lab.replace(/65–75% OF PEAK$/, range) : lab + " · " + range;
+  return Object.assign({}, tm, { opt: Object.assign({}, tm.opt, { label }) });
+}
 export function zoneNote(avgHR, zone) {
   const a = num(avgHR); if (a == null || !zone) return null;
   if (a < zone[0]) return { in: false, low: true, s: "Under the zone — fine, but a touch more would build more base." };

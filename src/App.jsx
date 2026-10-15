@@ -61,7 +61,7 @@ import {
   phaseOfWeek, stopPct, VEL_BAND, campPhaseOfWeek, ballisticPct, isFast, prevReading,
 } from "./velocity.js";
 import {
-  morningFlag, recoveryDrop, easyZone, ergSlots, ergShapeFor, ergTotal, simFade, sleepWeek,
+  morningFlag, recoveryDrop, easyZone, peakHeartRate, isEasyTimer, easyTimer, ergSlots, ergShapeFor, ergTotal, simFade, sleepWeek,
   readiness, READY_LINE, recalibrated,
   BAR_SPEED_ITEMS, isPhotoDay, parseFuelExport, series, parseKey, ergUnitLabel, r1, MORNING_FIELDS, strapBackBy,
 } from "./metrics.js";
@@ -1441,7 +1441,7 @@ const topsOn = (log, dk) => { const o = {}; Object.keys(log || {}).forEach((k) =
 
 /* the weekly check's bodyweight lines */
 const BW_OUTS = { wr_bw: 1, cwr_bw: 1 };
-function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, startTimer, stopTimer, autoRest, calis, st, openTool, onSetMax, weekDates, onPainStop, wt }) {
+function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, startTimer, stopTimer, autoRest, calis, st, openTool, onSetMax, weekDates, onPainStop, wt, zone }) {
   const b = card.b, it = card.item;
   const dkey = "m" + macro + "w" + week + "-" + day;
   const key = (id) => dkey + "-" + id;
@@ -1624,6 +1624,7 @@ function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, st
   return (
     <div data-gym-card={card.key}>
       <CardHead name={card.n} lib={card.lib} desc={card.desc} pres={card.pres} />
+      {zone || null}
       {painStopped ? null : extra}
       {painStopped ? null : body}
       {pain}
@@ -1649,7 +1650,7 @@ function Today(props) {
     macro, week, day, isToday, shownIso, done, setDone, log, setLog, maxes, bw,
     ready, sparPrev, swapped, note, setNote,
     startTimer, onSetMax, autoRest, addBody,
-    calis, taper, rangeWeek, campLabel, peakHR,
+    calis, taper, rangeWeek, campLabel, peakHR, setEasyPeak,
     morning, setMorning, weekDates, st, imRec, setTick, imStreak, imWeek,
     checkA, setCheckA, readNow, openTool, sound, flowAt, setFlowAt, goIron, photoPrompt,
     imWks, setWkOn, oneThingOf,
@@ -1658,6 +1659,12 @@ function Today(props) {
 
   /* the log as it is now, for writes from inside a running timer */
   const logRef = useRef(log); logRef.current = log;
+  /* THE EASY ZONE: in PREP, CAMP, the week before camp and the
+     transition, every easy session carries the zone, and its timer runs
+     under it. The classic Fighter has none of it. */
+  const o8Zone = MODE.prep || MODE.camp || MODE.trans;
+  const zone = o8Zone ? easyZone(peakHR) : null;
+  const startZ = (tm) => startTimer(easyTimer(tm, zone));
   /* the feed chime: a feed or a drink due now, while the app is open */
   const chimeRows = useRef([]), chimed = useRef({});
   const beep = useBeep(sound);
@@ -2002,12 +2009,12 @@ function Today(props) {
   if (o8Evening && rx.thirty && day === "thu") {
     const em = rx.wedEasy || 30;
     ev.push(im("ev-thirty", C.moss, em === 30 ? "The easy thirty" : "The Thursday easy session", em + " min · nose only" + (em === 40 ? " · engine-first" : ""), em, "thirty",
-      Object.assign(fromLib("thursday easy thirty"), { tool: { label: "▶ START · " + em + " MIN", run: () => startTimer({ kind: "z2", opt: { min: em, label: "EASY — NOSE ONLY" }, title: em === 30 ? "THE EASY THIRTY" : "THE EASY " + em }) } })));
+      Object.assign(fromLib("thursday easy thirty"), { easy: 1, tool: { label: "▶ START · " + em + " MIN", run: () => startZ({ kind: "z2", opt: { min: em, label: "EASY — NOSE ONLY" }, title: em === 30 ? "THE EASY THIRTY" : "THE EASY " + em }) } })));
   }
   if (weekend) {
     const EH = MODE.camp ? CAMP_EASY_HOUR : EASY_HOUR;
     const ek = "m" + macro + "w" + week + "-easyhour", evl = log[ek] || {};
-    ev.push({ id: "ev-easy", colour: C.moss, n: "The easy hour", s: titleCase(EH.tag.split(" · ")[0]) + (rx.twoThirds && rx.easyHour ? " · " + rx.easyHour.join("–") + " min" : "") + " · + " + EASY_WATER + " ml water", mins: rx.twoThirds && rx.easyHour ? rx.easyHour[1] : 40, lib: libFor("easy hour"),
+    ev.push({ id: "ev-easy", colour: C.moss, n: "The easy hour", s: titleCase(EH.tag.split(" · ")[0]) + (rx.twoThirds && rx.easyHour ? " · " + rx.easyHour.join("–") + " min" : "") + " · + " + EASY_WATER + " ml water", mins: rx.twoThirds && rx.easyHour ? rx.easyHour[1] : 40, lib: libFor("easy hour"), easy: o8Zone,
       done: !!evl.ok, mark: (val) => { const n = Object.assign({}, log); n[ek] = Object.assign({}, evl, { ok: !!val, d: val ? day : null }); setLog(n); ftick("w-easy", val); },
       input: () => <Input label="AVERAGE HEART RATE" v={evl.hr} on={(val) => { const n = Object.assign({}, log); n[ek] = Object.assign({}, log[ek], { hr: val }); setLog(n); }} /> });
   }
@@ -2093,7 +2100,8 @@ function Today(props) {
   const pct = all.length ? Math.round(doneN / all.length * 100) : 0;
   const gymAll = sessItems.filter((x) => x.gym);
   const gymAt = cur && cur.gym ? gymAll.indexOf(cur) : -1;
-  const gp = { rx, week, macro, day, log, setLog, maxes, bw, ready: effReady, startTimer, stopTimer, autoRest, calis, st, openTool, onSetMax, weekDates, wt };
+  const zonePanel = o8Zone && cur && (cur.easy || (cur.gym && isEasyTimer(cur.gym.timer))) ? <EasyZonePanel peak={peakHR} onSave={setEasyPeak} /> : null;
+  const gp = { rx, week, macro, day, log, setLog, maxes, bw, ready: effReady, startTimer: startZ, stopTimer, autoRest, calis, st, openTool, onSetMax, weekDates, wt };
 
   const progress = (
     <div data-testid="day-progress" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label="The day"
@@ -2143,7 +2151,7 @@ function Today(props) {
                   <span style={Object.assign({}, bdy, { flex: 1, fontSize: T3, fontWeight: 700, color: g === cur ? C.brass : g.done ? C.ash : C.chalk })}>{g.n}</span>
                 </button>))}
             </div>) : null}
-          {cur.gym ? <GymCard key={cur.id} card={cur.gym} {...gp}
+          {cur.gym ? <GymCard key={cur.id} card={cur.gym} {...gp} zone={zonePanel}
               onPainStop={cur.painStop ? () => { cur.painStop(); const n = nextAfter(curIdx); go(n ? n.id : null); buzz(30); } : null} />
             : cur.runner ? (
               <div>
@@ -2152,6 +2160,7 @@ function Today(props) {
                   onAt={(i) => { const n = Object.assign({}, logRef.current); n[rtKey(cur.id)] = { i }; setLog(n); }} />
               </div>)
             : <CardHead name={cur.n} lib={cur.lib} desc={cur.desc} pres={cur.s} colour={cur.colour} />}
+          {cur.gym ? null : zonePanel}
           {cur.input ? cur.input() : null}
           {cur.tool ? <BigBtn on={cur.tool.run} c={cur.colour || C.brass} s={{ marginTop: 16 }}>{cur.tool.label}</BigBtn> : null}
           <div style={{ display: "flex", gap: 8, marginTop: 18 }}>
@@ -3492,10 +3501,11 @@ export default function App() {
   }, [st, imStart, imDay, imSit, imHard, imWk, imWeek, dayIso, weekMonday, hwLog, taperNow, calis, rangeWeek, oneThingOf, fightWeekNow]);
 
   /* ---------------- THE MEASUREMENT LAYER ----------------
-     The peak heart rate the 20-minute test found paces the easy zone;
+     The peak heart rate — the highest 20-minute test on file, or the
+     number typed into the easy-zone panel — paces the easy zone;
      the week's seven dates fill the weekly check's sleep averages from
      the mornings; the morning flag rides on the daily check. */
-  const peakHR = useMemo(() => { const r = series(log, MODE.camp ? "c_bike20hr" : "bike20hr", MODE.camp, "sun"); return r.length ? r[r.length - 1].v : null; }, [log, program]);
+  const peakHR = useMemo(() => peakHeartRate(log, st.easyPeak), [log, st.easyPeak]);
   const weekDates = useMemo(() => {
     const mon = monOf(shown.macro, shown.week);
     return Array.from({ length: 7 }, (_, i) => addDays(mon, i));
@@ -3613,7 +3623,7 @@ export default function App() {
   };
   const todayProps = { macro: shown.macro, week: shown.week, day: shown.day, isToday, shownIso, shownFuture,
     done, setDone, log, setLog, maxes, bw,
-    ergUnit: st.ergUnit || "w", peakHR, morning, setMorning, weekDates, st,
+    ergUnit: st.ergUnit || "w", peakHR, setEasyPeak: (val) => setSt(Object.assign({}, st, { easyPeak: val })), morning, setMorning, weekDates, st,
     imRec: imDay[shownIso] || {},
     setTick: tickOn(shownIso), imStreak: IM.streak, imWeek,
     imWks: imWk, setWkOn, oneThingOf,

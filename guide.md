@@ -22,7 +22,7 @@ The app works out every weight for you. Load the bar to the number it shows.
 - **Top-triple weeks** are marked. You work up to one heavy set of three with a rep or two left in you, safety pins set. Never a true max.
 
 ## THE BIKE, WITHOUT THE JARGON
-- **Easy** — you could talk. Nose breathing. Heart rate in the zone the app shows.
+- **Easy** — you could talk. Nose breathing. Heart rate in the zone the app shows. The first time, type your peak heart rate into the box on the session: the highest number you've seen on the strap.
 - **4-minute intervals** — hard for 4, easy for 3, four times.
 - **40-second repeats** — flat out for 40, easy for 80, six times. The last three are meant to hurt.
 - **Bursts** — flat out for 6–8 seconds, easy for 40, sixteen times in two sets.

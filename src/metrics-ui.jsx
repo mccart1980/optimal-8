@@ -3,7 +3,7 @@ import { C, dsp, bdy, mno, num, buzz, fmtDate, addDays, Card, Eye, Lab, Fld, Btn
 import { WeekOneCard } from "./im-ui.jsx";
 import {
   MORNING_FIELDS, rolling7, baseline, morningFlag, RHR_OVER, HRV_UNDER,
-  recoveryDrop, recoveryBand, easyZone, zoneNote, ergUnitLabel, ergTotal, ergMean, recalibrated,
+  recoveryDrop, recoveryBand, easyZone, peakOk, ergUnitLabel, ergTotal, ergMean, recalibrated,
   BAR_SPEED_LIFTS, barSpeeds, sameLoadSeries, PHOTO_VIEWS, PHOTO_NOTE, photoWeeks,
   bodyNow, trend, series, pairSeries, CAMP_TARGET, r1,
 } from "./metrics.js";
@@ -148,17 +148,28 @@ export function RecoveryHR({ endHR, hr60, onEnd, on60, prev }) {
 /* ================================================================
    THE EASY ZONE — on Monday's base and on the easy hour
    ================================================================ */
-export function EasyZonePanel({ peak, avgHR, onAvg, compact }) {
+export function EasyZonePanel({ peak, onSave }) {
   const zone = easyZone(peak);
-  const note = zoneNote(avgHR, zone);
+  const [open, setOpen] = useState(false), [typed, setTyped] = useState("");
+  const ok = peakOk(typed) != null;
+  const save = () => { if (!ok) return; onSave(String(peakOk(typed))); setTyped(""); setOpen(false); buzz(30); };
   return (
-    <div style={{ background: C.ink, border: "1px solid " + C.moss, borderRadius: 5, padding: "11px 12px", marginBottom: compact ? 0 : 11, marginTop: compact ? 10 : 0 }}>
+    <div data-testid="easy-zone" style={{ background: C.ink, border: "1px solid " + C.moss, borderRadius: 8, padding: 12, marginTop: 14 }}>
       <Eye c={C.moss} s={{ marginBottom: 4 }}>The easy zone — 65–75% of your peak heart rate</Eye>
-      {zone
-        ? <div style={Object.assign({}, mno, { fontSize: 24, fontWeight: 700, color: C.moss })}>{zone[0]}–{zone[1]} <span style={{ fontSize: 10, color: C.ash, letterSpacing: 1 }}>BPM · FROM A PEAK OF {peak}</span></div>
-        : <Note c={C.ash} s={{ fontStyle: "italic", marginTop: 0 }}>Log the peak heart rate from the 20-minute test and the zone appears here.</Note>}
-      <div style={{ marginTop: 9 }}><Lab>Average heart rate</Lab><Fld v={avgHR} on={onAvg} ph="bpm" /></div>
-      {note ? <div style={Object.assign({}, mno, { fontSize: 9.5, letterSpacing: 1, marginTop: 7, color: note.in ? C.moss : C.brass })}>{note.in ? "IN THE ZONE" : note.low ? "UNDER THE ZONE" : "OVER THE ZONE"}</div> : null}
+      {zone ? (
+        <div style={{ display: "flex", alignItems: "center", gap: 10, justifyContent: "space-between" }}>
+          <div data-testid="easy-zone-range" style={Object.assign({}, mno, { fontSize: 30, fontWeight: 700, color: C.moss })}>{zone[0]}–{zone[1]} <span style={{ fontSize: 13, color: C.ash, letterSpacing: 1 }}>BPM · FROM A PEAK OF {peak}</span></div>
+          {open ? null : <Btn on={() => setOpen(true)} c={C.ash} small>CHANGE</Btn>}
+        </div>) : null}
+      {!zone || open ? (
+        <div style={{ marginTop: zone ? 10 : 0 }}>
+          <label style={{ display: "block" }}>
+            <span style={Object.assign({}, mno, { display: "block", fontSize: 13, color: C.ash, marginBottom: 4, letterSpacing: .8 })}>PEAK HEART RATE (BPM)</span>
+            <Fld v={typed} on={setTyped} ph="bpm" a="left" />
+          </label>
+          <Note s={{ marginTop: 6 }}>The highest number you've seen on the strap: in the rounds, an interval session or a test.</Note>
+          <Btn on={save} c={C.moss} fill dis={!ok} s={{ width: "100%", marginTop: 10 }}>SAVE</Btn>
+        </div>) : null}
     </div>);
 }
 
