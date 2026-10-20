@@ -35,9 +35,9 @@ export function CardHead({ name, lib, desc, pres, colour }) {
     </div>);
 }
 
-export function BigBtn({ children, on, c, fill, dis, label, s }) {
+export function BigBtn({ children, on, c, fill, dis, label, s, pressed }) {
   const col = c || C.moss;
-  return <button onClick={on} disabled={dis} aria-label={label} style={Object.assign(big(fill ? col : "transparent", fill ? C.ink : col, col), { opacity: dis ? .45 : 1 }, s)}>{children}</button>;
+  return <button onClick={on} disabled={dis} aria-label={label} aria-pressed={pressed} style={Object.assign(big(fill ? col : "transparent", fill ? C.ink : col, col), { opacity: dis ? .45 : 1 }, s)}>{children}</button>;
 }
 
 /* ---------- the row of set buttons ----------

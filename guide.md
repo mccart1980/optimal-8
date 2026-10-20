@@ -28,7 +28,7 @@ The app works out every weight for you. Load the bar to the number it shows.
 - **Bursts** — flat out for 6–8 seconds, easy for 40, sixteen times in two sets.
 - **Threshold** — the hardest pace you could hold for half an hour, twice for 8 minutes.
 - **Rounds** — your fight, on the machines: your round length, your number of rounds, your rest. In the build and the peak you go past the fight on purpose — but if a round past the fight drops below three-quarters of your first, or your form goes, stop there.
-- After every hard session: sit on the bike, eyes closed, one minute. Type your heart rate at the end of it.
+- After every hard session: sit on the bike, eyes closed, one minute. Type your heart rate when you stop and again at the end of the minute: the drop is your recovery.
 
 ## THE BLOCKS — WHAT THIS PART OF THE YEAR IS FOR
 - **Build** (the first five or six weeks) — more reps, lighter weights, long slow lowering, longer easy rides, the size block at full dose (half dose after this block), movement twice a week. You get bigger and fitter. It feels easy. It isn't.

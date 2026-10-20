@@ -394,6 +394,21 @@ export function pairSeries(log, idA, idB, camp, day, f) {
     .sort((x, y) => x.week - y.week);
 }
 
+/* the same, off the two whole entries: for a value logged in more than
+   one box, as the Sunday rounds' SkiErg and bike */
+export function pairEntries(log, idA, idB, camp, day, f) {
+  const a = {}, b = {};
+  Object.keys(log || {}).forEach((k) => {
+    const p = parseKey(k); if (!p || (p.id !== idA && p.id !== idB)) return;
+    if (camp ? p.macro !== "C" : p.macro === "C") return;
+    if (day && p.day !== day) return;
+    (p.id === idA ? a : b)[(p.macro === "C" ? "w" : "m" + p.macro + "w") + p.week] = { macro: p.macro, week: p.week, day: p.day, e: log[k] };
+  });
+  return Object.keys(a).filter((k) => b[k]).map((k) => ({ macro: a[k].macro, week: a[k].week, day: a[k].day, label: k, v: f(a[k].e, b[k].e) }))
+    .filter((r) => r.v != null)
+    .sort((x, y) => x.week - y.week);
+}
+
 /* the direction of travel: the last number against the one before it */
 export function trend(rows, dir) {
   const r = (rows || []).filter((x) => x && x.v != null);

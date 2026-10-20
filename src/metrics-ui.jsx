@@ -1,11 +1,13 @@
 import React, { useState, useRef, useMemo } from "react";
 import { C, dsp, bdy, mno, num, buzz, fmtDate, addDays, Card, Eye, Lab, Fld, Btn, Note, Seg } from "./ui.jsx";
 import { WeekOneCard } from "./im-ui.jsx";
+import { Input, T3 } from "./now.jsx";
+import { fadePct } from "./safety.js";
 import {
   MORNING_FIELDS, rolling7, baseline, morningFlag, RHR_OVER, HRV_UNDER,
   recoveryDrop, recoveryBand, easyZone, peakOk, ergUnitLabel, ergTotal, ergMean, recalibrated,
   BAR_SPEED_LIFTS, barSpeeds, sameLoadSeries, PHOTO_VIEWS, PHOTO_NOTE, photoWeeks,
-  bodyNow, trend, series, pairSeries, CAMP_TARGET, r1,
+  bodyNow, trend, series, pairSeries, pairEntries, CAMP_TARGET, r1,
 } from "./metrics.js";
 
 /* ================================================================
@@ -129,19 +131,17 @@ export function MorningFlagLine({ flag }) {
 export function RecoveryHR({ endHR, hr60, onEnd, on60, prev }) {
   const drop = recoveryDrop(endHR, hr60);
   return (
-    <div style={{ background: C.ink, border: "1px solid " + C.cobalt, borderRadius: 5, padding: "11px 12px", marginBottom: 11 }}>
-      <Eye c={C.cobalt} s={{ marginBottom: 6 }}>Recovery heart rate — the drop over the settle</Eye>
-      <div style={{ display: "flex", gap: 8 }}>
-        <div style={{ flex: 1 }}><Lab>HR at the end of the last interval</Lab><Fld v={endHR} on={onEnd} ph="bpm" /></div>
-        <div style={{ flex: 1 }}><Lab>Heart rate at 60 seconds</Lab><Fld v={hr60} on={on60} ph="bpm" /></div>
-      </div>
+    <div data-testid="recovery-hr" style={{ background: C.ink, border: "1px solid " + C.cobalt, borderRadius: 8, padding: 12, marginTop: 14 }}>
+      <Eye c={C.cobalt} s={{ marginBottom: 0 }}>Recovery heart rate — the drop over the minute</Eye>
+      <Input label="HEART RATE WHEN YOU STOP (BPM)" v={endHR} on={onEnd} ph="bpm" />
+      <Input label="HEART RATE AFTER 60 SECONDS (BPM)" v={hr60} on={on60} ph="bpm" />
       {drop != null ? (
-        <div style={{ textAlign: "center", marginTop: 10 }}>
-          <div style={Object.assign({}, mno, { fontSize: 8, color: C.cobalt, letterSpacing: 1.2 })}>THE DROP</div>
-          <div style={Object.assign({}, mno, { fontSize: 26, fontWeight: 700, color: drop >= 20 ? C.moss : drop >= 12 ? C.brass : C.oxide })}>{drop} <span style={{ fontSize: 11, color: C.ash }}>bpm</span></div>
-          <Note s={{ marginTop: 2 }}>{recoveryBand(drop)}</Note>
+        <div style={{ marginTop: 12 }}>
+          <div style={Object.assign({}, mno, { fontSize: T3, color: C.cobalt, letterSpacing: 1 })}>THE DROP</div>
+          <div data-testid="recovery-drop" style={Object.assign({}, mno, { fontSize: 30, fontWeight: 700, color: drop >= 20 ? C.moss : drop >= 12 ? C.brass : C.oxide })}>{drop} <span style={{ fontSize: T3, color: C.ash }}>BPM</span></div>
+          <div style={Object.assign({}, bdy, { fontSize: T3, color: C.ash, marginTop: 2 })}>{recoveryBand(drop)}</div>
         </div>) : null}
-      {prev != null ? <div style={Object.assign({}, mno, { fontSize: 9, color: C.brass, marginTop: 6 })}>LAST WEEK: {prev} bpm</div> : null}
+      {prev != null ? <div style={Object.assign({}, mno, { fontSize: T3, color: C.brass, marginTop: 8 })}>LAST TIME: {prev} BPM</div> : null}
     </div>);
 }
 
@@ -179,26 +179,27 @@ export function EasyZonePanel({ peak, onSave }) {
 export function ErgPanel({ title, slots, vals, onVal, unit, fade, scored, prevTotal }) {
   const u = ergUnitLabel(unit);
   const total = ergTotal(vals), mean = ergMean(vals);
+  const stat = (lab, val, c, id) => (
+    <div data-testid={id} style={Object.assign({}, mno, { fontSize: T3, color: c || C.ash, letterSpacing: 1 })}>{lab} <span style={{ color: C.chalk, fontWeight: 700 }}>{val}</span> {u}</div>);
   return (
-    <div style={{ background: C.ink, border: "1px solid " + C.brass, borderRadius: 5, padding: "11px 12px", marginBottom: 11 }}>
-      <Eye c={C.brass} s={{ marginBottom: 6 }}>{title || "Output"} — {u} {slots.length > 1 ? "each" : ""}</Eye>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+    <div data-testid="erg-panel" style={{ background: C.ink, border: "1px solid " + C.brass, borderRadius: 8, padding: 12, marginTop: 14 }}>
+      <Eye c={C.brass} s={{ marginBottom: 0 }}>{title || "Output"} — {u}{slots.length > 1 ? " each" : ""}</Eye>
+      <div style={{ display: "flex", flexWrap: "wrap", columnGap: 8 }}>
         {slots.map((s, i) => (
-          <div key={i} style={{ flex: "1 1 22%", minWidth: 68 }}>
-            <Lab>{s}</Lab>
-            <Fld v={vals[i] == null ? "" : vals[i]} on={(v) => onVal(i, v)} ph={u} s={{ padding: "9px 4px" }} />
+          <div key={i} style={{ flex: "1 1 45%", minWidth: 140 }}>
+            <Input label={s + " (" + u + ")"} v={vals[i] == null ? "" : vals[i]} on={(v) => onVal(i, v)} ph={u} />
           </div>))}
       </div>
-      {total != null ? (
-        <div style={{ display: "flex", gap: 14, marginTop: 9 }}>
-          <span style={Object.assign({}, mno, { fontSize: 9.5, color: C.ash, letterSpacing: 1 })}>TOTAL <span style={{ color: C.chalk, fontSize: 13, fontWeight: 700 }}>{r1(total)}</span> {u}</span>
-          {slots.length > 1 ? <span style={Object.assign({}, mno, { fontSize: 9.5, color: C.ash, letterSpacing: 1 })}>MEAN <span style={{ color: C.chalk, fontSize: 13, fontWeight: 700 }}>{mean}</span> {u}</span> : null}
-          {prevTotal != null ? <span style={Object.assign({}, mno, { fontSize: 9.5, color: C.brass, letterSpacing: 1 })}>LAST WEEK {r1(prevTotal)}</span> : null}
+      {total != null || prevTotal != null ? (
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 16px", marginTop: 12 }}>
+          {total != null ? stat("TOTAL", r1(total), null, "erg-total") : null}
+          {total != null && slots.length > 1 ? stat("MEAN", mean, null, "erg-mean") : null}
+          {prevTotal != null ? stat("LAST TIME", r1(prevTotal), C.brass, "erg-last") : null}
         </div>) : null}
       {fade ? (
         <div style={{ marginTop: 10, paddingTop: 9, borderTop: "1px solid " + C.line }}>
-          <div style={Object.assign({}, mno, { fontSize: 8, color: C.oxide, letterSpacing: 1.2 })}>THE FADE — ROUND {fade.idx} AGAINST ROUND 1{scored ? " · SCORED WEEK" : ""}</div>
-          <div style={Object.assign({}, mno, { fontSize: 24, fontWeight: 700, color: fade.held >= 95 ? C.moss : fade.held >= 90 ? C.brass : C.oxide })}>{fade.held}%<span style={{ fontSize: 11, color: C.ash }}> held · {fade.drop}% drop</span></div>
+          <div style={Object.assign({}, mno, { fontSize: T3, color: C.oxide, letterSpacing: 1 })}>THE FADE — ROUND {fade.idx} AGAINST ROUND 1{scored ? " · SCORED WEEK" : ""}</div>
+          <div style={Object.assign({}, mno, { fontSize: 24, fontWeight: 700, color: fade.held >= 95 ? C.moss : fade.held >= 90 ? C.brass : C.oxide })}>{fade.held}%<span style={{ fontSize: T3, color: C.ash }}> held · {fade.drop}% drop</span></div>
         </div>) : null}
     </div>);
 }
@@ -387,7 +388,7 @@ function DashRow({ n, t, u, fmt, date, target, note }) {
 export function Dashboard({ log, morning, st, camp, body, fuel, addBody, dateOf, openPhotos, iron }) {
   const [tape, setTape] = useState({});
   const D = useMemo(() => {
-    const fadeRows = pairSeries(log, camp ? "c_fs_rd1" : "fs_rd1", camp ? "c_fs_rd6" : "fs_rd6", camp, "sun", (a, b) => (a ? r1(b / a * 100) : null));
+    const fadeRows = pairEntries(log, camp ? "c_fs_rd1" : "fs_rd1", camp ? "c_fs_rd6" : "fs_rd6", camp, "sun", (a, b) => { const f = fadePct(a, b); return f == null ? null : r1(f); });
     const t20Rows = series(log, camp ? "c_bike20" : "bike20", camp, "sun");
     const burstRows = pairSeries(log, "c_burst1", "c_burst10", camp, null, (a, b) => (a ? r1((a - b) / a * 100) : null));
     const recRows = ["settle", "settle2", "c_settle1", "c_settle2"]

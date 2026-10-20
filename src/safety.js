@@ -83,6 +83,33 @@ export function stopState(round1, past, form, rounds) {
   return { stopAt: -1, last: isNaN(lastV) ? null : lastV, done: true, why: "all" };
 }
 
+/* Two machines a round in PREP's and CAMP's Sunday rounds: SkiErg metres
+   in w, bike calories in cal. A round's share of round one is the mean of
+   (that round ÷ round one) over the machines filled in for both; one
+   machine filled is that machine alone. A plain number is SkiErg alone. */
+const asRound = (e) => (e != null && typeof e === "object" ? e : e == null || e === "" ? {} : { w: e });
+const rnum = (x) => { if (x == null || x === "") return null; const n = Number(String(x).replace(",", ".")); return isNaN(n) ? null : n; };
+export const roundFilled = (e) => { const r = asRound(e); return rnum(r.w) != null || rnum(r.cal) != null; };
+export function roundShare(first, round) {
+  const f = asRound(first), r = asRound(round);
+  const xs = ["w", "cal"].map((k) => { const a = rnum(f[k]), b = rnum(r[k]); return a > 0 && b != null ? b / a : null; }).filter((x) => x != null);
+  return xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : null;
+}
+/* the fade: the last round's share × 100 */
+export const fadePct = (first, last) => { const s = roundShare(first, last); return s == null ? null : s * 100; };
+/* the stop rule on shares: past rounds are { w, cal } */
+export function stopStateShares(first, past, form, rounds) {
+  const p = past || [];
+  for (let i = 0; i < rounds.length; i++) {
+    const e = asRound(p[i]);
+    if (form === i) return { stopAt: i, last: e, done: true, why: "form" };
+    if (!roundFilled(e)) return { stopAt: -1, next: i, done: false };
+    const s = roundShare(first, e);
+    if (s != null && s < STOP_PCT / 100) return { stopAt: i, last: e, done: true, why: "drop" };
+  }
+  return { stopAt: -1, last: rounds.length ? asRound(p[rounds.length - 1]) : null, done: true, why: "all" };
+}
+
 /* ---------------- the tendon gate, at the time ---------------- */
 /* "Any jump, sprint or hold that hurts more than 3 out of 10 while you
    do it, or is worse the next morning, stops that day; still there

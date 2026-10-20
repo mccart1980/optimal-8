@@ -5,7 +5,7 @@ import {
   FIGHT_WEEK_INTRO, FIGHT_WEEK_FOOD, FIGHT_WEEK_AFTER, PHASE_NAME, OUTPUT_RULE, CAMP_RULES, campBench, liftLine, daysOut,
 } from "./camp.js";
 import { rowDates } from "./builder.js";
-import { jumpOf } from "./safety.js";
+import { jumpOf, fadePct } from "./safety.js";
 
 /* ================================================================
    CAMP — the views the camp needs that the Fighter hasn't got: the
@@ -164,7 +164,7 @@ export function CampNumbers({ rows, log, maxes, onSetMax }) {
   const [edit, setEdit] = useState({});
   rows = rows || [];
   const get = (w, day, id) => { const e = log["mCw" + w + "-" + day + "-" + id]; return e ? num(e.w) : null; };
-  const fade = (w) => { const a = get(w, "sun", "c_fs_rd1"), b = get(w, "sun", "c_fs_rd6"); return a && b ? b / a * 100 : null; };
+  const fade = (w) => fadePct(log["mCw" + w + "-sun-c_fs_rd1"], log["mCw" + w + "-sun-c_fs_rd6"]);
   const TEST_WEEKS = rows.filter((x) => x.rx.tests && x.rx.tests.tue).map((x) => x.row.kw);
   const idOf = (kw) => { const x = rows.find((y) => y.row.kw === kw); return x ? x.row.id : kw; };
   const testRow = (id) => TEST_WEEKS.map((w) => [w, get(w, "tue", id)]);

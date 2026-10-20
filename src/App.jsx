@@ -43,7 +43,7 @@ import {
 } from "./camp.js";
 import { EDGE_OFF_LINE, EDGE_INTRO, EDGE_GUARDRAIL, EDGE_ITEMS, TENDON_GATE, edgeCutIndex, tendonGate, jumpYellow, EASY_THIRTY, SAUNA_BASE, saunaDays } from "./edge.js";
 import {
-  jumpOf, stageDown, JUMP_GATE_LINE, TOP_RAMP, topMax, TOP_NOT_MAX, STOP_PCT, stopRounds, stopState, PAIN_LINE, painRow,
+  jumpOf, stageDown, JUMP_GATE_LINE, TOP_RAMP, topMax, TOP_NOT_MAX, STOP_PCT, stopRounds, stopState, stopStateShares, roundFilled, fadePct, PAIN_LINE, painRow,
   HEAD_Q, HEAD_SYMPTOMS, HEAD_DOCTOR, HEAD_AE, HEAD_WHY, HEAD_CLEARED,
 } from "./safety.js";
 import { CampWeekTable, FightWeekTable, CampWorkPanel, CampNumbers, CampWeekCard } from "./camp-ui.jsx";
@@ -1441,6 +1441,35 @@ const topsOn = (log, dk) => { const o = {}; Object.keys(log || {}).forEach((k) =
 
 /* the weekly check's bodyweight lines */
 const BW_OUTS = { wr_bw: 1, cwr_bw: 1 };
+
+/* One result box from its spec on the item (camp.js, prep.js): a number
+   opens the number pad, a word the keyboard, a time the time picker, and
+   a choice is big buttons — tap again to clear. */
+function OutField({ f, v, on }) {
+  if (f.ch) {
+    const cur = String(v == null ? "" : v).toLowerCase();
+    return (
+      <div role="group" aria-label={f.l} data-out-field={f.k} style={{ marginTop: 12 }}>
+        <div style={Object.assign({}, mno, { fontSize: T3, color: C.ash, marginBottom: 4 })}>{f.l}</div>
+        <div style={{ display: "flex", gap: 8 }}>
+          {f.ch.map((c) => { const on1 = cur === c.toLowerCase();
+            return <BigBtn key={c} on={() => { on(on1 ? "" : c.toLowerCase()); buzz(20); }} c={C.brass} fill={on1} pressed={on1} s={{ minHeight: 56, padding: "10px 6px" }}>{c}</BigBtn>; })}
+        </div>
+      </div>);
+  }
+  return <div data-out-field={f.k}><Input label={f.l} v={v} on={on} type={f.kb === "text" || f.kb === "time" ? f.kb : undefined} /></div>;
+}
+/* the total of the last session of the same type, before this one */
+function lastErgTotal(log, macro, kind, day, self) {
+  let best = null;
+  Object.keys(log || {}).forEach((k) => {
+    if (k === self || !/_erg$/.test(k) || k.indexOf("m" + macro + "w") !== 0) return;
+    const e = log[k] || {}; if (!kind || e.kind !== kind || !e.d || (day && e.d >= day)) return;
+    const t = ergTotal(e.v || []); if (t == null) return;
+    if (!best || e.d > best.d) best = { d: e.d, t };
+  });
+  return best ? best.t : null;
+}
 function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, startTimer, stopTimer, autoRest, calis, st, openTool, onSetMax, weekDates, onPainStop, wt, zone }) {
   const b = card.b, it = card.item;
   const dkey = "m" + macro + "w" + week + "-" + day;
@@ -1468,9 +1497,32 @@ function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, st
      the weight result */
   const sunIso = card.kind === "review" && day === "sun" && weekDates ? weekDates[6] : null;
   const wCheck = sunIso && wt && wt.day(sunIso) ? wt.plan.checks[sunIso] : null;
+  const putF = (id, p) => setE(id, Object.assign({}, log[key(id)], p, engKind ? { kind: engKind, d: engDay } : {}));
+  /* PREP and CAMP: a box per value, from the item's own spec */
+  const specBoxes = (o) => {
+    const fs = v(o.fields, rx) || [], e = log[key(o.id)] || {};
+    const ergK = o.id + "_erg", ergE = log[key(ergK)] || {}, ergV = ergE.v || [];
+    const dropK = o.id + "_drop", dropE = log[key(dropK)] || {};
+    const putDrop = (p) => { const n = Object.assign({}, dropE, p), d = recoveryDrop(n.end, n.h60); n.w = d == null ? "" : String(d); setE(dropK, n); };
+    return (
+      <div key={o.id} data-out-id={o.id}>
+        {o.erg ? <ErgPanel slots={o.erg} vals={ergV} unit={(st && st.ergUnit) || "w"} prevTotal={lastErgTotal(log, macro, engKind, engDay, key(ergK))}
+          onVal={(i, val) => { const nv = ergV.slice(); while (nv.length < o.erg.length) nv.push(""); nv[i] = val; setE(ergK, Object.assign({}, ergE, { v: nv }, engKind ? { kind: engKind, d: engDay } : {})); }} /> : null}
+        {fs.map((f) => <OutField key={f.k} f={f} v={e[f.k]} on={(val) => putF(o.id, { [f.k]: val })} />)}
+        {o.recov ? <RecoveryHR endHR={dropE.end} hr60={dropE.h60} onEnd={(val) => putDrop({ end: val })} on60={(val) => putDrop({ h60: val })} /> : null}
+      </div>);
+  };
   const outs = (card.outs || []).map((o) => (wCheck && BW_OUTS[o.id]
     ? <WeightResult key={o.id} check={wCheck} asked={(wt.morning[sunIso] || {}).kgAsk} onAsk={(val) => wt.put(sunIso, { kgAsk: val })} /> :
+    o.fields || o.erg || o.recov ? specBoxes(o) :
     <Input key={o.id} label={((card.outs.length > 1 || !o.u ? v(o.n, rx) + (o.u ? " (" + o.u + ")" : "") : o.u) || "output").toUpperCase()} v={(log[key(o.id)] || {}).w} on={(val) => patchOut(o.id, val)} />));
+  /* the Sunday rounds on two machines: the fade is the last round's share
+     of round one */
+  const twoM = (o) => !!o && (v(o.fields, rx) || []).some((f) => f.k === "cal");
+  const rdOuts = (card.outs || []).filter(twoM);
+  const fadeNow = rdOuts.length === 2 ? fadePct(log[key(rdOuts[0].id)], log[key(rdOuts[1].id)]) : null;
+  const fadeUI = fadeNow != null ? (
+    <div data-testid="round-fade" style={Object.assign({}, mno, { fontSize: T2, fontWeight: 700, color: fadeNow >= STOP_PCT ? C.brass : C.oxide, marginTop: 14 })}>THE FADE · {Math.round(fadeNow * 10) / 10}%</div>) : null;
 
   /* THE STOP RULE: past the fight's own rounds — and the whole second set
      of the double — a round under 75% of round one, or the posture gone,
@@ -1482,13 +1534,17 @@ function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, st
     const ol = card.outs || [];
     const firstId = ol[0] ? ol[0].id : null, lastId = ol.length > 1 ? ol[ol.length - 1].id : null;
     const pk = "past_" + card.key, pe = log[key(pk)] || {}, past = pe.p || [];
-    const r1 = firstId ? num((log[key(firstId)] || {}).w) : null;
-    const stt = stopState(r1, past, pe.form, rounds);
+    /* two machines a round: the stop rule reads each round's share */
+    const two = twoM(ol[0]), first = firstId ? log[key(firstId)] || {} : {};
+    const r1 = two ? (roundFilled(first) ? 1 : null) : firstId ? num(first.w) : null;
+    const state = (p, form) => (two ? stopStateShares(first, p, form, rounds) : stopState(r1, p, form, rounds));
+    const stt = state(past, pe.form);
     const write = (p, form) => {
       const n = Object.assign({}, log);
       n[key(pk)] = form == null ? { p } : { p, form };
-      const s2 = stopState(r1, p, form, rounds);
-      if (s2.done && lastId && s2.last != null) n[key(lastId)] = Object.assign({}, log[key(lastId)], { w: String(s2.last) }, engKind ? { kind: engKind, d: engDay } : {});
+      const s2 = state(p, form);
+      if (s2.done && lastId && s2.last != null) n[key(lastId)] = Object.assign({}, log[key(lastId)],
+        two ? { w: s2.last.w == null ? "" : String(s2.last.w), cal: s2.last.cal == null ? "" : String(s2.last.cal) } : { w: String(s2.last) }, engKind ? { kind: engKind, d: engDay } : {});
       setLog(n);
       if (s2.done && s2.why !== "all" && stopTimer) stopTimer();
     };
@@ -1499,7 +1555,9 @@ function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, st
         {r1 ? null : <div style={Object.assign({}, mno, { fontSize: T3, color: C.ash, marginTop: 8 })}>ROUND ONE'S OUTPUT FIRST</div>}
         {rounds.slice(0, upto).map((rd, i) => (
           <div key={rd.k} style={{ display: "flex", gap: 8, alignItems: "flex-end" }}>
-            <div style={{ flex: 2 }}><Input label={rd.label + " OUTPUT"} v={past[i]} on={(val) => { const p = past.slice(); p[i] = val; write(p, pe.form); }} /></div>
+            {two ? [["w", " · SKIERG (M)"], ["cal", " · BIKE (CAL)"]].map(([k, l]) => { const cur = past[i] && typeof past[i] === "object" ? past[i] : past[i] ? { w: past[i] } : {};
+              return <div key={k} style={{ flex: 2 }}><Input label={rd.label + l} v={cur[k]} on={(val) => { const p = past.slice(); p[i] = Object.assign({}, cur, { [k]: val }); write(p, pe.form); }} /></div>; })
+              : <div style={{ flex: 2 }}><Input label={rd.label + " OUTPUT"} v={past[i]} on={(val) => { const p = past.slice(); p[i] = val; write(p, pe.form); }} /></div>}
             <div style={{ flex: 1 }}><BigBtn on={() => write(past.slice(), pe.form === i ? null : i)} c={C.oxide} fill={pe.form === i} label={"Form gone in " + rd.label.toLowerCase()} s={{ minHeight: 56, padding: "8px 6px", fontSize: T3 }}>FORM GONE</BigBtn></div>
           </div>))}
         {stt.done && stt.why !== "all" ? (
@@ -1520,6 +1578,7 @@ function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, st
         {tm && !(red && b.hard) ? <BigBtn on={() => startTimer(tm)} c={C.oxide} fill s={{ marginTop: 16 }}>▶ START{card.kind === "round" ? " THE ROUNDS" : ""}</BigBtn> : null}
         {b.profile ? <BigBtn on={() => openTool({ kind: "profile" })} c={C.brass} s={{ marginTop: 12 }}>DRAW THE PROFILE</BigBtn> : null}
         {outs}
+        {fadeUI}
         {stopUI}
       </div>);
   } else if (card.kind === "top") {
@@ -3753,9 +3812,9 @@ export default function App() {
     const first = camp.find((x) => x.rx.sim && x.rx.sim.scored && x.row.mon <= dayIso);
     if (!first || (st.fadeDone || {})[st.season.fight]) return;
     const k = "mCw" + first.row.kw + "-sun-";
-    const a = num((log[k + "c_fs_rd1"] || {}).w), b = num((log[k + "c_fs_rd6"] || {}).w);
-    if (!a || !b) return;
-    const fade = b / a * 100, fit = fitnessFromFade(fade);
+    const fade = fadePct(log[k + "c_fs_rd1"], log[k + "c_fs_rd6"]);
+    if (!fade) return;
+    const fit = fitnessFromFade(fade);
     const done1 = Object.assign({}, st.fadeDone, { [st.season.fight]: 1 });
     if (fit === first.row.camp.fitness) { setSt(Object.assign({}, st, { fadeDone: done1 })); return; }
     const next = addDays(mondayIso(dayIso), 7);

@@ -1,6 +1,7 @@
 import { C } from "./ui.jsx";
 import { clusterTimer } from "./edge.js";
 import { jumpOf, JUMP_GATE_LINE, TOP_CUE, STOP_RULE } from "./safety.js";
+import { SLED_FIELDS, roundFields, SETTLE_FIELDS, PACE_FIELDS, HONEST_FIELDS, LIGHTS_FIELDS } from "./camp.js";
 
 /* ================================================================
    OPTIMAL 8 · PREP — as data
@@ -375,7 +376,7 @@ export const PS = {
       why: "Bike or SkiErg — one of them, all preparation, so the numbers compare.", tr: 1 },
     { L: "E", n: "The 60-Second Settle", m: 1, settle: 1, timer: () => ({ kind: "settle", title: "THE SETTLE" }),
       rxLine: () => "60 seconds — log the seconds to land",
-      items: [{ n: "Seconds to land on the breath", s: "write it down", cue: "Stay on the bike. Eyes closed, heart pounding, find the breath at the nostrils and stay on it.", id: "settle", k: "out", u: "seconds" }],
+      items: [{ n: "Seconds to land on the breath", s: "write it down", cue: "Stay on the bike. Eyes closed, heart pounding, find the breath at the nostrils and stay on it.", id: "settle", k: "out", u: "seconds", recov: 1, fields: SETTLE_FIELDS }],
       why: "The corner between rounds, trained, for nothing, twice a week." },
     { L: "F", n: "Trunk", m: 9, rest: "Rest 45 s", rt: 45,
       items: [{ n: "Pallof press", s: "3 × 10 per side · 2 s hold", cue: "Band at chest height anchored beside you, press the hands straight out and hold two seconds without letting it twist you.", id: "pallof", k: "wr", sets: 3, reps: "10/side" },
@@ -394,8 +395,8 @@ export const PS = {
       rest: (rx) => (prepRepeatSled(rx) ? "Rest 0:30" : "Rest 2:30"), rt: (rx) => (prepRepeatSled(rx) ? 30 : 150),
       rxLine: (rx) => (prepRepeatSled(rx) ? "6 × 10 m" : rx.sled + " × 20 m"),
       items: (rx) => [prepRepeatSled(rx)
-        ? { n: "Repeat sled start 10 m", s: "6 × 10 m @ 40–60% of bodyweight", cue: "Six heavy runs of ten metres with thirty seconds' rest. Same load as the long runs; lean in at about 45° and drive the ground backward through the whole foot.", id: "sled_rep", k: "out", u: "load (kg) · time (s)", bwp: [40, 60], bwl: "on the sled" }
-        : { n: "Heavy sled sprint 20 m", s: rx.sled + " × 20 m @ 40–60% of bodyweight", cue: "Lean in at about 45° and sprint 20 metres driving the ground backward through the whole foot; 5–7 seconds a run. Faster, add weight; slower, take some off.", id: "sled", k: "out", u: "load (kg) · time (s)", bwp: [40, 60], bwl: "on the sled" }],
+        ? { n: "Repeat sled start 10 m", s: "6 × 10 m @ 40–60% of bodyweight", cue: "Six heavy runs of ten metres with thirty seconds' rest. Same load as the long runs; lean in at about 45° and drive the ground backward through the whole foot.", id: "sled_rep", k: "out", u: "load (kg) · time (s)", fields: SLED_FIELDS, bwp: [40, 60], bwl: "on the sled" }
+        : { n: "Heavy sled sprint 20 m", s: rx.sled + " × 20 m @ 40–60% of bodyweight", cue: "Lean in at about 45° and sprint 20 metres driving the ground backward through the whole foot; 5–7 seconds a run. Faster, add weight; slower, take some off.", id: "sled", k: "out", u: "load (kg) · time (s)", fields: SLED_FIELDS, bwp: [40, 60], bwl: "on the sled" }],
       why: "Horizontal force — the push that starts a punch and closes distance — with no soreness and nothing on your spine. First, while the nervous system is freshest." },
     { L: "K", n: "Drive Holds + Punch-Position Holds", m: 4, hard: 1, rest: "Rest 30 s", rt: 30, rxLine: () => "3 rounds",
       timer: () => ({ kind: "drivepunch", opt: { rounds: 3 }, title: "DRIVE + PUNCH HOLDS" }),
@@ -473,8 +474,8 @@ export const PS = {
       why: "Twice a week, because the contacts are up." },
     { L: "X", n: "Nasal Threshold Test", m: 8, hide: (rx) => !rx.nasal, star: 1,
       timer: () => ({ kind: "nasal", title: "NASAL THRESHOLD" }), rxLine: () => "8 min nose only, the pace up every 2 minutes",
-      items: [{ n: "Pace at the moment the mouth opened", s: "write it down", id: "p_nasal", k: "out", u: "pace" },
-        { n: "The honest half", s: "did it open because it had to", id: "p_nasal_h", k: "out", u: "had to / caved" }],
+      items: [{ n: "Pace at the moment the mouth opened", s: "write it down", id: "p_nasal", k: "out", u: "pace", fields: PACE_FIELDS },
+        { n: "The honest half", s: "did it open because it had to", id: "p_nasal_h", k: "out", u: "had to / caved", fields: HONEST_FIELDS }],
       why: (rx) => (rx.e2 === "t20" ? "Week 14: the nasal threshold test, then the 20-minute test instead of the session." : "Then the session that follows runs one round short.") },
     { L: "E", n: (rx) => engName("e2")(rx), m: engMin("e2"), star: 1, hard: 1, eng: 1, engKey: "e2",
       timer: prepEngTimer("e2"), rxLine: (rx) => (PENG[rx.e2] || PENG.easy).d,
@@ -489,7 +490,7 @@ export const PS = {
       why: (rx) => (rx.e2 === "t20" ? "Test week: the 20-minute test sets the heart-rate zones every easy session in the camp is paced from." : "Always a different quality from Tuesday's."), tr: 1 },
     { L: "F", n: "The 60-Second Settle", m: 1, settle: 1, timer: () => ({ kind: "settle", title: "THE SETTLE" }),
       rxLine: () => "60 seconds — log the seconds to land",
-      items: [{ n: "Seconds to land on the breath", s: "write it down", cue: "Stay on the bike. Eyes closed, heart pounding, find the breath at the nostrils.", id: "settle2", k: "out", u: "seconds" }] },
+      items: [{ n: "Seconds to land on the breath", s: "write it down", cue: "Stay on the bike. Eyes closed, heart pounding, find the breath at the nostrils.", id: "settle2", k: "out", u: "seconds", recov: 1, fields: SETTLE_FIELDS }] },
     { L: "G", n: "Neck", m: 8, p: "P_NECK", rxLine: () => "holds · rapid tense 4 × 6 · perturbation",
       items: [{ n: "The full neck block", s: "holds 3 × 10 s · rapid tense 4 × 6 per direction · perturbation 2 × 20 s", id: "p_neck_thu", k: "chk" }] },
     { L: "H", n: "Hands", m: 4, p: "HANDS",
@@ -618,8 +619,8 @@ export const PS = {
       stopRule: (rx) => (rx.sim > 6 ? { R: 6, total: rx.sim } : null),
       items: (rx) => [{ n: "Minute 1", s: "SkiErg", k: "txt" }, { n: "Minute 2", s: "Assault bike", k: "txt" },
         { n: "Minute 3", s: "Med-ball slams, or bag work, hard and technically clean", k: "txt" },
-        { n: "Round 1 output", s: rx.scored ? "SCORED WEEK — write it down" : "write it down", id: "c_fs_rd1", k: "out", u: "SkiErg m / bike cal" },
-        { n: "Last round output", s: rx.sim > 6 ? "the last round finished divided by round one is the fade" : "round six divided by round one is the fade", id: "c_fs_rd6", k: "out", u: "SkiErg m / bike cal" }],
+        { n: "Round 1 output", s: rx.scored ? "SCORED WEEK — write it down" : "write it down", id: "c_fs_rd1", k: "out", u: "SkiErg m / bike cal", fields: roundFields("ROUND 1") },
+        { n: "Last round output", s: rx.sim > 6 ? "the last round finished divided by round one is the fade" : "round six divided by round one is the fade", id: "c_fs_rd6", k: "out", u: "SkiErg m / bike cal", fields: roundFields("LAST ROUND") }],
       rules: (rx) => ["Relaxed jaw, shoulders down. Finish a round with your traps by your ears and it does not count.", CORNER,
         "On scored weeks write down round one's output and round six's. Round six divided by round one is the fade."]
         .concat(rx.sim > 6 ? ["Rounds past the fight — the seventh, in weeks 11–13 — are capacity work, not punishment. If one drops below 75% of round one's output, or your posture goes, that round is the last; the fade is scored on the last round you finished."] : []),
@@ -648,7 +649,7 @@ export const PS = {
         { n: "Knees", s: "0–10", id: "wr_kn", k: "out", u: "0–10" }, { n: "Achilles", s: "0–10", id: "wr_ach", k: "out", u: "0–10" },
         { n: "Hamstrings", s: "0–10", id: "wr_ham", k: "out", u: "0–10" },
         { n: "Hours of sleep, averaged", s: "hours a night", id: "wr_sleep", k: "out", u: "hours" },
-        { n: "Lights-out time, averaged", s: "what time the light went off", id: "wr_lights", k: "out", u: "e.g. 20:30" },
+        { n: "Lights-out time, averaged", s: "what time the light went off", id: "wr_lights", k: "out", u: "e.g. 20:30", fields: LIGHTS_FIELDS },
         { n: "Energy", s: "1–10", id: "wr_en", k: "out", u: "1–10" },
         { n: "Evenings you did RANGE", s: "0–7", id: "wr_home", k: "out", u: "0–7" }],
       note: "Three yellows in a week: next week runs at the table's numbers minus one set on everything and the interval sessions at 90%. Achilles or knee at 3 or more: no reactive jumps next week, the tendon holds carry on. Hamstring at 3 or more: no flying sprints next week, Nordics only if pain-free. That's the tendon gate, and it runs whatever the strap says." }] },
