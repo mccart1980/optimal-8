@@ -13,6 +13,8 @@ Open the app. It shows today's feeds in order with a time on each. Eat what the 
 7. **Dinner:** steak and eggs on the heavy days, chicken on the others.
 8. **Before bed** on the early-dinner nights: casein in water.
 
+**Boxing tonight?** Tap BOXING TONIGHT on FOOD, or tick your boxing evenings once in Settings. The five o'clock top-up goes in if the day hasn't one, dinner moves to quarter past eight, after the boxing, and the casein comes off. Five hundred ml of water through the boxing.
+
 Friday has no session, so no bottle — porridge when you wake, then the same day. Saturday and Sunday: porridge at half six, half the bottle at quarter to eight, the other half with two bananas straight after the session, then the feeds through the day.
 
 ## SIT DOWN OR ON THE MOVE
@@ -40,13 +42,15 @@ Weigh on Sunday. Tape every four to six weeks: arms, shoulders, waist. The app's
 ## MAKING WEIGHT
 Only when your fight has a weight limit. In Settings, with the fight: the limit, any tolerance, your natural weight, and when you weigh in.
 
+**It starts with the camp,** on its first Monday, whenever you put the limit in. Prep is never a cut. From the day the limit goes in, the scales are there every morning, so the app has your average on the Sunday before the camp. The one exception: a Sunday average so far over that the camp couldn't take it off at the safe speed starts it the next day, and Settings tells you why.
+
 **Every morning:** toilet, then the scales — before you eat or drink, nothing on. Type the number. The app goes by the average of your last seven mornings, so one heavy morning means nothing.
 
 **The line:** the app gives you an aim for every Sunday. The kilos above your natural weight come off first and fast; the rest is spread evenly, never more than about 1% of your weight a week.
 
 **Every Sunday:** the app checks your average against the aim and sets next week's food — one step less, one step more, or the same. It never goes past Step 4.
 
-**The steps take the carbs furthest from your hard sessions:** the three o'clock and the breakfast honey first; then half the rice or potato at lunch and at some dinners; then at mid-morning; then the breakfast banana. **The bottle, the 5pm loads, the protein and the drinking never change.** The food cards show exactly what's on the plate.
+**The steps take the carbs furthest from your hard sessions:** the three o'clock and the breakfast honey first; then half the rice or potato at lunch and at some dinners; then at mid-morning; then the breakfast banana. **The bottle, the 5pm loads (a boxing evening's too), the protein and the drinking never change.** The food cards show exactly what's on the plate.
 
 **Two Sundays before fight week:** if the app says you'll be over, it tells you straight. That's the time to talk to the promoter. Never water.
 

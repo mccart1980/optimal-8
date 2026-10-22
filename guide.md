@@ -4,7 +4,7 @@
 Open the app. It shows one thing at a time. Do it, press NEXT. That's the whole system. If you only ever read this page, read this page.
 
 ## THE MORNING, IN ORDER
-1. **Making weight?** Toilet, then the scales — before you eat or drink, nothing on. Type the number. Not making weight, the app doesn't show it.
+1. **A weight limit in?** Toilet, then the scales — before you eat or drink, nothing on. Type the number. No limit, the app doesn't show it.
 2. Strap on, lie still one minute. Type the two numbers from the strap app: resting heart rate and HRV.
 3. Three big sighs — breathe in through the nose, sip in a bit more, long breath out through the mouth.
 4. The one thing: what's the one job that makes today a win?
@@ -20,6 +20,7 @@ The app works out every weight for you. Load the bar to the number it shows.
 - The watch will buzz when a rep gets too slow. **Rack it.** That set is finished, even if the app said five reps.
 - A rep that grinds ends the set. Never fight one.
 - **Top-triple weeks** are marked. You work up to one heavy set of three with a rep or two left in you, safety pins set. Never a true max.
+- **Your four numbers** — PROGRESS → NUMBERS — are working maxes: your heaviest clean set of three with a rep or two left in you, × 1.08. Never a best single.
 
 ## THE BIKE, WITHOUT THE JARGON
 - **Easy** — you could talk. Nose breathing. Heart rate in the zone the app shows. The first time, type your peak heart rate into the box on the session: the highest number you've seen on the strap.
@@ -42,7 +43,7 @@ The app works out every weight for you. Load the bar to the number it shows.
 Settings → **Fight booked?**
 - **No:** the app runs Prep, your everyday program, in 16-week cycles.
 - **Yes:** type in the date, the rounds and minutes (like 3 × 2), the rest between rounds, when you weigh in (the day before in the morning, the day before later on, or on the day), how fit you are right now (low, moderate or good), and whether you want a little extra on power, strength or durability — or nothing extra.
-- **A weight limit?** Put in the limit, any tolerance, and your natural weight — what you weigh after a normal week. The app runs your food down to it: the food guide's MAKING WEIGHT says how.
+- **A weight limit?** Put in the limit, any tolerance, and your natural weight — what you weigh after a normal week. The app runs your food down to it from the camp's first Monday, so Prep is never a cut: the food guide's MAKING WEIGHT says how.
 
 The app builds everything from that. The engine always comes first. Change anything and it re-plans from today, and tells you in one line what changed. Your first scored rounds tell the app how fit you really are, and it adjusts.
 
@@ -56,7 +57,7 @@ They fall in the lighter weeks and on test day, and the app puts each one on the
 Every evening: RANGE (the app times each stretch), the hollow and arch holds and the handstand on parallettes Monday to Thursday, the sit, the three questions, casein, bed by half past eight. Wednesday and Saturday evenings in the build weeks, and Saturdays after: the movement session — the app times it.
 
 ## FOOD AND DRINK
-The food guide has the detail. Half the bottle and a banana twenty minutes before you train, the other half after. The 5pm feeds on Tuesday, Friday and Saturday are the ones that never move. Drink when the alarm says.
+The food guide has the detail. Half the bottle and a banana twenty minutes before you train, the other half after. The 5pm feeds on Tuesday, Friday and Saturday are the ones that never move. Boxing tonight? Tap BOXING TONIGHT on FOOD, or tick your boxing evenings in Settings: the app adds the 5pm feed and moves dinner after the boxing. Drink when the alarm says.
 
 ## WORDS YOU'LL SEE
 **Working weight** — the heaviest weight you could do the set with and still have two reps left. **Slow lowering** — five seconds down. **Paused** — stop dead at the bottom for three seconds. **Contrast** — a heavy double, then jumps. **Fade** — round six divided by round one; the number the whole thing is aimed at. **Recovery heart rate** — how far your heart rate drops in the minute after the last interval; higher is fitter. **HRV** — how much the gap between heartbeats varies; a bigger number than your usual means you're recovered, a smaller one means you're not. **BOLT** — how long you can comfortably hold your breath after a normal exhale. **Threshold** — the fastest pace you could keep for half an hour. **Close and plant** — sprint five metres from your stance and stop dead in your stance. **Jump check** — three jumps on Tuesday that tell the app how fresh your legs are. **Peak-power load** — the weight for the bench throw and the trap bar jump where the watch shows the most power; the app works it out from the profile. **Engine-first** — when your fitness is low, the lifting drops to two sets so the conditioning gets the time; your strength holds on it. **Emphasis** — a little extra on one thing, never at the cost of the engine. **The double** — one round more than your fight, five minutes easy, then your fight's rounds again. **Top triple** — a heavy set of three with a rep or two left in you; the heaviest lifting in the program. **Drop landing** — step off a low box and land soft and still. **Low-box depth jump** — step off a low box and jump straight back up. **Seven-morning average** — your last seven morning weights averaged; when you're making weight, it's the only weight the app goes by. **Circuit** — three or four exercises back to back with 20 seconds between; the app's timer says each one as it starts. **THE BRACE** — Tuesday's body-shot block.

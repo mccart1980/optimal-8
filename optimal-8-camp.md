@@ -472,13 +472,15 @@ Food this week holds — the day as printed, or, if you're making weight, your l
 
 The fuel plan's camp phases, Menu A or Menu B meal by meal, with the hydration schedule: the bottle around every session, the 5pm loads on Tuesday, Friday and Saturday, the batch through the day, casein before bed, the tape at weeks 5 and 9. Seven-round-plus weeks keep the mid-session banana; sauna days keep the hydration schedule's sauna line.
 
-**Weight:** if the fight has a weight limit, it goes in under Fight booked? and Making Weight runs the food — the scales every morning, an aim for every Sunday, one step of food up or down at each weekly check, the light days in fight week, never from protein, never the bottle, never the 5pm loads, and never water. If the limit can't be reached at a safe pace, the app says so the day you enter it and again two Sundays before fight week, while there's still time to change the weight — because a camp that has to cut hard in the last fortnight arrives at the ring flat, and this program will not do that to you.
+**Weight:** if the fight has a weight limit, it goes in under Fight booked? and Making Weight runs the food from the camp's first Monday — the scales every morning, an aim for every Sunday, one step of food up or down at each weekly check, the light days in fight week, never from protein, never the bottle, never the 5pm loads, and never water. If the limit can't be reached at a safe pace, the app says so the day the plan starts and again two Sundays before fight week, while there's still time to change the weight — because a camp that has to cut hard in the last fortnight arrives at the ring flat, and this program will not do that to you.
+
+**Boxing evenings:** tick them in Settings, under the day's clock, or tap BOXING TONIGHT on FOOD. The 5pm load goes in if the day hasn't one, dinner moves to 20:15, after the boxing, and the casein comes off, as on Tuesday; 500 ml of water goes through the boxing. The load stays at every step of Making Weight; the light days have none, boxing or not. The training doesn't change.
 
 ---
 
 ## WHAT THIS PROGRAM DOESN'T DO
 
-Skill. Hitting hard on contact, snap and retraction, distance, timing, the guard under fatigue — those are built with a coach, on pads and a bag and in sparring, and this program has no opinion about them. It builds the engine that lets you use them for six rounds, the power that's in the shot, the strength underneath it, the tissue that keeps you training, and the taper that lands you at the bell fresh. If you box on top of this, that's your judgement; nothing here has been arranged around it.
+Skill. Hitting hard on contact, snap and retraction, distance, timing, the guard under fatigue — those are built with a coach, on pads and a bag and in sparring, and this program has no opinion about them. It builds the engine that lets you use them for six rounds, the power that's in the shot, the strength underneath it, the tissue that keeps you training, and the taper that lands you at the bell fresh. If you box on top of this, that's your judgement; nothing here has been arranged around it except the food on your boxing evenings.
 
 ---
 

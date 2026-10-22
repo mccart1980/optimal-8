@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { weightCfg, numbers, runPlan, drawLine, sundayCheck, r1, plusDays } from "./weight.js";
+import { weightCfg, numbers, runPlan, drawLine, sundayCheck, r1, plusDays, weightDay, needSundays, lineStart, startDraws } from "./weight.js";
 
 /* ================================================================
    THE PROOF — weight-making.md's eight tests. 1–7 here, on the
@@ -183,5 +183,61 @@ describe("the arithmetic's edges", () => {
   it("never steps below 4 or above 0, and no step up in the first two weeks", () => {
     const l = drawLine(exCfg, 81.6, "2026-10-18", false);
     expect(l.firstStep).toBe(2);
+  });
+});
+
+describe("proof 9 — the start: the line waits for the camp", () => {
+  /* the March fight: the camp from Monday 4 January, the last check Sunday 7 March */
+  const MAR = weightCfg({ booked: true, fight: "2027-03-13", limit: 76.0, tol: 0, weighIn: "before" });
+  const CAMP = "2027-01-04";
+  /* Prep's Sundays at 83.0, from the Sunday the limit goes in */
+  const prep = (extra) => { const o = {}; for (let s = "2026-10-25"; s <= "2027-01-03"; s = plusDays(s, 7)) Object.assign(o, week(s, 83.0)); return Object.assign(o, extra || {}); };
+  const upTo = (w, today) => { const o = {}; Object.keys(w).forEach((d) => { if (d <= today) o[d] = w[d]; }); return o; };
+  const plan = (w, today) => { const start = lineStart({ cfg: MAR, campMon: CAMP, setAt: "2026-10-25", weights: upTo(w, today), today });
+    return { start, p: runPlan({ draws: startDraws([{ at: "2026-10-25", cfg: MAR }], start), weights: upTo(w, today), today }) }; };
+
+  it("the Sundays a line needs: the real kilos at 1% of natural weight a week, the easy kilos at a kilo and a half", () => {
+    expect([83.0, 84.0, 84.6, 76.0].map((x) => needSundays(MAR, x))).toEqual([8, 9, 10, 0]);
+    /* the worked example from 83.0: easy kilos 3.0 in two Sundays, real 2.5 in four */
+    expect(needSundays(exCfg, 83.0)).toBe(4);
+  });
+  it("entered in Prep: nothing runs before the camp — no step, no banner — and the plan waits", () => {
+    const { start, p } = plan(prep(), "2026-11-20");
+    expect(start).toBe("2027-01-03");
+    expect(p.waiting).toBe(true);
+    expect(p.firstAt).toBe("2027-01-03");
+    expect(weightDay(p, MAR, "2026-11-20")).toBe(null);
+  });
+  it("the line is drawn on the Sunday before the camp's first Monday, from that Sunday's average: nine Sundays, Step 3 from Monday 4 January", () => {
+    const { start, p } = plan(prep(), "2027-01-04");
+    expect(start).toBe("2027-01-03");
+    const l = p.lines[0];
+    expect([l.at, l.N, r1(l.S), l.firstStep, r1(l.forecast)]).toEqual(["2027-01-03", 9, 83.0, 3, 75.0]);
+    expect(l.sundays[0]).toBe("2027-01-10");
+    expect(l.sundays[8]).toBe("2027-03-07");
+    expect(p.stepOn("2027-01-03")).toBe(0);
+    expect(p.stepOn("2027-01-04")).toBe(3);
+    expect(weightDay(p, MAR, "2026-12-27")).toBe(null);
+    expect(weightDay(p, MAR, "2027-01-04").step).toBe(3);
+  });
+  it("a Sunday in Prep the camp couldn't take off inside the speed limit draws the line that Sunday: 84.6 on 15 November, sixteen Sundays, Step 2 from the Monday", () => {
+    const { start, p } = plan(prep(week("2026-11-15", 84.6)), "2026-11-16");
+    expect(start).toBe("2026-11-15");
+    const l = p.lines[0];
+    expect([l.at, l.N, l.firstStep, r1(l.forecast)]).toEqual(["2026-11-15", 16, 2, 75.0]);
+    expect(p.stepOn("2026-11-16")).toBe(2);
+    /* 84.0 is not that far: the camp's nine Sundays are enough */
+    expect(plan(prep(week("2026-11-15", 84.0)), "2026-11-16").start).toBe("2027-01-03");
+  });
+  it("a change made before the start counts from the start, and the last one wins", () => {
+    const tol = weightCfg({ booked: true, fight: "2027-03-13", limit: 76.0, tol: 1.0, weighIn: "before" });
+    expect(startDraws([{ at: "2026-10-25", cfg: MAR }, { at: "2026-11-20", cfg: tol }], "2027-01-03")).toEqual([{ at: "2027-01-03", cfg: tol }]);
+    /* a change after the start is a redraw, as before */
+    expect(startDraws([{ at: "2026-10-25", cfg: MAR }, { at: "2027-01-20", cfg: tol }], "2027-01-03").map((d) => d.at)).toEqual(["2027-01-03", "2027-01-20"]);
+  });
+  it("entered once the camp is running, or the day before it starts, the line is drawn the day it's entered — as in the worked example", () => {
+    expect(lineStart({ cfg: MAR, campMon: CAMP, setAt: "2027-01-03", weights: {}, today: "2027-01-03" })).toBe("2027-01-03");
+    expect(lineStart({ cfg: MAR, campMon: CAMP, setAt: "2027-01-20", weights: {}, today: "2027-01-20" })).toBe("2027-01-20");
+    expect(lineStart({ cfg: exCfg, campMon: "2026-10-12", setAt: "2026-10-11", weights: {}, today: "2026-10-11" })).toBe("2026-10-11");
   });
 });

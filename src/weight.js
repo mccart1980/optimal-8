@@ -99,6 +99,50 @@ export function drawLine(cfg, S, at, prov) {
 }
 export const aimOn = (line, sun) => { const i = line ? line.sundays.indexOf(sun) : -1; return i >= 0 ? line.aims[i] : null; };
 
+/* THE START. The line waits for the camp: it's drawn on the Sunday before
+   the camp's first Monday, so Prep is never a cut by accident. Entered
+   later than that, it's drawn the day it's entered, as before.
+   The one exception: a Sunday average in Prep so far over the aim that
+   the camp couldn't take it off inside the speed limit. Then the line is
+   drawn that Sunday, and the plan starts the next day. */
+
+/* The Sundays a line from S needs to reach the fight-week aim inside the
+   speed limit: the real kilos at 1% of natural weight a week, and the
+   easy kilos at a kilo and a half. */
+export function needSundays(cfg, S) {
+  const { F } = numbers(cfg);
+  const U = cfg.natural || S;
+  const E = Math.min(Math.max(0, S - Math.max(U, F)), 0.04 * S);
+  const R = Math.max(0, S - F - E);
+  return Math.max(R <= EPS ? 0 : Math.ceil(R / (0.01 * U) - EPS), E <= EPS ? 0 : Math.ceil(E / 1.5 - EPS));
+}
+/* the Sundays after `at`, up to and including the last check */
+const sundaysLeft = (cfg, at) => { const lc = fightDates(cfg).lastCheck; let n = 0;
+  for (let x = nextSunday(at); x <= lc; x = plusDays(x, 7)) n++; return n; };
+/* The day the line is drawn. campMon is the camp's first Monday; setAt
+   the day the limit went in. Only Sundays up to today are read. */
+export function lineStart({ cfg, campMon, setAt, weights, today }) {
+  if (!cfg || !setAt) return setAt || null;
+  if (!campMon) return setAt;
+  const campSun = plusDays(campMon, -1);
+  if (setAt >= campSun) return setAt;
+  const campN = sundaysLeft(cfg, campSun);
+  for (let x = sundayOf(setAt); x < campSun && (!today || x <= today); x = plusDays(x, 7)) {
+    const a = averageOn(weights, x).avg;
+    if (a != null && needSundays(cfg, a) > campN) return x;
+  }
+  return campSun;
+}
+/* The draws as the plan runs them: every change made before the start
+   counts from the start, and the last of those wins. */
+export function startDraws(draws, start) {
+  const ds = (draws || []).filter((d) => d && d.at && d.cfg).slice().sort((a, b) => (a.at < b.at ? -1 : a.at > b.at ? 1 : 0));
+  if (!start) return ds;
+  const before = ds.filter((d) => d.at < start), after = ds.filter((d) => d.at >= start);
+  if (!before.length || (after.length && after[0].at === start)) return after;
+  return [{ at: start, cfg: before[before.length - 1].cfg }].concat(after);
+}
+
 /* Forecast colour: over the ceiling red, within half a kilo of it amber. */
 export const forecastTone = (f, C) => (f > C + EPS ? "red" : f >= C - 0.5 - EPS ? "amber" : "green");
 
@@ -157,8 +201,10 @@ function resolveDraw(d, weights, first, prevProv) {
      asked:   { sundayIso: kg } — the one weight a thin week's check asks for
      bad:     (sundayIso) => yellow or red mornings, Monday to Sunday */
 export function runPlan({ draws, weights, asked, bad, today }) {
-  const ds = (draws || []).filter((d) => d && d.at && d.cfg).slice().sort((a, b) => (a.at < b.at ? -1 : a.at > b.at ? 1 : 0));
-  const out = { lines: [], checks: {}, timeline: [], setAt: null, line: null, waiting: !ds.length, firstAt: ds.length ? ds[0].at : null };
+  const all = (draws || []).filter((d) => d && d.at && d.cfg).slice().sort((a, b) => (a.at < b.at ? -1 : a.at > b.at ? 1 : 0));
+  /* a draw still ahead of today (the line waiting for the camp) waits */
+  const ds = all.filter((d) => !today || d.at <= today);
+  const out = { lines: [], checks: {}, timeline: [], setAt: null, line: null, waiting: !ds.length, firstAt: all.length ? all[0].at : null };
   if (!ds.length) return finish(out);
   let line = null, step = 0, prevA = null, di = 0, prov = false;
   const take = (x) => {
@@ -215,7 +261,7 @@ export const lineOn = (plan, s) => { let l = null; (plan.lines || []).forEach((x
    plan yet, or the fight is behind it (the transition menu runs). */
 export function weightDay(plan, cfg, s) {
   if (!cfg || !plan || s > cfg.fight) return null;
-  /* on from the day it was entered */
+  /* on from the day the line is drawn */
   if (plan.firstAt && s < plan.firstAt) return null;
   const fd = fightDates(cfg), nums = numbers(cfg);
   const line = lineOn(plan, s);

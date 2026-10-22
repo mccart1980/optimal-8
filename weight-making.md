@@ -13,7 +13,15 @@ Settings → **Fight booked?** → Yes, with the fight's other answers:
 - **Natural weight** — what you weigh after a normal week of eating and training. Leave it blank if you don't know.
 - **Weigh-in** — the day before, in the morning (before 12) · the day before, in the afternoon or evening · on the day. Not confirmed yet? Pick afternoon or evening. It's the safer plan; change it when you know.
 
-Change any of them and the app redraws the plan from your latest average. Your step stays where it is.
+Change any of them and the app redraws the plan from your latest average. Your step stays where it is. Before the plan has started, a change just waits for the start.
+
+## WHEN IT STARTS
+
+**With the camp.** The plan starts on the camp's first Monday, not the day you enter the limit, so Prep is never a cut by accident. The line is drawn from your seven-morning average on the Sunday before, so the scales start the morning from the day the limit goes in. Until the camp, the food runs as printed.
+
+**Entered once the camp is running,** or on the Sunday before it starts, the plan starts the next day, as in the worked example below.
+
+**The one exception.** If a Sunday average in Prep is so far over that the camp couldn't take the weight off inside the speed limit, the line is drawn that Sunday and the plan starts the next day. Settings says so, and why. With a 76 limit, weighing in the day before and no natural weight entered, that's a Sunday average over about 84 kg.
 
 ## EVERY MORNING — THE SCALES
 
@@ -68,7 +76,7 @@ Step 0 is the menu as printed. Each step takes about 200–250 calories a day of
 **What never changes, at any step:**
 
 - The bottle around every session.
-- The 5pm loads.
+- The 5pm loads, a boxing evening's included.
 - The protein in every feed.
 - The weekend feed after the session.
 - Monday's and Wednesday's dinner, carbs and all. They load Tuesday's and Thursday's hard sessions.
@@ -139,7 +147,7 @@ If the forecast is over the ceiling, the app says it plainly: **"At this pace yo
 
 **One more lever if you're going for it, and still no water: stop the creatine from that Sunday.** The extra water it holds in the muscle drains slowly, about half a kilo by the weigh-in. It costs a little repeat power. Your call.
 
-The plan carries on either way. The same card shows on the day you set the plan if the forecast is already over the ceiling.
+The plan carries on either way. The same card shows on the day the plan starts if the forecast is already over the ceiling.
 
 ## FIGHT WEEK
 
@@ -159,7 +167,7 @@ The plan carries on either way. The same card shows on the day you set the plan 
 | DINNER | 250 g chicken breast or cod, 2 eggs, half a rice pouch | about 625 · 76 · 37 · 16 |
 | BEDTIME | Casein in water | 130 · 30 · 3 · 1 |
 
-- No three o'clock and no 5pm load.
+- No three o'clock and no 5pm load, boxing evening or not.
 - No fruit, no veg, no beans, no oats, no wholemeal, no mushrooms, no passata.
 - Salt as normal.
 - **Drink the full schedule. Drinking less is the one thing that doesn't happen.**
@@ -260,6 +268,7 @@ If the weigh-in turns out to be in the morning, change it in Settings. The fight
 - **F** (fight-week aim) and **M** (weigh-in morning aim) come from the weigh-in table above.
 - **U** = natural weight; if blank, U = S.
 - **Morning weights** are entered to 0.1 kg. **The average** on any day is the mean of the weights logged that day and the six days before; it needs at least 3. With fewer, the Sunday check asks for one weight and uses that.
+- **The start.** The line is drawn on the Sunday before the camp's first Monday. If the limit goes in on or after that Sunday, it's drawn the day it goes in. Before then, every Sunday from the one the limit goes in is read: if the Sundays a line from that Sunday's average needs are more than the camp's Sundays, the line is drawn on that Sunday instead. **The Sundays a line needs** = the larger of R ÷ (0.01 × U) and E ÷ 1.5, rounded up, with E, R and U worked out from that average. **The camp's Sundays** = the Sundays after the Sunday before its first Monday, up to and including the last check. A change made before the start counts from the start, and the last one wins. Everywhere below, the day the plan is set is the day the line is drawn.
 - **S** = the average on the day the plan is set. If there isn't one, S is the weight entered that day. The line is then provisional: the first Sunday with an average redraws it from that average with the Sundays left, sets the step from the redrawn line, and decides nothing else.
 - **The last check** is the Sunday before the Monday of fight week. For a fight early in the week whose light days would fall before that Sunday, it's the last Sunday before the light days.
 - **N** = the number of Sundays after the day the plan is set, up to and including the last check.
@@ -301,3 +310,9 @@ If the weigh-in turns out to be in the morning, change it in Settings. The fight
    - no scales in the morning, no weight banner and no step anywhere
    - the Sunday check's bodyweight line and the Referee as before
    - every week of training identical
+9. **The start.** Limit 76.0, tolerance 0, no natural weight, the day before in the afternoon or evening, fight Saturday 13 March, the camp from Monday 4 January, the limit entered Sunday 25 October, Sunday averages of 83.0.
+   - Before Sunday 3 January: no step, no banner; the plan waits.
+   - The line is drawn on Sunday 3 January from 83.0: nine Sundays, forecast 75.0, Step 3 from Monday 4 January.
+   - A Sunday average of 84.6 on 15 November needs ten Sundays, more than the camp's nine: the line is drawn that Sunday, sixteen Sundays, Step 2 from Monday 16 November. An average of 84.0 needs nine, so the line waits for the camp.
+   - A change made before the start counts from the start, and the last one wins.
+   - Entered on or after the Sunday before the camp, the line is drawn the day it's entered: the worked example doesn't change.

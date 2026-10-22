@@ -238,3 +238,80 @@ describe("the FOOD card's cooked weights", () => {
     expect(card("batch", null).container.textContent).toContain("cooked sweet potato ≈ 245 g");
   });
 });
+
+/* ================================================================
+   THE START, BOXING TONIGHT AND THE WORKING MAXES — the March fight
+   in Prep, the limit entered on Sunday 25 October.
+   ================================================================ */
+const MARCH = { booked: true, fight: "2027-03-13", rounds: 6, mins: 3, rest: 60, weighIn: "before", fitness: "low", emphasis: "power", classic: false, limit: "76", tol: "0" };
+const MARCH_MORNINGS = { "2026-10-29": { kg: "83.0" }, "2026-10-31": { kg: "83.2" }, "2026-11-02": { kg: "83.4" } };
+async function mountMarch(at, extra) {
+  vi.setSystemTime(at);
+  localStorage.setItem("o8s-settings", JSON.stringify(Object.assign(
+    { start: "2026-10-26", macroBase: 1, iron: false, sound: false, autoRest: true, medStage: 1, breathStage: 1, hardLevel: 1, sitLen: 30,
+      imStart: "2026-10-26", rangeStart: "2026-10-26", levelStart: "2026-10-26", v12: true, program: "prep",
+      season: MARCH, fightDate: MARCH.fight, plans: [{ from: "2026-10-26", made: "2026-10-25", inputs: MARCH }],
+      wdraws: [{ at: "2026-10-25", cfg: weightCfg(MARCH) }] }, extra || {})));
+  localStorage.setItem("o8s-morning", JSON.stringify(MARCH_MORNINGS));
+  render(<App />);
+  await waitFor(() => expect(screen.queryByText("LOADING…")).not.toBeInTheDocument());
+}
+
+describe("the start, boxing tonight and the working maxes, in the app", () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    localStorage.clear();
+    localStorage.setItem("o8s-migrated", "true");
+    localStorage.setItem("o8s-maxes", JSON.stringify({ squat: 140, bench: 100, tbdl: 180, pp: 70, cw_squat: 120, cw_tbdl: 160, cw_bench: 90, cw_pp: 60 }));
+  });
+  afterEach(() => vi.useRealTimers());
+
+  it("a limit entered in Prep waits for the camp: the scales every morning, and nothing else until Monday 4 January", async () => {
+    await mountMarch(new Date(2026, 10, 4, 2, 0, 0));
+    expect(screen.getByTestId("card-name").textContent).toBe("Every morning — the scales");
+    expect(screen.getByTestId("scales-line").textContent).toMatch(/^SEVEN-MORNING AVERAGE 83\.2 · THE PLAN STARTS MON,? 4 JAN$/);
+    tab("FOOD");
+    expect(screen.queryByTestId("weight-banner")).not.toBeInTheDocument();
+    expect(within(screen.getByTestId("food-menu")).getAllByText("TWO BANANAS").length).toBeGreaterThan(0);
+    tab("MORE");
+    fireEvent.click(screen.getByRole("button", { name: "SETTINGS" }));
+    expect(screen.getByTestId("weight-ahead").textContent).toMatch(/The weight plan starts with the camp, on Mon,? 4 Jan\./);
+    expect(screen.queryByTestId("line-card")).not.toBeInTheDocument();
+  });
+
+  it("BOXING TONIGHT on FOOD: the 5pm load, dinner at 20:15, no casein — for that day only", async () => {
+    await mountMarch(new Date(2026, 10, 4, 10, 0, 0));
+    tab("FOOD");
+    const menu = () => screen.getByTestId("food-menu");
+    expect(screen.getByTestId("boxing-tonight").textContent).toBe("BOXING TONIGHT");
+    expect(within(menu()).queryAllByText("POUCH LOAD")).toHaveLength(0);
+    expect(within(menu()).getAllByText("CASEIN").length).toBeGreaterThan(0);
+    fireEvent.click(screen.getByTestId("boxing-tonight"));
+    expect(screen.getByTestId("boxing-tonight").textContent).toBe("✓ BOXING TONIGHT");
+    expect(within(menu()).getAllByText("POUCH LOAD").length).toBeGreaterThan(0);
+    expect(within(menu()).getAllByText("17:00").length).toBeGreaterThan(0);
+    expect(within(menu()).getAllByText("20:15").length).toBeGreaterThan(0);
+    expect(within(menu()).queryAllByText("CASEIN")).toHaveLength(0);
+    expect(JSON.parse(localStorage.getItem("o8s-fday"))["2026-11-04"].box).toBe(true);
+  });
+
+  it("the boxing evenings ticked in Settings switch it on for that weekday", async () => {
+    await mountMarch(new Date(2026, 10, 4, 10, 0, 0));
+    tab("MORE");
+    fireEvent.click(screen.getByRole("button", { name: "SETTINGS" }));
+    fireEvent.click(within(screen.getByTestId("boxing-days")).getByRole("button", { name: "WED" }));
+    expect(JSON.parse(localStorage.getItem("o8s-settings")).boxDays).toEqual({ wed: 1 });
+    tab("FOOD");
+    expect(screen.getByTestId("boxing-tonight").textContent).toBe("✓ BOXING TONIGHT");
+    expect(within(screen.getByTestId("food-menu")).getAllByText("POUCH LOAD").length).toBeGreaterThan(0);
+  });
+
+  it("PROGRESS → NUMBERS in Prep asks for working maxes, never a best single", async () => {
+    await mountMarch(new Date(2026, 10, 4, 10, 0, 0));
+    tab("PROGRESS");
+    fireEvent.click(screen.getByRole("button", { name: "NUMBERS" }));
+    expect(screen.getByText(/^Every number here is a working max: your heaviest clean set of 3/)).toBeInTheDocument();
+    expect(screen.queryByText(/your best single/)).not.toBeInTheDocument();
+    expect(screen.getAllByPlaceholderText("set of 3 × 1.08 (kg)")).toHaveLength(4);
+  });
+});

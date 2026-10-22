@@ -18,8 +18,8 @@
 | straight after, on the way to work | BREAKFAST | ~570 · 16 · 105 · 10 |
 | 09:00 and 12:30 (11:30 and 14:30 at the weekend) | MID-MORNING and LUNCH | ~545 · 36 · 66 · 15 each |
 | 15:00 | THE THREE O'CLOCK | ~210 · 2 · 54 · 1 |
-| 17:00 Tue, Fri, Sat (Mon and Thu too in the build block) | THE LOAD | ~525 · 9 · 116 · 6 |
-| 18:30 (20:15 on load nights) | DINNER | ~940 · 80 · 75 · 35 |
+| 17:00 Tue, Fri, Sat (Mon and Thu too in the build block, and any boxing evening) | THE LOAD | ~525 · 9 · 116 · 6 |
+| 18:30 (20:15 on load nights and boxing evenings) | DINNER | ~940 · 80 · 75 · 35 |
 | 21:00 on early-dinner nights | BEDTIME | ~130 · 30 · 3 · 1 |
 
 Friday has no session: breakfast on waking, then the day as printed. Saturday and Sunday: breakfast big at 06:30, the bottle at 07:45, the other half with two bananas straight after, then the feeds through the day.
@@ -99,6 +99,16 @@ BIG portions on Saturday: a third wrap, a second egg, or a second half-pouch —
 
 Low fat, low fibre, easy to move on — no beans, no wholemeal, no eggs in this slot. It's loading tomorrow morning, not filling you tonight.
 
+## BOXING EVENINGS
+
+The menu was written around the morning sessions, not your boxing. On a boxing evening — ticked in Settings under the day's clock, or BOXING TONIGHT on FOOD for any one day — the app changes three things:
+
+- **The 5pm load goes in** if the day hasn't one: any option above. On Sunday it takes the five o'clock banana's place.
+- **Dinner moves to 20:15,** after the boxing, so the casein comes off, as on Tuesday.
+- **500 ml of water through the boxing,** sipped between rounds.
+
+The load stays at every step of Making Weight. The light days have none, boxing or not.
+
 ## DINNER · ~940 kcal (BIG on Wednesday and Saturday: ~1,135)
 
 | Option | What | kcal · P · C · F |
@@ -154,7 +164,7 @@ Steak on the two heavy days. Salmon twice a week if you'll eat it — the one li
 | BUILD (Prep accumulation) | ~3,900 | The 5pm load on Monday and Thursday as well. |
 | HEAVY · FAST · TEST WEEK · CAMP · SHARPEN · FIGHT WEEK | ~3,600 | The day as printed. Do not cut in the light weeks — only the weight plan's step changes it. |
 | TRANSITION (two weeks after a fight) | ~3,300 | No three o'clock on Monday, Wednesday and Thursday; Saturday's big portion standard. |
-| MAKING WEIGHT (any fight with a weight limit) | ~3,350 to ~2,700 | The step the Sunday check sets — MAKING WEIGHT, Steps 1–4, each card showing its own portion. Never protein, never the bottle, never the loads. The build block's extra loads don't run. |
+| MAKING WEIGHT (any fight with a weight limit, from the camp's first Monday) | ~3,350 to ~2,700 | The step the Sunday check sets — MAKING WEIGHT, Steps 1–4, each card showing its own portion. Never protein, never the bottle, never the loads. The build block's extra loads don't run. |
 
 ## THE BATCH, THE PREP, THE SHOP
 
@@ -164,4 +174,4 @@ Weekly on top of the standing list, as you use them: bagels 10 · wholemeal wrap
 
 ## HYDRATION — THE SHORT VERSION
 
-500 ml on waking · 500 in the session · 300 with breakfast, the creatine in it · **the litre with a sachet at work start, empty by nine** · 500 with each feed, 300 in the gaps · urine check at ten and four, pale straw or drink now · sachet two at three only on hot days or after a dark check · 250 at eight, nothing big after. Weekends: 750 with a sachet through the session, 500 before and after the sauna. About four and a half litres on a work day.
+500 ml on waking · 500 in the session · 300 with breakfast, the creatine in it · **the litre with a sachet at work start, empty by nine** · 500 with each feed, 300 in the gaps · urine check at ten and four, pale straw or drink now · sachet two at three only on hot days or after a dark check · 500 through the boxing on a boxing evening · 250 at eight, nothing big after. Weekends: 750 with a sachet through the session, 500 before and after the sauna. About four and a half litres on a work day.

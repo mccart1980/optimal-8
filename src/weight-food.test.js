@@ -147,3 +147,56 @@ describe("proof 7 — on the day: the two days before the fight are Step 0 in lo
     expect(j.rows.find((r) => r.id === "f-breakfast").key).toBe("eggbagelbf");
   });
 });
+
+/* ================================================================
+   BOXING TONIGHT — the menu was written without the boxing. On a boxing
+   evening: the 5pm load if the day hasn't one, dinner at 20:15, after the
+   boxing, so no casein, and 500 ml through the boxing.
+   ================================================================ */
+describe("boxing tonight", () => {
+  const box = (day, w, extra) => plan(day, w, Object.assign({ boxing: true }, extra || {}));
+  const kcal = (p) => feeds(p).reduce((a, r) => a + r.blk.kcal, 0);
+  it("Monday: the 5pm load goes in, dinner moves to 20:15 and the casein comes off; 500 ml through the boxing", () => {
+    const p = box("mon");
+    const load = p.rows.find((r) => r.slot === "five");
+    expect([load.t, load.key, load.crit]).toEqual([tMin("17:00"), "topup", true]);
+    expect(load.ml).toBe(300);
+    expect(p.rows.find((r) => r.slot === "dinner").t).toBe(tMin("20:15"));
+    expect(p.rows.find((r) => r.slot === "bed")).toBeUndefined();
+    expect(p.rows.find((r) => r.id === "w-boxing").ml).toBe(500);
+    expect(p.target).toBe(5000);
+    expect(p.boxing).toBe(true);
+    expect(kcal(p)).toBe(kcal(plan("mon")) + B.topup.kcal - B.casein.kcal);
+  });
+  it("Tuesday has both already: the food is the day as printed, and only the water is added", () => {
+    const p = box("tue"), q = plan("tue");
+    expect(feeds(p).map((r) => [r.id, r.t, r.key])).toEqual(feeds(q).map((r) => [r.id, r.t, r.key]));
+    expect(p.target).toBe(q.target + 500);
+  });
+  it("Sunday: the load takes the five o'clock banana's place", () => {
+    const p = box("sun");
+    expect(feeds(p).some((r) => r.b === "banana")).toBe(false);
+    expect(p.rows.find((r) => r.slot === "five").t).toBe(tMin("17:00"));
+    expect(p.rows.find((r) => r.slot === "dinner").t).toBe(tMin("20:15"));
+  });
+  it("the build block's Monday load isn't doubled", () => {
+    const p = box("mon", null, { phase: "build" });
+    expect(feeds(p).filter((r) => r.slot === "five").length).toBe(1);
+  });
+  it("no step touches the load: at Step 4 it's whole, the three o'clock still gone", () => {
+    const p = box("mon", step(4));
+    expect(card(p, "f-five")).toEqual(mac(B.topup));
+    expect(p.rows.find((r) => r.slot === "three")).toBeUndefined();
+  });
+  it("never on the light days, which have no 5pm load", () => {
+    const p = box("wed", { kind: "light" });
+    expect(p.boxing).toBe(false);
+    expect(p.rows.find((r) => r.slot === "five")).toBeUndefined();
+    expect(p.rows.find((r) => r.id === "w-boxing")).toBeUndefined();
+  });
+  it("off, every day is exactly as before", () => {
+    ["mon", "tue", "wed", "thu", "fri", "sat", "sun"].forEach((d) => {
+      expect(JSON.stringify(plan(d, null, { boxing: false }).rows)).toBe(JSON.stringify(plan(d).rows));
+    });
+  });
+});

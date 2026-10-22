@@ -328,6 +328,28 @@ export function phaseFeeds(ph, day, feeds, weightOn) {
 }
 export const MIDBANANA = { fast: 1, camp: 1 };
 
+/* BOXING TONIGHT — the menu was written without the boxing. On a boxing
+   evening the day gets the 5pm load if it hasn't one (it takes the place
+   of a five o'clock banana), dinner moves to 20:15, after the boxing, and
+   so the casein comes off, as on Tuesday and Saturday. The load is a 5pm
+   load like any other: no step ever touches it. */
+export const BOXING = { at: "19:00", dinner: "20:15", water: 500 };
+export function boxingFeeds(feeds) {
+  const hasLoad = feeds.some((f) => slotOf(f.b) === "five");
+  let out = feeds;
+  if (!hasLoad) {
+    out = out.filter((f) => !(f.b === "banana" && f.t === "17:00"));
+    const at = out.findIndex((f) => f.b && tMin(f.t) > tMin("15:00"));
+    const row = F("17:00", "topup", { crit: 1, note: "Boxing tonight: this fuels it, and loads tomorrow morning." });
+    out = out.slice(0, at < 0 ? out.length : at).concat([row], at < 0 ? [] : out.slice(at));
+  }
+  const late = tMin(BOXING.dinner);
+  let moved = false;
+  out = out.map((f) => { if (slotOf(f.b) !== "dinner" || tMin(f.t) >= late) return f;
+    moved = true; return Object.assign({}, f, { t: BOXING.dinner, note: "After the boxing. Dinner is late, so no casein tonight." }); });
+  return moved ? out.filter((f) => f.b !== "casein") : out;
+}
+
 export const HYDRA_RULES = [
   ["The 5:15 litre with the sachet is the one that never moves.", "You start every shift already sweating from a session; this is what stops the day going dark at ten."],
   ["Pale straw at 10 and 4.", "The check outranks the schedule — dark means more, however much you've drunk."],
@@ -497,11 +519,14 @@ export function fuelPlan(o) {
   const bf = !sess ? wake + 15 : weekend ? S - 105 : S + len + 15;
   const lights = o.lights;
   const light = !!W && W.kind === "light", lowFibre = !!W && W.kind === "lowfibre";
+  /* boxing tonight: never on the light days, which have no 5pm load */
+  const boxing = !!o.boxing && !light;
   const step = W && W.kind === "step" ? W.step || 0 : 0;
   const drops = W && W.kind === "step" ? stepDrops(step) : {};
 
   const plan = D[day];
-  const feeds = (light ? LIGHT_FEEDS : phaseFeeds(o.phase, day, plan.feeds, !!W)).filter((f) => f.b);
+  const feeds0 = (light ? LIGHT_FEEDS : phaseFeeds(o.phase, day, plan.feeds, !!W)).filter((f) => f.b);
+  const feeds = boxing ? boxingFeeds(feeds0) : feeds0;
   const seen = {}, rows = [];
   let lunchN = 0;
   feeds.forEach((f) => {
@@ -581,14 +606,15 @@ export function fuelPlan(o) {
     if (!withFeed(feedOf((r) => r.t === tMin("17:00")), { ml: 500, wnote: "500 ml water with it." })) water("t1700", tMin("17:00"), 500, "500 ml water at five");
   }
   withFeed(feedOf((r) => r.slot === "dinner"), { ml: 300, wnote: "300 ml water with it." });
+  if (boxing) water("boxing", tMin(BOXING.at), BOXING.water, "500 ml through the boxing, sipped", { note: "Plain water, sipped between rounds." });
   water("last", tMin("20:00"), 250, "The last big drink — 250 ml", { note: "Nothing large after this. Water at 9pm is a 2am toilet trip, and the sleep is worth more than the fluid." });
   if (o.sauna) {
     rows.push({ id: "w-sauna1", kind: "water", anchor: "sauna-before", ml: SAUNA_WATER.before, n: "500 ml before the sauna", note: "Never sauna dry." });
     rows.push({ id: "w-sauna2", kind: "water", anchor: "sauna-after", ml: SAUNA_WATER.after, n: "500 ml after the sauna, with a second sachet", sachet: "A SECOND SACHET", note: "Twenty minutes in a sauna is half a litre gone." });
   }
-  const target = (weekend ? 4000 : 4500) + (o.sauna ? 500 : 0);
+  const target = (weekend ? 4000 : 4500) + (o.sauna ? 500 : 0) + (boxing ? BOXING.water : 0);
   const call = light ? ["THE LIGHT DAYS", LIGHT_CALL] : plan.call;
-  return { rows, target, weekend, work, wake, call, dayName: light ? "THE LIGHT DAYS" : plan.n, star: plan.star, tag: plan.tag };
+  return { rows, target, weekend, work, wake, call, boxing, boxable: !light, dayName: light ? "THE LIGHT DAYS" : plan.n, star: plan.star, tag: plan.tag };
 }
 const LIGHT_CALL = "Low fibre and fewer carbs: this menu replaces the whole day. No three o'clock and no 5pm load. Salt as normal, creatine as normal, and every drink on the schedule.";
 

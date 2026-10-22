@@ -13,7 +13,7 @@
    - **The format:** rounds × minutes, e.g. 3 × 2 or 6 × 3.
    - **Rest between rounds:** 1 minute unless you change it.
    - **Weigh-in:** the day before in the morning, the day before in the afternoon or evening, or on the day. It sets the fight-day food.
-   - **Weight limit, if there is one:** the limit, any tolerance, and your natural weight. Making Weight (weight-making.md) runs the food to it from the next Monday; blank means no weight plan. It never changes the training.
+   - **Weight limit, if there is one:** the limit, any tolerance, and your natural weight. Making Weight (weight-making.md) runs the food to it from the camp's first Monday — from the next Monday if the camp is already running; blank means no weight plan. It never changes the training.
    - **How fit you are right now:** low, moderate or good. Coming back from time off is low. The first tests confirm or correct it.
    - **Emphasis:** none, power, strength or durability. One, or none.
 

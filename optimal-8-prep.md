@@ -605,13 +605,15 @@ Wrist circles × 10 each way. Hollow hold, 2 × 20 seconds — on your back, low
 
 This program eats like the Fuel — Optimal 8 Fighter plan, Menu A or Menu B meal by meal, with the hydration schedule: half the bottle and a banana before every session and the other half after, the carb feed at 5pm the evening before every hard morning and before the weekend sessions, the batch through the day, casein before bed, and the tape every fortnight. One change for the accumulation block: weeks 1–5 add a CARB TOP-UP at 17:00 on Monday and Thursday — the two days without one — because five weeks of volume, the upper-body day and the circuits are a building block and the surplus is allowed to be 300, not 190. From week 6 it comes back off. The tape at weeks 1, 5 and 10 decides.
 
-**Weight:** when a fight with a weight limit goes in under Fight booked?, Making Weight runs the food from the next Monday, wherever you are in Prep, and the build block's extra 5pm loads don't run while it's on. Nothing else in Prep changes.
+**Weight:** when a fight with a weight limit goes in under Fight booked?, Making Weight runs the food from the camp's first Monday, not the day you enter it, so Prep is never a cut by accident. The scales start the morning from the day the limit goes in, so the line has your average on the Sunday before the camp. The one exception: a Sunday average so far over that the camp couldn't take it off inside the speed limit starts the plan the next day, and Settings says why. While it's on, the build block's extra 5pm loads don't run. Nothing else in Prep changes.
+
+**Boxing evenings:** tick them in Settings, under the day's clock, or tap BOXING TONIGHT on FOOD. The 5pm load goes in if the day hasn't one, dinner moves to 20:15, after the boxing, and the casein comes off, as on Tuesday; 500 ml of water goes through the boxing. The load stays at every step of Making Weight. The training doesn't change.
 
 ---
 
 ## WHAT THIS PROGRAM DOESN'T DO
 
-Skill. Hitting hard on contact, snap and retraction, distance, timing, the guard under fatigue — those are built with a coach, on pads and a bag and in sparring, and this program has no opinion about them. It builds the engine that lets you use them for six rounds, the power that's in the shot, the strength underneath it, the tissue that keeps you training, and the taper that lands you at the bell fresh. If you box on top of this, that's your judgement; nothing here has been arranged around it.
+Skill. Hitting hard on contact, snap and retraction, distance, timing, the guard under fatigue — those are built with a coach, on pads and a bag and in sparring, and this program has no opinion about them. It builds the engine that lets you use them for six rounds, the power that's in the shot, the strength underneath it, the tissue that keeps you training, and the taper that lands you at the bell fresh. If you box on top of this, that's your judgement; nothing here has been arranged around it except the food on your boxing evenings.
 
 ---
 

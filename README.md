@@ -52,15 +52,23 @@ are four tabs: **TODAY · PROGRESS · FOOD · MORE**.
 - **MORE → SETTINGS** is one set: Fight booked? and its answers — the weigh-in
   (the day before in the morning, the day before in the afternoon or evening,
   or on the day) and the weight limit, tolerance and natural weight — the
-  break times and the session length per weekday, text size, THE EDGE, the
-  units. The fuel phase is read off the app's one season.
+  break times, the session length per weekday and the boxing evenings, text
+  size, THE EDGE, the units. The fuel phase is read off the app's one season.
 - **MAKING WEIGHT** (weight-making.md) runs whenever the fight has a weight
-  limit: the scales first thing every morning, a line with an aim for every
-  Sunday, the Sunday check moving the food one step at most (Steps 0–4, every
-  food card at its step), the light days and the weigh-in day in fight week,
-  and off the day after the fight. Food only — never water, never extra
-  training; it never changes a session. Its eight proof tests run in the
-  build (`src/weight*.test.*`).
+  limit, from the camp's first Monday — never in Prep, unless a Sunday average
+  there is more than the camp could take off inside the speed limit: the
+  scales first thing every morning from the day the limit goes in, a line with
+  an aim for every Sunday, the Sunday check moving the food one step at most
+  (Steps 0–4, every food card at its step), the light days and the weigh-in day
+  in fight week, and off the day after the fight. Food only — never water,
+  never extra training; it never changes a session. Its nine proof tests run
+  in the build (`src/weight*.test.*`).
+- **BOXING TONIGHT** on FOOD, and the boxing evenings ticked in SETTINGS: the
+  5pm load goes in if the day hasn't one, dinner moves to 20:15, after the
+  boxing, the casein comes off and 500 ml of water goes through the boxing.
+  Fuel only; the training doesn't change.
+- **PROGRESS → NUMBERS** in PREP and CAMP asks for working maxes — the
+  heaviest clean set of 3 × 1.08 — never a best single.
 - **Bringing the fuel app's data across:** SETTINGS → *The fuel app — bring it
   across* → IMPORT THE FUEL APP'S BACKUP, and pick the `.json` file the fuel app
   exported. Your chosen options, cooked-batch weights, saved ratios, shopping
