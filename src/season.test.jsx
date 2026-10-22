@@ -97,3 +97,34 @@ describe("the season, in the app", () => {
     expect(title()).toBe("TRANSITION · WEEK 1 · EASY");
   });
 });
+
+/* Worked Example 3 in the app: the comeback, and the date moved inside it.
+   The re-plan carries Prep on from the week you're on instead of
+   restarting it. */
+describe("the comeback, re-planned inside Prep", () => {
+  beforeEach(() => { vi.useFakeTimers({ toFake: ["Date"] }); localStorage.clear(); localStorage.setItem("o8s-migrated", "true"); });
+  afterEach(() => { cleanup(); vi.useRealTimers(); });
+  const WE3 = { booked: true, fight: "2027-03-13", rounds: 6, mins: 3, rest: 60, weighIn: "before", fitness: "low", emphasis: "power", classic: false };
+  const we3 = [{ from: "2026-10-26", made: "2026-10-25", inputs: WE3 }];
+  async function mount(y, m, d, st) {
+    vi.setSystemTime(new Date(y, m - 1, d, 6, 0, 0));
+    localStorage.setItem("o8s-settings", st);
+    render(<App />);
+    await waitFor(() => expect(screen.queryByText("LOADING…")).not.toBeInTheDocument());
+  }
+  const raw = () => screen.getByTestId("app-title").textContent;
+  it("moving the date on Thursday 12 November carries Prep on: P4 this week, P4b the next", async () => {
+    await mount(2026, 11, 12, settings({ plans: we3, season: WE3, fightDate: "2027-03-13" }));
+    expect(raw()).toMatch(/· P4 ·/);
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "MORE" }));
+    fireEvent.click(screen.getByRole("button", { name: "SETTINGS" }));
+    fireEvent.change((await screen.findByText("The date")).parentElement.querySelector("input"), { target: { value: "2027-04-10" } });
+    fireEvent.click(screen.getByRole("button", { name: /^RE-PLAN FROM MON,? 16 NOV/ }));
+    await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-settings")).plans.length).toBe(2));
+    const saved = localStorage.getItem("o8s-settings");
+    expect(JSON.parse(saved).plans[1]).toMatchObject({ from: "2026-11-16", inputs: { fight: "2027-04-10" } });
+    cleanup();
+    await mount(2026, 11, 16, saved);
+    expect(raw()).toMatch(/· P4b ·/);
+  });
+});

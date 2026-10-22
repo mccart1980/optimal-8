@@ -981,6 +981,9 @@ export const CATALOG_SEASONS = (() => {
   });
   out.push({ set: "wednesday-fight", plans: [P("2027-01-04", "2027-01-04", { fight: "2027-03-10", rounds: 5, mins: 3, rest: 90, weighIn: "day" })], today: "2027-01-04" });
   out.push({ set: "fitted-9", plans: [P("2026-11-02", "2026-11-02", { fight: "2027-03-13", fitness: "moderate" })], today: "2026-11-02" });
+  /* Worked Example 3: the comeback, and the same Prep carried on when the date moves */
+  out.push({ set: "comeback", plans: [P("2026-10-26", "2026-10-25", { fight: "2027-03-13", fitness: "low", emphasis: "power" })], today: "2026-10-25" });
+  out.push({ set: "carried", plans: [P("2026-10-26", "2026-10-25", { fight: "2027-03-13", fitness: "low", emphasis: "power" }), P("2026-11-16", "2026-11-12", { fight: "2027-04-10", fitness: "low", emphasis: "power" })], today: "2026-11-12" });
   return out;
 })();
 

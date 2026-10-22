@@ -81,13 +81,72 @@ export const PREP_N = {
   5: P(4, 7, 8, 10, 14),
   4: P(4, 7, 8, 14),
 };
+/* THE COMEBACK — from low fitness, a Prep that doesn't follow a fight's
+   transition starts at its own week 1: P1 and P2 always, then the N table's
+   weeks, taken out in this order as it shortens — P11, P12, P8, P3, P6,
+   P13, P9, P4, P10, P5. Fifteen weeks or more start at week 1 already. */
+export const COMEBACK_N = {
+  14: P(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14),
+  13: P(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14),
+  12: P(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14),
+  11: P(1, 2, 3, 4, 5, 6, 7, 9, 10, 13, 14),
+  10: P(1, 2, 4, 5, 6, 7, 9, 10, 13, 14),
+  9: P(1, 2, 4, 5, 7, 9, 10, 13, 14),
+  8: P(1, 2, 4, 5, 7, 9, 10, 14),
+  7: P(1, 2, 4, 5, 7, 10, 14),
+  6: P(1, 2, 5, 7, 10, 14),
+  5: P(1, 2, 5, 7, 14),
+  4: P(1, 2, 7, 14),
+};
+/* the order each table takes weeks out in as the Prep shortens */
+export const DROP_ORDER = { standard: [1, 2, 11, 12, 6, 3, 13, 9, 5, 10], comeback: [11, 12, 8, 3, 6, 13, 9, 4, 10, 5] };
 /* The Prep for N weeks, as segments that each end in a test day. */
-export function prepLayout(N) {
+export function prepLayout(N, comeback) {
   if (N >= 20) return [CYCLE16.slice()].concat(prepLayout(N - 16));
   if (N >= 17) { const c = CYCLE16.slice(); c.splice(5, 0, ...["P4c", "P4d", "P4e"].slice(0, N - 16)); return [c]; }
   if (N === 16) return [CYCLE16.slice()];
+  if (comeback && COMEBACK_N[N]) return [COMEBACK_N[N].slice()];
   if (PREP_N[N]) return [PREP_N[N].slice()];
   return [];
+}
+/* a Prep week's place in the order: P4 · P4b · P4c · P5 … */
+const weekKey = (id) => { const m = String(id).match(/^P(\d+)([a-z]?)$/); return m ? Number(m[1]) + (m[2] ? (m[2].charCodeAt(0) - 96) / 10 : 0) : 0; };
+/* THE CONTINUATION — a re-plan made while a Prep is running carries it on.
+   The weeks done stay done; the weeks left are the whole length's own table
+   (weeks done + weeks left) after the week you're on. Too many: the table's
+   order takes the extras out, never test week. Too few: the extras run
+   straight after the week you're on — P4 again, +2.5% each time, from the
+   build; after it, the last heavy week done again (P6–P8), or P12 again at
+   88% from the fast block. Never a lighter, top-triple, easy or test week
+   twice. Returns the weeks left, as segments. */
+export function prepCarryOn(doneIds, left, comeback) {
+  const lastId = doneIds[doneIds.length - 1], lastKey = weekKey(lastId), lastDoc = prepIdInfo(lastId).doc;
+  const total = doneIds.length + left;
+  const segs = prepLayout(Math.max(4, total), comeback);
+  let rest = (segs[0] || PREP_N[4]).filter((id) => weekKey(id) > lastKey);
+  const later = segs.slice(1);
+  let room = left - later.reduce((a, x) => a + x.length, 0);
+  if (rest[rest.length - 1] !== "P14") rest.push("P14");
+  for (const d of DROP_ORDER[comeback ? "comeback" : "standard"]) {
+    if (rest.length <= room) break;
+    const i = rest.findIndex((id) => prepIdInfo(id).doc === d);
+    if (i >= 0) rest.splice(i, 1);
+  }
+  if (rest.length > room) rest = rest.slice(rest.length - room);
+  const extra = room - rest.length;
+  if (extra > 0) {
+    const all = doneIds.concat(rest);
+    const anchor = doneIds.slice().reverse().find((id) => [5, 9, 10, 13, 14].indexOf(prepIdInfo(id).doc) < 0) || "P4";
+    const ad = prepIdInfo(anchor).doc;
+    if (ad <= 4) {
+      /* P4 again, after any P4 repeat already in the weeks left */
+      const used = all.filter((id) => /^P4[a-z]$/.test(id)).map((id) => id.charCodeAt(2));
+      const from = used.length ? Math.max(...used) + 1 : 98;
+      const at = rest.reduce((a, id, i) => (/^P4[a-z]$/.test(id) ? i + 1 : a), 0);
+      rest.splice(at, 0, ...Array.from({ length: extra }, (_, i) => "P4" + String.fromCharCode(from + i)));
+    } else rest = Array.from({ length: extra }, () => (ad >= 11 ? "P12b" : anchor)).concat(rest);
+  }
+  return [rest].concat(later);
 }
 /* "P4b" → document row 4, two and a half percent on; "P12b" → row 12 at 88% */
 export function prepIdInfo(id) {
@@ -102,14 +161,20 @@ export function prepIdInfo(id) {
 const fightMinutes = (inp) => (Number(inp.rounds) || 6) * (Number(inp.mins) || 3);
 export const transitionWeeks = (inp) => (fightMinutes(inp) <= 9 ? 1 : 2);
 
-function prepRows(ids, segIdx, extra) {
-  const hasDoc = (d) => ids.some((x) => prepIdInfo(x).doc === d);
+/* o: { comeback, done } — a comeback Prep's rows carry it and their place
+   in it (pk), so the ramp runs its first weeks; a carried-on Prep counts on
+   from the weeks already done, which drew the profiles */
+function prepRows(ids, segIdx, extra, o) {
+  o = o || {};
+  const done = o.done || [];
+  const hasDoc = (d) => ids.concat(done).some((x) => prepIdInfo(x).doc === d);
   /* test day's depth jump is from the box you've trained on */
-  const depthTrained = ids.some((x) => { const d = prepIdInfo(x).doc; return d >= 11 && d <= 13; });
+  const depthTrained = ids.concat(done).some((x) => { const d = prepIdInfo(x).doc; return d >= 11 && d <= 13; });
   return ids.map((id, i) => {
     const inf = prepIdInfo(id);
-    const r = Object.assign({ program: "prep", id, doc: inf.doc, plus: inf.plus, p88: inf.p88, seg: segIdx, segLen: ids.length, depthTrained }, extra || {});
-    r.profile = i === 0 || inf.doc === 10 || (inf.doc === 14 && !hasDoc(10));
+    const r = Object.assign({ program: "prep", id, doc: inf.doc, plus: inf.plus, p88: inf.p88, seg: segIdx, segLen: ids.length + done.length, depthTrained }, extra || {});
+    r.profile = (i === 0 && !done.length) || inf.doc === 10 || (inf.doc === 14 && !hasDoc(10));
+    if (o.comeback) { r.comeback = 1; r.pk = done.length + i + 1; }
     return r;
   });
 }
@@ -175,17 +240,24 @@ function genPlan(plan, ctx, horizon) {
   let fitness = inp.fitness;
   let lastBefore = rows.length ? rows[rows.length - 1] : ctx.lastRow;
   let filler = false;
+  /* a Prep already running when this plan starts — its weeks back to its
+     first, or to the week after its last test week */
+  const run = [];
+  if (!rows.length && ctx.prepRun) ctx.prepRun.forEach((r) => run.push(r));
+  /* from low fitness, a Prep that doesn't follow a fight's transition is a comeback */
+  const comeback = run.length ? !!run[0].comeback : fitness === "low" && !afterFight;
   if (M >= 11) {
     const N = M - 10;
-    const segs = prepLayout(N);
-    if (segs.length) segs.forEach((ids, si) => prepRows(ids, si + 1, { fitted: 1 }).forEach((r) => push(r)));
+    const segs = run.length ? prepCarryOn(run.map((r) => r.id), N, comeback) : prepLayout(N, comeback);
+    if (run.length) segs.forEach((ids, si) => prepRows(ids, si ? si + 1 : run[0].seg || 1, { fitted: 1, carried: si ? 0 : 1 }, si ? {} : { comeback, done: run.map((r) => r.id) }).forEach((r) => push(r)));
+    else if (segs.length) segs.forEach((ids, si) => prepRows(ids, si + 1, { fitted: 1 }, { comeback: comeback && si === 0 }).forEach((r) => push(r)));
     else {
       /* 1–3 weeks: straight after a fight, the transition's easy weeks run
          on until the camp; otherwise those weeks run as P1, P2 and P3 */
       filler = true;
       for (let k = 0; k < N; k++) {
         if (afterFight) { const last = rows[rows.length - 1]; push({ program: "transition", id: "T", idx: (last && last.program === "transition" ? last.idx : 0) + 1, tw: transitionWeeks(ctx.prevFightInp || inp), fight: ctx.prevFight, runOn: 1 }); }
-        else push(Object.assign(prepRows(["P1", "P2", "P3"].slice(k, k + 1), 1, { filler: 1 })[0], { profile: k === 0 }));
+        else push(Object.assign(prepRows(["P1", "P2", "P3"].slice(k, k + 1), 1, { filler: 1 }, comeback ? { comeback: 1, done: ["P1", "P2", "P3"].slice(0, k) } : {})[0], { profile: k === 0 }));
       }
     }
     if (rows.length) lastBefore = rows[rows.length - 1];
@@ -252,8 +324,16 @@ export function buildSeason(o) {
     const fights = before.filter((r) => r.program === "camp" && r.camp.fight < plan.from).map((r) => r.camp);
     const pf = fights.length ? fights[fights.length - 1] : null;
     const tests = before.filter((r) => r.program === "prep" && r.doc === 14);
+    /* a Prep running into this plan's first Monday: its weeks back to its
+       start, or to the week after its last test week */
+    const prepRun = [];
+    if (lastRow && lastRow.program === "prep" && lastRow.doc !== 14 && addDays(lastRow.mon, 7) === plan.from) {
+      for (let k = before.length - 1; k >= 0; k--) { const r = before[k];
+        if (r.program !== "prep" || r.doc === 14 || (k < before.length - 1 && addDays(r.mon, 7) !== before[k + 1].mon)) break;
+        prepRun.unshift(r); }
+    }
     const ctx = {
-      today, todayMon, strapBack, head, lastRow,
+      today, todayMon, strapBack, head, lastRow, prepRun,
       prevFight: pf ? pf.fight : null, prevFightInp: pf ? { rounds: pf.R, mins: pf.mins } : null,
       lastTestDay: tests.length ? addDays(tests[tests.length - 1].mon, 5) : null,
     };
@@ -499,6 +579,17 @@ export function prepWeekRx(row, edgeOn) {
     em: base.em.replace(/@ 87%/, "@ 88%") + " P12 again at 88%, depth jumps 4 × 4." });
   /* test day's depth jumps are from the box you've trained on */
   if (row.doc === 14 && row.depthTrained === false) rx = Object.assign({}, rx, { jump: "lowbox" });
+  /* THE COMEBACK'S FIRST WEEKS: everything new a round short and the
+     flying sprints at 90% for two weeks; the Nordics 2 × 3, 2 × 4, 3 × 4,
+     then the calendar's — never more than the week's own */
+  if (row.comeback && row.pk <= 3) {
+    const ramp = [[2, 3], [2, 4], [3, 4]][row.pk - 1];
+    const nor = ramp[0] * ramp[1] < rx.nor[0] * rx.nor[1] ? ramp.slice() : rx.nor;
+    rx = Object.assign({}, rx, { nor, ramp: 1, comeback: row.pk });
+    if (row.pk <= 2) rx = Object.assign({}, rx, { circ: Math.min(rx.circ, 2), dr: Math.min(rx.dr, 3), carry: Math.min(rx.carry, 2), spr90: 1,
+      em: rx.em + " Easing back in: everything new a round short, the sprints at 90%, the Nordics " + nor[0] + " × " + nor[1] + "." });
+    else rx = Object.assign({}, rx, { em: rx.em + " The Nordics " + nor[0] + " × " + nor[1] + ", the last week of the ramp." });
+  }
   /* test week names its own Saturday and Sunday */
   if (row.doc === 14) rx = Object.assign({}, rx, { em: rx.em.replace("Sat 2 Jan", "Sat " + dayMonth(addDays(row.mon, 5))).replace("Sun 3 Jan", "Sun " + dayMonth(addDays(row.mon, 6))) });
   /* the bar-speed profiles: the Prep's first week, P10 if kept, else P14 */

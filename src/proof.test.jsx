@@ -156,6 +156,24 @@ describe("proof 3 — Worked Example 1's session pages", () => {
   });
 });
 
+describe("Worked Example 3's pages — the comeback eases you back in", () => {
+  const cb = (id, day, name) => CAT.find((c) => c.set === "comeback" && c.edge && c.row === "prep" && c.id === id && c.day === day && c.n === name);
+  it("weeks 1 and 2 a round short, the sprints at 90%, the Nordics ramped; week 3 as the calendar writes it", () => {
+    ["P1", "P2"].forEach((id) => {
+      expect(cb(id, "mon", "Dips + Ring Rows").pres).toMatch(/^3 rounds/);
+      ["The Arms Circuit", "The Shoulders Circuit", "THE BRACE"].forEach((n, i) => expect(cb(id, ["mon", "thu", "tue"][i], n).pres).toMatch(/^2 rounds/));
+      expect(cb(id, "wed", "Farmer's Carry").pres).toMatch(/^2 × 30 m/);
+    });
+    expect(cb("P1", "sat", "Flying Sprints").pres).toMatch(/^3 runs at 90%/);
+    expect(cb("P2", "sat", "Flying Sprints").pres).toMatch(/^4 runs at 90%/);
+    expect(cb("P1", "wed", "Nordic Curls").pres).toMatch(/^2 × 3/);
+    expect(cb("P2", "wed", "Nordic Curls").pres).toMatch(/^2 × 4/);
+    expect(cb("P4", "wed", "Nordic Curls").pres).toMatch(/^3 × 4/);
+    expect(cb("P4", "sat", "Flying Sprints").pres).toMatch(/^5 runs/);
+    expect(cb("P4", "mon", "Dips + Ring Rows").pres).toMatch(/^4 rounds/);
+  });
+});
+
 describe("the standing rules", () => {
   it("puts the pre-camp check in the week before every camp — P14 here, the transition in Worked Example 2", () => {
     const p14 = CAT.filter((c) => c.set === "prep14" && c.row === "prep" && c.id === "P14" && c.day === "mon" && c.edge);

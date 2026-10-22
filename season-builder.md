@@ -14,7 +14,7 @@
    - **Rest between rounds:** 1 minute unless you change it.
    - **Weigh-in:** the day before in the morning, the day before in the afternoon or evening, or on the day. It sets the fight-day food.
    - **Weight limit, if there is one:** the limit, any tolerance, and your natural weight. Making Weight (weight-making.md) runs the food to it from the next Monday; blank means no weight plan. It never changes the training.
-   - **How fit you are right now:** low, moderate or good. The first tests confirm or correct it.
+   - **How fit you are right now:** low, moderate or good. Coming back from time off is low. The first tests confirm or correct it.
    - **Emphasis:** none, power, strength or durability. One, or none.
 
 Change any answer and the app re-plans from today, keeps everything you've logged, and tells you in one line what changed.
@@ -136,6 +136,7 @@ When the fight is closer than the shortest camp:
 
 | | Low | Moderate | Good |
 |---|---|---|---|
+| Prep before the camp | the comeback: Prep from its week 1, the first two weeks a round short, the tendon ramp — unless it follows a fight's transition | the N table | the N table |
 | Foundation | two weeks: F1 at two-thirds dose, then F | one week, F | one week, F |
 | Engine-first | on | off | off |
 | The tendon ramp | on | off | off |
@@ -153,6 +154,7 @@ When the fight is closer than the shortest camp:
 - Flying sprints at 90% for the camp's first two weeks; flat out from week 3.
 - Reactive jumps: drop landings in the camp's first two weeks, low-box depth jumps from week 3, full depth jumps not before week 4.
 - Nordics ramp 2 × 3, 2 × 4, 3 × 4, then the camp's numbers.
+- In a comeback Prep, the same ramp runs its first weeks: the flying sprints at 90% for two weeks, the Nordics 2 × 3, 2 × 4, 3 × 4 — never more than the week's own — and the drop landings Prep's first block already has.
 
 **The working-weight check:** on each of the squat, trap bar and bench press, work up to a set of 3 that's hard but leaves two more in you. That weight × 1.08 is the working max every percentage reads from.
 
@@ -206,7 +208,7 @@ On automatically from low fitness, and in every short-notice camp. It doesn't ad
 ## YOUR STANDING RULES — EVERY PROGRAM, EVERY WEEK
 
 1. **Three genuinely hard conditioning sessions a week at most** — Tuesday, Thursday, Sunday. Everything else easy.
-2. **The tendon ramp** in every camp from low fitness, and **the tendon gate** every Sunday: Achilles or knee at 3 or more out of 10 means no reactive jumps next week, with the tendon holds carried on; hamstring at 3 or more means no flying sprints next week, and Nordics only if they're pain-free. Back under 3, the jumps restart one stage down for a week. Any jump, sprint or hold that hurts more than 3 out of 10 while you do it, or is worse the next morning, stops that day; still there after two weeks, a physio looks at it.
+2. **The tendon ramp** in every camp from low fitness and in the first weeks of a comeback Prep, and **the tendon gate** every Sunday: Achilles or knee at 3 or more out of 10 means no reactive jumps next week, with the tendon holds carried on; hamstring at 3 or more means no flying sprints next week, and Nordics only if they're pain-free. Back under 3, the jumps restart one stage down for a week. Any jump, sprint or hold that hurts more than 3 out of 10 while you do it, or is worse the next morning, stops that day; still there after two weeks, a physio looks at it.
 3. **Hydration is the rule, not a guide.** The sauna at most twice a week, never without the water.
 4. **No dehydration cuts, ever.** Weight is made with food only, by Making Weight: below your natural weight, never faster than 1% of it a week, and nothing below its Step 4. The training never changes to make weight.
 5. **Before every camp:** bloods — full blood count, lipids, liver and kidneys — and blood pressure. A resting ECG once a year. The app puts this in the week before the camp's first Monday.
@@ -251,6 +253,37 @@ Test day is week 16's Saturday. The next cycle starts the Monday after, its work
 | 5 | P4 · P7 · P8 · P10 · P14 |
 | 4 | P4 · P7 · P8 · P14 |
 | 1–3 | No Prep. Straight after a fight, the transition's easy weeks run on until the camp; otherwise those weeks run as P1, P2 and P3, in order. Either way, the working weights are checked in the camp's week 1 |
+
+**From low fitness — THE COMEBACK.** After time off, Prep starts at its own week 1 whatever its length, unless it follows a fight's transition. P1 and P2 are always kept; the other weeks come out in this order as it shortens: P11, P12, P8, P3, P6, P13, P9, P4, P10, P5. Fifteen weeks or more start at P1 already.
+
+| N | The comeback |
+|---|---|
+| 14 | P1 to P14 — the master |
+| 13 | P1 · P2 · P3 · P4 · P5 · P6 · P7 · P8 · P9 · P10 · P12 · P13 · P14 |
+| 12 | P1 · P2 · P3 · P4 · P5 · P6 · P7 · P8 · P9 · P10 · P13 · P14 |
+| 11 | P1 · P2 · P3 · P4 · P5 · P6 · P7 · P9 · P10 · P13 · P14 |
+| 10 | P1 · P2 · P4 · P5 · P6 · P7 · P9 · P10 · P13 · P14 |
+| 9 | P1 · P2 · P4 · P5 · P7 · P9 · P10 · P13 · P14 |
+| 8 | P1 · P2 · P4 · P5 · P7 · P9 · P10 · P14 |
+| 7 | P1 · P2 · P4 · P5 · P7 · P10 · P14 |
+| 6 | P1 · P2 · P5 · P7 · P10 · P14 |
+| 5 | P1 · P2 · P5 · P7 · P14 |
+| 4 | P1 · P2 · P7 · P14 |
+
+**A comeback's first weeks:**
+
+- **Weeks 1 and 2:** everything new a round short — Monday's dips and rows three rounds, the three circuits two, the carries two runs — and the flying sprints at 90%.
+- **The Nordics:** 2 × 3, 2 × 4, then 3 × 4 in week 3, never more than the week's own; then the calendar's.
+- **The drop landings** are already Prep's first-block jump.
+
+On what you're running, muscle comes back faster than tendons do, and that gap is where comeback injuries happen: the weights climb with the bar speed, the jumps, sprints and Nordics climb on the ramp.
+
+**A re-plan inside a running Prep carries it on.** Change the date, or any other answer, while Prep is running and the weeks you've done stay done. The weeks left are the whole length's own table — the weeks done plus the weeks left — after the week you're on:
+
+- **Too many:** the table's order takes the extras out, never the test week.
+- **Too few:** the extras run straight after the week you're on. From the build, P4 again, +2.5% each time. After it, the last heavy week done again (P6, P7 or P8), or P12 again at 88% from the fast block.
+- **Never twice:** a lighter, top-triple, easy, Christmas or test week.
+- The bar-speed profiles aren't redrawn for a re-plan, and a comeback's ramp counts on from its first week.
 
 **How a fitted Prep runs:**
 
@@ -328,11 +361,34 @@ The sauna runs twice a week in weeks 2–5: Thursday straight after the easy ses
 
 ---
 
+## WORKED EXAMPLE 3 — THE COMEBACK · SATURDAY 13 MARCH · 6 × 3 · LOW FITNESS · POWER
+
+Entered: fight Saturday 13 March 2027 · 6 rounds × 3 minutes · 1 minute's rest · weigh-in the day before, afternoon or evening · low fitness, after time off · power · no weight limit yet. Plan starts Monday 26 October. Twenty weeks to the fight week: ten weeks of Prep, then the full camp. From low fitness, and not after a fight, the Prep is the comeback.
+
+| Week of | Prep week | What's special |
+|---|---|---|
+| 26 Oct | P1 | easing back in: a round short, sprints at 90%, Nordics 2 × 3 |
+| 2 Nov | P2 | easing back in: a round short, sprints at 90%, Nordics 2 × 4 |
+| 9 Nov | P4 | Nordics 3 × 4, the ramp's last week |
+| 16 Nov | P5 | lighter; the working weights re-checked |
+| 23 Nov | P6 | |
+| 30 Nov | P7 | |
+| 7 Dec | P9 | the top triples |
+| 14 Dec | P10 | easy; tests; profiles redrawn |
+| 21 Dec | P13 | Christmas week, as written |
+| 28 Dec | P14 | test week; test day Saturday 2 January |
+
+**Mon 4 January – Sat 13 March: the camp — the master, ten weeks**, good fitness off test week, the power emphasis.
+
+**If the fight moves to Saturday 10 April**, entered on Thursday 12 November: the plan re-made from Monday 16 November keeps P1, P2 and P4, then runs P4 again at +2.5%, P5 to P14 — fourteen weeks in all — and the camp from Monday 1 February.
+
+---
+
 ## THE PROOF — WHAT THE BUILD MUST PASS
 
 1. **The master camp.** 6 × 3, 1 minute's rest, good fitness, no emphasis, fight Saturday 13 March 2027, plan starting Monday 4 January 2027: every week table row and session page of Optimal 8 · Camp, exactly.
 2. **The no-fight cycle.** No fight: the 16-week cycle above.
 3. **The short camp.** Fight Saturday 28 November 2026, 3 × 2, 1 minute's rest, low fitness, durability, plan starting Monday 12 October 2026: Worked Example 1, week by week.
-4. **Prep fitted.** Prep with 14 weeks: Optimal 8 · Prep, exactly. Prep with 4 weeks: P4, P7, P8, P14.
+4. **Prep fitted.** Prep with 14 weeks: Optimal 8 · Prep, exactly. Prep with 4 weeks: P4, P7, P8, P14. The comeback: Worked Example 3, week by week, and the re-plan inside it carried on.
 5. **Nothing invented.** Not one exercise, load or session type in any generated week that isn't written in Prep, the Camp or these pages.
 6. **The weight plan.** Making Weight's proof tests, exactly — and with no weight limit, no trace of it anywhere.

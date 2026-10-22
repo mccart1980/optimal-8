@@ -34,6 +34,23 @@ Every week of Prep, by its number. A shorter Prep keeps some of them and drops t
 
 Sled runs on Wednesday: weeks 1–5: 4 · weeks 6–9 and 11–13: 5 · weeks 10 and 14: 3. Nordics on Wednesday: 3 × 4 in week 1, 3 × 5 from week 2, 2 × 3 in weeks 5, 10 and 14. Sprints on Saturday: build-ups and 3 runs at 90% in week 1, then 4, 5, 5 · weeks 5, 10 and 14 at 90% · weeks 6–9 and 11–13: 5 runs. Monday's base: 40 minutes every week.
 
+**This year — the comeback, ten weeks.** After time off, Prep starts at its own week 1 and keeps ten of the fourteen. It skips week 3 (a third slow-lowering week), week 8 (the clusters — the camp's week 4 runs them) and weeks 11 and 12 (the camp's peak repeats the contrast); week 13 stays, so nothing in the camp is new.
+
+| Week of | Prep week | What's special |
+|---|---|---|
+| 26 Oct | 1 | easing back in: a round short, sprints at 90%, Nordics 2 × 3 |
+| 2 Nov | 2 | easing back in: a round short, sprints at 90%, Nordics 2 × 4 |
+| 9 Nov | 4 | Nordics 3 × 4, the ramp's last week |
+| 16 Nov | 5 | lighter; the working weights re-checked |
+| 23 Nov | 6 | |
+| 30 Nov | 7 | |
+| 7 Dec | 9 | the top triples |
+| 14 Dec | 10 | easy; tests; profiles redrawn |
+| 21 Dec | 13 | Christmas week, as written |
+| 28 Dec | 14 | test week; test day Saturday 2 January |
+
+The first two weeks ease you back in. Everything new runs a round short — the dips and rows three rounds, the circuits two, the carries two runs. The flying sprints are at 90%. The Nordics build 2 × 3, 2 × 4, then 3 × 4. On what you're running, muscle comes back faster than tendons do, and that gap is where comeback injuries happen. If the fight's date moves, the app carries Prep on from the week you're on (season-builder.md).
+
 The circuits — the arms circuit on Monday, THE BRACE on Tuesday, the shoulders circuit on Thursday: 3 rounds in weeks 1–4 and 6–8 · 2 in weeks 5, 9 and 11–13 · 1 in week 10 · none in week 14. Monday's dips and ring rows: 4 rounds in weeks 1–4 and 6–8 · 3 in weeks 5, 9 and 11–13 · 2 in weeks 10 and 14. The farmer's and bear-hug carries: 3 runs · 2 in weeks 5 and 10 · none in week 14.
 
 ---

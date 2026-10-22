@@ -476,7 +476,7 @@ export const PS = {
       rxLine: (rx) => rx.nor[0] + " × " + rx.nor[1] + (rx.nordicPF ? " · only if pain-free" : ""),
       items: (rx) => [{ n: "Nordic curl", s: rx.nor[0] + " × " + rx.nor[1] + (rx.nordicPF ? " · only if pain-free" : ""), cue: "Heels anchored, body straight from knees to head, lower forward as slowly as you can, catch yourself with your hands, push back up. Stop the set the moment the lower back rounds.", id: "nordic", k: "wr", sets: rx.nor[0], reps: rx.nor[1] }],
       w: (rx) => (rx.nordicPF ? "Hamstring at 3 or more on Sunday's check: the Nordics only if they're pain-free." : "Stop the set the moment the lower back rounds."),
-      why: "A hamstring on a Saturday sprint is the second-commonest way a preparation ends. Wednesday, so the soreness is gone before Saturday." },
+      why: (rx) => (rx.ramp ? "Easing back in, the Nordics ramp 2 × 3, 2 × 4, 3 × 4, then the calendar's. " : "") + "A hamstring on a Saturday sprint is the second-commonest way a preparation ends. Wednesday, so the soreness is gone before Saturday." },
     { L: "H", n: "Neck — holds only", m: 5, p: "P_NECK",
       items: [{ n: "Four-direction holds", s: "3 × 10 s each direction", cue: "Press your palm hard against your forehead and push your head into it; the head never moves. Then the back of the head, then each side.", id: "p_neck_wed", k: "chk" }],
       why: "The first of the week's two neck doses; Thursday has the full block. The cheapest insurance there is." },
@@ -557,9 +557,9 @@ export const PS = {
       items: [{ n: "Close and plant", s: "3 × 5 m · stick 2 s", cue: "From your stance, sprint five metres and stop into your stance in one or two steps, dead still for two seconds, balanced and ready to punch; walk back, 60 seconds between.", id: "p_closeplant", k: "chk" }],
       why: "Closing the distance and braking into position is the movement a pressure fighter repeats most, and this is the braking, trained." },
     { L: "B", n: "Flying Sprints", m: 14, star: 1, hard: 1, hide: (rx) => !!rx.testWeek || !!rx.noFlying, rest: "Rest 2:30–3:00", rt: 165,
-      rxLine: (rx) => (rx.spr ? rx.spr + " × 20 m flat out" : "build-ups, then three runs at 90%"),
-      items: (rx) => [{ n: "Flying sprint 20 m", s: rx.spr ? rx.spr + " runs" : "3 runs at 90%", cue: "Jog-build for 10–15 metres, then 20 metres absolutely flat out. Walk back, full rest — speed, not cardio.", id: "p_sprint", k: "chk" }],
-      w: "A hamstring twinge on the build-ups ends the sprints for the day.",
+      rxLine: (rx) => (rx.spr ? rx.spr + " × 20 m " + (rx.spr90 ? "@ 90%" : "flat out") : "build-ups, then three runs at 90%"),
+      items: (rx) => [{ n: "Flying sprint 20 m", s: rx.spr ? rx.spr + " runs" + (rx.spr90 ? " at 90%" : "") : "3 runs at 90%", cue: "Jog-build for 10–15 metres, then 20 metres absolutely flat out. Walk back, full rest — speed, not cardio.", id: "p_sprint", k: "chk" }],
+      w: (rx) => (rx.spr90 ? "Easing back in: 90% for the first two weeks, flat out from the third. " : "") + "A hamstring twinge on the build-ups ends the sprints for the day.",
       why: "Top speed is the quality that fades first and costs least to keep." },
     /* the reactive slot: drop landings in weeks 1–5, low-box depth jumps in
        weeks 6–10, depth jumps in weeks 11–13; none the week after an

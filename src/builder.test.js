@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import campMd from "../optimal-8-camp.md?raw";
 import prepMd from "../optimal-8-prep.md?raw";
 import builderMd from "../season-builder.md?raw";
-import { buildSeason, rowRx, rowDates, CYCLE16, prepLayout, campLayout } from "./builder.js";
+import { buildSeason, rowRx, rowDates, CYCLE16, prepLayout, campLayout, COMEBACK_N } from "./builder.js";
 import { campRow } from "./camp.js";
 import { prepEmphasis } from "./prep.js";
 import { GRID } from "./proof-grid.js";
@@ -292,6 +292,68 @@ describe("proof 4 — Prep fitted by the N table", () => {
     expect(prepLayout(17)[0].slice(4, 7)).toEqual(["P4b", "P4c", "P5"]);
     expect(prepLayout(20).map((x) => x.length)).toEqual([16, 4]);
     expect(prepLayout(3)).toEqual([]);
+  });
+});
+
+/* ---------------- 4 · the comeback, and a re-plan carried on ---------------- */
+describe("proof 4 — the comeback: Worked Example 3, and a re-plan inside Prep carried on", () => {
+  const WE3 = { fight: "2027-03-13", rounds: 6, mins: 3, rest: 60, weighIn: "before", fitness: "low", emphasis: "power" };
+  const his = buildSeason({ plans: [plan("2026-10-26", "2026-10-25", WE3)], today: "2026-10-25" });
+  const prep = his.rows.filter((r) => r.program === "prep" && r.mon < "2027-01-04");
+  it("from low fitness, not after a fight, Prep starts at its week 1: the comeback table, as season-builder.md writes it", () => {
+    const doc = tableAfter(builderMd, /^\*\*From low fitness — THE COMEBACK/);
+    expect(doc.length).toBe(11);
+    doc.forEach(([n, ids]) => expect(n === "14" ? P14() : ids.split(" · ")).toEqual(COMEBACK_N[Number(n)]));
+    expect(prepLayout(10, true)).toEqual([COMEBACK_N[10]]);
+    function P14() { return Array.from({ length: 14 }, (_, i) => "P" + (i + 1)); }
+  });
+  it("is Worked Example 3 week by week, and the Prep page's own table", () => {
+    const ex = tableAfter(builderMd, /^## WORKED EXAMPLE 3/), pg = tableAfter(prepMd, /^\*\*This year — the comeback/);
+    expect(prep.map((r) => r.id)).toEqual(ex.map((d) => d[1]));
+    expect(prep.map((r) => r.id)).toEqual(pg.map((d) => "P" + d[1]));
+    const DM = (iso) => { const d = new Date(iso + "T12:00:00"); return d.getDate() + " " + ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][d.getMonth()]; };
+    expect(prep.map((r) => DM(r.mon))).toEqual(ex.map((d) => d[0]));
+    expect(pg.map((d) => d[0])).toEqual(ex.map((d) => d[0]));
+    const camp = his.rows.filter((r) => r.program === "camp");
+    expect(camp[0].mon).toBe("2027-01-04"); expect(camp.map((r) => r.id)).toEqual(["F", "B1", "B2", "B3", "E", "P1", "P2", "P3", "S", "FW"]);
+    expect(camp[0].camp.fitness).toBe("good"); expect(camp[0].camp.emphasis).toBe("power");
+  });
+  it("eases back in: the first two weeks a round short and the sprints at 90%, the Nordics 2 × 3, 2 × 4, 3 × 4, then the calendar's", () => {
+    const rx = prep.map((r) => rowRx(r, true));
+    expect(rx.slice(0, 4).map((x) => [x.circ, x.dr, x.carry].join("/"))).toEqual(["2/3/2", "2/3/2", "3/4/3", "2/3/2"]);
+    expect(rx.slice(0, 4).map((x) => !!x.spr90)).toEqual([true, true, false, false]);
+    expect(rx.slice(0, 5).map((x) => x.nor.join(" × "))).toEqual(["2 × 3", "2 × 4", "3 × 4", "2 × 3", "3 × 5"]);
+    expect(rx[1].spr).toBe(4);
+    /* the profiles: week 1 and P10; the Christmas week is P13, as written */
+    expect(prep.filter((r) => r.profile).map((r) => r.id)).toEqual(["P1", "P10"]);
+    expect(rx[8].xmas).toBe(1); expect(rx[8].vol34).toBeFalsy();
+  });
+  it("is the N table, not the comeback, after a fight's transition or from good fitness", () => {
+    const good = buildSeason({ plans: [plan("2026-10-26", "2026-10-25", Object.assign({}, WE3, { fitness: "good" }))], today: "2026-10-25" });
+    expect(good.rows.filter((r) => r.program === "prep" && r.mon < "2027-01-04").map((r) => r.id)).toEqual(prepLayout(10)[0]);
+    expect(good.rows.some((r) => r.comeback)).toBe(false);
+  });
+  const moved = (from, made, fight, extra) => buildSeason({ plans: [plan("2026-10-26", "2026-10-25", WE3), plan(from, made, Object.assign({}, WE3, { fight }, extra || {}))], today: made });
+  it("carries a re-plan on from the week you're on: 10 April entered on 12 November", () => {
+    const s = moved("2026-11-16", "2026-11-12", "2027-04-10");
+    const before = (rows) => rows.filter((r) => r.mon < "2026-11-16").map((r) => r.id + ":" + r.mac + r.kw);
+    expect(before(s.rows)).toEqual(before(his.rows));
+    const p = s.rows.filter((r) => r.program === "prep" && r.mon < "2027-02-01");
+    expect(p.map((r) => r.id)).toEqual(["P1", "P2", "P4", "P4b", "P5", "P6", "P7", "P8", "P9", "P10", "P11", "P12", "P13", "P14"]);
+    expect(p.map((r) => r.pk)).toEqual(Array.from({ length: 14 }, (_, i) => i + 1));
+    expect(p.filter((r) => r.profile).map((r) => r.id)).toEqual(["P1", "P10"]);
+    expect(rowRx(p[3], true).pct).toBe(77.5);
+    expect(s.rows.find((r) => r.program === "camp").mon).toBe("2027-02-01");
+    expect(builderMd).toMatch(/keeps P1, P2 and P4, then runs P4 again at \+2\.5%, P5 to P14 — fourteen weeks in all — and the camp from Monday 1 February/);
+  });
+  it("shortens from the week you're on, by the table's order, when the fight comes closer — and an answer that isn't the date changes nothing in the weeks", () => {
+    const s = moved("2026-11-16", "2026-11-12", "2027-02-27");
+    expect(s.rows.filter((r) => r.program === "prep" && r.mon < "2026-12-21").map((r) => r.id)).toEqual(["P1", "P2", "P4", "P5", "P7", "P9", "P10", "P14"]);
+    const e = moved("2026-11-09", "2026-11-04", "2027-03-13", { emphasis: "strength" });
+    expect(e.rows.filter((r) => r.program === "prep" && r.mon < "2027-01-04").map((r) => r.id)).toEqual(prep.map((r) => r.id));
+    /* too few weeks left after a heavy week: the last heavy week again, never the easy week */
+    const late = moved("2026-12-21", "2026-12-17", "2027-04-10");
+    expect(late.rows.filter((r) => r.program === "prep" && r.mon < "2027-02-01").map((r) => r.id)).toEqual(["P1", "P2", "P4", "P5", "P6", "P7", "P9", "P10", "P7", "P7", "P11", "P12", "P13", "P14"]);
   });
 });
 
