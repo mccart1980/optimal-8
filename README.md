@@ -79,8 +79,9 @@ are four tabs: **TODAY · PROGRESS · FOOD · MORE**.
 
 **MORE → SETTINGS → Fight booked?** is the season builder (season-builder.md).
 
-- **No:** Prep's 16-week cycle, on repeat (P1–P14 with P4b and P12b). Optimal 8
-  Fighter is still there as the classic.
+- **No:** Prep's 16-week cycle, on repeat (P1–P14 with P4b and P12b), and how
+  fit you are right now — from low, a new cycle's first weeks ease you back in.
+  Optimal 8 Fighter is still there as the classic.
 - **Yes:** the date, the rounds and minutes, the rest between rounds (1 minute
   unless you change it), the weigh-in (the day before or on the day), how fit
   you are right now (low, moderate, good) and one emphasis (none, power,
@@ -100,7 +101,10 @@ exactly as the document writes them.
 
 **Change any answer and press RE-PLAN:** the plan starts again from today's
 Monday (or the next one), every week already lived keeps the plan it was lived
-under, and one line says what changed. The first scored rounds check the
+under, and one line says what changed. A Prep that's running carries on from
+the week you're on — the fight called off included, to its test week, then the
+cycle — unless *The Prep you're on* is set to START AGAIN, for coming back from
+time off: week 1 from that Monday. The first scored rounds check the
 fitness you entered — a fade under 75% reads low, 75–84% moderate, 85% or more
 good — and correct it from the next Monday.
 
@@ -238,7 +242,9 @@ mid-thigh pull); those Fighter rows show the Fighter's own words.
 TODAY opens on one large **NOW** card: the item's name, its library entry,
 its prescription, only the fields that item needs, and a big **DONE**.
 Under it, one line: **NEXT**, with its time. The header is one line —
-*Prep · Week 1 · P1 · Build* — with the day's progress bar under it.
+*Prep · Week 1 · P1 · Build* — with the day's progress bar under it. The week
+is the week of its stretch, as the week picker numbers it: 1–16 in each Prep
+cycle, never a count of every Prep week since the start.
 
 **WHOLE DAY** opens the full timeline in four collapsible chapters —
 MORNING, GYM, THE DAY, EVENING — each row with its time and prescription;

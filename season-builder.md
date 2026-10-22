@@ -7,7 +7,7 @@
 ## WHAT YOU ENTER
 
 1. **Fight booked?** No or Yes.
-2. **If no:** the app runs Prep. Optimal 8 Fighter stays in Settings as the classic, if you ever want it.
+2. **If no:** the app runs Prep's 16-week cycle, and asks **how fit you are right now** — low, moderate or good. Coming back from time off is low, and a new cycle eases you back in. Optimal 8 Fighter stays in Settings as the classic, if you ever want it.
 3. **If yes:**
    - **The date.** The app counts the weeks.
    - **The format:** rounds × minutes, e.g. 3 × 2 or 6 × 3.
@@ -17,7 +17,7 @@
    - **How fit you are right now:** low, moderate or good. Coming back from time off is low. The first tests confirm or correct it.
    - **Emphasis:** none, power, strength or durability. One, or none.
 
-Change any answer and the app re-plans from today, keeps everything you've logged, and tells you in one line what changed.
+Change any answer and the app re-plans from today, keeps everything you've logged, and tells you in one line what changed. With a Prep running, it carries on from the week you're on — unless you choose **START AGAIN** under *The Prep you're on*: week 1 from the plan's Monday, eased in from low fitness, for coming back from time off.
 
 ---
 
@@ -27,7 +27,7 @@ Weeks are counted in whole training weeks, Monday to Sunday, from the Monday the
 
 | Your answers | What runs |
 |---|---|
-| No fight | Prep — the 16-week cycle, on repeat |
+| No fight | Prep — the 16-week cycle, on repeat; a Prep that's running carries on to its test week first |
 | Fight 11 or more weeks away | Prep, fitted to the weeks before the camp, then the full 10-week camp |
 | Fight 6–10 weeks away (7–10 from low fitness) | The camp, shortened from the front |
 | Fight under 6 weeks away (under 7 from low fitness) | The short-notice camp |
@@ -233,6 +233,10 @@ That's accumulate in weeks 1–6 (week 6 lighter, with tests), intensify in week
 
 Test day is week 16's Saturday. The next cycle starts the Monday after, its working weights reset from test week. The circuits, the dips and the carries run each week's own numbers from Prep's calendar — P4b as P4, P12b as P12 — and the bench press, like the trap bar, takes P4b's +2.5%.
 
+**The fight called off.** Change the answer to no fight while a Prep is running — fitted to a camp, or carried on — and the weeks you've done stay done. Prep carries on in the cycle's own order, from the week after the one you're on to its test week, then the cycle, on repeat. A comeback's ramp counts on, and the bar-speed profiles aren't redrawn until P10. Called off in the camp, or straight after Prep's test week, the cycle starts at week 1.
+
+**From low fitness, with no fight,** a new cycle's first weeks ease you back in, as a comeback's do (below), unless it follows a fight's transition or a Prep test week. The cycle after it runs as written.
+
 **Before a camp:** Prep runs from the end of the transition (or from today) to the Sunday before the camp starts. Its length in weeks, N, decides which weeks run:
 
 | N | The Prep |
@@ -254,7 +258,7 @@ Test day is week 16's Saturday. The next cycle starts the Monday after, its work
 | 4 | P4 · P7 · P8 · P14 |
 | 1–3 | No Prep. Straight after a fight, the transition's easy weeks run on until the camp; otherwise those weeks run as P1, P2 and P3, in order. Either way, the working weights are checked in the camp's week 1 |
 
-**From low fitness — THE COMEBACK.** After time off, Prep starts at its own week 1 whatever its length, unless it follows a fight's transition. P1 and P2 are always kept; the other weeks come out in this order as it shortens: P11, P12, P8, P3, P6, P13, P9, P4, P10, P5. Fifteen weeks or more start at P1 already.
+**From low fitness — THE COMEBACK.** After time off, Prep starts at its own week 1 whatever its length, unless it follows a fight's transition. P1 and P2 are always kept; the other weeks come out in this order as it shortens: P11, P12, P8, P3, P6, P13, P9, P4, P10, P5. Fifteen weeks or more start at P1 already. With no fight, it's the 16-week cycle, its first weeks eased in.
 
 | N | The comeback |
 |---|---|
@@ -284,6 +288,9 @@ On what you're running, muscle comes back faster than tendons do, and that gap i
 - **Too few:** the extras run straight after the week you're on. From the build, P4 again, +2.5% each time. After it, the last heavy week done again (P6, P7 or P8), or P12 again at 88% from the fast block.
 - **Never twice:** a lighter, top-triple, easy, Christmas or test week.
 - The bar-speed profiles aren't redrawn for a re-plan, and a comeback's ramp counts on from its first week.
+- With no fight booked, the weeks left are the cycle's own, to its test week (PREP — WITH NO FIGHT).
+
+**START AGAIN** — *The Prep you're on*, in Settings — lays the Prep out again from the plan's Monday instead, as if none of it had run: for coming back from time off, eased in from low fitness. It isn't kept as an answer: a later re-plan carries on the Prep that's running.
 
 **How a fitted Prep runs:**
 
@@ -382,12 +389,14 @@ Entered: fight Saturday 13 March 2027 · 6 rounds × 3 minutes · 1 minute's res
 
 **If the fight moves to Saturday 10 April**, entered on Thursday 12 November: the plan re-made from Monday 16 November keeps P1, P2 and P4, then runs P4 again at +2.5%, P5 to P14 — fourteen weeks in all — and the camp from Monday 1 February.
 
+**If the fight is called off**, set on Thursday 3 December: the plan re-made from Monday 7 December keeps the six weeks done and carries on with P8, P9, P10, P11, P12, P12b, P13 and P14 — test day Saturday 30 January — then the 16-week cycle from Monday 1 February. Christmas week is P10, the easy week, at three-quarters volume.
+
 ---
 
 ## THE PROOF — WHAT THE BUILD MUST PASS
 
 1. **The master camp.** 6 × 3, 1 minute's rest, good fitness, no emphasis, fight Saturday 13 March 2027, plan starting Monday 4 January 2027: every week table row and session page of Optimal 8 · Camp, exactly.
-2. **The no-fight cycle.** No fight: the 16-week cycle above.
+2. **The no-fight cycle.** No fight: the 16-week cycle above. From low fitness, its first weeks eased in. The fight called off inside a Prep: Prep carried on to its test week, as Worked Example 3 writes it. START AGAIN: week 1 from the plan's Monday.
 3. **The short camp.** Fight Saturday 28 November 2026, 3 × 2, 1 minute's rest, low fitness, durability, plan starting Monday 12 October 2026: Worked Example 1, week by week.
 4. **Prep fitted.** Prep with 14 weeks: Optimal 8 · Prep, exactly. Prep with 4 weeks: P4, P7, P8, P14. The comeback: Worked Example 3, week by week, and the re-plan inside it carried on.
 5. **Nothing invented.** Not one exercise, load or session type in any generated week that isn't written in Prep, the Camp or these pages.

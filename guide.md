@@ -41,11 +41,11 @@ The app works out every weight for you. Load the bar to the number it shows.
 
 ## SETTING A FIGHT
 Settings → **Fight booked?**
-- **No:** the app runs Prep, your everyday program, in 16-week cycles.
+- **No:** the app runs Prep, your everyday program, in 16-week cycles. It asks how fit you are right now: coming back from time off is low, and the new cycle eases you back in.
 - **Yes:** type in the date, the rounds and minutes (like 3 × 2), the rest between rounds, when you weigh in (the day before in the morning, the day before later on, or on the day), how fit you are right now (low, moderate or good), and whether you want a little extra on power, strength or durability — or nothing extra.
 - **A weight limit?** Put in the limit, any tolerance, and your natural weight — what you weigh after a normal week. The app runs your food down to it from the camp's first Monday, so Prep is never a cut: the food guide's MAKING WEIGHT says how.
 
-The app builds everything from that. The engine always comes first. Change anything and it re-plans from today, and tells you in one line what changed. Your first scored rounds tell the app how fit you really are, and it adjusts.
+The app builds everything from that. The engine always comes first. Change anything and it re-plans from today, and tells you in one line what changed. In the middle of Prep, it carries on from the week you're on, even if the fight is called off. Back after time off? Settings → The Prep you're on → START AGAIN. Your first scored rounds tell the app how fit you really are, and it adjusts.
 
 ## LIGHTER WEEKS
 The app marks them. Everything is lighter on purpose. Do not add anything. This is where the gains actually land.

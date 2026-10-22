@@ -49,7 +49,7 @@ Sled runs on Wednesday: weeks 1–5: 4 · weeks 6–9 and 11–13: 5 · weeks 10
 | 21 Dec | 13 | Christmas week, as written |
 | 28 Dec | 14 | test week; test day Saturday 2 January |
 
-The first two weeks ease you back in. Everything new runs a round short — the dips and rows three rounds, the circuits two, the carries two runs. The flying sprints are at 90%. The Nordics build 2 × 3, 2 × 4, then 3 × 4. On what you're running, muscle comes back faster than tendons do, and that gap is where comeback injuries happen. If the fight's date moves, the app carries Prep on from the week you're on (season-builder.md).
+The first two weeks ease you back in. Everything new runs a round short — the dips and rows three rounds, the circuits two, the carries two runs. The flying sprints are at 90%. The Nordics build 2 × 3, 2 × 4, then 3 × 4. On what you're running, muscle comes back faster than tendons do, and that gap is where comeback injuries happen. If the fight's date moves, the app carries Prep on from the week you're on; if the fight is called off, it carries on to its test week and then into the sixteen-week cycle (season-builder.md).
 
 The circuits — the arms circuit on Monday, THE BRACE on Tuesday, the shoulders circuit on Thursday: 3 rounds in weeks 1–4 and 6–8 · 2 in weeks 5, 9 and 11–13 · 1 in week 10 · none in week 14. Monday's dips and ring rows: 4 rounds in weeks 1–4 and 6–8 · 3 in weeks 5, 9 and 11–13 · 2 in weeks 10 and 14. The farmer's and bear-hug carries: 3 runs · 2 in weeks 5 and 10 · none in week 14.
 

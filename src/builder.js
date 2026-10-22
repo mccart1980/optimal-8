@@ -14,7 +14,8 @@ import { lowerStage } from "./safety.js";
    keeps the plan it was lived under.
 
    A plan is built out of the two master programs and nothing else:
-     · no fight      — Prep's 16-week cycle, on repeat
+     · no fight      — Prep's 16-week cycle, on repeat; a Prep that's
+                       running carries on to its test week first
      · 11+ weeks     — Prep fitted by the N table, then the full camp
      · 6–10 (7–10)   — the camp, shortened from the front
      · under 6 (7)   — the short-notice camp
@@ -148,6 +149,13 @@ export function prepCarryOn(doneIds, left, comeback) {
   }
   return [rest].concat(later);
 }
+/* THE FIGHT CALLED OFF — with no fight, a Prep that's running carries on
+   in the 16-week cycle's own order, from the week after the one you're on
+   to its test week. Returns the weeks left. */
+export function prepRunOn(doneIds) {
+  const lastKey = weekKey(doneIds[doneIds.length - 1]);
+  return CYCLE16.filter((id) => weekKey(id) > lastKey);
+}
 /* "P4b" → document row 4, two and a half percent on; "P12b" → row 12 at 88% */
 export function prepIdInfo(id) {
   const m = String(id).match(/^P(\d+)([a-z]?)$/); const doc = m ? Number(m[1]) : 1, s = m ? m[2] : "";
@@ -216,9 +224,11 @@ function genPlan(plan, ctx, horizon) {
   const rows = [];
   let cur = plan.from;
   const push = (r) => { rows.push(Object.assign({ mon: cur, sun: addDays(cur, 6), plan: plan.from }, r)); cur = addDays(cur, 7); };
-  const cycles = () => {
-    let c = 0;
-    do { prepRows(CYCLE16, ++c, { cycle: c }).forEach((r) => push(r)); } while (cur <= horizon);
+  /* the cycles, numbered on from c0; comeback: the first one eases you in */
+  const cycles = (c0, comeback) => {
+    let c = c0 || 0;
+    const first = c + 1;
+    do { c += 1; prepRows(CYCLE16, c, { cycle: c }, { comeback: !!comeback && c === first }).forEach((r) => push(r)); } while (cur <= horizon);
   };
 
   /* a transition carried over from the last plan's fight */
@@ -233,23 +243,41 @@ function genPlan(plan, ctx, horizon) {
 
   if (plan.inputs && plan.inputs.classic && !plan.inputs.booked) return { rows, classic: true };
   const booked = !!(inp.booked && inp.fight && monOf(inp.fight) >= cur);
-  if (!booked) { cycles(); return { rows }; }
+  /* a Prep already running when this plan starts — its weeks back to its
+     first, or to the week after its last test week — carries on, unless
+     you start it again. Its weeks stay one stretch with the weeks done. */
+  const run = [];
+  if (!rows.length && ctx.prepRun && !inp.restart) ctx.prepRun.forEach((r) => run.push(r));
+  const keep = run.length ? Object.assign({ plan: run[0].plan }, run[0].cycle ? { cycle: run[0].cycle } : {}) : {};
+  if (!booked) {
+    /* NO FIGHT. A Prep that's running — a fight called off — carries on in
+       the cycle's own order to its test week, then the cycle, on repeat.
+       Otherwise the cycle starts at week 1; from low fitness, not straight
+       after a fight's transition or a Prep test week, it eases you in. */
+    if (run.length) {
+      prepRows(prepRunOn(run.map((r) => r.id)), run[0].seg || 1, Object.assign({ carried: 1 }, keep), { comeback: !!run[0].comeback, done: run.map((r) => r.id) }).forEach((r) => push(r));
+      cycles(run[0].cycle || 0);
+    } else {
+      const lb = ctx.lastRow;
+      const afterTest = !!(lb && lb.program === "prep" && lb.doc === 14 && addDays(lb.mon, 7) === cur);
+      /* started again: the next cycle's number */
+      const c0 = !rows.length && ctx.prepRun && ctx.prepRun.length ? ctx.prepRun[0].cycle || 0 : 0;
+      cycles(c0, inp.fitness === "low" && !afterFight && !afterTest);
+    }
+    return { rows };
+  }
 
   const fightMon = monOf(inp.fight);
   const M = weeksBetween(cur, fightMon) + 1;
   let fitness = inp.fitness;
   let lastBefore = rows.length ? rows[rows.length - 1] : ctx.lastRow;
   let filler = false;
-  /* a Prep already running when this plan starts — its weeks back to its
-     first, or to the week after its last test week */
-  const run = [];
-  if (!rows.length && ctx.prepRun) ctx.prepRun.forEach((r) => run.push(r));
   /* from low fitness, a Prep that doesn't follow a fight's transition is a comeback */
   const comeback = run.length ? !!run[0].comeback : fitness === "low" && !afterFight;
   if (M >= 11) {
     const N = M - 10;
     const segs = run.length ? prepCarryOn(run.map((r) => r.id), N, comeback) : prepLayout(N, comeback);
-    if (run.length) segs.forEach((ids, si) => prepRows(ids, si ? si + 1 : run[0].seg || 1, { fitted: 1, carried: si ? 0 : 1 }, si ? {} : { comeback, done: run.map((r) => r.id) }).forEach((r) => push(r)));
+    if (run.length) segs.forEach((ids, si) => prepRows(ids, si ? si + 1 : run[0].seg || 1, si ? { fitted: 1, carried: 0 } : Object.assign({ fitted: 1, carried: 1 }, keep), si ? {} : { comeback, done: run.map((r) => r.id) }).forEach((r) => push(r)));
     else if (segs.length) segs.forEach((ids, si) => prepRows(ids, si + 1, { fitted: 1 }, { comeback: comeback && si === 0 }).forEach((r) => push(r)));
     else {
       /* 1–3 weeks: straight after a fight, the transition's easy weeks run
@@ -628,7 +656,14 @@ export function describeSeason(season, from) {
       + (c.short ? "the short-notice camp" : "a " + cRows.length + "-week camp") + " from " + fmtD(cfirst.mon) + ": " + cRows.map((r) => r.id).join(" · ")
       + " — " + c.R + " × " + c.mins + ", " + c.fitness + " fitness" + (c.emphasis !== "none" ? ", " + c.emphasis : "") + (c.ef ? ", engine-first" : "") + ".";
   }
-  if (prep.length) return "Prep's 16-week cycle from " + fmtD(prep[0].mon) + ".";
+  if (prep.length) {
+    /* a Prep carried on to its test week, then the cycle */
+    const on = [];
+    for (const r of prep) { if (!r.carried) break; on.push(r); }
+    if (on.length) { const t = on[on.length - 1];
+      return "Prep carries on: " + on.map((r) => r.id).join(" · ") + ", test day " + fmtD(addDays(t.mon, 5)) + "; then Prep's 16-week cycle from " + fmtD(addDays(t.mon, 7)) + "."; }
+    return "Prep's 16-week cycle from " + fmtD(prep[0].mon) + (prep[0].comeback ? ", easing you back in" : "") + ".";
+  }
   return "Optimal 8 Fighter, the classic.";
 }
 

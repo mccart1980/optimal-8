@@ -985,6 +985,10 @@ export const CATALOG_SEASONS = (() => {
   /* Worked Example 3: the comeback, and the same Prep carried on when the date moves */
   out.push({ set: "comeback", plans: [P("2026-10-26", "2026-10-25", { fight: "2027-03-13", fitness: "low", emphasis: "power" })], today: "2026-10-25" });
   out.push({ set: "carried", plans: [P("2026-10-26", "2026-10-25", { fight: "2027-03-13", fitness: "low", emphasis: "power" }), P("2026-11-16", "2026-11-12", { fight: "2027-04-10", fitness: "low", emphasis: "power" })], today: "2026-11-12" });
+  /* the same fight called off on Thursday 3 December: Prep carried on to its test week, then the cycle */
+  out.push({ set: "called-off", plans: [P("2026-10-26", "2026-10-25", { fight: "2027-03-13", fitness: "low", emphasis: "power" }), P("2026-12-07", "2026-12-03", { booked: false, fight: null, fitness: "low", emphasis: "power" })], today: "2026-12-03" });
+  /* no fight, from low fitness: the cycle's first weeks ease you in */
+  out.push({ set: "cycle-low", plans: [P("2026-10-26", "2026-10-25", { booked: false, fitness: "low" })], today: "2026-10-25" });
   return out;
 })();
 
@@ -1724,7 +1728,7 @@ const shortTitle = (week) => {
   if (row && row.program === "pre") return "Camp · Before Week 1";
   if (row && row.hold) return "Transition · On hold · The head check";
   const block = MODE.prep ? PREP_PLAIN[ph.n] || titleCase(ph.n) : MODE.camp ? titleCase(rxFor(week).block || "") : MODE.trans ? "Easy" : titleCase(ph.n);
-  return [prog, "Week " + (row ? row.idx || week : week), row && row.id && row.program !== "transition" ? row.id : null, block].filter(Boolean).join(" · ");
+  return [prog, "Week " + (row ? row.idx || weekIn(row) : week), row && row.id && row.program !== "transition" ? row.id : null, block].filter(Boolean).join(" · ");
 };
 
 /* ---------------- THE FLOW ---------------- */
@@ -2282,6 +2286,8 @@ const weekEyebrow = (week) => {
    its transition */
 const segKey = (r) => r.mac + "|" + (r.campStart || (r.program === "pre" ? "" : r.plan) || "") + "|" + (r.cycle || r.seg || "");
 const segmentOf = (row) => (SEASON.s && row ? SEASON.s.rows.filter((r) => segKey(r) === segKey(row)) : []);
+/* a week's place in its stretch: week 1–16 of a cycle, not every Prep week since the start */
+const weekIn = (row) => SEASON.s.rows.filter((r) => r.seq < row.seq && segKey(r) === segKey(row)).length + 1;
 function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDoneMap }) {
   const { macro, week } = view; const rx = rxFor(week), P = PH[rx.ph] || PH.c1;
   const row = MODE.mac ? seasonRow(MODE.mac, week) : null;
@@ -2682,9 +2688,13 @@ const Toggle = ({ on, set, n, s, c }) => (
 /* THE SEASON BUILDER'S QUESTIONS — "Fight booked?", and the rest if yes.
    Every change re-plans from today and says in one line what changed. */
 function FightSettings({ st, replan, season, dayIso }) {
-  const cur = Object.assign({ booked: false, classic: false }, FIGHT_DEFAULTS, st.season || {});
+  const from = planStartFor(dayIso);
+  /* START AGAIN is never kept: it belongs to the plan from this Monday */
+  const pending = (st.plans || []).find((p) => p.from === from);
+  const restartNow = !!(pending && pending.inputs && pending.inputs.restart);
+  const cur = Object.assign({ booked: false, classic: false }, FIGHT_DEFAULTS, st.season || {}, restartNow ? { restart: true } : {});
   const [draft, setDraft] = useState(cur);
-  useEffect(() => { setDraft(cur); }, [JSON.stringify(st.season || {})]);
+  useEffect(() => { setDraft(cur); }, [JSON.stringify(st.season || {}), restartNow]);
   const d = draft;
   const set = (patch) => setDraft(Object.assign({}, d, patch));
   const changed = JSON.stringify(Object.assign({}, cur)) !== JSON.stringify(Object.assign({}, d));
@@ -2692,8 +2702,10 @@ function FightSettings({ st, replan, season, dayIso }) {
   const validFight = !d.booked || (d.fight && d.fight >= dayIso && num(d.rounds) > 0 && num(d.mins) > 0 && num(d.rest) >= 0
     && okKg(d.limit, true) && okKg(d.tol, true, true) && okKg(d.natural, true));
   const onlyWeight = changed && !trainingChanged(cur, d);
-  const from = planStartFor(dayIso);
   const M = d.booked && d.fight ? weeksBetween(from, d.fight) + 1 : 0;
+  /* a Prep running into this Monday carries on, unless you start it again */
+  const prevRow = season && season.rows ? season.rows.find((r) => r.mon === addDays(from, -7)) : null;
+  const running = !!prevRow && prevRow.program === "prep" && prevRow.doc !== 14;
   const lay = M > 0 ? campLayout(Math.min(M, 10), d.fitness) : null;
   const opt = (arr) => arr.map((x) => [x, x.toUpperCase()]);
   return (
@@ -2706,6 +2718,9 @@ function FightSettings({ st, replan, season, dayIso }) {
           <Lab>What runs</Lab>
           <Seg opts={[["prep", "PREP · 16-WEEK CYCLE"], ["classic", "OPTIMAL 8 FIGHTER"]]} val={d.classic ? "classic" : "prep"} on={(v) => set({ classic: v === "classic" })} c={C.brass} />
           <Note>Prep's 16-week cycle, on repeat. Optimal 8 Fighter stays here as the classic, if you ever want it.</Note>
+          {!d.classic ? (<div style={{ marginTop: 10 }}><Lab>How fit you are right now</Lab>
+            <Seg opts={opt(FITNESS)} val={d.fitness} on={(v) => set({ fitness: v })} c={C.brass} />
+            <Note>Coming back from time off is low: a new cycle eases you back in.</Note></div>) : null}
         </div>) : (
         <div style={{ marginTop: 12 }}>
           <Lab>The date</Lab>
@@ -2733,6 +2748,11 @@ function FightSettings({ st, replan, season, dayIso }) {
           {d.emphasis === "strength" && M > 0 && M < 8 ? <Note c={C.oxide} bold>Strength takes longer than this camp has — power is the better pick.</Note> : null}
           {d.fight && d.fight < dayIso ? <Note c={C.oxide}>That date has passed.</Note> : null}
         </div>)}
+      {running && (d.booked ? M >= 11 : !d.classic) ? (
+        <div data-testid="prep-running" style={{ marginTop: 10 }}><Lab>The Prep you're on</Lab>
+          <Seg opts={[["on", "CARRY ON"], ["again", "START AGAIN"]]} val={d.restart ? "again" : "on"} on={(v) => set({ restart: v === "again" || undefined })} c={C.brass} />
+          <Note>{d.restart ? "Week 1 again from " + fmtDate(from) + (d.fitness === "low" ? ", eased in" : "") + ". For coming back from time off."
+            : "The weeks you've done stay done, and it carries on from the week you're on."}</Note></div>) : null}
       <Btn c={C.brass} fill dis={!changed || !validFight} s={{ width: "100%", marginTop: 12 }} on={() => replan(d)}>{onlyWeight ? "SET THE WEIGHT PLAN" : changed ? "RE-PLAN FROM " + fmtDate(from).toUpperCase() : "THIS IS THE PLAN"}</Btn>
       {st.planNote ? <Note c={C.brass} bold>{st.planNote}</Note> : null}
     </div>);
@@ -3270,7 +3290,7 @@ const kgStr = (x) => (x == null || String(x).trim() === "" ? "" : String(Number(
 function trainingChanged(was, now) {
   const a = Object.assign({ booked: false, classic: false }, FIGHT_DEFAULTS, was || {}), b = Object.assign({ booked: false, classic: false }, FIGHT_DEFAULTS, now || {});
   const keys = ["booked", "fight", "rounds", "mins", "rest", "fitness", "emphasis", "classic"];
-  return keys.some((k) => String(a[k]) !== String(b[k])) || ((a.weighIn === "day") !== (b.weighIn === "day"));
+  return keys.some((k) => String(a[k]) !== String(b[k])) || ((a.weighIn === "day") !== (b.weighIn === "day")) || !!a.restart !== !!b.restart;
 }
 /* BOXING TONIGHT: the day's own switch on FOOD, or else the weekday ticked
    in Settings */
@@ -3289,9 +3309,10 @@ function nextDraws(prev, cfg, today) {
 /* "fitness low → moderate · emphasis none → power" */
 function changeLine(was, now) {
   const a = Object.assign({ booked: false, classic: false }, FIGHT_DEFAULTS, was || {}), b = Object.assign({ booked: false, classic: false }, FIGHT_DEFAULTS, now || {});
-  const keys = b.booked ? ["booked", "fight", "rounds", "mins", "rest", "weighIn", "fitness", "emphasis", "limit", "tol", "natural"] : ["booked", "classic"];
+  const keys = b.booked ? ["booked", "fight", "rounds", "mins", "rest", "weighIn", "fitness", "emphasis", "limit", "tol", "natural"] : b.classic ? ["booked", "classic"] : ["booked", "classic", "fitness"];
   const same = (k) => (WEIGHT_FIELDS.indexOf(k) >= 0 ? kgStr(a[k]) === kgStr(b[k]) : String(a[k]) === String(b[k]));
-  return keys.filter((k) => !same(k)).map((k) => FIELD_NAMES[k] + " " + showVal(k, a[k]) + " → " + showVal(k, b[k])).join(" · ");
+  const line = keys.filter((k) => !same(k)).map((k) => FIELD_NAMES[k] + " " + showVal(k, a[k]) + " → " + showVal(k, b[k])).join(" · ");
+  return b.restart ? (line ? line + " · " : "") + "Prep starts again at week 1" : line;
 }
 
 export default function App() {
@@ -3884,7 +3905,9 @@ export default function App() {
     const s2 = buildSeason({ plans: plans2, today: dayIso });
     const what = why || changeLine(st.season, inputs) || "Re-planned";
     const line = what + ". From " + fmtDate(from) + ": " + (inputs.classic && !inputs.booked ? "Optimal 8 Fighter, the classic." : describeSeason(s2, from));
-    setSt(Object.assign({}, st, { season: inputs, plans: plans2, fightDate: inputs.booked ? inputs.fight : null, planNote: line, planNoteAt: dayIso, wdraws }));
+    /* START AGAIN goes in the plan, never in the answers */
+    const kept = Object.assign({}, inputs); delete kept.restart;
+    setSt(Object.assign({}, st, { season: kept, plans: plans2, fightDate: inputs.booked ? inputs.fight : null, planNote: line, planNoteAt: dayIso, wdraws }));
     setSelDay(null); setViewRaw(null);
   };
   /* THE TESTS CORRECT THE ANSWER: the first scored simulation's fade —

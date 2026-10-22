@@ -128,3 +128,68 @@ describe("the comeback, re-planned inside Prep", () => {
     expect(raw()).toMatch(/· P4b ·/);
   });
 });
+
+/* No fight booked: the fight called off carries Prep on; the fitness
+   question; START AGAIN; the week number within the cycle. */
+describe("no fight booked", () => {
+  beforeEach(() => { vi.useFakeTimers({ toFake: ["Date"] }); localStorage.clear(); localStorage.setItem("o8s-migrated", "true"); });
+  afterEach(() => { cleanup(); vi.useRealTimers(); });
+  const WE3 = { booked: true, fight: "2027-03-13", rounds: 6, mins: 3, rest: 60, weighIn: "before", fitness: "low", emphasis: "power", classic: false };
+  const CYC = { booked: false, classic: false, fitness: "good" };
+  async function mount(y, m, d, st) {
+    vi.setSystemTime(new Date(y, m - 1, d, 6, 0, 0));
+    localStorage.setItem("o8s-settings", st);
+    render(<App />);
+    await waitFor(() => expect(screen.queryByText("LOADING…")).not.toBeInTheDocument());
+  }
+  const raw = () => screen.getByTestId("app-title").textContent;
+  const openSettings = async () => {
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "MORE" }));
+    fireEvent.click(screen.getByRole("button", { name: "SETTINGS" }));
+    return (await screen.findByText("Fight booked?")).parentElement;
+  };
+  const saved = () => JSON.parse(localStorage.getItem("o8s-settings"));
+  it("the March fight called off on Thursday 3 December carries Prep on: P7 this week, P8 the next, test day Saturday 30 January", async () => {
+    await mount(2026, 12, 3, settings({ plans: [{ from: "2026-10-26", made: "2026-10-25", inputs: WE3 }], season: WE3, fightDate: "2027-03-13" }));
+    expect(raw()).toMatch(/^Prep · Week 6 · P7 ·/);
+    const box = await openSettings();
+    fireEvent.click(within(box).getByRole("button", { name: "NO" }));
+    expect(within(screen.getByText("How fit you are right now").parentElement).getByRole("button", { name: "LOW" })).toBeInTheDocument();
+    expect(within(screen.getByTestId("prep-running")).getByRole("button", { name: "CARRY ON" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /^RE-PLAN FROM MON,? 7 DEC/ }));
+    await waitFor(() => expect(saved().plans.length).toBe(2));
+    const st = saved();
+    expect(st.plans[1]).toMatchObject({ from: "2026-12-07", inputs: { booked: false, fight: null } });
+    expect(st.plans[1].inputs.restart).toBeUndefined();
+    expect(st.planNote).toMatch(/^fight booked yes → no\. From Mon,? 7 Dec: Prep carries on: P8 · P9 · P10 · P11 · P12 · P12b · P13 · P14, test day Sat,? 30 Jan; then Prep's 16-week cycle from Mon,? 1 Feb\.$/);
+    cleanup();
+    await mount(2026, 12, 7, localStorage.getItem("o8s-settings"));
+    expect(raw()).toMatch(/^Prep · Week 7 · P8 ·/);
+  });
+  it("START AGAIN, from low fitness: week 1 from the next Monday, eased in — and never kept as an answer", async () => {
+    await mount(2027, 1, 7, settings({ plans: [{ from: "2026-10-26", made: "2026-10-25", inputs: CYC }], season: CYC, fightDate: null }));
+    expect(raw()).toMatch(/^Prep · Week 11 · P10 ·/);
+    await openSettings();
+    fireEvent.click(within(screen.getByText("How fit you are right now").parentElement).getByRole("button", { name: "LOW" }));
+    fireEvent.click(within(screen.getByTestId("prep-running")).getByRole("button", { name: "START AGAIN" }));
+    expect(within(screen.getByTestId("prep-running")).getByText(/^Week 1 again from Mon,? 11 Jan, eased in\./)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /^RE-PLAN FROM MON,? 11 JAN/ }));
+    await waitFor(() => expect(saved().plans.length).toBe(2));
+    const st = saved();
+    expect(st.plans[1]).toMatchObject({ from: "2027-01-11", inputs: { booked: false, fitness: "low", restart: true } });
+    expect(st.season.restart).toBeUndefined(); expect(st.season.fitness).toBe("low");
+    expect(st.planNote).toMatch(/^fitness good → low · Prep starts again at week 1\. From Mon,? 11 Jan: Prep's 16-week cycle from Mon,? 11 Jan, easing you back in\.$/);
+    /* this Monday's plan starts again: Settings shows it, and nothing's left to re-plan */
+    expect(within(screen.getByTestId("prep-running")).getByText(/^Week 1 again from/)).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: "THIS IS THE PLAN" })).toBeInTheDocument();
+    cleanup();
+    await mount(2027, 1, 11, localStorage.getItem("o8s-settings"));
+    expect(raw()).toBe("Prep · Week 1 · P1 · Build");
+  });
+  it("counts the week within the cycle: the second cycle's first week is week 1, not week 17", async () => {
+    await mount(2026, 4, 27, settings({ plans: [{ from: "2026-01-05", made: "2026-01-05", inputs: CYC }], season: CYC, fightDate: null }));
+    expect(raw()).toBe("Prep · Week 1 · P1 · Build");
+    fireEvent.click(screen.getByRole("button", { name: "Previous week" }));
+    expect(raw()).toBe("Prep · Week 16 · P14 · Test");
+  });
+});

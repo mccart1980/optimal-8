@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import campMd from "../optimal-8-camp.md?raw";
 import prepMd from "../optimal-8-prep.md?raw";
 import builderMd from "../season-builder.md?raw";
-import { buildSeason, rowRx, rowDates, CYCLE16, prepLayout, campLayout, COMEBACK_N } from "./builder.js";
+import { buildSeason, rowRx, rowDates, CYCLE16, prepLayout, campLayout, COMEBACK_N, prepRunOn, describeSeason } from "./builder.js";
 import { campRow } from "./camp.js";
 import { prepEmphasis } from "./prep.js";
 import { GRID } from "./proof-grid.js";
@@ -354,6 +354,91 @@ describe("proof 4 — the comeback: Worked Example 3, and a re-plan inside Prep 
     /* too few weeks left after a heavy week: the last heavy week again, never the easy week */
     const late = moved("2026-12-21", "2026-12-17", "2027-04-10");
     expect(late.rows.filter((r) => r.program === "prep" && r.mon < "2027-02-01").map((r) => r.id)).toEqual(["P1", "P2", "P4", "P5", "P6", "P7", "P9", "P10", "P7", "P7", "P11", "P12", "P13", "P14"]);
+  });
+});
+
+/* ---------------- 2 · no fight: the fight called off, the comeback, starting again ---------------- */
+describe("proof 2 — no fight: a Prep that's running carries on, a new cycle eases you in from low fitness, START AGAIN", () => {
+  const WE3 = { fight: "2027-03-13", rounds: 6, mins: 3, rest: 60, weighIn: "before", fitness: "low", emphasis: "power" };
+  const march = plan("2026-10-26", "2026-10-25", WE3);
+  const his = buildSeason({ plans: [march], today: "2026-10-25" });
+  /* Settings keeps the other answers when the fight goes: fitness low stays */
+  const off = (from, made) => buildSeason({ plans: [march, plan(from, made, Object.assign({}, WE3, { booked: false, fight: null }))], today: made });
+  const ids = (s, a, b) => s.rows.filter((r) => r.mon >= a && (!b || r.mon < b)).map((r) => r.id);
+  const lived = (rows, before) => rows.filter((r) => r.mon < before).map((r) => r.program + ":" + r.id + ":" + r.mac + r.kw);
+  const cr = (r) => { const x = rowRx(r, true); return [x.circ, x.dr, x.carry].join("/"); };
+
+  it("the fight called off on Thursday 3 December: the weeks done stay done, and Prep carries on in the cycle's own order to its test week", () => {
+    const s = off("2026-12-07", "2026-12-03");
+    expect(lived(s.rows, "2026-12-07")).toEqual(lived(his.rows, "2026-12-07"));
+    expect(ids(s, "2026-12-07", "2027-02-01")).toEqual(["P8", "P9", "P10", "P11", "P12", "P12b", "P13", "P14"]);
+    expect(prepRunOn(["P1", "P2", "P4", "P5", "P6", "P7"])).toEqual(["P8", "P9", "P10", "P11", "P12", "P12b", "P13", "P14"]);
+    const p14 = s.rows.find((r) => r.mon === "2027-01-25");
+    expect(p14.id).toBe("P14"); expect(rowRx(p14, true).em).toMatch(/Sat 30 Jan TEST DAY/);
+    /* then the cycle, on repeat, from the Monday after test day */
+    expect(ids(s, "2027-02-01", "2027-05-24")).toEqual(CYCLE16);
+    expect(s.rows.find((r) => r.mon === "2027-02-01").cycle).toBe(1);
+    /* one stretch with the weeks done: the same Prep, its ramp counted on, no profiles redrawn until P10 */
+    const prep = s.rows.filter((r) => r.mon < "2027-02-01");
+    expect([...new Set(prep.map((r) => r.plan + "|" + r.seg))]).toEqual(["2026-10-26|1"]);
+    expect(prep.map((r) => r.pk)).toEqual(Array.from({ length: 14 }, (_, i) => i + 1));
+    expect(prep.filter((r) => r.profile).map((r) => r.id)).toEqual(["P1", "P10"]);
+    /* P10, the easy week, is Christmas week: three-quarters volume */
+    const p10 = rowRx(s.rows.find((r) => r.id === "P10"), true);
+    expect(p10.xmas).toBe(1); expect(p10.vol34).toBe(1);
+    expect(describeSeason(s, "2026-12-07")).toMatch(/^Prep carries on: P8 · P9 · P10 · P11 · P12 · P12b · P13 · P14, test day Sat,? 30 Jan; then Prep's 16-week cycle from Mon,? 1 Feb\.$/);
+    expect(builderMd).toMatch(/If the fight is called off\*\*, set on Thursday 3 December: the plan re-made from Monday 7 December keeps the six weeks done and carries on with P8, P9, P10, P11, P12, P12b, P13 and P14 — test day Saturday 30 January — then the 16-week cycle from Monday 1 February/);
+  });
+  it("called off inside the ramp, the ramp counts on", () => {
+    const s = off("2026-11-09", "2026-11-05");
+    expect(ids(s, "2026-10-26", "2027-02-15")).toEqual(["P1", "P2", "P3", "P4", "P4b", "P5", "P6", "P7", "P8", "P9", "P10", "P11", "P12", "P12b", "P13", "P14"]);
+    const rx = s.rows.filter((r) => r.mon >= "2026-11-09").slice(0, 2).map((r) => rowRx(r, true));
+    expect(rx.map((x) => x.nor.join(" × "))).toEqual(["3 × 4", "3 × 5"]);
+    expect(rx[0].em).toMatch(/the last week of the ramp/); expect(rx.map((x) => !!x.spr90)).toEqual([false, false]);
+  });
+  it("called off in the camp, the cycle starts at week 1; straight after Prep's test week, at its own numbers", () => {
+    const camp = off("2027-02-01", "2027-01-28");
+    expect(ids(camp, "2027-01-04", "2027-02-01")).toEqual(["F", "B1", "B2", "B3"]);
+    expect(ids(camp, "2027-02-01", "2027-05-24")).toEqual(CYCLE16);
+    const test = off("2027-01-04", "2026-12-31");
+    expect(ids(test, "2027-01-04", "2027-04-26")).toEqual(CYCLE16);
+    expect(test.rows.filter((r) => r.mon >= "2027-01-04").some((r) => r.comeback)).toBe(false);
+  });
+  it("from low fitness, a new cycle eases you in as a comeback's first weeks do — not after a fight's transition, not from good fitness, and the next cycle as written", () => {
+    const low = buildSeason({ plans: [plan("2026-10-26", "2026-10-25", { booked: false, fitness: "low" })], today: "2026-10-25" });
+    const c1 = low.rows.slice(0, 16), c2 = low.rows.slice(16, 32);
+    expect(c1.map((r) => r.id)).toEqual(CYCLE16); expect(c2.map((r) => r.id)).toEqual(CYCLE16);
+    const rx = c1.slice(0, 4).map((r) => rowRx(r, true));
+    expect(c1.slice(0, 4).map(cr)).toEqual(["2/3/2", "2/3/2", "3/4/3", "3/4/3"]);
+    expect(rx.map((x) => !!x.spr90)).toEqual([true, true, false, false]);
+    expect(rx.map((x) => x.nor.join(" × "))).toEqual(["2 × 3", "2 × 4", "3 × 4", "3 × 5"]);
+    expect(c2.some((r) => r.comeback)).toBe(false);
+    expect(describeSeason(low, "2026-10-26")).toMatch(/^Prep's 16-week cycle from Mon,? 26 Oct, easing you back in\.$/);
+    const good = buildSeason({ plans: [plan("2026-10-26", "2026-10-25", { booked: false })], today: "2026-10-25" });
+    expect(good.rows.some((r) => r.comeback)).toBe(false);
+    /* after Worked Example 1's fight and its transition, from low fitness: the cycle as written */
+    const ex1 = plan("2026-10-12", "2026-10-08", { fight: "2026-11-28", rounds: 3, mins: 2, rest: 60, weighIn: "before", fitness: "low", emphasis: "durability" });
+    const after = buildSeason({ plans: [ex1, plan("2026-11-30", "2026-11-29", { booked: false, fitness: "low" })], today: "2026-11-29", head: () => ({ a: "no", at: "2026-11-29" }) });
+    expect(ids(after, "2026-11-30", "2026-12-14")).toEqual(["T", "P1"]);
+    expect(after.rows.some((r) => r.comeback)).toBe(false);
+  });
+  it("START AGAIN: week 1 from the plan's Monday — eased in from low, the next cycle's number; carrying on, a re-plan changes nothing in the weeks", () => {
+    const cyc = plan("2026-10-26", "2026-10-25", { booked: false });
+    const base = buildSeason({ plans: [cyc], today: "2026-12-31" });
+    const again = buildSeason({ plans: [cyc, plan("2027-01-04", "2026-12-31", { booked: false, fitness: "low", restart: true })], today: "2026-12-31" });
+    expect(ids(again, "2026-10-26", "2027-01-04")).toEqual(CYCLE16.slice(0, 10));
+    expect(ids(again, "2027-01-04", "2027-04-26")).toEqual(CYCLE16);
+    const first = again.rows.find((r) => r.mon === "2027-01-04");
+    expect(first.cycle).toBe(2); expect(first.comeback).toBe(1); expect(first.profile).toBe(true);
+    const on = buildSeason({ plans: [cyc, plan("2027-01-04", "2026-12-31", { booked: false, fitness: "moderate" })], today: "2026-12-31" });
+    const key = (s) => s.rows.slice(0, 40).map((r) => r.mon + ":" + r.id + ":" + (r.cycle || "") + ":" + r.mac + r.kw);
+    expect(key(on)).toEqual(key(base));
+    expect([...new Set(on.rows.filter((r) => r.mon < "2027-02-15").map((r) => r.plan))]).toEqual(["2026-10-26"]);
+    /* with a fight booked: the Prep laid out again from low fitness, by the comeback table */
+    const fresh = buildSeason({ plans: [march, plan("2026-11-30", "2026-11-26", Object.assign({}, WE3, { restart: true }))], today: "2026-11-26" });
+    expect(ids(fresh, "2026-11-30", "2027-01-04")).toEqual(COMEBACK_N[5]);
+    expect(fresh.rows.find((r) => r.mon === "2026-11-30").pk).toBe(1);
+    expect(fresh.rows.find((r) => r.program === "camp").mon).toBe("2027-01-04");
   });
 });
 
