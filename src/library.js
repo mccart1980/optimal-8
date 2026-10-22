@@ -87,6 +87,7 @@ const ROW_NAMES = {
   "the warm-up you rehearsed": ["EASY BIKE (WARM-UP)", "BAND PULL-APARTS", "GOBLET SQUAT", "PUSH-UPS", "90/90 HIP SWITCHES", "POGO HOPS"],
   "band pull-aparts and external rotations": ["BAND PULL-APARTS", "BAND EXTERNAL ROTATIONS"],
   "weighted chin-ups + the muscle-up line": ["WEIGHTED CHIN-UPS", "MUSCLE-UP LINE"],
+  "bodyweight dip": "WEIGHTED DIPS",
   "weighted chin-up + the muscle-up line": ["WEIGHTED CHIN-UPS", "MUSCLE-UP LINE"],
 
 
@@ -169,7 +170,7 @@ const ROW_NAMES = {
   "four punch throw": ["ROTATIONAL SHOT-PUT THROW", "DOWNWARD DIAGONAL THROW", "HOOK THROW", "LANDMINE PUNCH"],
   "power dose throw landmine": ["ROTATIONAL SHOT-PUT THROW", "LANDMINE PUNCH"],
   "med ball slam": "MEDICINE-BALL SLAMS",
-  /* size */
+  /* shoulders, arms and traps */
   "rear delt fly": "REAR-DELT FLY",
   /* conditioning */
   "base easy nose only": "EASY BASE (RIDE OR RUN)",

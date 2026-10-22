@@ -179,6 +179,7 @@ On automatically from low fitness, and in every short-notice camp. It doesn't ad
   - 40-second repeats always 2 × 6, and repeat bursts always 2 × 8.
   - The Thursday easy thirty becomes forty.
   - Monday's base stays at its 45-minute cap.
+  - Monday's dips and ring rows: two rounds.
 
 ---
 
@@ -228,7 +229,7 @@ Prep's fourteen weeks are **P1 to P14** as Optimal 8 · Prep writes them.
 
 That's accumulate in weeks 1–6 (week 6 lighter, with tests), intensify in weeks 7–11 (top triples in week 10, week 11 easy with tests), convert in weeks 12–15, and the test week in week 16.
 
-Test day is week 16's Saturday. The next cycle starts the Monday after, its working weights reset from test week. The size block runs full in weeks 1–6, at half dose in weeks 7–15, and not at all in week 16.
+Test day is week 16's Saturday. The next cycle starts the Monday after, its working weights reset from test week. The circuits, the dips and the carries run each week's own numbers from Prep's calendar — P4b as P4, P12b as P12 — and the bench press, like the trap bar, takes P4b's +2.5%.
 
 **Before a camp:** Prep runs from the end of the transition (or from today) to the Sunday before the camp starts. Its length in weeks, N, decides which weeks run:
 
@@ -256,8 +257,8 @@ Test day is week 16's Saturday. The next cycle starts the Monday after, its work
 - Every kept week runs exactly as written.
 - P14, the test week, always ends it, with test day on its Saturday and the camp on the Monday after.
 - The bar-speed profiles are drawn in the Prep's first week and again in P10 if it's kept, otherwise in P14.
-- If P6 isn't kept, the bench press starts in the first heavy week at P6's load, 80%.
-- The size block runs full in kept weeks P1–P5, at half dose in the others, and not in P14.
+- The bench press runs every kept week, in that week's phase.
+- The circuits, the dips and the carries run each kept week's own numbers.
 - **The Christmas rule:** the week with 25 December in it runs at three-quarters volume, intensity kept.
 
 ---
@@ -322,7 +323,7 @@ The sauna runs twice a week in weeks 2–5: Thursday straight after the easy ses
 | Dates | What runs |
 |---|---|
 | Mon 30 Nov – Sun 6 Dec | **The transition** — one week after a 3 × 2, longer if the strap isn't back |
-| Mon 7 Dec – Sun 3 Jan | **Prep, four weeks:** P4 (7–13 Dec, normal tempo 5 × 5 @ 75%, the size block full) · P7 (14–20 Dec, paused 4 × 3 @ 84%; the bench press starts at 80%) · P8 (21–27 Dec, fast in clusters at 87–90%, Christmas week at three-quarters volume) · P14 (28 Dec – 3 Jan, the test week — the 20-minute test Thursday 31 December, test day Saturday 2 January) |
+| Mon 7 Dec – Sun 3 Jan | **Prep, four weeks:** P4 (7–13 Dec, normal tempo 5 × 5 @ 75%) · P7 (14–20 Dec, paused 4 × 3 @ 84%) · P8 (21–27 Dec, fast in clusters at 87–90%, Christmas week at three-quarters volume) · P14 (28 Dec – 3 Jan, the test week — the 20-minute test Thursday 31 December, test day Saturday 2 January) |
 | Mon 4 Jan – Sat 13 Mar | **The camp — the master, ten weeks**, good fitness off test week, as Optimal 8 · Camp writes it |
 
 ---

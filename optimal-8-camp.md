@@ -4,7 +4,7 @@
 
 Prep and Optimal 8 Fighter are untouched. This runs in their place for ten weeks — the app switches to it on the date — and when it ends, two easy weeks of transition, then Prep again. Everything you need to run a session is written on that session's page. No codes, no jargon.
 
-**The philosophy in five lines.** The engine is the priority and it's built brutally from week 1, because Prep did the foundation: two conditioning sessions a week shaped like a round, the rounds every Sunday at fight rest, eight in the peak block and ten once, the fade scored every fortnight. Strength is kept and turned into speed through the phased lifts — one week of slow lowering, paused, fast in clusters, contrast — with working weights reset off test week and again in week 5, never a max. Durability and movement don't stop for a camp — RANGE, the tendon block twice a week, the neck, the hands and the Nordics run all ten weeks. Brutal lives in the sessions: every hard session has a number to beat and a standard that ends it. Discipline lives in the structure: Friday asleep, sleep as a rule, nothing new in camp, and the last ten days sacred.
+**The philosophy in five lines.** The engine is the priority and it's built brutally from week 1, because Prep did the foundation: two conditioning sessions a week shaped like a round, the rounds every Sunday at fight rest, eight in the peak block and ten once, the fade scored every fortnight. Strength is kept and turned into speed through the phased lifts — one week of slow lowering, paused, fast in clusters, contrast — with working weights reset off test week and again in week 5, never a max. Durability and movement don't stop for a camp — RANGE, the tendon block twice a week, the neck, the hands and the Nordics run all ten weeks — and what Prep built is kept: the dips, a round of the arms circuit, THE BRACE and the two carries, through week 8. Brutal lives in the sessions: every hard session has a number to beat and a standard that ends it. Discipline lives in the structure: Friday asleep, sleep as a rule, nothing new in camp, and the last ten days sacred.
 
 ---
 
@@ -14,16 +14,16 @@ Prep and Optimal 8 Fighter are untouched. This runs in their place for ten weeks
 
 | Day | Session | Time |
 |---|---|---|
-| Monday | 3:30 · BASE — easy nasal ride or run, 45 min · neck · hands · ring rows | ~60 min |
-| Tuesday | 3:30 · POWER + ENGINE 1 — the jump check, jumps, shuttles, speed from week 6, pistol line, Spanish hold, the interval session, the settle, trunk, the Achilles hold | ~70 min |
-| Wednesday | 3:30 · STRENGTH — sled (repeat starts on even weeks), drive holds, the trap bar in its phase, the bench press and bench throws, chins and the muscle-up line, Nordics, neck holds · evening: the movement session in weeks 1–5 | ~64 min |
+| Monday | 3:30 · BASE + KEEP — weighted dips and ring rows, a round of the arms circuit (weeks 1–8), easy nasal ride or run 45 min · neck · hands · band catch | ~75 min |
+| Tuesday | 3:30 · POWER + ENGINE 1 — the jump check, jumps, shuttles, speed from week 6, pistol line, Spanish hold, the interval session, the settle, THE BRACE, the Achilles hold | ~74 min |
+| Wednesday | 3:30 · STRENGTH — sled (repeat starts on even weeks), drive holds, the trap bar in its phase, the bench press and bench throws, chins and the muscle-up line, Nordics, neck holds, the farmer's carry (weeks 1–8) · evening: the movement session in weeks 1–5 | ~67 min |
 | Thursday | 3:30 · THROWS + ENGINE 2 — throws and landmine, split squat, Spanish hold, Achilles hold, the second conditioning session, the settle, neck, hands, band catch · evening: the easy thirty, then the sauna in weeks 2–8 | ~69 min |
 | Friday | SLEEP. No alarm. | — |
-| Saturday | 8:30 · THE LONG SESSION — get-ups, build-ups, stance starts, close and plant, sprints, reactive jumps, side bounds, the squat in its phase, push press · evening: the movement session | ~85 min |
+| Saturday | 8:30 · THE LONG SESSION — get-ups, build-ups, stance starts, close and plant, sprints, reactive jumps, side bounds, the squat in its phase, push press, the bear-hug carry (weeks 1–8) · evening: the movement session | ~88 min |
 | Sunday | 8:30 · THE ROUNDS — throws, the simulation, the post-max sit, core with suitcase carries, the L-sit, the lever and face pulls, hands, weekly check · then the easy hour, then the sauna | ~80 min |
 | Every day | On waking: the strap, the sighs, the one thing, the morning five, the check · evening: RANGE 20 min, the skill block Mon–Thu, the sit, the review | ~50 min |
 
-About seven and a half hours in the gym a week at peak and three at home. Week 5 is easy; weeks 9–10 are much lighter.
+About seven and three-quarter hours in the gym a week at peak and three at home. Week 5 is easy; weeks 9–10 are much lighter.
 
 **How the weights work — no maxes in camp.** The working weights are test week's numbers, reset once in week 5 with a hard set of 3 with two in you. The calendar gives sets, reps and a percentage; the bar speed on your wrist decides whether the number was right — the first work set sets the day (one slow reading takes 5% off; it takes two fast sessions running to add 2.5%), strength sets end at a 20% slowdown, fast and contrast sets at 10%. A max attempt three weeks out is how camps end. The bench throw and the trap bar jump stay at the peak-power loads from Prep's test-week profile, redrawn in week 5.
 
@@ -76,37 +76,43 @@ Targets over the camp: fade 5–8 points better than Prep's last read · burst d
 
 ---
 
-## MONDAY · BASE · ~60 min
+## MONDAY · BASE + KEEP · ~75 min
 
-The base is the thing Optimal 8 was thin on and the thing the camp will lean on hardest. It decides how fast you recover between exchanges and between rounds — roughly three-quarters of a 6 × 3 is aerobic — and it's the floor that lets Tuesday and Thursday be as hard as they are. It's the low day in a high/low week, and it must stay low. Forty-five minutes through the camp, thirty in the easy week and the sharpen week.
+The base is the thing Optimal 8 was thin on and the thing the camp will lean on hardest. It decides how fast you recover between exchanges and between rounds — roughly three-quarters of a 6 × 3 is aerobic — and it's the floor that lets Tuesday and Thursday be as hard as they are. It's the low day in a high/low week for your legs and your engine, and it must stay low. Forty-five minutes through the camp, thirty in the easy week and the sharpen week. Before it, through week 8, the camp keeps what Prep built for your upper body: the dips and the rows, and one round of the arms circuit.
 
-**1 · 0:00 — EASY, NOSE ONLY · 45 min** (30 in weeks 5 and 9)
+**1 · 0:00 — WARM-UP · 4 min · weeks 1–8** — band pull-aparts × 20 → band external rotations × 15 per arm → ring support hold, 2 × 20 seconds: arms locked at the top of the rings, the rings dead still by your hips, shoulders pushed down → dips at bodyweight × 5.
+
+**2 · 0:04 — WEIGHTED DIPS + RING ROWS · 3 rounds · 60 s after each · 9 min · weeks 1–8**
+
+Weighted dips, 5 reps, heavy — a weight that leaves two in you at five: parallel bars, weight on a belt, lower until your shoulders are level with your elbows, chest slightly forward, then press back up to locked arms, and no deeper. Rest 60 seconds. Then the ring rows at your level: rings at hip height, body straight, heels on the floor, pull the rings to your chest, pause, lower slowly. Rest 60 seconds, then the next round. Week 5, the easy week: two rounds, the dips light and fast. Week 9: the ring rows on their own, 3 sets, holds only. An elbow or a shoulder at 4 or more on Sunday's check: push-ups for the dips that week, and the rows held at the top.
+
+**3 · 0:13 — THE ARMS CIRCUIT · 1 round · 3 min · weeks 1–8**
+
+Incline dumbbell curls × 10–12, overhead triceps extensions × 10–12, lateral raises × 15, rear-delt flies × 15 — back to back, 20 seconds between (Prep's Monday page describes each). One round holds what the circuits built.
+
+**4 · 0:16 — EASY, NOSE ONLY · 45 min** (30 in weeks 5 and 9)
 
 Bike, SkiErg, or a run if your legs and ankles are used to it — a run builds the base faster but costs more. Heart rate on the strap and the average logged: 65–75% of your peak, no higher. The output at that heart rate is the number that should climb. Nose the whole way; if you can't hold a sentence, slow down. 65–75% of the peak heart rate from the 20-minute test. Boring on purpose. Fine on an empty stomach.
 
-**2 · 0:45 — NECK · 8 min**
+**5 · 1:01 — NECK · 8 min**
 
 Four-direction holds, 3 × 10 seconds each direction — press your palm hard against your forehead and push your head into it; the head never moves. Then the back of the head, then each side. Rapid tense, 4 × 6 per direction — a band resting light pressure on your head; snap from fully relaxed to fully braced in under a second, hold 2 seconds, relax. Perturbation hold, 2 × 20 seconds — band around the head, anchored to the rack; brace in neutral and tug the band in small random pulses with your own hand; the head does not move. A stiffer neck lowers how much the head accelerates when hit. Not armour; a cheap bet on a sound mechanism, from day one.
 
-**3 · 0:53 — HANDS · 4 min**
+**6 · 1:09 — HANDS · 4 min**
 
 Knuckle hold, 3 × 20 seconds — push-up position on your fists, wrist dead straight. Band wrist extension, 2 × 15 — forearm on your knee, palm down, band in the hand, lift the knuckles toward you.
 
-**4 · 0:57 — BAND DECELERATION CATCH · 2 × 8 per arm · 2 min**
+**7 · 1:13 — BAND DECELERATION CATCH · 2 × 8 per arm · 2 min**
 
 A light band anchored behind you at shoulder height, the end in your hand, in your stance. Punch the arm out fast; the band snatches it back — brake it hard and stop it dead in the last third of the return. Fast out, hard stop. Every punch you throw has to be braked and brought home by these muscles, and this is the only exercise that trains them to do it.
 
-**5 · 0:59 — RING ROWS · 3 sets at your level · rest 60 s · 5 min**
-
-Rings hung at hip height, hang beneath them with the body straight and heels on the floor, pull the rings to the chest, pause, lower slow; the line climbs to feet-elevated rows and archer rows (Calisthenics page). Light horizontal pulling on the easy day, keeping the shoulder honest without touching the elbow load Wednesday carries.
-
-**Done · ~1:04.** Tonight: RANGE, the skill block, the sit.
+**Done · ~1:15.** Tonight: RANGE, the skill block, the sit.
 
 ---
 
-## TUESDAY · POWER + ENGINE 1 · ~60 min
+## TUESDAY · POWER + ENGINE 1 · ~64 min
 
-Fresh legs, so the power dose goes first. Then the week's first hard conditioning session. Then the trunk, because the trunk is what turns leg drive into hand speed.
+Fresh legs, so the power dose goes first. Then the week's first hard conditioning session. Then THE BRACE, because the trunk is what turns leg drive into hand speed and takes the shots to the body.
 
 **1 · 0:00 — WARM-UP · 7 min**
 
@@ -142,19 +148,19 @@ Easy (week 5): 20 minutes conversational.
 
 Every session ends with **the 60-second settle**: stay on the bike, eyes closed, heart pounding, find the breath at the nostrils, count the seconds it takes to land there. The corner between rounds, trained.
 
-**5 · 0:46 — TRUNK · 9 min · rest 45 s**
+**5 · 0:46 — THE BRACE · 3 rounds · 13 min · weeks 1–8**
 
-Pallof press, 3 × 10 per side — band at chest height anchored beside you, press the hands straight out and hold 2 seconds without letting it twist you. Ab wheel rollouts, 3 × 8–12 — knees down, out only as far as the lower back stays flat. Copenhagen plank, 2 × 30 seconds per side — side plank, top foot on a bench, bottom leg lifted. The groin you pivot off.
+The body-shot block, kept from Prep: ab wheel rollouts × 8–12, the Pallof press × 10 per side, medicine-ball drops × 8, and the Copenhagen plank for 25 seconds a side in the first two rounds — back to back, 20 seconds between exercises, 60 seconds after each round (Prep's Tuesday page describes each). Two rounds in week 5. None in weeks 9 and 10.
 
-**6 · 0:55 — SEATED CALF RAISE + ACHILLES HOLD · 3 × 12, then one 45-second hold · rest 60 s · 5 min**
+**6 · 0:59 — SEATED CALF RAISE + ACHILLES HOLD · 3 × 12, then one 45-second hold · rest 60 s · 5 min**
 
 Seated calf raise, up on the balls of the feet, pause, down slow, twelve times — the knee-bent position trains the muscle that keeps you on your toes in round six. Then the hold, STANDING: on the edge of a step, a dumbbell in each hand or a bar on your back, as heavy as you can hold dead still, rise to the top and hold 45 seconds, knees straight. The Achilles takes every sprint and landing in this camp on a straight knee; this is its insurance.
 
-**Done · ~1:00.** Tonight: RANGE, the skill block, the sit.
+**Done · ~1:04.** Tonight: RANGE, the skill block, the sit.
 
 ---
 
-## WEDNESDAY · STRENGTH · ~60 min
+## WEDNESDAY · STRENGTH · ~67 min
 
 The heavy morning, and the lift changes its shape by block — slow lowering in accumulation, paused then fast in intensification, contrast in conversion. Every rep moves with intent; the watch says how fast, and the set ends at the velocity threshold on the Loading page. A grinding rep ends the set.
 
@@ -180,7 +186,7 @@ The phases, block by block: **SLOW LOWERING (week 1)** — five seconds down, dr
 
 Warm-up sets: bar × 10, 40% × 5, 60% × 3, 75% × 2. Pins at chest height, no collars. Week 1 SLOW LOWERING: 3 × 5 at 72% of test week's working max, five seconds down. Weeks 2–3 PAUSED: 3 × 3 at 78%, then 82%, two seconds dead still on the chest. Week 4 FAST: 4 × 2 at 87%. Week 5: 2 × 3 at 65%, fast — the working weight reset. Weeks 6–8 CONTRAST: 2 reps at 85% (87% in week 7, 88% in week 8) → rest 20 seconds → 3 bench throws → rest 2½ minutes; three rounds, two in week 8. In weeks 1–5 the bench throws follow the press, 3 × 3 at your peak-power load. Sharpen week: the sharpen page. Fight week: none.
 
-The bench throw: a Smith machine with its safety stops set so the bar rests on them a couple of centimetres above your chest. Light bar; lower it to the stops, throw it so hard it leaves your hands, catch it with soft elbows, lower it back to the stops. A missed catch lands on the stops, never on you. No Smith machine with adjustable stops: a 4–6 kg medicine ball thrown off the chest at a wall. The punch-speed lift, built on a bench you now train. The ring dips rotate out for the camp; they come back in the next Prep's first block.
+The bench throw: a Smith machine with its safety stops set so the bar rests on them a couple of centimetres above your chest. Light bar; lower it to the stops, throw it so hard it leaves your hands, catch it with soft elbows, lower it back to the stops. A missed catch lands on the stops, never on you. No Smith machine with adjustable stops: a 4–6 kg medicine ball thrown off the chest at a wall. The punch-speed lift, built on a bench you now train. The weighted dips stay in, on Monday.
 
 **6 · 0:43 — WEIGHTED CHIN-UPS · 3 × 5, then the MUSCLE-UP LINE, 2 sets · rest 90 s · 8 min**
 
@@ -192,7 +198,9 @@ Kneel with the heels anchored under something solid. Body straight from knees to
 
 **8 · 0:57 — NECK · HOLDS ONLY · 5 min** — the four-direction holds, 3 × 10 seconds each direction. The third neck dose of the week, because in camp the neck is the cheapest insurance there is.
 
-**Done · ~1:04.** Tonight: the movement session in weeks 1–5, RANGE, the skill block, the sit.
+**9 · 1:02 — FARMER'S CARRY · 2 × 30 m · rest 60 s · 3 min · weeks 1–8** — a heavy dumbbell in each hand; stand tall, shoulders down, short quick steps for 30 metres without putting them down, as in Prep.
+
+**Done · ~1:07.** Tonight: the movement session in weeks 1–5, RANGE, the skill block, the sit.
 
 ---
 
@@ -250,9 +258,9 @@ No alarm. Tomorrow is the long session and Sunday is the rounds, and the best th
 
 ---
 
-## SATURDAY · THE LONG SESSION · 8:30 · ~80 min
+## SATURDAY · THE LONG SESSION · 8:30 · ~83 min
 
-Fed and rested, Friday's sleep in front of it. Speed first, then reactive power, then the squat in its phase, then the push press. Fuel it: porridge two hours before, half the bottle and a banana twenty minutes before.
+Fed and rested, Friday's sleep in front of it. Speed first, then reactive power, then the squat in its phase, then the push press, then the bear-hug carry. Fuel it: porridge two hours before, half the bottle and a banana twenty minutes before.
 
 **1 · 0:00 — WARM-UP · 16 min**
 
@@ -286,7 +294,9 @@ Lower-body maximal strength is the best predictor there is of how hard trained b
 
 Bar on the front of the shoulders, quick shallow knee dip, drive it overhead with the legs and punch it to lockout. Legs, braced trunk, hands — the route a punch takes. Loaded like the other lifts: fast, two in reserve; weeks 6–8 at 85%; week 9 at 70%.
 
-**Done · ~1:15.** THE MOVEMENT SESSION this evening, then RANGE. Bed early: tomorrow is the rounds. Saturday's 5pm carb feed loads it.
+**7 · 1:11 — BEAR-HUG CARRY · 2 × 30 m · rest 60 s · 3 min · weeks 1–8** — hug a heavy sandbag tight to your chest, elbows in, stand tall, walk 30 metres, breathing short and sharp through your nose behind a braced stomach, as in Prep.
+
+**Done · ~1:18.** THE MOVEMENT SESSION this evening, then RANGE. Bed early: tomorrow is the rounds. Saturday's 5pm carb feed loads it.
 
 ---
 
@@ -326,13 +336,13 @@ Three yellows in a week: next week runs at the table's numbers minus one set on 
 
 ## CALISTHENICS — THE LINES AND THE LEVELS
 
-The five lines you're already running, at the levels you've reached, in the same slots. The handstand is in the home skill block, Monday to Thursday, at your level, on parallettes; holds only from week 9. The planche leans are gone: they bend the wrist further back than anything else in the program and give a puncher nothing back.
+The lines you're already running, at the levels you've reached, and the dips, weighted, on Monday through week 8. The handstand is in the home skill block, Monday to Thursday, at your level, on parallettes; holds only from week 9. The planche leans are gone: they bend the wrist further back than anything else in the program and give a puncher nothing back.
 
 **You own a level when you hit the top of its target for the prescribed sets on two occasions running.** Adding reps at a level always comes before adding difficulty. Reps in the tank on every set. Week 5: half the sets. Weeks 9–10: holds only. Any elbow or wrist at 4 or above on the weekly check: holds only the following week.
 
 **RING ROWS** — Monday: ring rows 3 × 8 → 3 × 12 near horizontal → feet-elevated rows 3 × 8 → 3 × 12 → archer rows 3 × 5 per side → 3 × 8.
 
-**RING DIPS** — rotated out for the camp; the bench press does the pressing, and the dips come back in the next Prep's first block. The line, for then: bar dips 3 × 5 (bench dips if not there yet) → 3 × 10 → ring support hold 3 × 20 s → 3 × 40 s → ring dip negatives 3 × 5 at 5 s → ring dips 3 × 5–8 → 3 × 10 → weighted.
+**THE DIPS** — Monday, weeks 1–8, weighted, on the bars: 3 × 5, heavy, two in reserve (2 rounds, light and fast, in week 5). The bench press does the heavy pressing; the dips keep what Prep built.
 
 **THE MUSCLE-UP LINE** — Wednesday, 2 sets: chest-to-bar pull-ups 2 × 5 → 2 × 8 → muscle-up negatives 2 × 3 at 5 s → 2 × 5 → bar muscle-ups with a band 2 × 3 → strict 2 × 5.
 
@@ -493,6 +503,8 @@ Five additions, on by default, that give this camp a professional camp's density
 **What the October audit changed, and why.** Every major system was run back over this program — block periodization, conjugate, Sheiko, autoregulation, Easy Strength, triphasic, Charlie Francis, the shock method, velocity training, ALTIS and the deceleration research, Joel Jamieson, the HIIT and polarized research, the UFC Performance Institute and the boxing research. Out, because they weren't earning their minutes: Saturday's tired throws (Thursday and Sunday throw fresh), the evening microdoses (explosive work already runs five days a week), the warm-up crawls, Sunday's get-ups and the planche leans. In, because each fills a real gap: braking into your stance, strength in the punch position, loaded sideways trunk stiffness, a jump check that reads what the strap can't, the arm-braking work twice a week, the back of the shoulder all year, a bench press you're trained on before you're tested on it, and shrugs in the size weeks. Depth jumps came down to sixteen clean contacts, and a tendon gate went in. Sheiko's lesson was taken without Sheiko's volume: you get strong at what you practise, and you don't test a lift you don't train.
 
 **What the October review changed, and why.** An outside review read the documents line by line and found four safety points worth taking. The dumbbell-release jumps went: dropped dumbbells bounce and roll, and you land where they fell — the reactive slot now climbs from drop landings to low-box depth jumps to full depth jumps. The bench throw now runs off the Smith machine's safety stops, so a missed catch lands on them, not on you. The true maxes went: for a fighter a one-rep max only sets loads, and the top triple with the bar-speed profile does that without the risk of failing a lift alone. And the tendon gate was fixed: a sore tendon gets its jumping taken away and its holds kept, not a different jump. Two rules tightened with them — the bar-speed rule now comes down on one slow reading but goes up only on two fast ones, because one reading is inside the watch's noise; and rounds past the fight stop if they fall below three-quarters of round one, because they're capacity work, not punishment.
+
+**Why the camp keeps a third of what Prep built.** Ten weeks without the upper-body work would erode what Prep built, and the look peaks on fight night only if it's still there. About a third of the dose holds muscle: the dips and rows on Monday, one round of the arms circuit, THE BRACE and the two carries — about twenty minutes a week. The engine sessions don't change, and the sharpen week and fight week run as they always have.
 
 **Why the foundation is one week.** Prep did the foundation — fourteen weeks of it. One week of slow lowering off test week's working max is a hand-over, not a build: the body re-learns the tempo, the new working weights settle, the camp's baselines get logged, and the build block starts from a floor no eight-week camp ever has.
 

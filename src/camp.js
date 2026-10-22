@@ -2,6 +2,7 @@ import { C } from "./ui.jsx";
 import { mondayOf, parseISO } from "./ui.jsx";
 import { clusterTimer } from "./edge.js";
 import { jumpOf, JUMPS, JUMP_GATE_LINE, STOP_RULE, HEAD_DOCTOR, HEAD_AE } from "./safety.js";
+import { MON_WU, dipsAndRows, armsCircuit, theBrace, carryBlock } from "./circuits.js";
 
 /* ================================================================
    OPTIMAL 8 · CAMP — ten weeks to the fight.
@@ -466,6 +467,7 @@ export const SCORED_WEEKS_LINE = "Scored weeks: 1, 4, 5 and 8.";
 const GETUP = "2 per side, light — lie on your back with a kettlebell pressed up in the right hand, right knee bent, left arm and leg out at 45°; roll up onto the left elbow, then the hand; lift the hips, sweep the left leg back to kneeling, windmill the trunk upright, stand; reverse every step to the floor. The bell never stops pointing at the ceiling. 8–12 kg to learn it.";
 
 export const CPROTO = {
+  C_MONWU: Object.assign({ c: C.cobalt }, MON_WU, { s: "4 min · Mon, weeks 1–8" }),
   C_WU: { n: "Warm-up", s: "7 min · Tue and Thu", c: C.cobalt,
     note: "Thursday's is the same, then three easy throws of each at half effort.",
     i: [["Easy bike", "3 min"], ["Band pull-apart", "×20"], ["Goblet squat", "×8"], ["Push-up", "×10"], ["90/90 hip switch", "×5 each way"], ["Pogo hops", "×20"]] },
@@ -548,9 +550,28 @@ const testItems = (kind) => {
 };
 const testTitle = { burst: "THE BURST TEST", retest: "THE RETESTS", retest9: "THE RETESTS — SHORT" };
 
+/* What the camp keeps of what Prep builds: a holding dose, about a third
+   of Prep's — Monday's dips and ring rows and a round of the arms circuit,
+   THE BRACE on Tuesday, the farmer's carry on Wednesday and the bear-hug
+   carry on Saturday, weeks 1–8. The engine sessions don't change. */
+const keeps = (rx) => (rx.w || 0) <= 8 && !rx.fightWeek;
+const CAMP_PAIR = dipsAndRows({ L: "R", pfx: "c", rounds: (rx) => (!keeps(rx) ? 0 : rx.dl || rx.ef ? 2 : setsOf(rx, 3)), dips: (rx) => (rx.dl ? "light" : "heavy"),
+  why: "The camp keeps what Prep built: the dips heavy at five, the rows with them. About a third of Prep's dose holds the muscle; the engine sessions don't change." });
+const CAMP_ARMS = armsCircuit({ L: "M", pfx: "c", rounds: (rx) => (keeps(rx) ? 1 : 0),
+  why: "One round holds what the circuits built in Prep, in four minutes." });
+const braceRounds = (rx) => (rx.tp ? 0 : rx.dl ? 2 : setsOf(rx, 3));
+const CAMP_BRACE = theBrace({ L: "F", pfx: "c", rounds: braceRounds, copen: (rx) => Math.min(braceRounds(rx), setsOf(rx, rx.copen || 2)),
+  why: "The body-shot block, kept: the brace firing on time, the wall that takes the shot, the nerves settled a little at a time." });
+const CAMP_FARMER = carryBlock({ L: "M", pfx: "c", kind: "farmer", runs: (rx) => (keeps(rx) ? setsOf(rx, 2) : 0),
+  why: "Grip, forearms and traps, and a trunk that stays stiff under load — kept through the camp." });
+const CAMP_BEARHUG = carryBlock({ L: "H", pfx: "c", kind: "bear", runs: (rx) => (keeps(rx) && !(rx.spr && rx.spr.micro) ? setsOf(rx, 2) : 0),
+  why: "The clinch against a heavier man, and breathing behind a brace when one lands." });
+const vv2 = (x, rx) => (typeof x === "function" ? x(rx) : x);
+const minsIf = (B, rx) => (B.hide(rx) ? 0 : Number(vv2(B.m, rx)) || 0);
+
 export const CS = {
   /* ---------------- MONDAY · BASE ---------------- */
-  mon: { n: "MONDAY", t: "BASE — easy nasal ride or run, 45 min · neck · hands · band deceleration catch · ring rows", m: (rx) => (rx.base || 0) + 19, ac: C.moss,
+  mon: { n: "MONDAY", t: "BASE + KEEP — weighted dips and ring rows, a round of the arms circuit, easy nasal ride or run, 45 min · neck · hands · band deceleration catch", m: (rx) => (rx.base || 0) + 19 + (keeps(rx) ? 4 + minsIf(CAMP_PAIR, rx) + minsIf(CAMP_ARMS, rx) - 5 : 0), ac: C.moss,
     intro: "The base is the thing Optimal 8 was thin on and the thing the camp will lean on hardest. It decides how fast you recover between exchanges and between rounds — roughly three-quarters of a 6 × 3 is aerobic — and it's the floor that lets Tuesday and Thursday be as hard as they are. It's the low day in a high/low week, and it must stay low.",
     b: [
     { L: "Y", n: "The Pre-Camp Check", m: 0, hide: (rx) => !rx.preCamp, rxLine: () => "this week — bloods and blood pressure",
@@ -562,6 +583,9 @@ export const CS = {
       items: [{ n: "Distance", s: "the engine's ceiling", id: "c_bike20", k: "out", u: "distance (m)" },
         { n: "Peak heart rate", s: "the highest you saw — it sets your heart-rate zones", id: "c_bike20hr", k: "out", u: "bpm" }],
       why: "The camp didn't start straight after a Prep test week, and there wasn't time before week 1: the 20-minute test sets your heart-rate zones, so it comes first." },
+    { L: "W", n: "Warm-up", m: 4, p: "C_MONWU", hide: (rx) => !keeps(rx), rxLine: () => "4 min · bands, the ring support hold, dips at bodyweight" },
+    CAMP_PAIR,
+    CAMP_ARMS,
     { L: "A", n: "Easy, nose only", m: (rx) => rx.base || 45, star: 1, baseTrend: "c_base", hide: (rx) => !!rx.checks,
       timer: (rx) => ({ kind: "z2", opt: { min: rx.base || 45, label: "EASY — NOSE ONLY" }, title: "THE BASE" }),
       rxLine: (rx) => (rx.base || 45) + " min · nose the whole way",
@@ -579,13 +603,13 @@ export const CS = {
     { L: "K", n: "Band Deceleration Catch", m: 2, rxLine: (rx) => setsOf(rx, 2) + " × 8 per arm",
       items: (rx) => [{ n: "Band deceleration catch", s: setsOf(rx, 2) + " × 8 per arm", cue: "A light band anchored behind you at shoulder height, the end in your hand, in your stance. Punch the arm out fast; the band snatches it back — brake it hard and stop it dead in the last third of the return. Fast out, hard stop.", id: "c_decel", k: "chk" }],
       why: "Every punch you throw has to be braked and brought home by these muscles, and this is the only exercise that trains them to do it." },
-    { L: "D", n: "Ring Rows", m: 5, cal: "ringrow", rest: "Rest 60 s", rt: 60, rxLine: (rx) => setsOf(rx, 3) + " sets at your level",
+    { L: "D", n: "Ring Rows", m: 5, cal: "ringrow", rest: "Rest 60 s", rt: 60, hide: (rx) => keeps(rx), rxLine: (rx) => setsOf(rx, 3) + " sets at your level",
       items: (rx) => [{ n: "Ring rows — at your level", s: setsOf(rx, 3) + " sets", cue: "Rings hung at hip height, hang beneath them with the body straight and heels on the floor, pull the rings to the chest, pause, lower slow; the line climbs to feet-elevated rows and archer rows.", id: "ringrow", k: "wr", sets: setsOf(rx, 3), reps: "at your level" }],
       why: "Light horizontal pulling on the easy day, keeping the shoulder honest without touching the elbow load Wednesday carries." }] },
 
   /* ---------------- TUESDAY · POWER + ENGINE 1 ---------------- */
-  tue: { n: "TUESDAY", t: "POWER + ENGINE 1 — the jump check, jumps, shuttles, speed from week 6, pistol line, Spanish hold, the interval session, the settle, trunk, the Achilles hold", m: (rx) => (isTest(rx, "tue") ? 78 : 70), ac: C.cobalt,
-    intro: "Fresh legs, so the power dose goes first. Then the week's first hard conditioning session. Then the trunk, because the trunk is what turns leg drive into hand speed.",
+  tue: { n: "TUESDAY", t: "POWER + ENGINE 1 — the jump check, jumps, shuttles, speed from week 6, pistol line, Spanish hold, the interval session, the settle, THE BRACE, the Achilles hold", m: (rx) => (isTest(rx, "tue") ? 78 : 70) + (CAMP_BRACE.hide(rx) ? 0 : minsIf(CAMP_BRACE, rx) - 9), ac: C.cobalt,
+    intro: "Fresh legs, so the power dose goes first. Then the week's first hard conditioning session. Then THE BRACE, because the trunk is what turns leg drive into hand speed and takes the shots to the body.",
     b: [
     { L: "A", n: "Warm-up", m: 7, p: "C_WU", rxLine: () => "7 min · bike, bands, squats, push-ups, hips, pogos" },
     { L: "J", n: "The Jump Check", m: 1, jumpCheck: 1, hide: (rx) => !!rx.fightWeek, rxLine: () => "3 countermovement jumps — the best height",
@@ -635,11 +659,7 @@ export const CS = {
       timer: () => ({ kind: "settle", title: "THE SETTLE" }), rxLine: () => "60 seconds — log the seconds to land",
       items: [{ n: "Seconds to land on the breath", s: "write it down", id: "c_settle1", k: "out", u: "seconds", recov: 1, fields: SETTLE_FIELDS }],
       why: "Stay on the bike, eyes closed, heart pounding, find the breath at the nostrils, count the seconds it takes to land there. The corner between rounds, trained." },
-    { L: "F", n: "Trunk", m: 9, rest: "Rest 45 s", rt: 45, hide: (rx) => !!rx.tp,
-      items: (rx) => [{ n: "Pallof press", s: setsOf(rx, 3) + " × 10 per side · 2 s hold", cue: "Band at chest height anchored beside you, press the hands straight out and hold 2 seconds without letting it twist you.", id: "c_pallof", k: "wr", sets: setsOf(rx, 3), reps: "10/side" },
-        { n: "Ab wheel rollout", s: setsOf(rx, 3) + " × 8–12", cue: "Knees down, out only as far as the lower back remains flat.", id: "c_abwheel", k: "wr", sets: setsOf(rx, 3), reps: "8–12" },
-        { n: "Copenhagen plank", s: setsOf(rx, rx.copen || 2) + " × 30 s per side", cue: "Side plank, top foot on a bench, bottom leg lifted.", id: "c_copenplank", k: "wr", sets: setsOf(rx, rx.copen || 2), reps: 30 }],
-      why: "The groin you pivot off, and the trunk that turns leg drive into hand speed." },
+    CAMP_BRACE,
     { L: "G", n: "Seated Calf Raise + Achilles Hold", m: 5, rest: "Rest 60 s", rt: 60,
       rxLine: (rx) => setsOf(rx, 3) + " × 12, then one 45-second hold" + HOLDS_PLUS(rx),
       timer: () => ({ kind: "hold", opt: { sets: 1, secs: 45, label: "ACHILLES HOLD — STANDING, STRAIGHT KNEE" }, title: "ACHILLES HOLD" }),
@@ -648,7 +668,7 @@ export const CS = {
       why: "The Achilles takes every sprint and landing in this camp on a straight knee; this is its insurance." }] },
 
   /* ---------------- WEDNESDAY · STRENGTH ---------------- */
-  wed: { n: "WEDNESDAY", t: "STRENGTH — sled (repeat starts on even weeks), drive and punch-position holds, the trap bar in its phase, the bench press and bench throws, chins and the muscle-up line, Nordics, neck holds", m: 64, ac: C.oxide,
+  wed: { n: "WEDNESDAY", t: "STRENGTH — sled (repeat starts on even weeks), drive and punch-position holds, the trap bar in its phase, the bench press and bench throws, chins and the muscle-up line, Nordics, neck holds, the farmer's carry", m: (rx) => 64 + minsIf(CAMP_FARMER, rx), ac: C.oxide,
     intro: "The heavy morning, and the lift changes its shape by block — slow lowering, paused, fast in clusters, contrast. Every rep moves with intent; the watch says how fast, and the set ends at the velocity threshold. A grinding rep ends the set.",
     b: [
     { L: "A", n: "Warm-up", m: 6, p: "C_WUW", rxLine: () => "6 min · then bar × 5, 50% × 3, 70% × 2 of working" },
@@ -697,7 +717,7 @@ export const CS = {
           .concat(bp.extra ? [{ n: "Bench press — the strength set", s: bp.extra.sets + " × " + bp.extra.reps + " @ " + bp.extra.pct + "%", cue: "The strength emphasis: one more set, at the top of the week's load.", id: "c_bench_x", k: "wr", mk: "cw_bench", pct: bp.extra.pct, sets: bp.extra.sets, reps: bp.extra.reps }] : [])
           .concat(bp.phase === "contrast" ? [{ n: "Bench throw", s: "3 after each pair · rest 20 s before", cue: BENCH_THROW_CUE_C, id: "c_benchthrow", k: "wr", mk: "cw_bench", pct: rx.btPct, sets: bp.sets, reps: 3 }] : []); },
       w: "A grinding rep ends the set.",
-      why: "The punch-speed lift, built on a bench you now train. The ring dips rotate out for the camp; the bench press does the pressing.",
+      why: "The punch-speed lift, built on a bench you now train. The weighted dips stay in on Monday; the bench press does the heavy pressing.",
       note: (rx) => (rx.reset ? "Reset week: before the working sets, a set of 3 that's hard but leaves two in you. That weight × 1.08 is the new working max — save it in the panel above." : ""), tr: 2 },
     { L: "D", n: "Bench Throw", m: 4, star: 1, hard: 1, rest: "Rest 90 s", rt: 90, hide: (rx) => !campThrowRow(rx),
       rxLine: () => "3 × 3 @ your peak-power load",
@@ -718,7 +738,8 @@ export const CS = {
     { L: "H", n: "Neck — holds only", m: 5, p: "C_NECK",
       timer: (rx) => ({ kind: "hold", opt: { sets: setsOf(rx, 3), secs: 10, rest: 20, label: "4-DIRECTION HOLD" }, title: "NECK HOLDS" }),
       items: (rx) => [{ n: "4-direction holds", s: setsOf(rx, 3) + " × 10 s each direction", id: "c_neck_wed", k: "chk" }],
-      why: "The third neck dose of the week, because in camp the neck is the cheapest insurance there is." }] },
+      why: "The third neck dose of the week, because in camp the neck is the cheapest insurance there is." },
+    CAMP_FARMER] },
 
   /* ---------------- THURSDAY · THROWS + ENGINE 2 ---------------- */
   thu: { n: "THURSDAY", t: "THROWS + ENGINE 2 — throws and landmine, split squat, Spanish hold, Achilles hold, the second conditioning session, the settle, neck, hands, band catch", m: (rx) => (rx.nasal ? 77 : 69), ac: C.cobalt,
@@ -786,7 +807,7 @@ export const CS = {
     b: [] },
 
   /* ---------------- SATURDAY · THE LONG SESSION ---------------- */
-  sat: { n: "SATURDAY", t: "★ THE LONG SESSION · 8:30 — get-ups, build-ups, stance starts, close and plant, sprints, reactive jumps, side bounds, the squat in its phase, push press", m: (rx) => (rx.spr && rx.spr.micro ? 25 : 85), ac: C.oxide, free: 1,
+  sat: { n: "SATURDAY", t: "★ THE LONG SESSION · 8:30 — get-ups, build-ups, stance starts, close and plant, sprints, reactive jumps, side bounds, the squat in its phase, push press, the bear-hug carry", m: (rx) => (rx.spr && rx.spr.micro ? 25 : 85 + minsIf(CAMP_BEARHUG, rx)), ac: C.oxide, free: 1,
     intro: "Fed and rested, Friday's sleep in front of it. Speed first, then reactive power, then the squat in its phase, then the push press. Fuel it: porridge two hours before, half the bottle and a banana twenty minutes before.",
     b: [
     { L: "A", n: "Warm-up — get-ups first", m: 16, p: "C_SATWU", rxLine: () => "16 min · get-ups 2/side, hips, build-ups",
@@ -864,7 +885,8 @@ export const CS = {
       rxLine: (rx) => ppLine(rx) + " @ " + rx.pp.pct + "%",
       items: (rx) => [{ n: "Push press", s: ppLine(rx), cue: "Bar on the front of the shoulders, quick shallow knee dip, drive it overhead with the legs and punch it to lockout.", id: "c_pushpress", k: "wr", mk: "cw_pp", pct: rx.pp.pct, sets: rx.pp.sets, reps: rx.pp.reps }],
       w: "Loaded like the other lifts: fast, two in reserve.",
-      why: "Legs, braced trunk, hands — the route a punch takes." }] },
+      why: "Legs, braced trunk, hands — the route a punch takes." },
+    CAMP_BEARHUG] },
 
   /* ---------------- SUNDAY · THE ROUNDS ---------------- */
   sun: { n: "SUNDAY", t: "★ THE ROUNDS · 8:30 — throws, the simulation, the post-max sit, core with suitcase carries, the L-sit, the lever and face pulls, hands, weekly check", m: 80, ac: C.brass, free: 1,
@@ -939,7 +961,7 @@ export const CS = {
         { n: "Lights-out time, averaged", s: "what time the light went off", id: "cwr_lights", k: "out", u: "e.g. 20:30", fields: LIGHTS_FIELDS },
         { n: "Energy", s: "1–10", id: "cwr_en", k: "out", u: "1–10" },
         { n: "Home-block evenings done", s: "0–7", id: "cwr_home", k: "out", u: "0–7" }],
-      note: "Three yellows in a week: next week runs at the table's numbers minus one set on everything and the interval sessions at 90%. Achilles or knee at 3 or more: no reactive jumps next week, the tendon holds carry on. Hamstring at 3 or more: no flying sprints next week, Nordics only if pain-free. That's the tendon gate, and it runs whatever the strap says." }] },
+      note: "Three yellows in a week: next week runs at the table's numbers minus one set on everything and the interval sessions at 90%. Achilles or knee at 3 or more: no reactive jumps next week, the tendon holds carry on. Hamstring at 3 or more: no flying sprints next week, Nordics only if pain-free. That's the tendon gate, and it runs whatever the strap says. An elbow or a shoulder at 4 or more: next week's dips become push-ups and the circuits drop their curls and triceps work." }] },
 };
 
 export const PHASE_CUE = {

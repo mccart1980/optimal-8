@@ -23,11 +23,15 @@ describe("the programs, as the gym runs them", () => {
     expect(n[1]).toBe("The Four Punch Throws");
   });
 
-  it("PREP week 7 Wednesday has the bench press and no ring dips; weeks 1–5 the bench throw and the ring dips", () => {
-    expect(names("prep", 7, "wed")).toContain("Bench Press");
-    expect(names("prep", 7, "wed")).not.toContain("Ring Dips");
-    expect(names("prep", 3, "wed")).toEqual(expect.arrayContaining(["Bench Throw (Smith)", "Ring Dips"]));
-    expect(names("prep", 3, "thu")).toContain("Trap bar shrugs");
+  it("PREP's Wednesday has the bench press and the bench throws from week 1, no ring dips, and the farmer's carry last", () => {
+    [1, 3, 7].forEach((w) => {
+      const n = names("prep", w, "wed");
+      expect(before(n, "Bench Press", "Bench Throw (Smith)")).toBe(true);
+      expect(n).not.toContain("Ring Dips");
+      expect(n[n.length - 1]).toBe("Farmer's Carry");
+    });
+    expect(day("prep", 1, "wed").find((c) => c.n === "Bench Press").pres).toMatch(/^SLOW LOWERING · 3 × 5 · 70%/);
+    expect(names("prep", 3, "thu")).toContain("The Shoulders Circuit");
   });
 
   it("PREP's fast week runs the trap bar in clusters with the edge on, straight sets with it off", () => {
@@ -36,12 +40,18 @@ describe("the programs, as the gym runs them", () => {
     expect(day("prep", 9, "wed", { edge: false }).find((c) => c.n === "Trap Bar Deadlift").pres).toMatch(/^4 × 3 · 87%/);
   });
 
-  it("puts the band deceleration catch between the hands and the ring rows on Monday, in PREP and in CAMP", () => {
+  it("runs Monday's dips and ring rows and the arms circuit before the base, in PREP and in CAMP", () => {
     ["prep", "camp"].forEach((p) => {
       const n = names(p, 2, "mon");
+      expect(before(n, "Warm-up", "Dips + Ring Rows")).toBe(true);
+      expect(before(n, "Dips + Ring Rows", "The Arms Circuit")).toBe(true);
+      expect(before(n, "The Arms Circuit", p === "prep" ? "Base — easy, nose only" : "Easy, nose only")).toBe(true);
       expect(before(n, "Hands", "Band Deceleration Catch")).toBe(true);
-      expect(before(n, "Band Deceleration Catch", "Ring Rows")).toBe(true);
+      expect(n).not.toContain("Ring Rows");
     });
+    expect(names("prep", 2, "mon")).not.toContain("Neck");
+    expect(names("camp", 2, "mon")).toContain("Neck");
+    expect(day("prep", 2, "mon").find((c) => c.n === "Dips + Ring Rows").kind).toBe("round");
   });
 
   it("runs the drive and punch holds and the rounds as round cards", () => {

@@ -142,13 +142,13 @@ describe("TODAY — one thing at a time", () => {
     // another day opens on its session, every row with its prescription
     const gymOf = () => screen.getByText("GYM").closest("[data-chapter]");
     expect(within(gymOf()).getByText("Trap Bar Deadlift")).toBeInTheDocument();
-    expect(within(gymOf()).getByText("3 × 5 · 125 kg · Rest 2:30")).toBeInTheDocument();
+    expect(within(gymOf()).getByText("3 × 5 · 125 kg · Rest 2:30 · lateral raises × 15 in it, then sit")).toBeInTheDocument();
     expect(screen.getByTestId("day-label").textContent).toBe("WED 7 JAN");
     expect(screen.getByTestId("app-title").textContent).toBe("Prep · Week 1 · P1 · Build");
     // a week on, the same day
     fireEvent.click(screen.getByRole("button", { name: "Next week" }));
     expect(screen.getByTestId("app-title").textContent).toBe("Prep · Week 2 · P2 · Build");
-    expect(within(gymOf()).getByText("4 × 5 · 130 kg · Rest 2:30")).toBeInTheDocument();
+    expect(within(gymOf()).getByText("4 × 5 · 130 kg · Rest 2:30 · lateral raises × 15 in it, then sit")).toBeInTheDocument();
     // any week, from the week line
     fireEvent.click(screen.getByRole("button", { name: "Pick a week" }));
     fireEvent.click(within(screen.getByTestId("week-picker")).getByRole("button", { name: "Week 9" }));

@@ -103,9 +103,13 @@ describe("proof 2 — no fight: the 16-week cycle, on repeat", () => {
     expect(p14.e2).toBe("t20"); expect(p14.t20).toBe("thu"); expect(p14.sunOff).toBe(1); expect(p14.burstTest).toBe(1); expect(p14.nasal).toBe(1);
     expect(p14.em).toMatch(/Sat 30 Jan TEST DAY/); expect(p14.em).toMatch(/Sun 31 Jan easy hour/);
   });
-  it("runs the size block full in weeks 1–6, half in 7–15, none in 16", () => {
-    expect(s.rows.slice(0, 16).map((r) => r.size)).toEqual(["full", "full", "full", "full", "full", "full",
-      "half", "half", "half", "half", "half", "half", "half", "half", "half", null]);
+  it("runs the circuits, the dips and the carries by the calendar's numbers: P4b as P4, test week the least", () => {
+    const n = s.rows.slice(0, 16).map((r) => { const rx = rowRx(r, true); return [rx.circ, rx.dr, rx.carry].join("/"); });
+    expect(n).toEqual(["3/4/3", "3/4/3", "3/4/3", "3/4/3", "3/4/3", "2/3/2", "3/4/3", "3/4/3", "3/4/3", "2/3/3", "1/2/2",
+      "2/3/3", "2/3/3", "2/3/3", "2/3/3", "0/2/0"]);
+    const p4b = rowRx(s.rows[4], true);
+    expect(p4b.bench.pct).toBe(77.5); expect(p4b.bench.sc).toBe("NORMAL TEMPO · 4 × 5 @ 77.5%");
+    expect(rowRx(s.rows[0], true).bench.sc).toBe("SLOW LOWERING · 3 × 5 @ 70%");
   });
 });
 
@@ -228,11 +232,12 @@ describe("proof 4 — Prep fitted by the N table", () => {
     const s = buildSeason({ plans: [plan("2026-09-28", "2026-09-28", { fight: "2027-03-13", rounds: 6, mins: 3, fitness: "good" })], today: "2026-09-28" });
     const prep = s.rows.filter((r) => r.program === "prep" && r.mon < "2027-01-04");
     expect(prep.map((r) => r.id)).toEqual(Array.from({ length: 14 }, (_, i) => "P" + (i + 1)));
+    /* the calendar is the fourteen weeks by number: Wk · Block · emphasis */
     const doc = tableAfter(prepMd, /^## THE CALENDAR/).filter((r) => /^\d+$/.test(r[0]));
     expect(doc.length).toBe(14);
     prep.forEach((r, i) => {
-      const rx = rowRx(r, true), d = doc[i], em = d[3];
-      expect(rowDates(r)).toBe(d[1]);
+      const rx = rowRx(r, true), d = doc[i], em = d[2];
+      expect(Number(d[0])).toBe(r.doc);
       expect(rx.doc).toBe(i + 1);
       const lm = em.match(/(\d+) × (\d+|\(2\+2\)) @ (\d+)/);
       /* test week loads nothing: the top triples set the working maxes */
@@ -250,9 +255,15 @@ describe("proof 4 — Prep fitted by the N table", () => {
     expect(campRows(s)[0].camp.fitness).toBe("good");
   });
 
-  it("runs the size block full in weeks 1–5, two sets in weeks 6–13, none in week 14", () => {
+  it("runs the bench from week 1 in the trap bar's phases, and the Christmas week at three-quarters", () => {
     const s = buildSeason({ plans: [plan("2026-09-28", "2026-09-28", { fight: "2027-03-13" })], today: "2026-09-28" });
-    expect(s.rows.filter((r) => r.program === "prep" && r.mon < "2027-01-04").map((r) => r.size)).toEqual(["full", "full", "full", "full", "full", "half", "half", "half", "half", "half", "half", "half", "half", null]);
+    const prep = s.rows.filter((r) => r.program === "prep" && r.mon < "2027-01-04").map((r) => rowRx(r, true));
+    expect(prep.map((rx) => rx.bench.ph)).toEqual(["slow", "slow", "slow", "normal", "normal", "paused", "paused", "fast", "top", "fast", "contrast", "contrast", "contrast", "top"]);
+    expect(prep.map((rx) => rx.dips)).toEqual(["6–8", "6–8", "6–8", "6–8", "6–8", "4–6", "4–6", "4–6", "4–6", "light", "4–5", "4–5", "4–5", "light"]);
+    /* P13 is written as Christmas week; elsewhere the rule takes a quarter off */
+    const xmas = buildSeason({ plans: [plan("2026-10-05", "2026-10-05", { fight: "2027-03-20" })], today: "2026-10-05" }).rows.find((r) => r.program === "prep" && r.doc === 12);
+    const rx = rowRx(xmas, true);
+    expect(rx.xmas).toBe(1); expect([rx.circ, rx.dr, rx.carry]).toEqual([2, 2, 2]); expect(rx.bench.sets).toBe(2);
   });
 
   it("with 4 weeks gives P4, P7, P8, P14 — Worked Example 2", () => {
@@ -264,8 +275,8 @@ describe("proof 4 — Prep fitted by the N table", () => {
     expect(after.slice(0, 5).map((r) => r.program + ":" + r.id)).toEqual(["transition:T", "prep:P4", "prep:P7", "prep:P8", "prep:P14"]);
     expect(after.slice(1, 5).map((r) => r.mon)).toEqual(["2026-12-07", "2026-12-14", "2026-12-21", "2026-12-28"]);
     const p4 = rowRx(after[1], true), p7 = rowRx(after[2], true), p8 = rowRx(after[3], true);
-    expect(p4.sc).toBe("5 × 5 @ 75%"); expect(p4.size).toBe("full"); expect(p4.profile).toBe(1);
-    expect(p7.sc).toBe("4 × 3 @ 84%"); expect(p7.benchDoc).toBe(6);
+    expect(p4.sc).toBe("5 × 5 @ 75%"); expect(p4.bench.sc).toBe("NORMAL TEMPO · 4 × 5 @ 75%"); expect(p4.profile).toBe(1);
+    expect(p7.sc).toBe("4 × 3 @ 84%"); expect(p7.bench.sc).toBe("PAUSED · 3 × 3 @ 84%");
     expect(p8.xmas).toBe(1);
     /* the camp — the master, ten weeks, good fitness off test day */
     const camp = s.rows.filter((r) => r.program === "camp" && r.mon >= "2027-01-04");

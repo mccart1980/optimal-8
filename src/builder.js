@@ -1,6 +1,6 @@
 import { iso, mondayOf, parseISO, addDays } from "./ui.jsx";
 import { campMaster, campBenchMaster, campEdge } from "./camp.js";
-import { prepRx, prepEdge } from "./prep.js";
+import { prepRx, prepEdge, prepBench } from "./prep.js";
 import { lowerStage } from "./safety.js";
 
 /* ================================================================
@@ -104,15 +104,12 @@ export const transitionWeeks = (inp) => (fightMinutes(inp) <= 9 ? 1 : 2);
 
 function prepRows(ids, segIdx, extra) {
   const hasDoc = (d) => ids.some((x) => prepIdInfo(x).doc === d);
-  let benchEarlyDone = hasDoc(6);
   /* test day's depth jump is from the box you've trained on */
   const depthTrained = ids.some((x) => { const d = prepIdInfo(x).doc; return d >= 11 && d <= 13; });
   return ids.map((id, i) => {
     const inf = prepIdInfo(id);
     const r = Object.assign({ program: "prep", id, doc: inf.doc, plus: inf.plus, p88: inf.p88, seg: segIdx, segLen: ids.length, depthTrained }, extra || {});
     r.profile = i === 0 || inf.doc === 10 || (inf.doc === 14 && !hasDoc(10));
-    if (!benchEarlyDone && inf.doc >= 6 && inf.doc <= 13) { r.benchEarly = 1; benchEarlyDone = true; }
-    r.size = inf.doc <= 5 ? "full" : inf.doc <= 13 ? "half" : null;
     return r;
   });
 }
@@ -490,17 +487,16 @@ const dayMonth = (isoDay) => { const d = parseISO(isoDay); return d.getDate() + 
 export function prepWeekRx(row, edgeOn) {
   const base = prepRx(row.doc);
   let rx = prepEdge(base, edgeOn !== false);
-  rx = Object.assign({}, rx, { id: row.id, doc: row.doc, size: row.size, profile: row.profile ? 1 : 0, reset: base.reset && row.doc === 10 ? 1 : 0, preCamp: !!row.preCamp,
-    depthTrained: row.depthTrained !== false });
+  rx = Object.assign({}, rx, { id: row.id, doc: row.doc, profile: row.profile ? 1 : 0, reset: base.reset && row.doc === 10 ? 1 : 0, preCamp: !!row.preCamp,
+    depthTrained: row.depthTrained !== false, bench: prepBench(row.doc) });
   if (row.plus) {
-    const pct = rx.pct + row.plus;
+    const pct = rx.pct + row.plus, bp = rx.bench, bpct = bp.pct + row.plus;
     rx = Object.assign({}, rx, { pct, sc: rx.sc.replace(/@ \d+(\.\d+)?%/, "@ " + pct + "%"),
+      bench: Object.assign({}, bp, { pct: bpct, sc: bp.sc.replace(/@ \d+(\.\d+)?%/, "@ " + bpct + "%") }),
       em: base.em.replace(/@ 75%/, "@ " + pct + "%") + " P4 again, +" + row.plus + "%." });
   }
   if (row.p88) rx = Object.assign({}, rx, { pct: 88, sc: rx.sc.replace(/@ 87%/, "@ 88%"), js: [4, 4],
     em: base.em.replace(/@ 87%/, "@ 88%") + " P12 again at 88%, depth jumps 4 × 4." });
-  if (row.benchEarly) rx = Object.assign({}, rx, { benchDoc: 6, em: rx.em + " The bench press starts this week at P6's load, 80%." });
-  else rx = Object.assign({}, rx, { benchDoc: row.doc });
   /* test day's depth jumps are from the box you've trained on */
   if (row.doc === 14 && row.depthTrained === false) rx = Object.assign({}, rx, { jump: "lowbox" });
   /* test week names its own Saturday and Sunday */
@@ -514,7 +510,8 @@ export function prepWeekRx(row, edgeOn) {
     rx = Object.assign({}, rx, { xmas: 1, vol34: 1, sets: rx.sets ? q34(rx.sets) : rx.sets, sled: q34(rx.sled), nor: [q34(rx.nor[0]), rx.nor[1]],
       js: [q34(rx.js[0]), rx.js[1]], box: [q34(rx.box[0]), rx.box[1]], bsets: q34(rx.bsets), split: q34(rx.split),
       spr: rx.spr ? q34(rx.spr) : rx.spr, pp: rx.pp ? Object.assign({}, rx.pp, { sets: q34(rx.pp.sets) }) : rx.pp,
-      cr: rx.cr ? q34(rx.cr) : rx.cr,
+      cr: rx.cr ? q34(rx.cr) : rx.cr, circ: rx.circ ? q34(rx.circ) : rx.circ, dr: q34(rx.dr), carry: rx.carry ? q34(rx.carry) : rx.carry,
+      bench: rx.bench && rx.bench.sets ? Object.assign({}, rx.bench, { sets: q34(rx.bench.sets), sc: rx.bench.sc.replace(/(\d+) ×/, (m, n) => q34(Number(n)) + " ×").replace(/(\d+) rounds/, (m, n) => q34(Number(n)) + " rounds") }) : rx.bench,
       sc: rx.sc.replace(/^(\d+)/, (m) => String(q34(Number(m)))),
       em: rx.em + " Christmas week: three-quarters volume, intensity kept." });
   }

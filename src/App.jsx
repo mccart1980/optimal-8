@@ -152,9 +152,9 @@ Object.assign(PH, CPH);
 /* PREP's three blocks, and the two easy weeks after a fight */
 Object.assign(PH, {
   accumulate: { n: "ACCUMULATE", long: "BLOCK 1 · ACCUMULATE", ac: C.moss, vl: "volume, base, tissue, size, movement",
-    note: "Five weeks of volume, base, tissue and size. Slow lowering on the two big lifts, the base growing to an hour, the size block and the movement session twice a week. It feels easy. It is not." },
+    note: "Five weeks of volume, base, tissue and size. Slow lowering on the big lifts and the bench, the upper-body Monday, the three circuits and the three carries, and the movement session twice a week. It feels easy. It is not." },
   intensify: { n: "INTENSIFY", long: "BLOCK 2 · INTENSIFY", ac: C.oxide, vl: "heavy, paused then fast",
-    note: "Five weeks of heavy work: paused reps, then fast reps, then the top triples in week 9 and the reset that follows it. The size block drops to two sets and the sauna goes in." },
+    note: "Five weeks of heavy work: paused reps, then fast reps, then the top triples in week 9 and the reset that follows it. The dips go heavier and the sauna goes in." },
   convert: { n: "CONVERT", long: "BLOCK 3 · CONVERT", ac: C.brass, vl: "contrast, reactive, top speed",
     note: "Contrast doubles straight into the jump circuit, depth jumps, top speed, repeat bursts and the rounds at fight rest. Where strength becomes speed." },
   prepTest: { n: "TEST WEEK", long: "TEST WEEK", ac: C.cobalt, vl: "light, then test day",
@@ -265,7 +265,7 @@ const baseRxFor = (w) => R[w] || R[1];
    the week; the lift phase names what the bar does inside it. */
 const seasonRxFor = (mac, w, edge) => {
   const row = seasonRow(mac, w);
-  if (!row) return mac === "P" ? Object.assign({}, prepRx(1), { w, lift: "slow", ph: "accumulate", doc: 1, prep: 1, size: "full" }) : mac === "T" || mac === "H" ? transRx(w) : { w, ph: "c1", pre: 1 };
+  if (!row) return mac === "P" ? Object.assign({}, prepRx(1), { w, lift: "slow", ph: "accumulate", doc: 1, prep: 1 }) : mac === "T" || mac === "H" ? transRx(w) : { w, ph: "c1", pre: 1 };
   const rx = rowRx(row, edge);
   if (row.program === "prep") return gated(Object.assign({}, rx, { w, kw: w, lift: rx.ph, ph: prepPhaseOf(rx.doc), bw: null, prep: 1 }), "P", w);
   if (row.program === "camp" || row.program === "pre") return gated(Object.assign({}, rx, { kw: w }), "C", w);
@@ -285,7 +285,7 @@ const sundayScores = (mac, week, back) => {
   if (row) { let pr = row; for (let i = 0; i < n && pr; i++) pr = prevRow(pr); if (!pr) return {}; pm = pr.mac; pw = pr.kw; }
   else { if (week - n < 1) return {}; pm = mac; pw = week - n; }
   const pre = pm === "C" || pm === "B" ? "cwr_" : "wr_", at = (id) => (GATE.log["m" + pm + "w" + pw + "-sun-" + pre + id] || {}).w;
-  return { ach: at("ach"), kn: at("kn"), ham: at("ham"), el: at("el") };
+  return { ach: at("ach"), kn: at("kn"), ham: at("ham"), el: at("el"), sh: at("sh") };
 };
 function gated(rx, mac, week) {
   const sc = sundayScores(mac, week), g = tendonGate(sc);
@@ -295,8 +295,11 @@ function gated(rx, mac, week) {
     else if (tendonGate(sundayScores(mac, week, 2)).noJumps) Object.assign(o, { jump: stageDown(rx.jump), restart: 1 });
   }
   if (g.noFlying) Object.assign(o, { noFlying: 1, speed: false, nordicPF: 1 });
-  /* an elbow at 4 or more: rope pushdowns instead of the overhead extension */
+  /* an elbow or a shoulder at 4 or more: next week's dips become push-ups and
+     the circuits drop their curls and triceps work */
   if (Number(sc.el) >= 4) o.elbow4 = 1;
+  if (Number(sc.sh) >= 4) o.sh4 = 1;
+  if (o.elbow4 || o.sh4) o.upper4 = 1;
   return o;
 }
 /* Tuesday's jump check: the best height against the four Tuesdays before */
@@ -397,6 +400,15 @@ function steps(kind, o) {
       W("ROUND " + i + " · PUNCH HOLD — REAR HAND", 4);
       if (i < r) Rs("REST", 30); } }
   else if (kind === "hold") { const r = o.sets || 3; for (let i = 1; i <= r; i++) { W((o.label || "HOLD") + " " + i, o.secs || 20); if (i < r) Rs("REST", o.rest || 30); } }
+  /* a circuit, or Monday's pair: every exercise said as it starts, the next
+     one named in the gap, the round's rest after it. An exercise with an
+     upto runs in that many rounds only. */
+  else if (kind === "circuit") { const r = o.rounds || 3, its = o.items || [], btw = o.between == null ? 20 : o.between;
+    for (let i = 1; i <= r; i++) {
+      const here = its.filter((it) => !it.upto || i <= it.upto);
+      here.forEach((it, j) => { W("RD " + i + " · " + it.l, it.s || 40); if (j < here.length - 1) Rs("NEXT · " + here[j + 1].l, btw); });
+      if (i < r) Rs("ROUND " + i + " DONE — REST", o.rest || 90, "Next: " + its.filter((it) => !it.upto || i + 1 <= it.upto).map((it) => it.l.toLowerCase()).join(", ") + ".");
+    } }
   else if (kind === "rest") Rs("REST", o.secs || 90);
   return S;
 }
@@ -825,7 +837,7 @@ const orderFor = (day, rx, ready) => {
    everything else is a card per exercise. Every card carries the
    library entry it is.
    ================================================================ */
-const ROUND_KINDS = { contrast: 1, csim: 1, sim: 1, drivepunch: 1, vec: 1 };
+const ROUND_KINDS = { contrast: 1, csim: 1, sim: 1, drivepunch: 1, vec: 1, circuit: 1 };
 const ENGINE_KINDS = { z2: 1, vo2: 1, lac: 1, mod: 1, tempo: 1, thr: 1, rz: 1, ergrounds: 1, nasal: 1, bursttest: 1, settle: 1, postmax: 1, recovery: 1 };
 /* the lines of a warm-up checklist that are loads and notes, not moves */
 const NOT_A_MOVE = /^(bar|\d+%|\d+\s*m\s*@|loading|set-up|the hold|it should|weak side|straight knee|slow beats fast|plus|then|three things|if you skip)/i;
@@ -886,7 +898,10 @@ function gymCards(blocks, rx, o) {
       const parts = squatContrast ? ["Back squat", "Box jumps", "Trap bar jumps", "Band-assisted jumps"].map((n) => ({ n, lib: libFor(n) }))
         : b.sim ? ["The rounds", "The corner minute"].map((n) => ({ n, lib: libFor(n) }))
         : its.filter((x) => x.k !== "out").map((x) => ({ n: cleanName(v(x.n, rx)), lib: libFor(v(x.n, rx)) }));
-      const lib = firstLib(tm && tm.title, name) || [].concat(...parts.map((p) => p.lib || []));
+      /* a circuit shows its own entry first, if it has one, then every exercise in it */
+      const lib = tm && tm.kind === "circuit"
+        ? [].concat(libFor(tm.title) || [], ...parts.map((p) => p.lib || [])).filter((e, i, a) => a.indexOf(e) === i)
+        : firstLib(tm && tm.title, name) || [].concat(...parts.map((p) => p.lib || []));
       out.push(Object.assign({}, base, { key: b.L, kind: "round", n: squatContrast ? "Squat contrast circuit" : tm && tm.title === "BENCH CONTRAST" ? "Bench contrast" : name,
         pres: v(b.rxLine, rx) ? String(v(b.rxLine, rx)) + (row.load ? " · " + row.load : "") : blockPres, timer: tm, parts, lib: lib && lib.length ? lib : null,
         outs: its.filter((x) => x.k === "out"), lifts: its.filter((x) => x.k === "wr" && x.mk) }));
@@ -929,8 +944,11 @@ function gymCards(blocks, rx, o) {
       else pres = [p[0] || v(it.s, rx), kg ? kg.join("–") + " kg" : p[1], bwp && o.bw ? Math.round(o.bw * bwp[0] / 100) + "–" + Math.round(o.bw * bwp[1] / 100) + " kg " + (it.bwl || "") : "", rest].filter(Boolean).join(" · ");
       /* the three sighs are home-routines.md's THREE BIG SIGHS, not a library entry */
       const sighs = /physiological sighs/i.test(nm);
+      /* a block that runs another exercise in its rests carries that one's entry too */
+      const also = b.alsoLib ? v(b.alsoLib, rx) : null;
+      const lib0 = sighs ? null : it.k === "top" ? topLib(nm, itn) : firstLib(nm, itn);
       out.push(Object.assign({}, base, { key: single ? b.L : b.L + ":" + j, kind: it.k === "wr" ? "lift" : it.k === "out" ? "out" : it.k === "top" ? "top" : "chk",
-        n: nm, pres, item: it, kg, lib: sighs ? null : it.k === "top" ? topLib(nm, itn) : firstLib(nm, itn), desc: sighs ? SIGHS.words : null, outs: it.k === "out" ? [it] : [],
+        n: nm, pres, item: it, kg, lib: also && lib0 && it.k === "wr" ? lib0.concat(libFor(also) || []) : lib0, desc: sighs ? SIGHS.words : null, outs: it.k === "out" ? [it] : [],
         /* the first work set is the first after a top triple */
         first: j === Math.max(0, its.findIndex((x) => x.k !== "top")), lastOfBlock: j === its.length - 1 }));
     });

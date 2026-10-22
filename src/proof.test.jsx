@@ -23,13 +23,20 @@ const has = (set, week, day, name) => cards(set, week, day).some((x) => x.n === 
 
 describe("proof 1 — the master camp's session pages", () => {
   const W = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  it("Monday: the base 45 (30 in weeks 5 and 9), the neck, the hands, the catch, the ring rows", () => {
+  it("Monday: the dips and rows and a round of the arms circuit through week 8, the base 45 (30 in weeks 5 and 9), the neck, the hands, the catch; week 9 the ring rows alone", () => {
     W.forEach((w) => {
       expect(pres("master", w, "mon", "Easy, nose only")).toMatch(new RegExp("^" + (w === 5 || w === 9 ? 30 : 45) + " min"));
       expect(pres("master", w, "mon", "Neck")).toBe("holds 3 × 10 s · rapid tense 4 × 6 per direction · perturbation 2 × 20 s");
       expect(pres("master", w, "mon", "Hands")).toBe("3 × 20 s · 2 × 15");
       expect(pres("master", w, "mon", "Band Deceleration Catch")).toBe("2 × 8 per arm");
-      expect(pres("master", w, "mon", "Ring Rows")).toMatch(/^3 sets/);
+      if (w <= 8) {
+        expect(pres("master", w, "mon", "Dips + Ring Rows")).toMatch(new RegExp("^" + (w === 5 ? "2 rounds · weighted dips × 5, light and fast" : "3 rounds · weighted dips × 5, heavy") + " · ring rows at your level"));
+        expect(pres("master", w, "mon", "The Arms Circuit")).toMatch(/^1 round · 20 s between exercises · 90 s after each round/);
+        expect(has("master", w, "mon", "Ring Rows")).toBe(false);
+      } else {
+        expect(pres("master", w, "mon", "Ring Rows")).toMatch(/^3 sets/);
+        expect(has("master", w, "mon", "Dips + Ring Rows")).toBe(false);
+      }
     });
   });
   it("Tuesday: broad jumps 3 × 2, box jumps 3 × 3 (4 × 3 in weeks 6–8), shuttles from week 3, speed from week 6, the pistol line, the holds, the trunk", () => {
@@ -40,9 +47,7 @@ describe("proof 1 — the master camp's session pages", () => {
       expect(has("master", w, "tue", "Flying sprint 20 m")).toBe(w >= 6);
       expect(pres("master", w, "tue", "The Pistol Line")).toMatch(/^2 × 5 per leg/);
       expect(pres("master", w, "tue", "Spanish Squat Hold")).toMatch(/^3 × 30 seconds/);
-      expect(pres("master", w, "tue", "Pallof press")).toMatch(/^3 × 10 per side/);
-      expect(pres("master", w, "tue", "Ab wheel rollout")).toMatch(/^3 × 8–12/);
-      expect(pres("master", w, "tue", "Copenhagen plank")).toMatch(/^2 × 30 s per side/);
+      expect(pres("master", w, "tue", "THE BRACE")).toMatch(new RegExp("^" + (w === 5 ? 2 : 3) + " rounds · the Copenhagen plank in " + (w === 5 ? "every round" : "the first 2")));
       expect(pres("master", w, "tue", "Seated calf raise")).toMatch(/^3 × 12/);
     });
     /* the camp test week hands on: the burst decrement was measured there */
@@ -159,11 +164,28 @@ describe("the standing rules", () => {
     expect(p13.some((c) => c.n === "The Pre-Camp Check")).toBe(false);
     expect(CAT.some((c) => c.set === "example2" && c.id === "P14" && c.n === "The Pre-Camp Check")).toBe(true);
   });
-  it("runs the size block in Prep with the overhead triceps extension, and never in a camp", () => {
-    expect(CAT.some((c) => c.set === "cycle" && c.n === "Overhead triceps extension" && /^3 × 10–12/.test(c.pres))).toBe(true);
-    expect(CAT.some((c) => c.set === "cycle" && c.n === "Overhead triceps extension" && /^2 × 10–12/.test(c.pres))).toBe(true);
-    expect(CAT.some((c) => c.set === "cycle" && c.id === "P14" && c.n === "Overhead triceps extension")).toBe(false);
-    expect(CAT.some((c) => c.row === "camp" && /triceps|Hammer|Lean-away/.test(c.n))).toBe(false);
+  it("runs the circuits, the dips and the carries in Prep by the week's numbers, and the camp's holding dose through week 8", () => {
+    const cyc = (id, day, name) => CAT.find((c) => c.set === "cycle" && c.edge && c.id === id && c.day === day && c.n === name);
+    [["P4", 3, 4, 3], ["P5", 2, 3, 2], ["P7", 3, 4, 3], ["P9", 2, 3, 3], ["P10", 1, 2, 2], ["P12", 2, 3, 3]].forEach(([id, circ, dr, carry]) => {
+      ["The Arms Circuit", "The Shoulders Circuit", "THE BRACE"].forEach((n, i) => expect(cyc(id, ["mon", "thu", "tue"][i], n).pres).toMatch(new RegExp("^" + circ + " round")));
+      expect(cyc(id, "mon", "Dips + Ring Rows").pres).toMatch(new RegExp("^" + dr + " rounds"));
+      expect(cyc(id, "wed", "Farmer's Carry").pres).toMatch(new RegExp("^" + carry + " × 30 m"));
+      expect(cyc(id, "sat", "Bear-Hug Carry").pres).toMatch(new RegExp("^" + carry + " × 30 m"));
+    });
+    /* test week: dips and rows twice, no circuits, no carries */
+    ["The Arms Circuit", "The Shoulders Circuit", "THE BRACE", "Farmer's Carry", "Bear-Hug Carry"].forEach((n) => expect(CAT.some((c) => c.set === "cycle" && c.id === "P14" && c.n === n)).toBe(false));
+    expect(cyc("P14", "mon", "Dips + Ring Rows").pres).toMatch(/^2 rounds · weighted dips × 5/);
+    /* the circuit cards carry every exercise's entry */
+    expect(cyc("P4", "mon", "The Arms Circuit").lib.map((e) => e.n)).toEqual(["THE ARMS CIRCUIT", "INCLINE DUMBBELL CURL", "OVERHEAD TRICEPS EXTENSION", "LATERAL RAISE", "REAR-DELT FLY"]);
+    expect(cyc("P4", "thu", "The Shoulders Circuit").lib.map((e) => e.n)).toEqual(["THE SHOULDERS CIRCUIT", "LATERAL RAISE", "TRAP BAR SHRUGS", "HAMMER CURLS", "ROPE PUSHDOWNS"]);
+    expect(cyc("P4", "tue", "THE BRACE").lib.map((e) => e.n)).toEqual(["THE BRACE", "AB WHEEL ROLLOUTS", "PALLOF PRESS", "MEDICINE-BALL DROPS", "COPENHAGEN PLANK"]);
+    /* the lateral raises in the trap bar's rest: not in the clusters, the top triple or the contrast */
+    expect(cyc("P4", "wed", "Trap Bar Deadlift").lib.map((e) => e.n)).toEqual(["TRAP BAR DEADLIFT", "LATERAL RAISE"]);
+    expect(cyc("P4", "wed", "Trap Bar Deadlift").pres).toMatch(/lateral raises × 15 in it, then sit/);
+    ["P8", "P12"].forEach((id) => expect(cyc(id, "wed", "Trap Bar Deadlift").lib.map((e) => e.n)).toEqual(["TRAP BAR DEADLIFT"]));
+    /* the camp: no shoulders circuit, nothing kept in weeks 9 and 10 */
+    expect(CAT.some((c) => c.row === "camp" && /Shoulders Circuit|Hammer|Lean-away/.test(c.n))).toBe(false);
+    expect(CAT.some((c) => c.set === "master" && c.row === "camp" && c.week >= 9 && /Dips|Arms Circuit|BRACE|Carry/.test(c.n) && !/Suitcase/.test(c.n))).toBe(false);
   });
 });
 

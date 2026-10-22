@@ -92,6 +92,8 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **WEIGHTED CHIN-UPS** — Palms facing away, extra weight on a belt or a dumbbell between your feet. From a dead hang, pull your chin over the bar, then lower slowly.
 
+**WEIGHTED DIPS** — Parallel bars, weight on a belt. Lower until your shoulders are level with your elbows, chest slightly forward, then press back up to locked arms. No deeper: that's the depth where stiff shoulders are safe. Leave two reps in you; when every set reaches the top of the week's range, add 2.5 kg next week.
+
 **NORDIC CURLS** — Kneel with your heels held under something solid. Keeping your body straight from knees to head, lower yourself forward as slowly as you can, catch yourself with your hands, push back up.
 
 ## CALISTHENICS
@@ -99,6 +101,8 @@ Every exercise, session, test and move in the program, in two or three plain lin
 **RING ROWS** — Hang under rings set at hip height, body straight, heels on the floor. Pull your chest up to the rings, pause, lower slowly. Feet up on a box makes it harder; archer rows pull mostly with one arm.
 
 **RING DIPS** — Hold yourself up on the rings with straight arms. Lower until your shoulders are level with your elbows, then press back up, turning your palms forward at the top. Easier versions: bar dips, then holding the top position.
+
+**RING SUPPORT HOLD** — Hold yourself at the top of the rings with your arms locked and the rings dead still by your hips, shoulders pushed down away from your ears, body straight. Hold.
 
 **MUSCLE-UP LINE** — Chest-to-bar pull-ups (pull fast until the bar touches your chest), then muscle-up negatives (start above the bar and lower slowly through to a hang), building to the full muscle-up: pull up and over the bar to straight arms.
 
@@ -125,6 +129,14 @@ Every exercise, session, test and move in the program, in two or three plain lin
 **HANGING LEG RAISES** — Hang from a bar and lift your legs to hip height or above without swinging, then lower slowly.
 
 **SUITCASE CARRY** — A heavy dumbbell or kettlebell in one hand. Walk 30 metres standing tall without leaning to either side, then switch hands.
+
+**FARMER'S CARRY** — A heavy dumbbell in each hand. Stand tall, shoulders down, and take short, quick steps for 30 metres without putting them down. Start around 30 kg a hand; add 2.5 kg a hand when every run is clean, with no stop and no lean.
+
+**BEAR-HUG CARRY** — Hug a heavy sandbag tight to your chest, or a heavy plate, or a dumbbell held upright against it. Elbows in, stand tall, walk 30 metres. Breathe short and sharp through your nose behind a braced stomach, and never let the brace go.
+
+**MEDICINE-BALL DROPS** — Lie on your back, knees bent, a 3 kg ball held at arm's length over your stomach. Breathe in, then let it go and breathe out hard through your teeth as you brace. It lands on the brace just above your belly button; catch it on the bounce. Drops 5 to 8 land a hand's width to each side, alternating. Never on the ribs. Go up a kilo when all eight land on a brace that doesn't give, from 3 kg up to 6.
+
+**THE BRACE** — The body-shot block, Tuesday: ab wheel rollouts × 8–12, the Pallof press × 10 per side, medicine-ball drops × 8, and the Copenhagen plank for 25 seconds a side in the first two rounds. Back to back, twenty seconds between exercises, a minute after each round.
 
 **SPANISH SQUAT HOLD** — A thick band around the back of both knees, anchored to the rack in front of you. Lean back into it so your shins stay upright and sit into a half squat. Hold dead still. It burns above the kneecap, never inside the knee.
 
@@ -158,15 +170,19 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **MEDICINE-BALL SLAMS** — A 5–8 kg ball overhead; slam it into the floor as hard as you can, catch it on the bounce, go again without stopping.
 
-## SIZE BLOCK
+## SHOULDERS, ARMS AND TRAPS
 
-**LEAN-AWAY LATERAL RAISE** — Hold a rack with one hand and lean away from it. With the other hand, raise a dumbbell out to the side to shoulder height, then lower slowly.
+**THE ARMS CIRCUIT** — Monday: incline dumbbell curls × 10–12, overhead triceps extensions × 10–12, lateral raises × 15 and rear-delt flies × 15, back to back. Twenty seconds between exercises, ninety seconds after each round. Leave two reps in you on each; when every round reaches the top of the range, go up a dumbbell next time.
+
+**THE SHOULDERS CIRCUIT** — Thursday: lateral raises × 15, trap bar shrugs × 10–12, hammer curls × 10–12 and rope pushdowns × 12–15, back to back. Twenty seconds between exercises, ninety seconds after each round. Leave two reps in you on each; when every round reaches the top of the range, go up next time.
+
+**LATERAL RAISE** — A dumbbell in each hand at your sides. Raise them out to shoulder height, elbows leading, and lower slowly.
 
 **REAR-DELT FLY** — Bent over with a flat back, small dumbbells hanging. Raise them out to the sides, little fingers leading, squeeze, lower.
 
-**CURLS** — EZ-bar or dumbbells, elbows still at your sides. Curl up, lower slowly to a full stretch. No swinging.
+**INCLINE DUMBBELL CURL** — Lie back on a bench set at about 45°, arms hanging straight down behind you, a dumbbell in each hand. Curl without the elbows moving forward, then lower all the way to a full stretch.
 
-**HAMMER CURLS** — Dumbbells with your palms facing each other. Curl up, lower slowly.
+**HAMMER CURLS** — Dumbbells with your thumbs up and your elbows still at your sides. Curl to the shoulder, lower slowly.
 
 **TRAP BAR SHRUGS** — Stand inside the trap bar, arms straight. Shrug your shoulders straight up toward your ears, hold one or two seconds, lower slowly. Don't roll them.
 

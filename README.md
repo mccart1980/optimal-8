@@ -129,14 +129,24 @@ The calendar's weekly emphasis drives the session, not the other way round:
   contrast with the jump circuit, and test week spread over the week as the
   tests page spreads it.
   The phase is named on the block and the cue is on the lift.
-- **Monday's base** grows with the calendar, 45 to 60 minutes.
+- **Monday** is the upper-body day: weighted dips and ring rows, the arms circuit,
+  then a 40-minute base.
 - **Tuesday and Thursday** run the session types the calendar names, and never
   the same quality twice in a week.
 - **Sunday's rounds** rest 90 seconds in accumulation and 60 from week 6.
-- **The size block** runs all through Prep on Thursday and Sunday — three sets
-  in weeks 1–5, two in weeks 6–13, none in the test week — with the overhead
-  triceps extension (rope pushdowns in a week after an elbow at 4 or more), and
-  never in a camp.
+- **The circuits, the dips and the carries** run all through Prep: Monday's
+  dips and rows and the arms circuit, Tuesday's BRACE, the bench press from
+  week 1 with lateral raises in the trap bar's rest and the farmer's carry on
+  Wednesday, the shoulders circuit on Thursday and the bear-hug carry on
+  Saturday — each week's rounds from the calendar, no circuits or carries in
+  the test week. The pair and each circuit are one card with a guided timer
+  that says every exercise, and boxes for the weights. An elbow or a shoulder at
+  4 or more turns next week's dips into push-ups and drops the circuits' curls
+  and triceps. The camp keeps a holding dose through its week 8: the dips and
+  rows, one round of the arms circuit, THE BRACE and both carries.
+- **Week 5 re-checks the working weights**: a set of 3, hard with two in you,
+  before the trap bar and the bench on Wednesday and the squat and the push
+  press on Saturday; × 1.08 is saved as the working max.
 - **The movement session** is a guided 30-minute timer on Wednesday and Saturday
   evenings in accumulation, Saturday evenings after.
 - **The carb top-up** is on TODAY at 17:00 on Monday and Thursday in
@@ -618,8 +628,11 @@ npm run icons   # regenerate the app icons from scripts/generate-icons.mjs
   of a row's name to its entry. `src/library.test.jsx` is the build check.
 - `src/prep.js` — PREP as data: the fourteen-week calendar row by row, the lift
   phases, the engine sessions with their targets, the seven session pages, the
-  movement session, the size block, the three flexibility tests, and the two
-  easy weeks after a fight.
+  movement session, the three flexibility tests, and the two easy weeks after a
+  fight.
+- `src/circuits.js` — Monday's dips and ring rows, the arms circuit, THE BRACE,
+  the shoulders circuit and the two carries, built for Prep and the camp from
+  their own numbers.
 - `src/builder.js` — the season builder: the plans laid end to end, the
   decision and shortening tables, Prep fitted by the N table, every camp week's
   prescription, the head check's hold and the transition.
