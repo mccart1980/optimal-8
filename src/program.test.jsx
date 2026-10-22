@@ -1,5 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { sessionCatalog } from "./App.jsx";
+import { jumpYellow } from "./edge.js";
+import { ergBoxes, sessionBoxes, engHR } from "./camp.js";
 
 /* The programs' content, read off the cards the gym runs. The rebuild
    changed how a session is shown, never what is in it. */
@@ -10,6 +12,25 @@ const names = (...a) => day(...a).map((c) => c.n);
 const before = (arr, a, b) => arr.indexOf(a) >= 0 && arr.indexOf(b) >= 0 && arr.indexOf(a) < arr.indexOf(b);
 
 describe("the programs, as the gym runs them", () => {
+  it("the jump check is three broad jumps against a tape, PREP and CAMP; more than 5% under the four-week average is a yellow", () => {
+    expect(day("prep", 2, "tue").find((c) => c.n === "The Jump Check").pres).toBe("3 broad jumps — the best distance");
+    const camp = CAT.find((c) => c.set === "master" && c.program === "camp" && c.day === "tue" && c.n === "The Jump Check");
+    expect(camp.pres).toBe("3 broad jumps — the best distance");
+    expect(camp.lib.map((e) => e.n)).toEqual(["JUMP CHECK"]);
+    expect(camp.lib[0].text).toMatch(/^Three broad jumps against a tape\./);
+    expect(jumpYellow(218, [230, 229, 231, 230])).toBe(true);
+    expect(jumpYellow(219, [230, 229, 231, 230])).toBe(false);
+    expect(jumpYellow(218, [])).toBe(false);
+  });
+
+  it("an interval session logs one number, at the end, and the peak heart rate; easy logs its output", () => {
+    ["vo2", "tempo", "lac", "lac2", "rz", "rz1", "thr", "erg", "fp"].forEach((k) => expect(ergBoxes(k, false, {})).toEqual(["SESSION"]));
+    expect(ergBoxes("easy", false, {})).toEqual(["OUTPUT"]);
+    ["mod", "vo2", "tempo", "lac", "lac2", "rz", "rz1", "thr"].forEach((k) => expect(sessionBoxes(k)).toEqual(["SESSION"]));
+    expect(sessionBoxes("easy")).toEqual(["OUTPUT"]);
+    expect(engHR("tempo")).toEqual([{ k: "hr", l: "PEAK HEART RATE (BPM)" }]);
+  });
+
   it("PREP week 2 Saturday: stance starts, then close and plant, before the flying sprints; no throws", () => {
     const n = names("prep", 2, "sat");
     expect(before(n, "Stance Starts", "Close and Plant")).toBe(true);

@@ -304,7 +304,7 @@ function gated(rx, mac, week) {
   return o;
 }
 /* Tuesday's jump check: the best height against the four Tuesdays before */
-const JUMP_ID = { P: "p_jumpchk", C: "c_jumpchk" };
+const JUMP_ID = { P: "p_jumpbj", C: "c_jumpbj" };
 const jumpNum = (mac, w) => { const e = GATE.log["m" + mac + "w" + w + "-tue-" + JUMP_ID[mac]]; const n = e ? Number(String(e.w || "").replace(",", ".")) : NaN; return n > 0 ? n : null; };
 const jumpAvg = (mac, week) => { const p = []; for (let w = Math.max(1, week - 4); w < week; w++) { const n = jumpNum(mac, w); if (n != null) p.push(n); } return p; };
 const jumpFlag = (mac, week) => jumpYellow(jumpNum(mac, week), jumpAvg(mac, week));

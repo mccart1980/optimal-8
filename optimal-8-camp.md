@@ -118,7 +118,7 @@ Fresh legs, so the power dose goes first. Then the week's first hard conditionin
 
 3 easy minutes on the bike → band pull-aparts × 20 → goblet squats × 8 → push-ups × 10 → 90/90 hip switches × 5 each way → pogo hops × 20.
 
-**THE JUMP CHECK · 1 min** — three countermovement jumps: no arm swing, dip and jump straight up as high as you can, land soft, reset between each. Measure them with the jump mode in Spleeft, set up the same way every week, and log the best height. More than 7% under your four-week average counts as a yellow (Prep's Readiness page) — it reads tired legs and a tired nervous system, which the strap can't.
+**THE JUMP CHECK · 1 min** — three broad jumps. Lay a tape measure along the floor, its end on a line and a plate on each end. Toes behind the line, swing your arms, jump as far forward as you can and land on both feet, dead still. Read the tape at the back of the heel nearer the line — fall back or step and it doesn't count. Walk back, reset, go again, and log the best in centimetres. A tape, not a phone: an app on your arm can't time a jump steadily enough for this rule. More than 5% under your four-week average counts as a yellow (Prep's Readiness page) — it reads tired legs and a tired nervous system, which the strap can't.
 
 **2 · 0:08 — POWER DOSE · JUMPS · 8 min · rest 90 s**
 
@@ -136,7 +136,7 @@ Box pistol to start — stand on one leg in front of a box, the other straight o
 
 **4 · 0:21 — ENGINE 1 · 24 min · the table says which**
 
-Bike or SkiErg — one, all camp, so the numbers compare. Write down your output every session.
+Bike or SkiErg — one, all camp, so the numbers compare. Nothing to log during the session: at the end, the total on the machine's screen and your peak heart rate.
 
 4-minute intervals: 4 × 4 minutes HARD — breathing heavily, two or three words at most — 3 easy between. The best-proven builder of the aerobic ceiling there is.
 
@@ -496,7 +496,7 @@ Five additions, on by default, that give this camp a professional camp's density
 
 **THE GUARDRAIL.** Two yellow mornings on the strap in the same week — resting heart rate five over, or HRV twelve percent under — and the five come off for the rest of that week. Not the program: the additions. Tuesday's speed and the Thursday thirty go first; the clusters become straight sets; the contacts drop back; the rounds go back to six. The base program is what keeps you training. The edge is what makes you dangerous, and it's only worth having if you're standing on the day.
 
-**THE TENDON GATE AND THE JUMP CHECK.** Separately from the strap: Achilles or knee at 3 or more on Sunday's check means no reactive jumps the following week, with the tendon holds carried on, and a hamstring at 3 or more means no flying sprints — a sore tendon doesn't show on HRV. And Tuesday's jump check more than 7% under its four-week average counts as a yellow, toward the two that take the Edge off.
+**THE TENDON GATE AND THE JUMP CHECK.** Separately from the strap: Achilles or knee at 3 or more on Sunday's check means no reactive jumps the following week, with the tendon holds carried on, and a hamstring at 3 or more means no flying sprints — a sore tendon doesn't show on HRV. And Tuesday's jump check more than 5% under its four-week average counts as a yellow, toward the two that take the Edge off.
 
 ---
 

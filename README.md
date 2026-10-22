@@ -314,13 +314,15 @@ works out 65–75% of it and shows that zone on Monday's base and on the easy
 hour. Each of those has an average heart rate field. Out of the zone gets a
 quiet line, not an alarm.
 
-**Erg output.** Every conditioning session — the intervals, the 40-second
-repeats, the repeat bursts, the rounds on the erg, the 6 × 3 and 7 × 3
-simulations and the 20-minute test — has an output field per interval, per
-burst or per round, in the unit you pick in settings (watts, metres or
-calories). They chart by session type, so a four-minute interval session is
-only ever read against another one. On scored weeks the simulation's fade is
-worked out from rounds one and six by itself.
+**Erg output.** Nothing is logged during a session. Every interval session —
+the moderate, 4-minute, tempo and threshold intervals, the 40-second repeats
+and the repeat bursts — has one box, filled at the end: the total on the
+machine's screen in the unit you pick in settings (metres or calories), or its
+average watts, beside last time's, with the peak heart rate under it. The
+rounds on the erg and the simulations log round one and the last round, and
+the 20-minute test its distance. They chart by session type, so a four-minute
+interval session is only ever read against another one. On scored weeks the
+simulation's fade is worked out from rounds one and six by itself.
 
 **Sleep.** The two morning fields fill the weekly check's sleep averages. Type
 over either one and your number stands.
@@ -493,8 +495,8 @@ program puts it in has no weekend sauna of your own on top.
 in a week, the additions come off for the rest of that week — no Tuesday speed
 or Thursday thirty, the clusters as straight sets, the contacts back to base,
 the rounds back to the fight's — and TODAY says "The edge is off this week:
-two yellow mornings". Tuesday's **jump check** (three countermovement jumps,
-the best height logged) more than 7% under its four-week average counts as one
+two yellow mornings". Tuesday's **jump check** (three broad jumps against a
+tape, the best distance logged) more than 5% under its four-week average counts as one
 of the two. It comes back the next Monday. **THE EDGE** in settings turns it
 off by hand.
 

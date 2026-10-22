@@ -90,7 +90,7 @@ On waking, lying still: one minute on the strap, resting heart rate and HRV into
 
 Two yellows in a row on HRV alone: Tuesday's or Thursday's hard session becomes the easy 20 minutes and the base is unchanged. Recalibrate the baselines at the start of weeks 6 and 11.
 
-**The jump check — Tuesday.** Three countermovement jumps after the warm-up, the best height logged. More than 7% under your four-week average counts as a yellow. It reads tired legs and a tired nervous system, which the strap can't.
+**The jump check — Tuesday.** Three broad jumps after the warm-up, measured with a tape on the floor, the best distance logged. More than 5% under your four-week average counts as a yellow. It reads tired legs and a tired nervous system, which the strap can't.
 
 **The tendon gate — Sunday.** Achilles or knee at 3 or more out of 10 on the weekly check: no reactive jumps the following week — no drop landings, no depth jumps — while the Spanish squat hold and the Achilles hold carry on, because holds are what a sore tendon needs. Hamstring at 3 or more: no flying sprints the following week, and the Nordics only if they're pain-free. When it's back under 3, the jumps restart one stage down for a week (depth jumps → low-box depth jumps → drop landings). And at any time: a jump, sprint or hold that hurts more than 3 out of 10 while you're doing it, or leaves the tendon worse the next morning, stops for that day. Still there after two weeks: a physio looks at it. The gate runs separately from the colours, because a sore tendon doesn't show on HRV.
 
@@ -100,11 +100,13 @@ Two yellows in a row on HRV alone: Tuesday's or Thursday's hard session becomes 
 
 Every conditioning session has a number from last time, and the number is the target.
 
+**How to log one:** nothing during it. Zero the machine's screen as the timer starts and keep moving through the easy parts; when the timer says done, log the total on the screen and your peak heart rate. The app shows last time's beside it.
+
 - **Base (Monday, the easy hour):** the average heart rate stays in 65–75% of peak; the output at that heart rate is what should rise. Log both. A higher output at the same heart rate is the base getting deeper — that's the whole point of five weeks of it. Judge it on a four-week trend, never one ride: morning heart rate moves three to five beats with sleep, heat and stress, and that swamps a week's change. Up across each four weeks is right. Flat for four weeks: check the sleep line and the yellow days first; if they're clean, hold the minutes and keep it nasal.
-- **4-minute intervals:** the average output across the four; beat it by 1–2% each time, never by more.
-- **40-second repeats:** the output of the last repeat against the first — the decrement. It should shrink.
-- **Repeat bursts:** the sixteenth burst against the first. Same.
-- **Threshold:** the output held for the two eights.
+- **4-minute intervals:** the session total; beat it by 1–2% each time, never by more.
+- **40-second repeats:** the session total. Hold the last repeats near the first and it climbs; the burst test in the test weeks measures the decrement itself.
+- **Repeat bursts:** the session total. Same.
+- **Threshold:** the session total for the two eights.
 - **Rounds:** the fade — round six over round one — scored in weeks 2, 10 and 13. From 90-second rest in accumulation to 60 from week 6. Rounds past the fight are capacity work, not punishment: if one drops below 75% of round one's output, or your posture goes, that round is the last.
 - **The 20-minute test:** weeks 1, 5 and 14. Distance and peak heart rate.
 - **Recovery heart rate:** the drop at 60 seconds on every settle. It should grow.
@@ -195,7 +197,7 @@ Fresh legs, so the power dose goes first. Then the week's first hard conditionin
 
 3 easy minutes on the bike → band pull-aparts × 20 → goblet squats × 8 → push-ups × 10 → 90/90 hip switches × 5 each way → pogo hops × 20.
 
-**THE JUMP CHECK · 1 min** — three countermovement jumps: no arm swing, dip and jump straight up as high as you can, land soft, reset between each. Measure them with the jump mode in Spleeft, set up the same way every week, and log the best height. More than 7% under your four-week average counts as a yellow (the Readiness page) — it reads tired legs and a tired nervous system, which the strap can't.
+**THE JUMP CHECK · 1 min** — three broad jumps. Lay a tape measure along the floor, its end on a line and a plate on each end. Toes behind the line, swing your arms, jump as far forward as you can and land on both feet, dead still. Read the tape at the back of the heel nearer the line — fall back or step and it doesn't count. Walk back, reset, go again, and log the best in centimetres. A tape, not a phone: an app on your arm can't time a jump steadily enough for this rule. More than 5% under your four-week average counts as a yellow (the Readiness page) — it reads tired legs and a tired nervous system, which the strap can't.
 
 **2 · 0:08 — POWER DOSE · JUMPS · 8 min · rest 90 s**
 
@@ -213,7 +215,7 @@ Box pistol to start — stand on one leg in front of a box, the other straight o
 
 **4 · 0:24 — ENGINE 1 · 24 min · the table says which**
 
-Bike or SkiErg — one, all camp, so the numbers compare. Write down your output every session.
+Bike or SkiErg — one, all camp, so the numbers compare. Nothing to log during the session: at the end, the total on the machine's screen and your peak heart rate.
 
 Moderate intervals (week 1): 4 × 3 minutes at a pace where you could speak short sentences, 3 easy between. The engine measured before it's pushed.
 
@@ -629,7 +631,7 @@ Five additions, on by default, that turn this from a program into a professional
 
 **THE GUARDRAIL.** Two yellow mornings on the strap in the same week — resting heart rate five over, or HRV twelve percent under — and the five come off for the rest of that week. Not the program: the additions. Tuesday's speed and the Thursday thirty go first; the clusters become straight sets; the contacts drop back; the rounds go back to six. The base program is what keeps you training. The edge is what makes you dangerous, and it's only worth having if you're standing on the day.
 
-**THE TENDON GATE AND THE JUMP CHECK.** Separately from the strap: Achilles or knee at 3 or more on Sunday's check means no reactive jumps the following week, with the tendon holds carried on, and a hamstring at 3 or more means no flying sprints — a sore tendon doesn't show on HRV. And Tuesday's jump check more than 7% under its four-week average counts as a yellow, toward the two that take the Edge off.
+**THE TENDON GATE AND THE JUMP CHECK.** Separately from the strap: Achilles or knee at 3 or more on Sunday's check means no reactive jumps the following week, with the tendon holds carried on, and a hamstring at 3 or more means no flying sprints — a sore tendon doesn't show on HRV. And Tuesday's jump check more than 5% under its four-week average counts as a yellow, toward the two that take the Edge off.
 
 ---
 

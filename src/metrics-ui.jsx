@@ -174,11 +174,15 @@ export function EasyZonePanel({ peak, onSave }) {
 }
 
 /* ================================================================
-   ERG OUTPUT — per interval, per burst, per round
+   ERG OUTPUT — an interval session's one number, logged at the end:
+   the total on the machine's screen, or its average watts
    ================================================================ */
+const slotLabel = (s, unit) => (s === "SESSION" ? (unit === "w" ? "SESSION AVERAGE" : "SESSION TOTAL") : s);
+export const SESSION_HOW = { w: "Nothing to log during the session. When the timer says done, log the session's average watts from the machine's summary.",
+  other: "Nothing to log during the session. Zero the machine's screen as the timer starts and keep moving through the easy parts; when the timer says done, log the total on the screen." };
 export function ErgPanel({ title, slots, vals, onVal, unit, fade, scored, prevTotal }) {
   const u = ergUnitLabel(unit);
-  const total = ergTotal(vals), mean = ergMean(vals);
+  const total = ergTotal(vals), mean = ergMean(vals), one = slots.length === 1;
   const stat = (lab, val, c, id) => (
     <div data-testid={id} style={Object.assign({}, mno, { fontSize: T3, color: c || C.ash, letterSpacing: 1 })}>{lab} <span style={{ color: C.chalk, fontWeight: 700 }}>{val}</span> {u}</div>);
   return (
@@ -187,12 +191,13 @@ export function ErgPanel({ title, slots, vals, onVal, unit, fade, scored, prevTo
       <div style={{ display: "flex", flexWrap: "wrap", columnGap: 8 }}>
         {slots.map((s, i) => (
           <div key={i} style={{ flex: "1 1 45%", minWidth: 140 }}>
-            <Input label={s + " (" + u + ")"} v={vals[i] == null ? "" : vals[i]} on={(v) => onVal(i, v)} ph={u} />
+            <Input label={slotLabel(s, unit) + " (" + u + ")"} v={vals[i] == null ? "" : vals[i]} on={(v) => onVal(i, v)} ph={u} />
           </div>))}
       </div>
-      {total != null || prevTotal != null ? (
+      {slots[0] === "SESSION" ? <Note s={{ marginTop: 6 }}>{unit === "w" ? SESSION_HOW.w : SESSION_HOW.other}</Note> : null}
+      {(total != null && !one) || prevTotal != null ? (
         <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 16px", marginTop: 12 }}>
-          {total != null ? stat("TOTAL", r1(total), null, "erg-total") : null}
+          {total != null && !one ? stat("TOTAL", r1(total), null, "erg-total") : null}
           {total != null && slots.length > 1 ? stat("MEAN", mean, null, "erg-mean") : null}
           {prevTotal != null ? stat("LAST TIME", r1(prevTotal), C.brass, "erg-last") : null}
         </div>) : null}
@@ -244,7 +249,7 @@ export function ErgTrack({ ergRows, unit }) {
   return (
     <Card ac={C.cobalt}>
       <Eye c={C.cobalt}>Erg output — by session type, week against week</Eye>
-      <Note c={C.chalk} s={{ marginTop: 0 }}>Total output for the session, in {u}. Charted by type, so a 4-minute interval session is only ever read against another one.</Note>
+      <Note c={C.chalk} s={{ marginTop: 0 }}>The session's number, in {u}: its total, or its average watts. Charted by type, so a 4-minute interval session is only ever read against another one.</Note>
       {!types.length ? <Note s={{ fontStyle: "italic" }}>Nothing logged yet. The output fields are on every conditioning session.</Note>
         : types.map((t) => (
           <div key={t} style={{ marginTop: 12 }}>
@@ -471,7 +476,7 @@ export function MeasureSettings({ st, upd, morning, dayIso, fuel, setFuel, impor
       <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
       <Eye c={C.brass}>Erg output — the unit you log in</Eye>
       <Seg opts={[["w", "WATTS"], ["m", "METRES"], ["cal", "CALORIES"]]} val={st.ergUnit || "w"} on={(v) => upd({ ergUnit: v })} c={C.brass} />
-      <Note>Every conditioning session logs its output in this unit — per interval, per burst, per round. Pick one and keep it, or the weeks stop comparing.</Note>
+      <Note>Every interval session logs one number in this unit, at the end: the total on the machine's screen — calories on the bike, metres on the SkiErg — or its average watts. Pick one and keep it, or the weeks stop comparing.</Note>
 
       <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
       <Eye c={C.violet}>The fuel app — bring it across</Eye>

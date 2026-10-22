@@ -5,7 +5,7 @@
    PREP and CAMP both carry it. Each program's data module says which
    weeks each addition runs in (prepEdge, campEdge); this module holds
    the words, the evening row, and the guardrail: two yellow mornings in
-   the same week — Tuesday's jump check more than 7% under its four-week
+   the same week — Tuesday's jump check more than 5% under its four-week
    average counts as one — and the five come off for the rest of that
    week. Not the program — the additions. They come back on the Monday,
    because the count starts again. The tendon gate runs beside it,
@@ -22,7 +22,7 @@ export const EDGE_GUARDRAIL =
   "Two yellow mornings on the strap in the same week — resting heart rate five over, or HRV twelve percent under — and the five come off for the rest of that week. Not the program: the additions. Tuesday's speed and the Thursday thirty go first; the clusters become straight sets; the contacts drop back; the rounds go back to six.";
 
 export const TENDON_GATE =
-  "Separately from the strap: Achilles or knee at 3 or more on Sunday's check means no reactive jumps the following week, with the tendon holds carried on, and a hamstring at 3 or more means no flying sprints — a sore tendon doesn't show on HRV. And Tuesday's jump check more than 7% under its four-week average counts as a yellow, toward the two that take the Edge off.";
+  "Separately from the strap: Achilles or knee at 3 or more on Sunday's check means no reactive jumps the following week, with the tendon holds carried on, and a hamstring at 3 or more means no flying sprints — a sore tendon doesn't show on HRV. And Tuesday's jump check more than 5% under its four-week average counts as a yellow, toward the two that take the Edge off.";
 
 export const EDGE_ITEMS = {
   prep: [
@@ -43,7 +43,7 @@ export const EDGE_ITEMS = {
 
 /* ---------------- the tendon gate and the jump check ---------------- */
 export const TENDON_LIMIT = 3;
-export const JUMP_DROP = 0.07;
+export const JUMP_DROP = 0.05;
 /* Last Sunday's joint scores, read into next week's prescription:
    Achilles or knee at 3 or more — no reactive jumps, the tendon holds
    carried on; hamstring at 3 or more — no flying sprints, and the Nordics
@@ -58,7 +58,7 @@ export function tendonGate(scores) {
   };
 }
 /* Tuesday's best jump against the average of the four Tuesdays before it:
-   more than 7% under is a yellow. Null until there is a number to read. */
+   more than 5% under is a yellow. Null until there is a number to read. */
 export function jumpYellow(best, previous) {
   const b = Number(best);
   const prev = (previous || []).map(Number).filter((x) => x > 0).slice(-4);

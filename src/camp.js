@@ -161,20 +161,16 @@ export const cengTimer = (key, short, rx) => {
    { k, l, kb, ch } — the key on the entry (the first is w, where the one
    box always saved), the label with its unit, the keyboard ("num" by
    default, "text", "time") or the choices `ch` as big buttons. `erg`
-   gives one box per effort the session prescribes; `recov` adds the two
-   heart rates of the settle. */
-const rep1 = (n, f) => Array.from({ length: n }, (_, i) => f(i + 1));
+   gives an interval session its one box, logged at the end: the total on
+   the machine's screen (its average watts, when watts is the unit) —
+   nothing is logged during a session; `recov` adds the two heart rates
+   of the settle. */
+export const SESSION_SLOT = "SESSION";
+export const sessionBoxes = (key) => (!key || key === "easy" ? ["OUTPUT"] : [SESSION_SLOT]);
 export function ergBoxes(key, short, rx) {
-  const t = cengTimer(key, short, rx), o = t.opt || {};
-  if (t.kind === "vo2") return rep1((o.n || 4) - (o.short ? 1 : 0), (i) => "INTERVAL " + i);
-  if (t.kind === "tempo") return rep1(o.reps || 10, (i) => "MINUTE " + i);
-  if (t.kind === "rz") return o.sets === 1 ? rep1(8, (i) => "BURST " + i) : [].concat(...rep1(o.sets || 2, (st) => rep1(8, (i) => "SET " + st + " · BURST " + i)));
-  if (t.kind === "lac") return (o.blocks || 1) > 1 ? [].concat(...rep1(o.blocks, (st) => rep1(o.reps || 6, (i) => "SET " + st + " · REP " + i))) : rep1(o.reps || 6, (i) => "REP " + i);
-  if (t.kind === "thr") return rep1(2, (i) => "INTERVAL " + i);
-  if (t.kind === "ergrounds") return rep1(o.rounds || 6, (i) => "ROUND " + i);
-  return ["OUTPUT"];
+  return cengTimer(key, short, rx).kind === "z2" ? ["OUTPUT"] : [SESSION_SLOT];
 }
-const engHR = (key) => [{ k: "hr", l: key === "easy" ? "AVERAGE HEART RATE (BPM)" : "PEAK HEART RATE (BPM)" }];
+export const engHR = (key) => [{ k: "hr", l: key === "easy" ? "AVERAGE HEART RATE (BPM)" : "PEAK HEART RATE (BPM)" }];
 const BASE_FIELDS = [{ k: "w", l: "DISTANCE (KM)" }, { k: "hr", l: "AVERAGE HEART RATE (BPM)" }];
 export const SLED_FIELDS = [{ k: "w", l: "LOAD (KG)" }, { k: "t", l: "TIME (S)" }];
 export const roundFields = (rd) => [{ k: "w", l: rd + " · SKIERG (M)" }, { k: "cal", l: rd + " · BIKE (CAL)" }];
@@ -612,8 +608,8 @@ export const CS = {
     intro: "Fresh legs, so the power dose goes first. Then the week's first hard conditioning session. Then THE BRACE, because the trunk is what turns leg drive into hand speed and takes the shots to the body.",
     b: [
     { L: "A", n: "Warm-up", m: 7, p: "C_WU", rxLine: () => "7 min · bike, bands, squats, push-ups, hips, pogos" },
-    { L: "J", n: "The Jump Check", m: 1, jumpCheck: 1, hide: (rx) => !!rx.fightWeek, rxLine: () => "3 countermovement jumps — the best height",
-      items: [{ n: "Countermovement jump — best of three", s: "3 jumps · log the best height", cue: "No arm swing, dip and jump straight up as high as you can, land soft, reset between each. Measure them with the jump mode in Spleeft, set up the same way every week, and log the best height.", id: "c_jumpchk", k: "out", u: "best height (cm)" }],
+    { L: "J", n: "The Jump Check", m: 1, jumpCheck: 1, hide: (rx) => !!rx.fightWeek, rxLine: () => "3 broad jumps — the best distance",
+      items: [{ n: "Jump check — three broad jumps", s: "3 jumps · log the best distance", cue: "Lay a tape measure along the floor, its end on a line and a plate on each end. Toes behind the line, swing your arms, jump as far forward as you can and land on both feet, dead still. Read the tape at the back of the heel nearer the line — fall back or step and it doesn't count. Walk back, reset, go again. Log the best, in centimetres.", id: "c_jumpbj", k: "out", u: "best distance (cm)" }],
       why: "It reads tired legs and a tired nervous system, which the strap can't." },
     { L: "T", n: (rx) => testTitle[rx.tests.tue], m: 18, star: 1, hard: 1, hide: (rx) => !isTest(rx, "tue"),
       timer: () => ({ kind: "bursttest", title: "BURST TEST · 10 × 6 s" }),
@@ -654,7 +650,7 @@ export const CS = {
       engLine: (rx) => cengLine(rx.eng1, rx),
       hide: (rx) => !rx.eng1, timer: (rx) => cengTimer(rx.eng1, false, rx),
       items: (rx) => [{ n: "Output", s: "write it down", id: "c_eng1", k: "out", u: "output / peak HR", erg: ergBoxes(rx.eng1, false, rx), fields: engHR(rx.eng1) }],
-      note: "Bike or SkiErg — one, all camp, so the numbers compare. Write down your output every session." },
+      note: "Bike or SkiErg — one, all camp, so the numbers compare. Nothing to log during the session: at the end, the total on the machine's screen and your peak heart rate." },
     { L: "E", n: "The 60-Second Settle", m: 1, settle: 1, hide: (rx) => !rx.eng1,
       timer: () => ({ kind: "settle", title: "THE SETTLE" }), rxLine: () => "60 seconds — log the seconds to land",
       items: [{ n: "Seconds to land on the breath", s: "write it down", id: "c_settle1", k: "out", u: "seconds", recov: 1, fields: SETTLE_FIELDS }],
@@ -782,7 +778,7 @@ export const CS = {
           { n: "Last round output", s: rx.eng2 === "fp" ? "write it down" : "the last round finished — write it down", id: "c_erg_rdl", k: "out", u: "output" }]
         : [{ n: "Output", s: "write it down", id: "c_eng2", k: "out", u: "output / peak HR", erg: ergBoxes(rx.eng2, !!rx.nasal, rx), fields: engHR(rx.eng2) }]),
       note: (rx) => (rx.eng2 === "erg" || rx.eng2 === "erg8" ? "Past the fight, on purpose. The fight's " + WORDS[R6(rx)] + " are always finished; past them, if a round drops below 75% of round one's output, or your posture goes, that round is the last."
-        : "The same session types as Tuesday, written on the Tuesday page. Thursday always runs a different quality from Tuesday. Same erg, same rules, write down your output.") },
+        : "The same session types as Tuesday, written on the Tuesday page. Thursday always runs a different quality from Tuesday. Same erg, same rules: the total on the screen at the end.") },
     { L: "F", n: "The 60-Second Settle", m: 1, settle: 1, hide: (rx) => !rx.eng2,
       timer: () => ({ kind: "settle", title: "THE SETTLE" }), rxLine: () => "60 seconds — log the seconds to land",
       items: [{ n: "Seconds to land on the breath", s: "write it down", id: "c_settle2", k: "out", u: "seconds", recov: 1, fields: SETTLE_FIELDS }],

@@ -163,43 +163,67 @@ describe("the Sunday rounds on two machines", () => {
 });
 
 describe("the conditioning sessions", () => {
-  it("a 4 × 4 session shows four boxes: 230, 228, 225 and 220 are TOTAL 903, MEAN 225.8, and in PROGRESS → MEASURE", async () => {
+  /* nothing is logged during a session: one box at the end — the total on
+     the machine's screen, or its average watts — and the peak heart rate */
+  it("a 4 × 4 session shows one box: 226 W, and in PROGRESS → MEASURE", async () => {
     await at("2026-10-20", camp({ ergUnit: "w" }));
     pick("4-MINUTE INTERVALS");
-    const labels = ["INTERVAL 1 (W)", "INTERVAL 2 (W)", "INTERVAL 3 (W)", "INTERVAL 4 (W)"];
-    expect(boxes().map((b) => b[0])).toEqual(labels.concat(["PEAK HEART RATE (BPM)"]));
+    expect(boxes().map((b) => b[0])).toEqual(["SESSION AVERAGE (W)", "PEAK HEART RATE (BPM)"]);
     boxes().forEach((b) => expect(b[1]).toBe("decimal"));
     tall();
-    expect(labelSize("INTERVAL 1 (W)")).toBe(18);
-    ["230", "228", "225", "220"].forEach((x, i) => type(labels[i], x));
-    expect(screen.getByTestId("erg-total").textContent).toBe("TOTAL 903 W");
-    expect(screen.getByTestId("erg-mean").textContent).toBe("MEAN 225.8 W");
-    expect(entry(/-tue-c_eng1_erg$/).v).toEqual(["230", "228", "225", "220"]);
+    expect(labelSize("SESSION AVERAGE (W)")).toBe(18);
+    expect(within(card()).getByText(/^Nothing to log during the session\. When the timer says done, log the session's average watts/)).toBeInTheDocument();
+    type("SESSION AVERAGE (W)", "226");
+    expect(screen.queryByTestId("erg-total")).toBe(null);
+    expect(screen.queryByTestId("erg-mean")).toBe(null);
+    expect(entry(/-tue-c_eng1_erg$/).v).toEqual(["226"]);
     type("PEAK HEART RATE (BPM)", "182");
     expect(entry(/-tue-c_eng1$/)).toMatchObject({ hr: "182" });
     fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByText("PROGRESS"));
     fireEvent.click(screen.getByRole("button", { name: "MEASURE" }));
     expect(screen.getByText("4-minute intervals")).toBeInTheDocument();
-    expect(screen.getByText("903")).toBeInTheDocument();
+    expect(screen.getByText("226")).toBeInTheDocument();
   });
-  it("week 1's 2 × 4 shows two; boxes can be left empty", async () => {
+  it("week 1's 2 × 4 has the same one box", async () => {
     await at("2026-10-13", camp());
     pick("4-MINUTE INTERVALS");
-    expect(boxes().map((b) => b[0])).toEqual(["INTERVAL 1 (W)", "INTERVAL 2 (W)", "PEAK HEART RATE (BPM)"]);
-    type("INTERVAL 2 (W)", "210");
-    expect(screen.getByTestId("erg-total").textContent).toBe("TOTAL 210 W");
+    expect(boxes().map((b) => b[0])).toEqual(["SESSION AVERAGE (W)", "PEAK HEART RATE (BPM)"]);
   });
-  it("LAST TIME is the total of the last session of the same type", async () => {
-    await at("2026-10-20", camp(), { "mCw1-tue-c_eng1_erg": { v: ["200", "205"], kind: "vo2", d: "2026-10-13" } });
+  it("LAST TIME is the last session of the same type", async () => {
+    await at("2026-10-20", camp(), { "mCw1-tue-c_eng1_erg": { v: ["205"], kind: "vo2", d: "2026-10-13" } });
     pick("4-MINUTE INTERVALS");
-    expect(screen.getByTestId("erg-last").textContent).toBe("LAST TIME 405 W");
+    expect(screen.getByTestId("erg-last").textContent).toBe("LAST TIME 205 W");
   });
-  it("tempo: a box a minute, in the unit set in Settings", async () => {
+  it("tempo: one box, the total on the screen, in the unit set in Settings", async () => {
     await at("2026-10-15", camp({ ergUnit: "cal" }));
     pick("TEMPO INTERVALS");
-    const b = boxes().map((x) => x[0]);
-    expect(b[0]).toBe("MINUTE 1 (cal)");
-    expect(b[b.length - 1]).toBe("PEAK HEART RATE (BPM)");
+    expect(boxes().map((x) => x[0])).toEqual(["SESSION TOTAL (cal)", "PEAK HEART RATE (BPM)"]);
+    expect(within(card()).getByText(/^Nothing to log during the session\. Zero the machine's screen as the timer starts/)).toBeInTheDocument();
+  });
+  it("PREP's intervals: the same box and the peak heart rate, last time beside it", async () => {
+    await at("2026-01-15", prep({ ergUnit: "m" }), { "mPw1-thu-p_e2_erg": { v: ["2380"], kind: "lac", d: "2026-01-08" } });
+    pick("40-SECOND REPEATS");
+    expect(boxes().map((x) => x[0])).toEqual(["SESSION TOTAL (m)", "PEAK HEART RATE (BPM)"]);
+    expect(screen.getByTestId("erg-last").textContent).toBe("LAST TIME 2380 m");
+    type("SESSION TOTAL (m)", "2417");
+    expect(entry(/^mPw2-thu-p_e2_erg$/).v).toEqual(["2417"]);
+    type("PEAK HEART RATE (BPM)", "184");
+    expect(entry(/^mPw2-thu-p_e2$/)).toMatchObject({ hr: "184" });
+  });
+});
+
+describe("the jump check", () => {
+  it("three broad jumps: BEST DISTANCE (CM), saved under the jump check, PREP and CAMP", async () => {
+    await at("2026-01-06", prep());
+    pick("The Jump Check");
+    expect(boxes()).toEqual([["BEST DISTANCE (CM)", "decimal", "text"]]);
+    type("BEST DISTANCE (CM)", "231");
+    expect(entry(/-tue-p_jumpbj$/)).toMatchObject({ w: "231" });
+    cleanup();
+    await at("2026-10-13", camp());
+    pick("The Jump Check");
+    type("BEST DISTANCE (CM)", "228");
+    expect(entry(/-tue-c_jumpbj$/)).toMatchObject({ w: "228" });
   });
 });
 

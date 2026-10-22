@@ -34,7 +34,7 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 ## POWER, JUMPS AND SPEED
 
-**JUMP CHECK** — Three jumps straight up: no arm swing, a quick dip, jump as high as you can, land soft. Measure them with the jump mode in Spleeft, set up the way the app shows you and the same way every week, and log the best height. The app compares it to your average.
+**JUMP CHECK** — Three broad jumps against a tape. Lay a tape measure along the floor, its end on a line and a plate on each end. Toes behind the line, swing your arms, jump as far forward as you can and land on both feet, dead still. Read the tape at the back of the heel nearer the line; fall back or step and it doesn't count. Walk back, reset, go again. Log the best, in centimetres. The app compares it to your average.
 
 **BROAD JUMPS** — A two-footed jump forward as far as you can. Swing the arms, land soft, and hold the landing dead still before you stand up.
 

@@ -1,7 +1,7 @@
 import { C } from "./ui.jsx";
 import { clusterTimer } from "./edge.js";
 import { jumpOf, JUMP_GATE_LINE, TOP_CUE, STOP_RULE } from "./safety.js";
-import { SLED_FIELDS, roundFields, SETTLE_FIELDS, PACE_FIELDS, HONEST_FIELDS, LIGHTS_FIELDS, WW_CHECK_CUE } from "./camp.js";
+import { SLED_FIELDS, roundFields, SETTLE_FIELDS, PACE_FIELDS, HONEST_FIELDS, LIGHTS_FIELDS, WW_CHECK_CUE, sessionBoxes, engHR } from "./camp.js";
 import { MON_WU, dipsAndRows, armsCircuit, shouldersCircuit, theBrace, carryBlock } from "./circuits.js";
 
 /* ================================================================
@@ -56,23 +56,23 @@ export const PREP_PHASE_WHY = {
 /* ---------- the engine sessions ---------- */
 export const PENG = {
   mod: { n: "MODERATE INTERVALS", d: "4 × 3 minutes at a pace where you could speak short sentences, 3 easy between",
-    tgt: "The average output across the four. This one measures the engine before it is pushed." },
+    tgt: "The session total. This one measures the engine before it is pushed." },
   vo2: { n: "4-MINUTE INTERVALS", d: "4 × 4 minutes HARD — breathing heavily, two or three words at most — 3 easy between",
-    tgt: "The average output across the four: beat last time by 1–2%, never by more." },
+    tgt: "The session total: beat last time by 1–2%, never by more." },
   lac: { n: "40-SECOND REPEATS", d: "40 seconds absolutely flat out, 80 seconds easy. Six",
-    tgt: "The last repeat against the first — the decrement. It should shrink." },
+    tgt: "The session total. Hold the last repeats near the first and it climbs." },
   lac2: { n: "40-SECOND REPEATS · TWO BLOCKS", d: "Six, then 5 full minutes easy, then six more",
-    tgt: "The last repeat against the first — the decrement. It should shrink." },
+    tgt: "The session total. Hold the last repeats near the first and it climbs." },
   rz: { n: "REPEAT BURSTS", d: "8 bursts of 6–8 seconds at absolute maximum, 40 seconds easy between; 5 full minutes; 8 more",
-    tgt: "The sixteenth burst against the first. It should shrink.",
+    tgt: "The session total. The burst test measures the decrement.",
     rule: "A burst visibly weaker than the last buys an extra 20 seconds; two in a row and the set is over." },
   rz1: { n: "REPEAT BURSTS · ONE SET", d: "1 set × 8 bursts of 6–8 seconds at absolute maximum, 40 seconds easy between",
-    tgt: "The eighth burst against the first.",
+    tgt: "The session total.",
     rule: "A burst visibly weaker than the last buys an extra 20 seconds; two in a row and the set is over." },
   tempo: { n: "TEMPO INTERVALS", d: "10 × 1 minute hard but controlled, about 70% of flat out, 1 minute easy between",
-    tgt: "The average output across the ten. Aerobic power without the cost." },
+    tgt: "The session total. Aerobic power without the cost." },
   thr: { n: "THRESHOLD", d: "2 × 8 minutes at the hardest pace you could hold for half an hour, 3 easy minutes between",
-    tgt: "The output held across the two eights." },
+    tgt: "The session total for the two eights." },
   ergrounds: { n: "ROUNDS ON THE ERG", d: "6 × 3 minutes on the bike or SkiErg at fight pace — the output you can hold across all six — 60 seconds between",
     tgt: "Round one and round six. Round six over round one is the fade." },
   t20: { n: "THE 20-MINUTE TEST", d: "Five easy minutes, then the most distance you can cover in 20 minutes on the machine you always use. Log the distance and the highest heart rate.",
@@ -370,8 +370,8 @@ export const PS = {
   tue: { n: "TUESDAY", t: "Power + Engine 1 — the jump check, jumps, pistols, the interval session, the settle, THE BRACE, the Achilles hold", m: 60, ac: C.cobalt, box: 1,
     intro: "Fresh legs, so the power dose goes first. Then the week's first hard conditioning session, then THE BRACE, because the trunk is what turns leg drive into hand speed and takes the shots to the body.", b: [
     { L: "A", n: "Warm-up", m: 7, p: "P_WU", rxLine: () => "7 min · bike, bands, squats, push-ups, hips, pogos" },
-    { L: "J", n: "The Jump Check", m: 1, jumpCheck: 1, rxLine: () => "3 countermovement jumps — the best height",
-      items: [{ n: "Countermovement jump — best of three", s: "3 jumps · log the best height", cue: "No arm swing, dip and jump straight up as high as you can, land soft, reset between each. Measure them with the jump mode in Spleeft, set up the same way every week, and log the best height.", id: "p_jumpchk", k: "out", u: "best height (cm)" }],
+    { L: "J", n: "The Jump Check", m: 1, jumpCheck: 1, rxLine: () => "3 broad jumps — the best distance",
+      items: [{ n: "Jump check — three broad jumps", s: "3 jumps · log the best distance", cue: "Lay a tape measure along the floor, its end on a line and a plate on each end. Toes behind the line, swing your arms, jump as far forward as you can and land on both feet, dead still. Read the tape at the back of the heel nearer the line — fall back or step and it doesn't count. Walk back, reset, go again. Log the best, in centimetres.", id: "p_jumpbj", k: "out", u: "best distance (cm)" }],
       why: "It reads tired legs and a tired nervous system, which the strap can't." },
     { L: "B", n: "Power dose — jumps", m: 8, star: 1, hard: 1, rest: "Rest 90 s", rt: 90,
       rxLine: (rx) => "broad jumps 3 × 2 · box jumps " + rx.box[0] + " × " + rx.box[1] + (rx.d >= 11 ? " · shuttle bursts × 6" : ""),
@@ -403,7 +403,7 @@ export const PS = {
       why: "The decrement halving over the preparation is the flurry holding up." },
     { L: "D", n: (rx) => engName("e1")(rx), m: engMin("e1"), star: 1, hard: 1, eng: 1, engKey: "e1",
       timer: prepEngTimer("e1"), rxLine: (rx) => (PENG[rx.e1] || PENG.easy).d,
-      items: (rx) => [{ n: "Output", s: "write it down", id: "p_e1", k: "out", u: "output" }],
+      items: (rx) => [{ n: "Output", s: "write it down", id: "p_e1", k: "out", u: "output / peak HR", erg: sessionBoxes(rx.e1), fields: engHR(rx.e1) }],
       rules: (rx) => ((PENG[rx.e1] || {}).rule ? [(PENG[rx.e1] || {}).rule] : null),
       why: "Bike or SkiErg — one of them, all preparation, so the numbers compare.", tr: 1 },
     { L: "E", n: "The 60-Second Settle", m: 1, settle: 1, timer: () => ({ kind: "settle", title: "THE SETTLE" }),
@@ -515,7 +515,7 @@ export const PS = {
         : rx.e2 === "ergrounds"
           ? [{ n: "Round 1 output", s: "write it down", id: "p_erg_rd1", k: "out", u: "output" },
             { n: "Round 6 output", s: "write it down", id: "p_erg_rd6", k: "out", u: "output" }]
-          : [{ n: "Output", s: "write it down", id: "p_e2", k: "out", u: "output" }]),
+          : [{ n: "Output", s: "write it down", id: "p_e2", k: "out", u: "output / peak HR", erg: sessionBoxes(rx.e2), fields: engHR(rx.e2) }]),
       rules: (rx) => ((PENG[rx.e2] || {}).rule ? [(PENG[rx.e2] || {}).rule] : null),
       why: (rx) => (rx.e2 === "t20" ? "Test week: the 20-minute test sets the heart-rate zones every easy session in the camp is paced from." : "Always a different quality from Tuesday's."), tr: 1 },
     { L: "F", n: "The 60-Second Settle", m: 1, settle: 1, timer: () => ({ kind: "settle", title: "THE SETTLE" }),
