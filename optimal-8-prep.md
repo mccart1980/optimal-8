@@ -34,6 +34,8 @@ Every week of Prep, by its number. A shorter Prep keeps some of them and drops t
 
 Sled runs on Wednesday: weeks 1–5: 4 · weeks 6–9 and 11–13: 5 · weeks 10 and 14: 3. Nordics on Wednesday: 3 × 4 in week 1, 3 × 5 from week 2, 2 × 3 in weeks 5, 10 and 14. Sprints on Saturday: build-ups and 3 runs at 90% in week 1, then 4, 5, 5 · weeks 5, 10 and 14 at 90% · weeks 6–9 and 11–13: 5 runs. Monday's base: 40 minutes every week.
 
+The pause squat on Wednesday, 3 × 3 with a two-second pause, a percentage of the squat's working max: 65% in week 1, then 68%, 70%, 72% · week 5 2 × 3 at 60% · weeks 6–8 72%, 75%, 75% · none in week 9 · week 10 2 × 3 at 60% · weeks 11–12 a SPEED SQUAT, 3 × 3 at 70%, no pause · week 13 2 × 3 · none in week 14. It never goes above 75%. The Romanian deadlift on Saturday: 3 × 6 · 2 × 6 in weeks 5 and 9–13 · none in week 14.
+
 **This year — the comeback, ten weeks.** After time off, Prep starts at its own week 1 and keeps ten of the fourteen. It skips week 3 (a third slow-lowering week), week 8 (the clusters — the camp's week 4 runs them) and weeks 11 and 12 (the camp's peak repeats the contrast); week 13 stays, so nothing in the camp is new.
 
 | Week of | Prep week | What's special |
@@ -49,7 +51,7 @@ Sled runs on Wednesday: weeks 1–5: 4 · weeks 6–9 and 11–13: 5 · weeks 10
 | 21 Dec | 13 | Christmas week, as written |
 | 28 Dec | 14 | test week; test day Saturday 2 January |
 
-The first two weeks ease you back in. Everything new runs a round short — the dips and rows three rounds, the circuits two, the carries two runs. The flying sprints are at 90%. The Nordics build 2 × 3, 2 × 4, then 3 × 4. On what you're running, muscle comes back faster than tendons do, and that gap is where comeback injuries happen. If the fight's date moves, the app carries Prep on from the week you're on; if the fight is called off, it carries on to its test week and then into the sixteen-week cycle (season-builder.md).
+The first two weeks ease you back in. Everything new runs a round short — the dips and rows three rounds, the circuits two, the carries two runs, the pause squat and the Romanian deadlift two sets. The flying sprints are at 90%. The Nordics build 2 × 3, 2 × 4, then 3 × 4. On what you're running, muscle comes back faster than tendons do, and that gap is where comeback injuries happen. If the fight's date moves, the app carries Prep on from the week you're on; if the fight is called off, it carries on to its test week and then into the sixteen-week cycle (season-builder.md).
 
 The circuits — the arms circuit on Monday, THE BRACE on Tuesday, the shoulders circuit on Thursday: 3 rounds in weeks 1–4 and 6–8 · 2 in weeks 5, 9 and 11–13 · 1 in week 10 · none in week 14. Monday's dips and ring rows: 4 rounds in weeks 1–4 and 6–8 · 3 in weeks 5, 9 and 11–13 · 2 in weeks 10 and 14. The farmer's and bear-hug carries: 3 runs · 2 in weeks 5 and 10 · none in week 14.
 
@@ -59,11 +61,13 @@ The circuits — the arms circuit on Monday, THE BRACE on Tuesday, the shoulders
 
 The calendar gives percentages because you need a number to load the bar with. The watch decides whether the number was right. Three rules, and they replace the fast-bar rule for the whole preparation.
 
-**1 · The first work set sets the day.** Every main lift has a velocity target for its phase, from your own profile (below). Load the bar to the calendar's percentage and do the first work set. Read the average of its two fastest reps. Within 0.05 m/s of target: stay. More than 0.05 slower: take 5% off for the remaining sets — one slow reading is enough to come down. More than 0.05 faster: stay at today's load; if the same lift comes up more than 0.05 fast again next session, add 2.5% from then on. Coming down on one reading is safe; going up on one reading is chasing the watch's noise. Same setup every time — the watch on the same wrist, the same depth, the same tempo — or the numbers don't compare.
+**1 · The first work set sets the day.** Every main lift has a velocity target for its phase, from your own profile (below). Load the bar to the calendar's percentage and do the first work set. Read the average of its two fastest reps. Within 0.05 m/s of target: stay. More than 0.05 slower: take 5% off for the remaining sets — one slow reading is enough to come down. More than 0.05 faster: stay at today's load; if the same lift comes up more than 0.05 fast again next session, add 2.5% from then on. Coming down on one reading is safe; going up on one reading is chasing the watch's noise. Same setup every time — the watch on the same wrist, the same depth, the same tempo — or the numbers don't compare. And hold the lockout, still, until Spleeft beeps before the next rep: it tells one rep from the next by that stop, so there's no need to rack the bar between reps.
 
 **2 · The set ends at the threshold.** Strength sets: the set is over when a rep is 20% slower than the set's first rep. Fast and contrast sets: 10%. The watch alerts; you rack it. Rep counts are ceilings.
 
 **3 · No true maxes, ever.** The heaviest work is a top triple — a set of three that's hard but leaves one or two reps in you — in week 9 and in test week, on pins, after the warm-up ramp. That weight × 1.08 resets the working max. For a fighter a one-rep max is only a number to set loads with; the top triple and your bar-speed profile set them without the risk of failing a lift alone.
+
+**The pause squat runs off its percentage alone.** The two-second pause makes its bar speed read slow, so the watch doesn't judge it; the calendar's percentage of the squat's working max is the load, and it never goes above 75%.
 
 **The re-check, week 5.** On the lighter week, each main lift gets a working-weight check before its working sets — the trap bar and the bench on Wednesday, the squat and the push press on Saturday: a set of 3 that's hard but leaves two in you, × 1.08, rounded to 2.5 kg. The app saves it, and the week's sets read off it straight away. Coming back from time off, strength climbs faster than the bar-speed steps can follow; this catches it up.
 
@@ -111,7 +115,7 @@ Every conditioning session has a number from last time, and the number is the ta
 - **The 20-minute test:** weeks 1, 5 and 14. Distance and peak heart rate.
 - **Recovery heart rate:** the drop at 60 seconds on every settle. It should grow.
 
-The camp inherits every one of these numbers as its week-1 starting line.
+PROGRESS charts every one of them, week against week, and the camp inherits them as its week-1 starting line.
 
 ---
 
@@ -121,14 +125,14 @@ The camp inherits every one of these numbers as its week-1 starting line.
 |---|---|---|
 | Monday | 3:30 · UPPER STRENGTH + BASE — weighted dips and ring rows, the arms circuit, easy nasal ride or run 40 min · hands · band catch | ~77 min |
 | Tuesday | 3:30 · POWER + ENGINE 1 — the jump check, jumps, pistol line, the interval session, the settle, THE BRACE, the Achilles hold | ~68 min |
-| Wednesday | 3:30 · STRENGTH — sled, the trap bar in its phase with lateral raises in its rest, the bench press and bench throws, chins and the muscle-up line, Nordics, neck holds, the farmer's carry · evening, weeks 1–5: THE MOVEMENT SESSION | ~70 min |
+| Wednesday | 3:30 · STRENGTH — sled, the trap bar in its phase with lateral raises in its rest, the pause squat, the bench press and bench throws, chins and the muscle-up line, Nordics, neck holds, the farmer's carry · evening, weeks 1–5: THE MOVEMENT SESSION | ~78 min |
 | Thursday | 3:30 · THROWS + ENGINE 2 — throws and landmine, split squat, Spanish squat hold, the second conditioning session, the settle, neck, hands, band catch, the shoulders circuit · evening: the easy thirty, then the sauna in weeks 6–13 | ~81 min (~85 when the session is 28 minutes) |
 | Friday | SLEEP. No alarm. | — |
-| Saturday | 8:30 · THE LONG SESSION — get-ups, build-ups, stance starts, close and plant, sprints, reactive jumps, side bounds, the squat in its phase, push press, the bear-hug carry · evening: THE MOVEMENT SESSION | ~77 min |
+| Saturday | 8:30 · THE LONG SESSION — get-ups, build-ups, stance starts, close and plant, sprints, reactive jumps, side bounds, the squat in its phase, push press, Romanian deadlifts, the bear-hug carry · evening: THE MOVEMENT SESSION | ~83 min |
 | Sunday | 8:30 · THE ROUNDS — throws, the 6 × 3, the post-max sit, core with suitcase carries, the L-sit, the lever and face pulls, hands, weekly check · then the easy hour, then the sauna from week 6 | ~73 min |
 | Every day | On waking: the strap, the sighs, the one thing, the morning five, the check · evening: RANGE 20 min, the skill block Mon–Thu, the sit, the review | ~50 min |
 
-About seven and a half hours in the gym a week in the build and heavy weeks, and three and a half at home in the build, three after. Weeks 5, 10 and 14 are lighter.
+Just over seven and a half hours in the gym a week in the build and heavy weeks, and three and a half at home in the build, three after. Weeks 5, 10 and 14 are lighter.
 
 **The rules that don't change.** No true maxes, ever — the heaviest work is a top triple, in week 9 and test week, on pins. The output rule: every explosive set ends the moment the output drops. The velocity rule on every main lift. Easy means easy — the base and the easy hour at 65–75% of peak, nose only. Cold water out; sauna in from week 6, twice a week, never more. Bed by half past eight, Sunday to Wednesday. Nothing new after week 10 — the camp must know every exercise in it before it starts.
 
@@ -248,9 +252,9 @@ Seated calf raise, up on the balls of the feet, pause, down slow, twelve times �
 
 ---
 
-## WEDNESDAY · STRENGTH · ~70 min
+## WEDNESDAY · STRENGTH · ~78 min
 
-The heavy morning, and the lift changes its shape by block — slow lowering in accumulation, paused then fast in intensification, contrast in conversion. Every rep moves with intent; the watch says how fast, and the set ends at the velocity threshold on the Loading page. A grinding rep ends the set.
+The heavy morning, and the lift changes its shape by block — slow lowering in accumulation, paused then fast in intensification, contrast in conversion. Every rep moves with intent; the watch says how fast, and the set ends at the velocity threshold on the Loading page. A grinding rep ends the set. Then the week's second squat, lighter, with a pause.
 
 **1 · 0:00 — WARM-UP · 6 min** — Tuesday's warm-up, then trap bar warm-up sets: bar × 5, 50% × 3, 70% × 2 of working.
 
@@ -268,31 +272,37 @@ Drive hold, 10 seconds: load the sled so it won't move — or use a wall — and
 
 Stand inside the bar, grip the handles, flat back, drive the floor away. Nothing passes over your body and a rep you're not sure of goes down, not up — the one heavy lift safe to do alone at this hour.
 
-The phases, block by block: **SLOW LOWERING (weeks 1–3)** — lower the bar to the floor over a full five seconds, touch, and drive up fast. Builds tissue and the tendon stiffness sprinting needs; sore in week 1, then not. **NORMAL TEMPO (weeks 4–5)** — down under control, up fast, the volume at its highest. **PAUSED (weeks 6–7)** — lower normally, stop dead an inch off the floor for three seconds, then drive. **FAST, IN CLUSTERS (week 8)** — five sets of two-plus-two at 87–90%: two reps, the bar down on the pins or the floor for twenty seconds, two more; three minutes between sets. More heavy reps at full speed than straight sets can give; the watch polices every one, and a rep under the threshold ends the set. **TOP TRIPLE (week 9)** — the ramp as on the Saturday page, pins set, up to a set of three that's hard but leaves one or two in you; × 1.08 is the new working max; then 2 × 2 at 85% of it. **EASY (week 10)** — 2 × 3 at 65%, fast; the profile redrawn. **CONTRAST (weeks 11–13)** — 2 × 2 at the calendar's percentage, fast, then straight into the jump circuit (Saturday's page describes it) with trap bar jumps as the loaded jump. **TEST WEEK (week 14)** — the top triple again, no back-off sets. **Week 5:** first, the working-weight check (the Loading page).
+The phases, block by block: **SLOW LOWERING (weeks 1–3)** — lower the bar to the floor over a full five seconds, touch, and drive up fast. Builds tissue and the tendon stiffness sprinting needs; sore in week 1, then not. **NORMAL TEMPO (weeks 4–5)** — down under control, up fast, the volume at its highest. **PAUSED (weeks 6–7)** — lower normally, stop dead an inch off the floor for three seconds, then drive. **FAST, IN CLUSTERS (week 8)** — five sets of two-plus-two at 87–90%: two reps, the bar down on the pins or the floor for twenty seconds, two more; three minutes between sets. More heavy reps at full speed than straight sets can give; the watch polices every one, and a rep under the threshold ends the set. **TOP TRIPLE (week 9)** — the ramp as on the Saturday page, pins set, up to a set of three that's hard but leaves one or two in you; × 1.08 is the new working max; then 2 × 2 at 85% of it. **EASY (week 10)** — 2 × 3 at 65%, fast; the profile redrawn. **CONTRAST (weeks 11–13)** — 2 × 2 at the calendar's percentage, fast, three minutes between; the speed squat follows it, and the jump circuit is Saturday's. **TEST WEEK (week 14)** — the top triple again, no back-off sets. **Week 5:** first, the working-weight check (the Loading page).
 
 **Lateral raises in the rest** — in the slow-lowering, normal-tempo, paused and easy weeks, and in week 8 when it runs as straight sets: after each work set, one set of lateral raises × 15 — a dumbbell in each hand at your sides, raised to shoulder height, elbows leading — then sit for the rest. Your shoulders get a third dose a week at no cost in time. Not in the cluster, top-triple, contrast or test weeks: there the rest is part of the method.
 
-**5 · 0:34 — BENCH PRESS + BENCH THROWS · 12 min**
+**5 · 0:34 — PAUSE SQUAT · sets from the calendar · rest 2 min · PINS SET · 8 min**
+
+Warm-up sets: bar × 5, 50% × 3 — the trap bar has already warmed your legs. Bar on your back, sit to just below parallel and stop dead for two full seconds — tight, never resting on the pins — then drive up hard. 3 × 3 at a percentage of your squat's working max, from the calendar: 65% in week 1, climbing to 75% by week 7; 2 × 3 at 60% in weeks 5 and 10; none in week 9, the top triples. **Weeks 11–13 it becomes a SPEED SQUAT** — 3 × 3 at 70% (2 × 3 in week 13), no pause, every rep as fast as you can move it; the set ends the moment the bar slows. None in week 14.
+
+A two-second pause takes 10–15% off what you can lift, so a paused triple at 75% is a hard triple, and it never goes above 75%. The week's second squat: Saturday's comes after the sprints and the jumps, so this one is lighter and on its own, and your legs get two squat days a week instead of one. The pause takes the bounce out — the drive starts from a dead stop.
+
+**6 · 0:42 — BENCH PRESS + BENCH THROWS · 12 min**
 
 **THE BENCH PRESS, every week from week 1.** Warm-up sets: bar × 10, 40% × 5, 60% × 3, 75% × 2. Pins at chest height, no collars — you're alone. The same phases as the trap bar: **weeks 1–3 SLOW LOWERING** — five seconds down to the chest, touch, then drive: 3 × 5 at 70%, then 3 × 5 at 72%, then 4 × 5 at 72%. **Weeks 4–5 NORMAL TEMPO** — 4 × 5 at 75%, then 3 × 5 at 70%; week 5 starts with the working-weight check. **Weeks 6–7 PAUSED** — 3 × 3 at 80%, then 84%, the bar dead still on the chest for 2 seconds, then drive. **Week 8 FAST** — 4 × 2 at 87%. **Week 9** — the top triple: sets of three going up until one is hard but leaves one or two in you, pins set; × 1.08 is the new working max; then 2 × 2 at 85% of it. **Week 10** — 2 × 3 at 65%, fast. **Weeks 11–13 CONTRAST** — 2 reps at 85% → rest 20 seconds → 3 bench throws → rest 2½ minutes; three rounds. **Week 14** — the top triple again, no back-off sets. Your main upper-body lift, and you don't test a lift you don't train.
 
 **BENCH THROWS, weeks 1–10 — 3 × 3, rest 90 s, straight after the press.** Smith machine, with its safety stops set so the bar rests on them a couple of centimetres above your chest when you lie under it. Light bar, at your peak-power load from the profile (the Loading page). Lower the bar to the stops, throw it so hard it leaves your hands, catch it with soft elbows, lower it back to the stops. A missed catch lands on the stops, never on you. No Smith machine with adjustable stops: a 4–6 kg medicine ball thrown off the chest at a wall, 3 × 5. The punch-speed lift. From week 11 the throws are inside the contrast.
 
-**6 · 0:46 — WEIGHTED CHIN-UPS · 3 × 5, then the MUSCLE-UP LINE, 2 sets · rest 90 s · 8 min**
+**7 · 0:54 — WEIGHTED CHIN-UPS · 3 × 5, then the MUSCLE-UP LINE, 2 sets · rest 90 s · 8 min**
 
 Palms away, weight on a belt or a dumbbell between the feet, from a dead hang, chin over the bar, lower under control. Then two sets of the muscle-up line — chest-to-bar pull-ups at the first level, explosive, the bar touching the chest, climbing through negatives to the strict muscle-up (Calisthenics page). Pulling strength protects the shoulders that throw; the muscle-up is pulling power, the quality that snaps a hand back.
 
-**7 · 0:54 — NORDIC CURLS · sets from the table · rest 2 min · 6 min**
+**8 · 1:02 — NORDIC CURLS · sets from the table · rest 2 min · 6 min**
 
 Kneel with the heels anchored under something solid. Body straight from knees to head, lower forward as slowly as you can, catch yourself with your hands, push back up. Stop the set the moment the lower back rounds. Ramped from where you are — 3 × 4 to 3 × 5 — and held there. A hamstring on a Saturday sprint is the second-commonest way a preparation ends. Wednesday, so the soreness is gone before Saturday.
 
-**8 · 1:00 — NECK · HOLDS ONLY · 5 min** — the four-direction holds, 3 × 10 seconds each direction: press your palm hard against your forehead and push your head into it; the head never moves. Then the back of the head, then each side. The first of the week's two neck doses; Thursday has the full block.
+**9 · 1:08 — NECK · HOLDS ONLY · 5 min** — the four-direction holds, 3 × 10 seconds each direction: press your palm hard against your forehead and push your head into it; the head never moves. Then the back of the head, then each side. The first of the week's two neck doses; Thursday has the full block.
 
-**9 · 1:05 — FARMER'S CARRY · 3 × 30 m · rest 60 s · 4 min**
+**10 · 1:13 — FARMER'S CARRY · 3 × 30 m · rest 60 s · 4 min**
 
 A heavy dumbbell in each hand. Stand tall, shoulders down, and take short, quick steps for 30 metres without putting them down. Start around 30 kg a hand; add 2.5 kg a hand when all three runs are clean, with no stop and no lean. Two runs in weeks 5 and 10, none in week 14. Grip, forearms and traps for the look, and a trunk that stays stiff under load. Last, so the grip is fresh for the chins.
 
-**Done · ~1:10.** Tonight: RANGE, the skill block, the sit. Weeks 1–5: THE MOVEMENT SESSION first.
+**Done · ~1:18.** Tonight: RANGE, the skill block, the sit. Weeks 1–5: THE MOVEMENT SESSION first.
 
 ---
 
@@ -361,9 +371,9 @@ No alarm. Tomorrow is the long session and Sunday is the rounds, and the best th
 
 ---
 
-## SATURDAY · THE LONG SESSION · 8:30 · ~77 min
+## SATURDAY · THE LONG SESSION · 8:30 · ~83 min
 
-Fed and rested, Friday's sleep in front of it. Speed first, then reactive power, then the squat in its phase, then the push press, then the bear-hug carry. Fuel it: porridge two hours before, half the bottle and a banana twenty minutes before.
+Fed and rested, Friday's sleep in front of it. Speed first, then reactive power, then the squat in its phase, then the push press, then the Romanian deadlifts, then the bear-hug carry. Fuel it: porridge two hours before, half the bottle and a banana twenty minutes before.
 
 **1 · 0:00 — WARM-UP · 16 min**
 
@@ -397,11 +407,17 @@ Lower-body maximal strength is the best predictor there is of how hard trained b
 
 Bar on the front of the shoulders, quick shallow knee dip, drive it overhead with the legs and punch it to lockout. Legs, braced trunk, hands — the route a punch takes. Loaded like the other lifts: fast, two in reserve; weeks 11–13 at 85%; week 9 skipped (the squat top triple is enough); week 14 none. Week 5: first, the working-weight check.
 
-**7 · 1:13 — BEAR-HUG CARRY · 3 × 30 m · rest 60 s · 4 min**
+**7 · 1:13 — ROMANIAN DEADLIFT · 3 × 6 · rest 75 s · 6 min** — weeks 5 and 9–13: 2 × 6 · none in week 14
+
+Take the bar out of the rack at hip height, hands just outside your legs. Knees soft, and they stay soft: push your hips back, the bar close to your legs and your back flat, until you feel a strong stretch behind your knees, about mid-shin; then drive your hips forward to stand tall. A rep your back rounds on ends the set. Start around 60% of your trap bar working max and add 2.5–5 kg a week while every rep moves at the same speed and your back stays flat. Hamstring at 3 or more on Sunday's check: only if it's pain-free, as the Nordics.
+
+The trap bar is half a squat and the Nordics work the hamstrings at the knee; this is the hips and hamstrings at full stretch — the drive in your back leg, and the back of the legs that sprinting leans on. Last, after the speed and the squat, so it takes nothing from them.
+
+**8 · 1:19 — BEAR-HUG CARRY · 3 × 30 m · rest 60 s · 4 min**
 
 Hug a heavy sandbag tight to your chest — or a heavy plate, or a dumbbell held upright against it. Elbows in, stand tall, walk 30 metres. Breathe short and sharp through your nose behind a braced stomach, and never let the brace go. Start with a 30–40 kg sandbag or a 20–25 kg plate; add weight when all three runs are clean. Two runs in weeks 5 and 10, none in week 14. That's the clinch against a heavier man, and breathing behind a brace when one lands.
 
-**Done · ~1:17.** THE MOVEMENT SESSION this evening, then RANGE. Bed early: tomorrow is the rounds. Saturday's 5pm carb feed loads it.
+**Done · ~1:23.** THE MOVEMENT SESSION this evening, then RANGE. Bed early: tomorrow is the rounds. Saturday's 5pm carb feed loads it.
 
 ---
 
@@ -652,6 +668,8 @@ Five additions, on by default, that turn this from a program into a professional
 **Why movement gets two sessions and a daily dose.** You said it holds you back, and for a boxer stiff hips and shoulders cost power directly — a hip that can't turn sends the force through the back and knee instead. RANGE finds the range with long holds and end-range strength; the movement session teaches the body to use it under control; the tests every five weeks make it a number. By the camp, this is done, and the camp doesn't have to spend a minute on it.
 
 **What the October rebuild changed, and why.** Prep gave your shoulders, traps and chest roughly half the hard sets Optimal 8 Singles did: the bench didn't start until week 6, the dips stopped after week 5, and the camp had no size work at all. That suited a fighter-first brief, not one that asks for maximal strength, power and the look as well as the engine. So: Monday became an upper-body strength day — weighted dips paired with ring rows, then the arms circuit, then the base — because strength rises with how often a lift is trained and size with the hard sets a muscle gets a week. The dips run all year, weighted, on bars, so the weight can keep climbing. The bench press runs from week 1 in the trap bar's phases. Three circuits went in, because supersets and circuits build the same muscle as straight sets in far less time, and train shoulders and arms that keep working tired. Three carries went in for grip, traps and a trunk that stays stiff under load — proven by coaches more than by studies, and in because of what they train, cheaply. THE BRACE turned Tuesday's trunk work into the body-shot block. Lateral raises went into the trap bar's rest, a third shoulder dose at no cost in time. The one trade: Monday's base stays at 40 minutes instead of climbing to 60, because the upper-body work needs the time and the engine responds to training far faster than muscle does; the camp is engine-led, and that's where the engine is built to its peak. The neck goes to twice a week in Prep, Wednesday and Thursday; the camp keeps three. And the lighter week re-checks the working weights, because strength coming back after time off climbs faster than the bar-speed steps.
+
+**What the leg fix changed, and why.** Set beside Optimal 8 Fighter, Prep was behind on one thing: leg strength. The Fighter squats twice a week — heavy on Saturday, a pause squat on Wednesday — and hinges with Romanian deadlifts; Prep squatted once, on Saturday, after the sprints, the jumps and the bounds had taken the best of your legs, and nothing loaded the hips and hamstrings through a long hinge. Strength rises with how often a lift is trained, so the pause squat went in on Wednesday after the trap bar, at a weight you own — 65–75%, two seconds at the bottom, a speed squat at 70% in the fast block — and the Romanian deadlift on Saturday after the push press, for the back of the legs. About fourteen minutes a week, and nothing else moved. The trap bar's and the squat's cards now name the week's phase in front of the sets — slow lowering, normal tempo, the three-second pause, fast — as the bench's always did.
 
 **Why the look lives in Prep and the camp only keeps it.** Prep is the everyday program, so it's where the look gets built, with the food to match. A camp is for sharpening: it keeps about a third of the dose, which is roughly what holds muscle, and gives the time to the engine.
 

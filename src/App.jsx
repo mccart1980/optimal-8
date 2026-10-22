@@ -50,7 +50,7 @@ import { CampWeekTable, FightWeekTable, CampWorkPanel, CampNumbers, CampWeekCard
 import {
   PREP_INTRO, PREP_PHASE_NAME, PREP_PHASE_CUE, PENG, PENG_MENU, prepRx, prepEdge, prepEmphasis, prepTests,
   FLEX_TESTS, MOVE_INTRO, moveTonight, CARB_TOPUP,
-  TRANSITION_INTRO, TRANSITION_RULES, prepSess, transitionSess, PPROTO, prepBench, topItem,
+  TRANSITION_INTRO, TRANSITION_RULES, prepSess, transitionSess, PPROTO, prepBench, topItem, psqOf, psqLine, rdlOf,
 } from "./prep.js";
 import {
   buildSeason, rowOn, rowForDay, rowByKey, rowRx, rowDates, monOf as mondayIso, planStartFor, describeSeason, fitnessFromFade,
@@ -63,7 +63,7 @@ import {
 import {
   morningFlag, recoveryDrop, easyZone, peakHeartRate, isEasyTimer, easyTimer, ergSlots, ergShapeFor, ergTotal, simFade, sleepWeek,
   readiness, READY_LINE, recalibrated,
-  BAR_SPEED_ITEMS, isPhotoDay, parseFuelExport, series, parseKey, ergUnitLabel, r1, MORNING_FIELDS, strapBackBy,
+  BAR_SPEED_ITEMS, isPhotoDay, parseFuelExport, series, parseKey, ergUnitLabel, r1, MORNING_FIELDS, strapBackBy, scopeOf, inScope, SETTLE_IDS,
 } from "./metrics.js";
 import {
   MorningCard, RecoveryHR, EasyZonePanel, ErgPanel, BarSpeedField,
@@ -1661,6 +1661,9 @@ function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, st
     const vcol = verdict ? (verdict.kind === "down" ? C.oxide : verdict.kind === "up" ? C.moss : C.brass) : C.line;
     const speed = speedOn ? (
       <div data-testid="bar-speed" style={{ background: C.ink, border: "1px solid " + vcol, borderRadius: 8, padding: 12 }}>
+        {/* Spleeft tells one rep from the next by the stop between them: the
+           bar held still at the top, not racked */}
+        {velT ? <div data-testid="lockout-line" style={Object.assign({}, mno, { fontSize: T3, color: C.brass, lineHeight: 1.4 })}>SPLEEFT: HOLD THE LOCKOUT UNTIL IT BEEPS, THEN THE NEXT REP. NO NEED TO RACK THE BAR BETWEEN REPS.</div> : null}
         <Input label={"SET 1 · MEAN OF ITS TWO FASTEST REPS (M/S)" + (velT ? " · TARGET " + velT.v : "")} v={velT ? cur.v1 : cur.bs}
           on={(val) => setE(id, Object.assign({}, cur, velT ? { v1: val, vt: velT.v, vl: velLift, vd: engDay } : { bs: val }))} ph="m/s" />
         {verdict ? <div data-testid="bar-verdict" style={Object.assign({}, dsp, { fontSize: 22, fontWeight: 800, letterSpacing: 1.2, marginTop: 10, color: vcol })}>{verdict.line}{afterKg != null ? " · " + afterKg + " KG" : ""}</div> : null}
@@ -2343,6 +2346,8 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
           <Eye c={C.brass}>What this week actually is</Eye>
           <Note c={C.chalk} s={{ marginTop: 0 }}>{rx.em}</Note>
           <Row k="Trap bar and squat" val={PREP_PHASE_NAME[rx.lift] + " · " + rx.sc} />
+          <Row k={psqOf(rx) && psqOf(rx).fast ? "Speed squat (Wed)" : "Pause squat (Wed)"} val={psqOf(rx) ? (psqOf(rx).fast ? "fast · " : "2-second pause · ") + psqLine(psqOf(rx)) : "none this week"} />
+          <Row k="Romanian deadlift (Sat)" val={rdlOf(rx) ? rdlOf(rx) + " × 6" : "none this week"} />
           <Row k="Monday base" val={rx.base + " min"} />
           <Row k="Tuesday" val={(PENG[rx.e1] || PENG.easy).n} />
           <Row k="Thursday" val={(PENG[rx.e2] || PENG.easy).n} />
@@ -2440,6 +2445,9 @@ function Bars({ data, unit, color }) {
 const ERG_TYPE_NAME = { vo2: "4-minute intervals", mod: "Moderate intervals", lac: "40-second repeats", lac2: "40-second repeats · 2 × 6",
   rz: "Repeat bursts", rz1: "Repeat bursts · one set", rz3: "Repeat bursts · one set", tempo: "Tempo intervals", thr: "Threshold",
   erg: "Rounds on the erg", fp: "Fight-pace rounds", easy: "Easy", easy15: "Easy flush", sim: "The simulation", t20: "The 20-minute test" };
+/* `camp` is the view: true for the camp, "prep" for Prep, false for the
+   classic, which reads its current macrocycle only. A session's type is
+   the one saved with it when it was logged, else the week's own. */
 function ergByType(log, camp, L, macro) {
   const out = {};
   const push = (type, label, week, total) => { if (total == null) return;
@@ -2447,27 +2455,29 @@ function ergByType(log, camp, L, macro) {
   Object.keys(log || {}).forEach((k) => {
     if (k.indexOf("_erg") < 0) return;
     const p = parseKey(k); if (!p) return;
-    if (camp ? p.macro !== "C" : p.macro === "C") return;
-    if (!camp && String(p.macro) !== String(macro)) return;
-    const rx = rxFor(p.week);
-    const base = p.id.replace(/_erg$/, "");
+    if (!inScope(camp, p.macro)) return;
+    if (scopeOf(camp) === "fighter" && String(p.macro) !== String(macro)) return;
+    const base = p.id.replace(/_erg$/, ""), e = log[k] || {};
+    const wk = () => (MAC_PROGRAM[p.macro] && String(p.macro) !== String(MODE.mac) ? seasonRxFor(p.macro, p.week, true) : rxFor(p.week));
     const type = /fs$/.test(base) ? "sim" : /bike20$/.test(base) ? "t20"
-      : base === "cond" || base === "c_eng1" ? rx.eng || rx.eng1
-      : base === "cond2" || base === "c_eng2" ? rx.eng2 : null;
+      : base === "cond" || base === "c_eng1" || base === "p_e1" ? e.kind || wk().eng || wk().eng1 || wk().e1
+      : base === "cond2" || base === "c_eng2" || base === "p_e2" ? e.kind || wk().eng2 || wk().e2 : null;
     if (!type) return;
-    push(type, (camp ? "w" : "w") + p.week, p.week, ergTotal((log[k] || {}).v || []));
+    push(type, "w" + p.week, p.week, ergTotal(e.v || []));
   });
   Object.keys(out).forEach((t) => out[t].rows.sort((a, b) => a.week - b.week));
   return out;
 }
 
-function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L, IM, calis, camp, title, rangeWeeks, rangeGet, campRows, fight, sub: subIn, setSub: setSubIn, st, morning, photos, setPhotos, fuel, dateOf, dayIso, photoDay, ergUnit, tape, setTape, fuelPhase, weightOn }) {
+function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L, IM, calis, camp, view: viewIn, title, rangeWeeks, rangeGet, campRows, fight, sub: subIn, setSub: setSubIn, st, morning, photos, setPhotos, fuel, dateOf, dayIso, photoDay, ergUnit, tape, setTape, fuelPhase, weightOn }) {
   const [subOwn, setSubOwn] = useState("dash");
   const sub = subIn || subOwn;
   const setSub = (x) => { setSubOwn(x); if (setSubIn) setSubIn(x); };
   const [edit, setEdit] = useState({});
   const [tp, setTp] = useState({});
   const macro = current.macro;
+  /* whose weeks the charts read: the camp's, Prep's or the classic's */
+  const view = viewIn !== undefined ? viewIn : camp;
   const testVal = (m, id) => { const e = log["m" + m + "w16-test-" + id]; return e ? num(e.w) : null; };
   const fade = (m, w) => { const a = log["m" + m + "w" + w + "-sun-fs_rd1"], b = log["m" + m + "w" + w + "-sun-fs_rd6"];
     return a && b && num(a.w) && num(b.w) ? (num(a.w) - num(b.w)) / num(a.w) * 100 : null; };
@@ -2480,7 +2490,7 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
           style={Object.assign({}, dsp, { flex: "1 1 20%", fontSize: 9.5, fontWeight: 700, letterSpacing: .3, padding: "11px 1px", borderRadius: 4, cursor: "pointer", minHeight: 44, background: sub === x[0] ? C.brass : "transparent", color: sub === x[0] ? C.ink : C.ash, border: "1px solid " + (sub === x[0] ? C.brass : C.line) })}>{x[1]}</button>)}
       </div>
 
-      {sub === "dash" ? <Dashboard log={log} morning={morning || {}} st={st || {}} camp={camp} body={body} fuel={fuel} addBody={addBody} dateOf={dateOf} iron={IM}
+      {sub === "dash" ? <Dashboard log={log} morning={morning || {}} st={st || {}} camp={view} body={body} fuel={fuel} addBody={addBody} dateOf={dateOf} iron={IM}
         openPhotos={() => setSub("photos")} /> : null}
 
       {sub === "ref" ? <Referee tape={tape || []} setTape={setTape} phase={fuelPhase} weightOn={weightOn} /> : null}
@@ -2489,12 +2499,12 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
 
       {sub === "measure" ? (
         <div>
-          <ErgTrack ergRows={ergByType(log, camp, L, current.macro)} unit={ergUnit} />
-          <BarSpeedTrack log={log} camp={camp} />
+          <ErgTrack ergRows={ergByType(log, view, L, current.macro)} unit={ergUnit} />
+          <BarSpeedTrack log={log} camp={view} />
           <Card ac={C.cobalt}>
             <Eye c={C.cobalt}>Recovery heart rate — the 60-second drop, session by session</Eye>
-            {(() => { const rows = ["settle", "settle2", "c_settle1", "c_settle2"]
-                .reduce((a, id) => a.concat(series(log, id + "_drop", camp)), [])
+            {(() => { const rows = SETTLE_IDS
+                .reduce((a, id) => a.concat(series(log, id + "_drop", view)), [])
                 .sort((a, b) => a.week - b.week).slice(-10);
               return rows.length ? <MiniBars data={rows.map((r) => ["w" + r.week, r.v])} color={C.cobalt} />
                 : <Note s={{ fontStyle: "italic" }}>Nothing logged yet. The two heart rates sit on every 60-second settle.</Note>; })()}
@@ -2529,7 +2539,7 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
               : <Note>Squat and bench: your best single. Trap bar and push press: week 1 finds them (hard triple × 1.08), or enter one here.</Note>}
           </Card>
           {camp ? <Note c={C.ash} s={{ fontStyle: "italic" }}>Camp Mode is on: the camp loads from working weights, not these. Your maxes wait here, untouched, until the switch goes off.</Note> : null}
-          {camp ? null : (
+          {scopeOf(view) !== "fighter" ? null : (
           <Card ac={C.cobalt}>
             <Eye c={C.cobalt}>Fight-sim fade — scored weeks 4, 9 and 14</Eye>
             {[4, 9, 14].map((w) => { const f = fade(macro, w);
@@ -4040,7 +4050,8 @@ export default function App() {
                       open: () => { setPhotoDate(shownIso); setTab("track"); setTrackSub("photos"); } }
                   : null} />
               </div>) : null}
-            {tab === "track" ? <Track current={current} maxes={maxes} onSetMax={onSetMax} maxHist={maxHist} log={log} body={body} addBody={addBody} done={done} L={L} IM={IM} calis={calis} camp={MODE.camp} title={headerTitle}
+            {tab === "track" ? <Track current={current} maxes={maxes} onSetMax={onSetMax} maxHist={maxHist} log={log} body={body} addBody={addBody} done={done} L={L} IM={IM} calis={calis} camp={MODE.camp}
+              view={MODE.camp ? true : MODE.prep || MODE.trans ? "prep" : false} title={headerTitle}
               rangeWeeks={rangeTestWeeks} rangeGet={rangeGet} campRows={campRowsNow}
               sub={trackSub} setSub={(x) => { setTrackSub(x); setPhotoDate(null); }} st={st} morning={morning} photos={photos} setPhotos={setPhotos} fuel={fuelForDash} dateOf={dateOf}
               tape={tape} setTape={setTape} fuelPhase={fuelPhaseOf(st, current.week, dayIso)} weightOn={!!wDay(dayIso)}

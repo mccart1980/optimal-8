@@ -74,7 +74,9 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **TRAP BAR DEADLIFT** — Stand inside the hexagonal bar, grip the handles, back flat, chest up. Drive the floor away and stand tall, then lower with control. Slow lowering: take five seconds to lower. Paused: stop an inch off the floor for three seconds. Fast: lift as fast as the bar will move.
 
-**BACK SQUAT** — Bar across your upper back, feet about shoulder width. Sit down until your hips are just below your knees, then drive up hard. Safety pins set just below your lowest point, every set.
+**BACK SQUAT** — Bar across your upper back, feet about shoulder width. Sit down until your hips are just below your knees, then drive up hard. Safety pins set just below your lowest point, every set. Slow lowering: take five seconds to sit down. Paused: stop dead at the bottom for two seconds — three when the card says so — tight, never resting on the pins, then drive. Fast: up as fast as the bar will move.
+
+**ROMANIAN DEADLIFT** — Take the bar out of the rack at hip height, hands just outside your legs. Knees soft, and they stay soft: push your hips back, the bar close to your legs and your back flat, until you feel a strong stretch behind your knees, about mid-shin. Then drive your hips forward to stand tall. Start around 60% of your trap bar working max; add 2.5–5 kg a week while every rep moves at the same speed and your back stays flat.
 
 **BENCH PRESS** — Lie on the bench, feet flat, shoulder blades squeezed together. Lower the bar to your chest and press it back up. Paused: hold it still on your chest for two seconds. Pins at chest height, no collars.
 

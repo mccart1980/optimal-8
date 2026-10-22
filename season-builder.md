@@ -231,7 +231,7 @@ Prep's fourteen weeks are **P1 to P14** as Optimal 8 · Prep writes them.
 
 That's accumulate in weeks 1–6 (week 6 lighter, with tests), intensify in weeks 7–11 (top triples in week 10, week 11 easy with tests), convert in weeks 12–15, and the test week in week 16.
 
-Test day is week 16's Saturday. The next cycle starts the Monday after, its working weights reset from test week. The circuits, the dips and the carries run each week's own numbers from Prep's calendar — P4b as P4, P12b as P12 — and the bench press, like the trap bar, takes P4b's +2.5%.
+Test day is week 16's Saturday. The next cycle starts the Monday after, its working weights reset from test week. The circuits, the dips and the carries run each week's own numbers from Prep's calendar — P4b as P4, P12b as P12 — and the bench press and the pause squat, like the trap bar, take P4b's +2.5%, the pause squat never above 75%.
 
 **The fight called off.** Change the answer to no fight while a Prep is running — fitted to a camp, or carried on — and the weeks you've done stay done. Prep carries on in the cycle's own order, from the week after the one you're on to its test week, then the cycle, on repeat. A comeback's ramp counts on, and the bar-speed profiles aren't redrawn until P10. Called off in the camp, or straight after Prep's test week, the cycle starts at week 1.
 
@@ -276,7 +276,7 @@ Test day is week 16's Saturday. The next cycle starts the Monday after, its work
 
 **A comeback's first weeks:**
 
-- **Weeks 1 and 2:** everything new a round short — Monday's dips and rows three rounds, the three circuits two, the carries two runs — and the flying sprints at 90%.
+- **Weeks 1 and 2:** everything new a round short — Monday's dips and rows three rounds, the three circuits two, the carries two runs, Wednesday's pause squat and Saturday's Romanian deadlift two sets — and the flying sprints at 90%.
 - **The Nordics:** 2 × 3, 2 × 4, then 3 × 4 in week 3, never more than the week's own; then the calendar's.
 - **The drop landings** are already Prep's first-block jump.
 

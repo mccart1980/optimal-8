@@ -2,6 +2,8 @@ import { describe, it, expect } from "vitest";
 import { sessionCatalog } from "./App.jsx";
 import { jumpYellow } from "./edge.js";
 import { ergBoxes, sessionBoxes, engHR } from "./camp.js";
+import { parseKey, series, pairEntries, barSpeeds, DASH_IDS } from "./metrics.js";
+import { fadePct } from "./safety.js";
 
 /* The programs' content, read off the cards the gym runs. The rebuild
    changed how a session is shown, never what is in it. */
@@ -58,7 +60,54 @@ describe("the programs, as the gym runs them", () => {
   it("PREP's fast week runs the trap bar in clusters with the edge on, straight sets with it off", () => {
     /* the sixteen-week form: document week 8 is week 9 */
     expect(day("prep", 9, "wed").find((c) => c.n === "Trap Bar Deadlift").pres).toMatch(/^5 × \(2\+2\) · 87–90%/);
-    expect(day("prep", 9, "wed", { edge: false }).find((c) => c.n === "Trap Bar Deadlift").pres).toMatch(/^4 × 3 · 87%/);
+    expect(day("prep", 9, "wed", { edge: false }).find((c) => c.n === "Trap Bar Deadlift").pres).toMatch(/^FAST · 4 × 3 · 87%/);
+  });
+
+  it("PREP's trap bar and squat name the week's phase in front of the sets, as the bench does", () => {
+    expect(day("prep", 1, "wed").find((c) => c.n === "Trap Bar Deadlift").pres).toMatch(/^SLOW LOWERING · 3 × 5 · 70%/);
+    expect(day("prep", 4, "sat").find((c) => c.n === "Back Squat").pres).toMatch(/^NORMAL TEMPO · 5 × 5 · 75%/);
+    /* the sixteen-week form: document week 6 is week 7 */
+    expect(day("prep", 7, "sat").find((c) => c.n === "Back Squat").pres).toMatch(/^3-SECOND PAUSE · 4 × 4 · 80%/);
+    expect(day("prep", 11, "wed").find((c) => c.n === "Trap Bar Deadlift").pres).toMatch(/^FAST · 2 × 3 · 65%/);
+  });
+
+  it("PREP's legs: the pause squat after the trap bar on Wednesday, fast in the fast block; the Romanian deadlift after the push press on Saturday", () => {
+    /* the sixteen-week form: P4b is week 5, P5 week 6, P9 week 10, P11 week 12, P13 week 15, P14 week 16 */
+    const wed = names("prep", 1, "wed");
+    expect(before(wed, "Trap Bar Deadlift", "Pause Squat")).toBe(true);
+    expect(before(wed, "Pause Squat", "Bench Press")).toBe(true);
+    const pq = (w) => day("prep", w, "wed").find((c) => /^(Pause|Speed) Squat$/.test(c.n));
+    expect(pq(1).pres).toMatch(/^2-SECOND PAUSE · 3 × 3 · 65% · Rest 2:00$/);
+    expect(pq(1).lib.map((e) => e.n)).toEqual(["BACK SQUAT"]);
+    expect(pq(1).lib[0].text).toMatch(/Paused: stop dead at the bottom for two seconds/);
+    expect(pq(2).pres).toMatch(/· 68%/);
+    expect(pq(5).pres).toMatch(/· 74\.5%/);
+    expect(pq(6).pres).toMatch(/^2-SECOND PAUSE · 2 × 3 · 60%/);
+    expect(pq(8).pres).toMatch(/· 75%/);
+    expect(pq(10)).toBeUndefined();
+    expect(pq(12).n).toBe("Speed Squat");
+    expect(pq(12).pres).toMatch(/^FAST · 3 × 3 · 70%/);
+    expect(pq(15).pres).toMatch(/^FAST · 2 × 3 · 70%/);
+    expect(pq(16)).toBeUndefined();
+    const sat = names("prep", 2, "sat");
+    expect(before(sat, "Push Press", "Romanian Deadlift")).toBe(true);
+    expect(before(sat, "Romanian Deadlift", "Bear-Hug Carry")).toBe(true);
+    const rdl = (w) => day("prep", w, "sat").find((c) => c.n === "Romanian Deadlift");
+    expect(rdl(2).pres).toBe("3 × 6 · Rest 75 s");
+    expect(rdl(2).lib.map((e) => e.n)).toEqual(["ROMANIAN DEADLIFT"]);
+    expect(rdl(6).pres).toMatch(/^2 × 6/);
+    expect(rdl(10).pres).toMatch(/^2 × 6/);
+    expect(rdl(12).pres).toMatch(/^2 × 6/);
+    expect(rdl(16)).toBeUndefined();
+  });
+
+  it("the comeback's first two weeks run the pause squat and the Romanian deadlift a set short", () => {
+    const cb = CAT.filter((c) => c.set === "comeback" && c.program === "prep");
+    const at = (w, d, n) => cb.find((c) => c.week === w && c.day === d && c.n === n && c.edge !== false);
+    expect(at(1, "wed", "Pause Squat").pres).toMatch(/^2-SECOND PAUSE · 2 × 3 · 65%/);
+    expect(at(1, "sat", "Romanian Deadlift").pres).toMatch(/^2 × 6/);
+    expect(at(3, "wed", "Pause Squat").pres).toMatch(/^2-SECOND PAUSE · 3 × 3/);
+    expect(at(3, "sat", "Romanian Deadlift").pres).toMatch(/^3 × 6/);
   });
 
   it("runs Monday's dips and ring rows and the arms circuit before the base, in PREP and in CAMP", () => {
@@ -95,6 +144,31 @@ describe("the programs, as the gym runs them", () => {
 
   it("the Fighter's week 8 pause squat is at 75%", () => {
     expect(day("fighter", 8, "wed").find((c) => /Pause Squat|Speed Squat/.test(c.n)).pres).toMatch(/75%/);
+  });
+
+  it("the Fighter's Wednesday is as it was: the pause squat and the Romanian deadlift, its own numbers", () => {
+    const n = names("fighter", 2, "wed");
+    expect(before(n, "Trap Bar Deadlift", "Pause Squat")).toBe(true);
+    expect(before(n, "Pause Squat", "Romanian Deadlift")).toBe(true);
+    expect(day("fighter", 2, "wed").find((c) => c.n === "Pause Squat").pres).toMatch(/^3 × 3 · 68%/);
+    expect(day("fighter", 2, "wed").find((c) => c.n === "Romanian Deadlift").pres).toMatch(/^3 × 6/);
+    expect(names("fighter", 2, "sat")).not.toContain("Romanian Deadlift");
+  });
+
+  it("PROGRESS reads each program's own weeks: Prep's keys parse, and the classic and the camp read what they always read", () => {
+    expect(parseKey("mPw12-thu-p_e2_erg")).toEqual({ macro: "P", week: 12, day: "thu", id: "p_e2_erg" });
+    expect(parseKey("mCw3-sun-c_fs_rd1").macro).toBe("C");
+    expect(parseKey("m2w5-sun-fs_rd1").macro).toBe("2");
+    const log = { "mPw1-sun-bike20": { w: "6100" }, "mPw16-thu-bike20": { w: "6450" }, "m1w1-sun-bike20": { w: "5900" }, "mCw1-sun-c_bike20": { w: "6300" },
+      "mPw2-sun-c_fs_rd1": { w: "250", cal: "20" }, "mPw2-sun-c_fs_rd6": { w: "200", cal: "16" } };
+    expect(series(log, DASH_IDS.prep.t20, "prep", DASH_IDS.prep.t20Day).map((r) => [r.label, r.v])).toEqual([["w1", 6100], ["w16", 6450]]);
+    expect(series(log, "bike20", false, "sun").map((r) => r.v)).toEqual([5900]);
+    expect(series(log, "c_bike20", true, "sun").map((r) => r.v)).toEqual([6300]);
+    expect(pairEntries(log, DASH_IDS.prep.rd1, DASH_IDS.prep.rd6, "prep", "sun", fadePct).map((r) => [r.label, r.v])).toEqual([["w2", 80]]);
+    /* Prep's bar speed is the first work set's, at that set's load; the classic's the top set's */
+    const bs = { "mPw2-wed-tbdl": { v1: "0.62", sets: [{ ok: true, w: "130" }, { ok: true, w: "135" }] }, "m1w2-wed-tbdl": { bs: "0.7", sets: [{ ok: true, w: "120" }, { ok: true, w: "125" }] } };
+    expect(barSpeeds(bs, "prep").tbdl).toEqual([{ macro: "P", week: 2, label: "w2", load: 130, speed: 0.62 }]);
+    expect(barSpeeds(bs, false).tbdl).toEqual([{ macro: "1", week: 2, label: "m1w2", load: 125, speed: 0.7 }]);
   });
 
   it("the two easy weeks have no sprints and no rounds", () => {

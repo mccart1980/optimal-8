@@ -138,9 +138,18 @@ The calendar's weekly emphasis drives the session, not the other way round:
 - **The trap bar and the squat** move through their phases — slow lowering with
   the five-second cue, normal tempo, paused with the three-second hold, fast,
   the top triples in week 9 (then 2 × 2 at 85% of the new working max), easy,
-  contrast with the jump circuit, and test week spread over the week as the
-  tests page spreads it.
-  The phase is named on the block and the cue is on the lift.
+  contrast (the squat with the jump circuit), and test week spread over the
+  week as the tests page spreads it.
+  The phase is named on the lift's card in front of its sets, as the bench's
+  is — *SLOW LOWERING · 3 × 5 · 125 kg* — and the library entry says how.
+- **Two squats and a hinge a week.** Wednesday's pause squat follows the trap
+  bar: 3 × 3 with a two-second pause at 65–75% of the squat's working max,
+  2 × 3 at 60% in the lighter and easy weeks, none in the top-triple and test
+  weeks, and a speed squat at 70% in the fast block. Saturday's Romanian
+  deadlift follows the push press: 3 × 6, 2 × 6 in weeks 5 and 9–13, none in
+  test week. P4 again adds 2.5% to the pause squat, never above 75%; the
+  comeback's first two weeks run each at two sets, and Christmas week at
+  three-quarters, as everything else.
 - **Monday** is the upper-body day: weighted dips and ring rows, the arms circuit,
   then a 40-minute base.
 - **Tuesday and Thursday** run the session types the calendar names, and never
@@ -188,6 +197,10 @@ two fastest reps and answers:
 
 The row carries the stop threshold with it: 20% slower than the set's first rep
 on strength sets, 10% on fast and contrast sets. The rep count is a ceiling.
+Above the box, in PREP and the camp, one line: *hold the lockout until Spleeft
+beeps, then the next rep* — Spleeft tells the reps apart by that stop, so the
+bar never needs racking between reps. The pause squat has no box: its pause
+makes the bar read slow, so it runs off its percentage alone.
 
 ## READINESS, WITH NUMBERS
 
@@ -204,6 +217,12 @@ weeks 6 and 11.
 
 Every conditioning card logs its output; PROGRESS charts it against the last
 session of the same type.
+
+PROGRESS reads the program you're on: Prep's own weeks in Prep, the camp's in
+the camp, the classic's in the classic — the dashboard's fade, 20-minute test,
+burst decrement and recovery heart rate, MEASURE's sessions by type, the bar
+speeds and the recovery chart. In Prep and the camp the bar speed charted is
+the first work set's, at that set's own load.
 
 ## THE GUIDE
 
@@ -233,9 +252,10 @@ that are two or three entries at once ("Hands", "Neck").
 every season the builder makes — Prep, every camp shape, the week before a
 camp, the transition — and the Fighter, and stops the build if any of them has
 no entry. The October library dropped seven entries only the classic Fighter
-still names (bear crawls, breathe down, the Romanian deadlift, the
-chest-supported row, the clap push-up, the side plank reach-through, the
-mid-thigh pull); those Fighter rows show the Fighter's own words.
+still named; the Romanian deadlift came back when Prep took it up. The other
+six (bear crawls, breathe down, the chest-supported row, the clap push-up,
+the side plank reach-through, the mid-thigh pull) show the Fighter's own
+words.
 
 ## TODAY — one thing at a time
 

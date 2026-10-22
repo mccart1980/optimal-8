@@ -10,16 +10,15 @@ import { sessionCatalog } from "./App.jsx";
    left out.
 
    The October library dropped seven entries only Optimal 8 Fighter, the
-   classic, still names (bear crawls, breathe down, the Romanian
-   deadlift, the chest-supported row, the clap push-up, the side plank
-   reach-through, the mid-thigh pull). Those Fighter rows show the
-   Fighter's own words instead, and are the only rows allowed through,
-   with the activation's three sighs, which show home-routines.md's
-   THREE BIG SIGHS words and no library entry. */
+   classic, still named; the Romanian deadlift came back when Prep took
+   it up. The other six (bear crawls, breathe down, the chest-supported
+   row, the clap push-up, the side plank reach-through, the mid-thigh
+   pull) are the only rows allowed through, with the activation's three
+   sighs, which show home-routines.md's THREE BIG SIGHS words and no
+   library entry. */
 const FIGHTER_ONLY = [
   "fighter · Chest-Supported Row",
   "fighter · Mid-thigh pull peak force",
-  "fighter · Romanian Deadlift",
   "fighter · Side plank reach-through",
   "fighter · Upper Circuit — Bench + Throws · Clap push-up",
   "fighter · Warm-up · Back on the floor, feet on a bench",

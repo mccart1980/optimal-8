@@ -1,6 +1,6 @@
 import { iso, mondayOf, parseISO, addDays } from "./ui.jsx";
 import { campMaster, campBenchMaster, campEdge } from "./camp.js";
-import { prepRx, prepEdge, prepBench } from "./prep.js";
+import { prepRx, prepEdge, prepBench, prepPsq, PSQ_CAP } from "./prep.js";
 import { lowerStage } from "./safety.js";
 
 /* ================================================================
@@ -596,11 +596,12 @@ export function prepWeekRx(row, edgeOn) {
   const base = prepRx(row.doc);
   let rx = prepEdge(base, edgeOn !== false);
   rx = Object.assign({}, rx, { id: row.id, doc: row.doc, profile: row.profile ? 1 : 0, reset: base.reset && row.doc === 10 ? 1 : 0, preCamp: !!row.preCamp,
-    depthTrained: row.depthTrained !== false, bench: prepBench(row.doc) });
+    depthTrained: row.depthTrained !== false, bench: prepBench(row.doc), psq: prepPsq(row.doc) });
   if (row.plus) {
-    const pct = rx.pct + row.plus, bp = rx.bench, bpct = bp.pct + row.plus;
+    const pct = rx.pct + row.plus, bp = rx.bench, bpct = bp.pct + row.plus, q = rx.psq;
     rx = Object.assign({}, rx, { pct, sc: rx.sc.replace(/@ \d+(\.\d+)?%/, "@ " + pct + "%"),
       bench: Object.assign({}, bp, { pct: bpct, sc: bp.sc.replace(/@ \d+(\.\d+)?%/, "@ " + bpct + "%") }),
+      psq: q ? Object.assign({}, q, { pct: Math.min(PSQ_CAP, q.pct + row.plus) }) : q,
       em: base.em.replace(/@ 75%/, "@ " + pct + "%") + " P4 again, +" + row.plus + "%." });
   }
   if (row.p88) rx = Object.assign({}, rx, { pct: 88, sc: rx.sc.replace(/@ 87%/, "@ 88%"), js: [4, 4],
@@ -615,6 +616,7 @@ export function prepWeekRx(row, edgeOn) {
     const nor = ramp[0] * ramp[1] < rx.nor[0] * rx.nor[1] ? ramp.slice() : rx.nor;
     rx = Object.assign({}, rx, { nor, ramp: 1, comeback: row.pk });
     if (row.pk <= 2) rx = Object.assign({}, rx, { circ: Math.min(rx.circ, 2), dr: Math.min(rx.dr, 3), carry: Math.min(rx.carry, 2), spr90: 1,
+      psq: rx.psq ? Object.assign({}, rx.psq, { sets: Math.min(rx.psq.sets, 2) }) : rx.psq, rdl: Math.min(rx.rdl, 2),
       em: rx.em + " Easing back in: everything new a round short, the sprints at 90%, the Nordics " + nor[0] + " × " + nor[1] + "." });
     else rx = Object.assign({}, rx, { em: rx.em + " The Nordics " + nor[0] + " × " + nor[1] + ", the last week of the ramp." });
   }
@@ -630,6 +632,7 @@ export function prepWeekRx(row, edgeOn) {
       js: [q34(rx.js[0]), rx.js[1]], box: [q34(rx.box[0]), rx.box[1]], bsets: q34(rx.bsets), split: q34(rx.split),
       spr: rx.spr ? q34(rx.spr) : rx.spr, pp: rx.pp ? Object.assign({}, rx.pp, { sets: q34(rx.pp.sets) }) : rx.pp,
       cr: rx.cr ? q34(rx.cr) : rx.cr, circ: rx.circ ? q34(rx.circ) : rx.circ, dr: q34(rx.dr), carry: rx.carry ? q34(rx.carry) : rx.carry,
+      psq: rx.psq ? Object.assign({}, rx.psq, { sets: q34(rx.psq.sets) }) : rx.psq, rdl: rx.rdl ? q34(rx.rdl) : rx.rdl,
       bench: rx.bench && rx.bench.sets ? Object.assign({}, rx.bench, { sets: q34(rx.bench.sets), sc: rx.bench.sc.replace(/(\d+) ×/, (m, n) => q34(Number(n)) + " ×").replace(/(\d+) rounds/, (m, n) => q34(Number(n)) + " rounds") }) : rx.bench,
       sc: rx.sc.replace(/^(\d+)/, (m) => String(q34(Number(m)))),
       em: rx.em + " Christmas week: three-quarters volume, intensity kept." });

@@ -17,6 +17,7 @@ Open the app. It shows one thing at a time. Do it, press NEXT. That's the whole 
 The app works out every weight for you. Load the bar to the number it shows.
 
 - The **watch** measures how fast the bar moves. After your first work set, type the speed. The app tells you to **stay** or **take 5% off**. It only **adds 2.5%** after two sessions in a row came up fast — one fast set can be the watch, not you. Do what it says.
+- **Spleeft:** at the top of every rep, hold the lockout still until it beeps, then do the next one. That stop is how it tells one rep from the next — no need to rack the bar between reps.
 - The watch will buzz when a rep gets too slow. **Rack it.** That set is finished, even if the app said five reps.
 - A rep that grinds ends the set. Never fight one.
 - **Top-triple weeks** are marked. You work up to one heavy set of three with a rep or two left in you, safety pins set. Never a true max.

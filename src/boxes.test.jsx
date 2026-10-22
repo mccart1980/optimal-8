@@ -210,6 +210,51 @@ describe("the conditioning sessions", () => {
     type("PEAK HEART RATE (BPM)", "184");
     expect(entry(/^mPw2-thu-p_e2$/)).toMatchObject({ hr: "184" });
   });
+  it("PROGRESS reads PREP's own weeks: the sessions by type, the bar speed, the recovery heart rate and the dashboard", async () => {
+    await at("2026-01-15", prep({ ergUnit: "m" }), {
+      "mPw1-thu-p_e2_erg": { v: ["2380"], kind: "lac", d: "2026-01-08" }, "mPw1-tue-p_e1_erg": { v: ["410"], kind: "mod", d: "2026-01-06" },
+      "mPw1-sun-bike20": { w: "6100" }, "m1w1-sun-bike20": { w: "5000" },
+      "mPw1-tue-p_burst1": { w: "900" }, "mPw1-tue-p_burst10": { w: "720" },
+      "mPw1-tue-settle_drop": { w: "28" }, "mPw1-thu-settle2_drop": { w: "31" },
+      "mPw1-sun-c_fs_rd1": { w: "250", cal: "20" }, "mPw1-sun-c_fs_rd6": { w: "200", cal: "16" },
+      "mPw1-wed-tbdl": { v1: "0.66", vt: 0.65, vl: "tbdl", sets: [{ ok: true, w: "125", r: "5" }, { ok: true, w: "125", r: "5" }] } });
+    pick("40-SECOND REPEATS");
+    type("SESSION TOTAL (m)", "2417");
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByText("PROGRESS"));
+    /* the dashboard: Prep's fade, its 20-minute test (not the classic's), the burst decrement, the recovery */
+    const page = () => document.body.textContent;
+    expect(page()).toMatch(/Fade — round six against round one.{0,40}80 % held/);
+    expect(page()).toMatch(/20-minute test — distance.{0,40}6100 m/);
+    expect(page()).not.toMatch(/5000 m/);
+    expect(page()).toMatch(/Burst decrement — first against last.{0,40}20 %/);
+    expect(page()).toMatch(/Recovery heart rate — the 60-second drop.{0,40}31 bpm/);
+    fireEvent.click(screen.getByRole("button", { name: "MEASURE" }));
+    expect(screen.getByText("40-second repeats")).toBeInTheDocument();
+    expect(page()).toMatch(/40-second repeats2380w12417w2/);
+    expect(page()).toMatch(/Moderate intervals410w1/);
+    expect(page()).toMatch(/Trap Bar DeadliftAT 125 KG0\.66w1/);
+    expect(page()).toMatch(/session by session28w131w1/i);
+    fireEvent.click(screen.getByRole("button", { name: "NUMBERS" }));
+    expect(page()).not.toMatch(/Fight-sim fade — scored weeks 4, 9 and 14/i);
+  });
+});
+
+describe("the bar speed", () => {
+  it("PREP and the camp: hold the lockout until Spleeft beeps, above the box; the classic as it was", async () => {
+    await at("2026-01-07", prep());
+    pick("Trap Bar Deadlift");
+    expect(within(card()).getByTestId("lockout-line").textContent).toBe("SPLEEFT: HOLD THE LOCKOUT UNTIL IT BEEPS, THEN THE NEXT REP. NO NEED TO RACK THE BAR BETWEEN REPS.");
+    pick("Pause Squat");
+    expect(within(card()).queryByTestId("bar-speed")).toBe(null);
+    cleanup();
+    await at("2026-10-14", camp());
+    pick("Trap Bar Deadlift");
+    expect(within(card()).getByTestId("lockout-line")).toBeInTheDocument();
+    cleanup();
+    await at("2026-01-14", fighter());
+    pick("Trap Bar Deadlift");
+    expect(within(card()).queryByTestId("lockout-line")).toBe(null);
+  });
 });
 
 describe("the jump check", () => {

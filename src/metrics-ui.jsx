@@ -7,7 +7,7 @@ import {
   MORNING_FIELDS, rolling7, baseline, morningFlag, RHR_OVER, HRV_UNDER,
   recoveryDrop, recoveryBand, easyZone, peakOk, ergUnitLabel, ergTotal, ergMean, recalibrated,
   BAR_SPEED_LIFTS, barSpeeds, sameLoadSeries, PHOTO_VIEWS, PHOTO_NOTE, photoWeeks,
-  bodyNow, trend, series, pairSeries, pairEntries, CAMP_TARGET, r1,
+  bodyNow, trend, series, pairSeries, pairEntries, CAMP_TARGET, r1, scopeOf, DASH_IDS, SETTLE_IDS,
 } from "./metrics.js";
 
 /* ================================================================
@@ -225,7 +225,7 @@ export function BarSpeedTrack({ log, camp }) {
   return (
     <Card ac={C.brass}>
       <Eye c={C.brass}>Bar speed — at the same load, per lift</Eye>
-      <Note c={C.chalk} s={{ marginTop: 0 }}>A speed only means something against another speed at the same weight, so each chart holds the load with the most entries on it. Metres a second, top set.</Note>
+      <Note c={C.chalk} s={{ marginTop: 0 }}>A speed only means something against another speed at the same weight, so each chart holds the load with the most entries on it. {scopeOf(camp) === "fighter" ? "Metres a second, top set." : "Metres a second: the first work set, the mean of its two fastest reps."}</Note>
       {BAR_SPEED_LIFTS.map((l) => { const rows = all[l[0]] || []; const same = sameLoadSeries(rows);
         return (
           <div key={l[0]} style={{ marginTop: 12 }}>
@@ -390,21 +390,24 @@ function DashRow({ n, t, u, fmt, date, target, note }) {
     </div>);
 }
 
-export function Dashboard({ log, morning, st, camp, body, fuel, addBody, dateOf, openPhotos, iron }) {
+/* `camp` is the view: true for the camp, "prep" for Prep, false for the
+   classic — each reads its own weeks and its own ids */
+export function Dashboard({ log, morning, st, camp: view, body, fuel, addBody, dateOf, openPhotos, iron }) {
   const [tape, setTape] = useState({});
+  const camp = scopeOf(view) === "camp", ids = DASH_IDS[scopeOf(view)];
   const D = useMemo(() => {
-    const fadeRows = pairEntries(log, camp ? "c_fs_rd1" : "fs_rd1", camp ? "c_fs_rd6" : "fs_rd6", camp, "sun", (a, b) => { const f = fadePct(a, b); return f == null ? null : r1(f); });
-    const t20Rows = series(log, camp ? "c_bike20" : "bike20", camp, "sun");
-    const burstRows = pairSeries(log, "c_burst1", "c_burst10", camp, null, (a, b) => (a ? r1((a - b) / a * 100) : null));
-    const recRows = ["settle", "settle2", "c_settle1", "c_settle2"]
-      .reduce((acc, id) => acc.concat(series(log, id + "_drop", camp)), [])
+    const fadeRows = pairEntries(log, ids.rd1, ids.rd6, view, "sun", (a, b) => { const f = fadePct(a, b); return f == null ? null : r1(f); });
+    const t20Rows = series(log, ids.t20, view, ids.t20Day);
+    const burstRows = pairSeries(log, ids.b1, ids.b10, view, null, (a, b) => (a ? r1((a - b) / a * 100) : null));
+    const recRows = SETTLE_IDS
+      .reduce((acc, id) => acc.concat(series(log, id + "_drop", view)), [])
       .sort((a, b) => a.week - b.week);
     const mDates = (f) => Object.keys(morning || {}).filter((d) => num((morning[d] || {})[f]) != null).sort();
     const mRows = (f) => mDates(f).map((d) => ({ d, v: num(morning[d][f]) }));
     /* the reactivity count, Sunday by Sunday, oldest first */
     const reactRows = iron ? iron.weekRows.filter((r) => r.react != null).map((r) => ({ d: addDays(r.mon, 6), v: r.react })) : [];
     return { fadeRows, t20Rows, burstRows, recRows, rhrRows: mRows("rhr"), hrvRows: mRows("hrv"), reactRows };
-  }, [log, morning, camp, iron]);
+  }, [log, morning, view, iron]);
 
   const bn = bodyNow(fuel, body);
   const dat = (rows) => { const r = rows[rows.length - 1]; return r ? (r.d ? fmtDate(r.d) : dateOf(r.macro, r.week, r.day)) : null; };
