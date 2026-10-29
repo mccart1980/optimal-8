@@ -43,11 +43,14 @@ The app works out every weight for you. Load the bar to the number it shows.
 
 ## SETTING A FIGHT
 Settings → **Fight booked?**
-- **No:** the app runs Prep, your everyday program, in 16-week cycles. It asks how fit you are right now: coming back from time off is low, and the new cycle eases you back in.
+- **No:** pick what runs. **Prep**, your everyday program, in 16-week cycles: the app asks how fit you are right now — coming back from time off is low, and the new cycle eases you back in. **Strength, Power and Physique**: twelve weeks to get as strong, explosive and muscular as you can, the engine held — picked in the middle of a Prep, the Prep finishes on its test day first. Or **Optimal 8 Fighter**, the classic.
 - **Yes:** type in the date, the rounds and minutes (like 3 × 2), the rest between rounds, when you weigh in (the day before in the morning, the day before later on, or on the day), how fit you are right now (low, moderate or good), and whether you want a little extra on power, strength or durability — or nothing extra.
 - **A weight limit?** Put in the limit, any tolerance, and your natural weight — what you weigh after a normal week. The app runs your food down to it from the camp's first Monday, so Prep is never a cut: the food guide's MAKING WEIGHT says how.
 
 The app builds everything from that. The engine always comes first. Change anything and it re-plans from today, and tells you in one line what changed. In the middle of Prep, it carries on from the week you're on, even if the fight is called off. Back after time off? Settings → The Prep you're on → START AGAIN. Your first scored rounds tell the app how fit you really are, and it adjusts.
+
+## STRENGTH, POWER AND PHYSIQUE
+Twelve weeks: three of size, a lighter week, three of strength, a lighter week, three of power, then the test week. Monday and Thursday are the legs, heavy then fast; Tuesday and Saturday the upper body, heavy then fast, with the 4 × 4 on the bike after Saturday's; Wednesday and Sunday are size for chest, back, shoulders and arms, then a 30-minute run breathing through your nose. Friday is off. Two exercises on one card are a pair: a set of one, the rest, a set of the other. The ramp to the working sets is on each main lift's card. The food is yours: the app runs the day as printed.
 
 ## LIGHTER WEEKS
 The app marks them. Everything is lighter on purpose. Do not add anything. This is where the gains actually land.

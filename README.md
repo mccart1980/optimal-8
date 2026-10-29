@@ -79,9 +79,12 @@ are four tabs: **TODAY · PROGRESS · FOOD · MORE**.
 
 **MORE → SETTINGS → Fight booked?** is the season builder (season-builder.md).
 
-- **No:** Prep's 16-week cycle, on repeat (P1–P14 with P4b and P12b), and how
-  fit you are right now — from low, a new cycle's first weeks ease you back in.
-  Optimal 8 Fighter is still there as the classic.
+- **No:** what runs. Prep's 16-week cycle, on repeat (P1–P14 with P4b and
+  P12b), and how fit you are right now — from low, a new cycle's first weeks
+  ease you back in. Or Optimal 8 · Strength, Power and Physique
+  (optimal-8-strength-power-physique.md): its twelve weeks, S1–S12, on repeat —
+  picked inside a Prep, the Prep carries on to its test day first, unless you
+  START NOW. Optimal 8 Fighter is still there as the classic.
 - **Yes:** the date, the rounds and minutes, the rest between rounds (1 minute
   unless you change it), the weigh-in (the day before or on the day), how fit
   you are right now (low, moderate, good) and one emphasis (none, power,

@@ -265,16 +265,18 @@ const WORK_OF = { cw_squat: "squat", cw_tbdl: "tbdl", cw_bench: "bench", cw_pp: 
 
 /* a log key: m{macro}w{week}-{day}-{id}. The macro is the classic's
    macrocycle number, or a season's program: C the camp, P Prep, T and H
-   the transition, B the week before a camp */
-export const parseKey = (k) => { const m = String(k).match(/^m(C|P|T|H|B|\d+)w(\d+)-([a-z0-9]+)-(.+)$/); return m ? { macro: m[1], week: Number(m[2]), day: m[3], id: m[4] } : null; };
+   the transition, B the week before a camp, S Strength, Power and
+   Physique */
+export const parseKey = (k) => { const m = String(k).match(/^m(C|P|T|H|B|S|\d+)w(\d+)-([a-z0-9]+)-(.+)$/); return m ? { macro: m[1], week: Number(m[2]), day: m[3], id: m[4] } : null; };
 /* which weeks a PROGRESS view reads. `view` is the camp flag as it always
-   was — true for the camp, false for the classic — or "prep": the camp
-   reads its own weeks (C), Prep its own (P), the classic its numbered
-   macrocycles */
-export const scopeOf = (view) => (view === true || view === "camp" ? "camp" : view === "prep" ? "prep" : "fighter");
-export const inScope = (view, macro) => { const s = scopeOf(view); return s === "camp" ? macro === "C" : s === "prep" ? macro === "P" : /^\d+$/.test(String(macro)); };
-/* a week's label on a chart: w{week} in a camp or Prep, m{macro}w{week} in the classic */
-export const weekLabel = (macro, week) => (macro === "C" || macro === "P" ? "w" : "m" + macro + "w") + week;
+   was — true for the camp, false for the classic — or "prep" or "spp":
+   the camp reads its own weeks (C), Prep its own (P), Strength, Power and
+   Physique its own (S), the classic its numbered macrocycles */
+export const scopeOf = (view) => (view === true || view === "camp" ? "camp" : view === "prep" ? "prep" : view === "spp" ? "spp" : "fighter");
+export const inScope = (view, macro) => { const s = scopeOf(view); return s === "camp" ? macro === "C" : s === "prep" ? macro === "P" : s === "spp" ? macro === "S" : /^\d+$/.test(String(macro)); };
+/* a week's label on a chart: w{week} in a camp, Prep or Strength, Power
+   and Physique, m{macro}w{week} in the classic */
+export const weekLabel = (macro, week) => (macro === "C" || macro === "P" || macro === "S" ? "w" : "m" + macro + "w") + week;
 
 /* every bar speed on file, per lift, newest last: the top set's (bs), or
    — in Prep and the camp — the first work set's, the mean of its two
@@ -393,6 +395,9 @@ export const DASH_IDS = {
   camp: { rd1: "c_fs_rd1", rd6: "c_fs_rd6", t20: "c_bike20", t20Day: "sun", b1: "c_burst1", b10: "c_burst10" },
   prep: { rd1: "c_fs_rd1", rd6: "c_fs_rd6", t20: "bike20", t20Day: null, b1: "p_burst1", b10: "p_burst10" },
   fighter: { rd1: "fs_rd1", rd6: "fs_rd6", t20: "bike20", t20Day: "sun", b1: "c_burst1", b10: "c_burst10" },
+  /* Strength, Power and Physique runs no rounds, no 20-minute test and no
+     bursts: its own numbers are the 4 × 4, the broad jump and the tape */
+  spp: { rd1: null, rd6: null, t20: null, t20Day: null, b1: null, b10: null, e44: "s_44", bj: "s_bj", arm: "s_arm", sh: "s_sh" },
 };
 export const SETTLE_IDS = ["settle", "settle2", "c_settle1", "c_settle2"];
 
@@ -407,6 +412,21 @@ export function series(log, id, camp, day) {
     out.push({ macro: p.macro, week: p.week, day: p.day, label: weekLabel(p.macro, p.week), v });
   });
   return out.sort((a, b) => (String(a.macro) === String(b.macro) ? a.week - b.week : String(a.macro) < String(b.macro) ? -1 : 1));
+}
+
+/* an interval session's totals, oldest first: the one number logged at
+   the end, by the session's own kind, so a 3 × 4 is only read against
+   another 3 × 4 */
+export function ergSeries(log, id, view, kind) {
+  const out = [];
+  Object.keys(log || {}).forEach((k) => {
+    const p = parseKey(k); if (!p || p.id !== id + "_erg" || !inScope(view, p.macro)) return;
+    const e = log[k] || {}; if (kind && e.kind && e.kind !== kind) return;
+    const v = ergTotal(e.v || []); if (v == null) return;
+    const hr = num((log["m" + p.macro + "w" + p.week + "-" + p.day + "-" + id] || {}).hr);
+    out.push({ macro: p.macro, week: p.week, day: p.day, label: weekLabel(p.macro, p.week), v, hr });
+  });
+  return out.sort((a, b) => a.week - b.week);
 }
 
 /* the same, for a value the app computes rather than one you type */

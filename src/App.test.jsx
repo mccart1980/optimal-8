@@ -419,7 +419,7 @@ describe("Optimal 8", () => {
   it("holds every document on PLAN, and one live panel on GUIDE with the phase and the next feed", async () => {
     await mount();
     nav("PLAN");
-    ["PREP", "CAMP", "FIGHTER v1.5", "IRON MIND v5", "FUEL · FIGHTER", "THE MENU", "MENU B + WATER", "FUEL · SEASON"].forEach((n) =>
+    ["PREP", "CAMP", "FIGHTER v1.5", "STRENGTH & POWER", "IRON MIND v5", "FUEL · FIGHTER", "THE MENU", "MENU B + WATER", "FUEL · SEASON"].forEach((n) =>
       expect(screen.getByRole("button", { name: n })).toBeInTheDocument());
     fireEvent.click(screen.getByRole("button", { name: "THE MENU" }));
     expect((await screen.findAllByText(/THE FIVE RULES/)).length).toBeGreaterThan(0);

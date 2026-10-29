@@ -26,6 +26,12 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **LEG SWINGS** — Hold a support. Swing one leg forward and back ten times, then across your body and out ten times. Relaxed, getting bigger.
 
+**BAND DISLOCATES** — A light band held wide, arms straight. Take it up over your head and down behind your back, then back over to the front. Widen your grip if your elbows bend.
+
+**A-SKIPS** — Skip forward, driving one knee up to hip height while the other foot paws down and back under you. Tall, quick and light.
+
+**WALKING LUNGES** — A long step forward, lower until your back knee nearly touches the floor, then step through into the next one.
+
 **MEDICINE-BALL CHEST PASSES** — Ball at your chest, throw it hard against a wall with both hands, catch it, repeat.
 
 **BIKE SPRINTS (10 SECONDS)** — Ten seconds flat out on the bike, a minute easy. Wakes the engine up before the rounds.
@@ -95,6 +101,12 @@ Every exercise, session, test and move in the program, in two or three plain lin
 **WEIGHTED CHIN-UPS** — Palms facing away, extra weight on a belt or a dumbbell between your feet. From a dead hang, pull your chin over the bar, then lower slowly.
 
 **WEIGHTED DIPS** — Parallel bars, weight on a belt. Lower until your shoulders are level with your elbows, chest slightly forward, then press back up to locked arms. No deeper: that's the depth where stiff shoulders are safe. Leave two reps in you; when every set reaches the top of the week's range, add 2.5 kg next week.
+
+**WEIGHTED CHIN-UP, PALMS TOWARD YOU** — Palms facing you, hands shoulder width, weight on a belt. From a dead hang, pull until your chin clears the bar, then lower all the way to straight arms.
+
+**PULL-UPS** — Palms facing away, hands just outside shoulder width. From a dead hang, pull until your chin is over the bar, then lower all the way. Weight on a belt once ten are easy.
+
+**OVERHEAD PRESS** — Standing, bar at the front of your shoulders, feet hip width, glutes squeezed. Press straight up and push your head through, so the bar finishes over the back of your head. No leg drive — that's the push press.
 
 **NORDIC CURLS** — Kneel with your heels held under something solid. Keeping your body straight from knees to head, lower yourself forward as slowly as you can, catch yourself with your hands, push back up.
 
@@ -172,6 +184,26 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **MEDICINE-BALL SLAMS** — A 5–8 kg ball overhead; slam it into the floor as hard as you can, catch it on the bounce, go again without stopping.
 
+**ROTATIONAL SCOOP THROW** — Side-on to a solid wall, a 4–6 kg medicine ball held low at your back hip. Drive off your back foot, turn your hips through and throw the ball into the wall as hard as you can, arms long. Catch it and reset. Both sides.
+
+## SIZE — CHEST, BACK AND LEGS
+
+**INCLINE DUMBBELL PRESS** — Bench at 30°. Lower the dumbbells to the sides of your upper chest at a deep stretch, then press up and slightly in.
+
+**LOW-TO-HIGH CABLE FLY** — Both cables set low, a handle in each hand, one step forward. Arms slightly bent, sweep your hands up and together to chin height, then lower to a full stretch.
+
+**LAT PULLDOWN** — Lean back slightly and pull the bar to your upper chest, driving your elbows down. Then let it all the way up to a full stretch.
+
+**WIDE-GRIP SEATED CABLE ROW** — A wide bar on the seated row. Pull it to your upper chest with your elbows out, squeeze your upper back, then reach forward to a full stretch.
+
+**CHEST-SUPPORTED DUMBBELL ROW** — Chest on a bench set at about 30°, a dumbbell in each hand. Row your elbows back towards your hips, squeeze, then lower to a full stretch.
+
+**ONE-ARM DUMBBELL ROW** — One knee and one hand on a bench, the dumbbell hanging at full stretch. Row it to your hip, then lower slowly. Both sides.
+
+**SEATED LEG CURL** — Sit in the machine with the pad on your lower shins and your chest leaning slightly forward. Curl your heels all the way under, then lower slowly to a full stretch.
+
+**STANDING CALF RAISE** — On a calf-raise machine, or the edge of a step holding a weight, knees straight. Lower your heels as far as they go and hold the stretch for two seconds, then rise all the way up onto your toes.
+
 ## SHOULDERS, ARMS AND TRAPS
 
 **THE ARMS CIRCUIT** — Monday: incline dumbbell curls × 10–12, overhead triceps extensions × 10–12, lateral raises × 15 and rear-delt flies × 15, back to back. Twenty seconds between exercises, ninety seconds after each round. Leave two reps in you on each; when every round reaches the top of the range, go up a dumbbell next time.
@@ -179,6 +211,10 @@ Every exercise, session, test and move in the program, in two or three plain lin
 **THE SHOULDERS CIRCUIT** — Thursday: lateral raises × 15, trap bar shrugs × 10–12, hammer curls × 10–12 and rope pushdowns × 12–15, back to back. Twenty seconds between exercises, ninety seconds after each round. Leave two reps in you on each; when every round reaches the top of the range, go up next time.
 
 **LATERAL RAISE** — A dumbbell in each hand at your sides. Raise them out to shoulder height, elbows leading, and lower slowly.
+
+**CABLE LATERAL RAISE** — Cable at hand height. Stand side-on to it with the handle in your far hand, the cable running behind your back. Raise your arm out to the side to shoulder height, leading with the elbow, then lower slowly. The cable keeps working at the bottom, where a dumbbell goes slack.
+
+**REVERSE PEC-DECK** — Face the pec-deck, handles at shoulder height, arms straight out in front. Sweep your arms back until they're level with your body, squeeze, return slowly.
 
 **REAR-DELT FLY** — Bent over with a flat back, small dumbbells hanging. Raise them out to the sides, little fingers leading, squeeze, lower.
 
@@ -188,7 +224,13 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **TRAP BAR SHRUGS** — Stand inside the trap bar, arms straight. Shrug your shoulders straight up toward your ears, hold one or two seconds, lower slowly. Don't roll them.
 
+**DUMBBELL SHRUGS** — Heavy dumbbells at your sides. Lift your shoulders straight up towards your ears, hold for a second, then lower to a full stretch. Don't roll them.
+
+**EZ-BAR CURL** — An EZ bar, elbows pinned at your sides. Curl it up, then take two seconds to lower to straight arms.
+
 **OVERHEAD TRICEPS EXTENSION** — A rope on a high cable with your back to it, or one dumbbell held in both hands. Elbows pointing at the ceiling, lower behind your head to a full stretch, then straighten your arms. Keep your elbows still.
+
+**DUMBBELL SKULL CRUSHER** — Lie on a flat bench, dumbbells above your shoulders, palms facing each other. Bend only at the elbows to lower them beside your head to a deep stretch, then straighten your arms.
 
 **ROPE PUSHDOWNS** — A rope on a high cable. Elbows tucked at your sides, push the rope down until your arms are straight, spreading the ends at the bottom, then let it back up slowly.
 

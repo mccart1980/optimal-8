@@ -12,15 +12,19 @@ const BLOCK_C = { ACCUMULATE: C.moss, INTENSIFY: C.oxide, CONVERT: C.brass, "TES
   FOUNDATION: C.moss, BUILD: C.oxide, "EASY + TESTS": C.cobalt, PEAK: C.brass, SHARPEN: C.violet, "FIGHT WEEK": C.oxide,
   TRANSITION: C.moss };
 
-const PROG_C = { prep: C.moss, camp: C.brass, transition: C.cobalt, pre: C.violet };
-const PROG_N = { prep: "PREP", camp: "CAMP", transition: "TRANSITION", pre: "BEFORE THE CAMP" };
-const rowBlock = (r) => (r.program === "prep" ? (r.doc <= 5 ? "ACCUMULATE" : r.doc <= 10 ? "INTENSIFY" : r.doc <= 13 ? "CONVERT" : "TEST WEEK")
+const PROG_C = { prep: C.moss, camp: C.brass, transition: C.cobalt, pre: C.violet, spp: C.oxide };
+const PROG_N = { prep: "PREP", camp: "CAMP", transition: "TRANSITION", pre: "BEFORE THE CAMP", spp: "STRENGTH, POWER, PHYSIQUE" };
+/* Strength, Power and Physique's twelve weeks, by block */
+const SPP_BLOCK = (d) => (d <= 3 ? "SIZE" : d === 4 || d === 8 ? "LIGHTER" : d <= 7 ? "STRENGTH" : d <= 11 ? "POWER" : "TEST WEEK");
+const rowBlock = (r) => (r.program === "spp" ? SPP_BLOCK(r.doc) : r.program === "prep" ? (r.doc <= 5 ? "ACCUMULATE" : r.doc <= 10 ? "INTENSIFY" : r.doc <= 13 ? "CONVERT" : "TEST WEEK")
   : r.program === "camp" ? ({ F1: "FOUNDATION", F: "FOUNDATION", B1: "BUILD", B2: "BUILD", B3: "BUILD", E: "EASY + TESTS", P1: "PEAK", P2: "PEAK", P3: "PEAK", E1: "ENGINE", E2: "ENGINE", S: "SHARPEN", FW: "FIGHT WEEK" })[r.id]
   : r.program === "pre" ? "BEFORE WEEK 1" : r.hold ? "THE HEAD CHECK" : "TRANSITION");
 
 export function SeasonView({ season, st, current, classic, dayIso, openWeek }) {
   const s = st.season || {};
   const rows = season.rows.filter((r) => r.mon >= addDays(dayIso, -7 * 20)).slice(0, 60);
+  /* the first Monday of Strength, Power and Physique, when a Prep finishes first */
+  const sppFrom = ((season.rows || []).find((r) => r.program === "spp" && r.sun >= dayIso) || {}).mon || null;
   let lastHead = null;
   return (
     <div>
@@ -35,6 +39,7 @@ export function SeasonView({ season, st, current, classic, dayIso, openWeek }) {
         <div style={Object.assign({}, bdy, { fontSize: 18, color: C.chalk, marginTop: 10, lineHeight: 1.5 })}>
           {classic ? "The classic program, on its own clock. Settings → Fight booked? builds a season."
             : s.booked ? s.rounds + " × " + s.mins + " · " + s.rest + " s rest · weigh-in " + (s.weighIn === "day" ? "on the day" : s.weighIn === "am" ? "the day before, morning" : "the day before, afternoon or evening") + (Number(s.limit) > 0 ? " · limit " + s.limit + " kg" : "") + " · " + s.fitness + " fitness · emphasis " + s.emphasis
+            : s.spp && !s.classic ? "Strength, Power and Physique's 12-week cycle, on repeat" + (sppFrom && sppFrom > dayIso ? ", from " + fmtDate(sppFrom) + ", after the Prep you're on" : "") + ". Settings → Fight booked? builds a camp."
             : "Prep's 16-week cycle, on repeat. Settings → Fight booked? builds a camp."}
         </div>
         {st.planNote ? <Note c={C.brass}>{st.planNote}</Note> : null}
@@ -42,7 +47,7 @@ export function SeasonView({ season, st, current, classic, dayIso, openWeek }) {
 
       {rows.map((r) => {
         const isNow = r.mac === current.macro && r.kw === current.week;
-        const head = PROG_N[r.program] + (r.program === "camp" ? " · " + fmtDate(r.camp.fight) : r.program === "prep" && r.cycle ? " · CYCLE " + r.cycle : "");
+        const head = PROG_N[r.program] + (r.program === "camp" ? " · " + fmtDate(r.camp.fight) : (r.program === "prep" || r.program === "spp") && r.cycle ? " · CYCLE " + r.cycle : "");
         const showHead = head + r.plan !== lastHead ? (lastHead = head + r.plan) : null;
         const c = PROG_C[r.program] || C.ash;
         return (
@@ -51,12 +56,13 @@ export function SeasonView({ season, st, current, classic, dayIso, openWeek }) {
             <Card ac={isNow ? c : C.line} s={{ padding: "12px 13px", opacity: isNow ? 1 : r.sun < dayIso ? .7 : .88 }}>
               <button onClick={() => openWeek && openWeek(r)} style={{ display: "block", width: "100%", textAlign: "left", background: "transparent", border: "none", padding: 0, cursor: "pointer" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10 }}>
-                  <span style={Object.assign({}, dsp, { fontSize: 20, fontWeight: 800, letterSpacing: 1.1, color: C.chalk })}>{r.hold ? "HOLD" : r.program === "transition" ? "T" + r.idx : r.id} · {rowBlock(r)}</span>
+                  <span style={Object.assign({}, dsp, { fontSize: 20, fontWeight: 800, letterSpacing: 1.1, color: C.chalk })}>{r.hold ? "HOLD" : r.program === "transition" ? "T" + r.idx : r.program === "spp" ? "WEEK " + r.doc : r.id} · {rowBlock(r)}</span>
                   <span style={Object.assign({}, mno, { fontSize: 14, color: c, whiteSpace: "nowrap" })}>{isNow ? "THIS WEEK" : ""}</span>
                 </div>
                 <div style={Object.assign({}, mno, { fontSize: 15, color: C.ash, marginTop: 4 })}>{rowDates(r)}</div>
                 {r.preCamp ? <div style={Object.assign({}, bdy, { fontSize: 16, color: C.violet, marginTop: 6 })}>The pre-camp check — bloods and blood pressure</div> : null}
                 {r.program === "prep" && r.doc === 14 ? <div style={Object.assign({}, bdy, { fontSize: 16, color: C.cobalt, marginTop: 6 })}>Test day {fmtDate(addDays(r.mon, 5))}</div> : null}
+                {r.program === "spp" && r.doc === 12 ? <div style={Object.assign({}, bdy, { fontSize: 16, color: C.cobalt, marginTop: 6 })}>Top triples Monday, Tuesday, Thursday and Saturday; tape and photos Sunday</div> : null}
                 {r.program === "camp" && r.id === "FW" ? <div style={Object.assign({}, bdy, { fontSize: 16, color: C.oxide, marginTop: 6 })}>FIGHT {fmtDate(r.camp.fight)}</div> : null}
               </button>
             </Card>

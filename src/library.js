@@ -121,6 +121,8 @@ const ROW_NAMES = {
   "drive hold punch position hold": ["DRIVE HOLDS", "PUNCH-POSITION HOLD"],
   /* strength */
   "rear foot elevated split squat": "SPLIT SQUAT, REAR FOOT ELEVATED",
+  "bulgarian split squat": "SPLIT SQUAT, REAR FOOT ELEVATED",
+  "pull up": "PULL-UPS",
   "weighted chin up": "WEIGHTED CHIN-UPS",
   "nordic curl": "NORDIC CURLS",
   "jump circuit": "SQUAT CONTRAST CIRCUIT",
@@ -172,11 +174,14 @@ const ROW_NAMES = {
   "med ball slam": "MEDICINE-BALL SLAMS",
   /* shoulders, arms and traps */
   "rear delt fly": "REAR-DELT FLY",
+  "dumbbell lateral raise": "LATERAL RAISE",
+  "overhead cable triceps extension": "OVERHEAD TRICEPS EXTENSION",
   /* conditioning */
   "base easy nose only": "EASY BASE (RIDE OR RUN)",
   "base": "EASY BASE (RIDE OR RUN)",
   "easy, nose only": "EASY BASE (RIDE OR RUN)",
   "easy flush": "EASY BASE (RIDE OR RUN)",
+  "nasal run": "EASY BASE (RIDE OR RUN)",
   "easy walk or ride": "EASY HOUR / THURSDAY EASY THIRTY",
   "3 × 20 m @ 90%": "FLYING SPRINTS",
   "3 × 20 m flying sprints @ 90%": "FLYING SPRINTS",
@@ -211,6 +216,8 @@ const ROW_NAMES = {
   "squat at five load": "LOAD-VELOCITY PROFILE",
   "bench and push press at four load": "LOAD-VELOCITY PROFILE",
   "bench throw at four load": "LOAD-VELOCITY PROFILE",
+  "bench at five load": "LOAD-VELOCITY PROFILE",
+  "push press at five load": "LOAD-VELOCITY PROFILE",
   "bolt score": "BOLT",
   "four range test": "THE FOUR RANGE TESTS",
   "range test": "THE FOUR RANGE TESTS",

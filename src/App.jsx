@@ -4,6 +4,7 @@ import fighterDoc from "../optimal8fighter.md?raw";
 import ironMindDoc from "../iron-mind-v5.md?raw";
 import campDoc from "../optimal-8-camp.md?raw";
 import prepDocMd from "../optimal-8-prep.md?raw";
+import sppDocMd from "../optimal-8-strength-power-physique.md?raw";
 import guideDoc from "../guide.md?raw";
 import guideFuelDoc from "../guide-fuel.md?raw";
 import {
@@ -52,6 +53,9 @@ import {
   FLEX_TESTS, MOVE_INTRO, moveTonight, CARB_TOPUP,
   TRANSITION_INTRO, TRANSITION_RULES, prepSess, transitionSess, PPROTO, prepBench, topItem, psqOf, psqLine, rdlOf,
 } from "./prep.js";
+import {
+  SPP_PH, SPPENG, SPPENG_MENU, SPPROTO, SPP_READY_LINE, sppSess, sppRx, sppTests, sppVelPhase, sppPhotoDay, sppMainLine, sppPsq, sppPp, sppSprints,
+} from "./spp.js";
 import {
   buildSeason, rowOn, rowForDay, rowByKey, rowRx, rowDates, monOf as mondayIso, planStartFor, describeSeason, fitnessFromFade,
   FIGHT_DEFAULTS, FITNESS, EMPHASES, campLayout, weeksBetween,
@@ -163,6 +167,8 @@ Object.assign(PH, {
   trans: { n: "TRANSITION", long: "THE TWO EASY WEEKS", ac: C.moss, vl: "nothing above 70%",
     note: "Two easy weeks after the fight. Base rides, the movement session, calisthenics at half sets, nothing above 70%, no sprints, no rounds." },
 });
+/* Strength, Power and Physique's blocks */
+Object.assign(PH, SPP_PH);
 const prepPhaseOf = (doc) => (doc <= 5 ? "accumulate" : doc <= 10 ? "intensify" : doc <= 13 ? "convert" : "prepTest");
 const phaseOf = (w) => (w <= 5 ? "b1" : w <= 10 ? "b2" : w <= 14 ? "b3" : w <= 16 ? "taper" : w === 17 ? "hell" : "reload");
 const bwk = (w) => (w <= 5 ? w : w <= 10 ? w - 5 : w <= 14 ? w - 10 : null);
@@ -227,7 +233,7 @@ Object.keys(R).forEach((w) => { R[w].eng2 = ENG2[w] === undefined ? null : ENG2[
    THE EDGE rides on PREP and CAMP: on unless the switch in settings is
    off, and off for the rest of any week the check records a second
    yellow morning in.                                                   */
-const MODE = { program: "fighter", camp: false, lastTen: false, prep: false, trans: false, pre: false, mac: null };
+const MODE = { program: "fighter", camp: false, lastTen: false, prep: false, trans: false, pre: false, spp: false, mac: null };
 const EDGE = { manual: true, ready: {} };
 /* What last week's log says about this week: Sunday's joint scores for
    the tendon gate, Tuesday's jump checks for the guardrail, and the
@@ -240,14 +246,14 @@ const SEASON = { s: null };
 const seasonRow = (mac, kw) => (SEASON.s ? rowByKey(SEASON.s, mac, kw) : null);
 const prevRow = (row) => (row && SEASON.s && row.seq > 0 ? SEASON.s.rows[row.seq - 1] : null);
 /* which program a row runs */
-const MAC_PROGRAM = { P: "prep", C: "camp", T: "transition", H: "transition", B: "camp" };
+const MAC_PROGRAM = { P: "prep", C: "camp", T: "transition", H: "transition", B: "camp", S: "spp" };
 /* Point MODE at a row's program before anything reads a prescription.
    The weeks the head check holds (H) are the transition's. The Fighter
    keeps its macrocycle number, for the Sunday check it reads. */
 function setModeFor(mac) {
   if (MAC_PROGRAM[mac]) {
-    Object.assign(MODE, { program: MAC_PROGRAM[mac], prep: mac === "P", camp: mac === "C" || mac === "B", trans: mac === "T" || mac === "H", pre: mac === "B", mac, fmac: null, lastTen: false });
-  } else Object.assign(MODE, { program: "fighter", prep: false, camp: false, trans: false, pre: false, mac: null, fmac: typeof mac === "number" ? mac : null });
+    Object.assign(MODE, { program: MAC_PROGRAM[mac], prep: mac === "P", camp: mac === "C" || mac === "B", trans: mac === "T" || mac === "H", pre: mac === "B", spp: mac === "S", mac, fmac: null, lastTen: false });
+  } else Object.assign(MODE, { program: "fighter", prep: false, camp: false, trans: false, pre: false, spp: false, mac: null, fmac: typeof mac === "number" ? mac : null });
 }
 const LASTTEN_INTRO = "Week table numbers stop; every lift goes to 2 sets at 70%, fast; no sprints, no depth jumps, no Nordics inside the last seven days; the jump circuit becomes box jumps only. The two power doses stay because they keep the nervous system sharp without costing anything. The last heavy thing you do is nine days out. The fuel plan's \"making weight\" section runs the food.";
 
@@ -266,9 +272,10 @@ const baseRxFor = (w) => R[w] || R[1];
    the week; the lift phase names what the bar does inside it. */
 const seasonRxFor = (mac, w, edge) => {
   const row = seasonRow(mac, w);
-  if (!row) return mac === "P" ? Object.assign({}, prepRx(1), { w, lift: "slow", ph: "accumulate", doc: 1, prep: 1 }) : mac === "T" || mac === "H" ? transRx(w) : { w, ph: "c1", pre: 1 };
+  if (!row) return mac === "P" ? Object.assign({}, prepRx(1), { w, lift: "slow", ph: "accumulate", doc: 1, prep: 1 }) : mac === "S" ? Object.assign({}, sppRx(1), { w, kw: w, doc: 1, spp: 1 }) : mac === "T" || mac === "H" ? transRx(w) : { w, ph: "c1", pre: 1 };
   const rx = rowRx(row, edge);
   if (row.program === "prep") return gated(Object.assign({}, rx, { w, kw: w, lift: rx.ph, ph: prepPhaseOf(rx.doc), bw: null, prep: 1 }), "P", w);
+  if (row.program === "spp") return gated(Object.assign({}, rx, { w, kw: w, bw: null, spp: 1 }), "S", w);
   if (row.program === "camp" || row.program === "pre") return gated(Object.assign({}, rx, { kw: w }), "C", w);
   return Object.assign({}, rx, { kw: w });
 };
@@ -344,7 +351,11 @@ function steps(kind, o) {
   o = o || {};
   if (kind === "sim") { const r = o.rounds || 6, rest = o.rest == null ? 60 : o.rest;
     for (let i = 1; i <= r; i++) { W("RD " + i + " · MIN 1 — SKIERG", 60); W("RD " + i + " · MIN 2 — ASSAULT BIKE", 60); W("RD " + i + " · MIN 3 — " + (i % 2 ? "LANDMINE PUNCHES" : "MED-BALL SLAMS") + (o.max3 ? " · MAXIMAL" : ""), 60); if (i < r && rest > 0) Rs("REST — ROUND-RECOVERY BREATHING · 2 SIGHS, THEN IN 3 OUT 6", rest); } }
-  else if (kind === "vo2") { const r = (o.n || 4) - (o.short ? 1 : 0); for (let i = 1; i <= r; i++) { W("INTERVAL " + i + " — 90–95% HRMAX", 240); if (i < r) Rs("EASY", 180); } }
+  else if (kind === "vo2") { const r = (o.n || 4) - (o.short ? 1 : 0);
+    /* Strength, Power and Physique's 4 × 4 runs its own easy minutes either side */
+    if (o.wu) Rs("EASY — " + o.wu + " MINUTES", o.wu * 60);
+    for (let i = 1; i <= r; i++) { W("INTERVAL " + i + " — 90–95% HRMAX", 240); if (i < r) Rs("EASY", 180); }
+    if (o.cd) Rs("EASY — " + o.cd + " MINUTES TO FINISH", o.cd * 60); }
   else if (kind === "lac") { const blocks = o.blocks || 2, base = o.reps || 3;
     for (let b = 1; b <= blocks; b++) { const reps = o.short && b === blocks ? base - 1 : base;
       for (let i = 1; i <= reps; i++) { W("BLOCK " + b + " · REP " + i + " — MAX", 40); if (i < reps) Rs("REST", 80); }
@@ -410,7 +421,9 @@ function steps(kind, o) {
       here.forEach((it, j) => { W("RD " + i + " · " + it.l, it.s || 40); if (j < here.length - 1) Rs("NEXT · " + here[j + 1].l, btw); });
       if (i < r) Rs("ROUND " + i + " DONE — REST", o.rest || 90, "Next: " + its.filter((it) => !it.upto || i + 1 <= it.upto).map((it) => it.l.toLowerCase()).join(", ") + ".");
     } }
-  else if (kind === "rest") Rs("REST", o.secs || 90);
+  /* a rest with the power block's jumps or throws in it: 90 seconds, the
+     three, then two minutes */
+  else if (kind === "rest") { if (o.then) { Rs("REST — THEN " + String(o.then).split(" — ")[0], o.a || 90); W(o.then, o.w || 15); Rs("REST", o.b || 120); } else Rs("REST", o.secs || 90); }
   return S;
 }
 
@@ -490,7 +503,7 @@ const PROTO = {
       ["RANGE only", "no skill block"],
       ["If you skip it", "nothing shows this week. By week 6 the hips tighten back to where they were, the internal-rotation lift stops moving, and the tests say so in numbers."]] },
 };
-Object.assign(PROTO, CPROTO, PPROTO);
+Object.assign(PROTO, CPROTO, PPROTO, SPPROTO);
 
 /* v1.5 — thirty to forty easy nasal minutes on a weekend afternoon: the
    aerobic base that left with the Friday alarm, put back where it costs no
@@ -794,6 +807,7 @@ const S = {
    after the bell, the hand-back) return null and get a card instead. */
 const sessFor = (day, rx) => (MODE.trans ? transitionSess(day, rx)
   : MODE.prep ? prepSess(day)
+  : MODE.spp ? sppSess(day)
   : MODE.camp ? campSess(day, rx || rxFor(1)) : S[day]);
 
 /* Is this day a sleep day? Friday, in both programs. */
@@ -932,27 +946,39 @@ function gymCards(blocks, rx, o) {
       out.push(Object.assign({}, base, { key: b.L, kind: "chk", n: name, pres: blockPres || v(b.rxLine, rx) || "", lib: libFor(name) }));
       return;
     }
-    /* a card per exercise; a block of one is named as the block is */
-    its.forEach((it, j) => {
-      const itn = v(it.n, rx), single = its.length === 1;
+    /* a card per exercise; a block of one is named as the block is. An
+       exercise with its own rest — one half of a pair — says its own. */
+    const exCard = (it, j, single) => {
+      const itn = v(it.n, rx);
       const nm = single ? name : cleanName(itn);
       const p = splitPres(v(it.s, rx));
       const kg = it.mk && it.pct != null ? calc(it.mk, v(it.pct, rx)) : null;
       const bwp = v(it.bwp, rx);
+      const rest1 = it.rest != null ? String(v(it.rest, rx) || "") : rest;
       let pres;
       /* a calisthenics line's own row reads its level; the block's other exercises read their own */
       if (b.cal && (single || LINE_OF[it.id] === b.cal || it.id === b.cal)) pres = [row.work, row.load, row.rest].filter(Boolean).join(" · ");
-      else pres = [p[0] || v(it.s, rx), kg ? kg.join("–") + " kg" : p[1], bwp && o.bw ? Math.round(o.bw * bwp[0] / 100) + "–" + Math.round(o.bw * bwp[1] / 100) + " kg " + (it.bwl || "") : "", rest].filter(Boolean).join(" · ");
+      else pres = [p[0] || v(it.s, rx), kg ? kg.join("–") + " kg" : p[1], bwp && o.bw ? Math.round(o.bw * bwp[0] / 100) + "–" + Math.round(o.bw * bwp[1] / 100) + " kg " + (it.bwl || "") : "", rest1].filter(Boolean).join(" · ");
       /* the three sighs are home-routines.md's THREE BIG SIGHS, not a library entry */
       const sighs = /physiological sighs/i.test(nm);
       /* a block that runs another exercise in its rests carries that one's entry too */
-      const also = b.alsoLib ? v(b.alsoLib, rx) : null;
+      const also = it.also !== undefined ? v(it.also, rx) : b.alsoLib ? v(b.alsoLib, rx) : null;
       const lib0 = sighs ? null : it.k === "top" ? topLib(nm, itn) : firstLib(nm, itn);
-      out.push(Object.assign({}, base, { key: single ? b.L : b.L + ":" + j, kind: it.k === "wr" ? "lift" : it.k === "out" ? "out" : it.k === "top" ? "top" : "chk",
+      return Object.assign({}, base, it.rest != null ? { rest: rest1 } : {}, it.rt != null ? { rt: v(it.rt, rx) } : {}, it.restT ? { restT: it.restT } : {},
+        { key: single ? b.L : b.L + ":" + j, kind: it.k === "wr" ? "lift" : it.k === "out" ? "out" : it.k === "top" ? "top" : "chk",
         n: nm, pres, item: it, kg, lib: also && lib0 && it.k === "wr" ? lib0.concat(libFor(also) || []) : lib0, desc: sighs ? SIGHS.words : null, outs: it.k === "out" ? [it] : [],
         /* the first work set is the first after a top triple */
-        first: j === Math.max(0, its.findIndex((x) => x.k !== "top")), lastOfBlock: j === its.length - 1 }));
-    });
+        first: j === Math.max(0, its.findIndex((x) => x.k !== "top")), lastOfBlock: j === its.length - 1 });
+    };
+    /* a pair: two exercises on one card, a set of one, its rest, a set of
+       the other — every set logged on its own exercise */
+    if (b.pair && its.length === 2) {
+      const subs = its.map((it, j) => withBenchThrow(exCard(it, j, false), rx));
+      out.push(Object.assign({}, base, { key: b.L, kind: "pair", n: name, pres: String(v(b.rxLine, rx) || ""), subs,
+        lib: [].concat(...subs.map((c) => c.lib || [])).filter((e, i, a) => a.indexOf(e) === i), parts: subs.map((c) => ({ n: c.n, lib: c.lib })) }));
+      return;
+    }
+    its.forEach((it, j) => out.push(exCard(it, j, its.length === 1)));
   });
   return out.map((c) => withBenchThrow(c, rx));
 }
@@ -989,6 +1015,11 @@ export const CATALOG_SEASONS = (() => {
   out.push({ set: "called-off", plans: [P("2026-10-26", "2026-10-25", { fight: "2027-03-13", fitness: "low", emphasis: "power" }), P("2026-12-07", "2026-12-03", { booked: false, fight: null, fitness: "low", emphasis: "power" })], today: "2026-12-03" });
   /* no fight, from low fitness: the cycle's first weeks ease you in */
   out.push({ set: "cycle-low", plans: [P("2026-10-26", "2026-10-25", { booked: false, fitness: "low" })], today: "2026-10-25" });
+  /* Strength, Power and Physique: its twelve weeks from the start, and
+     picked inside a Prep — the Prep carried on to its test day, then the
+     twelve weeks */
+  out.push({ set: "spp", plans: [P("2027-02-15", "2027-02-14", { booked: false, spp: true })], today: "2027-02-14" });
+  out.push({ set: "prep-then-spp", plans: [P("2026-10-26", "2026-10-25", { booked: false }), P("2026-11-02", "2026-10-29", { booked: false, spp: true })], today: "2026-10-29" });
   return out;
 })();
 
@@ -1021,7 +1052,7 @@ export function sessionCatalog(only, seasons) {
     (seasons || CATALOG_SEASONS.filter((x) => !only || only.indexOf(x.set) >= 0)).forEach((cs) => [true, false].forEach((edge) => {
       EDGE.manual = edge;
       SEASON.s = buildSeason({ plans: cs.plans, today: cs.today });
-      const rows = SEASON.s.rows.filter((r) => r.program !== "prep" || (r.cycle || 1) === 1);
+      const rows = SEASON.s.rows.filter((r) => (r.program !== "prep" && r.program !== "spp") || (r.cycle || 1) === 1);
       rows.forEach((r) => {
         setModeFor(r.mac);
         const week = r.program === "prep" ? rows.filter((x) => x.program === "prep" && x.seq <= r.seq && x.plan === r.plan).length : r.idx || 1;
@@ -1048,7 +1079,7 @@ export function seasonWeeks(seasons) {
   const out = [];
   (seasons || CATALOG_SEASONS).forEach((cs) => [true, false].forEach((edge) => {
     const s = buildSeason({ plans: cs.plans, today: cs.today });
-    s.rows.filter((r) => r.program !== "prep" || (r.cycle || 1) === 1).forEach((r) => out.push({ set: cs.set, row: r, rx: rowRx(r, edge) }));
+    s.rows.filter((r) => (r.program !== "prep" && r.program !== "spp") || (r.cycle || 1) === 1).forEach((r) => out.push({ set: cs.set, row: r, rx: rowRx(r, edge) }));
   }));
   return out;
 }
@@ -1064,8 +1095,8 @@ const LIFT_NAME = {}; MAXES.concat(CAMP_WORK).forEach((x) => { LIFT_NAME[x[0]] =
 const liftName = (id) => LIFT_NAME[id] || id;
 const isWork = (id) => String(id || "").indexOf("cw_") === 0;
 /* which engine map and menu the pages read from */
-const engMap = () => (MODE.prep ? PENG : MODE.camp ? CENG : ENG);
-const engMenu = () => (MODE.prep ? PENG_MENU : MODE.camp ? CENG_MENU : ENG_MENU);
+const engMap = () => (MODE.prep ? PENG : MODE.spp ? SPPENG : MODE.camp ? CENG : ENG);
+const engMenu = () => (MODE.prep ? PENG_MENU : MODE.spp ? SPPENG_MENU : MODE.camp ? CENG_MENU : ENG_MENU);
 const TESTS = [
   { id: "sprint", n: "Flying sprint 20m", u: "s", dir: "down", d: "3 attempts, best time", tgt: "−1–3%" },
   { id: "jump", n: "Depth jump rebound", u: "cm", dir: "up", d: "3 attempts, best height — phone slow-motion or jump mat", tgt: "+3–5%" },
@@ -1215,8 +1246,10 @@ function Plates({ kg, bar, onClose }) {
    ================================================================ */
 const BW_ITEMS = ["ringrow", "ringdip", "muscleup", "pistol", "lsit", "lever", "nordic", "c_nordic",
   "crawl", "c_crawl", "spanish", "c_spanish", "copen", "c_copen", "c_copenplank",
-  "hands2", "c_hands_mon", "c_hands_thu", "c_hands_sun"];
-const ADD_ITEMS = ["chin", "c_chinup", "achilles", "achilles_c"];
+  "hands2", "c_hands_mon", "c_hands_thu", "c_hands_sun", "s_pushup"];
+/* Strength, Power and Physique's weighted chin-ups, dips and pull-ups log
+   the weight on the belt */
+const ADD_ITEMS = ["chin", "c_chinup", "achilles", "achilles_c", "s_chin", "s_dip", "s_pullup"];
 /* the ones prescribed as a hold, so the number is seconds and not reps */
 const SECS_ITEMS = ["lsit", "lever", "spanish", "c_spanish", "copen", "c_copen", "c_copenplank",
   "hands2", "c_hands_mon", "c_hands_thu", "c_hands_sun", "achilles", "achilles_c"];
@@ -1430,6 +1463,8 @@ function fuelPhaseOf(st, week, isoDay) {
   const row = SEASON.s && !SEASON.classic ? rowOn(SEASON.s, isoDay) : null;
   if (row) {
     if (row.program === "transition") return "trans";
+    /* Strength, Power and Physique: the food is yours — the day as printed */
+    if (row.program === "spp") return null;
     if (row.program === "camp") return row.id === "E" ? "easy" : row.id === "S" ? "sharpen" : row.id === "FW" ? "fight" : "camp";
     if (row.program === "pre") return "camp";
     return row.doc <= 5 ? "build" : row.doc <= 10 ? "heavy" : row.doc <= 13 ? "fast" : "test";
@@ -1498,7 +1533,24 @@ function lastErgTotal(log, macro, kind, day, self) {
   });
   return best ? best.t : null;
 }
-function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, startTimer, stopTimer, autoRest, calis, st, openTool, onSetMax, weekDates, onPainStop, wt, zone }) {
+/* A PAIR: two exercises on one card — each its own name, entry, line and
+   sets, a set of one, its rest, then a set of the other. A pain stop
+   stops the one exercise. */
+function PairCard(props) {
+  const { card } = props;
+  return (
+    <div data-gym-card={card.key} data-pair="1">
+      <CardHead name={card.n} pres={card.pres} />
+      {card.subs.map((sc, i) => (
+        <div key={sc.key} data-pair-part={i} style={{ marginTop: 18, paddingTop: 14, borderTop: "1px solid " + C.line }}>
+          <GymCardOne {...props} card={sc} zone={null} onPainStop={null} />
+        </div>))}
+    </div>);
+}
+function GymCard(props) {
+  return props.card && props.card.kind === "pair" ? <PairCard {...props} /> : <GymCardOne {...props} />;
+}
+function GymCardOne({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, startTimer, stopTimer, autoRest, calis, st, openTool, onSetMax, weekDates, onPainStop, wt, zone }) {
   const b = card.b, it = card.item;
   const dkey = "m" + macro + "w" + week + "-" + day;
   const key = (id) => dkey + "-" + id;
@@ -1512,7 +1564,8 @@ function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, st
   const engDay = (weekDates && weekDates[DAYS.indexOf(day)]) || null;
   const patchOut = (id, val) => setE(id, Object.assign({}, log[key(id)], { w: val }, engKind ? { kind: engKind, d: engDay } : {}));
   const restSecs = Number(card.rt) || 60;
-  const startRest = () => startTimer({ kind: "rest", opt: { secs: restSecs }, title: "REST" });
+  /* the power block's rest carries its three jumps or throws */
+  const startRest = () => startTimer(card.restT ? v(card.restT, rx) : { kind: "rest", opt: { secs: restSecs }, title: "REST" });
   const needsCal = b.calib && card.first !== false && ((rx.cal && rx[b.calib === "tbdl" ? "tb" : "pp"] && rx[b.calib === "tbdl" ? "tb" : "pp"].cal) || !num(maxes[b.calib]));
   const [calIn, setCalIn] = useState("");
   const ticks = (log[key("wu_" + card.key)] || {}).t || {};
@@ -1616,7 +1669,7 @@ function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, st
        true max. In Prep's test week it is the camp's working weight too. */
     const mk = it.mk, wm = num(maxes[mk]), cur = log[key(it.id)] || {};
     const triple = num(cur.w), est = triple ? topMax(triple) : null;
-    const also = MODE.prep && rx.testWeek ? ["cw_" + mk] : [];
+    const also = (MODE.prep || MODE.spp) && rx.testWeek ? ["cw_" + mk] : [];
     const saved = est != null && num(maxes[mk]) === est;
     body = (
       <div data-testid="top-triple">
@@ -1637,7 +1690,9 @@ function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, st
     const auto = it.mk && it.pct != null ? calc(it.mk, v(it.pct, rx)) : null;
     const repNum = typeof so.reps === "number" ? String(so.reps) : (String(so.reps || "").match(/^\d+(\+\d+)?/) || [""])[0];
     const velLift = b.vel && (it.mk === b.vel || it.mk === "cw_" + b.vel) && it.id !== "throw" && it.id !== "c_benchthrow" ? b.vel : null;
-    const velT = velLift ? targetFor(st && st.profiles, velLift, rx.camp ? campPhaseOfWeek(rx.w) : phaseOfWeek(rx.doc || rx.w)) : null;
+    /* Strength, Power and Physique reads its target off the line at the set's own percentage */
+    const velT = velLift ? (rx.spp ? targetFor(st && st.profiles, velLift, sppVelPhase(v(it.pct, rx)), v(it.pct, rx))
+      : targetFor(st && st.profiles, velLift, rx.camp ? campPhaseOfWeek(rx.w) : phaseOfWeek(rx.doc || rx.w))) : null;
     /* the same lift at its previous session: fast then too, and today's
        fast reading adds 2.5% */
     const prev = velT ? prevReading(log, velLift, engDay || "9999-12-31", key(id)) : null;
@@ -1651,7 +1706,7 @@ function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, st
       if (r.ok) { put(i, { ok: false }); return; }
       const d = { ok: true, r: r.r != null && r.r !== "" ? r.r : repNum };
       if (md !== "bw") d.w = r.w != null && r.w !== "" ? r.w : defW(i);
-      put(i, d); buzz(30); if (autoRest !== false) startRest(); };
+      put(i, d); buzz(30); if (autoRest !== false && card.rt !== 0) startRest(); };
     const label = (i) => { const r = rows[i] || {}; const reps = r.r != null && r.r !== "" ? r.r : repNum; const w = md === "bw" ? "" : (r.w != null && r.w !== "" ? r.w : defW(i));
       const rs = reps ? reps + (sec ? " s" : "") : (sec ? "hold" : "go");
       return md === "bw" ? rs : w ? (md === "add" ? "+" : "") + w + " kg × " + rs : rs; };
@@ -1681,8 +1736,13 @@ function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, st
               <div style={{ flex: 1 }}><Input label={"SET " + (i + 1) + (sec ? " SECONDS" : " REPS")} v={r.r != null ? r.r : repNum} on={(val) => put(i, { r: val })} /></div>
             </div>); })}
       </div>);
+    /* THE RAMP, on a main lift that carries one: bar × 8, then the steps
+       under the day's working weight */
+    const rampLine = it.ramp && it.ramp.length && card.first !== false ? "RAMP · " + it.ramp.map((r) => {
+      const kg = r[0] ? calc(it.mk, r[0]) : null; return (r[0] ? (kg ? kg[0] + " KG" : r[0] + "%") : "BAR") + " × " + r[1]; }).join(" · ") : null;
     body = (
       <div data-set-mode={md} data-set-unit={sec ? "s" : "reps"} data-set-id={id}>
+        {rampLine ? <div data-testid="lift-ramp" style={Object.assign({}, mno, { fontSize: T3, color: C.chalk, lineHeight: 1.6, marginTop: 14 })}>{rampLine} · A MINUTE BETWEEN</div> : null}
         {ln ? <div style={Object.assign({}, mno, { fontSize: T3, color: C.brass, marginTop: 10 })}>LEVEL {ln.l}</div> : null}
         <SetButtons n={so.n} sets={rows} label={label} onTap={tap} adjust={adjust} speed={speed} />
       </div>);
@@ -1725,13 +1785,14 @@ function GymCard({ card, rx, week, macro, day, log, setLog, maxes, bw, ready, st
 const PREP_PLAIN = { ACCUMULATE: "Build", INTENSIFY: "Heavy", CONVERT: "Fast", "TEST WEEK": "Test" };
 const titleCase = (s) => String(s || "").toLowerCase().replace(/(^|[\s+-])([a-z])/g, (m, a, c) => a + c.toUpperCase());
 const shortTitle = (week) => {
-  const prog = { prep: "Prep", camp: "Camp", fighter: "Fighter", transition: "Transition" }[MODE.program] || "Fighter";
+  const prog = { prep: "Prep", camp: "Camp", fighter: "Fighter", transition: "Transition", spp: "Strength & Power" }[MODE.program] || "Fighter";
   const ph = PH[rxFor(week).ph] || {};
   const row = MODE.mac ? seasonRow(MODE.mac, week) : null;
   if (row && row.program === "pre") return "Camp · Before Week 1";
   if (row && row.hold) return "Transition · On hold · The head check";
   const block = MODE.prep ? PREP_PLAIN[ph.n] || titleCase(ph.n) : MODE.camp ? titleCase(rxFor(week).block || "") : MODE.trans ? "Easy" : titleCase(ph.n);
-  return [prog, "Week " + (row ? row.idx || weekIn(row) : week), row && row.id && row.program !== "transition" ? row.id : null, block].filter(Boolean).join(" · ");
+  /* Strength, Power and Physique's week number is the calendar's own, so the row's id would say it twice */
+  return [prog, "Week " + (row ? row.idx || weekIn(row) : week), row && row.id && row.program !== "transition" && row.program !== "spp" ? row.id : null, block].filter(Boolean).join(" · ");
 };
 
 /* ---------------- THE FLOW ---------------- */
@@ -1752,7 +1813,7 @@ function Today(props) {
   /* THE EASY ZONE: in PREP, CAMP, the week before camp and the
      transition, every easy session carries the zone, and its timer runs
      under it. The classic Fighter has none of it. */
-  const o8Zone = MODE.prep || MODE.camp || MODE.trans;
+  const o8Zone = MODE.prep || MODE.camp || MODE.trans || MODE.spp;
   const zone = o8Zone ? easyZone(peakHR) : null;
   const startZ = (tm) => startTimer(easyTimer(tm, zone));
   /* the feed chime: a feed or a drink due now, while the app is open */
@@ -1835,7 +1896,7 @@ function Today(props) {
       input: () => <Checklist rows={MORNING_FIVE.rows.map((r) => ({ n: r.n, text: r.text }))} ticks={m5Ticks}
         onTick={(i) => { const n = Object.assign({}, log); n[m5Key] = { t: Object.assign({}, m5Ticks, { [i]: !m5Ticks[i] }) }; setLog(n); buzz(20); }} /> });
   const mCheck = im("m-check", C.cobalt, "The check", "4 yes / no", 1, "check",
-    { input: () => <CheckTaps qs={CHECK_Q} answers={checkA} setAnswers={setCheckA} result={readNow.level} line={READY_LINE[readNow.level]} /> });
+    { input: () => <CheckTaps qs={CHECK_Q} answers={checkA} setAnswers={setCheckA} result={readNow.level} line={(MODE.spp ? SPP_READY_LINE : READY_LINE)[readNow.level]} /> });
   /* MAKING WEIGHT: the scales start the morning, while the plan is on —
      and from the day the limit goes in, so the line's start has its
      seven-morning average */
@@ -2084,7 +2145,8 @@ function Today(props) {
      RANGE, the skill block and the movement session run one move per
      card, each hold timed, each move coming up by itself. */
   const ev = [];
-  const weekend = MODE.camp ? (day === "sun" && !!rx.sim) : (day === "sat" || day === "sun");
+  /* Strength, Power and Physique's easy work is its two nasal runs: no easy hour */
+  const weekend = MODE.spp ? false : MODE.camp ? (day === "sun" && !!rx.sim) : (day === "sat" || day === "sun");
   const saunaWater = (a) => fuelItems.find((x) => x.anchor === a);
   /* the sauna and its two water rows: in PREP and CAMP straight after the
      easy session or the easy hour, never before them; the classic
@@ -2123,7 +2185,7 @@ function Today(props) {
   ev.push(im("ev-range", C.violet, RG.n, RG.mins + " min", RG.mins, "mobility", routine(RG.cards)));
   if (DAYS.indexOf(day) <= 3) {
     const hs = curLevel(calis, "handstand");
-    const o8 = MODE.prep || MODE.camp;
+    const o8 = MODE.prep || MODE.camp || MODE.spp;
     const sk = o8 ? skillCards(hs) : fighterSkillCards(hs, day === "tue" || day === "thu");
     const skMins = o8 ? ROUTINE_MINS.skill : SKILL_BLOCK.mins;
     ev.push(im("ev-skill", C.brass, "The skill block", skMins + " min", skMins, "skill", routine(sk)));
@@ -2188,7 +2250,7 @@ function Today(props) {
   const finish = () => { if (!cur) return;
     /* the app sets the working max off a logged top triple */
     if (cur.gym && cur.gym.kind === "top") { const e = log[dk + "-" + cur.gym.item.id] || {}, mk = cur.gym.item.mk, est = num(e.est);
-      if (est && num(maxes[mk]) !== est) onSetMax(mk, est, "top triple × 1.08 · " + macro + week, MODE.prep && rx.testWeek ? ["cw_" + mk] : []); }
+      if (est && num(maxes[mk]) !== est) onSetMax(mk, est, "top triple × 1.08 · " + macro + week, (MODE.prep || MODE.spp) && rx.testWeek ? ["cw_" + mk] : []); }
     cur.mark(true); const n = nextAfter(curIdx); go(n ? n.id : null); buzz(30); };
   /* BACK: the item before this one in the day's order, done or not —
      opened as it was, its inputs editable, nothing unticked */
@@ -2317,13 +2379,17 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
         </div>
         <div style={{ display: "flex", gap: 2, marginTop: 14 }}>
           {wks.map((n) => { const r = rxFor(n), ph = PH[r.ph] || PH.c1; const sel = n === week; const dn = weekDoneMap && weekDoneMap[n];
-            return <div key={n} onClick={() => setView({ macro, week: n })} style={{ flex: 1, height: 30, borderRadius: 3, cursor: "pointer", background: sel ? ph.ac : (r.hell ? "rgba(194,78,51,.35)" : r.dl || r.reload ? "rgba(102,132,90,.35)" : r.test || r.tp ? "rgba(79,132,168,.45)" : (r.topSq ? "rgba(210,160,71,.35)" : "rgba(138,149,158,.13)")), border: sel ? "none" : "1px solid " + C.line, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2 }}>
+            /* Strength, Power and Physique marks its lighter weeks and its test week */
+            const tint = MODE.spp ? (r.light ? "rgba(102,132,90,.35)" : r.testWeek ? "rgba(79,132,168,.45)" : "rgba(138,149,158,.13)")
+              : (r.hell ? "rgba(194,78,51,.35)" : r.dl || r.reload ? "rgba(102,132,90,.35)" : r.test || r.tp ? "rgba(79,132,168,.45)" : (r.topSq ? "rgba(210,160,71,.35)" : "rgba(138,149,158,.13)"));
+            return <div key={n} onClick={() => setView({ macro, week: n })} style={{ flex: 1, height: 30, borderRadius: 3, cursor: "pointer", background: sel ? ph.ac : tint, border: sel ? "none" : "1px solid " + C.line, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2 }}>
               <span style={Object.assign({}, mno, { fontSize: 7, color: sel ? C.ink : C.ash })}>{row ? (seasonRow(MODE.mac, n) || {}).id || n : n}</span>
               {dn != null ? <span style={{ width: 4, height: 4, borderRadius: 2, background: dn >= 1 ? C.moss : dn > 0 ? C.brass : "transparent" }} /> : null}
             </div>; })}
         </div>
         <div style={{ display: "flex", gap: 9, marginTop: 7, flexWrap: "wrap" }}>
           {(MODE.camp ? [["EASY + TESTS", "rgba(102,132,90,.6)"], ["SHARPEN / FIGHT WEEK", "rgba(79,132,168,.7)"]]
+            : MODE.spp ? [["LIGHTER", "rgba(102,132,90,.6)"], ["TEST", "rgba(79,132,168,.7)"]]
             : [["TOP TRIPLE", "rgba(210,160,71,.6)"], ["DELOAD", "rgba(102,132,90,.6)"], ["TEST", "rgba(79,132,168,.7)"]].concat(L > 16 ? [["HELL WEEK", "rgba(194,78,51,.6)"]] : [])).map((x) =>
             <span key={x[0]} style={Object.assign({}, mno, { fontSize: 8, color: C.ash, display: "flex", alignItems: "center", gap: 4 })}><span style={{ width: 9, height: 9, borderRadius: 2, background: x[1], display: "inline-block" }} />{x[0]}</span>)}
         </div>
@@ -2358,6 +2424,20 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
           <Row k="Sauna" val={rx.sauna ? "twice — Thursday after the easy thirty, Sunday after the easy hour" : "—"} />
           <Row k="Tests" val={prepTests(rx.doc).join(" · ") || "none"} />
         </Card>) : null}
+      {MODE.spp ? (
+        <Card ac={C.brass}>
+          <Eye c={C.brass}>What this week actually is</Eye>
+          <Note c={C.chalk} s={{ marginTop: 0 }}>{rx.em}</Note>
+          <Row k="Squat · bench · trap bar" val={rx.profile ? "the profiles — five loads, two fast reps each" : rx.testWeek ? "the top triples — × 1.08 is the new working max" : sppMainLine(rx) + (rx.contrast ? " · three jumps or throws after each double" : "")} />
+          <Row k="Push press (Sat)" val={rx.profile ? "the profile" : rx.testWeek ? "the top triple" : sppPp(rx).sets + " × " + sppPp(rx).reps + " @ " + sppPp(rx).pct + "%"} />
+          <Row k="Pause squat (Thu)" val={sppPsq(rx) ? sppPsq(rx).sets + " × " + sppPsq(rx).reps + " @ " + sppPsq(rx).pct + "%" : "none this week"} />
+          <Row k="Flying sprints (Thu)" val={rx.testWeek ? "none this week" : rx.noFlying ? "none — the tendon gate" : sppSprints(rx) + " × 20 m " + (rx.spr90 ? "at 90%" : "flat out")} />
+          <Row k="Jumps (Thu)" val={rx.testWeek ? "none this week" : !rx.jump ? "box jumps" : rx.noJumps ? "none — the tendon gate" : jumpOf(rx.jump).n + (rx.restart ? " · one stage down" : "")} />
+          <Row k="The intervals (Sat)" val={(rx.e === "vo2s" ? "3 × 4" : "4 × 4") + (rx.testWeek ? " — the engine test" : "")} />
+          <Row k="Nasal runs" val="Wednesday and Sunday · 30 min" />
+          <Row k="Everything else" val={rx.half ? "half the sets, rounded up" : "as written"} />
+          <Row k="Tests" val={sppTests(rx.doc).join(" · ") || "none"} />
+        </Card>) : null}
       {MODE.trans ? (
         <Card ac={C.moss}>
           <Eye c={C.moss}>The transition</Eye>
@@ -2365,7 +2445,7 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
           {TRANSITION_RULES.map((r, i) => <Row key={i} k={"Rule " + (i + 1)} val={r} />)}
         </Card>) : null}
 
-      {MODE.camp || MODE.prep || MODE.trans ? null : (
+      {MODE.camp || MODE.prep || MODE.trans || MODE.spp ? null : (
       <Card ac={C.brass}>
         <Eye c={C.brass}>What this week actually is</Eye>
         {rx.hell ? <Note c={C.chalk}>Hell Week. Six flagship tests, one a day. No Optimal 8 volume — the IRON tab runs this week.</Note> : (
@@ -2442,7 +2522,7 @@ function Bars({ data, unit, color }) {
 
 /* The erg outputs, gathered by session type, so the same session is only
    ever read against another one of its own kind. */
-const ERG_TYPE_NAME = { vo2: "4-minute intervals", mod: "Moderate intervals", lac: "40-second repeats", lac2: "40-second repeats · 2 × 6",
+const ERG_TYPE_NAME = { vo2: "4-minute intervals", vo2s: "4-minute intervals · 3 × 4", mod: "Moderate intervals", lac: "40-second repeats", lac2: "40-second repeats · 2 × 6",
   rz: "Repeat bursts", rz1: "Repeat bursts · one set", rz3: "Repeat bursts · one set", tempo: "Tempo intervals", thr: "Threshold",
   erg: "Rounds on the erg", fp: "Fight-pace rounds", easy: "Easy", easy15: "Easy flush", sim: "The simulation", t20: "The 20-minute test" };
 /* `camp` is the view: true for the camp, "prep" for Prep, false for the
@@ -2461,7 +2541,8 @@ function ergByType(log, camp, L, macro) {
     const wk = () => (MAC_PROGRAM[p.macro] && String(p.macro) !== String(MODE.mac) ? seasonRxFor(p.macro, p.week, true) : rxFor(p.week));
     const type = /fs$/.test(base) ? "sim" : /bike20$/.test(base) ? "t20"
       : base === "cond" || base === "c_eng1" || base === "p_e1" ? e.kind || wk().eng || wk().eng1 || wk().e1
-      : base === "cond2" || base === "c_eng2" || base === "p_e2" ? e.kind || wk().eng2 || wk().e2 : null;
+      : base === "cond2" || base === "c_eng2" || base === "p_e2" ? e.kind || wk().eng2 || wk().e2
+      : base === "s_44" ? e.kind || wk().e : null;
     if (!type) return;
     push(type, "w" + p.week, p.week, ergTotal(e.v || []));
   });
@@ -2662,12 +2743,12 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
    PLAN — both documents, read offline, with a table of contents
    ================================================================ */
 const PLAN_DOCS = [
-  ["prep", "PREP", C.moss, prepDocMd], ["camp", "CAMP", C.brass, campDoc], ["fighter", "FIGHTER v1.5", C.oxide, fighterDoc],
+  ["prep", "PREP", C.moss, prepDocMd], ["camp", "CAMP", C.brass, campDoc], ["fighter", "FIGHTER v1.5", C.oxide, fighterDoc], ["spp", "STRENGTH & POWER", C.oxide, sppDocMd],
   ["iron", "IRON MIND v5", C.violet, ironMindDoc], ["fuel", "FUEL · FIGHTER", C.brass, fuelDocMd], ["menu", "THE MENU", C.brass, fuelMenuMd],
   ["menub", "MENU B + WATER", C.cobalt, fuelMenuBMd], ["fseason", "FUEL · SEASON", C.moss, fuelSeasonMd], ["iron4", "IRON MIND v4.2", C.violet, ironMindV4Md],
 ];
 function PlanView({ program, title }) {
-  const [doc, setDoc] = useState(program === "camp" ? "camp" : program === "fighter" ? "fighter" : "prep");
+  const [doc, setDoc] = useState(program === "camp" ? "camp" : program === "fighter" ? "fighter" : program === "spp" ? "spp" : "prep");
   const D0 = PLAN_DOCS.find((x) => x[0] === doc) || PLAN_DOCS[0];
   return (
     <div>
@@ -2702,7 +2783,7 @@ function FightSettings({ st, replan, season, dayIso }) {
   /* START AGAIN is never kept: it belongs to the plan from this Monday */
   const pending = (st.plans || []).find((p) => p.from === from);
   const restartNow = !!(pending && pending.inputs && pending.inputs.restart);
-  const cur = Object.assign({ booked: false, classic: false }, FIGHT_DEFAULTS, st.season || {}, restartNow ? { restart: true } : {});
+  const cur = Object.assign({ booked: false, classic: false, spp: false }, FIGHT_DEFAULTS, st.season || {}, restartNow ? { restart: true } : {});
   const [draft, setDraft] = useState(cur);
   useEffect(() => { setDraft(cur); }, [JSON.stringify(st.season || {}), restartNow]);
   const d = draft;
@@ -2716,6 +2797,15 @@ function FightSettings({ st, replan, season, dayIso }) {
   /* a Prep running into this Monday carries on, unless you start it again */
   const prevRow = season && season.rows ? season.rows.find((r) => r.mon === addDays(from, -7)) : null;
   const running = !!prevRow && prevRow.program === "prep" && prevRow.doc !== 14;
+  /* a Strength, Power and Physique cycle running into this Monday carries on too */
+  const sppRunning = !!prevRow && prevRow.program === "spp" && prevRow.doc !== 12;
+  const isSpp = !d.booked && !d.classic && !!d.spp;
+  /* carrying on: the Monday the other program takes over */
+  const handOver = (() => {
+    if (d.booked || d.classic || d.restart || !(running ? isSpp : sppRunning && !isSpp)) return null;
+    const s2 = buildSeason({ plans: (st.plans || []).filter((p) => p.from < from).concat([{ from, made: dayIso, inputs: Object.assign({}, d, { fight: null }) }]), today: dayIso });
+    const r = s2.rows.find((x) => x.mon >= from && x.program === (isSpp ? "spp" : "prep") && !x.carried);
+    return r ? r.mon : null; })();
   const lay = M > 0 ? campLayout(Math.min(M, 10), d.fitness) : null;
   const opt = (arr) => arr.map((x) => [x, x.toUpperCase()]);
   return (
@@ -2726,9 +2816,10 @@ function FightSettings({ st, replan, season, dayIso }) {
       {!d.booked ? (
         <div style={{ marginTop: 12 }}>
           <Lab>What runs</Lab>
-          <Seg opts={[["prep", "PREP · 16-WEEK CYCLE"], ["classic", "OPTIMAL 8 FIGHTER"]]} val={d.classic ? "classic" : "prep"} on={(v) => set({ classic: v === "classic" })} c={C.brass} />
-          <Note>Prep's 16-week cycle, on repeat. Optimal 8 Fighter stays here as the classic, if you ever want it.</Note>
-          {!d.classic ? (<div style={{ marginTop: 10 }}><Lab>How fit you are right now</Lab>
+          <Seg col opts={[["prep", "PREP · 16-WEEK CYCLE"], ["spp", "STRENGTH, POWER, PHYSIQUE · 12 WEEKS"], ["classic", "OPTIMAL 8 FIGHTER"]]} val={d.classic ? "classic" : d.spp ? "spp" : "prep"} on={(v) => set({ classic: v === "classic", spp: v === "spp" })} c={C.brass} />
+          <Note>{isSpp ? "Strength, Power and Physique's twelve weeks, on repeat: size, then strength, then power, with the engine held. Prep and Optimal 8 Fighter don't change."
+            : "Prep's 16-week cycle, on repeat. Optimal 8 Fighter stays here as the classic, if you ever want it."}</Note>
+          {!d.classic && !d.spp ? (<div style={{ marginTop: 10 }}><Lab>How fit you are right now</Lab>
             <Seg opts={opt(FITNESS)} val={d.fitness} on={(v) => set({ fitness: v })} c={C.brass} />
             <Note>Coming back from time off is low: a new cycle eases you back in.</Note></div>) : null}
         </div>) : (
@@ -2760,9 +2851,17 @@ function FightSettings({ st, replan, season, dayIso }) {
         </div>)}
       {running && (d.booked ? M >= 11 : !d.classic) ? (
         <div data-testid="prep-running" style={{ marginTop: 10 }}><Lab>The Prep you're on</Lab>
-          <Seg opts={[["on", "CARRY ON"], ["again", "START AGAIN"]]} val={d.restart ? "again" : "on"} on={(v) => set({ restart: v === "again" || undefined })} c={C.brass} />
-          <Note>{d.restart ? "Week 1 again from " + fmtDate(from) + (d.fitness === "low" ? ", eased in" : "") + ". For coming back from time off."
+          <Seg opts={[["on", "CARRY ON"], ["again", isSpp ? "START NOW" : "START AGAIN"]]} val={d.restart ? "again" : "on"} on={(v) => set({ restart: v === "again" || undefined })} c={C.brass} />
+          <Note>{isSpp ? (d.restart ? "Strength, Power and Physique from " + fmtDate(from) + ". The Prep stops here."
+              : "The Prep carries on to its test day" + (handOver ? ", then Strength, Power and Physique from " + fmtDate(handOver) : "") + ".")
+            : d.restart ? "Week 1 again from " + fmtDate(from) + (d.fitness === "low" ? ", eased in" : "") + ". For coming back from time off."
             : "The weeks you've done stay done, and it carries on from the week you're on."}</Note></div>) : null}
+      {sppRunning && !d.booked && !d.classic ? (
+        <div data-testid="spp-running" style={{ marginTop: 10 }}><Lab>The cycle you're on</Lab>
+          <Seg opts={[["on", "CARRY ON"], ["again", isSpp ? "START AGAIN" : "START NOW"]]} val={d.restart ? "again" : "on"} on={(v) => set({ restart: v === "again" || undefined })} c={C.brass} />
+          <Note>{isSpp ? (d.restart ? "Week 1 again from " + fmtDate(from) + "." : "The weeks you've done stay done, and it carries on from the week you're on.")
+            : d.restart ? "Prep from " + fmtDate(from) + ". Strength, Power and Physique stops here."
+            : "Strength, Power and Physique carries on to its test week" + (handOver ? ", then Prep from " + fmtDate(handOver) : "") + "."}</Note></div>) : null}
       <Btn c={C.brass} fill dis={!changed || !validFight} s={{ width: "100%", marginTop: 12 }} on={() => replan(d)}>{onlyWeight ? "SET THE WEIGHT PLAN" : changed ? "RE-PLAN FROM " + fmtDate(from).toUpperCase() : "THIS IS THE PLAN"}</Btn>
       {st.planNote ? <Note c={C.brass} bold>{st.planNote}</Note> : null}
     </div>);
@@ -2885,7 +2984,8 @@ function Settings({ st, setSt, current, L, exportData, importData, IM, calis, se
             </span>
           </div>))}
         <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
-        {!classicOn ? (
+        {/* THE EDGE rides on Prep and the camp; Strength, Power and Physique has none */}
+        {!classicOn && !(current && current.row && current.row.program === "spp") ? (
           <div>
             <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
             <Eye c={C.oxide}>The edge</Eye>
@@ -3287,19 +3387,22 @@ function migratePlans(st, fresh) {
   const season = st.fightDate ? Object.assign({ booked: true, fight: st.fightDate, classic: false }, d) : { booked: false, classic: false };
   return { season, plans: [{ from, made: from, inputs: season }] };
 }
-const FIELD_NAMES = { booked: "fight booked", fight: "date", rounds: "rounds", mins: "minutes", rest: "rest", weighIn: "weigh-in", fitness: "fitness", emphasis: "emphasis", classic: "program",
+const FIELD_NAMES = { booked: "fight booked", fight: "date", rounds: "rounds", mins: "minutes", rest: "rest", weighIn: "weigh-in", fitness: "fitness", emphasis: "emphasis", classic: "program", program: "program",
   limit: "weight limit", tol: "tolerance", natural: "natural weight" };
 const WEIGH_NAME = { am: "day before, morning", before: "day before, afternoon or evening", day: "on the day" };
 const blankKg = (x) => (x == null || String(x).trim() === "" ? "—" : String(x).replace(",", ".") + " kg");
-const showVal = (k, x) => (k === "booked" ? (x ? "yes" : "no") : k === "classic" ? (x ? "Optimal 8 Fighter" : "Prep") : k === "fight" ? (x ? fmtDate(x) : "—") : k === "rest" ? x + " s"
+/* what runs with no fight booked */
+const PROG_SAY = { prep: "Prep", spp: "Strength, Power and Physique", classic: "Optimal 8 Fighter" };
+const progOf = (x) => (x.classic ? "classic" : x.spp ? "spp" : "prep");
+const showVal = (k, x) => (k === "booked" ? (x ? "yes" : "no") : k === "classic" ? (x ? "Optimal 8 Fighter" : "Prep") : k === "program" ? PROG_SAY[x] || String(x) : k === "fight" ? (x ? fmtDate(x) : "—") : k === "rest" ? x + " s"
   : k === "weighIn" ? WEIGH_NAME[x] || WEIGH_NAME.before : WEIGHT_FIELDS.indexOf(k) >= 0 ? blankKg(x) : String(x));
 /* The weight plan never changes the training: a change to the limit, the
    tolerance, the natural weight, or the weigh-in's time of day re-draws
    the line and leaves the plans alone. */
 const kgStr = (x) => (x == null || String(x).trim() === "" ? "" : String(Number(String(x).replace(",", "."))));
 function trainingChanged(was, now) {
-  const a = Object.assign({ booked: false, classic: false }, FIGHT_DEFAULTS, was || {}), b = Object.assign({ booked: false, classic: false }, FIGHT_DEFAULTS, now || {});
-  const keys = ["booked", "fight", "rounds", "mins", "rest", "fitness", "emphasis", "classic"];
+  const a = Object.assign({ booked: false, classic: false, spp: false }, FIGHT_DEFAULTS, was || {}), b = Object.assign({ booked: false, classic: false, spp: false }, FIGHT_DEFAULTS, now || {});
+  const keys = ["booked", "fight", "rounds", "mins", "rest", "fitness", "emphasis", "classic", "spp"];
   return keys.some((k) => String(a[k]) !== String(b[k])) || ((a.weighIn === "day") !== (b.weighIn === "day")) || !!a.restart !== !!b.restart;
 }
 /* BOXING TONIGHT: the day's own switch on FOOD, or else the weekday ticked
@@ -3316,13 +3419,18 @@ function nextDraws(prev, cfg, today) {
   if (!last || (last.cfg.fight < today && last.cfg.fight !== cfg.fight)) return [{ at: today, cfg }];
   return sameCfg(last.cfg, cfg) ? ds : ds.concat([{ at: today, cfg }]);
 }
-/* "fitness low → moderate · emphasis none → power" */
-function changeLine(was, now) {
-  const a = Object.assign({ booked: false, classic: false }, FIGHT_DEFAULTS, was || {}), b = Object.assign({ booked: false, classic: false }, FIGHT_DEFAULTS, now || {});
-  const keys = b.booked ? ["booked", "fight", "rounds", "mins", "rest", "weighIn", "fitness", "emphasis", "limit", "tol", "natural"] : b.classic ? ["booked", "classic"] : ["booked", "classic", "fitness"];
+/* "fitness low → moderate · emphasis none → power". `running`: the program
+   running into the plan's Monday, for what START AGAIN or START NOW does */
+function changeLine(was, now, running) {
+  const a = Object.assign({ booked: false, classic: false, spp: false }, FIGHT_DEFAULTS, was || {}), b = Object.assign({ booked: false, classic: false, spp: false }, FIGHT_DEFAULTS, now || {});
+  a.program = progOf(a); b.program = progOf(b);
+  const keys = b.booked ? ["booked", "fight", "rounds", "mins", "rest", "weighIn", "fitness", "emphasis", "limit", "tol", "natural"] : b.program === "prep" ? ["booked", "program", "fitness"] : ["booked", "program"];
   const same = (k) => (WEIGHT_FIELDS.indexOf(k) >= 0 ? kgStr(a[k]) === kgStr(b[k]) : String(a[k]) === String(b[k]));
   const line = keys.filter((k) => !same(k)).map((k) => FIELD_NAMES[k] + " " + showVal(k, a[k]) + " → " + showVal(k, b[k])).join(" · ");
-  return b.restart ? (line ? line + " · " : "") + "Prep starts again at week 1" : line;
+  if (!b.restart) return line;
+  const again = !b.booked && b.program === "spp" ? (running === "spp" ? "Strength, Power and Physique starts again at week 1" : "Strength, Power and Physique starts now")
+    : !b.booked && running === "spp" ? "Prep starts now" : "Prep starts again at week 1";
+  return (line ? line + " · " : "") + again;
 }
 
 export default function App() {
@@ -3681,8 +3789,9 @@ export default function App() {
   const shownIso = weekDates[DAYS.indexOf(shown.day)] || dayIso;
   const shownFuture = shownIso > dayIso;
   const mFlag = useMemo(() => morningFlag(morning[shownIso], morning, st, shownIso), [morning, st, shownIso]);
-  const photoDay = isPhotoDay(MODE.camp, current.week, today);
-  const shownPhotoDay = isPhotoDay(MODE.camp, shown.week, shown.day);
+  /* Strength, Power and Physique's photos: the Sunday of weeks 4, 8 and 12 */
+  const photoDay = curRow && curRow.program === "spp" ? sppPhotoDay(curRow.doc, today) : isPhotoDay(MODE.camp, current.week, today);
+  const shownPhotoDay = shownRow && shownRow.program === "spp" ? sppPhotoDay(shownRow.doc, shown.day) : isPhotoDay(MODE.camp, shown.week, shown.day);
   const photosShown = photos[shownIso] || {};
   const dateOf = useCallback((mac, wk, dy) => {
     const di = Math.max(0, DAYS.indexOf(dy || "sun"));
@@ -3883,6 +3992,7 @@ export default function App() {
     if (!curRow) { const ph = PH[baseRxFor(current.week).ph] || PH.b1; return { name: ph.n, emphasis: ph.note, tests: [] }; }
     const rx = rowRx(curRow, true);
     if (curRow.program === "prep") return { name: (PH[prepPhaseOf(curRow.doc)] || {}).n + " · " + curRow.id, emphasis: rx.em, tests: prepTests(curRow.doc) };
+    if (curRow.program === "spp") return { name: (PH[rx.ph] || {}).n + " · WEEK " + curRow.doc + " OF 12", emphasis: rx.em, tests: sppTests(curRow.doc) };
     if (curRow.program === "transition") return { name: "TRANSITION", emphasis: TRANSITION_INTRO, tests: [] };
     if (curRow.program === "pre") return { name: "THE WEEK BEFORE THE CAMP", emphasis: "The pre-camp check" + (rx.checks ? "; Saturday the broad jump, the throw and the working-weight checks; Sunday the 20-minute test." : "."), tests: rx.checks ? ["broad jump", "rotational throw", "working-weight checks", "the 20-minute test"] : [] };
     const ph = CPH[rx.ph] || {};
@@ -3913,7 +4023,10 @@ export default function App() {
     }
     const plans2 = (st.plans || []).filter((p) => p.from < from).concat([{ from, made: dayIso, inputs }]);
     const s2 = buildSeason({ plans: plans2, today: dayIso });
-    const what = why || changeLine(st.season, inputs) || "Re-planned";
+    /* the program running into the plan's Monday */
+    const was = season.rows.find((r) => r.mon === addDays(from, -7));
+    const runningNow = was && was.program === "spp" && was.doc !== 12 ? "spp" : was && was.program === "prep" && was.doc !== 14 ? "prep" : null;
+    const what = why || changeLine(st.season, inputs, runningNow) || "Re-planned";
     const line = what + ". From " + fmtDate(from) + ": " + (inputs.classic && !inputs.booked ? "Optimal 8 Fighter, the classic." : describeSeason(s2, from));
     /* START AGAIN goes in the plan, never in the answers */
     const kept = Object.assign({}, inputs); delete kept.restart;
@@ -4035,7 +4148,7 @@ export default function App() {
             {tab === "today" ? (
               <div>
                 {current.pre ? <Card ac={C.brass}><Note c={C.brass} s={{ marginTop: 0 }}>Week 1 begins {fmtDate(current.row ? current.row.mon : monOf(current.macro, 1))}</Note></Card> : null}
-                {current.done ? <Card ac={C.moss}><Note c={C.moss} s={{ marginTop: 0 }}>{MODE.prep ? "PREP is over" : MODE.trans ? "The two easy weeks are over" : "The camp is over"}</Note><Btn c={C.moss} fill s={{ marginTop: 8, width: "100%" }} on={() => openMore("settings")}>OPEN SETTINGS</Btn></Card> : null}
+                {current.done ? <Card ac={C.moss}><Note c={C.moss} s={{ marginTop: 0 }}>{MODE.prep ? "PREP is over" : MODE.spp ? "The cycle is over" : MODE.trans ? "The two easy weeks are over" : "The camp is over"}</Note><Btn c={C.moss} fill s={{ marginTop: 8, width: "100%" }} on={() => openMore("settings")}>OPEN SETTINGS</Btn></Card> : null}
                 {noCampWork ? <Btn c={C.brass} fill s={{ width: "100%", marginBottom: 12 }} on={() => setTab("track")}>FIRST — SET THE WORKING WEIGHTS</Btn> : null}
                 {noMaxes ? <Btn c={C.brass} fill s={{ width: "100%", marginBottom: 12 }} on={() => setTab("track")}>FIRST — ENTER YOUR MAXES</Btn> : null}
                 {st.planNote && st.planNoteAt && addDays(st.planNoteAt, 7) > dayIso ? <Card ac={C.brass}><Note c={C.chalk} s={{ marginTop: 0 }}>{st.planNote}</Note></Card> : null}
@@ -4051,7 +4164,7 @@ export default function App() {
                   : null} />
               </div>) : null}
             {tab === "track" ? <Track current={current} maxes={maxes} onSetMax={onSetMax} maxHist={maxHist} log={log} body={body} addBody={addBody} done={done} L={L} IM={IM} calis={calis} camp={MODE.camp}
-              view={MODE.camp ? true : MODE.prep || MODE.trans ? "prep" : false} title={headerTitle}
+              view={MODE.camp ? true : MODE.prep || MODE.trans ? "prep" : MODE.spp ? "spp" : false} title={headerTitle}
               rangeWeeks={rangeTestWeeks} rangeGet={rangeGet} campRows={campRowsNow}
               sub={trackSub} setSub={(x) => { setTrackSub(x); setPhotoDate(null); }} st={st} morning={morning} photos={photos} setPhotos={setPhotos} fuel={fuelForDash} dateOf={dateOf}
               tape={tape} setTape={setTape} fuelPhase={fuelPhaseOf(st, current.week, dayIso)} weightOn={!!wDay(dayIso)}

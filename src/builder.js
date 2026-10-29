@@ -2,6 +2,7 @@ import { iso, mondayOf, parseISO, addDays } from "./ui.jsx";
 import { campMaster, campBenchMaster, campEdge } from "./camp.js";
 import { prepRx, prepEdge, prepBench, prepPsq, PSQ_CAP } from "./prep.js";
 import { lowerStage } from "./safety.js";
+import { sppWeekRx } from "./spp.js";
 
 /* ================================================================
    THE SEASON BUILDER — season-builder.md, as code.
@@ -16,6 +17,9 @@ import { lowerStage } from "./safety.js";
    A plan is built out of the two master programs and nothing else:
      · no fight      — Prep's 16-week cycle, on repeat; a Prep that's
                        running carries on to its test week first
+                     — or Strength, Power and Physique's 12 weeks, on
+                       repeat, the same way (a cycle that's running
+                       carries on to its test week first)
      · 11+ weeks     — Prep fitted by the N table, then the full camp
      · 6–10 (7–10)   — the camp, shortened from the front
      · under 6 (7)   — the short-notice camp
@@ -156,6 +160,14 @@ export function prepRunOn(doneIds) {
   const lastKey = weekKey(doneIds[doneIds.length - 1]);
   return CYCLE16.filter((id) => weekKey(id) > lastKey);
 }
+/* STRENGTH, POWER AND PHYSIQUE: its twelve weeks, S1 to S12, on repeat */
+export const CYCLE12 = ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12"];
+const sppDocOf = (id) => { const m = String(id).match(/^S(\d+)$/); return m ? Number(m[1]) : 1; };
+/* a cycle's rows, from a week on: the week number is the calendar's */
+function sppRows(ids, cycle, extra) {
+  return ids.map((id) => Object.assign({ program: "spp", id, doc: sppDocOf(id), idx: sppDocOf(id), cycle }, extra || {}));
+}
+
 /* "P4b" → document row 4, two and a half percent on; "P12b" → row 12 at 88% */
 export function prepIdInfo(id) {
   const m = String(id).match(/^P(\d+)([a-z]?)$/); const doc = m ? Number(m[1]) : 1, s = m ? m[2] : "";
@@ -230,6 +242,7 @@ function genPlan(plan, ctx, horizon) {
     const first = c + 1;
     do { c += 1; prepRows(CYCLE16, c, { cycle: c }, { comeback: !!comeback && c === first }).forEach((r) => push(r)); } while (cur <= horizon);
   };
+  const sppCycles = (c0) => { let c = c0 || 0; do { c += 1; sppRows(CYCLE12, c).forEach((r) => push(r)); } while (cur <= horizon); };
 
   /* a transition carried over from the last plan's fight */
   let afterFight = false;
@@ -249,15 +262,36 @@ function genPlan(plan, ctx, horizon) {
   const run = [];
   if (!rows.length && ctx.prepRun && !inp.restart) ctx.prepRun.forEach((r) => run.push(r));
   const keep = run.length ? Object.assign({ plan: run[0].plan }, run[0].cycle ? { cycle: run[0].cycle } : {}) : {};
+  /* a Strength, Power and Physique cycle running into this plan's first
+     Monday carries on to its test week, unless you start now */
+  const srun = !rows.length && ctx.sppRun && !inp.restart ? ctx.sppRun : [];
+  const sppCarry = () => { if (!srun.length) return 0;
+    const c = srun[0].cycle || 1;
+    sppRows(CYCLE12.slice(srun[srun.length - 1].doc), c, { carried: 1, plan: srun[0].plan }).forEach((r) => push(r));
+    return c; };
+  if (!booked && inp.spp) {
+    /* STRENGTH, POWER AND PHYSIQUE. A Prep that's running carries on to its
+       test week first, and a cycle of this one that's running carries on
+       in its own order; then the twelve weeks from week 1, on repeat. */
+    if (run.length) prepRows(prepRunOn(run.map((r) => r.id)), run[0].seg || 1, Object.assign({ carried: 1 }, keep), { comeback: !!run[0].comeback, done: run.map((r) => r.id) }).forEach((r) => push(r));
+    let c0 = sppCarry();
+    /* started again: the next cycle's number */
+    if (!c0 && !rows.length && ctx.sppRun && ctx.sppRun.length) c0 = ctx.sppRun[0].cycle || 0;
+    sppCycles(c0);
+    return { rows };
+  }
   if (!booked) {
     /* NO FIGHT. A Prep that's running — a fight called off — carries on in
        the cycle's own order to its test week, then the cycle, on repeat.
        Otherwise the cycle starts at week 1; from low fitness, not straight
-       after a fight's transition or a Prep test week, it eases you in. */
+       after a fight's transition or a Prep test week, it eases you in. A
+       Strength, Power and Physique cycle that's running carries on to its
+       own test week first. */
     if (run.length) {
       prepRows(prepRunOn(run.map((r) => r.id)), run[0].seg || 1, Object.assign({ carried: 1 }, keep), { comeback: !!run[0].comeback, done: run.map((r) => r.id) }).forEach((r) => push(r));
       cycles(run[0].cycle || 0);
     } else {
+      sppCarry();
       const lb = ctx.lastRow;
       const afterTest = !!(lb && lb.program === "prep" && lb.doc === 14 && addDays(lb.mon, 7) === cur);
       /* started again: the next cycle's number */
@@ -360,8 +394,16 @@ export function buildSeason(o) {
         if (r.program !== "prep" || r.doc === 14 || (k < before.length - 1 && addDays(r.mon, 7) !== before[k + 1].mon)) break;
         prepRun.unshift(r); }
     }
+    /* the same for a Strength, Power and Physique cycle: its weeks back to
+       its first, or to the week after its last test week */
+    const sppRun = [];
+    if (lastRow && lastRow.program === "spp" && lastRow.doc !== 12 && addDays(lastRow.mon, 7) === plan.from) {
+      for (let k = before.length - 1; k >= 0; k--) { const r = before[k];
+        if (r.program !== "spp" || r.doc === 12 || (k < before.length - 1 && addDays(r.mon, 7) !== before[k + 1].mon)) break;
+        sppRun.unshift(r); }
+    }
     const ctx = {
-      today, todayMon, strapBack, head, lastRow, prepRun,
+      today, todayMon, strapBack, head, lastRow, prepRun, sppRun,
       prevFight: pf ? pf.fight : null, prevFightInp: pf ? { rounds: pf.R, mins: pf.mins } : null,
       lastTestDay: tests.length ? addDays(tests[tests.length - 1].mon, 5) : null,
     };
@@ -387,7 +429,7 @@ export function buildSeason(o) {
   /* the key week of each row: counted per program across the whole
      season, so a week's log never lands on another week — a week a
      re-plan landed on mid-week is counted where it was lived */
-  const mac = { prep: "P", camp: "C", transition: "T", pre: "B" };
+  const mac = { prep: "P", camp: "C", transition: "T", pre: "B", spp: "S" };
   const cnt = {};
   /* the weeks the head check holds are counted on their own, so the
      transition's weeks keep their keys whenever the answer comes */
@@ -581,6 +623,7 @@ export function rowRx(row, edgeOn) {
   if (!row) return null;
   if (row.program === "camp") return campWeekRx(row, edgeOn);
   if (row.program === "prep") return prepWeekRx(row, edgeOn);
+  if (row.program === "spp") return sppWeekRx(row);
   if (row.program === "pre") return preWeekRx(row);
   if (row.hold) return { w: 0, ph: "trans", trans: 1, hold: 1, doc: 0, tw: 0, fight: row.fight, preCamp: !!row.preCamp };
   return { w: row.idx, ph: "trans", trans: 1, doc: row.idx, tw: row.tw, fight: row.fight, runOn: !!row.runOn || row.idx > row.tw, preCamp: !!row.preCamp };
@@ -652,12 +695,26 @@ export function describeSeason(season, from) {
   const rows = season.rows.filter((r) => r.mon >= from);
   const camp = rows.filter((r) => r.program === "camp");
   const prep = rows.filter((r) => r.program === "prep");
+  const spp = rows.filter((r) => r.program === "spp");
   if (camp.length) {
     const cfirst = camp[0], c = cfirst.camp, cRows = camp.filter((r) => r.campStart === cfirst.campStart);
     const pBefore = prep.filter((r) => r.mon < cfirst.mon);
     return (pBefore.length ? pBefore.length + " weeks of Prep (" + pBefore.map((r) => r.id).join(" · ") + "), then " : "")
       + (c.short ? "the short-notice camp" : "a " + cRows.length + "-week camp") + " from " + fmtD(cfirst.mon) + ": " + cRows.map((r) => r.id).join(" · ")
       + " — " + c.R + " × " + c.mins + ", " + c.fitness + " fitness" + (c.emphasis !== "none" ? ", " + c.emphasis : "") + (c.ef ? ", engine-first" : "") + ".";
+  }
+  if (spp.length) {
+    /* Strength, Power and Physique: after a Prep carried on to its test
+       week, or the cycle carried on to its own */
+    const name = "Strength, Power and Physique";
+    const pOn = prep.filter((r) => r.carried && r.mon < spp[0].mon);
+    const sOn = []; for (const r of spp) { if (!r.carried) break; sOn.push(r); }
+    if (pOn.length) { const t = pOn[pOn.length - 1];
+      return "Prep carries on: " + pOn.map((r) => r.id).join(" · ") + ", test day " + fmtD(addDays(t.mon, 5)) + "; then " + name + "'s 12-week cycle from " + fmtD(spp[0].mon) + "."; }
+    if (sOn.length) { const t = sOn[sOn.length - 1], after = rows.find((r) => r.mon > t.mon);
+      const then = !after ? "" : after.program === "spp" ? "the 12-week cycle again" : after.program === "prep" ? "Prep's 16-week cycle" : "";
+      return name + " carries on: " + sOn.map((r) => r.id).join(" · ") + ", test week from " + fmtD(t.mon) + (then ? "; then " + then + " from " + fmtD(after.mon) + (after.comeback ? ", easing you back in" : "") : "") + "."; }
+    return name + "'s 12-week cycle from " + fmtD(spp[0].mon) + ".";
   }
   if (prep.length) {
     /* a Prep carried on to its test week, then the cycle */

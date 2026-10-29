@@ -1,0 +1,324 @@
+# OPTIMAL 8 · STRENGTH, POWER AND PHYSIQUE
+
+**Twelve weeks to make you as strong, as explosive and as muscular as you can be, six days a week, with your engine held where it is. It runs in three blocks — size, then strength, then power — and every block keeps all three going. It's its own programme, beside Prep and Optimal 8 Fighter: Settings → Fight booked? No → What runs → STRENGTH, POWER, PHYSIQUE. Neither of them changes.**
+
+Picked while a Prep is running, the Prep carries on to its test day and the twelve weeks start the Monday after. The weeks are S1 to S12 in the app; after S12 the cycle starts again from the new working maxes. Book a fight and the fight's plan takes over from the next Monday. The food is yours: the app runs the day as printed.
+
+---
+
+## THE WEEK
+
+Six sessions: four heavy or fast, two for size with an easy run after. Friday is off. About seven hours a week, the same as Prep.
+
+| Day | Session | Time |
+| --- | --- | --- |
+| Monday | **Lower strength** — the squat heavy, then Romanian deadlifts, split squats and leg curls for size | ~60 min |
+| Tuesday | **Upper strength** — bench, weighted chins and the overhead press heavy, then rows and dips | ~60 min |
+| Wednesday | **Physique A** — chest and back for size, then a 30-minute nasal run | ~65 min |
+| Thursday | **Lower power** — sled, sprints and jumps, then the trap bar heavy and a second squat | ~80 min |
+| Friday | Off — sleep | — |
+| Saturday | **Upper power** — throws, bench throws and the push press, then bench and back for size, then the 4 × 4 intervals | ~90 min |
+| Sunday | **Physique B** — shoulders, arms, traps and calves, then a 30-minute nasal run | ~70 min |
+
+Heavy and fast days alternate with size days, and the easy runs sit on the size days. That keeps the runs and the fatigue away from the sessions where speed and heavy weights matter most.
+
+---
+
+## THE TWELVE WEEKS
+
+Three blocks of three hard weeks, each followed by a lighter week, then a test week. The main lifts move from size to strength to power; everything else keeps going all the way through.
+
+| Week | Block | Squat, bench and trap bar | Everything else |
+| --- | --- | --- | --- |
+| S1 | Size | 4 × 6 @ 75% | As written |
+| S2 | Size | 4 × 6 @ 77.5% | As written |
+| S3 | Size | 4 × 6 @ 80% | As written |
+| S4 | Lighter | The profile: five loads, two fast reps each | Half the sets |
+| S5 | Strength | 5 × 3 @ 85% | As written |
+| S6 | Strength | 5 × 3 @ 87.5% | As written |
+| S7 | Strength | 5 × 3 @ 90% | As written |
+| S8 | Lighter | The profile again | Half the sets |
+| S9 | Power | 4 × 2 @ 90%, three jumps after each set | As written |
+| S10 | Power | 4 × 2 @ 92.5%, three jumps after each set | As written |
+| S11 | Power | 4 × 2 @ 95%, three jumps after each set | As written |
+| S12 | Test | Top triple → new working max | Half the sets, plus the tests |
+
+The percentages are of your working max, the number in the app. The push press, pause squat, chins and the other lifts have their own numbers on each day, block by block. A lighter week runs everything else as the block before it writes it, at half the sets, rounded up; test week runs the power block's, at half the sets.
+
+---
+
+## HOW THE WEIGHTS ARE SET
+
+Every heavy weight comes off your working max, and bar speed decides the load. Everything else goes by how many reps you have left in you.
+
+**Working max.** The same number the app keeps: your heaviest clean set of 3 with one or two reps left, × 1.08, rounded to 2.5 kg. Your current numbers carry straight over, and test week resets them.
+
+**The ramp before every main lift — on the lift's own card.** Bar × 8, then 40% × 5, 55% × 3, 65% × 2, 75% × 1 and 85% × 1 — each step only while it's at least 5% under the day's working weight. A minute between.
+
+**Bar speed.** Spleeft on your wrist, alert at a 20% slowdown, on the squat, bench, trap bar and push press. When it beeps, that rep is the set's last: rack it, and the set counts. The first work set's speed — the mean of its two fastest reps — goes in the box under it, against the target the app reads off your profile at the day's percentage. More than 0.05 m/s slower: the remaining sets come down 5%. More than 0.05 m/s faster two sessions running: 2.5% goes on your working max from then on.
+
+**Reps in reserve** — how many more clean reps you could have done:
+
+- Main lifts: two or more. The beep usually stops you there.
+- Presses, rows, dips, chins, split squats and Romanian deadlifts: one or two.
+- Raises, curls, extensions, flyes, leg curls and calves: one or two, and the last set to failure or one short of it.
+
+**Adding weight.** On anything with a rep range, when every set reaches the top of the range, add the smallest step next time. The main lifts rise with the table.
+
+**Tempo.** Main lifts: down under control, up as fast as the bar will go. Everything else: about two seconds down to a full stretch, then up.
+
+**Jumps and throws.** Every rep as fast, high or far as you can make it. A rep clearly slower or lower than the first ends the set.
+
+**Peak-power loads.** Trap bar jumps and bench throws use the green row in THE PROFILE (MORE → SETTINGS). Weeks 4 and 8 redraw every profile, the jumps and throws included.
+
+**Pairs.** Two exercises on one card: a set of one, its rest, a set of the other. Every set is logged on its own exercise.
+
+**No true maxes.** The heaviest you ever lift is a top triple, on pins.
+
+---
+
+## MONDAY · LOWER STRENGTH
+
+The squat heavy, then Romanian deadlifts, split squats and leg curls for size.
+
+**Warm-up · 6 minutes**
+
+1. **Easy bike**, 3 minutes.
+2. **Spanish squat hold**, 2 × 30 seconds. A heavy band looped round a rack at knee height and behind your knees; sit back to a quarter squat, shins vertical, and hold. It readies the knee tendons.
+3. **Box jump**, 2 × 3. Jump onto a box about knee height, land soft and quiet, step down.
+
+**The session**
+
+1. **Back squat** — the table's sets and percentages, after the ramp. Rest 3 minutes. In the power block, do three box jumps 90 seconds after each double, then rest 2 minutes. Bar on your upper back, feet about shoulder width, toes slightly out. Brace, sit down between your heels until the crease of your hip is below the top of your knee, then drive up. Pins set just below your lowest point.
+2. **Romanian deadlift** — size 3 × 8, strength 3 × 6, power 3 × 5. Rest 2 minutes. Barbell at arm's length, knees soft. Push your hips back and slide the bar down your thighs, back flat, until your hamstrings are at a deep stretch, then drive your hips forward to stand.
+3. **Bulgarian split squat** — size 3 × 8 each leg, strength 3 × 6, power 2 × 6. Rest 90 seconds. Back foot on a bench behind you, a dumbbell in each hand, front foot far enough forward that its shin stays fairly upright. Lower until the back knee nearly touches the floor, then drive up through the front heel.
+4. **Seated leg curl** — 3 × 10–12, all twelve weeks, the last set to failure. Rest 75 seconds. Pad on your lower shins, chest leaning slightly forward. Curl all the way, then lower slowly to a full stretch.
+5. **Standing calf raise**, 3 × 10–15, back to back with 6. All the way down to a full stretch, hold two seconds, then all the way up.
+6. **Hanging leg raise**, 3 × 8–12. Rest 60 seconds after each pair. Hang from the bar, curl your pelvis up and lift your knees to your chest without swinging, then lower slowly. Straight legs once that gets easy.
+
+---
+
+## TUESDAY · UPPER STRENGTH
+
+Bench, weighted chins and the overhead press heavy, then rows and dips for size.
+
+**Warm-up · 5 minutes**
+
+1. **Band pull-apart**, 2 × 15. Arms straight out in front, pull the band apart to your chest and squeeze your shoulder blades together.
+2. **Band dislocate**, 2 × 10. Wide grip on a band, arms straight, take it over your head and down behind you, then back.
+3. **Push-ups**, 10.
+
+**The session**
+
+1. **Bench press**, alternated with 2 — the table's sets and percentages, after the ramp. In the power block, do three medicine-ball chest passes 90 seconds after each double. Feet flat, backside on the bench, shoulder blades squeezed together. Lower to your lower chest, pause for a one-count, then press. Pins at chest height, no collars.
+2. **Weighted chin-up, palms toward you** — size 4 × 6, strength 5 × 4, power 4 × 3, at the heaviest weight that leaves two in you. Palms facing you, hands shoulder width, weight on a belt. From a dead hang, pull until your chin clears the bar, then lower all the way. Go bench, 90 seconds, chins, 90 seconds, so each lift gets 3 minutes.
+3. **Standing overhead press** — size 3 × 6, strength 4 × 4, power 3 × 3. Rest 2½ minutes. Bar at the front of your shoulders, feet hip width, glutes squeezed. Press straight up and push your head through, so the bar finishes over the back of your head. No leg drive: that's Saturday's push press.
+4. **Chest-supported dumbbell row**, alternated with 5 — 3 × 8–10. Chest on a bench set at about 30 degrees, a dumbbell in each hand. Row your elbows back to your hips, squeeze, then lower to a full stretch.
+5. **Weighted dip** — size 3 × 8–10, strength 3 × 6–8, power 3 × 5–6. Rest 90 seconds between each exercise. Parallel bars, weight on a belt once 10 bodyweight reps are easy. Lower until your shoulders are level with your elbows, chest slightly forward, then press to locked arms.
+6. **Cable lateral raise** — 3 × 12–15. Rest 60 seconds. Cable at hand height, stand side-on, the handle in your far hand with the cable running behind your back. Raise your arm out to the side to shoulder height, leading with the elbow, then lower slowly. The cable keeps the shoulder working at the bottom, where a dumbbell goes slack.
+7. **Ab wheel rollout** — 3 × 8–10. Rest 60 seconds. Kneeling, roll forward as far as you can without your lower back sagging, then pull back with your abs.
+
+---
+
+## WEDNESDAY · PHYSIQUE A
+
+Chest and back for size, then a 30-minute nasal run. Nothing heavy and nothing fast, because Thursday is the power session.
+
+**Warm-up · 5 minutes**
+
+1. **Band pull-apart**, 2 × 15.
+2. **Push-ups**, 10, then a light set of exercises 1 and 2.
+
+**The session**
+
+1. **Incline dumbbell press**, alternated with 2 — 3 × 8–12. Bench at 30 degrees. Lower the dumbbells to the sides of your upper chest at a deep stretch, then press up and slightly in.
+2. **Lat pulldown** — 3 × 10–12. Rest 90 seconds between each exercise. Lean back slightly and pull the bar to your upper chest, driving your elbows down, then let it all the way up to a full stretch.
+3. **Low-to-high cable fly**, alternated with 4 — 3 × 12–15. Cables set low, step forward, and sweep your hands up and together to chin height, arms slightly bent. Lower to a full stretch.
+4. **Wide-grip seated cable row** — 3 × 10–12. Rest 75 seconds between each exercise. Pull the bar to your upper chest with your elbows out, squeeze your upper back, then reach forward to a full stretch.
+5. **Reverse pec-deck** — 3 × 15–20. Rest 60 seconds. Face the machine, arms straight out in front, and sweep them back until they're level with your body.
+6. **Dumbbell lateral raise** — 4 × 12–20. Rest 60 seconds. Lean slightly forward, raise the dumbbells out to the sides to shoulder height, elbows soft, and lower slowly. On the last set, when you reach failure, pick up dumbbells about 30% lighter and go again.
+
+**Then · the nasal run, 30 minutes**
+
+Easy, on the road or a treadmill, breathing in and out through your nose the whole way. If you need your mouth, slow down.
+
+---
+
+## THURSDAY · LOWER POWER
+
+Sled, sprints and jumps while you're fresh, then the trap bar heavy and a second, lighter squat. Friday's rest after it.
+
+**Warm-up · 10 minutes**
+
+1. **Easy bike**, 3 minutes.
+2. **Leg swings**, 10 each way on each leg. **A-skips**, 2 × 15 metres: skip forward, driving one knee up to hip height while the other foot paws the ground. **Walking lunges**, 10.
+3. **Sprint build-ups**: three runs of 20 metres, at 60%, 75% and 90%.
+
+**The session**
+
+1. **Heavy sled sprint** — 3 × 20 metres, every week. Rest 2 minutes. Load 40–60% of your bodyweight on the sled. Lean in at about 45 degrees and drive the ground backward through the whole foot, 5–7 seconds a run. Faster than that, add weight; slower, take some off.
+2. **Flying sprint** — 3 runs in the size block, 4 in the strength and power blocks. Weeks 1 and 2 at 90%, flat out from week 3. Rest 2½ minutes. Jog-build for 15 metres, then run 20 metres absolutely flat out, and walk back. A hamstring twinge on the build-ups ends the sprints for the day.
+3. **Jumps** — 4 × 3. Rest 90 seconds. Size block: box jumps, onto a box about knee height, landing soft, stepping down. Strength block: low-box depth jumps — step off a 20 cm box and, the instant your feet touch, jump straight up as high as you can. Power block: depth jumps, the same off a 30–40 cm box.
+4. **Trap bar jump** — 4 × 3 at your peak-power load. Rest 90 seconds. Stand inside the bar, dip and jump as high as you can, land soft with bent knees, reset, go again.
+5. **Trap bar deadlift** — the table's sets and percentages, after the ramp. Rest 3 minutes. In the power block, do three broad jumps 90 seconds after each double: two-foot jump forward for distance, stick the landing. Stand inside the bar, hips back, chest up, grip the handles and push the floor away until hips and knees lock out together. No hitch, no leaning back.
+6. **Pause squat** — size 3 × 5 @ 65%, strength 3 × 3 @ 72.5%, power 3 × 2 @ 75%, all of your squat working max. Rest 2 minutes. Monday's squat with a dead stop at the bottom for two seconds, staying tight, then up as fast as the bar will move.
+7. **Nordic curl** — 3 × 4–6. Rest 90 seconds. Kneel with your heels anchored under a pad. Keep your body straight from knees to head and lower yourself forward as slowly as you can, catch yourself with your hands, and push back up.
+
+---
+
+## SATURDAY · UPPER POWER
+
+Throws, bench throws and the push press while you're fresh from Friday's rest, then bench and back for size, then the 4 × 4. About 90 minutes.
+
+**Warm-up · 6 minutes**
+
+1. **Band pull-apart**, 2 × 15. **Band dislocate**, 2 × 10. **Push-ups**, 10.
+2. Two easy throws of each kind.
+
+**The session**
+
+1. **Medicine-ball chest pass**, alternated with 2 — 3 × 5. Rest 60 seconds between each. Stand a metre from a solid wall with a 4–6 kg ball at your chest and throw it into the wall as hard and fast as you can, then catch the rebound. This is training, not a test, so the wall is fine.
+2. **Rotational scoop throw** — 3 × 4 each side. Side-on to the wall, ball at your back hip. Drive off your back foot and turn your hips through to throw it into the wall.
+3. **Bench throw** — 4 × 3 at your peak-power load. Rest 2 minutes. Smith machine, with its safety stops set so the bar rests a couple of centimetres above your chest. Lower the bar to the stops, throw it so hard it leaves your hands, catch it with soft elbows and lower it back to the stops.
+4. **Push press** — size 4 × 5 @ 70%, strength 5 × 3 @ 80%, power 5 × 2 @ 85%, of your push press working max, after the ramp. Rest 2½ minutes. Bar at the front of your shoulders: one quick dip at the knees and drive, pressing as the bar leaves your shoulders. Lock your arms with the bar over the back of your head. One dip only.
+5. **Bench press, touch and go**, alternated with 6 — size 3 × 8 @ 70%, strength 3 × 6 @ 75%, power 3 × 5 @ 75%, fast. Rest 90 seconds between each exercise. Tuesday's bench without the pause: lower under control, touch your chest and press.
+6. **Pull-up** — 3 × 8–10, with weight on a belt once 10 is easy. Palms facing away, hands just outside shoulder width. From a dead hang, pull until your chin is over the bar.
+7. **One-arm dumbbell row** — 3 × 8–12 each side. Rest 60 seconds. One knee and one hand on a bench, the dumbbell hanging at full stretch. Row it to your hip, then lower slowly.
+8. **Cable lateral raise** — 3 × 15–20. Rest 60 seconds. Cable at hand height, the handle in your far hand with the cable behind your back. Raise your arm out to shoulder height and lower slowly. On the last set, at failure, drop the weight by about 30% and go again.
+
+**Then · the 4 × 4 intervals, about 30 minutes**
+
+On the bike: 5 minutes easy, then four hard efforts of 4 minutes with 3 minutes easy between, then 3 minutes easy. The timer runs all of it. The heart rates and what to log are in The engine, below.
+
+---
+
+## SUNDAY · PHYSIQUE B
+
+Shoulders, arms, traps and calves for size, then a 30-minute nasal run and the weekly check.
+
+**Warm-up · 4 minutes**
+
+1. **Band pull-apart**, 2 × 15. **Band dislocate**, 2 × 10.
+2. A light set of exercises 1 and 4.
+
+**The session**
+
+1. **Cable lateral raise** — 4 × 12–20. Rest 60 seconds. Cable at hand height, the handle in your far hand with the cable behind your back. Raise your arm out to shoulder height, leading with the elbow, and lower slowly. On the last set, at failure, drop the weight by about 30% and go again.
+2. **Face pull** — 3 × 15–20. Rest 60 seconds. Rope on a cable at forehead height. Pull the rope towards your forehead, hands apart and elbows high, and squeeze the backs of your shoulders.
+3. **Dumbbell shrug** — 3 × 10–15. Rest 75 seconds. Heavy dumbbells at your sides. Lift your shoulders straight up towards your ears, hold for a second, then lower to a full stretch.
+4. **EZ-bar curl**, alternated with 5 — 3 × 8–12. Elbows pinned at your sides. Curl up, then take two seconds to lower to straight arms.
+5. **Overhead cable triceps extension** — 3 × 10–15. Rest 60 seconds between each exercise. A rope on a high cable with your back to it, or one dumbbell held in both hands. Elbows pointing at the ceiling, lower your hands behind your head to a deep stretch, then straighten your arms.
+6. **Incline dumbbell curl**, alternated with 7 — 3 × 10–12. Bench at 45 degrees, arms hanging straight down behind your body: the stretch is the point. Curl without letting your elbows move forward.
+7. **Dumbbell skull crusher** — 3 × 10–12. Rest 60 seconds between each exercise. Lie on a flat bench, dumbbells above your shoulders, palms facing each other. Bend only at the elbows to lower the dumbbells beside your head to a deep stretch, then straighten.
+8. **Hammer curl** — 2 × 10–12. Rest 60 seconds. Thumbs up, elbows at your sides. Curl, then lower slowly.
+9. **Seated calf raise** — 3 × 12–15. Rest 60 seconds. Pad on your knees. Lower your heels to a full stretch and hold for two seconds, then rise all the way up.
+
+**Then · the nasal run, 30 minutes**
+
+Easy, breathing through your nose only, as on Wednesday.
+
+**The weekly check.** Bodyweight, waist, resting heart rate, the morning colours, your joints, sleep, lights-out, energy and your RANGE evenings — Prep's weekly check. In weeks 4, 8 and 12 it takes your arm and shoulders too, and the app asks for the photos.
+
+---
+
+## THE ENGINE
+
+Two easy nasal runs and one hard interval session hold your engine where it is for all twelve weeks. Intensity is what holds it, so the one hard session has to stay genuinely hard.
+
+**The nasal runs · Wednesday and Sunday, 30 minutes**
+
+- Breathe in and out through your nose the whole way. If you need your mouth, slow down.
+- Heart rate around 65–75% of your peak: the easy zone the app gives you. Flat ground or a treadmill.
+- Never on Monday, Thursday or Saturday. The runs stay off the heavy and fast days.
+- Log the distance and your average heart rate.
+
+**The 4 × 4 · Saturday, after the session**
+
+1. 5 minutes easy on the bike.
+2. Four efforts of 4 minutes at 90–95% of your peak heart rate. The first minute climbs into that band; the last three sit in it.
+3. 3 minutes easy between efforts, at about 70%.
+4. 3 minutes easy to finish.
+
+Use the same bike every week. Log the total on its screen at the end and your peak heart rate from the Polar. Progress is more on the screen at the same peak heart rate, or the same at a lower one. In the lighter weeks it's 3 × 4, read only against other 3 × 4s, and in test week the 4 × 4 is the engine test.
+
+---
+
+## THE RULES
+
+These protect the work, and none of them is optional.
+
+1. **Lighter weeks, 4 and 8.** The squat, bench, trap bar and push press are replaced by their profiles in THE PROFILE: five loads, two fast reps each. Trap bar jumps and bench throws get their four-load profiles. Everything else, the jumps and sprints included, is half the sets, rounded up, and the 4 × 4 becomes 3 × 4.
+2. **The morning check.** Yellow: every load on the bar 7% lighter, and the 4 × 4 at 90%. Red: the heavy lifts, the sprints, jumps and throws and the 4 × 4 come off; the size work runs as written. Three red mornings in a week make the next week a lighter week.
+3. **Pain.** Anything over 3 out of 10 while you do it, or worse the next morning, stops that exercise for the day; the jumps, sprints and holds have the button for it. Sunday's check runs the tendon gate: Achilles or knee at 3 or more means no reactive jumps the next week, the tendon holds carried on, and once it's back under 3 they restart one stage down for a week; a hamstring at 3 or more means no flying sprints and the Nordics only if they're pain-free; an elbow or a shoulder at 4 or more turns the next week's dips into push-ups and takes Sunday's curls and triceps work off. The same pain two weeks running means a physio.
+4. **Sleep.** Friday is off. Aim for seven hours a night, which at a 3 am start means asleep by 8 pm.
+5. **Boxing evenings.** If you're still boxing, it's extra load on top of all this. When it tips you into red mornings, the nasal runs go first, because the boxing covers that work.
+6. **No true maxes.** Top triples on pins, never singles.
+7. **Bloods and blood pressure** before each cycle: full blood count, lipids, liver, kidneys and blood pressure. With what you're running, those are the numbers that matter.
+
+---
+
+## TEST WEEK AND WHAT TO EXPECT
+
+Week 12 resets every number and shows what the twelve weeks did. Everything not listed below runs at half the sets.
+
+| Day | The tests |
+| --- | --- |
+| Monday | Broad jump, best of three, after the warm-up. Then the squat top triple. |
+| Tuesday | Bench top triple, then the weighted chin top triple. |
+| Thursday | Warm-up, 2 sled sprints and 3 × 3 trap bar jumps, then the trap bar top triple. No flying sprints, depth jumps or pause squats. |
+| Saturday | Push press top triple, then the 4 × 4 as the engine test. |
+| Sunday | Tape and photos: the same spots and the same light every time. |
+
+**The top triple.** After the ramp on its card, work up in sets of 3, adding 2.5–5% a set, 3 minutes apart. Stop at the set of 3 that's hard but leaves one or two in you, or when the Spleeft beeps. That weight × 1.08, rounded to 2.5 kg, is your new working max — the app saves it, and it's the camp's working weight too if a fight comes next. For chins, record the heaviest added weight for a clean 3.
+
+**The broad jump.** Two-foot jump forward from a line, stick the landing, and measure from the line to the back of your heels. Open floor, never towards a wall.
+
+**What counts as progress**
+
+- Higher working maxes on the squat, bench, trap bar and push press.
+- A longer broad jump, and heavier peak-power loads in the profiles.
+- Arms and shoulders up on the tape, with the waist the same or smaller.
+- The same or more on the bike's screen in the 4 × 4, at the same peak heart rate.
+
+The next cycle starts from the new numbers, with one tilt towards whatever moved least: one quality gets more, paid for by another, and the engine work never changes.
+
+**What to expect, honestly**
+
+- The first cycle moves fastest, because what time off took comes back quicker than it was built.
+- After that, at 45 and already trained, the big lifts move a few per cent a cycle, not tens. That's a good result, not a failure.
+- Power is the hardest quality to raise at your age, and it fades fastest. That's why the fast work runs in every block, never just the last one.
+- The programme gives the stimulus; food and sleep make the look. Short nights will cost you more than any set or rep in here.
+
+---
+
+## WHY IT'S BUILT THIS WAY
+
+Every choice below rests on trials where trials exist. Where it rests on coaching practice instead, it says so.
+
+- **Planned variation, all three qualities every week.** Periodised training built more strength than unvaried training, and programmes that varied the load within the week did best (Williams, 2017). Hence the size, strength and power blocks, with every lift heavy on one day and lighter or faster on another.
+- **Each lift twice a week, 10–20 hard sets per muscle.** Strength rises with how often a lift is trained. Strength and size both rise with weekly sets, but the returns flatten sooner for strength (Pelland, 2026). So the heavy lifts stay low in sets, and the extra sets go to size, with shoulders, chest, back and arms getting the most.
+- **Bar speed ends the heavy sets.** Stopping squat sets at a 20% slowdown built the same strength as grinding on to 40%, and raised the jump 9.5% against 3.5%, with 40% fewer reps. Grinding built more thigh muscle, which is why the size work goes closer to failure and the heavy work doesn't (Pareja-Blanco, 2017).
+- **Three minutes between heavy sets.** In trained men, 3 minutes' rest built more strength and size than 1 minute: the squat rose 15.2% against 7.6% (Schoenfeld, 2016).
+- **Power built on strength, by several methods at once.** Power needs strength first, then throws, loaded jumps and rebound jumps on top, with the most work going to the weakest link (Cormie, 2011; Jiménez-Reyes, 2017). Loaded jumps and throws stand in for cleans and snatches: the same intent to move fast, without years of technique or the wrist risk. That last part is a coaching call, not a trial.
+- **The sled.** Heavy sled sprints improve the first metres of a sprint and the forward push (Alcaraz, 2018; Morin, 2017).
+- **Exercises chosen for the stretch.** Overhead triceps extensions grew the triceps 1.4 times as much as pushdowns (Maeo, 2023). Seated leg curls grew the hamstrings more than lying ones, 14% against 9% (Maeo, 2021). The incline curls, deep presses and full-stretch raises follow the same idea.
+- **The engine held, not built.** Endurance can be held for up to 15 weeks on as little as two sessions a week, as long as the intensity stays (Spiering, 2021). The 4 × 4 at 90–95% of peak heart rate raised fitness more than steady or threshold work (Helgerud, 2007). Cardio barely holds back strength or muscle size, but it does blunt explosive power, mostly when both are in the same session (Schumann, 2022). So there's one hard session, not two, and the runs are easy and kept off the fast days.
+- **Hard days and easy days.** Heavy and fast sessions alternate with size work and easy running, and upper and lower body each get a heavy day and a fast day, as the conjugate method splits them. That shape comes from coaching practice — Charlie Francis's sprinters, Westside's lifters — more than from trials.
+
+---
+
+## SOURCES
+
+- Comparison of Periodized and Non-Periodized Resistance Training on Maximal Strength: A Meta-Analysis — Williams et al., Sports Medicine, 2017
+- The resistance training dose response: meta-regressions on weekly volume and frequency — Pelland et al., Sports Medicine, 2026
+- Effects of velocity loss during resistance training on athletic performance, strength gains and muscle adaptations — Pareja-Blanco et al., 2017
+- Longer interset rest periods enhance muscle strength and hypertrophy in resistance-trained men — Schoenfeld et al., 2016
+- Developing maximal neuromuscular power: Part 2 — Cormie, McGuigan and Newton, 2011
+- Effectiveness of an Individualized Training Based on Force-Velocity Profiling during Jumping — Jiménez-Reyes et al., 2017
+- The Effectiveness of Resisted Sled Training for Sprint Performance — Alcaraz et al., Sports Medicine, 2018
+- Very-Heavy Sled Training for Improving Horizontal-Force Output in Soccer Players — Morin et al., 2017
+- Triceps brachii hypertrophy is substantially greater after elbow extension training performed in the overhead versus neutral arm position — Maeo et al., 2023
+- Greater Hamstrings Muscle Hypertrophy but Similar Damage Protection after Training at Long versus Short Muscle Lengths — Maeo et al., 2021
+- Maintaining Physical Performance: The Minimal Dose of Exercise Needed to Preserve Endurance and Strength Over Time — Spiering et al., 2021
+- Aerobic high-intensity intervals improve VO2max more than moderate training — Helgerud et al., 2007
+- Compatibility of Concurrent Aerobic and Strength Training for Skeletal Muscle Size and Function — Schumann et al., Sports Medicine, 2022

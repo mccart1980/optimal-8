@@ -75,8 +75,9 @@ export const Fld = ({ v, on, ph, a, type, s }) => <input value={v == null ? "" :
 export const Btn = ({ children, on, c, fill, s, dis, small, label }) => <button onClick={on} disabled={dis} aria-label={label} style={Object.assign({}, dsp, { fontSize: small ? 16 : 18, fontWeight: 700, letterSpacing: 1.1, background: fill ? (c || C.brass) : "transparent", color: fill ? C.ink : (c || C.brass), border: "1px solid " + (c || C.brass), borderRadius: 5, padding: small ? "10px 12px" : "14px 16px", cursor: dis ? "default" : "pointer", opacity: dis ? .45 : 1, minHeight: 48 }, s)}>{children}</button>;
 export const Chip = ({ children, c, s }) => <span style={Object.assign({}, mno, { fontSize: 12, letterSpacing: 1, color: c || C.ash, border: "1px solid " + (c || C.line), borderRadius: 3, padding: "3px 7px", textTransform: "uppercase", whiteSpace: "nowrap", display: "inline-block" }, s)}>{children}</span>;
 export const Note = ({ children, c, bold, s }) => <div style={Object.assign({}, bdy, { fontSize: 18, color: c || C.ash, lineHeight: 1.5, marginTop: 8, fontWeight: bold ? 600 : 400 }, s)}>{children}</div>;
-export const Seg = ({ opts, val, on, c }) => (
-  <div style={{ display: "flex", gap: 5 }}>
+/* `col`: the options one under another, for labels too long to share a row */
+export const Seg = ({ opts, val, on, c, col }) => (
+  <div style={Object.assign({ display: "flex", gap: 5 }, col ? { flexDirection: "column" } : {})}>
     {opts.map((o) => <button key={o[0]} onClick={() => on(o[0])} style={Object.assign({}, dsp, { flex: 1, fontSize: 18, fontWeight: 700, letterSpacing: .6, padding: "11px 4px", borderRadius: 4, cursor: "pointer", minHeight: 52,
       background: val === o[0] ? (o[2] || c || C.brass) : "transparent", color: val === o[0] ? C.ink : C.ash, border: "1px solid " + (val === o[0] ? (o[2] || c || C.brass) : C.line) })}>{o[1]}</button>)}
   </div>);

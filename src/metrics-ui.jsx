@@ -7,7 +7,7 @@ import {
   MORNING_FIELDS, rolling7, baseline, morningFlag, RHR_OVER, HRV_UNDER,
   recoveryDrop, recoveryBand, easyZone, peakOk, ergUnitLabel, ergTotal, ergMean, recalibrated,
   BAR_SPEED_LIFTS, barSpeeds, sameLoadSeries, PHOTO_VIEWS, PHOTO_NOTE, photoWeeks,
-  bodyNow, trend, series, pairSeries, pairEntries, CAMP_TARGET, r1, scopeOf, DASH_IDS, SETTLE_IDS,
+  bodyNow, trend, series, pairSeries, pairEntries, CAMP_TARGET, r1, scopeOf, DASH_IDS, SETTLE_IDS, ergSeries,
 } from "./metrics.js";
 
 /* ================================================================
@@ -394,7 +394,7 @@ function DashRow({ n, t, u, fmt, date, target, note }) {
    classic — each reads its own weeks and its own ids */
 export function Dashboard({ log, morning, st, camp: view, body, fuel, addBody, dateOf, openPhotos, iron }) {
   const [tape, setTape] = useState({});
-  const camp = scopeOf(view) === "camp", ids = DASH_IDS[scopeOf(view)];
+  const camp = scopeOf(view) === "camp", spp = scopeOf(view) === "spp", ids = DASH_IDS[scopeOf(view)];
   const D = useMemo(() => {
     const fadeRows = pairEntries(log, ids.rd1, ids.rd6, view, "sun", (a, b) => { const f = fadePct(a, b); return f == null ? null : r1(f); });
     const t20Rows = series(log, ids.t20, view, ids.t20Day);
@@ -406,7 +406,9 @@ export function Dashboard({ log, morning, st, camp: view, body, fuel, addBody, d
     const mRows = (f) => mDates(f).map((d) => ({ d, v: num(morning[d][f]) }));
     /* the reactivity count, Sunday by Sunday, oldest first */
     const reactRows = iron ? iron.weekRows.filter((r) => r.react != null).map((r) => ({ d: addDays(r.mon, 6), v: r.react })) : [];
-    return { fadeRows, t20Rows, burstRows, recRows, rhrRows: mRows("rhr"), hrvRows: mRows("hrv"), reactRows };
+    /* Strength, Power and Physique: the 4 × 4's total, the broad jump, the tape */
+    const sp = spp ? { e44Rows: ergSeries(log, ids.e44, view, "vo2"), bjRows: series(log, ids.bj, view), armRows: series(log, ids.arm, view, "sun"), shRows: series(log, ids.sh, view, "sun") } : {};
+    return Object.assign({ fadeRows, t20Rows, burstRows, recRows, rhrRows: mRows("rhr"), hrvRows: mRows("hrv"), reactRows }, sp);
   }, [log, morning, view, iron]);
 
   const bn = bodyNow(fuel, body);
@@ -416,12 +418,22 @@ export function Dashboard({ log, morning, st, camp: view, body, fuel, addBody, d
   return (
     <div>
       <Card ac={C.brass}>
-        <Eye c={C.brass}>The dashboard — the seven numbers{camp ? ", against the camp's targets" : ""}</Eye>
+        <Eye c={C.brass}>{spp ? "The dashboard — the numbers this cycle moves" : "The dashboard — the seven numbers" + (camp ? ", against the camp's targets" : "")}</Eye>
         <Note c={C.chalk} s={{ marginTop: 0 }}>Everything the whole programme is actually trying to move, on one screen, with the way it is going and the day it was last written down.</Note>
-        <DashRow n="Fade — round six against round one" t={trend(D.fadeRows, "up")} u="% held" date={dat(D.fadeRows)} target={tg("fade")} />
-        <DashRow n="20-minute test — distance" t={trend(D.t20Rows, "up")} u="m" date={dat(D.t20Rows)} target={tg("t20")} />
-        <DashRow n="Burst decrement — first against last" t={trend(D.burstRows, "down")} u="%" date={dat(D.burstRows)} target={tg("burst")} />
-        <DashRow n="Recovery heart rate — the 60-second drop" t={trend(D.recRows, "up")} u="bpm" date={dat(D.recRows)} target={tg("recovery")} />
+        {spp ? (
+          <React.Fragment>
+            <DashRow n="The 4 × 4 — the total at the end" t={trend(D.e44Rows, "up")} u={ergUnitLabel(st.ergUnit)} date={dat(D.e44Rows)}
+              note={D.e44Rows.length && D.e44Rows[D.e44Rows.length - 1].hr != null ? "At a peak of " + D.e44Rows[D.e44Rows.length - 1].hr + " bpm. More at the same peak, or the same at a lower one, is the engine held." : null} />
+            <DashRow n="Broad jump — test week" t={trend(D.bjRows, "up")} u="cm" date={dat(D.bjRows)} />
+            <DashRow n="Arm" t={trend(D.armRows, "up")} u="cm" date={dat(D.armRows)} />
+            <DashRow n="Shoulders" t={trend(D.shRows, "up")} u="cm" date={dat(D.shRows)} />
+          </React.Fragment>) : (
+          <React.Fragment>
+            <DashRow n="Fade — round six against round one" t={trend(D.fadeRows, "up")} u="% held" date={dat(D.fadeRows)} target={tg("fade")} />
+            <DashRow n="20-minute test — distance" t={trend(D.t20Rows, "up")} u="m" date={dat(D.t20Rows)} target={tg("t20")} />
+            <DashRow n="Burst decrement — first against last" t={trend(D.burstRows, "down")} u="%" date={dat(D.burstRows)} target={tg("burst")} />
+            <DashRow n="Recovery heart rate — the 60-second drop" t={trend(D.recRows, "up")} u="bpm" date={dat(D.recRows)} target={tg("recovery")} />
+          </React.Fragment>)}
         <DashRow n="Resting heart rate" t={trend(D.rhrRows, "down")} u="bpm" date={dat(D.rhrRows)} target={tg("rhr")}
           note={D.rhrRows.length ? "Seven-day average " + (r1(rolling7(morning, "rhr").avg) || "—") + " bpm · week-1 baseline " + (baseline(morning, st).rhr == null ? "—" : baseline(morning, st).rhr) + " bpm." : null} />
         <DashRow n="HRV" t={trend(D.hrvRows, "up")} u="ms" date={dat(D.hrvRows)} target={tg("hrv")}

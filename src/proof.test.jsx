@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import campMd from "../optimal-8-camp.md?raw";
 import prepMd from "../optimal-8-prep.md?raw";
 import builderMd from "../season-builder.md?raw";
+import sppMd from "../optimal-8-strength-power-physique.md?raw";
 import { sessionCatalog, seasonWeeks } from "./App.jsx";
 import { GRID } from "./proof-grid.js";
 
@@ -10,7 +11,8 @@ import { GRID } from "./proof-grid.js";
    1 · the master camp's session pages, as Optimal 8 · Camp writes them
    3 · Worked Example 1's pages: two-thirds, engine-first, durability
    5 · nothing invented: every exercise, load and session type in every
-       generated week is written in Prep, the Camp or season-builder.md
+       generated week is written in Prep, the Camp, season-builder.md or
+       Strength, Power and Physique
    6 · the safety corrections, on the pages: no released-weight jump, no
        true max, no full depth jumps before the tendon ramp allows them —
        every fitness level, format and emphasis, and the Fighter too
@@ -208,7 +210,7 @@ describe("the standing rules", () => {
 });
 
 /* ---------------- 5 · nothing invented ---------------- */
-const DOCS = (prepMd + "\n" + campMd + "\n" + builderMd);
+const DOCS = (prepMd + "\n" + campMd + "\n" + builderMd + "\n" + sppMd);
 const norm = (t) => String(t).toLowerCase().replace(/[‘’']/g, "").replace(/[–—-]/g, " ").replace(/[^a-z0-9%.×]+/g, " ").replace(/\s+/g, " ");
 const DOCN = norm(DOCS);
 /* the library entries whose own name isn't how the pages say it, with
@@ -230,13 +232,14 @@ const SAID_AS = {
   "PUSH-UP AND CHIN-UP TESTS": "push ups, chins", "PLANK AND COPENHAGEN TESTS": "plank, copenhagen", "THE MOVEMENT SESSION": "the movement session",
   "TRAP BAR JUMPS": "trap bar jumps", "BAND-ASSISTED JUMPS": "band assisted jumps", "DROP LANDINGS": "drop landings", "LOW-BOX DEPTH JUMPS": "low box depth jumps", "SIDE BOUNDS": "side bounds",
   "SHUTTLE BURSTS": "shuttle bursts", "ACTIVATION": "activation", "SPEED MICRODOSE": "speed microdose", "THE DOUBLE": "the double",
+  "BAND DISLOCATES": "band dislocate", "DUMBBELL SHRUGS": "dumbbell shrug",
 };
 const SESSION_SAID = { vo2: "4 minute intervals", rz: "repeat bursts", rz1: "bursts 1 × 8", lac: "40 second repeats", lac2: "40 s repeats 2 × 6", tempo: "tempo",
   thr: "threshold", erg: "rounds on the erg", erg8: "rounds on the erg", ergrounds: "rounds on the erg", fp: "fight pace", fightpace: "fight pace",
   easy: "20 minutes conversational", mod: "moderate", t20: "20 minute test" };
 
 describe("proof 5 — nothing invented", () => {
-  it("every exercise on every generated card is a library entry the three documents name", () => {
+  it("every exercise on every generated card is a library entry the documents name", () => {
     const out = new Set();
     CAT.forEach((c) => (c.lib || []).concat(...c.rows.map((r) => r.lib || [])).forEach((e) => {
       if (!e) return;

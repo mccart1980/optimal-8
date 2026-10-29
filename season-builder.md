@@ -7,7 +7,7 @@
 ## WHAT YOU ENTER
 
 1. **Fight booked?** No or Yes.
-2. **If no:** the app runs Prep's 16-week cycle, and asks **how fit you are right now** — low, moderate or good. Coming back from time off is low, and a new cycle eases you back in. Optimal 8 Fighter stays in Settings as the classic, if you ever want it.
+2. **If no:** **what runs** — Prep's 16-week cycle, Strength, Power and Physique's 12 weeks, or Optimal 8 Fighter, the classic. With Prep the app asks **how fit you are right now** — low, moderate or good. Coming back from time off is low, and a new cycle eases you back in.
 3. **If yes:**
    - **The date.** The app counts the weeks.
    - **The format:** rounds × minutes, e.g. 3 × 2 or 6 × 3.
@@ -17,7 +17,7 @@
    - **How fit you are right now:** low, moderate or good. Coming back from time off is low. The first tests confirm or correct it.
    - **Emphasis:** none, power, strength or durability. One, or none.
 
-Change any answer and the app re-plans from today, keeps everything you've logged, and tells you in one line what changed. With a Prep running, it carries on from the week you're on — unless you choose **START AGAIN** under *The Prep you're on*: week 1 from the plan's Monday, eased in from low fitness, for coming back from time off.
+Change any answer and the app re-plans from today, keeps everything you've logged, and tells you in one line what changed. With a Prep running, it carries on from the week you're on — unless you choose **START AGAIN** under *The Prep you're on*: week 1 from the plan's Monday, eased in from low fitness, for coming back from time off. Pick Strength, Power and Physique with a Prep running and the Prep carries on to its test day, then the twelve weeks — unless you choose **START NOW**.
 
 ---
 
@@ -28,6 +28,7 @@ Weeks are counted in whole training weeks, Monday to Sunday, from the Monday the
 | Your answers | What runs |
 |---|---|
 | No fight | Prep — the 16-week cycle, on repeat; a Prep that's running carries on to its test week first |
+| No fight, Strength, Power and Physique picked | Its 12-week cycle, on repeat; a Prep, or a cycle of its own, that's running carries on to its test week first |
 | Fight 11 or more weeks away | Prep, fitted to the weeks before the camp, then the full 10-week camp |
 | Fight 6–10 weeks away (7–10 from low fitness) | The camp, shortened from the front |
 | Fight under 6 weeks away (under 7 from low fitness) | The short-notice camp |
@@ -303,6 +304,18 @@ On what you're running, muscle comes back faster than tendons do, and that gap i
 
 ---
 
+## STRENGTH, POWER AND PHYSIQUE — WITH NO FIGHT, IF YOU PICK IT
+
+Its twelve weeks are **S1 · S2 · S3 · S4 · S5 · S6 · S7 · S8 · S9 · S10 · S11 · S12**, as Optimal 8 · Strength, Power and Physique writes them: size in S1–S3, lighter in S4, strength in S5–S7, lighter in S8, power in S9–S11, and the test week in S12. Then the cycle again, from the new working maxes, on repeat. Nothing in Prep, the camp or Optimal 8 Fighter changes.
+
+- **Picked with a Prep running:** the Prep carries on in its own order to its test day, and S1 is the Monday after — unless you choose **START NOW**, and S1 is the plan's Monday. Picked on Thursday 29 October with Prep's cycle running from 26 October: Prep to test day on Saturday 13 February, then S1 on Monday 15 February.
+- **A cycle that's running:** pick Prep and the cycle carries on to S12, then Prep's cycle; **START NOW** starts Prep on the plan's Monday. **START AGAIN** under *The cycle you're on* is S1 again from the plan's Monday.
+- **A fight booked:** the fight's plan from the next Monday — Prep fitted to the weeks before the camp, or the camp — whatever week of the twelve you're on.
+- **After a fight:** the head check and the transition, then S1.
+- The Edge, the fitness question, the easy hour, the movement session and the sauna weeks aren't part of it; its two nasal runs are the easy work. The food runs the day as printed. Its tendon gate, pain rule, elbow and shoulder rule and morning check are the standing rules, as its own pages write them, and its test week's top triples are the camp's working weights too.
+
+---
+
 ## AFTER A FIGHT — THE TRANSITION
 
 **How long:**
@@ -318,7 +331,7 @@ On what you're running, muscle comes back faster than tendons do, and that gap i
 
 **First, the head check.** If you were stopped or dropped, or have any symptoms after the fight — headache, fogginess, feeling slowed down, dizziness, sensitivity to light or noise — see a doctor before any training, and nothing hard until you're cleared and symptom-free. A medical suspension overrides everything here. A severe or worsening headache, repeated vomiting, confusion or drowsiness is A&E, straight away. The app asks the morning after the fight, and the transition doesn't start until you've answered.
 
-**It runs on until the strap says you're back:** resting heart rate within 3 beats of baseline and HRV within 10% of its average, three mornings running. Then the next fight's plan, or Prep.
+**It runs on until the strap says you're back:** resting heart rate within 3 beats of baseline and HRV within 10% of its average, three mornings running. Then the next fight's plan, or Prep — or Strength, Power and Physique, if that's what you've picked.
 
 ---
 

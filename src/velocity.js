@@ -64,13 +64,17 @@ export function fitLine(points) {
 }
 
 /* The target for one lift in one phase: from the profile when there is
-   one, from the document's typical numbers when there is not. */
-export function targetFor(profiles, lift, phase) {
+   one, from the document's typical numbers when there is not. `pct`, when
+   it's given, reads the line at the set's own percentage instead of the
+   phase's — Strength, Power and Physique's sets sit anywhere from 70% to
+   95%. */
+export function targetFor(profiles, lift, phase, pct) {
   if ((TYPICAL[lift] || TYPICAL.squat)[phase] === null) return null;
   const p = profiles && profiles[lift];
   const line = p && p.points ? fitLine(p.points) : null;
   const ph = VEL_PHASES.find((x) => x.id === phase) || VEL_PHASES[0];
-  if (line) { const v = line.at(ph.pct); if (v > 0.05 && v < 2.5) return { v: Math.round(v * 100) / 100, own: true, drawn: p.drawn || null }; }
+  const at = num(pct) != null ? num(pct) : ph.pct;
+  if (line) { const v = line.at(at); if (v > 0.05 && v < 2.5) return { v: Math.round(v * 100) / 100, own: true, drawn: p.drawn || null }; }
   const t = (TYPICAL[lift] || TYPICAL.squat)[phase] || [0.5, 0.6];
   return { v: Math.round((t[0] + t[1]) / 2 * 100) / 100, lo: t[0], hi: t[1], own: false };
 }
