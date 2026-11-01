@@ -379,15 +379,19 @@ function steps(kind, o) {
         if (o.pace) W((o.double ? tag : "ROUND " + i + " OF " + r) + " — FIGHT PACE", third * 3);
         else { W(tag + " · FIRST THIRD — SKIERG", third); W(tag + " · SECOND THIRD — ASSAULT BIKE", third); W(tag + " · LAST THIRD — MED-BALL SLAMS OR THE BAG", third); }
         if (i < r) Rs("THE CORNER MINUTE — 2 SIGHS, THEN NOSE ONLY, IN 3 OUT 6", rest, watched(pi, i) ? STOP_STEP : "Stood up, hands off the knees. Relaxed jaw, shoulders down."); } }); }
-  else if (kind === "rz") { /* repeat bursts — the flurry, trained */
-    const sets = o.sets == null ? 2 : o.sets, n = 8 - (o.short ? 1 : 0);
+  else if (kind === "rz") { /* repeat bursts — the flurry, trained. Strength, Power and Physique's
+       Tuesday bursts give their own count and seconds, and easy minutes either side */
+    const sets = o.sets == null ? 2 : o.sets, n = (o.n || 8) - (o.short ? 1 : 0);
+    if (o.wu) Rs("EASY — " + o.wu + " MINUTES", o.wu * 60);
     for (let st = 1; st <= sets; st++) {
       for (let i = 1; i <= n; i++) {
-        W("SET " + st + " · BURST " + i + " OF " + n + " — ABSOLUTE MAXIMUM", 7, "6–8 seconds, everything you have.");
+        if (o.secs) W("BURST " + i + " OF " + n + " — FLAT OUT", o.secs, o.secs + " seconds, everything you have.");
+        else W("SET " + st + " · BURST " + i + " OF " + n + " — ABSOLUTE MAXIMUM", 7, "6–8 seconds, everything you have.");
         if (i < n) Rs("EASY SPINNING · " + i + " OF " + n + " DONE", 40, BURST_RULE);
       }
       if (st < sets) Rs("5 FULL MINUTES EASY — BETWEEN SETS", 300, "Set " + st + " done. Sit up, nose breathe, let it refill.");
-    } }
+    }
+    if (o.cd) Rs("EASY — " + o.cd + " MINUTES TO FINISH", o.cd * 60); }
   else if (kind === "nasal") { for (let i = 1; i <= 4; i++) W("NOSE ONLY · MIN " + (i * 2 - 1) + "–" + i * 2 + " — RAISE THE PACE", 120); }
   else if (kind === "settle") { W("EYES CLOSED — FIND THE BREATH AT THE NOSTRILS", 60); }
   else if (kind === "postmax") { W("SIT · EYES CLOSED · FIND THE BREATH AT THE NOSTRILS", 180); }
@@ -2434,6 +2438,7 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
           <Row k="Flying sprints (Thu)" val={rx.testWeek ? "none this week" : rx.noFlying ? "none — the tendon gate" : sppSprints(rx) + " × 20 m " + (rx.spr90 ? "at 90%" : "flat out")} />
           <Row k="Jumps (Thu)" val={rx.testWeek ? "none this week" : !rx.jump ? "box jumps" : rx.noJumps ? "none — the tendon gate" : jumpOf(rx.jump).n + (rx.restart ? " · one stage down" : "")} />
           <Row k="The intervals (Sat)" val={(rx.e === "vo2s" ? "3 × 4" : "4 × 4") + (rx.testWeek ? " — the engine test" : "")} />
+          <Row k="Bursts (Tue)" val={(rx.bk === "sb4" ? "4" : "8") + " × 6 seconds on the assault bike"} />
           <Row k="Nasal runs" val="Wednesday and Sunday · 30 min" />
           <Row k="Everything else" val={rx.half ? "half the sets, rounded up" : "as written"} />
           <Row k="Tests" val={sppTests(rx.doc).join(" · ") || "none"} />
@@ -2522,7 +2527,7 @@ function Bars({ data, unit, color }) {
 
 /* The erg outputs, gathered by session type, so the same session is only
    ever read against another one of its own kind. */
-const ERG_TYPE_NAME = { vo2: "4-minute intervals", vo2s: "4-minute intervals · 3 × 4", mod: "Moderate intervals", lac: "40-second repeats", lac2: "40-second repeats · 2 × 6",
+const ERG_TYPE_NAME = { vo2: "4-minute intervals", vo2s: "4-minute intervals · 3 × 4", sb: "6-second bursts", sb4: "6-second bursts · four", mod: "Moderate intervals", lac: "40-second repeats", lac2: "40-second repeats · 2 × 6",
   rz: "Repeat bursts", rz1: "Repeat bursts · one set", rz3: "Repeat bursts · one set", tempo: "Tempo intervals", thr: "Threshold",
   erg: "Rounds on the erg", fp: "Fight-pace rounds", easy: "Easy", easy15: "Easy flush", sim: "The simulation", t20: "The 20-minute test" };
 /* `camp` is the view: true for the camp, "prep" for Prep, false for the
@@ -2542,7 +2547,8 @@ function ergByType(log, camp, L, macro) {
     const type = /fs$/.test(base) ? "sim" : /bike20$/.test(base) ? "t20"
       : base === "cond" || base === "c_eng1" || base === "p_e1" ? e.kind || wk().eng || wk().eng1 || wk().e1
       : base === "cond2" || base === "c_eng2" || base === "p_e2" ? e.kind || wk().eng2 || wk().e2
-      : base === "s_44" ? e.kind || wk().e : null;
+      : base === "s_44" ? e.kind || wk().e
+      : base === "s_burst" ? e.kind || wk().bk : null;
     if (!type) return;
     push(type, "w" + p.week, p.week, ergTotal(e.v || []));
   });

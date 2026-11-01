@@ -130,6 +130,26 @@ describe("the engine", () => {
   });
 });
 
+describe("Tuesday's bursts", () => {
+  it("end Tuesday after the ab wheel; the timer runs 2 easy minutes first, 17 steps in all; four in week 4; none on a red morning", async () => {
+    await at(2027, 2, 16, spp());
+    expect(before(wholeDay(), "Ab Wheel Rollout", "Assault Bike Bursts")).toBe(true);
+    const card = pick("Assault Bike Bursts");
+    expect(within(card).getByTestId("card-pres").textContent).toBe("On the assault bike: 2 minutes easy, then 8 bursts of 6 seconds flat out with 40 seconds easy between, then 2 minutes easy");
+    fireEvent.click(within(card).getAllByRole("button", { name: /START/ })[0]);
+    expect(screen.getByTestId("timer-title").textContent).toBe("8 BURSTS");
+    expect(screen.getByTestId("timer-part").textContent).toBe("EASY — 2 MINUTES");
+    expect(screen.getAllByText(/STEP 1 \/ 17/).length).toBeGreaterThan(0);
+    cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
+    await at(2027, 3, 9, spp());
+    fireEvent.click(within(pick("Assault Bike Bursts")).getAllByRole("button", { name: /START/ })[0]);
+    expect(screen.getByTestId("timer-title").textContent).toBe("4 BURSTS");
+    cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
+    await at(2027, 2, 23, spp(), { "o8s-ready": { "mSw2-tue": "R" } });
+    expect(wholeDay()).not.toContain("Assault Bike Bursts");
+  });
+});
+
 describe("the tape, the photos and PROGRESS", () => {
   it("week 4's Sunday: the photos, and the weekly check asks the arm and the shoulders", async () => {
     await at(2027, 3, 14, spp());

@@ -13,7 +13,7 @@ Six sessions: four heavy or fast, two for size with an easy run after. Friday is
 | Day | Session | Time |
 | --- | --- | --- |
 | Monday | **Lower strength** — the squat heavy, then Romanian deadlifts, split squats and leg curls for size | ~60 min |
-| Tuesday | **Upper strength** — bench, weighted chins and the overhead press heavy, then rows and dips | ~60 min |
+| Tuesday | **Upper strength** — bench, weighted chins and the overhead press heavy, then rows and dips, then 6-second bursts on the assault bike | ~70 min |
 | Wednesday | **Physique A** — chest and back for size, then a 30-minute nasal run | ~65 min |
 | Thursday | **Lower power** — sled, sprints and jumps, then the trap bar heavy and a second squat | ~80 min |
 | Friday | Off — sleep | — |
@@ -100,7 +100,7 @@ The squat heavy, then Romanian deadlifts, split squats and leg curls for size.
 
 ## TUESDAY · UPPER STRENGTH
 
-Bench, weighted chins and the overhead press heavy, then rows and dips for size.
+Bench, weighted chins and the overhead press heavy, then rows and dips for size, then 6-second bursts on the assault bike.
 
 **Warm-up · 5 minutes**
 
@@ -117,6 +117,7 @@ Bench, weighted chins and the overhead press heavy, then rows and dips for size.
 5. **Weighted dip** — size 3 × 8–10, strength 3 × 6–8, power 3 × 5–6. Rest 90 seconds between each exercise. Parallel bars, weight on a belt once 10 bodyweight reps are easy. Lower until your shoulders are level with your elbows, chest slightly forward, then press to locked arms.
 6. **Cable lateral raise** — 3 × 12–15. Rest 60 seconds. Cable at hand height, stand side-on, the handle in your far hand with the cable running behind your back. Raise your arm out to the side to shoulder height, leading with the elbow, then lower slowly. The cable keeps the shoulder working at the bottom, where a dumbbell goes slack.
 7. **Ab wheel rollout** — 3 × 8–10. Rest 60 seconds. Kneeling, roll forward as far as you can without your lower back sagging, then pull back with your abs.
+8. **Assault bike bursts** — 8 bursts, 4 in weeks 4, 8 and 12. On the assault bike, arms and legs together: 2 minutes easy, then each burst 6 seconds absolutely flat out with 40 seconds of easy spinning after it, then 2 minutes easy to finish. About 10 minutes. If a burst is clearly weaker than the one before, take an extra 20 seconds; if two in a row are, stop there.
 
 ---
 
@@ -223,7 +224,7 @@ Easy, breathing through your nose only, as on Wednesday.
 
 ## THE ENGINE
 
-Two easy nasal runs and one hard interval session hold your engine where it is for all twelve weeks. Intensity is what holds it, so the one hard session has to stay genuinely hard.
+Two easy nasal runs and one hard interval session hold your engine where it is for all twelve weeks, and Tuesday's bursts add a little power and repeat-effort fitness on top. Intensity is what holds it, so the hard session has to stay genuinely hard.
 
 **The nasal runs · Wednesday and Sunday, 30 minutes**
 
@@ -241,14 +242,18 @@ Two easy nasal runs and one hard interval session hold your engine where it is f
 
 Use the same bike every week. Log the total on its screen at the end and your peak heart rate from the Polar. Progress is more on the screen at the same peak heart rate, or the same at a lower one. In the lighter weeks it's 3 × 4, read only against other 3 × 4s, and in test week the 4 × 4 is the engine test.
 
+**The bursts · Tuesday, after the session**
+
+Eight 6-second bursts on the assault bike, 40 seconds easy spinning between, 2 minutes easy before and after: about 10 minutes, and the timer runs all of it. Log the total on the screen at the end and your peak heart rate. Four in the lighter weeks and test week, read only against other fours.
+
 ---
 
 ## THE RULES
 
 These protect the work, and none of them is optional.
 
-1. **Lighter weeks, 4 and 8.** The squat, bench, trap bar and push press are replaced by their profiles in THE PROFILE: five loads, two fast reps each. Trap bar jumps and bench throws get their four-load profiles. Everything else, the jumps and sprints included, is half the sets, rounded up, and the 4 × 4 becomes 3 × 4.
-2. **The morning check.** Yellow: every load on the bar 7% lighter, and the 4 × 4 at 90%. Red: the heavy lifts, the sprints, jumps and throws and the 4 × 4 come off; the size work runs as written. Three red mornings in a week make the next week a lighter week.
+1. **Lighter weeks, 4 and 8.** The squat, bench, trap bar and push press are replaced by their profiles in THE PROFILE: five loads, two fast reps each. Trap bar jumps and bench throws get their four-load profiles. Everything else, the jumps and sprints included, is half the sets, rounded up, the 4 × 4 becomes 3 × 4, and the bursts become four.
+2. **The morning check.** Yellow: every load on the bar 7% lighter, and the 4 × 4 at 90%. Red: the heavy lifts, the sprints, jumps and throws, the 4 × 4 and the bursts come off; the size work runs as written. Three red mornings in a week make the next week a lighter week.
 3. **Pain.** Anything over 3 out of 10 while you do it, or worse the next morning, stops that exercise for the day; the jumps, sprints and holds have the button for it. Sunday's check runs the tendon gate: Achilles or knee at 3 or more means no reactive jumps the next week, the tendon holds carried on, and once it's back under 3 they restart one stage down for a week; a hamstring at 3 or more means no flying sprints and the Nordics only if they're pain-free; an elbow or a shoulder at 4 or more turns the next week's dips into push-ups and takes Sunday's curls and triceps work off. The same pain two weeks running means a physio.
 4. **Sleep.** Friday is off. Aim for seven hours a night, which at a 3 am start means asleep by 8 pm.
 5. **Boxing evenings.** If you're still boxing, it's extra load on top of all this. When it tips you into red mornings, the nasal runs go first, because the boxing covers that work.
@@ -302,7 +307,7 @@ Every choice below rests on trials where trials exist. Where it rests on coachin
 - **Power built on strength, by several methods at once.** Power needs strength first, then throws, loaded jumps and rebound jumps on top, with the most work going to the weakest link (Cormie, 2011; Jiménez-Reyes, 2017). Loaded jumps and throws stand in for cleans and snatches: the same intent to move fast, without years of technique or the wrist risk. That last part is a coaching call, not a trial.
 - **The sled.** Heavy sled sprints improve the first metres of a sprint and the forward push (Alcaraz, 2018; Morin, 2017).
 - **Exercises chosen for the stretch.** Overhead triceps extensions grew the triceps 1.4 times as much as pushdowns (Maeo, 2023). Seated leg curls grew the hamstrings more than lying ones, 14% against 9% (Maeo, 2021). The incline curls, deep presses and full-stretch raises follow the same idea.
-- **The engine held, not built.** Endurance can be held for up to 15 weeks on as little as two sessions a week, as long as the intensity stays (Spiering, 2021). The 4 × 4 at 90–95% of peak heart rate raised fitness more than steady or threshold work (Helgerud, 2007). Cardio barely holds back strength or muscle size, but it does blunt explosive power, mostly when both are in the same session (Schumann, 2022). So there's one hard session, not two, and the runs are easy and kept off the fast days.
+- **The engine held, not built.** Endurance can be held for up to 15 weeks on as little as two sessions a week, as long as the intensity stays (Spiering, 2021). The 4 × 4 at 90–95% of peak heart rate raised fitness more than steady or threshold work (Helgerud, 2007). Cardio barely holds back strength or muscle size, but it does blunt explosive power, mostly when both are in the same session (Schumann, 2022). So there's one long hard session, not two, the bursts are ten minutes on an upper-body day, and the runs are easy and kept off the fast days.
 - **Hard days and easy days.** Heavy and fast sessions alternate with size work and easy running, and upper and lower body each get a heavy day and a fast day, as the conjugate method splits them. That shape comes from coaching practice — Charlie Francis's sprinters, Westside's lifters — more than from trials.
 
 ---

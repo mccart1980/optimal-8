@@ -136,8 +136,8 @@ describe("3 · the session pages", () => {
     expect([1, 5, 9].map((w) => card(w, "mon", "Bulgarian Split Squat").pres.split(" · ")[0])).toEqual(["3 × 8 each leg", "3 × 6 each leg", "2 × 6 each leg"]);
     expect(card(1, "mon", "Standing Calf Raise + Hanging Leg Raise").kind).toBe("pair");
   });
-  it("Tuesday: bench and weighted chin-ups as a pair, the overhead press, rows and dips, lateral raises, the ab wheel", () => {
-    expect(names(1, "tue")).toEqual(["Warm-up", "Bench Press + Weighted Chin-Up", "Standing Overhead Press", "Chest-Supported Row + Weighted Dip", "Cable Lateral Raise", "Ab Wheel Rollout"]);
+  it("Tuesday: bench and weighted chin-ups as a pair, the overhead press, rows and dips, lateral raises, the ab wheel, then the bursts", () => {
+    expect(names(1, "tue")).toEqual(["Warm-up", "Bench Press + Weighted Chin-Up", "Standing Overhead Press", "Chest-Supported Row + Weighted Dip", "Cable Lateral Raise", "Ab Wheel Rollout", "Assault Bike Bursts"]);
     const pair = card(5, "tue", "Bench Press + Weighted Chin-Up");
     expect(pair.kind).toBe("pair");
     expect(pair.rows.map((r) => r.n)).toEqual(["Bench press", "Weighted chin-up, palms toward you"]);
@@ -166,6 +166,19 @@ describe("3 · the session pages", () => {
     expect([1, 5, 9].map((w) => card(w, "sat", "Push Press").pres)).toEqual(["4 × 5 · 70% · Rest 2:30", "5 × 3 · 80% · Rest 2:30", "5 × 2 · 85% · Rest 2:30"]);
     expect(card(1, "sat", "Bench Throw (Smith)").lib.some((e) => e.n === "BENCH THROW" && /safety stops/.test(e.text))).toBe(true);
     expect(card(4, "sat", "The 3 × 4 Intervals").pres).toMatch(/3 × 4 minutes at 90–95% of your peak heart rate/);
+  });
+  it("Tuesday's bursts: eight 6-second bursts on the assault bike, four in the lighter weeks and test week; the timer runs the easy minutes either side", () => {
+    expect(CYCLE12.map((x, i) => sppRx(i + 1).bk)).toEqual(["sb", "sb", "sb", "sb4", "sb", "sb", "sb", "sb4", "sb", "sb", "sb", "sb4"]);
+    expect(card(1, "tue", "Assault Bike Bursts").pres).toBe(SPPENG.sb.d);
+    expect(SPPENG.sb.d).toMatch(/8 bursts of 6 seconds flat out with 40 seconds easy between/);
+    expect(card(4, "tue", "Assault Bike Bursts").pres).toMatch(/4 bursts of 6 seconds/);
+    expect(card(12, "tue", "Assault Bike Bursts").pres).toMatch(/4 bursts of 6 seconds/);
+    expect(card(1, "tue", "Assault Bike Bursts").lib.map((e) => e.n)).toEqual(["ASSAULT BIKE BURSTS"]);
+    const b = sppSess("tue").b.find((x) => x.n === "Assault Bike Bursts");
+    expect(b.timer(sppRx(1))).toEqual({ kind: "rz", opt: { sets: 1, n: 8, secs: 6, wu: 2, cd: 2 }, title: "8 BURSTS" });
+    expect(b.timer(sppRx(8)).opt.n).toBe(4);
+    expect(b.items(sppRx(1))[0].id).toBe("s_burst");
+    expect(sppMd).toMatch(/\*\*Assault bike bursts\*\* — 8 bursts, 4 in weeks 4, 8 and 12/);
   });
   it("the lighter weeks: the profiles in place of the main lifts, everything else half the sets, rounded up", () => {
     ["mon", "tue", "thu", "sat"].forEach((d) => expect(day(4, d).some((c) => /^Load-Velocity Profile/.test(c.n))).toBe(true));
@@ -222,10 +235,10 @@ describe("4 · the standing rules on its pages", () => {
     const sun = visible("sun", rx);
     ["EZ-Bar Curl + Overhead Triceps Extension", "Incline Dumbbell Curl + Dumbbell Skull Crusher", "Hammer Curl"].forEach((n) => expect(sun).not.toContain(n));
   });
-  it("red: the main lifts, sprints, jumps, throws and the 4 × 4 are the hard blocks; the size work isn't", () => {
+  it("red: the main lifts, sprints, jumps, throws, the 4 × 4 and the bursts are the hard blocks; the size work isn't", () => {
     const hard = (day, rx) => sppSess(day).b.filter((b) => !(b.hide && b.hide(rx)) && b.hard).map((b) => (typeof b.n === "function" ? b.n(rx) : b.n));
     expect(hard("mon", sppRx(2))).toEqual(["Back Squat"]);
-    expect(hard("tue", sppRx(2))).toEqual(["Bench Press + Weighted Chin-Up", "Standing Overhead Press"]);
+    expect(hard("tue", sppRx(2))).toEqual(["Bench Press + Weighted Chin-Up", "Standing Overhead Press", "Assault Bike Bursts"]);
     expect(hard("wed", sppRx(2))).toEqual([]);
     expect(hard("sat", sppRx(2))).toEqual(["Medicine-Ball Chest Pass + Rotational Scoop Throw", "Bench Throw (Smith)", "Push Press", "The 4 × 4 Intervals"]);
     expect(hard("sun", sppRx(2))).toEqual([]);

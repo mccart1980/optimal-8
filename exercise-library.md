@@ -244,6 +244,8 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **REPEAT BURSTS** — Six to eight seconds absolutely flat out, forty seconds easy, eight times. Five minutes easy, then eight more.
 
+**ASSAULT BIKE BURSTS** — On the assault bike, arms and legs together. Two minutes easy, then six seconds absolutely flat out and forty seconds easy spinning, eight times, then two minutes easy. If a burst is clearly weaker than the one before, take an extra twenty seconds; if two in a row are, stop there.
+
 **40-SECOND REPEATS** — Forty seconds flat out, eighty seconds easy, six times. The last three are meant to hurt. Don't hold back early.
 
 **TEMPO INTERVALS** — One minute at about 70% effort — hard, but never gasping — one minute easy. Ten times.

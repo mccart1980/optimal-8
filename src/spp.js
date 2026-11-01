@@ -38,6 +38,11 @@ export const SPPENG = {
     tgt: "The total on the bike's screen, at the same peak heart rate or a lower one." },
   vo2s: { n: "4-MINUTE INTERVALS", d: "On the bike: 5 minutes easy, then 3 × 4 minutes at 90–95% of your peak heart rate with 3 easy between, then 3 minutes easy — the lighter week's 3 × 4",
     tgt: "The total on the bike's screen, against the last 3 × 4." },
+  /* Tuesday's bursts on the assault bike: eight, four in the lighter weeks and test week */
+  sb: { n: "6-SECOND BURSTS", d: "On the assault bike: 2 minutes easy, then 8 bursts of 6 seconds flat out with 40 seconds easy between, then 2 minutes easy",
+    tgt: "The total on the bike's screen, against the last eight." },
+  sb4: { n: "6-SECOND BURSTS", d: "On the assault bike: 2 minutes easy, then 4 bursts of 6 seconds flat out with 40 seconds easy between, then 2 minutes easy — four in the lighter weeks and test week",
+    tgt: "The total on the bike's screen, against the last four." },
 };
 export const SPPENG_MENU = ["vo2"];
 
@@ -48,10 +53,12 @@ export const SPPENG_MENU = ["vo2"];
    after every double · profile: the lighter weeks' profiles · half: half
    the sets, rounded up · jump: the reactive slot — none in the size block
    (box jumps), low-box depth jumps in the strength block, depth jumps in
-   the power block · e: the Saturday intervals · tape: arm and shoulders on
-   Sunday's check, and the photos. */
+   the power block · e: the Saturday intervals · bk: Tuesday's bursts, eight
+   or, in the half weeks, four · tape: arm and shoulders on Sunday's check,
+   and the photos. */
 const SR = {};
-const swk = (d, o) => { SR[d] = Object.assign({ d, main: null, half: 0, light: 0, testWeek: 0, profile: 0, contrast: 0, jump: null, e: "vo2", spr90: 0, tape: 0 }, o); };
+const swk = (d, o) => { SR[d] = Object.assign({ d, main: null, half: 0, light: 0, testWeek: 0, profile: 0, contrast: 0, jump: null, e: "vo2", spr90: 0, tape: 0 }, o);
+  SR[d].bk = SR[d].half ? "sb4" : "sb"; };
 swk(1, { blk: "size", acc: "size", ph: "spp_size", main: { sets: 4, reps: 6, pct: 75 }, spr90: 1,
   em: "Size: the squat, bench and trap bar 4 × 6 @ 75%. Box jumps; the flying sprints at 90%. The 4 × 4 on Saturday, the nasal runs on Wednesday and Sunday." });
 swk(2, { blk: "size", acc: "size", ph: "spp_size", main: { sets: 4, reps: 6, pct: 77.5 }, spr90: 1,
@@ -81,7 +88,7 @@ swk(12, { blk: "test", acc: "power", ph: "spp_test", half: 1, testWeek: 1, tape:
 export const SPP_READY_LINE = {
   G: "GREEN — the session as written",
   Y: "YELLOW — every load −7% · the 4 × 4 at 90%",
-  R: "RED — the heavy lifts, the sprints, jumps and throws and the 4 × 4 come off; the size work runs",
+  R: "RED — the heavy lifts, the sprints, jumps and throws, the 4 × 4 and the bursts come off; the size work runs",
 };
 
 export const SPP_ROWS = SR;
@@ -223,8 +230,8 @@ export const SS = {
       why: "Back to back, a minute after each pair." }] },
 
   /* ---------------- TUESDAY ---------------- */
-  tue: { n: "TUESDAY", t: "Upper strength — bench and weighted chin-ups, the overhead press, then rows, dips, lateral raises and the ab wheel", ac: C.cobalt, box: 1,
-    intro: "Bench, weighted chin-ups and the overhead press heavy, then rows and dips for size.", b: [
+  tue: { n: "TUESDAY", t: "Upper strength — bench and weighted chin-ups, the overhead press, then rows, dips, lateral raises and the ab wheel, then the bursts", ac: C.cobalt, box: 1,
+    intro: "Bench, weighted chin-ups and the overhead press heavy, then rows and dips for size, then 6-second bursts on the assault bike.", b: [
     { L: "A", n: "Warm-up", m: 5, p: "S_WU_TUE", rxLine: () => "5 min · bands, push-ups" },
     { L: "B", n: "Load-Velocity Profile — Bench", m: 10, star: 1, profile: "bench", hide: (rx) => !rx.profile,
       rxLine: () => "five loads × 2 reps, fast, the watch recording",
@@ -265,7 +272,15 @@ export const SS = {
     { L: "F", n: "Cable Lateral Raise", m: 4, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 3) + " × 12–15",
       items: (rx) => [{ n: "Cable lateral raise", s: hs(rx, 3) + " × 12–15 · one or two left", cue: "Cable at hand height, stand side-on, the handle in your far hand with the cable running behind your back. Raise your arm out to the side to shoulder height, leading with the elbow, then lower slowly.", id: "s_clat_tue", k: "wr", sets: hs(rx, 3), reps: "12–15" }] },
     { L: "G", n: "Ab Wheel Rollout", m: 4, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 3) + " × 8–10",
-      items: (rx) => [{ n: "Ab wheel rollout", s: hs(rx, 3) + " × 8–10", cue: "Kneeling, roll forward as far as you can without your lower back sagging, then pull back with your abs.", id: "abwheel", k: "wr", sets: hs(rx, 3), reps: "8–10" }] }] },
+      items: (rx) => [{ n: "Ab wheel rollout", s: hs(rx, 3) + " × 8–10", cue: "Kneeling, roll forward as far as you can without your lower back sagging, then pull back with your abs.", id: "abwheel", k: "wr", sets: hs(rx, 3), reps: "8–10" }] },
+    /* THE BURSTS: six seconds flat out, forty easy, on the assault bike —
+       a little power and repeat-effort fitness for ten minutes on a day
+       the legs are fresh, halfway between Saturday's 4 × 4 and Thursday */
+    { L: "H", n: "Assault Bike Bursts", m: 10, hard: 1, eng: 1, engKey: "bk",
+      timer: (rx) => ({ kind: "rz", opt: { sets: 1, n: rx.bk === "sb4" ? 4 : 8, secs: 6, wu: 2, cd: 2 }, title: rx.bk === "sb4" ? "4 BURSTS" : "8 BURSTS" }),
+      rxLine: (rx) => (SPPENG[rx.bk] || SPPENG.sb).d,
+      items: (rx) => [{ n: "Output", s: "the total on the bike's screen · the peak heart rate", id: "s_burst", k: "out", u: "output / peak HR", erg: sessionBoxes(rx.bk), fields: engHR(rx.bk) }],
+      why: "Six seconds flat out, arms and legs, then forty easy. If a burst is clearly weaker than the one before, take an extra 20 seconds; if two in a row are, stop there. Same bike every week, so the totals compare.", tr: 1 }] },
 
   /* ---------------- WEDNESDAY ---------------- */
   wed: { n: "WEDNESDAY", t: "Physique A — chest and back for size, rear delts and lateral raises, then the nasal run", ac: C.moss, box: 1,
