@@ -221,7 +221,7 @@ export const SS = {
       why: "One leg at a time: size for the quads and glutes, and the weak side found." },
     { L: "F", n: "Seated Leg Curl", m: 5, rest: "Rest 75 s", rt: 75,
       rxLine: (rx) => hs(rx, 3) + " × 10–12",
-      items: (rx) => [{ n: "Seated leg curl", s: hs(rx, 3) + " × 10–12 · " + DROP.split(",")[0], cue: "Pad on your lower shins, chest leaning slightly forward. Curl all the way, then lower slowly to a full stretch.", id: "s_legcurl", k: "wr", sets: hs(rx, 3), reps: "10–12" }],
+      items: (rx) => [{ n: "Seated leg curl", s: hs(rx, 3) + " × 10–12 · " + DROP.split(",")[0], cue: "Knees lined up with the machine's pivot, the pad behind your legs just above your heels, the top pad down on your thighs, chest leaning slightly forward. Curl all the way, then lower slowly to a full stretch.", id: "s_legcurl", k: "wr", sets: hs(rx, 3), reps: "10–12" }],
       why: "Seated leg curls grew the hamstrings more than lying ones, 14% against 9% (Maeo, 2021)." },
     { L: "G", n: "Standing Calf Raise + Hanging Leg Raise", m: 6, pair: 1,
       rxLine: () => "back to back · 60 s after each pair",

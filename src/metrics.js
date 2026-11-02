@@ -401,6 +401,47 @@ export const DASH_IDS = {
 };
 export const SETTLE_IDS = ["settle", "settle2", "c_settle1", "c_settle2"];
 
+/* ================================================================
+   THE WEIGHTS YOU LIFT — Strength, Power and Physique keeps every
+   lift's sets, so a card can show last time's and NUMBERS can chart
+   them. A set counts once it's done with a weight on it.
+   ================================================================ */
+const DAY_ORDER = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+const setsDone = (e) => ((e && e.sets) || []).filter((x) => x && x.ok && num(x.w) != null);
+/* one lift's last session before a day: the latest entry with a weight
+   on a done set. `dateOf(p)` gives a parsed key's date, for an entry
+   that doesn't carry its own. */
+export function lastSession(log, id, before, dateOf) {
+  let best = null;
+  Object.keys(log || {}).forEach((k) => {
+    const p = parseKey(k); if (!p || p.id !== id) return;
+    const e = log[k], done = setsDone(e); if (!done.length) return;
+    const d = e.d || (dateOf ? dateOf(p) : null); if (!d || d >= before) return;
+    if (!best || d > best.d) best = { d, sets: done.map((x) => ({ w: num(x.w), r: x.r })) };
+  });
+  return best;
+}
+/* the top of a rep range: "10–12" → 12; a fixed count has none */
+export const rangeTop = (reps) => { const m = String(reps == null ? "" : reps).match(/^\s*\d+\s*[–-]\s*(\d+)/); return m ? Number(m[1]) : null; };
+/* every set at the top of its range last time, and at least as many
+   sets as today's: the smallest step goes on */
+export const topOfRange = (sess, reps, n) => { const t = rangeTop(reps); if (!t || !sess || sess.sets.length < (n || 1)) return false;
+  return sess.sets.every((x) => num(x.r) != null && num(x.r) >= t); };
+/* every lift with a weight on it, in a view's weeks: its heaviest set,
+   session by session, oldest first */
+export function liftHistory(log, view) {
+  const by = {};
+  Object.keys(log || {}).forEach((k) => {
+    const p = parseKey(k); if (!p || !inScope(view, p.macro)) return;
+    const e = log[k], done = setsDone(e); if (!done.length) return;
+    const top = Math.max(...done.map((x) => num(x.w)));
+    const L = by[p.id] || (by[p.id] = { id: p.id, n: null, rows: [] });
+    L.rows.push({ week: p.week, day: p.day, v: top, label: weekLabel(p.macro, p.week) + " " + p.day });
+    if (e.n) L.n = e.n;
+  });
+  return Object.keys(by).map((id) => Object.assign(by[id], { rows: by[id].rows.sort((a, b) => a.week - b.week || DAY_ORDER.indexOf(a.day) - DAY_ORDER.indexOf(b.day)) }));
+}
+
 /* the log entries for one id, oldest first */
 export function series(log, id, camp, day) {
   const out = [];

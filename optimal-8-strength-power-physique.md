@@ -63,7 +63,7 @@ Every heavy weight comes off your working max, and bar speed decides the load. E
 - Presses, rows, dips, chins, split squats and Romanian deadlifts: one or two.
 - Raises, curls, extensions, flyes, leg curls and calves: one or two, and the last set to failure or one short of it.
 
-**Adding weight.** On anything with a rep range, when every set reaches the top of the range, add the smallest step next time. The main lifts rise with the table.
+**Adding weight.** On anything with a rep range, when every set reaches the top of the range, add the smallest step next time. The main lifts rise with the table. Every exercise the app doesn't load for you has a weight box above its sets: type the weight, and it shows last time's weights and reps the next time round, tells you when every set hit the top of the range, and charts every lift in NUMBERS. Log the reps you actually did with ADJUST.
 
 **Tempo.** Main lifts: down under control, up as fast as the bar will go. Everything else: about two seconds down to a full stretch, then up.
 
@@ -92,7 +92,7 @@ The squat heavy, then Romanian deadlifts, split squats and leg curls for size.
 1. **Back squat** — the table's sets and percentages, after the ramp. Rest 3 minutes. In the power block, do three box jumps 90 seconds after each double, then rest 2 minutes. Bar on your upper back, feet about shoulder width, toes slightly out. Brace, sit down between your heels until the crease of your hip is below the top of your knee, then drive up. Pins set just below your lowest point.
 2. **Romanian deadlift** — size 3 × 8, strength 3 × 6, power 3 × 5. Rest 2 minutes. Barbell at arm's length, knees soft. Push your hips back and slide the bar down your thighs, back flat, until your hamstrings are at a deep stretch, then drive your hips forward to stand.
 3. **Bulgarian split squat** — size 3 × 8 each leg, strength 3 × 6, power 2 × 6. Rest 90 seconds. Back foot on a bench behind you, a dumbbell in each hand, front foot far enough forward that its shin stays fairly upright. Lower until the back knee nearly touches the floor, then drive up through the front heel.
-4. **Seated leg curl** — 3 × 10–12, all twelve weeks, the last set to failure. Rest 75 seconds. Pad on your lower shins, chest leaning slightly forward. Curl all the way, then lower slowly to a full stretch.
+4. **Seated leg curl** — 3 × 10–12, all twelve weeks, the last set to failure. Rest 75 seconds. Knees lined up with the machine's pivot, the pad behind your legs just above your heels, the top pad down on your thighs, chest leaning slightly forward. Curl all the way, then lower slowly to a full stretch.
 5. **Standing calf raise**, 3 × 10–15, back to back with 6. All the way down to a full stretch, hold two seconds, then all the way up.
 6. **Hanging leg raise**, 3 × 8–12. Rest 60 seconds after each pair. Hang from the bar, curl your pelvis up and lift your knees to your chest without swinging, then lower slowly. Straight legs once that gets easy.
 

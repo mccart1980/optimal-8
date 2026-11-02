@@ -150,6 +150,41 @@ describe("Tuesday's bursts", () => {
   });
 });
 
+describe("the weight box", () => {
+  /* the plan in use: Prep from 26 October, Strength, Power and Physique started on Monday 2 November */
+  const live = () => base({ autoRest: false, plans: [{ from: "2026-10-26", made: "2026-10-25", inputs: PREP }, { from: "2026-11-02", made: "2026-11-01", inputs: Object.assign({}, SPP, { restart: true }) }], season: SPP });
+  const seed = { "mSw1-mon-rdl": { sets: [{ ok: true, w: "60", r: "8" }, { ok: true, w: "60", r: "8" }, { ok: true, w: "60", r: "8" }], n: "Romanian Deadlift", d: "2026-11-02" },
+    "mSw1-mon-s_legcurl": { sets: [{ ok: true, w: "40", r: "12" }, { ok: true, w: "40", r: "12" }, { ok: true, w: "40", r: "12" }], n: "Seated Leg Curl", d: "2026-11-02" } };
+  it("week 1: type the weight once, the sets read it, the log keeps it; none on the squat or the leg raises", async () => {
+    await at(2026, 11, 2, live());
+    const card = pick("Romanian Deadlift");
+    expect(within(card).queryByTestId("last-time")).toBe(null);
+    fireEvent.change(within(card).getByTestId("weight-box").querySelector("input"), { target: { value: "60" } });
+    expect(card.querySelector("[data-set-btn='1']").textContent).toMatch(/60 kg × 8/);
+    fireEvent.click(within(card).getByRole("button", { name: "Set 1" }));
+    const e = JSON.parse(localStorage.getItem("o8s-log"))["mSw1-mon-rdl"];
+    expect(e).toMatchObject({ n: "Romanian Deadlift", d: "2026-11-02" });
+    expect(e.sets[0]).toMatchObject({ ok: true, w: "60", r: "8" });
+    expect(within(pick("Back Squat")).queryByTestId("weight-box")).toBe(null);
+    const pair = pick("Standing Calf Raise + Hanging Leg Raise");
+    expect([...pair.querySelectorAll("[data-pair-part]")].map((e) => !!e.querySelector("[data-testid='weight-box']"))).toEqual([true, false]);
+  });
+  it("week 2: last time's sets, the box starts at them, the nudge when every set hit the top of the range, and NUMBERS", async () => {
+    await at(2026, 11, 9, live(), { "o8s-log": seed });
+    let card = pick("Romanian Deadlift");
+    expect(within(card).getByTestId("last-time").textContent).toMatch(/^LAST TIME · MON,? 2 NOV · 60 KG × 8 · 8 · 8$/);
+    expect(within(card).getByTestId("weight-box").querySelector("input").value).toBe("60");
+    expect(within(card).queryByTestId("step-up")).toBe(null);
+    card = pick("Seated Leg Curl");
+    expect(within(card).getByTestId("step-up").textContent).toBe("TOP OF THE RANGE ON EVERY SET LAST TIME — ADD THE SMALLEST STEP TODAY");
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "PROGRESS" }));
+    fireEvent.click(screen.getByRole("button", { name: "NUMBERS" }));
+    const rows = [...document.querySelectorAll("[data-lift-history]")].map((e) => e.textContent);
+    expect(rows.some((t) => /^Romanian Deadlift60 kg/.test(t))).toBe(true);
+    expect(rows.some((t) => /^Seated Leg Curl40 kg/.test(t))).toBe(true);
+  });
+});
+
 describe("the tape, the photos and PROGRESS", () => {
   it("week 4's Sunday: the photos, and the weekly check asks the arm and the shoulders", async () => {
     await at(2027, 3, 14, spp());

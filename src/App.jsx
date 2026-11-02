@@ -68,6 +68,7 @@ import {
   morningFlag, recoveryDrop, easyZone, peakHeartRate, isEasyTimer, easyTimer, ergSlots, ergShapeFor, ergTotal, simFade, sleepWeek,
   readiness, READY_LINE, recalibrated,
   BAR_SPEED_ITEMS, isPhotoDay, parseFuelExport, series, parseKey, ergUnitLabel, r1, MORNING_FIELDS, strapBackBy, scopeOf, inScope, SETTLE_IDS,
+  lastSession, topOfRange, liftHistory,
 } from "./metrics.js";
 import {
   MorningCard, RecoveryHR, EasyZonePanel, ErgPanel, BarSpeedField,
@@ -1258,6 +1259,14 @@ const ADD_ITEMS = ["chin", "c_chinup", "achilles", "achilles_c", "s_chin", "s_di
 const SECS_ITEMS = ["lsit", "lever", "spanish", "c_spanish", "copen", "c_copen", "c_copenplank",
   "hands2", "c_hands_mon", "c_hands_thu", "c_hands_sun", "achilles", "achilles_c"];
 const SET_MODE = {}; BW_ITEMS.forEach((id) => { SET_MODE[id] = "bw"; }); ADD_ITEMS.forEach((id) => { SET_MODE[id] = "add"; });
+/* Strength, Power and Physique's bodyweight core: no weight box */
+const NO_LOAD = { hlr: 1, abwheel: 1 };
+/* a log key's date, off the season's rows */
+const keyDate = (p) => { const row = seasonRow(p.macro, p.week); return row ? addDays(row.mon, DAYS.indexOf(p.day)) : null; };
+/* last time's sets as one line: "60 KG × 10 · 10 · 9", or each set's own weight when they differ */
+const lastLine = (last, md) => { const pre = md === "add" ? "+" : ""; const same = last.sets.every((x) => x.w === last.sets[0].w);
+  return "LAST TIME · " + String(fmtDate(last.d)).toUpperCase() + " · " + (same ? pre + last.sets[0].w + " KG × " + last.sets.map((x) => x.r || "—").join(" · ")
+    : last.sets.map((x) => pre + x.w + " × " + (x.r || "—")).join(" · ") + " KG"); };
 const SET_SECS = {}; SECS_ITEMS.forEach((id) => { SET_SECS[id] = 1; });
 const setMode = (id) => SET_MODE[id] || "kg";
 /* the calisthenics line an item is logged against, for the level on the row */
@@ -1692,6 +1701,14 @@ function GymCardOne({ card, rx, week, macro, day, log, setLog, maxes, bw, ready,
     const sec = !!SET_SECS[id] || (md !== "kg" && (holdish(so.reps) || holdish(v(it.s, rx))));
     const ln = LINE_OF[id] && calis ? curLevel(calis, LINE_OF[id]) : null;
     const auto = it.mk && it.pct != null ? calc(it.mk, v(it.pct, rx)) : null;
+    /* THE WEIGHT BOX — Strength, Power and Physique: every exercise the
+       app doesn't load for you has the weight in one box above its sets,
+       last time's sets over it, and the nudge when every set hit the top
+       of the range. Today's weight starts as last time's. */
+    const boxOn = !!MODE.spp && md !== "bw" && !it.mk && !NO_LOAD[id];
+    const last = boxOn ? lastSession(log, id, engDay || "9999-12-31", keyDate) : null;
+    const w0 = boxOn ? (cur.w0 != null ? String(cur.w0) : last ? String(Math.max(...last.sets.map((x) => x.w))) : "") : "";
+    const stepUp = boxOn && topOfRange(last, so.reps, so.n);
     const repNum = typeof so.reps === "number" ? String(so.reps) : (String(so.reps || "").match(/^\d+(\+\d+)?/) || [""])[0];
     const velLift = b.vel && (it.mk === b.vel || it.mk === "cw_" + b.vel) && it.id !== "throw" && it.id !== "c_benchthrow" ? b.vel : null;
     /* Strength, Power and Physique reads its target off the line at the set's own percentage */
@@ -1704,8 +1721,10 @@ function GymCardOne({ card, rx, week, macro, day, log, setLog, maxes, bw, ready,
     const afterKg = velT && verdict && verdict.pct && auto && !(verdict.kind === "up" && cur.bumped) ? adjustLoad(auto[0], verdict) : null;
     const wmNow = it.mk ? workMax(it.mk) : null;
     const defW = (i) => { if (md === "bw") return ""; for (let k = i - 1; k >= 0; k--) if (rows[k] && rows[k].w) return rows[k].w;
-      if (i > 0 && afterKg != null) return String(afterKg); return md === "add" || !auto ? "" : String(auto[0]); };
-    const put = (i, p) => { const next = rows.slice(); while (next.length < so.n) next.push({}); next[i] = Object.assign({}, next[i], p); setE(id, Object.assign({}, cur, { sets: next })); };
+      if (i > 0 && afterKg != null) return String(afterKg); return md === "add" || !auto ? w0 : String(auto[0]); };
+    /* Strength, Power and Physique's sets carry the exercise's name and the day, for NUMBERS */
+    const tag = MODE.spp ? { n: card.n, d: engDay } : {};
+    const put = (i, p) => { const next = rows.slice(); while (next.length < so.n) next.push({}); next[i] = Object.assign({}, next[i], p); setE(id, Object.assign({}, cur, { sets: next }, tag)); };
     const tap = (i) => { const r = rows[i] || {};
       if (r.ok) { put(i, { ok: false }); return; }
       const d = { ok: true, r: r.r != null && r.r !== "" ? r.r : repNum };
@@ -1748,6 +1767,12 @@ function GymCardOne({ card, rx, week, macro, day, log, setLog, maxes, bw, ready,
       <div data-set-mode={md} data-set-unit={sec ? "s" : "reps"} data-set-id={id}>
         {rampLine ? <div data-testid="lift-ramp" style={Object.assign({}, mno, { fontSize: T3, color: C.chalk, lineHeight: 1.6, marginTop: 14 })}>{rampLine} · A MINUTE BETWEEN</div> : null}
         {ln ? <div style={Object.assign({}, mno, { fontSize: T3, color: C.brass, marginTop: 10 })}>LEVEL {ln.l}</div> : null}
+        {boxOn ? (
+          <div data-testid="weight-box" style={{ marginTop: 12 }}>
+            {last ? <div data-testid="last-time" style={Object.assign({}, mno, { fontSize: T3, color: C.chalk, lineHeight: 1.5 })}>{lastLine(last, md)}</div> : null}
+            {stepUp ? <div data-testid="step-up" style={Object.assign({}, mno, { fontSize: T3, color: C.moss, lineHeight: 1.5, marginTop: 6 })}>TOP OF THE RANGE ON EVERY SET LAST TIME — ADD THE SMALLEST STEP TODAY</div> : null}
+            <Input label={md === "add" ? "ADDED WEIGHT (KG)" : "WEIGHT (KG)"} v={w0} on={(val) => setE(id, Object.assign({}, cur, { w0: val }, tag))} ph="kg" />
+          </div>) : null}
         <SetButtons n={so.n} sets={rows} label={label} onTap={tap} adjust={adjust} speed={speed} />
       </div>);
   } else if (card.kind === "out" || card.kind === "review") {
@@ -2556,6 +2581,25 @@ function ergByType(log, camp, L, macro) {
   return out;
 }
 
+/* NUMBERS, in Strength, Power and Physique: every lift with a weight on
+   it — the heaviest set, session by session, the latest first */
+function LiftHistory({ rows }) {
+  const lifts = rows.filter((x) => x.rows.length).sort((a, b) => { const la = a.rows[a.rows.length - 1], lb = b.rows[b.rows.length - 1]; return lb.week - la.week || DAYS.indexOf(lb.day) - DAYS.indexOf(la.day); });
+  return (
+    <Card ac={C.moss}>
+      <Eye c={C.moss}>Every lift with a weight on it — the heaviest set, session by session</Eye>
+      {lifts.length ? lifts.map((x) => { const lastR = x.rows[x.rows.length - 1];
+        return (
+          <div key={x.id} data-lift-history={x.id} style={{ padding: "10px 0", borderBottom: "1px solid " + C.line }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+              <span style={Object.assign({}, bdy, { fontSize: 14, fontWeight: 600, color: C.chalk })}>{x.n || liftName(x.id)}</span>
+              <span style={Object.assign({}, mno, { fontSize: 13, fontWeight: 700, color: C.brass })}>{(ADD_ITEMS.indexOf(x.id) >= 0 ? "+" : "") + lastR.v} kg</span>
+            </div>
+            {x.rows.length > 1 ? <Bars data={x.rows.slice(-8).map((r) => [r.label, r.v])} color={C.moss} /> : null}
+          </div>); })
+        : <Note s={{ fontStyle: "italic" }}>Nothing logged yet. Type the weight in the box above an exercise's sets, then tap the sets.</Note>}
+    </Card>);
+}
 function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L, IM, calis, camp, view: viewIn, title, rangeWeeks, rangeGet, campRows, fight, sub: subIn, setSub: setSubIn, st, morning, photos, setPhotos, fuel, dateOf, dayIso, photoDay, ergUnit, tape, setTape, fuelPhase, weightOn }) {
   const [subOwn, setSubOwn] = useState("dash");
   const sub = subIn || subOwn;
@@ -2626,6 +2670,7 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
               : <Note>Squat and bench: your best single. Trap bar and push press: week 1 finds them (hard triple × 1.08), or enter one here.</Note>}
           </Card>
           {camp ? <Note c={C.ash} s={{ fontStyle: "italic" }}>Camp Mode is on: the camp loads from working weights, not these. Your maxes wait here, untouched, until the switch goes off.</Note> : null}
+          {scopeOf(view) === "spp" ? <LiftHistory rows={liftHistory(log, view)} /> : null}
           {scopeOf(view) !== "fighter" ? null : (
           <Card ac={C.cobalt}>
             <Eye c={C.cobalt}>Fight-sim fade — scored weeks 4, 9 and 14</Eye>

@@ -4,7 +4,7 @@ import builderMd from "../season-builder.md?raw";
 import { buildSeason, rowRx, describeSeason, CYCLE12, CYCLE16 } from "./builder.js";
 import { SPP_ROWS, sppRx, sppSess, sppTests, sppVelPhase, sppRamp, sppPhotoDay, sppMainLine, SPPENG } from "./spp.js";
 import { targetFor, TYPICAL } from "./velocity.js";
-import { parseKey, inScope, scopeOf, weekLabel, ergSeries, series, DASH_IDS } from "./metrics.js";
+import { parseKey, inScope, scopeOf, weekLabel, ergSeries, series, DASH_IDS, lastSession, rangeTop, topOfRange, liftHistory } from "./metrics.js";
 import { libFor } from "./library.js";
 import { sessionCatalog } from "./App.jsx";
 
@@ -278,5 +278,51 @@ describe("5 · PROGRESS and bar speed", () => {
     expect(prep.rows.some((r) => r.program === "spp")).toBe(false);
     expect(rowRx(prep.rows[0], true).spp).toBeUndefined();
     expect(Object.keys(SPP_ROWS).length).toBe(12);
+  });
+});
+
+describe("6 · the weights you lift", () => {
+  const set = (w, r, ok) => ({ ok: ok !== false, w: w == null ? undefined : String(w), r: String(r) });
+  const log = {
+    "mSw1-mon-rdl": { sets: [set(60, 8), set(60, 8), set(60, 8)], n: "Romanian Deadlift", d: "2027-02-15" },
+    "mSw2-mon-rdl": { sets: [set(62.5, 8), set(62.5, 8), set(65, 6)], n: "Romanian Deadlift", d: "2027-02-22" },
+    "mSw3-mon-rdl": { sets: [set(null, 8), set(null, 8)] },
+    "mSw2-mon-s_legcurl": { sets: [set(40, 12), set(40, 12), set(40, 12)], d: "2027-02-22" },
+    "mSw1-mon-s_legcurl": { sets: [set(40, 12), set(40, 11), set(40, 10)] },
+    "mPw5-sat-rdl": { sets: [set(80, 6), set(80, 6)] },
+    "mSw2-tue-s_chin": { sets: [set(10, 6), set(10, 6, false)], n: "Weighted chin-up, palms toward you", d: "2027-02-23" },
+  };
+  const dateOf = (p) => ({ "1": "2027-02-15", "2": "2027-02-22", "3": "2027-03-01" })[p.macro === "S" ? p.week : 0] || null;
+  it("last time: the latest session before the day with a weight on a done set; an entry without its date is placed off its week", () => {
+    expect(lastSession(log, "rdl", "2027-03-01", dateOf)).toEqual({ d: "2027-02-22", sets: [{ w: 62.5, r: "8" }, { w: 62.5, r: "8" }, { w: 65, r: "6" }] });
+    expect(lastSession(log, "rdl", "2027-02-22", dateOf).d).toBe("2027-02-15");
+    expect(lastSession(log, "rdl", "2027-02-15", dateOf)).toBe(null);
+    expect(lastSession(log, "s_legcurl", "2027-02-20", dateOf)).toEqual({ d: "2027-02-15", sets: [{ w: 40, r: "12" }, { w: 40, r: "11" }, { w: 40, r: "10" }] });
+    expect(lastSession(log, "s_chin", "2027-03-01", dateOf).sets).toEqual([{ w: 10, r: "6" }]);
+  });
+  it("the nudge: every set at the top of a rep range, and as many sets as today's; a fixed count never nudges", () => {
+    expect(rangeTop("10–12")).toBe(12);
+    expect(rangeTop("8–12/side")).toBe(12);
+    expect(rangeTop("8")).toBe(null);
+    expect(rangeTop("8/leg")).toBe(null);
+    expect(topOfRange(lastSession(log, "s_legcurl", "2027-03-01", dateOf), "10–12", 3)).toBe(true);
+    expect(topOfRange(lastSession(log, "s_legcurl", "2027-02-20", dateOf), "10–12", 3)).toBe(false);
+    expect(topOfRange(lastSession(log, "s_legcurl", "2027-03-01", dateOf), "10–12", 4)).toBe(false);
+    expect(topOfRange(lastSession(log, "rdl", "2027-03-01", dateOf), "8", 3)).toBe(false);
+  });
+  it("NUMBERS: each lift's heaviest set, session by session, its own weeks only, named as its card", () => {
+    const h = liftHistory(log, "spp");
+    const rdl = h.find((x) => x.id === "rdl");
+    expect(rdl.n).toBe("Romanian Deadlift");
+    expect(rdl.rows.map((r) => [r.label, r.v])).toEqual([["w1 mon", 60], ["w2 mon", 65]]);
+    expect(h.find((x) => x.id === "s_chin").rows.map((r) => r.v)).toEqual([10]);
+    expect(liftHistory(log, "prep").map((x) => x.id)).toEqual(["rdl"]);
+    expect(liftHistory(log, "prep")[0].rows.map((r) => r.v)).toEqual([80]);
+  });
+  it("the leg curl's card says where the pads go", () => {
+    const it0 = sppSess("mon").b.find((b) => b.n === "Seated Leg Curl").items(sppRx(1))[0];
+    expect(it0.cue).toMatch(/the pad behind your legs just above your heels, the top pad down on your thighs/);
+    expect(sppMd).toMatch(/the pad behind your legs just above your heels/);
+    expect(sppMd).not.toMatch(/lower shins/);
   });
 });

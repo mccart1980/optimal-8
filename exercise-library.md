@@ -200,7 +200,7 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **ONE-ARM DUMBBELL ROW** — One knee and one hand on a bench, the dumbbell hanging at full stretch. Row it to your hip, then lower slowly. Both sides.
 
-**SEATED LEG CURL** — Sit in the machine with the pad on your lower shins and your chest leaning slightly forward. Curl your heels all the way under, then lower slowly to a full stretch.
+**SEATED LEG CURL** — Sit in the machine with your knees lined up with its pivot, the pad behind your legs just above your heels and the top pad down on your thighs. Lean your chest slightly forward. Curl your heels all the way under, then lower slowly to a full stretch.
 
 **STANDING CALF RAISE** — On a calf-raise machine, or the edge of a step holding a weight, knees straight. Lower your heels as far as they go and hold the stretch for two seconds, then rise all the way up onto your toes.
 
