@@ -1781,7 +1781,20 @@ function GymCardOne({ card, rx, week, macro, day, log, setLog, maxes, bw, ready,
     const saves = (card.outs || []).filter((o) => o.max && num((log[key(o.id)] || {}).w)).map((o) => {
       const kg = o.est ? r25(num(log[key(o.id)].w) * o.est) : num(log[key(o.id)].w);
       return <BigBtn key={"sv" + o.id} on={() => onSetMax(o.max, kg, (o.est ? "working-weight check" : "test day") + " · " + macro + week)} c={C.oxide} s={{ marginTop: 10 }}>{num(maxes[o.max]) === kg ? "SAVED · " + kg + " KG" : "SAVE AS WORKING MAX · " + kg + " KG"}</BigBtn>; });
-    body = <div>{outs}{saves}</div>;
+    /* A BUTTON A RUN — Strength, Power and Physique's sled: one for each run
+       on its line, ticked as a set is, and the tick starts the rest. The
+       load and the time keep their boxes; the ticks sit beside them on the
+       same entry (runs), never as sets. */
+    const rm = it && it.runs ? String(v(it.s, rx) || "").match(SETS_LEAD) : null;
+    let runs = null;
+    if (rm) {
+      const n = Math.max(1, Number(rm[1])), cur = log[key(it.id)] || {}, done = cur.runs || [];
+      const tap = (i) => { const next = done.slice(); while (next.length < n) next.push(false); next[i] = !next[i];
+        setE(it.id, Object.assign({}, cur, { runs: next }));
+        if (next[i]) { buzz(30); if (autoRest !== false && card.rt !== 0) startRest(); } };
+      runs = <div data-runs={it.id}><SetButtons n={n} sets={done.map((x) => ({ ok: !!x }))} label={() => rm[2].trim()} onTap={tap} /></div>;
+    }
+    body = <div>{runs}{outs}{saves}</div>;
   }
 
   /* the calibration and the working weight, on the lift that needs them */

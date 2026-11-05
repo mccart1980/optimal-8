@@ -304,7 +304,7 @@ export const SS = {
     { L: "A", n: "Warm-up", m: 10, p: "S_WU_THU", rxLine: () => "10 min · bike, swings, skips, lunges, then the three build-ups" },
     { L: "B", n: "Heavy Sled Sprint", m: 8, star: 1, hard: 1, rest: "Rest 2:00", rt: 120,
       rxLine: (rx) => (rx.half ? 2 : 3) + " × 20 m",
-      items: (rx) => [{ n: "Heavy sled sprint 20 m", s: (rx.half ? 2 : 3) + " × 20 m @ 40–60% of bodyweight", cue: "Lean in at about 45 degrees and drive the ground backward through the whole foot, 5–7 seconds a run. Faster than that, add weight; slower, take some off.", id: "sled", k: "out", u: "load (kg) · time (s)", fields: SLED_FIELDS, bwp: [40, 60], bwl: "on the sled" }],
+      items: (rx) => [{ n: "Heavy sled sprint 20 m", s: (rx.half ? 2 : 3) + " × 20 m @ 40–60% of bodyweight", cue: "Lean in at about 45 degrees and drive the ground backward through the whole foot, 5–7 seconds a run. Faster than that, add weight; slower, take some off.", id: "sled", k: "out", u: "load (kg) · time (s)", fields: SLED_FIELDS, bwp: [40, 60], bwl: "on the sled", runs: 1 }],
       why: "Heavy sled sprints improve the first metres of a sprint and the forward push (Alcaraz, 2018; Morin, 2017)." },
     { L: "C", n: "Flying Sprints", m: 10, star: 1, hard: 1, hide: (rx) => !!rx.testWeek || !!rx.noFlying, rest: "Rest 2:30", rt: 150,
       rxLine: (rx) => sppSprints(rx) + " × 20 m " + (rx.spr90 ? "at 90%" : "flat out"),

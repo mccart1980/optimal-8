@@ -326,3 +326,21 @@ describe("6 · the weights you lift", () => {
     expect(sppMd).not.toMatch(/lower shins/);
   });
 });
+
+describe("7 · the sprints: a button a run, and the rest", () => {
+  const thu = sppSess("thu");
+  const sled = thu.b.find((b) => b.n === "Heavy Sled Sprint"), fly = thu.b.find((b) => b.n === "Flying Sprints");
+  it("the sled: a button for each run on its line — three, two in weeks 4, 8 and 12 — and the 2:00 rest; the load and the time keep their boxes", () => {
+    expect(sled.rt).toBe(120);
+    const runsOf = (w) => { const it0 = sled.items(sppRx(w))[0]; return it0.runs ? Number(it0.s.match(/^(\d+) ×/)[1]) : 0; };
+    expect(CYCLE12.map((x, i) => runsOf(i + 1))).toEqual([3, 3, 3, 2, 3, 3, 3, 2, 3, 3, 3, 2]);
+    const it1 = sled.items(sppRx(1))[0];
+    expect(it1.k).toBe("out");
+    expect(it1.fields.map((f) => f.k)).toEqual(["w", "t"]);
+  });
+  it("the flying sprints: a tick for each sprint on their line and the 2:30 rest, as before", () => {
+    expect(fly.rt).toBe(150);
+    expect(fly.items(sppRx(1))[0].k).toBe("chk");
+    expect([1, 4, 5].map((w) => fly.items(sppRx(w))[0].s.split(" · ")[0])).toEqual(["3 × 20 m", "2 × 20 m", "4 × 20 m"]);
+  });
+});

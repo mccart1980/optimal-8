@@ -185,6 +185,40 @@ describe("the weight box", () => {
   });
 });
 
+describe("the sprints' buttons", () => {
+  /* the plan in use: Prep from 26 October, Strength, Power and Physique started on Monday 2 November */
+  const live = () => base({ plans: [{ from: "2026-10-26", made: "2026-10-25", inputs: PREP }, { from: "2026-11-02", made: "2026-11-01", inputs: Object.assign({}, SPP, { restart: true }) }], season: SPP });
+  const runBtns = (card) => [...card.querySelectorAll("[data-runs='sled'] [data-set-btn]")];
+  it("Thursday's sled: a SET button a run, each tick starts the 2:00 rest; the load and the time keep their boxes; two runs in week 4", async () => {
+    await at(2026, 11, 5, live());
+    const card = pick("Heavy Sled Sprint");
+    expect(runBtns(card).map((b) => b.getAttribute("aria-label") + " · " + b.children[1].textContent)).toEqual(["Set 1 · 20 m", "Set 2 · 20 m", "Set 3 · 20 m"]);
+    expect([...card.querySelectorAll("[data-out-field]")].map((e) => e.getAttribute("data-out-field"))).toEqual(["w", "t"]);
+    fireEvent.change(card.querySelector("[data-out-field='w'] input"), { target: { value: "40" } });
+    fireEvent.click(runBtns(screen.getByTestId("now-card"))[0]);
+    expect(screen.getByTestId("timer-title").textContent).toBe("REST");
+    expect(screen.getByTestId("timer-count").textContent).toBe("2:00");
+    expect(JSON.parse(localStorage.getItem("o8s-log"))["mSw1-thu-sled"]).toEqual({ w: "40", runs: [true, false, false] });
+    expect(runBtns(screen.getByTestId("now-card"))[0].getAttribute("aria-label")).toBe("Undo set 1");
+    cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
+    await at(2026, 11, 26, live());
+    expect(runBtns(pick("Heavy Sled Sprint"))).toHaveLength(2);
+  });
+  it("the flying sprints: a SET button a sprint, and each tap starts the 2:30 rest", async () => {
+    await at(2026, 11, 5, live());
+    const card = pick("Flying Sprints");
+    expect(card.querySelectorAll("[data-set-btn]")).toHaveLength(3);
+    fireEvent.click(within(card).getByRole("button", { name: "Set 1" }));
+    expect(screen.getByTestId("timer-count").textContent).toBe("2:30");
+  });
+  it("Prep's sled is as it was: no run buttons", async () => {
+    await at(2026, 10, 28, live());
+    const card = pick("Heavy Sled Sprints");
+    expect(card.querySelector("[data-runs]")).toBe(null);
+    expect([...card.querySelectorAll("[data-out-field]")].map((e) => e.getAttribute("data-out-field"))).toEqual(["w", "t"]);
+  });
+});
+
 describe("the tape, the photos and PROGRESS", () => {
   it("week 4's Sunday: the photos, and the weekly check asks the arm and the shoulders", async () => {
     await at(2027, 3, 14, spp());
