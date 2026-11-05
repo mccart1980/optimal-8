@@ -13,12 +13,12 @@ Six sessions: four heavy or fast, two for size with an easy run after. Friday is
 | Day | Session | Time |
 | --- | --- | --- |
 | Monday | **Lower strength** — the squat heavy, then Romanian deadlifts, split squats and leg curls for size | ~60 min |
-| Tuesday | **Upper strength** — bench, weighted chins and the overhead press heavy, then rows and dips, then 6-second bursts on the assault bike | ~70 min |
+| Tuesday | **Upper strength** — rotational throws, then bench, weighted chins and the overhead press heavy, then rows and dips, then 6-second bursts on the assault bike | ~76 min |
 | Wednesday | **Physique A** — chest and back for size, then a 30-minute nasal run | ~65 min |
 | Thursday | **Lower power** — sled, sprints and jumps, then the trap bar heavy and a second squat | ~80 min |
 | Friday | Off — sleep | — |
 | Saturday | **Upper power** — throws, bench throws and the push press, then bench and back for size, then the 4 × 4 intervals | ~90 min |
-| Sunday | **Physique B** — shoulders, arms, traps and calves, then a 30-minute nasal run | ~70 min |
+| Sunday | **Physique B** — shoulders, arms, traps and calves, and the Pallof press, then a 30-minute nasal run | ~73 min |
 
 Heavy and fast days alternate with size days, and the easy runs sit on the size days. That keeps the runs and the fatigue away from the sessions where speed and heavy weights matter most.
 
@@ -100,24 +100,27 @@ The squat heavy, then Romanian deadlifts, split squats and leg curls for size.
 
 ## TUESDAY · UPPER STRENGTH
 
-Bench, weighted chins and the overhead press heavy, then rows and dips for size, then 6-second bursts on the assault bike.
+Rotational throws while you're fresh, then bench, weighted chins and the overhead press heavy, then rows and dips for size, then 6-second bursts on the assault bike.
 
-**Warm-up · 5 minutes**
+**Warm-up · 6 minutes**
 
 1. **Band pull-apart**, 2 × 15. Arms straight out in front, pull the band apart to your chest and squeeze your shoulder blades together.
 2. **Band dislocate**, 2 × 10. Wide grip on a band, arms straight, take it over your head and down behind you, then back.
 3. **Push-ups**, 10.
+4. Two easy throws of each kind, at half effort.
 
 **The session**
 
-1. **Bench press**, alternated with 2 — the table's sets and percentages, after the ramp. In the power block, do three medicine-ball chest passes 90 seconds after each double. Feet flat, backside on the bench, shoulder blades squeezed together. Lower to your lower chest, pause for a one-count, then press. Pins at chest height, no collars.
-2. **Weighted chin-up, palms toward you** — size 4 × 6, strength 5 × 4, power 4 × 3, at the heaviest weight that leaves two in you. Palms facing you, hands shoulder width, weight on a belt. From a dead hang, pull until your chin clears the bar, then lower all the way. Go bench, 90 seconds, chins, 90 seconds, so each lift gets 3 minutes.
-3. **Standing overhead press** — size 3 × 6, strength 4 × 4, power 3 × 3. Rest 2½ minutes. Bar at the front of your shoulders, feet hip width, glutes squeezed. Press straight up and push your head through, so the bar finishes over the back of your head. No leg drive: that's Saturday's push press.
-4. **Chest-supported dumbbell row**, alternated with 5 — 3 × 8–10. Chest on a bench set at about 30 degrees, a dumbbell in each hand. Row your elbows back to your hips, squeeze, then lower to a full stretch.
-5. **Weighted dip** — size 3 × 8–10, strength 3 × 6–8, power 3 × 5–6. Rest 90 seconds between each exercise. Parallel bars, weight on a belt once 10 bodyweight reps are easy. Lower until your shoulders are level with your elbows, chest slightly forward, then press to locked arms.
-6. **Cable lateral raise** — 3 × 12–15. Rest 60 seconds. Cable at hand height, stand side-on, the handle in your far hand with the cable running behind your back. Raise your arm out to the side to shoulder height, leading with the elbow, then lower slowly. The cable keeps the shoulder working at the bottom, where a dumbbell goes slack.
-7. **Ab wheel rollout** — 3 × 8–10. Rest 60 seconds. Kneeling, roll forward as far as you can without your lower back sagging, then pull back with your abs.
-8. **Assault bike bursts** — 8 bursts, 4 in weeks 4, 8 and 12. On the assault bike, arms and legs together: 2 minutes easy, then each burst 6 seconds absolutely flat out with 40 seconds of easy spinning after it, then 2 minutes easy to finish. About 10 minutes. If a burst is clearly weaker than the one before, take an extra 20 seconds; if two in a row are, stop there.
+1. **Rotational shot-put throw**, alternated with 2 — 3 × 3 each side. Rest 45 seconds between each. A 4–6 kg medicine ball at your shoulder, side-on to a solid wall in your stance. Drive off your back hip and push the ball into the wall hard and flat, like a straight punch. Catch it and reset.
+2. **Hook throw** — 3 × 3 each side. Ball at chest height in bent arms, side-on to the wall. Pivot hard off your lead leg and sling the ball sideways into the wall.
+3. **Bench press**, alternated with 4 — the table's sets and percentages, after the ramp. In the power block, do three medicine-ball chest passes 90 seconds after each double. Feet flat, backside on the bench, shoulder blades squeezed together. Lower to your lower chest, pause for a one-count, then press. Pins at chest height, no collars.
+4. **Weighted chin-up, palms toward you** — size 4 × 6, strength 5 × 4, power 4 × 3, at the heaviest weight that leaves two in you. Palms facing you, hands shoulder width, weight on a belt. From a dead hang, pull until your chin clears the bar, then lower all the way. Go bench, 90 seconds, chins, 90 seconds, so each lift gets 3 minutes.
+5. **Standing overhead press** — size 3 × 6, strength 4 × 4, power 3 × 3. Rest 2½ minutes. Bar at the front of your shoulders, feet hip width, glutes squeezed. Press straight up and push your head through, so the bar finishes over the back of your head. No leg drive: that's Saturday's push press.
+6. **Chest-supported dumbbell row**, alternated with 7 — 3 × 8–10. Chest on a bench set at about 30 degrees, a dumbbell in each hand. Row your elbows back to your hips, squeeze, then lower to a full stretch.
+7. **Weighted dip** — size 3 × 8–10, strength 3 × 6–8, power 3 × 5–6. Rest 90 seconds between each exercise. Parallel bars, weight on a belt once 10 bodyweight reps are easy. Lower until your shoulders are level with your elbows, chest slightly forward, then press to locked arms.
+8. **Cable lateral raise** — 3 × 12–15. Rest 60 seconds. Cable at hand height, stand side-on, the handle in your far hand with the cable running behind your back. Raise your arm out to the side to shoulder height, leading with the elbow, then lower slowly. The cable keeps the shoulder working at the bottom, where a dumbbell goes slack.
+9. **Ab wheel rollout** — 3 × 8–10. Rest 60 seconds. Kneeling, roll forward as far as you can without your lower back sagging, then pull back with your abs.
+10. **Assault bike bursts** — 8 bursts, 4 in weeks 4, 8 and 12. On the assault bike, arms and legs together: 2 minutes easy, then each burst 6 seconds absolutely flat out with 40 seconds of easy spinning after it, then 2 minutes easy to finish. About 10 minutes. If a burst is clearly weaker than the one before, take an extra 20 seconds; if two in a row are, stop there.
 
 ---
 
@@ -195,7 +198,7 @@ On the bike: 5 minutes easy, then four hard efforts of 4 minutes with 3 minutes 
 
 ## SUNDAY · PHYSIQUE B
 
-Shoulders, arms, traps and calves for size, then a 30-minute nasal run and the weekly check.
+Shoulders, arms, traps and calves for size, and the Pallof press, then a 30-minute nasal run and the weekly check.
 
 **Warm-up · 4 minutes**
 
@@ -212,7 +215,8 @@ Shoulders, arms, traps and calves for size, then a 30-minute nasal run and the w
 6. **Incline dumbbell curl**, alternated with 7 — 3 × 10–12. Bench at 45 degrees, arms hanging straight down behind your body: the stretch is the point. Curl without letting your elbows move forward.
 7. **Dumbbell skull crusher** — 3 × 10–12. Rest 60 seconds between each exercise. Lie on a flat bench, dumbbells above your shoulders, palms facing each other. Bend only at the elbows to lower the dumbbells beside your head to a deep stretch, then straighten.
 8. **Hammer curl** — 2 × 10–12. Rest 60 seconds. Thumbs up, elbows at your sides. Curl, then lower slowly.
-9. **Seated calf raise** — 3 × 12–15. Rest 60 seconds. Pad on your knees. Lower your heels to a full stretch and hold for two seconds, then rise all the way up.
+9. **Seated calf raise**, 3 × 12–15, back to back with 10. Pad on your knees. Lower your heels to a full stretch and hold for two seconds, then rise all the way up.
+10. **Pallof press**, 3 × 10 each side. Rest 60 seconds after each pair. A band or cable at chest height beside you, standing side-on. Hold the handle at your chest, press your hands straight out and hold two seconds without letting it twist you, then bring them back. When 10 is easy, stand further from the anchor.
 
 **Then · the nasal run, 30 minutes**
 
@@ -306,6 +310,7 @@ Every choice below rests on trials where trials exist. Where it rests on coachin
 - **Three minutes between heavy sets.** In trained men, 3 minutes' rest built more strength and size than 1 minute: the squat rose 15.2% against 7.6% (Schoenfeld, 2016).
 - **Power built on strength, by several methods at once.** Power needs strength first, then throws, loaded jumps and rebound jumps on top, with the most work going to the weakest link (Cormie, 2011; Jiménez-Reyes, 2017). Loaded jumps and throws stand in for cleans and snatches: the same intent to move fast, without years of technique or the wrist risk. That last part is a coaching call, not a trial.
 - **The sled.** Heavy sled sprints improve the first metres of a sprint and the forward push (Alcaraz, 2018; Morin, 2017).
+- **Rotation twice a week, and a trunk that holds.** The legs make a punch's force; the trunk turns it and carries it to the fist. Tuesday's shot-put and hook throws and Saturday's scoop throw train that turn fast, the straight and the hook, and the Pallof press trains the trunk to hold against a twist. That rests on how the punch works and on coaching practice, not a trial.
 - **Exercises chosen for the stretch.** Overhead triceps extensions grew the triceps 1.4 times as much as pushdowns (Maeo, 2023). Seated leg curls grew the hamstrings more than lying ones, 14% against 9% (Maeo, 2021). The incline curls, deep presses and full-stretch raises follow the same idea.
 - **The engine held, not built.** Endurance can be held for up to 15 weeks on as little as two sessions a week, as long as the intensity stays (Spiering, 2021). The 4 × 4 at 90–95% of peak heart rate raised fitness more than steady or threshold work (Helgerud, 2007). Cardio barely holds back strength or muscle size, but it does blunt explosive power, mostly when both are in the same session (Schumann, 2022). So there's one long hard session, not two, the bursts are ten minutes on an upper-body day, and the runs are easy and kept off the fast days.
 - **Hard days and easy days.** Heavy and fast sessions alternate with size work and easy running, and upper and lower body each get a heavy day and a fast day, as the conjugate method splits them. That shape comes from coaching practice — Charlie Francis's sprinters, Westside's lifters — more than from trials.

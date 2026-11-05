@@ -219,6 +219,41 @@ describe("the sprints' buttons", () => {
   });
 });
 
+describe("rotation and the trunk", () => {
+  /* the plan in use: Prep from 26 October, Strength, Power and Physique started on Monday 2 November */
+  const live = () => base({ plans: [{ from: "2026-10-26", made: "2026-10-25", inputs: PREP }, { from: "2026-11-02", made: "2026-11-01", inputs: Object.assign({}, SPP, { restart: true }) }], season: SPP });
+  it("Tuesday: the throws first, before the bench; a shot-put set starts the 45 seconds; two sets in week 4; none on a red morning", async () => {
+    await at(2026, 11, 3, live());
+    const rows = wholeDay();
+    expect(before(rows, "Warm-up", "Rotational Shot-Put Throw + Hook Throw")).toBe(true);
+    expect(before(rows, "Rotational Shot-Put Throw + Hook Throw", "Bench Press + Weighted Chin-Up")).toBe(true);
+    const card = pick("Rotational Shot-Put Throw + Hook Throw");
+    const parts = card.querySelectorAll("[data-pair-part]");
+    expect(within(card).getAllByTestId("card-name").map((e) => e.textContent)).toEqual(["Rotational Shot-Put Throw + Hook Throw", "Rotational shot-put throw", "Hook throw"]);
+    expect([...parts].map((p) => p.querySelectorAll("[data-set-btn]").length)).toEqual([3, 3]);
+    fireEvent.click(within(parts[0]).getByRole("button", { name: "Set 1" }));
+    expect(screen.getByTestId("timer-title").textContent).toBe("REST");
+    expect(screen.getByTestId("timer-count").textContent).toBe("0:45");
+    cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
+    await at(2026, 11, 24, live());
+    expect([...pick("Rotational Shot-Put Throw + Hook Throw").querySelectorAll("[data-pair-part]")].map((p) => p.querySelectorAll("[data-set-btn]").length)).toEqual([2, 2]);
+    cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
+    await at(2026, 11, 10, live(), { "o8s-ready": { "mSw2-tue": "R" } });
+    expect(wholeDay()).not.toContain("Rotational Shot-Put Throw + Hook Throw");
+  });
+  it("Sunday: the Pallof press back to back with the seated calf raise — the calf set goes straight into it, its own set starts the minute, and it counts reps", async () => {
+    await at(2026, 11, 8, live());
+    const card = pick("Seated Calf Raise + Pallof Press");
+    const parts = card.querySelectorAll("[data-pair-part]");
+    expect([...card.querySelectorAll("[data-set-mode]")].map((e) => e.getAttribute("data-set-mode") + ":" + e.getAttribute("data-set-id") + ":" + e.getAttribute("data-set-unit"))).toEqual(["kg:s_scalf:reps", "bw:s_pallof:reps"]);
+    fireEvent.click(within(parts[0]).getByRole("button", { name: "Set 1" }));
+    expect(screen.queryByTestId("timer-title")).toBe(null);
+    fireEvent.click(within(parts[1]).getByRole("button", { name: "Set 1" }));
+    expect(screen.getByTestId("timer-count").textContent).toBe("1:00");
+    expect(parts[1].querySelector("[data-set-btn='1']").textContent).toMatch(/10$/);
+  });
+});
+
 describe("the tape, the photos and PROGRESS", () => {
   it("week 4's Sunday: the photos, and the weekly check asks the arm and the shoulders", async () => {
     await at(2027, 3, 14, spp());

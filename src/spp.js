@@ -145,9 +145,9 @@ export const SPPROTO = {
   S_WU_MON: { n: "Warm-up", s: "6 min · Mon", c: C.cobalt,
     note: "The ramp to the working sets is on the squat's own card.",
     i: [["Easy bike", "3 min"], ["Spanish squat hold", "2 × 30 s"], ["Box jump", "2 × 3 — onto a knee-high box, land soft, step down"]] },
-  S_WU_TUE: { n: "Warm-up", s: "5 min · Tue and Sat", c: C.cobalt,
-    note: "The ramp to the working sets is on the bench's own card. Saturday's adds two easy throws of each.",
-    i: [["Band pull-apart", "2 × 15"], ["Band dislocate", "2 × 10"], ["Push-up", "×10"]] },
+  S_WU_TUE: { n: "Warm-up", s: "6 min · Tue", c: C.cobalt,
+    note: "The ramp to the working sets is on the bench's own card.",
+    i: [["Band pull-apart", "2 × 15"], ["Band dislocate", "2 × 10"], ["Push-up", "×10"], ["Then two easy throws of each", "at half effort"]] },
   S_WU_WED: { n: "Warm-up", s: "5 min · Wed", c: C.cobalt,
     i: [["Band pull-apart", "2 × 15"], ["Push-up", "×10"], ["Then a light set", "of the incline press and the pulldown"]] },
   S_WU_THU: { n: "Warm-up · legs and build-ups", s: "10 min · Thu", c: C.cobalt,
@@ -155,7 +155,7 @@ export const SPPROTO = {
     i: [["Easy bike", "3 min"], ["Leg swings", "×10 each way, each leg"], ["A-skips", "2 × 15 m"], ["Walking lunges", "×10"],
       ["SPRINT BUILD-UPS", ""], ["20 m @ 60%", "×1"], ["20 m @ 75%", "×1"], ["20 m @ 90%", "×1"]] },
   S_WU_SAT: { n: "Warm-up", s: "6 min · Sat", c: C.cobalt,
-    note: "Tuesday's warm-up, then two easy throws of each at half effort.",
+    note: "The same as Tuesday's: bands, push-ups, then two easy throws of each at half effort.",
     i: [["Band pull-apart", "2 × 15"], ["Band dislocate", "2 × 10"], ["Push-up", "×10"], ["Then two easy throws of each", "at half effort"]] },
   S_WU_SUN: { n: "Warm-up", s: "4 min · Sun", c: C.cobalt,
     i: [["Band pull-apart", "2 × 15"], ["Band dislocate", "2 × 10"], ["Then a light set", "of the cable lateral raise and the curl"]] },
@@ -230,9 +230,15 @@ export const SS = {
       why: "Back to back, a minute after each pair." }] },
 
   /* ---------------- TUESDAY ---------------- */
-  tue: { n: "TUESDAY", t: "Upper strength — bench and weighted chin-ups, the overhead press, then rows, dips, lateral raises and the ab wheel, then the bursts", ac: C.cobalt, box: 1,
-    intro: "Bench, weighted chin-ups and the overhead press heavy, then rows and dips for size, then 6-second bursts on the assault bike.", b: [
-    { L: "A", n: "Warm-up", m: 5, p: "S_WU_TUE", rxLine: () => "5 min · bands, push-ups" },
+  tue: { n: "TUESDAY", t: "Upper strength — rotational throws, then bench and weighted chin-ups, the overhead press, rows, dips, lateral raises and the ab wheel, then the bursts", ac: C.cobalt, box: 1,
+    intro: "Rotational throws while you're fresh, then bench, weighted chin-ups and the overhead press heavy, then rows and dips for size, then 6-second bursts on the assault bike.", b: [
+    { L: "A", n: "Warm-up", m: 6, p: "S_WU_TUE", rxLine: () => "6 min · bands, push-ups, two easy throws of each" },
+    /* ROTATION: the second throws of the week, three and four days from
+       Saturday's, the straight and the hook — first, while you're fresh */
+    { L: "K", n: "Rotational Shot-Put Throw + Hook Throw", m: 5, star: 1, hard: 1, pair: 1, rxLine: () => "alternate · 45 s after each",
+      items: (rx) => [{ n: "Rotational shot-put throw", s: hs(rx, 3) + " × 3 each side · 4–6 kg ball, into a wall", cue: "Ball at your shoulder, side-on to the wall in your stance. Drive off your back hip and push the ball into the wall hard and flat, like a straight punch.", id: "s_shotput", k: "chk", rest: "Rest 45 s · then the hook throw", rt: 45 },
+        { n: "Hook throw", s: hs(rx, 3) + " × 3 each side", cue: "Ball at chest height in bent arms, side-on to the wall. Pivot hard off your lead leg and sling the ball sideways into the wall.", id: "s_hookthrow", k: "chk", rest: "Rest 45 s · then the shot-put", rt: 45 }],
+      w: "Every throw as hard as you can make it. A throw clearly weaker than the first ends the set." },
     { L: "B", n: "Load-Velocity Profile — Bench", m: 10, star: 1, profile: "bench", hide: (rx) => !rx.profile,
       rxLine: () => "five loads × 2 reps, fast, the watch recording",
       items: [{ n: "Bench at five loads", s: FIVE, cue: "Two reps at each load, as fast as the bar will move, the watch recording the mean speed.", id: "s_prof_bp", k: "chk" }],
@@ -389,8 +395,8 @@ export const SS = {
       why: (rx) => (rx.testWeek ? "Test week: the 4 × 4 is the engine test. " : "") + "Use the same bike every week. Progress is more on the screen at the same peak heart rate, or the same at a lower one.", tr: 1 }] },
 
   /* ---------------- SUNDAY ---------------- */
-  sun: { n: "SUNDAY", t: "Physique B — shoulders, arms, traps and calves, then the nasal run and the weekly check", ac: C.brass, free: 1,
-    intro: "Shoulders, arms, traps and calves for size, then a 30-minute nasal run.", b: [
+  sun: { n: "SUNDAY", t: "Physique B — shoulders, arms, traps and calves, and the Pallof press, then the nasal run and the weekly check", ac: C.brass, free: 1,
+    intro: "Shoulders, arms, traps and calves for size, and the Pallof press, then a 30-minute nasal run.", b: [
     { L: "A", n: "Warm-up", m: 4, p: "S_WU_SUN", rxLine: () => "4 min · bands, a light set of the first two" },
     { L: "B", n: "Cable Lateral Raise", m: 6, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 4) + " × 12–20",
       items: (rx) => [{ n: "Cable lateral raise", s: hs(rx, 4) + " × 12–20 · " + DROP, cue: "Cable at hand height, the handle in your far hand with the cable behind your back. Raise your arm out to shoulder height, leading with the elbow, and lower slowly.", id: "s_clat_sun", k: "wr", sets: hs(rx, 4), reps: "12–20" }] },
@@ -407,8 +413,11 @@ export const SS = {
         { n: "Dumbbell skull crusher", s: hs(rx, 3) + " × 10–12 · one or two left", cue: "Lie on a flat bench, dumbbells above your shoulders, palms facing each other. Bend only at the elbows to lower the dumbbells beside your head to a deep stretch, then straighten.", id: "s_skull", k: "wr", sets: hs(rx, 3), reps: "10–12", rest: "Rest 60 s · then the curl", rt: 60 }] },
     { L: "G", n: "Hammer Curl", m: 3, hide: (rx) => !!rx.upper4, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 2) + " × 10–12",
       items: (rx) => [{ n: "Hammer curl", s: hs(rx, 2) + " × 10–12 · one or two left", cue: "Thumbs up, elbows at your sides. Curl, then lower slowly.", id: "s_hammer", k: "wr", sets: hs(rx, 2), reps: "10–12" }] },
-    { L: "H", n: "Seated Calf Raise", m: 4, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 3) + " × 12–15",
-      items: (rx) => [{ n: "Seated calf raise", s: hs(rx, 3) + " × 12–15 · 2 s at the bottom", cue: "Pad on your knees. Lower your heels to a full stretch and hold for two seconds, then rise all the way up.", id: "s_scalf", k: "wr", sets: hs(rx, 3), reps: "12–15" }] },
+    /* THE TRUNK: holding against a twist, back to back with the calves */
+    { L: "H", n: "Seated Calf Raise + Pallof Press", m: 7, pair: 1, rxLine: () => "back to back · 60 s after each pair",
+      items: (rx) => [{ n: "Seated calf raise", s: hs(rx, 3) + " × 12–15 · 2 s at the bottom", cue: "Pad on your knees. Lower your heels to a full stretch and hold for two seconds, then rise all the way up.", id: "s_scalf", k: "wr", sets: hs(rx, 3), reps: "12–15", rest: "straight into the Pallof press", rt: 0 },
+        { n: "Pallof press", s: hs(rx, 3) + " × 10 each side", cue: "A band or cable at chest height beside you, standing side-on. Hold the handle at your chest, press your hands straight out and hold two seconds without letting it twist you, then bring them back. When 10 is easy, stand further from the anchor.", id: "s_pallof", k: "chk", rest: "Rest 60 s", rt: 60 }],
+      why: "Back to back, a minute after each pair." },
     nasalRun("R"),
     { L: "I", n: "Weekly Check", m: 2, review: 1, rangeTests: 1,
       items: (rx) => checkItems(rx),
