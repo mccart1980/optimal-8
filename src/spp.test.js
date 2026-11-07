@@ -126,8 +126,8 @@ describe("3 · the session pages", () => {
   const day = (w, d) => CAT.filter((c) => c.week === w && c.day === d && c.edge == null).filter((c, i, a) => a.findIndex((x) => x.i === c.i) === i);
   const names = (w, d) => day(w, d).map((c) => c.n);
   const card = (w, d, n) => day(w, d).find((c) => c.n === n);
-  it("Monday: the squat, then the Romanian deadlift, the split squat, the leg curl, the calves and leg raises", () => {
-    expect(names(1, "mon")).toEqual(["Warm-up", "Back Squat", "Romanian Deadlift", "Bulgarian Split Squat", "Seated Leg Curl", "Standing Calf Raise + Hanging Leg Raise"]);
+  it("Monday: the squat, then the Romanian deadlift, the split squat, the leg curl, the calves and leg raises, then the neck and rear delts", () => {
+    expect(names(1, "mon")).toEqual(["Warm-up", "Back Squat", "Romanian Deadlift", "Bulgarian Split Squat", "Seated Leg Curl", "Standing Calf Raise + Hanging Leg Raise", "Lying Neck Curl + Lying Neck Extension", "Chest-Supported Rear-Delt Raise"]);
     expect(card(1, "mon", "Back Squat").pres).toBe("4 × 6 · 75% · Rest 3:00");
     expect(card(5, "mon", "Back Squat").pres).toBe("5 × 3 · 85% · Rest 3:00");
     expect(card(11, "mon", "Back Squat").pres).toBe("4 × 2 · 95% · Rest 90 s · 3 box jumps · rest 2:00");
@@ -146,13 +146,13 @@ describe("3 · the session pages", () => {
     expect(card(9, "tue", "Bench Press + Weighted Chin-Up").lib.map((e) => e.n)).toEqual(["BENCH PRESS", "MEDICINE-BALL CHEST PASSES", "WEIGHTED CHIN-UP, PALMS TOWARD YOU"]);
   });
   it("Wednesday and Sunday: size, then the 30-minute nasal run; Sunday ends with the weekly check", () => {
-    expect(names(1, "wed")).toEqual(["Warm-up", "Incline Dumbbell Press + Lat Pulldown", "Low-to-High Cable Fly + Wide-Grip Seated Row", "Reverse Pec-Deck", "Dumbbell Lateral Raise", "The Nasal Run"]);
+    expect(names(1, "wed")).toEqual(["Warm-up", "Incline Dumbbell Press + Lat Pulldown", "Low-to-High Cable Fly + Wide-Grip Seated Row", "Reverse Pec-Deck + Cable Crunch", "Dumbbell Lateral Raise", "The Nasal Run"]);
     expect(card(1, "wed", "The Nasal Run").pres).toBe("30 min easy, nose only · 65–75% of peak");
-    expect(names(1, "sun")).toEqual(["Warm-up", "Cable Lateral Raise", "Face Pull", "Dumbbell Shrug", "EZ-Bar Curl + Overhead Triceps Extension", "Incline Dumbbell Curl + Dumbbell Skull Crusher", "Hammer Curl", "Seated Calf Raise + Pallof Press", "The Nasal Run", "Weekly Check"]);
+    expect(names(1, "sun")).toEqual(["Warm-up", "Cable Lateral Raise", "Face Pull", "Dumbbell Shrug + Cable Crunch", "EZ-Bar Curl + Overhead Triceps Extension", "Incline Dumbbell Curl + Dumbbell Skull Crusher", "Hammer Curl", "Seated Calf Raise + Pallof Press", "The Nasal Run", "Weekly Check"]);
     expect(card(1, "sun", "Cable Lateral Raise").pres).toMatch(/^4 × 12–20 · the last set to failure, then 30% lighter and go again/);
   });
-  it("Thursday: the sled, the sprints and the jumps first, then trap bar jumps, the trap bar, the pause squat, the Nordics", () => {
-    expect(names(1, "thu")).toEqual(["Warm-up", "Heavy Sled Sprint", "Flying Sprints", "Box Jumps", "Trap Bar Jump", "Trap Bar Deadlift", "Pause Squat", "Nordic Curls"]);
+  it("Thursday: the sled, the sprints and the jumps first, then trap bar jumps, the trap bar and its shrugs, the pause squat, the Nordics", () => {
+    expect(names(1, "thu")).toEqual(["Warm-up", "Heavy Sled Sprint", "Flying Sprints", "Box Jumps", "Trap Bar Jump", "Trap Bar Deadlift", "Trap Bar Shrug", "Pause Squat", "Nordic Curls"]);
     expect(names(5, "thu")).toContain("Low-Box Depth Jumps");
     expect(names(9, "thu")).toContain("Depth Jumps");
     expect(card(5, "thu", "Low-Box Depth Jumps").pres).toMatch(/^4 × 3 · 20 cm box/);
@@ -200,7 +200,7 @@ describe("3 · the session pages", () => {
     expect(day(12, "tue").filter((c) => c.kind === "top").map((c) => c.n)).toEqual(["Bench Press"]);
     expect(card(12, "tue", "Weighted chin-up, palms toward you — top triple").kind).toBe("out");
     expect(day(12, "thu").filter((c) => c.kind === "top").map((c) => c.n)).toEqual(["Trap Bar Deadlift"]);
-    expect(names(12, "thu")).toEqual(["Warm-up", "Heavy Sled Sprint", "Trap Bar Jump", "Trap Bar Deadlift", "Nordic Curls"]);
+    expect(names(12, "thu")).toEqual(["Warm-up", "Heavy Sled Sprint", "Trap Bar Jump", "Trap Bar Deadlift", "Trap Bar Shrug", "Nordic Curls"]);
     expect(card(12, "thu", "Trap Bar Jump").pres.split(" · ")[0]).toBe("3 × 3 @ your peak-power load");
     expect(day(12, "sat").filter((c) => c.kind === "top").map((c) => c.n)).toEqual(["Push Press"]);
     day(12, "mon").concat(day(12, "tue"), day(12, "thu"), day(12, "sat")).filter((c) => c.kind === "top").forEach((c) => expect(c.lib[0].n).toBe("TOP TRIPLE"));
@@ -373,10 +373,73 @@ describe("8 · rotation and the trunk", () => {
     expect(trunk.hard).toBeUndefined();
     expect(sppMd).toMatch(/\*\*Pallof press\*\*, 3 × 10 each side\. Rest 60 seconds after each pair/);
   });
-  it("the week's minutes: Tuesday about 76, Sunday about 73, as the document's table says", () => {
+  it("the week's minutes: Tuesday about 76, Sunday about 76 with the cable crunches, as the document's table says", () => {
     expect([1, 5, 9].map((w) => sppSess("tue").m(sppRx(w)))).toEqual([73, 79, 80]);
-    expect(sppSess("sun").m(sppRx(1))).toBe(73);
+    expect(sppSess("sun").m(sppRx(1))).toBe(76);
     expect(sppMd).toMatch(/\| Tuesday \|[^\n]*\| ~76 min \|/);
-    expect(sppMd).toMatch(/\| Sunday \|[^\n]*\| ~73 min \|/);
+    expect(sppMd).toMatch(/\| Sunday \|[^\n]*\| ~76 min \|/);
+  });
+});
+
+describe("9 · the abs, the traps, the rear delts and the neck", () => {
+  const CAT = sessionCatalog(["spp"]).filter((c) => c.set === "spp");
+  const card = (w, d, n) => CAT.find((c) => c.week === w && c.day === d && c.n === n && c.edge == null);
+  const block = (d, n) => sppSess(d).b.find((b) => b.n === n);
+  const setsOf = (it) => Number(String(it.s).match(/^(\d+) ×/)[1]);
+  const items = (d, n, w) => block(d, n).items(sppRx(w));
+  const names = (w, d) => CAT.filter((c) => c.week === w && c.day === d && c.edge == null).filter((c, i, a) => a.findIndex((x) => x.i === c.i) === i).map((c) => c.n);
+  it("the abs: 12 hard sets a week — the leg raises, the ab wheel, and the cable crunch on Wednesday and Sunday — 8 in the lighter weeks", () => {
+    const abs = (w) => [items("mon", "Standing Calf Raise + Hanging Leg Raise", w)[1], items("tue", "Ab Wheel Rollout", w)[0],
+      items("wed", "Reverse Pec-Deck + Cable Crunch", w)[1], items("sun", "Dumbbell Shrug + Cable Crunch", w)[1]];
+    expect(abs(1).map((i) => i.n)).toEqual(["Hanging leg raise", "Ab wheel rollout", "Cable crunch", "Cable crunch"]);
+    expect(abs(1).reduce((a, i) => a + setsOf(i), 0)).toBe(12);
+    expect(abs(4).reduce((a, i) => a + setsOf(i), 0)).toBe(8);
+    const crunch = abs(1)[2];
+    expect([crunch.id, crunch.k, crunch.reps, crunch.rt, crunch.s]).toEqual(["s_crunch", "wr", "10–15", 60, "3 × 10–15 · one or two left"]);
+    expect(card(1, "wed", "Reverse Pec-Deck + Cable Crunch").lib.map((e) => e.n)).toEqual(["REVERSE PEC-DECK", "CABLE CRUNCHES"]);
+    expect(items("wed", "Reverse Pec-Deck + Cable Crunch", 1)[0].rt).toBe(0);
+    expect(items("sun", "Dumbbell Shrug + Cable Crunch", 1)[0].rt).toBe(0);
+  });
+  it("the traps: heavy trap bar shrugs on Thursday, straight after the deadlift, and Sunday's dumbbell shrugs — twice a week", () => {
+    const thu = names(1, "thu");
+    expect(thu.indexOf("Trap Bar Shrug")).toBe(thu.indexOf("Trap Bar Deadlift") + 1);
+    expect(names(4, "thu")).toContain("Trap Bar Shrug");
+    const tb = items("thu", "Trap Bar Shrug", 1)[0];
+    expect([tb.id, tb.s, tb.rt == null ? block("thu", "Trap Bar Shrug").rt : tb.rt]).toEqual(["s_tbshrug", "3 × 8–12 · a second's hold at the top", 75]);
+    expect(card(1, "thu", "Trap Bar Shrug").lib.map((e) => e.n)).toEqual(["TRAP BAR SHRUGS"]);
+    expect(block("thu", "Trap Bar Shrug").hard).toBeUndefined();
+  });
+  it("the neck: Monday's lying neck curl and extension, back to back, 3 × 15–20, 45 seconds after each pair, light and slow", () => {
+    const [c, e] = items("mon", "Lying Neck Curl + Lying Neck Extension", 1);
+    expect([c.id, c.s, c.rt, e.id, e.s, e.rt]).toEqual(["s_neckc", "3 × 15–20 · slow, never jerked", 0, "s_necke", "3 × 15–20 · slow, never jerked", 45]);
+    expect(c.cue).toMatch(/Start with 2\.5–5 kg/);
+    expect(card(1, "mon", "Lying Neck Curl + Lying Neck Extension").lib.map((x) => x.n)).toEqual(["LYING NECK CURLS", "LYING NECK EXTENSIONS"]);
+    expect(items("mon", "Lying Neck Curl + Lying Neck Extension", 4)[0].s).toMatch(/^2 ×/);
+  });
+  it("the rear delts: direct work three times a week — Monday's chest-supported raise, Wednesday's reverse pec-deck, Sunday's face pulls — 9 hard sets", () => {
+    const rd = [items("mon", "Chest-Supported Rear-Delt Raise", 1)[0], items("wed", "Reverse Pec-Deck + Cable Crunch", 1)[0], items("sun", "Face Pull", 1)[0]];
+    expect(rd.map((i) => i.n)).toEqual(["Chest-supported rear-delt raise", "Reverse pec-deck", "Face pull"]);
+    expect(rd.reduce((a, i) => a + setsOf(i), 0)).toBe(9);
+    const r = rd[0];
+    expect([r.id, r.k, r.s, r.reps, block("mon", "Chest-Supported Rear-Delt Raise").rt]).toEqual(["s_rdraise", "wr", "3 × 15–20 · one or two left", "15–20", 60]);
+    expect(card(1, "mon", "Chest-Supported Rear-Delt Raise").lib.map((e) => e.n)).toEqual(["CHEST-SUPPORTED REAR-DELT RAISES"]);
+    const mon = names(1, "mon");
+    expect(mon[mon.length - 1]).toBe("Chest-Supported Rear-Delt Raise");
+    expect(items("mon", "Chest-Supported Rear-Delt Raise", 4)[0].s).toMatch(/^2 ×/);
+    expect(block("mon", "Chest-Supported Rear-Delt Raise").hard).toBeUndefined();
+    expect(sppMd).toMatch(/\*\*Chest-supported rear-delt raise\*\* — 3 × 15–20\. Rest 60 seconds\./);
+    expect(sppMd).toMatch(/\| Wednesday \| \*\*Physique A\*\* — chest and back for size, rear delts and cable crunches/);
+  });
+  it("the week's minutes and the document: Monday ~69, Wednesday ~68, Thursday ~82, Sunday ~76, about seven and a half hours", () => {
+    expect([1, 5, 9].map((w) => sppSess("mon").m(sppRx(w)))).toEqual([67, 71, 71]);
+    expect(sppSess("wed").m(sppRx(1))).toBe(68);
+    expect([1, 5, 9].map((w) => sppSess("thu").m(sppRx(w)))).toEqual([80, 84, 84]);
+    expect(sppMd).toMatch(/\| Monday \|[^\n]*then the neck and rear delts \| ~69 min \|/);
+    expect(sppMd).toMatch(/\| Wednesday \|[^\n]*cable crunches[^\n]*\| ~68 min \|/);
+    expect(sppMd).toMatch(/\| Thursday \|[^\n]*trap bar shrugs[^\n]*\| ~82 min \|/);
+    expect(sppMd).toMatch(/About seven and a half hours a week\./);
+    expect(sppMd).toMatch(/\*\*Cable crunch\*\*, 3 × 10–15\. Rest 60 seconds after each pair/);
+    expect(sppMd).toMatch(/\*\*Trap bar shrug\*\* — 3 × 8–12\. Rest 75 seconds\. Straight after the deadlift/);
+    expect(sppMd).toMatch(/\*\*Lying neck curl\*\*, 3 × 15–20, back to back with 8/);
   });
 });

@@ -8,17 +8,17 @@ Picked while a Prep is running, the Prep carries on to its test day and the twel
 
 ## THE WEEK
 
-Six sessions: four heavy or fast, two for size with an easy run after. Friday is off. About seven hours a week, the same as Prep.
+Six sessions: four heavy or fast, two for size with an easy run after. Friday is off. About seven and a half hours a week.
 
 | Day | Session | Time |
 | --- | --- | --- |
-| Monday | **Lower strength** — the squat heavy, then Romanian deadlifts, split squats and leg curls for size | ~60 min |
+| Monday | **Lower strength** — the squat heavy, then Romanian deadlifts, split squats and leg curls for size, then the neck and rear delts | ~69 min |
 | Tuesday | **Upper strength** — rotational throws, then bench, weighted chins and the overhead press heavy, then rows and dips, then 6-second bursts on the assault bike | ~76 min |
-| Wednesday | **Physique A** — chest and back for size, then a 30-minute nasal run | ~65 min |
-| Thursday | **Lower power** — sled, sprints and jumps, then the trap bar heavy and a second squat | ~80 min |
+| Wednesday | **Physique A** — chest and back for size, rear delts and cable crunches, then a 30-minute nasal run | ~68 min |
+| Thursday | **Lower power** — sled, sprints and jumps, then the trap bar heavy, trap bar shrugs and a second squat | ~82 min |
 | Friday | Off — sleep | — |
 | Saturday | **Upper power** — throws, bench throws and the push press, then bench and back for size, then the 4 × 4 intervals | ~90 min |
-| Sunday | **Physique B** — shoulders, arms, traps and calves, and the Pallof press, then a 30-minute nasal run | ~73 min |
+| Sunday | **Physique B** — shoulders, traps, abs, arms and calves, and the Pallof press, then a 30-minute nasal run | ~76 min |
 
 Heavy and fast days alternate with size days, and the easy runs sit on the size days. That keeps the runs and the fatigue away from the sessions where speed and heavy weights matter most.
 
@@ -79,7 +79,7 @@ Every heavy weight comes off your working max, and bar speed decides the load. E
 
 ## MONDAY · LOWER STRENGTH
 
-The squat heavy, then Romanian deadlifts, split squats and leg curls for size.
+The squat heavy, then Romanian deadlifts, split squats and leg curls for size, then the neck and rear delts.
 
 **Warm-up · 6 minutes**
 
@@ -95,6 +95,9 @@ The squat heavy, then Romanian deadlifts, split squats and leg curls for size.
 4. **Seated leg curl** — 3 × 10–12, all twelve weeks, the last set to failure. Rest 75 seconds. Knees lined up with the machine's pivot, the pad behind your legs just above your heels, the top pad down on your thighs, chest leaning slightly forward. Curl all the way, then lower slowly to a full stretch.
 5. **Standing calf raise**, 3 × 10–15, back to back with 6. All the way down to a full stretch, hold two seconds, then all the way up.
 6. **Hanging leg raise**, 3 × 8–12. Rest 60 seconds after each pair. Hang from the bar, curl your pelvis up and lift your knees to your chest without swinging, then lower slowly. Straight legs once that gets easy.
+7. **Lying neck curl**, 3 × 15–20, back to back with 8. Slow, never jerked. Lie face up on a bench with your head off the end, a folded towel and a light plate on your forehead, held with both hands. Let your head go back slowly, then curl your chin to your chest. Start with 2.5–5 kg and add a little only when 20 is easy.
+8. **Lying neck extension**, 3 × 15–20. Rest 45 seconds after each pair. Lie face down on a bench with your head off the end, a folded towel and a light plate on the back of your head, held with both hands. Lower your chin towards your chest, then lift your head until you're looking straight ahead. Start light, as for the curl.
+9. **Chest-supported rear-delt raise** — 3 × 15–20. Rest 60 seconds. Lie face down on an incline bench with light dumbbells hanging straight down. Raise your arms out to the sides to shoulder height, little fingers leading, squeeze the backs of your shoulders, then lower slowly.
 
 ---
 
@@ -126,7 +129,7 @@ Rotational throws while you're fresh, then bench, weighted chins and the overhea
 
 ## WEDNESDAY · PHYSIQUE A
 
-Chest and back for size, then a 30-minute nasal run. Nothing heavy and nothing fast, because Thursday is the power session.
+Chest and back for size, rear delts and cable crunches, then a 30-minute nasal run. Nothing heavy and nothing fast, because Thursday is the power session.
 
 **Warm-up · 5 minutes**
 
@@ -139,8 +142,9 @@ Chest and back for size, then a 30-minute nasal run. Nothing heavy and nothing f
 2. **Lat pulldown** — 3 × 10–12. Rest 90 seconds between each exercise. Lean back slightly and pull the bar to your upper chest, driving your elbows down, then let it all the way up to a full stretch.
 3. **Low-to-high cable fly**, alternated with 4 — 3 × 12–15. Cables set low, step forward, and sweep your hands up and together to chin height, arms slightly bent. Lower to a full stretch.
 4. **Wide-grip seated cable row** — 3 × 10–12. Rest 75 seconds between each exercise. Pull the bar to your upper chest with your elbows out, squeeze your upper back, then reach forward to a full stretch.
-5. **Reverse pec-deck** — 3 × 15–20. Rest 60 seconds. Face the machine, arms straight out in front, and sweep them back until they're level with your body.
-6. **Dumbbell lateral raise** — 4 × 12–20. Rest 60 seconds. Lean slightly forward, raise the dumbbells out to the sides to shoulder height, elbows soft, and lower slowly. On the last set, when you reach failure, pick up dumbbells about 30% lighter and go again.
+5. **Reverse pec-deck**, 3 × 15–20, back to back with 6. Face the machine, arms straight out in front, and sweep them back until they're level with your body.
+6. **Cable crunch**, 3 × 10–15. Rest 60 seconds after each pair. Kneel facing a high cable, the rope held either side of your head. Curl your ribs down towards your hips, so your back rounds and your hips stay still, then uncurl slowly. Add weight when 15 is easy.
+7. **Dumbbell lateral raise** — 4 × 12–20. Rest 60 seconds. Lean slightly forward, raise the dumbbells out to the sides to shoulder height, elbows soft, and lower slowly. On the last set, when you reach failure, pick up dumbbells about 30% lighter and go again.
 
 **Then · the nasal run, 30 minutes**
 
@@ -150,7 +154,7 @@ Easy, on the road or a treadmill, breathing in and out through your nose the who
 
 ## THURSDAY · LOWER POWER
 
-Sled, sprints and jumps while you're fresh, then the trap bar heavy and a second, lighter squat. Friday's rest after it.
+Sled, sprints and jumps while you're fresh, then the trap bar heavy, heavy shrugs on the same bar, and a second, lighter squat. Friday's rest after it.
 
 **Warm-up · 10 minutes**
 
@@ -165,8 +169,9 @@ Sled, sprints and jumps while you're fresh, then the trap bar heavy and a second
 3. **Jumps** — 4 × 3. Rest 90 seconds. Size block: box jumps, onto a box about knee height, landing soft, stepping down. Strength block: low-box depth jumps — step off a 20 cm box and, the instant your feet touch, jump straight up as high as you can. Power block: depth jumps, the same off a 30–40 cm box.
 4. **Trap bar jump** — 4 × 3 at your peak-power load. Rest 90 seconds. Stand inside the bar, dip and jump as high as you can, land soft with bent knees, reset, go again.
 5. **Trap bar deadlift** — the table's sets and percentages, after the ramp. Rest 3 minutes. In the power block, do three broad jumps 90 seconds after each double: two-foot jump forward for distance, stick the landing. Stand inside the bar, hips back, chest up, grip the handles and push the floor away until hips and knees lock out together. No hitch, no leaning back.
-6. **Pause squat** — size 3 × 5 @ 65%, strength 3 × 3 @ 72.5%, power 3 × 2 @ 75%, all of your squat working max. Rest 2 minutes. Monday's squat with a dead stop at the bottom for two seconds, staying tight, then up as fast as the bar will move.
-7. **Nordic curl** — 3 × 4–6. Rest 90 seconds. Kneel with your heels anchored under a pad. Keep your body straight from knees to head and lower yourself forward as slowly as you can, catch yourself with your hands, and push back up.
+6. **Trap bar shrug** — 3 × 8–12. Rest 75 seconds. Straight after the deadlift, on the same bar. Stand inside the trap bar, arms straight. Shrug straight up towards your ears, hold for a second, then lower to a full stretch. Never roll the shoulders.
+7. **Pause squat** — size 3 × 5 @ 65%, strength 3 × 3 @ 72.5%, power 3 × 2 @ 75%, all of your squat working max. Rest 2 minutes. Monday's squat with a dead stop at the bottom for two seconds, staying tight, then up as fast as the bar will move.
+8. **Nordic curl** — 3 × 4–6. Rest 90 seconds. Kneel with your heels anchored under a pad. Keep your body straight from knees to head and lower yourself forward as slowly as you can, catch yourself with your hands, and push back up.
 
 ---
 
@@ -198,25 +203,26 @@ On the bike: 5 minutes easy, then four hard efforts of 4 minutes with 3 minutes 
 
 ## SUNDAY · PHYSIQUE B
 
-Shoulders, arms, traps and calves for size, and the Pallof press, then a 30-minute nasal run and the weekly check.
+Shoulders, traps, abs, arms and calves for size, and the Pallof press, then a 30-minute nasal run and the weekly check.
 
 **Warm-up · 4 minutes**
 
 1. **Band pull-apart**, 2 × 15. **Band dislocate**, 2 × 10.
-2. A light set of exercises 1 and 4.
+2. A light set of exercises 1 and 5.
 
 **The session**
 
 1. **Cable lateral raise** — 4 × 12–20. Rest 60 seconds. Cable at hand height, the handle in your far hand with the cable behind your back. Raise your arm out to shoulder height, leading with the elbow, and lower slowly. On the last set, at failure, drop the weight by about 30% and go again.
 2. **Face pull** — 3 × 15–20. Rest 60 seconds. Rope on a cable at forehead height. Pull the rope towards your forehead, hands apart and elbows high, and squeeze the backs of your shoulders.
-3. **Dumbbell shrug** — 3 × 10–15. Rest 75 seconds. Heavy dumbbells at your sides. Lift your shoulders straight up towards your ears, hold for a second, then lower to a full stretch.
-4. **EZ-bar curl**, alternated with 5 — 3 × 8–12. Elbows pinned at your sides. Curl up, then take two seconds to lower to straight arms.
-5. **Overhead cable triceps extension** — 3 × 10–15. Rest 60 seconds between each exercise. A rope on a high cable with your back to it, or one dumbbell held in both hands. Elbows pointing at the ceiling, lower your hands behind your head to a deep stretch, then straighten your arms.
-6. **Incline dumbbell curl**, alternated with 7 — 3 × 10–12. Bench at 45 degrees, arms hanging straight down behind your body: the stretch is the point. Curl without letting your elbows move forward.
-7. **Dumbbell skull crusher** — 3 × 10–12. Rest 60 seconds between each exercise. Lie on a flat bench, dumbbells above your shoulders, palms facing each other. Bend only at the elbows to lower the dumbbells beside your head to a deep stretch, then straighten.
-8. **Hammer curl** — 2 × 10–12. Rest 60 seconds. Thumbs up, elbows at your sides. Curl, then lower slowly.
-9. **Seated calf raise**, 3 × 12–15, back to back with 10. Pad on your knees. Lower your heels to a full stretch and hold for two seconds, then rise all the way up.
-10. **Pallof press**, 3 × 10 each side. Rest 60 seconds after each pair. A band or cable at chest height beside you, standing side-on. Hold the handle at your chest, press your hands straight out and hold two seconds without letting it twist you, then bring them back. When 10 is easy, stand further from the anchor.
+3. **Dumbbell shrug**, 3 × 10–15, back to back with 4. Heavy dumbbells at your sides. Lift your shoulders straight up towards your ears, hold for a second, then lower to a full stretch.
+4. **Cable crunch**, 3 × 10–15. Rest 60 seconds after each pair. Kneel facing a high cable, the rope held either side of your head. Curl your ribs down towards your hips, so your back rounds and your hips stay still, then uncurl slowly. Add weight when 15 is easy.
+5. **EZ-bar curl**, alternated with 6 — 3 × 8–12. Elbows pinned at your sides. Curl up, then take two seconds to lower to straight arms.
+6. **Overhead cable triceps extension** — 3 × 10–15. Rest 60 seconds between each exercise. A rope on a high cable with your back to it, or one dumbbell held in both hands. Elbows pointing at the ceiling, lower your hands behind your head to a deep stretch, then straighten your arms.
+7. **Incline dumbbell curl**, alternated with 8 — 3 × 10–12. Bench at 45 degrees, arms hanging straight down behind your body: the stretch is the point. Curl without letting your elbows move forward.
+8. **Dumbbell skull crusher** — 3 × 10–12. Rest 60 seconds between each exercise. Lie on a flat bench, dumbbells above your shoulders, palms facing each other. Bend only at the elbows to lower the dumbbells beside your head to a deep stretch, then straighten.
+9. **Hammer curl** — 2 × 10–12. Rest 60 seconds. Thumbs up, elbows at your sides. Curl, then lower slowly.
+10. **Seated calf raise**, 3 × 12–15, back to back with 11. Pad on your knees. Lower your heels to a full stretch and hold for two seconds, then rise all the way up.
+11. **Pallof press**, 3 × 10 each side. Rest 60 seconds after each pair. A band or cable at chest height beside you, standing side-on. Hold the handle at your chest, press your hands straight out and hold two seconds without letting it twist you, then bring them back. When 10 is easy, stand further from the anchor.
 
 **Then · the nasal run, 30 minutes**
 
@@ -311,6 +317,7 @@ Every choice below rests on trials where trials exist. Where it rests on coachin
 - **Power built on strength, by several methods at once.** Power needs strength first, then throws, loaded jumps and rebound jumps on top, with the most work going to the weakest link (Cormie, 2011; Jiménez-Reyes, 2017). Loaded jumps and throws stand in for cleans and snatches: the same intent to move fast, without years of technique or the wrist risk. That last part is a coaching call, not a trial.
 - **The sled.** Heavy sled sprints improve the first metres of a sprint and the forward push (Alcaraz, 2018; Morin, 2017).
 - **Rotation twice a week, and a trunk that holds.** The legs make a punch's force; the trunk turns it and carries it to the fist. Tuesday's shot-put and hook throws and Saturday's scoop throw train that turn fast, the straight and the hook, and the Pallof press trains the trunk to hold against a twist. That rests on how the punch works and on coaching practice, not a trial.
+- **Abs, traps, rear delts and the neck.** Abs grow like any other muscle, on load and hard sets: 12 a week from the leg raises, the ab wheel and the cable crunches, which take weight. The traps get heavy shrugs twice a week, the rear delts direct work three times and the neck its own work once. That's a coaching call for the build you're after, not a trial.
 - **Exercises chosen for the stretch.** Overhead triceps extensions grew the triceps 1.4 times as much as pushdowns (Maeo, 2023). Seated leg curls grew the hamstrings more than lying ones, 14% against 9% (Maeo, 2021). The incline curls, deep presses and full-stretch raises follow the same idea.
 - **The engine held, not built.** Endurance can be held for up to 15 weeks on as little as two sessions a week, as long as the intensity stays (Spiering, 2021). The 4 × 4 at 90–95% of peak heart rate raised fitness more than steady or threshold work (Helgerud, 2007). Cardio barely holds back strength or muscle size, but it does blunt explosive power, mostly when both are in the same session (Schumann, 2022). So there's one long hard session, not two, the bursts are ten minutes on an upper-body day, and the runs are easy and kept off the fast days.
 - **Hard days and easy days.** Heavy and fast sessions alternate with size work and easy running, and upper and lower body each get a heavy day and a fast day, as the conjugate method splits them. That shape comes from coaching practice — Charlie Francis's sprinters, Westside's lifters — more than from trials.

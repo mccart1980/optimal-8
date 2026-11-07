@@ -254,6 +254,53 @@ describe("rotation and the trunk", () => {
   });
 });
 
+describe("the abs, the traps and the neck", () => {
+  /* the plan in use: Prep from 26 October, Strength, Power and Physique started on Monday 2 November */
+  const live = () => base({ plans: [{ from: "2026-10-26", made: "2026-10-25", inputs: PREP }, { from: "2026-11-02", made: "2026-11-01", inputs: Object.assign({}, SPP, { restart: true }) }], season: SPP });
+  const modes = (card) => [...card.querySelectorAll("[data-set-mode]")].map((e) => e.getAttribute("data-set-mode") + ":" + e.getAttribute("data-set-id"));
+  it("Monday ends with the neck, back to back: the curl's set goes straight into the extension, the extension's starts 0:45", async () => {
+    await at(2026, 11, 2, live());
+    const rows = wholeDay();
+    expect(before(rows, "Standing Calf Raise + Hanging Leg Raise", "Lying Neck Curl + Lying Neck Extension")).toBe(true);
+    const card = pick("Lying Neck Curl + Lying Neck Extension");
+    expect(modes(card)).toEqual(["kg:s_neckc", "kg:s_necke"]);
+    const parts = card.querySelectorAll("[data-pair-part]");
+    fireEvent.click(within(parts[0]).getByRole("button", { name: "Set 1" }));
+    expect(screen.queryByTestId("timer-title")).toBe(null);
+    fireEvent.click(within(parts[1]).getByRole("button", { name: "Set 1" }));
+    expect(screen.getByTestId("timer-count").textContent).toBe("0:45");
+  });
+  it("Monday ends with the chest-supported rear-delt raise after the neck, in kilos; its set starts 1:00", async () => {
+    await at(2026, 11, 2, live());
+    const rows = wholeDay();
+    expect(before(rows, "Lying Neck Curl + Lying Neck Extension", "Chest-Supported Rear-Delt Raise")).toBe(true);
+    const card = pick("Chest-Supported Rear-Delt Raise");
+    expect(modes(card)).toEqual(["kg:s_rdraise"]);
+    fireEvent.click(within(card).getByRole("button", { name: "Set 1" }));
+    expect(screen.getByTestId("timer-count").textContent).toBe("1:00");
+  });
+  it("Wednesday's and Sunday's cable crunch, each back to back with the pull before it, with a weight box; the crunch's set starts 1:00", async () => {
+    await at(2026, 11, 4, live());
+    let card = pick("Reverse Pec-Deck + Cable Crunch");
+    expect(modes(card)).toEqual(["kg:s_rpd", "kg:s_crunch"]);
+    expect(within(card.querySelectorAll("[data-pair-part]")[1]).getByTestId("weight-box")).toBeTruthy();
+    fireEvent.click(within(card.querySelectorAll("[data-pair-part]")[1]).getByRole("button", { name: "Set 1" }));
+    expect(screen.getByTestId("timer-count").textContent).toBe("1:00");
+    cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
+    await at(2026, 11, 8, live());
+    card = pick("Dumbbell Shrug + Cable Crunch");
+    expect(modes(card)).toEqual(["kg:s_shrug", "kg:s_crunch"]);
+  });
+  it("Thursday: the trap bar shrug straight after the deadlift; a set starts 1:15", async () => {
+    await at(2026, 11, 5, live());
+    const rows = wholeDay();
+    expect(rows.indexOf("Trap Bar Shrug")).toBe(rows.indexOf("Trap Bar Deadlift") + 1);
+    const card = pick("Trap Bar Shrug");
+    fireEvent.click(within(card).getByRole("button", { name: "Set 1" }));
+    expect(screen.getByTestId("timer-count").textContent).toBe("1:15");
+  });
+});
+
 describe("the tape, the photos and PROGRESS", () => {
   it("week 4's Sunday: the photos, and the weekly check asks the arm and the shoulders", async () => {
     await at(2027, 3, 14, spp());

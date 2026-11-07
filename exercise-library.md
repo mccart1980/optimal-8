@@ -142,6 +142,8 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **HANGING LEG RAISES** — Hang from a bar and lift your legs to hip height or above without swinging, then lower slowly.
 
+**CABLE CRUNCHES** — Kneel facing a high cable, the rope held either side of your head. Curl your ribs down towards your hips, so your back rounds and your hips stay still, then uncurl slowly. Add weight when 15 is easy.
+
 **SUITCASE CARRY** — A heavy dumbbell or kettlebell in one hand. Walk 30 metres standing tall without leaning to either side, then switch hands.
 
 **FARMER'S CARRY** — A heavy dumbbell in each hand. Stand tall, shoulders down, and take short, quick steps for 30 metres without putting them down. Start around 30 kg a hand; add 2.5 kg a hand when every run is clean, with no stop and no lean.
@@ -169,6 +171,10 @@ Every exercise, session, test and move in the program, in two or three plain lin
 **NECK RAPID TENSE** — A band resting light pressure on your head. Go from fully relaxed to fully braced in under a second, hold two seconds, relax. Each direction.
 
 **NECK PERTURBATION HOLD** — A band around your head, anchored to the rack. Hold your neck still while you tug the band in small random pulses with your hand. Your head doesn't move.
+
+**LYING NECK CURLS** — Lie face up on a bench with your head off the end, a folded towel and a light plate on your forehead, held with both hands. Let your head go back slowly, then curl your chin to your chest. Start with 2.5–5 kg; never jerk it.
+
+**LYING NECK EXTENSIONS** — Lie face down on a bench with your head off the end, a folded towel and a light plate on the back of your head, held with both hands. Lower your chin towards your chest, then lift your head until you're looking straight ahead. Start light; never jerk it.
 
 **FACE PULLS** — A rope on a high cable, or a band on a door anchor. Pull it to your face with your elbows high, squeeze the backs of your shoulders, return slowly.
 
@@ -217,6 +223,8 @@ Every exercise, session, test and move in the program, in two or three plain lin
 **REVERSE PEC-DECK** — Face the pec-deck, handles at shoulder height, arms straight out in front. Sweep your arms back until they're level with your body, squeeze, return slowly.
 
 **REAR-DELT FLY** — Bent over with a flat back, small dumbbells hanging. Raise them out to the sides, little fingers leading, squeeze, lower.
+
+**CHEST-SUPPORTED REAR-DELT RAISES** — Lie face down on an incline bench with light dumbbells hanging straight down. Raise your arms out to the sides to shoulder height, little fingers leading, squeeze the backs of your shoulders, then lower slowly.
 
 **INCLINE DUMBBELL CURL** — Lie back on a bench set at about 45°, arms hanging straight down behind you, a dumbbell in each hand. Curl without the elbows moving forward, then lower all the way to a full stretch.
 

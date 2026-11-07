@@ -144,6 +144,7 @@ const ROW_NAMES = {
   /* trunk, tendons, hands, neck */
   "ab wheel rollout": "AB WHEEL ROLLOUTS",
   "hanging leg raise": "HANGING LEG RAISES",
+  "cable crunch": "CABLE CRUNCHES",
   "achilles hold standing": "ACHILLES HOLD",
   "hand": ["KNUCKLE HOLD", "BAND WRIST EXTENSION"],
   "full neck block": ["NECK FOUR-DIRECTION HOLDS", "NECK RAPID TENSE", "NECK PERTURBATION HOLD"],

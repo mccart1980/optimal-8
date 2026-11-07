@@ -138,6 +138,9 @@ export const sppPp = (rx) => (rx.profile || rx.testWeek ? null : by(rx, PP));
 /* Thursday's flying sprints: three in the size block, four after */
 export const sppSprints = (rx) => hs(rx, by(rx, { size: 3, strength: 4, power: 4 }));
 const DROP = "the last set to failure, then 30% lighter and go again";
+/* THE CABLE CRUNCH: the abs loaded, so they grow thick enough to show —
+   Wednesday's and Sunday's, back to back with the pull before it */
+const CRUNCH = (rx) => ({ n: "Cable crunch", s: hs(rx, 3) + " × 10–15 · one or two left", cue: "Kneel facing a high cable, the rope held either side of your head. Curl your ribs down towards your hips, so your back rounds and your hips stay still, then uncurl slowly. Add weight when 15 is easy.", id: "s_crunch", k: "wr", sets: hs(rx, 3), reps: "10–15", rest: "Rest 60 s", rt: 60 });
 const RUN_FIELDS = [{ k: "w", l: "DISTANCE (KM)" }, { k: "hr", l: "AVERAGE HEART RATE (BPM)" }];
 
 /* ---------- the warm-ups ---------- */
@@ -192,8 +195,8 @@ const nasalRun = (L) => ({ L, n: "The Nasal Run", m: 30, eng: 1, engKey: "base",
    ================================================================ */
 export const SS = {
   /* ---------------- MONDAY ---------------- */
-  mon: { n: "MONDAY", t: "Lower strength — the squat, then Romanian deadlifts, Bulgarian split squats, leg curls, calves and leg raises", ac: C.oxide, box: 1,
-    intro: "The squat heavy, then size for the legs.", b: [
+  mon: { n: "MONDAY", t: "Lower strength — the squat, then Romanian deadlifts, Bulgarian split squats, leg curls, calves and leg raises, then the neck and rear delts", ac: C.oxide, box: 1,
+    intro: "The squat heavy, then size for the legs, then the neck and rear delts.", b: [
     { L: "A", n: "Warm-up", m: 6, p: "S_WU_MON", rxLine: () => "6 min · bike, the Spanish squat hold, box jumps" },
     { L: "B", n: "Load-Velocity Profile — Squat", m: 12, star: 1, profile: "squat", hide: (rx) => !rx.profile,
       rxLine: () => "five loads × 2 reps, fast, the watch recording",
@@ -227,7 +230,15 @@ export const SS = {
       rxLine: () => "back to back · 60 s after each pair",
       items: (rx) => [{ n: "Standing calf raise", s: hs(rx, 3) + " × 10–15 · 2 s at the bottom", cue: "All the way down to a full stretch, hold two seconds, then all the way up.", id: "s_calf", k: "wr", sets: hs(rx, 3), reps: "10–15", rest: "straight into the leg raise", rt: 0 },
         { n: "Hanging leg raise", s: hs(rx, 3) + " × 8–12", cue: "Hang from the bar, curl your pelvis up and lift your knees to your chest without swinging, then lower slowly. Straight legs once that gets easy.", id: "hlr", k: "wr", sets: hs(rx, 3), reps: "8–12", rest: "Rest 60 s", rt: 60 }],
-      why: "Back to back, a minute after each pair." }] },
+      why: "Back to back, a minute after each pair." },
+    /* THE NECK: front and back, light and slow, once a week */
+    { L: "N", n: "Lying Neck Curl + Lying Neck Extension", m: 6, pair: 1, rxLine: () => "back to back · 45 s after each pair",
+      items: (rx) => [{ n: "Lying neck curl", s: hs(rx, 3) + " × 15–20 · slow, never jerked", cue: "Lie face up on a bench with your head off the end, a folded towel and a light plate on your forehead, held with both hands. Let your head go back slowly, then curl your chin to your chest. Start with 2.5–5 kg and add a little only when 20 is easy.", id: "s_neckc", k: "wr", sets: hs(rx, 3), reps: "15–20", rest: "straight into the neck extension", rt: 0 },
+        { n: "Lying neck extension", s: hs(rx, 3) + " × 15–20 · slow, never jerked", cue: "Lie face down on a bench with your head off the end, a folded towel and a light plate on the back of your head, held with both hands. Lower your chin towards your chest, then lift your head until you're looking straight ahead. Start light, as for the curl.", id: "s_necke", k: "wr", sets: hs(rx, 3), reps: "15–20", rest: "Rest 45 s", rt: 45 }],
+      why: "Back to back, 45 seconds after each pair. Light and slow: the neck grows on reps, not heavy plates." },
+    /* THE REAR DELTS' third dose: fresh, on the week's shortest session */
+    { L: "Q", n: "Chest-Supported Rear-Delt Raise", m: 4, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 3) + " × 15–20",
+      items: (rx) => [{ n: "Chest-supported rear-delt raise", s: hs(rx, 3) + " × 15–20 · one or two left", cue: "Lie face down on an incline bench with light dumbbells hanging straight down. Raise your arms out to the sides to shoulder height, little fingers leading, squeeze the backs of your shoulders, then lower slowly.", id: "s_rdraise", k: "wr", sets: hs(rx, 3), reps: "15–20" }] }] },
 
   /* ---------------- TUESDAY ---------------- */
   tue: { n: "TUESDAY", t: "Upper strength — rotational throws, then bench and weighted chin-ups, the overhead press, rows, dips, lateral raises and the ab wheel, then the bursts", ac: C.cobalt, box: 1,
@@ -289,7 +300,7 @@ export const SS = {
       why: "Six seconds flat out, arms and legs, then forty easy. If a burst is clearly weaker than the one before, take an extra 20 seconds; if two in a row are, stop there. Same bike every week, so the totals compare.", tr: 1 }] },
 
   /* ---------------- WEDNESDAY ---------------- */
-  wed: { n: "WEDNESDAY", t: "Physique A — chest and back for size, rear delts and lateral raises, then the nasal run", ac: C.moss, box: 1,
+  wed: { n: "WEDNESDAY", t: "Physique A — chest and back for size, rear delts and cable crunches, lateral raises, then the nasal run", ac: C.moss, box: 1,
     intro: "Nothing heavy and nothing fast: Thursday is the power session.", b: [
     { L: "A", n: "Warm-up", m: 5, p: "S_WU_WED", rxLine: () => "5 min · bands, push-ups, a light set of the first pair" },
     { L: "B", n: "Incline Dumbbell Press + Lat Pulldown", m: 11, pair: 1, rxLine: () => "alternate · 90 s after each",
@@ -298,15 +309,17 @@ export const SS = {
     { L: "C", n: "Low-to-High Cable Fly + Wide-Grip Seated Row", m: 9, pair: 1, rxLine: () => "alternate · 75 s after each",
       items: (rx) => [{ n: "Low-to-high cable fly", s: hs(rx, 3) + " × 12–15 · one or two left", cue: "Cables set low, step forward, and sweep your hands up and together to chin height, arms slightly bent. Lower to a full stretch.", id: "s_fly", k: "wr", sets: hs(rx, 3), reps: "12–15", rest: "Rest 75 s · then the row", rt: 75 },
         { n: "Wide-grip seated cable row", s: hs(rx, 3) + " × 10–12 · one or two left", cue: "Pull the bar to your upper chest with your elbows out, squeeze your upper back, then reach forward to a full stretch.", id: "s_wrow", k: "wr", sets: hs(rx, 3), reps: "10–12", rest: "Rest 75 s · then the fly", rt: 75 }] },
-    { L: "D", n: "Reverse Pec-Deck", m: 4, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 3) + " × 15–20",
-      items: (rx) => [{ n: "Reverse pec-deck", s: hs(rx, 3) + " × 15–20 · one or two left", cue: "Face the machine, arms straight out in front, and sweep them back until they're level with your body.", id: "s_rpd", k: "wr", sets: hs(rx, 3), reps: "15–20" }] },
+    { L: "D", n: "Reverse Pec-Deck + Cable Crunch", m: 7, pair: 1, rxLine: () => "back to back · 60 s after each pair",
+      items: (rx) => [{ n: "Reverse pec-deck", s: hs(rx, 3) + " × 15–20 · one or two left", cue: "Face the machine, arms straight out in front, and sweep them back until they're level with your body.", id: "s_rpd", k: "wr", sets: hs(rx, 3), reps: "15–20", rest: "straight into the cable crunch", rt: 0 },
+        CRUNCH(rx)],
+      why: "Back to back, a minute after each pair." },
     { L: "E", n: "Dumbbell Lateral Raise", m: 6, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 4) + " × 12–20",
       items: (rx) => [{ n: "Dumbbell lateral raise", s: hs(rx, 4) + " × 12–20 · " + DROP, cue: "Lean slightly forward, raise the dumbbells out to the sides to shoulder height, elbows soft, and lower slowly.", id: "s_dblat", k: "wr", sets: hs(rx, 4), reps: "12–20" }] },
     nasalRun("R")] },
 
   /* ---------------- THURSDAY ---------------- */
-  thu: { n: "THURSDAY", t: "Lower power — the sled, flying sprints and jumps, trap bar jumps, the trap bar deadlift, the pause squat, Nordics", ac: C.brass, box: 1,
-    intro: "Sled, sprints and jumps while you're fresh, then the trap bar heavy and a second, lighter squat. Friday's rest after it.", b: [
+  thu: { n: "THURSDAY", t: "Lower power — the sled, flying sprints and jumps, trap bar jumps, the trap bar deadlift and shrugs, the pause squat, Nordics", ac: C.brass, box: 1,
+    intro: "Sled, sprints and jumps while you're fresh, then the trap bar heavy, heavy shrugs on the same bar, and a second, lighter squat. Friday's rest after it.", b: [
     { L: "A", n: "Warm-up", m: 10, p: "S_WU_THU", rxLine: () => "10 min · bike, swings, skips, lunges, then the three build-ups" },
     { L: "B", n: "Heavy Sled Sprint", m: 8, star: 1, hard: 1, rest: "Rest 2:00", rt: 120,
       rxLine: (rx) => (rx.half ? 2 : 3) + " × 20 m",
@@ -343,6 +356,9 @@ export const SS = {
           also: rx.contrast ? "Broad jumps" : null, restT: rx.contrast ? thenRest("3 BROAD JUMPS — FOR DISTANCE, STICK THE LANDING") : null }]),
       w: "The beep is the set's last rep: set it down, and the set counts.",
       why: "The heaviest pull of the week, off your working max.", tr: 2 },
+    /* THE TRAPS: the week's second shrug, heavy, on the bar that's already loaded */
+    { L: "J", n: "Trap Bar Shrug", m: 4, rest: "Rest 75 s", rt: 75, rxLine: (rx) => hs(rx, 3) + " × 8–12",
+      items: (rx) => [{ n: "Trap bar shrug", s: hs(rx, 3) + " × 8–12 · a second's hold at the top", cue: "Stand inside the trap bar, arms straight. Shrug straight up towards your ears, hold for a second, then lower to a full stretch. Never roll the shoulders.", id: "s_tbshrug", k: "wr", sets: hs(rx, 3), reps: "8–12" }] },
     { L: "H", n: "Pause Squat", m: 7, hard: 1, mainLift: "squat", hide: (rx) => !sppPsq(rx), rest: "Rest 2:00", rt: 120,
       rxLine: (rx) => sppPsq(rx).sets + " × " + sppPsq(rx).reps + " @ " + sppPsq(rx).pct + "%",
       items: (rx) => { const q = sppPsq(rx);
@@ -395,15 +411,17 @@ export const SS = {
       why: (rx) => (rx.testWeek ? "Test week: the 4 × 4 is the engine test. " : "") + "Use the same bike every week. Progress is more on the screen at the same peak heart rate, or the same at a lower one.", tr: 1 }] },
 
   /* ---------------- SUNDAY ---------------- */
-  sun: { n: "SUNDAY", t: "Physique B — shoulders, arms, traps and calves, and the Pallof press, then the nasal run and the weekly check", ac: C.brass, free: 1,
-    intro: "Shoulders, arms, traps and calves for size, and the Pallof press, then a 30-minute nasal run.", b: [
+  sun: { n: "SUNDAY", t: "Physique B — shoulders, traps and cable crunches, arms and calves, and the Pallof press, then the nasal run and the weekly check", ac: C.brass, free: 1,
+    intro: "Shoulders, traps, abs, arms and calves for size, and the Pallof press, then a 30-minute nasal run.", b: [
     { L: "A", n: "Warm-up", m: 4, p: "S_WU_SUN", rxLine: () => "4 min · bands, a light set of the first two" },
     { L: "B", n: "Cable Lateral Raise", m: 6, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 4) + " × 12–20",
       items: (rx) => [{ n: "Cable lateral raise", s: hs(rx, 4) + " × 12–20 · " + DROP, cue: "Cable at hand height, the handle in your far hand with the cable behind your back. Raise your arm out to shoulder height, leading with the elbow, and lower slowly.", id: "s_clat_sun", k: "wr", sets: hs(rx, 4), reps: "12–20" }] },
     { L: "C", n: "Face Pull", m: 4, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 3) + " × 15–20",
       items: (rx) => [{ n: "Face pull", s: hs(rx, 3) + " × 15–20 · one or two left", cue: "Rope on a cable at forehead height. Pull the rope towards your forehead, hands apart and elbows high, and squeeze the backs of your shoulders.", id: "s_face", k: "wr", sets: hs(rx, 3), reps: "15–20" }] },
-    { L: "D", n: "Dumbbell Shrug", m: 5, rest: "Rest 75 s", rt: 75, rxLine: (rx) => hs(rx, 3) + " × 10–15",
-      items: (rx) => [{ n: "Dumbbell shrug", s: hs(rx, 3) + " × 10–15 · a second's hold at the top", cue: "Heavy dumbbells at your sides. Lift your shoulders straight up towards your ears, hold for a second, then lower to a full stretch.", id: "s_shrug", k: "wr", sets: hs(rx, 3), reps: "10–15" }] },
+    { L: "D", n: "Dumbbell Shrug + Cable Crunch", m: 8, pair: 1, rxLine: () => "back to back · 60 s after each pair",
+      items: (rx) => [{ n: "Dumbbell shrug", s: hs(rx, 3) + " × 10–15 · a second's hold at the top", cue: "Heavy dumbbells at your sides. Lift your shoulders straight up towards your ears, hold for a second, then lower to a full stretch.", id: "s_shrug", k: "wr", sets: hs(rx, 3), reps: "10–15", rest: "straight into the cable crunch", rt: 0 },
+        CRUNCH(rx)],
+      why: "Back to back, a minute after each pair." },
     { L: "E", n: "EZ-Bar Curl + Overhead Triceps Extension", m: 7, pair: 1, hide: (rx) => !!rx.upper4, rxLine: () => "alternate · 60 s after each",
       items: (rx) => [{ n: "EZ-bar curl", s: hs(rx, 3) + " × 8–12 · one or two left", cue: "Elbows pinned at your sides. Curl up, then take two seconds to lower to straight arms.", id: "s_ezcurl", k: "wr", sets: hs(rx, 3), reps: "8–12", rest: "Rest 60 s · then the triceps", rt: 60 },
         { n: "Overhead cable triceps extension", s: hs(rx, 3) + " × 10–15 · one or two left", cue: "Elbows pointing at the ceiling, lower your hands behind your head to a deep stretch, then straighten your arms.", id: "s_ohtri", k: "wr", sets: hs(rx, 3), reps: "10–15", rest: "Rest 60 s · then the curl", rt: 60 }],
