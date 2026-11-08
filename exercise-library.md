@@ -144,6 +144,12 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **CABLE CRUNCHES** — Kneel facing a high cable, the rope held either side of your head. Curl your ribs down towards your hips, so your back rounds and your hips stay still, then uncurl slowly. Add weight when 15 is easy.
 
+**FOREARM SIDE PLANK** — Lie on your side propped on your forearm, elbow under your shoulder, feet stacked. Lift your hips so you're straight from head to feet, and hold without letting them sag. Then the other side.
+
+**DEAD BUG** — Lie on your back, arms pointing at the ceiling, knees bent above your hips. Press your lower back into the floor and keep it there while you slowly lower one arm and the opposite leg to just above the floor. Bring them back, then the other pair.
+
+**LANDMINE ROTATION** — One end of a barbell in a landmine or a corner, the other end held at arm's length in front of your chest, feet wide. Swing it down to one hip by turning your hips and pivoting your back foot, arms straight, then across to the other side, trunk braced. Controlled, never swung loose. Start with the bar plus 5–10 kg.
+
 **SUITCASE CARRY** — A heavy dumbbell or kettlebell in one hand. Walk 30 metres standing tall without leaning to either side, then switch hands.
 
 **FARMER'S CARRY** — A heavy dumbbell in each hand. Stand tall, shoulders down, and take short, quick steps for 30 metres without putting them down. Start around 30 kg a hand; add 2.5 kg a hand when every run is clean, with no stop and no lean.
@@ -253,6 +259,8 @@ Every exercise, session, test and move in the program, in two or three plain lin
 **REPEAT BURSTS** — Six to eight seconds absolutely flat out, forty seconds easy, eight times. Five minutes easy, then eight more.
 
 **ASSAULT BIKE BURSTS** — On the assault bike, arms and legs together. Two minutes easy, then six seconds absolutely flat out and forty seconds easy spinning, eight times, then two minutes easy. If a burst is clearly weaker than the one before, take an extra twenty seconds; if two in a row are, stop there.
+
+**PRESSURE ROUNDS** — On the assault bike, straight after the bursts: clear its screen, a minute easy, then three-minute rounds with a minute's rest between. In each round, a five-second burst absolutely all out every twenty seconds, and a steady pace between them, a pace you could hold for the round. Never stop pedalling. Two minutes easy to finish.
 
 **40-SECOND REPEATS** — Forty seconds flat out, eighty seconds easy, six times. The last three are meant to hurt. Don't hold back early.
 

@@ -8,16 +8,16 @@ Picked while a Prep is running, the Prep carries on to its test day and the twel
 
 ## THE WEEK
 
-Six sessions: four heavy or fast, two for size with an easy run after. Friday is off. About seven and a half hours a week.
+Six sessions: four heavy or fast, two for size with an easy run after. Friday is off. About eight hours a week.
 
 | Day | Session | Time |
 | --- | --- | --- |
 | Monday | **Lower strength** — the squat heavy, then Romanian deadlifts, split squats and leg curls for size, then the neck and rear delts | ~69 min |
-| Tuesday | **Upper strength** — rotational throws, then bench, weighted chins and the overhead press heavy, then rows and dips, then 6-second bursts on the assault bike | ~76 min |
+| Tuesday | **Upper strength** — rotational throws, then bench, weighted chins and the overhead press heavy, then rows and dips, then 6-second bursts and the pressure rounds on the assault bike | ~91 min |
 | Wednesday | **Physique A** — chest and back for size, rear delts and cable crunches, then a 30-minute nasal run | ~68 min |
-| Thursday | **Lower power** — sled, sprints and jumps, then the trap bar heavy, trap bar shrugs and a second squat | ~82 min |
+| Thursday | **Lower power** — sled, sprints and jumps, then the trap bar heavy, trap bar shrugs and a second squat, then side planks and dead bugs | ~87 min |
 | Friday | Off — sleep | — |
-| Saturday | **Upper power** — throws, bench throws and the push press, then bench and back for size, then the 4 × 4 intervals | ~90 min |
+| Saturday | **Upper power** — throws, bench throws and the push press, then bench and back for size, side planks and landmine rotations, then the 4 × 4 intervals | ~100 min |
 | Sunday | **Physique B** — shoulders, traps, abs, arms and calves, and the Pallof press, then a 30-minute nasal run | ~76 min |
 
 Heavy and fast days alternate with size days, and the easy runs sit on the size days. That keeps the runs and the fatigue away from the sessions where speed and heavy weights matter most.
@@ -103,7 +103,7 @@ The squat heavy, then Romanian deadlifts, split squats and leg curls for size, t
 
 ## TUESDAY · UPPER STRENGTH
 
-Rotational throws while you're fresh, then bench, weighted chins and the overhead press heavy, then rows and dips for size, then 6-second bursts on the assault bike.
+Rotational throws while you're fresh, then bench, weighted chins and the overhead press heavy, then rows and dips for size, then 6-second bursts and the pressure rounds on the assault bike.
 
 **Warm-up · 6 minutes**
 
@@ -124,6 +124,7 @@ Rotational throws while you're fresh, then bench, weighted chins and the overhea
 8. **Cable lateral raise** — 3 × 12–15. Rest 60 seconds. Cable at hand height, stand side-on, the handle in your far hand with the cable running behind your back. Raise your arm out to the side to shoulder height, leading with the elbow, then lower slowly. The cable keeps the shoulder working at the bottom, where a dumbbell goes slack.
 9. **Ab wheel rollout** — 3 × 8–10. Rest 60 seconds. Kneeling, roll forward as far as you can without your lower back sagging, then pull back with your abs.
 10. **Assault bike bursts** — 8 bursts, 4 in weeks 4, 8 and 12. On the assault bike, arms and legs together: 2 minutes easy, then each burst 6 seconds absolutely flat out with 40 seconds of easy spinning after it, then 2 minutes easy to finish. About 10 minutes. If a burst is clearly weaker than the one before, take an extra 20 seconds; if two in a row are, stop there.
+11. **Pressure rounds** — 3 rounds, 2 in weeks 4, 8 and 12. Straight after the bursts, on the same bike: clear its screen, 1 minute easy, then 3-minute rounds with 1 minute's rest between. In each round, a 5-second burst all out every 20 seconds, and a steady pace between them, one you could hold for the round. Never stop pedalling. Then 2 minutes easy. About 15 minutes; the timer runs all of it. Off on a red morning.
 
 ---
 
@@ -154,7 +155,7 @@ Easy, on the road or a treadmill, breathing in and out through your nose the who
 
 ## THURSDAY · LOWER POWER
 
-Sled, sprints and jumps while you're fresh, then the trap bar heavy, heavy shrugs on the same bar, and a second, lighter squat. Friday's rest after it.
+Sled, sprints and jumps while you're fresh, then the trap bar heavy, heavy shrugs on the same bar and a second, lighter squat, then an ab finish. Friday's rest after it.
 
 **Warm-up · 10 minutes**
 
@@ -172,12 +173,14 @@ Sled, sprints and jumps while you're fresh, then the trap bar heavy, heavy shrug
 6. **Trap bar shrug** — 3 × 8–12. Rest 75 seconds. Straight after the deadlift, on the same bar. Stand inside the trap bar, arms straight. Shrug straight up towards your ears, hold for a second, then lower to a full stretch. Never roll the shoulders.
 7. **Pause squat** — size 3 × 5 @ 65%, strength 3 × 3 @ 72.5%, power 3 × 2 @ 75%, all of your squat working max. Rest 2 minutes. Monday's squat with a dead stop at the bottom for two seconds, staying tight, then up as fast as the bar will move.
 8. **Nordic curl** — 3 × 4–6. Rest 90 seconds. Kneel with your heels anchored under a pad. Keep your body straight from knees to head and lower yourself forward as slowly as you can, catch yourself with your hands, and push back up.
+9. **Side plank**, 2 × 30–45 seconds each side, back to back with 10. Lie on your side propped on your forearm, elbow under your shoulder. Lift your hips so you're straight from head to feet, and hold. Then the other side.
+10. **Dead bug**, 2 × 10 each side. Rest 30 seconds after each pair. Lie on your back, arms pointing at the ceiling, knees bent above your hips. Press your lower back into the floor, slowly lower one arm and the opposite leg to just above the floor, bring them back, then switch. Slow, and never to failure: the hard days do the growing.
 
 ---
 
 ## SATURDAY · UPPER POWER
 
-Throws, bench throws and the push press while you're fresh from Friday's rest, then bench and back for size, then the 4 × 4. About 90 minutes.
+Throws, bench throws and the push press while you're fresh from Friday's rest, then bench and back for size, an ab finish, then the 4 × 4. About 100 minutes.
 
 **Warm-up · 6 minutes**
 
@@ -194,6 +197,8 @@ Throws, bench throws and the push press while you're fresh from Friday's rest, t
 6. **Pull-up** — 3 × 8–10, with weight on a belt once 10 is easy. Palms facing away, hands just outside shoulder width. From a dead hang, pull until your chin is over the bar.
 7. **One-arm dumbbell row** — 3 × 8–12 each side. Rest 60 seconds. One knee and one hand on a bench, the dumbbell hanging at full stretch. Row it to your hip, then lower slowly.
 8. **Cable lateral raise** — 3 × 15–20. Rest 60 seconds. Cable at hand height, the handle in your far hand with the cable behind your back. Raise your arm out to shoulder height and lower slowly. On the last set, at failure, drop the weight by about 30% and go again.
+9. **Side plank** — 2 × 30–45 seconds each side. Rest 30 seconds. Lie on your side propped on your forearm, elbow under your shoulder. Lift your hips so you're straight from head to feet, and hold. Then the other side.
+10. **Landmine rotation** — 3 × 6–8 each side, controlled. Rest 60 seconds. One end of a barbell in a landmine or a corner, the other end at arm's length in front of your chest, feet wide. Swing it down to one hip by turning your hips and pivoting your back foot, arms straight, then across to the other side, trunk braced. Start with the bar plus 5–10 kg.
 
 **Then · the 4 × 4 intervals, about 30 minutes**
 
@@ -234,7 +239,7 @@ Easy, breathing through your nose only, as on Wednesday.
 
 ## THE ENGINE
 
-Two easy nasal runs and one hard interval session hold your engine where it is for all twelve weeks, and Tuesday's bursts add a little power and repeat-effort fitness on top. Intensity is what holds it, so the hard session has to stay genuinely hard.
+Two easy nasal runs and one hard interval session hold your engine where it is for all twelve weeks, and Tuesday's bursts and pressure rounds add a little power, repeat-effort fitness and fight pace on top. Intensity is what holds it, so the hard session has to stay genuinely hard.
 
 **The nasal runs · Wednesday and Sunday, 30 minutes**
 
@@ -256,14 +261,20 @@ Use the same bike every week. Log the total on its screen at the end and your pe
 
 Eight 6-second bursts on the assault bike, 40 seconds easy spinning between, 2 minutes easy before and after: about 10 minutes, and the timer runs all of it. Log the total on the screen at the end and your peak heart rate. Four in the lighter weeks and test week, read only against other fours.
 
+**The pressure rounds · Tuesday, straight after the bursts**
+
+Three rounds of 3 minutes on the same assault bike, with 1 minute's rest between. In each round, a 5-second burst all out every 20 seconds, nine a round, and a steady pace between them, never stopping. A minute easy before and 2 minutes easy after: about 15 minutes, and the timer runs all of it. Clear the bike's screen after the bursts, then log its total at the end and your peak heart rate. Two rounds in the lighter weeks and test week, read only against other twos.
+
+They're the fight sim: bursts with seconds to recover, the way you fight. They cost the power work a little, so they're watched. If Thursday's sled times get slower at the same load, or your jump and throw sets keep ending early, two weeks running, the pressure rounds come out for the rest of the twelve weeks.
+
 ---
 
 ## THE RULES
 
 These protect the work, and none of them is optional.
 
-1. **Lighter weeks, 4 and 8.** The squat, bench, trap bar and push press are replaced by their profiles in THE PROFILE: five loads, two fast reps each. Trap bar jumps and bench throws get their four-load profiles. Everything else, the jumps and sprints included, is half the sets, rounded up, the 4 × 4 becomes 3 × 4, and the bursts become four.
-2. **The morning check.** Yellow: every load on the bar 7% lighter, and the 4 × 4 at 90%. Red: the heavy lifts, the sprints, jumps and throws, the 4 × 4 and the bursts come off; the size work runs as written. Three red mornings in a week make the next week a lighter week.
+1. **Lighter weeks, 4 and 8.** The squat, bench, trap bar and push press are replaced by their profiles in THE PROFILE: five loads, two fast reps each. Trap bar jumps and bench throws get their four-load profiles. Everything else, the jumps and sprints included, is half the sets, rounded up, the 4 × 4 becomes 3 × 4, the bursts become four, and the pressure rounds two.
+2. **The morning check.** Yellow: every load on the bar 7% lighter, and the 4 × 4 at 90%. Red: the heavy lifts, the sprints, jumps and throws, the 4 × 4, the bursts and the pressure rounds come off; the size work runs as written. Three red mornings in a week make the next week a lighter week.
 3. **Pain.** Anything over 3 out of 10 while you do it, or worse the next morning, stops that exercise for the day; the jumps, sprints and holds have the button for it. Sunday's check runs the tendon gate: Achilles or knee at 3 or more means no reactive jumps the next week, the tendon holds carried on, and once it's back under 3 they restart one stage down for a week; a hamstring at 3 or more means no flying sprints and the Nordics only if they're pain-free; an elbow or a shoulder at 4 or more turns the next week's dips into push-ups and takes Sunday's curls and triceps work off. The same pain two weeks running means a physio.
 4. **Sleep.** Friday is off. Aim for seven hours a night, which at a 3 am start means asleep by 8 pm.
 5. **Boxing evenings.** If you're still boxing, it's extra load on top of all this. When it tips you into red mornings, the nasal runs go first, because the boxing covers that work.
@@ -316,10 +327,11 @@ Every choice below rests on trials where trials exist. Where it rests on coachin
 - **Three minutes between heavy sets.** In trained men, 3 minutes' rest built more strength and size than 1 minute: the squat rose 15.2% against 7.6% (Schoenfeld, 2016).
 - **Power built on strength, by several methods at once.** Power needs strength first, then throws, loaded jumps and rebound jumps on top, with the most work going to the weakest link (Cormie, 2011; Jiménez-Reyes, 2017). Loaded jumps and throws stand in for cleans and snatches: the same intent to move fast, without years of technique or the wrist risk. That last part is a coaching call, not a trial.
 - **The sled.** Heavy sled sprints improve the first metres of a sprint and the forward push (Alcaraz, 2018; Morin, 2017).
-- **Rotation twice a week, and a trunk that holds.** The legs make a punch's force; the trunk turns it and carries it to the fist. Tuesday's shot-put and hook throws and Saturday's scoop throw train that turn fast, the straight and the hook, and the Pallof press trains the trunk to hold against a twist. That rests on how the punch works and on coaching practice, not a trial.
-- **Abs, traps, rear delts and the neck.** Abs grow like any other muscle, on load and hard sets: 12 a week from the leg raises, the ab wheel and the cable crunches, which take weight. The traps get heavy shrugs twice a week, the rear delts direct work three times and the neck its own work once. That's a coaching call for the build you're after, not a trial.
+- **Rotation twice a week, and a trunk that holds.** The legs make a punch's force; the trunk turns it and carries it to the fist. Tuesday's shot-put and hook throws and Saturday's scoop throw train that turn fast, the straight and the hook; Saturday's landmine rotation trains it under load; and the Pallof press trains the trunk to hold against a twist. That rests on how the punch works and on coaching practice, not a trial.
+- **Abs, traps, rear delts and the neck.** Abs grow like any other muscle, on load and hard sets: 12 a week from the leg raises, the ab wheel and the cable crunches, which take weight. On top, Thursday and Saturday finish the lifting with trunk work that's never taken to failure: side planks, then dead bugs on Thursday and landmine rotations on Saturday. The traps get heavy shrugs twice a week, the rear delts direct work three times and the neck its own work once. That's a coaching call for the build you're after, not a trial.
 - **Exercises chosen for the stretch.** Overhead triceps extensions grew the triceps 1.4 times as much as pushdowns (Maeo, 2023). Seated leg curls grew the hamstrings more than lying ones, 14% against 9% (Maeo, 2021). The incline curls, deep presses and full-stretch raises follow the same idea.
-- **The engine held, not built.** Endurance can be held for up to 15 weeks on as little as two sessions a week, as long as the intensity stays (Spiering, 2021). The 4 × 4 at 90–95% of peak heart rate raised fitness more than steady or threshold work (Helgerud, 2007). Cardio barely holds back strength or muscle size, but it does blunt explosive power, mostly when both are in the same session (Schumann, 2022). So there's one long hard session, not two, the bursts are ten minutes on an upper-body day, and the runs are easy and kept off the fast days.
+- **The engine held, not built.** Endurance can be held for up to 15 weeks on as little as two sessions a week, as long as the intensity stays (Spiering, 2021). The 4 × 4 at 90–95% of peak heart rate raised fitness more than steady or threshold work (Helgerud, 2007). Cardio barely holds back strength or muscle size, but it does blunt explosive power, mostly when both are in the same session (Schumann, 2022). So there's one long hard session, not two; the bursts and the pressure rounds are 25 minutes on an upper-body day, two days clear of Thursday's sprints and jumps; and the runs are easy and kept off the fast days.
+- **The pressure rounds: three, not six.** Even a 3 × 2 fight is mostly aerobic, about 77% of its energy (Davis, 2014), but it's fought in short bursts with seconds between them: elite boxers work at about 18 to 1 activity to rest, novices at 9 to 1 (Slimani, 2017). The pressure rounds copy that on the bike. What conditioning costs power and size grows with how often and how long it is (Wilson, 2012), so it's three rounds, on one day. The full fight sim comes in the camp.
 - **Hard days and easy days.** Heavy and fast sessions alternate with size work and easy running, and upper and lower body each get a heavy day and a fast day, as the conjugate method splits them. That shape comes from coaching practice — Charlie Francis's sprinters, Westside's lifters — more than from trials.
 
 ---
@@ -339,3 +351,6 @@ Every choice below rests on trials where trials exist. Where it rests on coachin
 - Maintaining Physical Performance: The Minimal Dose of Exercise Needed to Preserve Endurance and Strength Over Time — Spiering et al., 2021
 - Aerobic high-intensity intervals improve VO2max more than moderate training — Helgerud et al., 2007
 - Compatibility of Concurrent Aerobic and Strength Training for Skeletal Muscle Size and Function — Schumann et al., Sports Medicine, 2022
+- The energetics of semicontact 3 × 2-min amateur boxing — Davis et al., 2014
+- Performance aspects and physiological responses in male amateur boxing competitions — Slimani et al., 2017
+- Concurrent training: a meta-analysis examining interference of aerobic and resistance exercises — Wilson et al., 2012

@@ -301,6 +301,79 @@ describe("the abs, the traps and the neck", () => {
   });
 });
 
+describe("the pressure rounds and the ab finishes", () => {
+  /* the plan in use: Prep from 26 October, Strength, Power and Physique started on Monday 2 November */
+  const live = () => base({ plans: [{ from: "2026-10-26", made: "2026-10-25", inputs: PREP }, { from: "2026-11-02", made: "2026-11-01", inputs: Object.assign({}, SPP, { restart: true }) }], season: SPP });
+  const modes = (card) => [...card.querySelectorAll("[data-set-mode]")].map((e) => e.getAttribute("data-set-mode") + ":" + e.getAttribute("data-set-id") + ":" + e.getAttribute("data-set-unit"));
+  const skip = () => fireEvent.click(screen.getAllByRole("button", { name: "SKIP" }).pop());
+  it("Tuesday: the pressure rounds straight after the bursts; the timer runs a minute easy, then three rounds of nine 5-second bursts with a steady 15 between, 58 steps; two rounds in week 4; none on a red morning", async () => {
+    await at(2026, 11, 3, live());
+    const rows = wholeDay();
+    expect(rows.indexOf("Pressure Rounds")).toBe(rows.indexOf("Assault Bike Bursts") + 1);
+    const card = pick("Pressure Rounds");
+    expect(within(card).getByTestId("card-pres").textContent).toBe("On the assault bike, straight after the bursts: 1 minute easy, then 3 rounds of 3 minutes with 1 minute's rest between — in each, a 5-second burst all out every 20 seconds, a steady pace between — then 2 minutes easy");
+    fireEvent.click(within(card).getAllByRole("button", { name: /START/ })[0]);
+    expect(screen.getByTestId("timer-title").textContent).toBe("3 PRESSURE ROUNDS");
+    expect(screen.getByTestId("timer-part").textContent).toBe("EASY — 1 MINUTE");
+    expect(screen.getAllByText(/STEP 1 \/ 58 · 14:00 LEFT/).length).toBeGreaterThan(0);
+    skip();
+    expect([screen.getByTestId("timer-part").textContent, screen.getByTestId("timer-count").textContent]).toEqual(["BURST 1 OF 9 — ALL OUT", "0:05"]);
+    skip();
+    expect([screen.getByTestId("timer-part").textContent, screen.getByTestId("timer-count").textContent]).toEqual(["ROUND 1 OF 3 · STEADY — NEVER STOP", "0:15"]);
+    for (let i = 0; i < 17; i++) skip();
+    expect([screen.getByTestId("timer-part").textContent, screen.getByTestId("timer-count").textContent]).toEqual(["REST — 1 MINUTE", "1:00"]);
+    cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
+    await at(2026, 11, 24, live());
+    fireEvent.click(within(pick("Pressure Rounds")).getAllByRole("button", { name: /START/ })[0]);
+    expect(screen.getByTestId("timer-title").textContent).toBe("2 PRESSURE ROUNDS");
+    expect(screen.getAllByText(/STEP 1 \/ 39 · 10:00 LEFT/).length).toBeGreaterThan(0);
+    cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
+    await at(2026, 11, 10, live(), { "o8s-ready": { "mSw2-tue": "R" } });
+    expect(wholeDay()).not.toContain("Pressure Rounds");
+  });
+  it("Thursday ends with the side plank and the dead bug, back to back: the plank counts seconds with no clock after it, the dead bug's set starts 0:30; one set each in week 4", async () => {
+    await at(2026, 11, 5, live());
+    const rows = wholeDay();
+    expect(rows.indexOf("Side Plank + Dead Bug")).toBe(rows.indexOf("Nordic Curls") + 1);
+    const card = pick("Side Plank + Dead Bug");
+    expect(modes(card)).toEqual(["bw:s_splank:s", "bw:s_deadbug:reps"]);
+    const parts = card.querySelectorAll("[data-pair-part]");
+    expect([...parts].map((p) => p.querySelectorAll("[data-set-btn]").length)).toEqual([2, 2]);
+    expect(parts[0].querySelector("[data-set-btn='1']").textContent).toMatch(/30 s$/);
+    fireEvent.click(within(parts[0]).getByRole("button", { name: "Set 1" }));
+    expect(screen.queryByTestId("timer-title")).toBe(null);
+    fireEvent.click(within(parts[1]).getByRole("button", { name: "Set 1" }));
+    expect(screen.getByTestId("timer-count").textContent).toBe("0:30");
+    cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
+    await at(2026, 11, 26, live());
+    expect([...pick("Side Plank + Dead Bug").querySelectorAll("[data-pair-part]")].map((p) => p.querySelectorAll("[data-set-btn]").length)).toEqual([1, 1]);
+  });
+  it("Saturday: the side plank, then the landmine rotation in added kilos, before the 4 × 4; a plank set starts 0:30, a rotation set 1:00; both run on a red morning", async () => {
+    await at(2026, 11, 7, live());
+    const rows = wholeDay();
+    const i = rows.indexOf("Cable Lateral Raise");
+    expect(rows.slice(i, i + 4)).toEqual(["Cable Lateral Raise", "Side Plank", "Landmine Rotation", "The 4 × 4 Intervals"]);
+    let card = pick("Side Plank");
+    expect(modes(card)).toEqual(["bw:s_splank:s"]);
+    expect(card.querySelectorAll("[data-set-btn]")).toHaveLength(2);
+    fireEvent.click(within(card).getByRole("button", { name: "Set 1" }));
+    expect(screen.getByTestId("timer-count").textContent).toBe("0:30");
+    fireEvent.click(screen.getByRole("button", { name: "CLOSE TIMER" }));
+    card = pick("Landmine Rotation");
+    expect(modes(card)).toEqual(["add:s_landrot:reps"]);
+    expect(within(card).getByTestId("weight-box").textContent).toMatch(/ADDED WEIGHT \(KG\)/);
+    expect(card.querySelectorAll("[data-set-btn]")).toHaveLength(3);
+    fireEvent.click(within(card).getByRole("button", { name: "Set 1" }));
+    expect(screen.getByTestId("timer-count").textContent).toBe("1:00");
+    cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
+    await at(2026, 11, 14, live(), { "o8s-ready": { "mSw2-sat": "R" } });
+    const red = wholeDay();
+    expect(red).toContain("Side Plank");
+    expect(red).toContain("Landmine Rotation");
+    expect(red).not.toContain("The 4 × 4 Intervals");
+  });
+});
+
 describe("the tape, the photos and PROGRESS", () => {
   it("week 4's Sunday: the photos, and the weekly check asks the arm and the shoulders", async () => {
     await at(2027, 3, 14, spp());

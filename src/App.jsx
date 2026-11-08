@@ -393,6 +393,18 @@ function steps(kind, o) {
       if (st < sets) Rs("5 FULL MINUTES EASY — BETWEEN SETS", 300, "Set " + st + " done. Sit up, nose breathe, let it refill.");
     }
     if (o.cd) Rs("EASY — " + o.cd + " MINUTES TO FINISH", o.cd * 60); }
+  else if (kind === "pressure") { /* Strength, Power and Physique's pressure rounds: through each
+       round a burst all out every `every` seconds, a steady pace between, then a minute's rest */
+    const r = o.rounds || 3, every = o.every || 20, secs = o.secs || 5, n = Math.floor((o.mins || 3) * 60 / every), rest = o.rest == null ? 60 : o.rest;
+    if (o.wu) Rs("EASY — " + o.wu + (o.wu === 1 ? " MINUTE" : " MINUTES"), o.wu * 60, "Then round 1: a burst every " + every + " seconds, a steady pace between.");
+    for (let i = 1; i <= r; i++) {
+      for (let j = 1; j <= n; j++) {
+        W("BURST " + j + " OF " + n + " — ALL OUT", secs, secs + " seconds, everything you have.");
+        Rs("ROUND " + i + " OF " + r + " · STEADY — NEVER STOP", every - secs, "A pace you could hold for the round.");
+      }
+      if (i < r) Rs("REST — " + (rest === 60 ? "1 MINUTE" : rest + " SECONDS"), rest, "Round " + i + " done. Next, round " + (i + 1) + ".");
+    }
+    if (o.cd) Rs("EASY — " + o.cd + " MINUTES TO FINISH", o.cd * 60); }
   else if (kind === "nasal") { for (let i = 1; i <= 4; i++) W("NOSE ONLY · MIN " + (i * 2 - 1) + "–" + i * 2 + " — RAISE THE PACE", 120); }
   else if (kind === "settle") { W("EYES CLOSED — FIND THE BREATH AT THE NOSTRILS", 60); }
   else if (kind === "postmax") { W("SIT · EYES CLOSED · FIND THE BREATH AT THE NOSTRILS", 180); }
@@ -1254,7 +1266,7 @@ const BW_ITEMS = ["ringrow", "ringdip", "muscleup", "pistol", "lsit", "lever", "
   "hands2", "c_hands_mon", "c_hands_thu", "c_hands_sun", "s_pushup"];
 /* Strength, Power and Physique's weighted chin-ups, dips and pull-ups log
    the weight on the belt */
-const ADD_ITEMS = ["chin", "c_chinup", "achilles", "achilles_c", "s_chin", "s_dip", "s_pullup"];
+const ADD_ITEMS = ["chin", "c_chinup", "achilles", "achilles_c", "s_chin", "s_dip", "s_pullup", "s_landrot"];
 /* the ones prescribed as a hold, so the number is seconds and not reps */
 const SECS_ITEMS = ["lsit", "lever", "spanish", "c_spanish", "copen", "c_copen", "c_copenplank",
   "hands2", "c_hands_mon", "c_hands_thu", "c_hands_sun", "achilles", "achilles_c"];
@@ -2477,6 +2489,7 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
           <Row k="Jumps (Thu)" val={rx.testWeek ? "none this week" : !rx.jump ? "box jumps" : rx.noJumps ? "none — the tendon gate" : jumpOf(rx.jump).n + (rx.restart ? " · one stage down" : "")} />
           <Row k="The intervals (Sat)" val={(rx.e === "vo2s" ? "3 × 4" : "4 × 4") + (rx.testWeek ? " — the engine test" : "")} />
           <Row k="Bursts (Tue)" val={(rx.bk === "sb4" ? "4" : "8") + " × 6 seconds on the assault bike"} />
+          <Row k="Pressure rounds (Tue)" val={(rx.pr === "pr2" ? "2" : "3") + " × 3 minutes, straight after the bursts"} />
           <Row k="Nasal runs" val="Wednesday and Sunday · 30 min" />
           <Row k="Everything else" val={rx.half ? "half the sets, rounded up" : "as written"} />
           <Row k="Tests" val={sppTests(rx.doc).join(" · ") || "none"} />
@@ -2565,7 +2578,7 @@ function Bars({ data, unit, color }) {
 
 /* The erg outputs, gathered by session type, so the same session is only
    ever read against another one of its own kind. */
-const ERG_TYPE_NAME = { vo2: "4-minute intervals", vo2s: "4-minute intervals · 3 × 4", sb: "6-second bursts", sb4: "6-second bursts · four", mod: "Moderate intervals", lac: "40-second repeats", lac2: "40-second repeats · 2 × 6",
+const ERG_TYPE_NAME = { vo2: "4-minute intervals", vo2s: "4-minute intervals · 3 × 4", sb: "6-second bursts", sb4: "6-second bursts · four", pr: "Pressure rounds", pr2: "Pressure rounds · two", mod: "Moderate intervals", lac: "40-second repeats", lac2: "40-second repeats · 2 × 6",
   rz: "Repeat bursts", rz1: "Repeat bursts · one set", rz3: "Repeat bursts · one set", tempo: "Tempo intervals", thr: "Threshold",
   erg: "Rounds on the erg", fp: "Fight-pace rounds", easy: "Easy", easy15: "Easy flush", sim: "The simulation", t20: "The 20-minute test" };
 /* `camp` is the view: true for the camp, "prep" for Prep, false for the
@@ -2586,7 +2599,8 @@ function ergByType(log, camp, L, macro) {
       : base === "cond" || base === "c_eng1" || base === "p_e1" ? e.kind || wk().eng || wk().eng1 || wk().e1
       : base === "cond2" || base === "c_eng2" || base === "p_e2" ? e.kind || wk().eng2 || wk().e2
       : base === "s_44" ? e.kind || wk().e
-      : base === "s_burst" ? e.kind || wk().bk : null;
+      : base === "s_burst" ? e.kind || wk().bk
+      : base === "s_press" ? e.kind || wk().pr : null;
     if (!type) return;
     push(type, "w" + p.week, p.week, ergTotal(e.v || []));
   });

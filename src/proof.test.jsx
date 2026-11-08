@@ -235,6 +235,7 @@ const SAID_AS = {
   "BAND DISLOCATES": "band dislocate", "DUMBBELL SHRUGS": "dumbbell shrug",
   "LYING NECK CURLS": "lying neck curl", "LYING NECK EXTENSIONS": "lying neck extension",
   "CHEST-SUPPORTED REAR-DELT RAISES": "chest supported rear delt raise",
+  "FOREARM SIDE PLANK": "side plank",
 };
 const SESSION_SAID = { vo2: "4 minute intervals", rz: "repeat bursts", rz1: "bursts 1 × 8", lac: "40 second repeats", lac2: "40 s repeats 2 × 6", tempo: "tempo",
   thr: "threshold", erg: "rounds on the erg", erg8: "rounds on the erg", ergrounds: "rounds on the erg", fp: "fight pace", fightpace: "fight pace",
