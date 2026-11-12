@@ -145,6 +145,8 @@ export const sppPsq = (rx) => (rx.testWeek ? null : Object.assign({}, by(rx, PSQ
 export const sppPp = (rx) => Object.assign({}, by(rx, PP), { sets: hs(rx, by(rx, PP).sets) });
 /* Thursday's flying sprints: three in the size block, four after */
 export const sppSprints = (rx) => hs(rx, by(rx, { size: 3, strength: 4, power: 4 }));
+/* Thursday's heavy sled: five runs, three in the lighter weeks, two in test week */
+export const sppSled = (rx) => (rx.testWeek ? 2 : rx.half ? 3 : 5);
 const DROP = "the last set to failure, then 30% lighter and go again";
 /* THE CABLE CRUNCH: the abs loaded, so they grow thick enough to show —
    Wednesday's and Sunday's, back to back with the pull before it */
@@ -155,9 +157,9 @@ const RUN_FIELDS = [{ k: "w", l: "DISTANCE (KM)" }, { k: "hr", l: "AVERAGE HEART
 
 /* ---------- the warm-ups ---------- */
 export const SPPROTO = {
-  S_WU_MON: { n: "Warm-up", s: "6 min · Mon", c: C.cobalt,
-    note: "The ramp to the working sets is on the squat's own card.",
-    i: [["Easy bike", "3 min"], ["Spanish squat hold", "2 × 30 s"], ["Box jump", "2 × 3 — onto a knee-high box, land soft, step down"]] },
+  S_WU_MON: { n: "Warm-up", s: "5 min · Mon", c: C.cobalt,
+    note: "The box jumps have their own card, next. The ramp to the working sets is on the squat's own card.",
+    i: [["Easy bike", "3 min"], ["Spanish squat hold", "2 × 30 s"]] },
   S_WU_TUE: { n: "Warm-up", s: "6 min · Tue", c: C.cobalt,
     note: "The ramp to the working sets is on the bench's own card.",
     i: [["Band pull-apart", "2 × 15"], ["Band dislocate", "2 × 10"], ["Push-up", "×10"], ["Then two easy throws of each", "at half effort"]] },
@@ -205,9 +207,14 @@ const nasalRun = (L) => ({ L, n: "The Nasal Run", m: 30, eng: 1, engKey: "base",
    ================================================================ */
 export const SS = {
   /* ---------------- MONDAY ---------------- */
-  mon: { n: "MONDAY", t: "Lower strength — the squat, then Romanian deadlifts, Bulgarian split squats, leg curls, calves and leg raises, then the neck and rear delts", ac: C.oxide, box: 1,
-    intro: "The squat heavy, then size for the legs, then the neck and rear delts.", b: [
-    { L: "A", n: "Warm-up", m: 6, p: "S_WU_MON", rxLine: () => "6 min · bike, the Spanish squat hold, box jumps" },
+  mon: { n: "MONDAY", t: "Lower strength — box jumps, the squat, then Romanian deadlifts, Bulgarian split squats, leg curls, calves and leg raises, then the neck and rear delts", ac: C.oxide, box: 1,
+    intro: "Box jumps while you're fresh, the squat heavy, then size for the legs, then the neck and rear delts.", b: [
+    { L: "A", n: "Warm-up", m: 5, p: "S_WU_MON", rxLine: () => "5 min · bike, the Spanish squat hold" },
+    { L: "K", n: "Box Jumps", m: (rx) => (rx.half ? 3 : 5), star: 1, hard: 1, rest: "Rest 60 s", rt: 60,
+      rxLine: (rx) => hs(rx, 4) + " × 3",
+      items: (rx) => [{ n: "Box jump", s: hs(rx, 4) + " × 3 · onto a knee-high box", cue: "Onto a box about knee height, landing soft, stepping down.", id: "boxjump", k: "chk" }],
+      w: "Every jump as high as you can make it. A jump clearly lower than the first ends the set.",
+      why: "The week's second jump day, before the squat: box jumps land the softest of all the jumps, and they sharpen the heavy sets that follow." },
     { L: "B", n: "Load-Velocity Profile — Squat", m: 12, star: 1, profile: "squat", hide: (rx) => !rx.profile,
       rxLine: () => "five loads × 2 reps, fast, the watch recording",
       items: [{ n: "Squat at five loads", s: FIVE, cue: "Two reps at each load, as fast as the bar will move, the watch recording the mean speed.", id: "s_prof_sq", k: "chk" }],
@@ -348,9 +355,9 @@ export const SS = {
   thu: { n: "THURSDAY", t: "Lower power — the sled, flying sprints and jumps, trap bar jumps, the trap bar deadlift and shrugs, the pause squat, Nordics, then side planks and dead bugs", ac: C.brass, box: 1,
     intro: "Sled, sprints and jumps while you're fresh, then the trap bar heavy, heavy shrugs on the same bar and a second, lighter squat, then an ab finish. Friday's rest after it.", b: [
     { L: "A", n: "Warm-up", m: 10, p: "S_WU_THU", rxLine: () => "10 min · bike, swings, skips, lunges, then the three build-ups" },
-    { L: "B", n: "Heavy Sled Sprint", m: 8, star: 1, hard: 1, rest: "Rest 2:00", rt: 120,
-      rxLine: (rx) => (rx.half ? 2 : 3) + " × 20 m",
-      items: (rx) => [{ n: "Heavy sled sprint 20 m", s: (rx.half ? 2 : 3) + " × 20 m @ 40–60% of bodyweight", cue: "Lean in at about 45 degrees and drive the ground backward through the whole foot, 5–7 seconds a run. Faster than that, add weight; slower, take some off.", id: "sled", k: "out", u: "load (kg) · time (s)", fields: SLED_FIELDS, bwp: [40, 60], bwl: "on the sled", runs: 1 }],
+    { L: "B", n: "Heavy Sled Sprint", m: (rx) => (rx.half ? 8 : 12), star: 1, hard: 1, rest: "Rest 2:00", rt: 120,
+      rxLine: (rx) => sppSled(rx) + " × 20 m",
+      items: (rx) => [{ n: "Heavy sled sprint 20 m", s: sppSled(rx) + " × 20 m @ 40–60% of bodyweight", cue: "Lean in at about 45 degrees and drive the ground backward through the whole foot, 5–7 seconds a run. Faster than that, add weight; slower, take some off.", id: "sled", k: "out", u: "load (kg) · time (s)", fields: SLED_FIELDS, bwp: [40, 60], bwl: "on the sled", runs: 1 }],
       why: "Heavy sled sprints improve the first metres of a sprint and the forward push (Alcaraz, 2018; Morin, 2017)." },
     { L: "C", n: "Flying Sprints", m: 10, star: 1, hard: 1, hide: (rx) => !!rx.testWeek || !!rx.noFlying, rest: "Rest 2:30", rt: 150,
       rxLine: (rx) => sppSprints(rx) + " × 20 m " + (rx.spr90 ? "at 90%" : "flat out"),

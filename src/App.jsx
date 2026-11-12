@@ -134,6 +134,17 @@ function migrateDone(done) {
     out[k] = m ? (done[k] || []).map((x) => m[x] || x) : done[k]; });
   return out;
 }
+/* Strength, Power and Physique's Monday box jumps were part of the warm-up
+   (block A) until they got a card of their own (block K). A Monday whose
+   warm-up was ticked before then has its box jumps ticked with it, so a day
+   already finished still reads as finished. Runs once, and on a backup made
+   before the change. */
+export function boxJumpsDone(done) {
+  const out = {};
+  Object.keys(done || {}).forEach((k) => { const l = done[k] || [];
+    out[k] = /^mSw\d+-mon$/.test(k) && l.indexOf("A") >= 0 && l.indexOf("K") < 0 ? l.concat(["K"]) : done[k]; });
+  return out;
+}
 
 const defaultStart = () => { const t = new Date(); const dow = (t.getDay() + 6) % 7; const m = mondayOf(t); if (dow >= 5) m.setDate(m.getDate() + 7); return iso(m); };
 
@@ -3432,7 +3443,7 @@ const TAB_H = 66;
 const DEF_ST = () => ({ start: defaultStart(), macroBase: 1, iron: false, sound: true, autoRest: true,
   medStage: 1, breathStage: 1, hardLevel: 1, sitLen: 30, imStart: null, rangeStart: null,
   camp: false, campStart: CAMP_START_DEFAULT, lastTen: false, taper: false, edge: true,
-  levelStart: null, v12: true,
+  levelStart: null, v12: true, v16: true,
   /* the measurement layer */
   ergUnit: "w", base: null,
   /* the season */
@@ -3613,6 +3624,7 @@ export default function App() {
     let st1 = s0 || Object.assign(DEF_ST(), mig.settings || {}, mig.macroBase ? { macroBase: mig.macroBase } : {});
     let done0 = await load(KEYS.done, {});
     if (!st1.v12) { done0 = migrateDone(done0); st1 = Object.assign({}, st1, { v12: true }); save(KEYS.done, done0); }
+    if (!st1.v16) { done0 = boxJumpsDone(done0); st1 = Object.assign({}, st1, { v16: true }); save(KEYS.done, done0); }
     if (!st1.plans) st1 = Object.assign({}, st1, migratePlans(st1, !s0 && !mig.settings));
     setStRaw(st1); save(KEYS.st, st1);
     const mx = await load(KEYS.maxes, null); setMaxesRaw(mx || mig.maxes || {}); if (!mx && mig.maxes) save(KEYS.maxes, mig.maxes);
@@ -4004,8 +4016,9 @@ export default function App() {
   const exportData = async () => JSON.stringify({ st, done, log, maxes, maxHist, body, readyMap, sparMap, swapMap, boxMap, notes, forge, fweek, hwLog, imDay, imSit, imHard, imWk, calis, morning, photos, fuel, flowAt,
     fdays, menuAll, cook, foods, shop, tape });
   const importData = (s) => { try { const d = JSON.parse(s || "{}");
-    setSt(Object.assign(DEF_ST(), d.st || {}, { v12: true }));
-    setDone(d.st && d.st.v12 ? (d.done || {}) : migrateDone(d.done || {})); setLog(d.log || {}); setMaxes(d.maxes || {}); setMaxHist(d.maxHist || []); setBody(d.body || []);
+    setSt(Object.assign(DEF_ST(), d.st || {}, { v12: true, v16: true }));
+    const done12 = d.st && d.st.v12 ? (d.done || {}) : migrateDone(d.done || {});
+    setDone(d.st && d.st.v16 ? done12 : boxJumpsDone(done12)); setLog(d.log || {}); setMaxes(d.maxes || {}); setMaxHist(d.maxHist || []); setBody(d.body || []);
     setReadyMap(d.readyMap || {}); setSparMap(d.sparMap || {}); setSwapMap(d.swapMap || {}); setBoxMap(d.boxMap || {}); setNotes(d.notes || {});
     setForge(d.forge || []); setFweek(d.fweek || 1); setHwLog(d.hwLog || []);
     setImDay(d.imDay || {}); setImSit(d.imSit || []); setImHard(d.imHard || []); setImWk(d.imWk || {});

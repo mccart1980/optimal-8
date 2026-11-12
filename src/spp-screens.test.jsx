@@ -54,7 +54,7 @@ describe("the week and its main lifts", () => {
     await at(2027, 2, 15, spp());
     expect(title()).toBe("Strength & Power · Week 1 · Size");
     const rows = wholeDay();
-    ["Warm-up", "Back Squat", "Romanian Deadlift", "Bulgarian Split Squat", "Seated Leg Curl", "Standing Calf Raise + Hanging Leg Raise"]
+    ["Warm-up", "Box Jumps", "Back Squat", "Romanian Deadlift", "Bulgarian Split Squat", "Seated Leg Curl", "Standing Calf Raise + Hanging Leg Raise"]
       .forEach((n, i, a) => { expect(rows).toContain(n); if (i) expect(before(rows, a[i - 1], n)).toBe(true); });
     // the two nasal runs are the easy work: no easy hour
     expect(rows).not.toContain("The easy hour");
@@ -189,20 +189,66 @@ describe("the sprints' buttons", () => {
   /* the plan in use: Prep from 26 October, Strength, Power and Physique started on Monday 2 November */
   const live = () => base({ plans: [{ from: "2026-10-26", made: "2026-10-25", inputs: PREP }, { from: "2026-11-02", made: "2026-11-01", inputs: Object.assign({}, SPP, { restart: true }) }], season: SPP });
   const runBtns = (card) => [...card.querySelectorAll("[data-runs='sled'] [data-set-btn]")];
-  it("Thursday's sled: a SET button a run, each tick starts the 2:00 rest; the load and the time keep their boxes; two runs in week 4", async () => {
+  it("Thursday's sled: a SET button a run — five, each tick starts the 2:00 rest; the load and the time keep their boxes; three runs in week 4, two in test week", async () => {
     await at(2026, 11, 5, live());
     const card = pick("Heavy Sled Sprint");
-    expect(runBtns(card).map((b) => b.getAttribute("aria-label") + " · " + b.children[1].textContent)).toEqual(["Set 1 · 20 m", "Set 2 · 20 m", "Set 3 · 20 m"]);
+    expect(runBtns(card).map((b) => b.getAttribute("aria-label") + " · " + b.children[1].textContent)).toEqual(["Set 1 · 20 m", "Set 2 · 20 m", "Set 3 · 20 m", "Set 4 · 20 m", "Set 5 · 20 m"]);
     expect([...card.querySelectorAll("[data-out-field]")].map((e) => e.getAttribute("data-out-field"))).toEqual(["w", "t"]);
     fireEvent.change(card.querySelector("[data-out-field='w'] input"), { target: { value: "40" } });
     fireEvent.click(runBtns(screen.getByTestId("now-card"))[0]);
     expect(screen.getByTestId("timer-title").textContent).toBe("REST");
     expect(screen.getByTestId("timer-count").textContent).toBe("2:00");
-    expect(JSON.parse(localStorage.getItem("o8s-log"))["mSw1-thu-sled"]).toEqual({ w: "40", runs: [true, false, false] });
+    expect(JSON.parse(localStorage.getItem("o8s-log"))["mSw1-thu-sled"]).toEqual({ w: "40", runs: [true, false, false, false, false] });
     expect(runBtns(screen.getByTestId("now-card"))[0].getAttribute("aria-label")).toBe("Undo set 1");
     cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
     await at(2026, 11, 26, live());
+    expect(runBtns(pick("Heavy Sled Sprint"))).toHaveLength(3);
+    cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
+    await at(2027, 1, 21, live());
     expect(runBtns(pick("Heavy Sled Sprint"))).toHaveLength(2);
+  });
+  it("last week's three ticked runs still read on a five-run card, and the day is no less done", async () => {
+    await at(2026, 11, 12, live(), { "o8s-log": { "mSw2-thu-sled": { w: "40", t: "6.2", runs: [true, true, true] } } });
+    const btns = runBtns(pick("Heavy Sled Sprint"));
+    expect(btns.map((b) => b.getAttribute("aria-label"))).toEqual(["Undo set 1", "Undo set 2", "Undo set 3", "Set 4", "Set 5"]);
+  });
+  it("a Monday finished before the box jumps had their own card still reads as finished, here and after a backup is loaded", async () => {
+    const eight = ["A", "C", "D", "E", "F", "G", "N", "Q"];
+    const week = () => { fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "MORE" })); fireEvent.click(screen.getByRole("button", { name: "PLAN" })); fireEvent.click(screen.getByRole("button", { name: "THIS WEEK" })); return document.body.textContent; };
+    await at(2026, 11, 12, live(), { "o8s-done": { "mSw2-mon": eight } });
+    expect(JSON.parse(localStorage.getItem("o8s-done"))["mSw2-mon"]).toEqual(eight.concat(["K"]));
+    expect(JSON.parse(localStorage.getItem("o8s-settings")).v16).toBe(true);
+    expect(week()).toMatch(/MONDAY · Mon 9 Nov71 MIN[^]{0,200}?rear delts9\/9/);
+    /* a Monday whose box jumps are skipped after the change stays as it is */
+    cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
+    await at(2026, 11, 19, Object.assign(live(), { v16: true }), { "o8s-done": { "mSw3-mon": eight } });
+    expect(JSON.parse(localStorage.getItem("o8s-done"))["mSw3-mon"]).toEqual(eight);
+  });
+  it("Monday's box jumps: their own card straight after the warm-up, four ticked sets of three, a set starts 1:00; two sets in week 4; none on a red morning; the warm-up is the bike and the hold", async () => {
+    await at(2026, 11, 9, live());
+    const rows = wholeDay();
+    expect(rows.slice(rows.indexOf("Warm-up"), rows.indexOf("Warm-up") + 3)).toEqual(["Warm-up", "Box Jumps", "Back Squat"]);
+    const warm = pick("Warm-up");
+    expect(within(warm).getByTestId("card-pres").textContent).toBe("5 min · bike, the Spanish squat hold");
+    expect(warm.textContent).not.toMatch(/Box jump/i);
+    const card = pick("Box Jumps");
+    expect(within(card).getByTestId("card-pres").textContent).toBe("4 × 3 · onto a knee-high box · Rest 60 s");
+    expect([...card.querySelectorAll("[data-set-mode]")].map((e) => e.getAttribute("data-set-mode") + ":" + e.getAttribute("data-set-id"))).toEqual(["bw:boxjump"]);
+    expect(card.querySelectorAll("[data-set-btn]")).toHaveLength(4);
+    expect(card.querySelector("[data-testid='weight-box']")).toBe(null);
+    fireEvent.click(within(card).getByRole("button", { name: "Set 1" }));
+    expect(screen.getByTestId("timer-count").textContent).toBe("1:00");
+    cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
+    await at(2026, 11, 23, live());
+    const light = wholeDay();
+    expect(light.slice(light.indexOf("Warm-up"), light.indexOf("Warm-up") + 3)).toEqual(["Warm-up", "Box Jumps", "Load-Velocity Profile — Squat"]);
+    expect(pick("Box Jumps").querySelectorAll("[data-set-btn]")).toHaveLength(2);
+    cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
+    await at(2026, 11, 16, live(), { "o8s-ready": { "mSw3-mon": "R" } });
+    const red = wholeDay();
+    expect(red).not.toContain("Box Jumps");
+    expect(red).not.toContain("Back Squat");
+    expect(red).toContain("Romanian Deadlift");
   });
   it("the flying sprints: a SET button a sprint, and each tap starts the 2:30 rest", async () => {
     await at(2026, 11, 5, live());
