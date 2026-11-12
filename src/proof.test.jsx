@@ -233,7 +233,7 @@ const SAID_AS = {
   "TRAP BAR JUMPS": "trap bar jumps", "BAND-ASSISTED JUMPS": "band assisted jumps", "DROP LANDINGS": "drop landings", "LOW-BOX DEPTH JUMPS": "low box depth jumps", "SIDE BOUNDS": "side bounds",
   "SHUTTLE BURSTS": "shuttle bursts", "ACTIVATION": "activation", "SPEED MICRODOSE": "speed microdose", "THE DOUBLE": "the double",
   "BAND DISLOCATES": "band dislocate", "DUMBBELL SHRUGS": "dumbbell shrug",
-  "LYING NECK CURLS": "lying neck curl", "LYING NECK EXTENSIONS": "lying neck extension",
+  "LYING NECK CURLS": "lying neck curl", "LYING NECK EXTENSIONS": "lying neck extension", "SIDE NECK RAISES": "side neck raise",
   "CHEST-SUPPORTED REAR-DELT RAISES": "chest supported rear delt raise",
   "FOREARM SIDE PLANK": "side plank",
 };

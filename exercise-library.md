@@ -68,6 +68,8 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **PUSH PRESS** — Bar resting on the front of your shoulders. A quick, shallow dip of the knees, then drive the bar overhead with your legs and finish by pressing to straight arms. Lower it back to your shoulders under control.
 
+**ONE-ARM LANDMINE PUSH PRESS** — The landmine press with a leg drive. One end of a barbell in a landmine or a corner, the other end at your shoulder in one hand, split stance, the opposite foot forward. A quick dip of the knees, then drive hard with the legs and punch the bar up and forward to a straight arm. Lower it under control and reset. All the reps on one side, then the other. Every rep as fast as you can; a rep clearly slower than the first ends the set. When every rep of every set is fast, add the smallest step next time.
+
 ## STRENGTH
 
 **HEAVY SLED PUSH** — Load the sled heavy, lean into it at about 45 degrees and sprint it 20 metres, driving through your whole foot. Each run should take 5–7 seconds; faster, add weight; slower, take some off.
@@ -107,6 +109,8 @@ Every exercise, session, test and move in the program, in two or three plain lin
 **PULL-UPS** — Palms facing away, hands just outside shoulder width. From a dead hang, pull until your chin is over the bar, then lower all the way. Weight on a belt once ten are easy.
 
 **OVERHEAD PRESS** — Standing, bar at the front of your shoulders, feet hip width, glutes squeezed. Press straight up and push your head through, so the bar finishes over the back of your head. No leg drive — that's the push press.
+
+**ONE-ARM LANDMINE PRESS** — One end of a barbell in a landmine or a corner, the other end at your shoulder in one hand. Stand in a split stance, the opposite foot forward, ribs down. Press the bar up and forward until your arm is straight, leaning into it, then lower it under control. Never lean back. All the reps on one side, then the other.
 
 **NORDIC CURLS** — Kneel with your heels held under something solid. Keeping your body straight from knees to head, lower yourself forward as slowly as you can, catch yourself with your hands, push back up.
 
@@ -181,6 +185,8 @@ Every exercise, session, test and move in the program, in two or three plain lin
 **LYING NECK CURLS** — Lie face up on a bench with your head off the end, a folded towel and a light plate on your forehead, held with both hands. Let your head go back slowly, then curl your chin to your chest. Start with 2.5–5 kg; never jerk it.
 
 **LYING NECK EXTENSIONS** — Lie face down on a bench with your head off the end, a folded towel and a light plate on the back of your head, held with both hands. Lower your chin towards your chest, then lift your head until you're looking straight ahead. Start light; never jerk it.
+
+**SIDE NECK RAISES** — Lie on your side on a bench with your head off the end. Lower your ear slowly towards the floor, then lift it towards the ceiling as far as it goes. All the reps on one side, then the other. No weight to start; when 15 is easy, hold a light plate against the side of your head. Never jerk it.
 
 **FACE PULLS** — A rope on a high cable, or a band on a door anchor. Pull it to your face with your elbows high, squeeze the backs of your shoulders, return slowly.
 

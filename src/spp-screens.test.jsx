@@ -374,6 +374,152 @@ describe("the pressure rounds and the ab finishes", () => {
   });
 });
 
+describe("the landmine presses, the side neck raise and the medicine-ball drops", () => {
+  /* the plan in use: Prep from 26 October, Strength, Power and Physique started on Monday 2 November */
+  const live = () => base({ plans: [{ from: "2026-10-26", made: "2026-10-25", inputs: PREP }, { from: "2026-11-02", made: "2026-11-01", inputs: Object.assign({}, SPP, { restart: true }) }], season: SPP });
+  const modes = (card) => [...card.querySelectorAll("[data-set-mode]")].map((e) => e.getAttribute("data-set-mode") + ":" + e.getAttribute("data-set-id") + ":" + e.getAttribute("data-set-unit"));
+  const again = () => { cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true"); };
+  const sets = (card) => [within(card).getByTestId("card-pres").textContent.split(" · ")[0], card.querySelectorAll("[data-set-btn]").length];
+  it("Tuesday: the one-arm landmine press straight after the bench and chin-ups, in added kilos; 3 × 8 each side, a set starts 2:00; two sets in week 4, 4 × 5 in week 5, 3 × 4 in week 9; none on a red morning", async () => {
+    await at(2026, 11, 3, live());
+    const rows = wholeDay();
+    expect(rows.indexOf("One-Arm Landmine Press")).toBe(rows.indexOf("Bench Press + Weighted Chin-Up") + 1);
+    expect(rows).not.toContain("Standing Overhead Press");
+    const card = pick("One-Arm Landmine Press");
+    expect(within(card).getByTestId("card-pres").textContent).toBe("3 × 8 each side · the heaviest that leaves two in you · Rest 2:00");
+    expect(within(card).getByTestId("card-lib").textContent).toMatch(/^One end of a barbell in a landmine or a corner, the other end at your shoulder in one hand\./);
+    expect(modes(card)).toEqual(["add:s_lmpress:reps"]);
+    expect(within(card).getByTestId("weight-box").textContent).toMatch(/ADDED WEIGHT \(KG\)/);
+    expect(card.querySelectorAll("[data-set-btn]")).toHaveLength(3);
+    expect(within(card).queryByTestId("lift-ramp")).toBe(null);
+    expect(within(card).queryByTestId("bar-speed")).toBe(null);
+    fireEvent.change(within(card).getByTestId("weight-box").querySelector("input"), { target: { value: "20" } });
+    expect(card.querySelector("[data-set-btn='1']").textContent).toMatch(/\+20 kg × 8/);
+    fireEvent.click(within(card).getByRole("button", { name: "Set 1" }));
+    expect(screen.getByTestId("timer-count").textContent).toBe("2:00");
+    expect(JSON.parse(localStorage.getItem("o8s-log"))["mSw1-tue-s_lmpress"].sets[0]).toMatchObject({ ok: true, w: "20", r: "8" });
+    again();
+    await at(2026, 11, 24, live());
+    expect(sets(pick("One-Arm Landmine Press"))).toEqual(["2 × 8 each side", 2]);
+    again();
+    await at(2026, 12, 1, live());
+    expect(sets(pick("One-Arm Landmine Press"))).toEqual(["4 × 5 each side", 4]);
+    again();
+    await at(2026, 12, 29, live());
+    expect(sets(pick("One-Arm Landmine Press"))).toEqual(["3 × 4 each side", 3]);
+    again();
+    await at(2026, 11, 10, live(), { "o8s-ready": { "mSw2-tue": "R" } });
+    const red = wholeDay();
+    expect(red).not.toContain("One-Arm Landmine Press");
+    expect(red).toContain("Chest-Supported Row + Weighted Dip");
+  });
+  it("Saturday: the one-arm landmine push press straight after the bench throw, in added kilos, with no ramp and no bar-speed box; 4 × 5 each side, a set starts 2:00; 5 × 3 in weeks 5 and 9; none on a red morning", async () => {
+    await at(2026, 11, 7, live());
+    const rows = wholeDay();
+    const i = rows.indexOf("Bench Throw (Smith)");
+    expect(rows.slice(i, i + 3)).toEqual(["Bench Throw (Smith)", "One-Arm Landmine Push Press", "Bench Press, Touch and Go + Pull-Up"]);
+    expect(rows).not.toContain("Push Press");
+    const card = pick("One-Arm Landmine Push Press");
+    expect(within(card).getByTestId("card-pres").textContent).toBe("4 × 5 each side · every rep fast · Rest 2:00");
+    expect(within(card).getByTestId("card-lib").textContent).toMatch(/^The landmine press with a leg drive\..* a rep clearly slower than the first ends the set\. When every rep of every set is fast, add the smallest step next time\.$/);
+    expect(modes(card)).toEqual(["add:s_lmpush:reps"]);
+    expect(within(card).getByTestId("weight-box").textContent).toMatch(/ADDED WEIGHT \(KG\)/);
+    expect(card.querySelectorAll("[data-set-btn]")).toHaveLength(4);
+    expect(within(card).queryByTestId("lift-ramp")).toBe(null);
+    expect(within(card).queryByTestId("bar-speed")).toBe(null);
+    fireEvent.change(within(card).getByTestId("weight-box").querySelector("input"), { target: { value: "15" } });
+    expect(card.querySelector("[data-set-btn='1']").textContent).toMatch(/\+15 kg × 5/);
+    fireEvent.click(within(card).getByRole("button", { name: "Set 1" }));
+    expect(screen.getByTestId("timer-count").textContent).toBe("2:00");
+    again();
+    await at(2026, 12, 5, live());
+    expect(sets(pick("One-Arm Landmine Push Press"))).toEqual(["5 × 3 each side", 5]);
+    again();
+    await at(2027, 1, 2, live());
+    expect(sets(pick("One-Arm Landmine Push Press"))).toEqual(["5 × 3 each side", 5]);
+    again();
+    await at(2026, 11, 14, live(), { "o8s-ready": { "mSw2-sat": "R" } });
+    const red = wholeDay();
+    expect(red).not.toContain("One-Arm Landmine Push Press");
+    expect(red).toContain("Bench Press, Touch and Go + Pull-Up");
+  });
+  it("the lighter week's and test week's Saturday: the bench throw's profile alone, then the landmine push press at half the sets; no top triple in test week", async () => {
+    await at(2026, 11, 28, live());
+    const rows = wholeDay();
+    const i = rows.indexOf("Load-Velocity Profile — Bench Throw");
+    expect(i).toBeGreaterThan(0);
+    expect(rows[i + 1]).toBe("One-Arm Landmine Push Press");
+    expect(rows).not.toContain("Bench Throw (Smith)");
+    const prof = pick("Load-Velocity Profile — Bench Throw");
+    expect(within(prof).getByTestId("card-pres").textContent).toBe("the bench throw at four loads · 2 reps each, the watch recording");
+    expect(within(prof).getByRole("button", { name: "DRAW THE PROFILE" })).toBeInTheDocument();
+    expect(prof.textContent).not.toMatch(/push press/i);
+    expect(sets(pick("One-Arm Landmine Push Press"))).toEqual(["2 × 5 each side", 2]);
+    again();
+    await at(2027, 1, 23, live());
+    const test = wholeDay();
+    expect(test.some((r) => /top triple/i.test(r))).toBe(false);
+    expect(test).toContain("Bench Throw (Smith)");
+    expect(sets(pick("One-Arm Landmine Push Press"))).toEqual(["3 × 3 each side", 3]);
+  });
+  it("Wednesday: the side neck raise and the medicine-ball drops, back to back, after the lateral raise and before the nasal run; the neck's set goes straight into the drops, the drops' set starts 0:45; two sets each in week 4; they run on a red morning", async () => {
+    await at(2026, 11, 4, live());
+    const rows = wholeDay();
+    const i = rows.indexOf("Dumbbell Lateral Raise");
+    expect(rows.slice(i, i + 3)).toEqual(["Dumbbell Lateral Raise", "Side Neck Raise + Medicine-Ball Drops", "The Nasal Run"]);
+    const card = pick("Side Neck Raise + Medicine-Ball Drops");
+    expect(within(card).getAllByTestId("card-name").map((e) => e.textContent)).toEqual(["Side Neck Raise + Medicine-Ball Drops", "Side neck raise", "Medicine-ball drops"]);
+    expect(within(card).getAllByTestId("card-pres").map((e) => e.textContent)).toEqual(["back to back · 45 s after each pair", "3 × 12–15 each side · no weight to start · straight into the drops", "3 × 8 · a 3 kg ball, up to 6 · Rest 45 s"]);
+    expect(within(card).getAllByTestId("card-lib").map((e) => e.textContent.slice(0, 44))).toEqual(["Lie on your side on a bench with your head o", "Lie on your back, knees bent, a 3 kg ball he"]);
+    expect(modes(card)).toEqual(["kg:s_neckside:reps", "bw:s_drops:reps"]);
+    const parts = card.querySelectorAll("[data-pair-part]");
+    expect([...parts].map((p) => p.querySelectorAll("[data-set-btn]").length)).toEqual([3, 3]);
+    expect([...parts].map((p) => !!p.querySelector("[data-testid='weight-box']"))).toEqual([true, false]);
+    fireEvent.click(within(parts[0]).getByRole("button", { name: "Set 1" }));
+    expect(screen.queryByTestId("timer-title")).toBe(null);
+    fireEvent.click(within(parts[1]).getByRole("button", { name: "Set 1" }));
+    expect(screen.getByTestId("timer-count").textContent).toBe("0:45");
+    const log = JSON.parse(localStorage.getItem("o8s-log"));
+    expect(log["mSw1-wed-s_neckside"].sets[0]).toMatchObject({ ok: true, r: "12" });
+    expect(log["mSw1-wed-s_drops"].sets[0]).toMatchObject({ ok: true, r: "8" });
+    again();
+    await at(2026, 11, 25, live());
+    expect([...pick("Side Neck Raise + Medicine-Ball Drops").querySelectorAll("[data-pair-part]")].map((p) => p.querySelectorAll("[data-set-btn]").length)).toEqual([2, 2]);
+    again();
+    await at(2026, 11, 11, live(), { "o8s-ready": { "mSw2-wed": "R" } });
+    expect(wholeDay()).toContain("Side Neck Raise + Medicine-Ball Drops");
+  });
+  it("the week's card: Saturday's landmine push press by sets and reps, in the lighter week and test week too; week 2 reads last week's added weight, and NUMBERS keeps the old presses", async () => {
+    const week = async (y, m, d) => {
+      await at(y, m, d, live());
+      fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "MORE" }));
+      fireEvent.click(screen.getByRole("button", { name: "PLAN" }));
+      fireEvent.click(screen.getByRole("button", { name: "THIS WEEK" }));
+      return document.body.textContent;
+    };
+    expect(await week(2026, 11, 3)).toMatch(/Landmine push press \(Sat\)4 × 5 each side, every rep fast/);
+    again();
+    expect(await week(2026, 11, 24)).toMatch(/Landmine push press \(Sat\)2 × 5 each side, every rep fast/);
+    again();
+    expect(await week(2027, 1, 19)).toMatch(/Landmine push press \(Sat\)3 × 3 each side, every rep fast/);
+    again();
+    const seed = { "mSw1-tue-s_lmpress": { sets: [{ ok: true, w: "20", r: "8" }, { ok: true, w: "20", r: "8" }, { ok: true, w: "20", r: "8" }], n: "One-Arm Landmine Press", d: "2026-11-03" },
+      "mSw1-sat-pushpress": { sets: [{ ok: true, w: "50", r: "5" }, { ok: true, w: "50", r: "5" }], n: "Push Press", d: "2026-11-07" },
+      "mSw1-tue-s_ohp": { sets: [{ ok: true, w: "40", r: "6" }], n: "Standing Overhead Press", d: "2026-11-03" } };
+    await at(2026, 11, 10, live(), { "o8s-log": seed });
+    const card = pick("One-Arm Landmine Press");
+    expect(within(card).getByTestId("last-time").textContent).toMatch(/^LAST TIME · TUE,? 3 NOV · \+20 KG × 8 · 8 · 8$/);
+    expect(within(card).getByTestId("weight-box").querySelector("input").value).toBe("20");
+    expect(within(card).queryByTestId("step-up")).toBe(null);
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "PROGRESS" }));
+    fireEvent.click(screen.getByRole("button", { name: "NUMBERS" }));
+    const hist = [...document.querySelectorAll("[data-lift-history]")].map((e) => e.textContent);
+    expect(hist.some((t) => /^One-Arm Landmine Press\+20 kg/.test(t))).toBe(true);
+    expect(hist.some((t) => /^Push Press50 kg/.test(t))).toBe(true);
+    expect(hist.some((t) => /^Standing Overhead Press40 kg/.test(t))).toBe(true);
+  });
+});
+
 describe("the tape, the photos and PROGRESS", () => {
   it("week 4's Sunday: the photos, and the weekly check asks the arm and the shoulders", async () => {
     await at(2027, 3, 14, spp());

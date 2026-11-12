@@ -1266,7 +1266,7 @@ const BW_ITEMS = ["ringrow", "ringdip", "muscleup", "pistol", "lsit", "lever", "
   "hands2", "c_hands_mon", "c_hands_thu", "c_hands_sun", "s_pushup"];
 /* Strength, Power and Physique's weighted chin-ups, dips and pull-ups log
    the weight on the belt */
-const ADD_ITEMS = ["chin", "c_chinup", "achilles", "achilles_c", "s_chin", "s_dip", "s_pullup", "s_landrot"];
+const ADD_ITEMS = ["chin", "c_chinup", "achilles", "achilles_c", "s_chin", "s_dip", "s_pullup", "s_landrot", "s_lmpress", "s_lmpush"];
 /* the ones prescribed as a hold, so the number is seconds and not reps */
 const SECS_ITEMS = ["lsit", "lever", "spanish", "c_spanish", "copen", "c_copen", "c_copenplank",
   "hands2", "c_hands_mon", "c_hands_thu", "c_hands_sun", "achilles", "achilles_c"];
@@ -2483,7 +2483,7 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
           <Eye c={C.brass}>What this week actually is</Eye>
           <Note c={C.chalk} s={{ marginTop: 0 }}>{rx.em}</Note>
           <Row k="Squat · bench · trap bar" val={rx.profile ? "the profiles — five loads, two fast reps each" : rx.testWeek ? "the top triples — × 1.08 is the new working max" : sppMainLine(rx) + (rx.contrast ? " · three jumps or throws after each double" : "")} />
-          <Row k="Push press (Sat)" val={rx.profile ? "the profile" : rx.testWeek ? "the top triple" : sppPp(rx).sets + " × " + sppPp(rx).reps + " @ " + sppPp(rx).pct + "%"} />
+          <Row k="Landmine push press (Sat)" val={sppPp(rx).sets + " × " + sppPp(rx).reps + " each side, every rep fast"} />
           <Row k="Pause squat (Thu)" val={sppPsq(rx) ? sppPsq(rx).sets + " × " + sppPsq(rx).reps + " @ " + sppPsq(rx).pct + "%" : "none this week"} />
           <Row k="Flying sprints (Thu)" val={rx.testWeek ? "none this week" : rx.noFlying ? "none — the tendon gate" : sppSprints(rx) + " × 20 m " + (rx.spr90 ? "at 90%" : "flat out")} />
           <Row k="Jumps (Thu)" val={rx.testWeek ? "none this week" : !rx.jump ? "box jumps" : rx.noJumps ? "none — the tendon gate" : jumpOf(rx.jump).n + (rx.restart ? " · one stage down" : "")} />

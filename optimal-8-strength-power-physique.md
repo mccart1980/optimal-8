@@ -13,11 +13,11 @@ Six sessions: four heavy or fast, two for size with an easy run after. Friday is
 | Day | Session | Time |
 | --- | --- | --- |
 | Monday | **Lower strength** — the squat heavy, then Romanian deadlifts, split squats and leg curls for size, then the neck and rear delts | ~69 min |
-| Tuesday | **Upper strength** — rotational throws, then bench, weighted chins and the overhead press heavy, then rows and dips, then 6-second bursts and the pressure rounds on the assault bike | ~91 min |
-| Wednesday | **Physique A** — chest and back for size, rear delts and cable crunches, then a 30-minute nasal run | ~68 min |
+| Tuesday | **Upper strength** — rotational throws, then bench, weighted chins and the landmine press heavy, then rows and dips, then 6-second bursts and the pressure rounds on the assault bike | ~91 min |
+| Wednesday | **Physique A** — chest and back for size, rear delts and cable crunches, the neck and medicine-ball drops, then a 30-minute nasal run | ~75 min |
 | Thursday | **Lower power** — sled, sprints and jumps, then the trap bar heavy, trap bar shrugs and a second squat, then side planks and dead bugs | ~87 min |
 | Friday | Off — sleep | — |
-| Saturday | **Upper power** — throws, bench throws and the push press, then bench and back for size, side planks and landmine rotations, then the 4 × 4 intervals | ~100 min |
+| Saturday | **Upper power** — throws, bench throws and the landmine push press, then bench and back for size, side planks and landmine rotations, then the 4 × 4 intervals | ~94 min |
 | Sunday | **Physique B** — shoulders, traps, abs, arms and calves, and the Pallof press, then a 30-minute nasal run | ~76 min |
 
 Heavy and fast days alternate with size days, and the easy runs sit on the size days. That keeps the runs and the fatigue away from the sessions where speed and heavy weights matter most.
@@ -43,7 +43,7 @@ Three blocks of three hard weeks, each followed by a lighter week, then a test w
 | S11 | Power | 4 × 2 @ 95%, three jumps after each set | As written |
 | S12 | Test | Top triple → new working max | Half the sets, plus the tests |
 
-The percentages are of your working max, the number in the app. The push press, pause squat, chins and the other lifts have their own numbers on each day, block by block. A lighter week runs everything else as the block before it writes it, at half the sets, rounded up; test week runs the power block's, at half the sets.
+The percentages are of your working max, the number in the app. The landmine presses, pause squat, chins and the other lifts have their own numbers on each day, block by block. A lighter week runs everything else as the block before it writes it, at half the sets, rounded up; test week runs the power block's, at half the sets.
 
 ---
 
@@ -55,7 +55,7 @@ Every heavy weight comes off your working max, and bar speed decides the load. E
 
 **The ramp before every main lift — on the lift's own card.** Bar × 8, then 40% × 5, 55% × 3, 65% × 2, 75% × 1 and 85% × 1 — each step only while it's at least 5% under the day's working weight. A minute between.
 
-**Bar speed.** Spleeft on your wrist, alert at a 20% slowdown, on the squat, bench, trap bar and push press. When it beeps, that rep is the set's last: rack it, and the set counts. The first work set's speed — the mean of its two fastest reps — goes in the box under it, against the target the app reads off your profile at the day's percentage. More than 0.05 m/s slower: the remaining sets come down 5%. More than 0.05 m/s faster two sessions running: 2.5% goes on your working max from then on.
+**Bar speed.** Spleeft on your wrist, alert at a 20% slowdown, on the squat, bench and trap bar. When it beeps, that rep is the set's last: rack it, and the set counts. The first work set's speed — the mean of its two fastest reps — goes in the box under it, against the target the app reads off your profile at the day's percentage. More than 0.05 m/s slower: the remaining sets come down 5%. More than 0.05 m/s faster two sessions running: 2.5% goes on your working max from then on.
 
 **Reps in reserve** — how many more clean reps you could have done:
 
@@ -103,7 +103,7 @@ The squat heavy, then Romanian deadlifts, split squats and leg curls for size, t
 
 ## TUESDAY · UPPER STRENGTH
 
-Rotational throws while you're fresh, then bench, weighted chins and the overhead press heavy, then rows and dips for size, then 6-second bursts and the pressure rounds on the assault bike.
+Rotational throws while you're fresh, then bench, weighted chins and the landmine press heavy, then rows and dips for size, then 6-second bursts and the pressure rounds on the assault bike.
 
 **Warm-up · 6 minutes**
 
@@ -118,7 +118,7 @@ Rotational throws while you're fresh, then bench, weighted chins and the overhea
 2. **Hook throw** — 3 × 3 each side. Ball at chest height in bent arms, side-on to the wall. Pivot hard off your lead leg and sling the ball sideways into the wall.
 3. **Bench press**, alternated with 4 — the table's sets and percentages, after the ramp. In the power block, do three medicine-ball chest passes 90 seconds after each double. Feet flat, backside on the bench, shoulder blades squeezed together. Lower to your lower chest, pause for a one-count, then press. Pins at chest height, no collars.
 4. **Weighted chin-up, palms toward you** — size 4 × 6, strength 5 × 4, power 4 × 3, at the heaviest weight that leaves two in you. Palms facing you, hands shoulder width, weight on a belt. From a dead hang, pull until your chin clears the bar, then lower all the way. Go bench, 90 seconds, chins, 90 seconds, so each lift gets 3 minutes.
-5. **Standing overhead press** — size 3 × 6, strength 4 × 4, power 3 × 3. Rest 2½ minutes. Bar at the front of your shoulders, feet hip width, glutes squeezed. Press straight up and push your head through, so the bar finishes over the back of your head. No leg drive: that's Saturday's push press.
+5. **One-arm landmine press** — size 3 × 8 each side, strength 4 × 5, power 3 × 4, at the heaviest weight that leaves two in you. Rest 2 minutes. One end of a barbell in a landmine or a corner, the other end at your shoulder in one hand. Stand in a split stance, the opposite foot forward, ribs down. Press the bar up and forward until your arm is straight, leaning into it, then lower it under control. Never lean back. Log the weight you add to the bar.
 6. **Chest-supported dumbbell row**, alternated with 7 — 3 × 8–10. Chest on a bench set at about 30 degrees, a dumbbell in each hand. Row your elbows back to your hips, squeeze, then lower to a full stretch.
 7. **Weighted dip** — size 3 × 8–10, strength 3 × 6–8, power 3 × 5–6. Rest 90 seconds between each exercise. Parallel bars, weight on a belt once 10 bodyweight reps are easy. Lower until your shoulders are level with your elbows, chest slightly forward, then press to locked arms.
 8. **Cable lateral raise** — 3 × 12–15. Rest 60 seconds. Cable at hand height, stand side-on, the handle in your far hand with the cable running behind your back. Raise your arm out to the side to shoulder height, leading with the elbow, then lower slowly. The cable keeps the shoulder working at the bottom, where a dumbbell goes slack.
@@ -130,7 +130,7 @@ Rotational throws while you're fresh, then bench, weighted chins and the overhea
 
 ## WEDNESDAY · PHYSIQUE A
 
-Chest and back for size, rear delts and cable crunches, then a 30-minute nasal run. Nothing heavy and nothing fast, because Thursday is the power session.
+Chest and back for size, rear delts and cable crunches, the neck and medicine-ball drops, then a 30-minute nasal run. Nothing heavy and nothing fast, because Thursday is the power session.
 
 **Warm-up · 5 minutes**
 
@@ -146,6 +146,8 @@ Chest and back for size, rear delts and cable crunches, then a 30-minute nasal r
 5. **Reverse pec-deck**, 3 × 15–20, back to back with 6. Face the machine, arms straight out in front, and sweep them back until they're level with your body.
 6. **Cable crunch**, 3 × 10–15. Rest 60 seconds after each pair. Kneel facing a high cable, the rope held either side of your head. Curl your ribs down towards your hips, so your back rounds and your hips stay still, then uncurl slowly. Add weight when 15 is easy.
 7. **Dumbbell lateral raise** — 4 × 12–20. Rest 60 seconds. Lean slightly forward, raise the dumbbells out to the sides to shoulder height, elbows soft, and lower slowly. On the last set, when you reach failure, pick up dumbbells about 30% lighter and go again.
+8. **Side neck raise**, 3 × 12–15 each side, back to back with 9. Lie on your side on a bench with your head off the end. Lower your ear slowly towards the floor, then lift it towards the ceiling. No weight to start; when 15 is easy, hold a light plate against the side of your head. Never jerk it.
+9. **Medicine-ball drops**, 3 × 8. Rest 45 seconds after each pair. Lie on your back, knees bent, a 3 kg ball held at arm's length over your stomach. Breathe out hard through your teeth and brace as you let it go; it lands just above your belly button, and you catch it on the bounce. Drops 5 to 8 land a hand's width to each side. Never on the ribs. Go up a kilo when all eight land on a brace that doesn't give, up to 6 kg.
 
 **Then · the nasal run, 30 minutes**
 
@@ -180,7 +182,7 @@ Sled, sprints and jumps while you're fresh, then the trap bar heavy, heavy shrug
 
 ## SATURDAY · UPPER POWER
 
-Throws, bench throws and the push press while you're fresh from Friday's rest, then bench and back for size, an ab finish, then the 4 × 4. About 100 minutes.
+Throws, bench throws and the landmine push press while you're fresh from Friday's rest, then bench and back for size, an ab finish, then the 4 × 4. About 94 minutes.
 
 **Warm-up · 6 minutes**
 
@@ -192,7 +194,7 @@ Throws, bench throws and the push press while you're fresh from Friday's rest, t
 1. **Medicine-ball chest pass**, alternated with 2 — 3 × 5. Rest 60 seconds between each. Stand a metre from a solid wall with a 4–6 kg ball at your chest and throw it into the wall as hard and fast as you can, then catch the rebound. This is training, not a test, so the wall is fine.
 2. **Rotational scoop throw** — 3 × 4 each side. Side-on to the wall, ball at your back hip. Drive off your back foot and turn your hips through to throw it into the wall.
 3. **Bench throw** — 4 × 3 at your peak-power load. Rest 2 minutes. Smith machine, with its safety stops set so the bar rests a couple of centimetres above your chest. Lower the bar to the stops, throw it so hard it leaves your hands, catch it with soft elbows and lower it back to the stops.
-4. **Push press** — size 4 × 5 @ 70%, strength 5 × 3 @ 80%, power 5 × 2 @ 85%, of your push press working max, after the ramp. Rest 2½ minutes. Bar at the front of your shoulders: one quick dip at the knees and drive, pressing as the bar leaves your shoulders. Lock your arms with the bar over the back of your head. One dip only.
+4. **One-arm landmine push press** — size 4 × 5 each side, strength and power 5 × 3, every rep as fast as you can. Rest 2 minutes. The landmine press with a leg drive: the end of the bar at your shoulder in one hand, split stance, the opposite foot forward. A quick dip of the knees, then drive hard with the legs and punch the bar up and forward to a straight arm. Lower it under control and reset. A rep clearly slower than the first ends the set. When every rep of every set is fast, add the smallest step next time. Log the weight you add to the bar.
 5. **Bench press, touch and go**, alternated with 6 — size 3 × 8 @ 70%, strength 3 × 6 @ 75%, power 3 × 5 @ 75%, fast. Rest 90 seconds between each exercise. Tuesday's bench without the pause: lower under control, touch your chest and press.
 6. **Pull-up** — 3 × 8–10, with weight on a belt once 10 is easy. Palms facing away, hands just outside shoulder width. From a dead hang, pull until your chin is over the bar.
 7. **One-arm dumbbell row** — 3 × 8–12 each side. Rest 60 seconds. One knee and one hand on a bench, the dumbbell hanging at full stretch. Row it to your hip, then lower slowly.
@@ -273,7 +275,7 @@ They're the fight sim: bursts with seconds to recover, the way you fight. They c
 
 These protect the work, and none of them is optional.
 
-1. **Lighter weeks, 4 and 8.** The squat, bench, trap bar and push press are replaced by their profiles in THE PROFILE: five loads, two fast reps each. Trap bar jumps and bench throws get their four-load profiles. Everything else, the jumps and sprints included, is half the sets, rounded up, the 4 × 4 becomes 3 × 4, the bursts become four, and the pressure rounds two.
+1. **Lighter weeks, 4 and 8.** The squat, bench and trap bar are replaced by their profiles in THE PROFILE: five loads, two fast reps each. Trap bar jumps and bench throws get their four-load profiles. Everything else, the jumps and sprints included, is half the sets, rounded up, the 4 × 4 becomes 3 × 4, the bursts become four, and the pressure rounds two.
 2. **The morning check.** Yellow: every load on the bar 7% lighter, and the 4 × 4 at 90%. Red: the heavy lifts, the sprints, jumps and throws, the 4 × 4, the bursts and the pressure rounds come off; the size work runs as written. Three red mornings in a week make the next week a lighter week.
 3. **Pain.** Anything over 3 out of 10 while you do it, or worse the next morning, stops that exercise for the day; the jumps, sprints and holds have the button for it. Sunday's check runs the tendon gate: Achilles or knee at 3 or more means no reactive jumps the next week, the tendon holds carried on, and once it's back under 3 they restart one stage down for a week; a hamstring at 3 or more means no flying sprints and the Nordics only if they're pain-free; an elbow or a shoulder at 4 or more turns the next week's dips into push-ups and takes Sunday's curls and triceps work off. The same pain two weeks running means a physio.
 4. **Sleep.** Friday is off. Aim for seven hours a night, which at a 3 am start means asleep by 8 pm.
@@ -292,7 +294,7 @@ Week 12 resets every number and shows what the twelve weeks did. Everything not 
 | Monday | Broad jump, best of three, after the warm-up. Then the squat top triple. |
 | Tuesday | Bench top triple, then the weighted chin top triple. |
 | Thursday | Warm-up, 2 sled sprints and 3 × 3 trap bar jumps, then the trap bar top triple. No flying sprints, depth jumps or pause squats. |
-| Saturday | Push press top triple, then the 4 × 4 as the engine test. |
+| Saturday | The 4 × 4 as the engine test. |
 | Sunday | Tape and photos: the same spots and the same light every time. |
 
 **The top triple.** After the ramp on its card, work up in sets of 3, adding 2.5–5% a set, 3 minutes apart. Stop at the set of 3 that's hard but leaves one or two in you, or when the Spleeft beeps. That weight × 1.08, rounded to 2.5 kg, is your new working max — the app saves it, and it's the camp's working weight too if a fight comes next. For chins, record the heaviest added weight for a clean 3.
@@ -301,7 +303,7 @@ Week 12 resets every number and shows what the twelve weeks did. Everything not 
 
 **What counts as progress**
 
-- Higher working maxes on the squat, bench, trap bar and push press.
+- Higher working maxes on the squat, bench and trap bar.
 - A longer broad jump, and heavier peak-power loads in the profiles.
 - Arms and shoulders up on the tape, with the waist the same or smaller.
 - The same or more on the bike's screen in the 4 × 4, at the same peak heart rate.
@@ -328,7 +330,9 @@ Every choice below rests on trials where trials exist. Where it rests on coachin
 - **Power built on strength, by several methods at once.** Power needs strength first, then throws, loaded jumps and rebound jumps on top, with the most work going to the weakest link (Cormie, 2011; Jiménez-Reyes, 2017). Loaded jumps and throws stand in for cleans and snatches: the same intent to move fast, without years of technique or the wrist risk. That last part is a coaching call, not a trial.
 - **The sled.** Heavy sled sprints improve the first metres of a sprint and the forward push (Alcaraz, 2018; Morin, 2017).
 - **Rotation twice a week, and a trunk that holds.** The legs make a punch's force; the trunk turns it and carries it to the fist. Tuesday's shot-put and hook throws and Saturday's scoop throw train that turn fast, the straight and the hook; Saturday's landmine rotation trains it under load; and the Pallof press trains the trunk to hold against a twist. That rests on how the punch works and on coaching practice, not a trial.
-- **Abs, traps, rear delts and the neck.** Abs grow like any other muscle, on load and hard sets: 12 a week from the leg raises, the ab wheel and the cable crunches, which take weight. On top, Thursday and Saturday finish the lifting with trunk work that's never taken to failure: side planks, then dead bugs on Thursday and landmine rotations on Saturday. The traps get heavy shrugs twice a week, the rear delts direct work three times and the neck its own work once. That's a coaching call for the build you're after, not a trial.
+- **Abs, traps, rear delts and the neck.** Abs grow like any other muscle, on load and hard sets: 12 a week from the leg raises, the ab wheel and the cable crunches, which take weight. On top, Thursday and Saturday finish the lifting with trunk work that's never taken to failure: side planks, then dead bugs on Thursday and landmine rotations on Saturday. The traps get heavy shrugs twice a week, the rear delts direct work three times and the neck its own work twice. That's a coaching call for the build you're after, not a trial.
+- **Pressing up and forward, not straight overhead.** A bar can only finish straight overhead if the shoulders reach all the way up. When they're stiff, the lower back arches to make up the difference, with the bar's weight on it. The landmine's bar travels up and forward, so both presses finish in front of you. The barbell push press produced as much power as a jump squat (Lake, 2014), and one arm moves less weight, so some leg power is given up; Thursday's jumps, sled and sprints cover it. The swap is a coaching call from how the lifts work, not a trial.
+- **A neck trained in every direction, and a brace that fires on time.** Monday trains the neck forward and back, Wednesday side to side. In pooled trials, neck training with a load made the neck stronger bending forward and to the side (Ivanic, 2024). No trial yet shows that a stronger neck prevents concussion, but a 2025 expert consensus sets out how to train it for the knocks the head takes in sport (Fownes-Walpole, 2025). Wednesday's medicine-ball drops train the trunk to brace the instant something lands on it. No study backs the drops; they're long-standing coaching practice.
 - **Exercises chosen for the stretch.** Overhead triceps extensions grew the triceps 1.4 times as much as pushdowns (Maeo, 2023). Seated leg curls grew the hamstrings more than lying ones, 14% against 9% (Maeo, 2021). The incline curls, deep presses and full-stretch raises follow the same idea.
 - **The engine held, not built.** Endurance can be held for up to 15 weeks on as little as two sessions a week, as long as the intensity stays (Spiering, 2021). The 4 × 4 at 90–95% of peak heart rate raised fitness more than steady or threshold work (Helgerud, 2007). Cardio barely holds back strength or muscle size, but it does blunt explosive power, mostly when both are in the same session (Schumann, 2022). So there's one long hard session, not two; the bursts and the pressure rounds are 25 minutes on an upper-body day, two days clear of Thursday's sprints and jumps; and the runs are easy and kept off the fast days.
 - **The pressure rounds: three, not six.** Even a 3 × 2 fight is mostly aerobic, about 77% of its energy (Davis, 2014), but it's fought in short bursts with seconds between them: elite boxers work at about 18 to 1 activity to rest, novices at 9 to 1 (Slimani, 2017). The pressure rounds copy that on the bike. What conditioning costs power and size grows with how often and how long it is (Wilson, 2012), so it's three rounds, on one day. The full fight sim comes in the camp.
@@ -354,3 +358,6 @@ Every choice below rests on trials where trials exist. Where it rests on coachin
 - The energetics of semicontact 3 × 2-min amateur boxing — Davis et al., 2014
 - Performance aspects and physiological responses in male amateur boxing competitions — Slimani et al., 2017
 - Concurrent training: a meta-analysis examining interference of aerobic and resistance exercises — Wilson et al., 2012
+- Power and impulse applied during push press exercise — Lake, Mundy and Comfort, 2014
+- Efficacy of exercise interventions on prevention of sport-related concussion and related outcomes — Ivanic et al., British Journal of Sports Medicine, 2024
+- Combining evidence and practice to optimise neck training aimed at reducing head acceleration events in sport — Fownes-Walpole et al., British Journal of Sports Medicine, 2025

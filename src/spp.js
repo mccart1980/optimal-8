@@ -23,13 +23,13 @@ export const SPP_PH = {
   spp_size: { n: "SIZE", long: "BLOCK 1 · SIZE", ac: C.moss, vl: "4 × 6 @ 75–80%",
     note: "Three weeks of size: the squat, bench and trap bar 4 × 6 at 75, 77.5 and 80%, and the most sets of the cycle for chest, back, shoulders and arms. Box jumps; the flying sprints at 90% for the first two weeks." },
   spp_lighter: { n: "LIGHTER", long: "THE LIGHTER WEEK", ac: C.moss, vl: "the profiles · half the sets",
-    note: "The squat, bench, trap bar and push press become their profiles — five loads, two fast reps each — and the trap bar jumps and bench throws theirs. Everything else is half the sets, rounded up, and the 4 × 4 is 3 × 4. Tape and photos on Sunday." },
+    note: "The squat, bench and trap bar become their profiles — five loads, two fast reps each — and the trap bar jumps and bench throws theirs. Everything else is half the sets, rounded up, and the 4 × 4 is 3 × 4. Tape and photos on Sunday." },
   spp_strength: { n: "STRENGTH", long: "BLOCK 2 · STRENGTH", ac: C.oxide, vl: "5 × 3 @ 85–90%",
     note: "Three weeks of strength: 5 × 3 at 85, 87.5 and 90%, three minutes between sets. Low-box depth jumps; four flying sprints, flat out. The size work keeps going." },
   spp_power: { n: "POWER", long: "BLOCK 3 · POWER", ac: C.brass, vl: "4 × 2 @ 90–95% + jumps",
     note: "Three weeks of power: 4 × 2 at 90, 92.5 and 95%, with three jumps or throws 90 seconds after every double. Depth jumps. The size work keeps going." },
   spp_test: { n: "TEST WEEK", long: "TEST WEEK", ac: C.cobalt, vl: "top triples · half the sets",
-    note: "Monday the broad jump and the squat top triple; Tuesday the bench and the chin-up top triples; Thursday the trap bar top triple; Saturday the push press top triple and the 4 × 4 as the engine test. Everything else half the sets. Tape and photos on Sunday." },
+    note: "Monday the broad jump and the squat top triple; Tuesday the bench and the chin-up top triples; Thursday the trap bar top triple; Saturday the 4 × 4 as the engine test. Everything else half the sets. Tape and photos on Sunday." },
 };
 
 /* ---------- the engine ---------- */
@@ -72,7 +72,7 @@ swk(2, { blk: "size", acc: "size", ph: "spp_size", main: { sets: 4, reps: 6, pct
 swk(3, { blk: "size", acc: "size", ph: "spp_size", main: { sets: 4, reps: 6, pct: 80 },
   em: "Size: 4 × 6 @ 80%. The flying sprints flat out from here." });
 swk(4, { blk: "lighter", acc: "size", ph: "spp_lighter", light: 1, half: 1, profile: 1, e: "vo2s", tape: 1,
-  em: "Lighter: the squat, bench, trap bar and push press are their profiles — five loads, two fast reps each — and the trap bar jumps and bench throws theirs. Everything else half the sets; the 4 × 4 is 3 × 4. Tape and photos on Sunday." });
+  em: "Lighter: the squat, bench and trap bar are their profiles — five loads, two fast reps each — and the trap bar jumps and bench throws theirs. Everything else half the sets; the 4 × 4 is 3 × 4. Tape and photos on Sunday." });
 swk(5, { blk: "strength", acc: "strength", ph: "spp_strength", main: { sets: 5, reps: 3, pct: 85 }, jump: "lowbox",
   em: "Strength: 5 × 3 @ 85%. Low-box depth jumps replace the box jumps; four flying sprints." });
 swk(6, { blk: "strength", acc: "strength", ph: "spp_strength", main: { sets: 5, reps: 3, pct: 87.5 }, jump: "lowbox",
@@ -88,7 +88,7 @@ swk(10, { blk: "power", acc: "power", ph: "spp_power", main: { sets: 4, reps: 2,
 swk(11, { blk: "power", acc: "power", ph: "spp_power", main: { sets: 4, reps: 2, pct: 95 }, contrast: 1, jump: "depth",
   em: "Power: 4 × 2 @ 95%, three jumps or throws after every double." });
 swk(12, { blk: "test", acc: "power", ph: "spp_test", half: 1, testWeek: 1, tape: 1,
-  em: "Test week: Monday the broad jump and the squat top triple; Tuesday the bench and chin-up top triples; Thursday the trap bar top triple; Saturday the push press top triple, then the 4 × 4 as the engine test. Everything else half the sets. Tape and photos on Sunday." });
+  em: "Test week: Monday the broad jump and the squat top triple; Tuesday the bench and chin-up top triples; Thursday the trap bar top triple; Saturday the 4 × 4 as the engine test. Everything else half the sets. Tape and photos on Sunday." });
 
 /* what the morning's colour does to the session, as the check says it */
 export const SPP_READY_LINE = {
@@ -134,13 +134,15 @@ const mainM = (rx) => (rx.testWeek || rx.contrast || (rx.main && rx.main.sets >=
 const thenRest = (what) => ({ kind: "rest", opt: { a: 90, then: what, w: 15, b: 120 }, title: "REST" });
 
 const PSQ = { size: { sets: 3, reps: 5, pct: 65 }, strength: { sets: 3, reps: 3, pct: 72.5 }, power: { sets: 3, reps: 2, pct: 75 } };
-const PP = { size: { sets: 4, reps: 5, pct: 70 }, strength: { sets: 5, reps: 3, pct: 80 }, power: { sets: 5, reps: 2, pct: 85 } };
+/* Saturday's one-arm landmine push press: by weight and reps, every rep fast — no working max, no profile */
+const PP = { size: { sets: 4, reps: 5 }, strength: { sets: 5, reps: 3 }, power: { sets: 5, reps: 3 } };
 const BTG = { size: { reps: 8, pct: 70 }, strength: { reps: 6, pct: 75 }, power: { reps: 5, pct: 75 } };
 const CHIN = { size: [4, 6], strength: [5, 4], power: [4, 3] };
-const OHP = { size: [3, 6], strength: [4, 4], power: [3, 3] };
+/* Tuesday's one-arm landmine press, each side */
+const LMP = { size: [3, 8], strength: [4, 5], power: [3, 4] };
 const BSS = { size: [3, 8], strength: [3, 6], power: [2, 6] };
 export const sppPsq = (rx) => (rx.testWeek ? null : Object.assign({}, by(rx, PSQ), { sets: hs(rx, by(rx, PSQ).sets) }));
-export const sppPp = (rx) => (rx.profile || rx.testWeek ? null : by(rx, PP));
+export const sppPp = (rx) => Object.assign({}, by(rx, PP), { sets: hs(rx, by(rx, PP).sets) });
 /* Thursday's flying sprints: three in the size block, four after */
 export const sppSprints = (rx) => hs(rx, by(rx, { size: 3, strength: 4, power: 4 }));
 const DROP = "the last set to failure, then 30% lighter and go again";
@@ -249,8 +251,8 @@ export const SS = {
       items: (rx) => [{ n: "Chest-supported rear-delt raise", s: hs(rx, 3) + " × 15–20 · one or two left", cue: "Lie face down on an incline bench with light dumbbells hanging straight down. Raise your arms out to the sides to shoulder height, little fingers leading, squeeze the backs of your shoulders, then lower slowly.", id: "s_rdraise", k: "wr", sets: hs(rx, 3), reps: "15–20" }] }] },
 
   /* ---------------- TUESDAY ---------------- */
-  tue: { n: "TUESDAY", t: "Upper strength — rotational throws, then bench and weighted chin-ups, the overhead press, rows, dips, lateral raises and the ab wheel, then the bursts and the pressure rounds", ac: C.cobalt, box: 1,
-    intro: "Rotational throws while you're fresh, then bench, weighted chin-ups and the overhead press heavy, then rows and dips for size, then 6-second bursts and the pressure rounds on the assault bike.", b: [
+  tue: { n: "TUESDAY", t: "Upper strength — rotational throws, then bench and weighted chin-ups, the landmine press, rows, dips, lateral raises and the ab wheel, then the bursts and the pressure rounds", ac: C.cobalt, box: 1,
+    intro: "Rotational throws while you're fresh, then bench, weighted chin-ups and the landmine press heavy, then rows and dips for size, then 6-second bursts and the pressure rounds on the assault bike.", b: [
     { L: "A", n: "Warm-up", m: 6, p: "S_WU_TUE", rxLine: () => "6 min · bands, push-ups, two easy throws of each" },
     /* ROTATION: the second throws of the week, three and four days from
        Saturday's, the straight and the hook — first, while you're fresh */
@@ -283,10 +285,12 @@ export const SS = {
     { L: "V", n: "Chin-Up Top Triple", m: 8, star: 1, hard: 1, prepTest: 1, hide: (rx) => !rx.testWeek,
       items: [{ n: "Weighted chin-up, palms toward you — top triple", s: "sets of three, 2.5–5 kg more each, to one that's hard but leaves one or two in you · log the added weight", cue: "After a light set or two, sets of three adding 2.5–5 kg, three minutes apart. Stop at the set of three that's hard but leaves one or two in you. Log the weight on the belt.", id: "s_chin_top", k: "out", u: "added kg" }],
       why: "Test week: the heaviest added weight for a clean three." },
-    { L: "D", n: "Standing Overhead Press", m: 9, hard: 1, rest: "Rest 2:30", rt: 150,
-      rxLine: (rx) => hs(rx, by(rx, OHP)[0]) + " × " + by(rx, OHP)[1],
-      items: (rx) => [{ n: "Overhead press", s: hs(rx, by(rx, OHP)[0]) + " × " + by(rx, OHP)[1] + " · the heaviest that leaves two in you", cue: "Bar at the front of your shoulders, feet hip width, glutes squeezed. Press straight up and push your head through, so the bar finishes over the back of your head. No leg drive: that's Saturday's push press.", id: "s_ohp", k: "wr", sets: hs(rx, by(rx, OHP)[0]), reps: by(rx, OHP)[1] }],
-      why: "Shoulders pressed heavy, strict." },
+    /* THE LANDMINE PRESS: the bar goes up and forward, not straight
+       overhead, so the lower back never has to arch to finish it */
+    { L: "D", n: "One-Arm Landmine Press", m: 9, hard: 1, rest: "Rest 2:00", rt: 120,
+      rxLine: (rx) => hs(rx, by(rx, LMP)[0]) + " × " + by(rx, LMP)[1] + " each side",
+      items: (rx) => [{ n: "One-arm landmine press", s: hs(rx, by(rx, LMP)[0]) + " × " + by(rx, LMP)[1] + " each side · the heaviest that leaves two in you", cue: "One end of a barbell in a landmine or a corner, the other end at your shoulder in one hand. Split stance, the opposite foot forward, ribs down. Press the bar up and forward until your arm is straight, leaning into it, then lower it under control. Never lean back. Log the weight you add to the bar.", id: "s_lmpress", k: "wr", sets: hs(rx, by(rx, LMP)[0]), reps: by(rx, LMP)[1] + "/side" }],
+      why: "Shoulders pressed heavy, one side at a time, with no bar straight overhead." },
     { L: "E", n: (rx) => (rx.upper4 ? "Chest-Supported Row + Push-Ups" : "Chest-Supported Row + Weighted Dip"), m: 9, pair: 1,
       rxLine: () => "alternate · 90 s after each",
       items: (rx) => [{ n: "Chest-supported dumbbell row", s: hs(rx, 3) + " × 8–10 · one or two left", cue: "Chest on a bench set at about 30 degrees, a dumbbell in each hand. Row your elbows back to your hips, squeeze, then lower to a full stretch.", id: "s_csrow", k: "wr", sets: hs(rx, 3), reps: "8–10", rest: "Rest 90 s · then the " + (rx.upper4 ? "push-ups" : "dip"), rt: 90 },
@@ -317,7 +321,7 @@ export const SS = {
       why: "Bursts with seconds to recover, the way you fight. Clear the bike's screen after the bursts, so its total is the rounds' alone. If Thursday's sled times get slower at the same load, or your jump and throw sets keep ending early, two weeks running, the pressure rounds come out for the rest of the twelve weeks.", tr: 1 }] },
 
   /* ---------------- WEDNESDAY ---------------- */
-  wed: { n: "WEDNESDAY", t: "Physique A — chest and back for size, rear delts and cable crunches, lateral raises, then the nasal run", ac: C.moss, box: 1,
+  wed: { n: "WEDNESDAY", t: "Physique A — chest and back for size, rear delts and cable crunches, lateral raises, the neck and medicine-ball drops, then the nasal run", ac: C.moss, box: 1,
     intro: "Nothing heavy and nothing fast: Thursday is the power session.", b: [
     { L: "A", n: "Warm-up", m: 5, p: "S_WU_WED", rxLine: () => "5 min · bands, push-ups, a light set of the first pair" },
     { L: "B", n: "Incline Dumbbell Press + Lat Pulldown", m: 11, pair: 1, rxLine: () => "alternate · 90 s after each",
@@ -332,6 +336,12 @@ export const SS = {
       why: "Back to back, a minute after each pair." },
     { L: "E", n: "Dumbbell Lateral Raise", m: 6, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 4) + " × 12–20",
       items: (rx) => [{ n: "Dumbbell lateral raise", s: hs(rx, 4) + " × 12–20 · " + DROP, cue: "Lean slightly forward, raise the dumbbells out to the sides to shoulder height, elbows soft, and lower slowly.", id: "s_dblat", k: "wr", sets: hs(rx, 4), reps: "12–20" }] },
+    /* DURABILITY: the neck side to side, and the brace that takes a body
+       shot — back to back, before the run */
+    { L: "F", n: "Side Neck Raise + Medicine-Ball Drops", m: 7, pair: 1, rxLine: () => "back to back · 45 s after each pair",
+      items: (rx) => [{ n: "Side neck raise", s: hs(rx, 3) + " × 12–15 each side · no weight to start", cue: "Lie on your side on a bench with your head off the end. Lower your ear slowly towards the floor, then lift it towards the ceiling. No weight to start; when 15 is easy, hold a light plate against the side of your head. Never jerk it.", id: "s_neckside", k: "wr", sets: hs(rx, 3), reps: "12–15/side", rest: "straight into the drops", rt: 0 },
+        { n: "Medicine-ball drops", s: hs(rx, 3) + " × 8 · a 3 kg ball, up to 6", cue: "Lie on your back, knees bent, the ball held at arm's length over your stomach. Breathe out hard through your teeth and brace as you let it go; it lands just above your belly button, and you catch it on the bounce. Never on the ribs.", id: "s_drops", k: "chk", rest: "Rest 45 s", rt: 45 }],
+      why: "Back to back, 45 seconds after each pair. The neck is trained forward and back on Monday and side to side here; the drops train the brace to fire on time." },
     nasalRun("R")] },
 
   /* ---------------- THURSDAY ---------------- */
@@ -397,29 +407,29 @@ export const SS = {
     intro: "No alarm. Saturday is the longest session of the week.", b: [] },
 
   /* ---------------- SATURDAY ---------------- */
-  sat: { n: "SATURDAY", t: "Upper power — throws, bench throws and the push press, then bench and back for size, side planks and landmine rotations, then the 4 × 4", ac: C.oxide, free: 1,
-    intro: "Throws, bench throws and the push press while you're fresh from Friday's rest, then bench and back for size, an ab finish, then the 4 × 4.", b: [
+  sat: { n: "SATURDAY", t: "Upper power — throws, bench throws and the landmine push press, then bench and back for size, side planks and landmine rotations, then the 4 × 4", ac: C.oxide, free: 1,
+    intro: "Throws, bench throws and the landmine push press while you're fresh from Friday's rest, then bench and back for size, an ab finish, then the 4 × 4.", b: [
     { L: "A", n: "Warm-up", m: 6, p: "S_WU_SAT", rxLine: () => "6 min · bands, push-ups, two easy throws of each" },
     { L: "B", n: "Medicine-Ball Chest Pass + Rotational Scoop Throw", m: 7, star: 1, hard: 1, pair: 1, rxLine: () => "alternate · 60 s after each",
       items: (rx) => [{ n: "Medicine-ball chest pass", s: hs(rx, 3) + " × 5 · 4–6 kg ball, into a wall", cue: "Stand a metre from a solid wall with the ball at your chest and throw it into the wall as hard and fast as you can, then catch the rebound.", id: "s_chestpass", k: "chk", rest: "Rest 60 s · then the scoop throw", rt: 60 },
         { n: "Rotational scoop throw", s: hs(rx, 3) + " × 4 each side", cue: "Side-on to the wall, ball at your back hip. Drive off your back foot and turn your hips through to throw it into the wall.", id: "s_scoop", k: "chk", rest: "Rest 60 s · then the chest pass", rt: 60 }],
       w: "Every throw as hard as you can make it. A throw clearly weaker than the first ends the set." },
-    { L: "P", n: "Load-Velocity Profile — Push Press and Bench Throw", m: 12, star: 1, profile: "pp", hide: (rx) => !rx.profile,
-      rxLine: () => "the push press at five loads, the bench throw at four",
-      items: [{ n: "Push press at five loads", s: FIVE, cue: "Two reps at each load, as fast as the bar will move, the watch recording the mean speed.", id: "s_prof_pp", k: "chk" },
-        { n: "Bench throw at four loads", s: "20 · 30 · 40 · 50% of the bench — two reps each", cue: "Two throws at each load, the watch recording the mean speed. The load with the highest power is the one you throw until the next profile.", id: "s_prof_bt", k: "chk" }],
+    { L: "P", n: "Load-Velocity Profile — Bench Throw", m: 6, star: 1, profile: "bthrow", hide: (rx) => !rx.profile,
+      rxLine: () => "the bench throw at four loads · 2 reps each, the watch recording",
+      items: [{ n: "Bench throw at four loads", s: "20 · 30 · 40 · 50% of the bench — two reps each", cue: "Two throws at each load, the watch recording the mean speed. The load with the highest power is the one you throw until the next profile.", id: "s_prof_bt", k: "chk" }],
       why: PROFILE_WHY },
     { L: "C", n: "Bench Throw (Smith)", m: 7, star: 1, hard: 1, hide: (rx) => !!rx.profile, rest: "Rest 2:00", rt: 120,
       rxLine: (rx) => hs(rx, 4) + " × 3 @ your peak-power load",
       items: (rx) => [{ n: "Bench throw", s: hs(rx, 4) + " × 3 @ your peak-power load", cue: "Smith machine, with its safety stops set so the bar rests a couple of centimetres above your chest. Lower the bar to the stops, throw it so hard it leaves your hands, catch it with soft elbows and lower it back to the stops.", id: "throw", k: "wr", mk: "bench", pct: rx.btPct, sets: hs(rx, 4), reps: 3 }],
       note: BENCH_THROW_NOTE, w: "Every throw as fast as you can make it. A throw clearly slower than the first ends the set." },
-    { L: "D", n: "Push Press", m: (rx) => (rx.testWeek ? 18 : rx.acc === "size" ? 17 : 21), star: 1, hard: 1, mainLift: "pp", vel: "pp", hide: (rx) => !!rx.profile, rest: "Rest 2:30", rt: 150,
-      rxLine: (rx) => (rx.testWeek ? "the top triple" : sppPp(rx).sets + " × " + sppPp(rx).reps + " @ " + sppPp(rx).pct + "%"),
-      items: (rx) => (rx.testWeek ? [topItem("Push press", "pp", "s_pp_top")]
-        : [{ n: "Push press", s: sppPp(rx).sets + " × " + sppPp(rx).reps + " @ " + sppPp(rx).pct + "%", cue: "Bar at the front of your shoulders: one quick dip at the knees and drive, pressing as the bar leaves your shoulders. Lock your arms with the bar over the back of your head. One dip only.",
-          id: "pushpress", k: "wr", mk: "pp", pct: sppPp(rx).pct, sets: sppPp(rx).sets, reps: sppPp(rx).reps, ramp: sppRamp(sppPp(rx).pct) }]),
-      w: "The beep is the set's last rep: rack it, and the set counts.",
-      why: "Off your push press working max.", tr: 2 },
+    /* THE LANDMINE PUSH PRESS: the legs start the bar and one arm finishes
+       it, up and forward — the week's fast press, with no bar overhead */
+    { L: "D", n: "One-Arm Landmine Push Press", m: (rx) => (rx.half ? 8 : rx.acc === "size" ? 13 : 15), star: 1, hard: 1, rest: "Rest 2:00", rt: 120,
+      rxLine: (rx) => sppPp(rx).sets + " × " + sppPp(rx).reps + " each side · every rep fast",
+      items: (rx) => [{ n: "One-arm landmine push press", s: sppPp(rx).sets + " × " + sppPp(rx).reps + " each side · every rep fast", cue: "The landmine press with a leg drive: the end of the bar at your shoulder, split stance, the opposite foot forward. A quick dip of the knees, then drive hard with the legs and punch the bar up and forward to a straight arm. Lower it under control and reset. Log the weight you add to the bar.",
+        id: "s_lmpush", k: "wr", sets: sppPp(rx).sets, reps: sppPp(rx).reps + "/side" }],
+      w: "Every rep as fast as you can make it. A rep clearly slower than the first ends the set.",
+      why: "When every rep of every set is fast, add the smallest step next time.", tr: 1 },
     { L: "E", n: "Bench Press, Touch and Go + Pull-Up", m: 11, pair: 1, rxLine: () => "alternate · 90 s after each",
       items: (rx) => [{ n: "Bench press, touch and go", s: hs(rx, 3) + " × " + by(rx, BTG).reps + " @ " + by(rx, BTG).pct + "%", cue: "Tuesday's bench without the pause: lower under control, touch your chest and press." + (rx.acc === "power" ? " Fast." : ""), id: "s_bench_tg", k: "wr", mk: "bench", pct: by(rx, BTG).pct, sets: hs(rx, 3), reps: by(rx, BTG).reps, rest: "Rest 90 s · then the pull-up", rt: 90 },
         { n: "Pull-up", s: hs(rx, 3) + " × 8–10 · one or two left", cue: "Palms facing away, hands just outside shoulder width. From a dead hang, pull until your chin is over the bar. Weight on a belt once 10 is easy.", id: "s_pullup", k: "wr", sets: hs(rx, 3), reps: "8–10", rest: "Rest 90 s · then the bench", rt: 90 }] },
