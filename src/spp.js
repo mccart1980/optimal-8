@@ -205,12 +205,16 @@ const nasalRun = (L) => ({ L, n: "The Nasal Run", m: 30, eng: 1, engKey: "base",
 /* ================================================================
    THE SEVEN PAGES, in running order
    ================================================================ */
+/* since: a card added after the programme first ran carries the first date it
+   counts from — the day after it went in. Days trained before that are
+   measured against the cards they had, so a finished day stays finished.
+   A card that's there from a programme's first day needs none. */
 export const SS = {
   /* ---------------- MONDAY ---------------- */
   mon: { n: "MONDAY", t: "Lower strength — box jumps, the squat, then Romanian deadlifts, Bulgarian split squats, leg curls, calves and leg raises, then the neck and rear delts", ac: C.oxide, box: 1,
     intro: "Box jumps while you're fresh, the squat heavy, then size for the legs, then the neck and rear delts.", b: [
     { L: "A", n: "Warm-up", m: 5, p: "S_WU_MON", rxLine: () => "5 min · bike, the Spanish squat hold" },
-    { L: "K", n: "Box Jumps", m: (rx) => (rx.half ? 3 : 5), star: 1, hard: 1, rest: "Rest 60 s", rt: 60,
+    { L: "K", n: "Box Jumps", since: "2026-11-13", m: (rx) => (rx.half ? 3 : 5), star: 1, hard: 1, rest: "Rest 60 s", rt: 60,
       rxLine: (rx) => hs(rx, 4) + " × 3",
       items: (rx) => [{ n: "Box jump", s: hs(rx, 4) + " × 3 · onto a knee-high box", cue: "Onto a box about knee height, landing soft, stepping down.", id: "boxjump", k: "chk" }],
       w: "Every jump as high as you can make it. A jump clearly lower than the first ends the set.",
@@ -249,12 +253,12 @@ export const SS = {
         { n: "Hanging leg raise", s: hs(rx, 3) + " × 8–12", cue: "Hang from the bar, curl your pelvis up and lift your knees to your chest without swinging, then lower slowly. Straight legs once that gets easy.", id: "hlr", k: "wr", sets: hs(rx, 3), reps: "8–12", rest: "Rest 60 s", rt: 60 }],
       why: "Back to back, a minute after each pair." },
     /* THE NECK: front and back, light and slow, once a week */
-    { L: "N", n: "Lying Neck Curl + Lying Neck Extension", m: 6, pair: 1, rxLine: () => "back to back · 45 s after each pair",
+    { L: "N", n: "Lying Neck Curl + Lying Neck Extension", since: "2026-11-08", m: 6, pair: 1, rxLine: () => "back to back · 45 s after each pair",
       items: (rx) => [{ n: "Lying neck curl", s: hs(rx, 3) + " × 15–20 · slow, never jerked", cue: "Lie face up on a bench with your head off the end, a folded towel and a light plate on your forehead, held with both hands. Let your head go back slowly, then curl your chin to your chest. Start with 2.5–5 kg and add a little only when 20 is easy.", id: "s_neckc", k: "wr", sets: hs(rx, 3), reps: "15–20", rest: "straight into the neck extension", rt: 0 },
         { n: "Lying neck extension", s: hs(rx, 3) + " × 15–20 · slow, never jerked", cue: "Lie face down on a bench with your head off the end, a folded towel and a light plate on the back of your head, held with both hands. Lower your chin towards your chest, then lift your head until you're looking straight ahead. Start light, as for the curl.", id: "s_necke", k: "wr", sets: hs(rx, 3), reps: "15–20", rest: "Rest 45 s", rt: 45 }],
       why: "Back to back, 45 seconds after each pair. Light and slow: the neck grows on reps, not heavy plates." },
     /* THE REAR DELTS' third dose: fresh, on the week's shortest session */
-    { L: "Q", n: "Chest-Supported Rear-Delt Raise", m: 4, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 3) + " × 15–20",
+    { L: "Q", n: "Chest-Supported Rear-Delt Raise", since: "2026-11-08", m: 4, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 3) + " × 15–20",
       items: (rx) => [{ n: "Chest-supported rear-delt raise", s: hs(rx, 3) + " × 15–20 · one or two left", cue: "Lie face down on an incline bench with light dumbbells hanging straight down. Raise your arms out to the sides to shoulder height, little fingers leading, squeeze the backs of your shoulders, then lower slowly.", id: "s_rdraise", k: "wr", sets: hs(rx, 3), reps: "15–20" }] }] },
 
   /* ---------------- TUESDAY ---------------- */
@@ -263,7 +267,7 @@ export const SS = {
     { L: "A", n: "Warm-up", m: 6, p: "S_WU_TUE", rxLine: () => "6 min · bands, push-ups, two easy throws of each" },
     /* ROTATION: the second throws of the week, three and four days from
        Saturday's, the straight and the hook — first, while you're fresh */
-    { L: "K", n: "Rotational Shot-Put Throw + Hook Throw", m: 5, star: 1, hard: 1, pair: 1, rxLine: () => "alternate · 45 s after each",
+    { L: "K", n: "Rotational Shot-Put Throw + Hook Throw", since: "2026-11-06", m: 5, star: 1, hard: 1, pair: 1, rxLine: () => "alternate · 45 s after each",
       items: (rx) => [{ n: "Rotational shot-put throw", s: hs(rx, 3) + " × 3 each side · 4–6 kg ball, into a wall", cue: "Ball at your shoulder, side-on to the wall in your stance. Drive off your back hip and push the ball into the wall hard and flat, like a straight punch.", id: "s_shotput", k: "chk", rest: "Rest 45 s · then the hook throw", rt: 45 },
         { n: "Hook throw", s: hs(rx, 3) + " × 3 each side", cue: "Ball at chest height in bent arms, side-on to the wall. Pivot hard off your lead leg and sling the ball sideways into the wall.", id: "s_hookthrow", k: "chk", rest: "Rest 45 s · then the shot-put", rt: 45 }],
       w: "Every throw as hard as you can make it. A throw clearly weaker than the first ends the set." },
@@ -320,7 +324,7 @@ export const SS = {
     /* THE PRESSURE ROUNDS: the fight sim — 3-minute rounds, a 5-second
        burst all out every 20 seconds and a steady pace between, straight
        after the bursts on the same bike. Three, two in the half weeks */
-    { L: "I", n: "Pressure Rounds", m: (rx) => (rx.pr === "pr2" ? 10 : 14), hard: 1, eng: 1, engKey: "pr",
+    { L: "I", n: "Pressure Rounds", since: "2026-11-09", m: (rx) => (rx.pr === "pr2" ? 10 : 14), hard: 1, eng: 1, engKey: "pr",
       timer: (rx) => ({ kind: "pressure", opt: { rounds: rx.pr === "pr2" ? 2 : 3, mins: 3, every: 20, secs: 5, rest: 60, wu: 1, cd: 2 }, title: rx.pr === "pr2" ? "2 PRESSURE ROUNDS" : "3 PRESSURE ROUNDS" }),
       rxLine: (rx) => (SPPENG[rx.pr] || SPPENG.pr).d,
       items: (rx) => [{ n: "Output", s: "the total on the bike's screen · the peak heart rate", id: "s_press", k: "out", u: "output / peak HR", erg: sessionBoxes(rx.pr), fields: engHR(rx.pr) }],
@@ -345,7 +349,7 @@ export const SS = {
       items: (rx) => [{ n: "Dumbbell lateral raise", s: hs(rx, 4) + " × 12–20 · " + DROP, cue: "Lean slightly forward, raise the dumbbells out to the sides to shoulder height, elbows soft, and lower slowly.", id: "s_dblat", k: "wr", sets: hs(rx, 4), reps: "12–20" }] },
     /* DURABILITY: the neck side to side, and the brace that takes a body
        shot — back to back, before the run */
-    { L: "F", n: "Side Neck Raise + Medicine-Ball Drops", m: 7, pair: 1, rxLine: () => "back to back · 45 s after each pair",
+    { L: "F", n: "Side Neck Raise + Medicine-Ball Drops", since: "2026-11-13", m: 7, pair: 1, rxLine: () => "back to back · 45 s after each pair",
       items: (rx) => [{ n: "Side neck raise", s: hs(rx, 3) + " × 12–15 each side · no weight to start", cue: "Lie on your side on a bench with your head off the end. Lower your ear slowly towards the floor, then lift it towards the ceiling. No weight to start; when 15 is easy, hold a light plate against the side of your head. Never jerk it.", id: "s_neckside", k: "wr", sets: hs(rx, 3), reps: "12–15/side", rest: "straight into the drops", rt: 0 },
         { n: "Medicine-ball drops", s: hs(rx, 3) + " × 8 · a 3 kg ball, up to 6", cue: "Lie on your back, knees bent, the ball held at arm's length over your stomach. Breathe out hard through your teeth and brace as you let it go; it lands just above your belly button, and you catch it on the bounce. Never on the ribs.", id: "s_drops", k: "chk", rest: "Rest 45 s", rt: 45 }],
       why: "Back to back, 45 seconds after each pair. The neck is trained forward and back on Monday and side to side here; the drops train the brace to fire on time." },
@@ -391,7 +395,7 @@ export const SS = {
       w: "The beep is the set's last rep: set it down, and the set counts.",
       why: "The heaviest pull of the week, off your working max.", tr: 2 },
     /* THE TRAPS: the week's second shrug, heavy, on the bar that's already loaded */
-    { L: "J", n: "Trap Bar Shrug", m: 4, rest: "Rest 75 s", rt: 75, rxLine: (rx) => hs(rx, 3) + " × 8–12",
+    { L: "J", n: "Trap Bar Shrug", since: "2026-11-08", m: 4, rest: "Rest 75 s", rt: 75, rxLine: (rx) => hs(rx, 3) + " × 8–12",
       items: (rx) => [{ n: "Trap bar shrug", s: hs(rx, 3) + " × 8–12 · a second's hold at the top", cue: "Stand inside the trap bar, arms straight. Shrug straight up towards your ears, hold for a second, then lower to a full stretch. Never roll the shoulders.", id: "s_tbshrug", k: "wr", sets: hs(rx, 3), reps: "8–12" }] },
     { L: "H", n: "Pause Squat", m: 7, hard: 1, mainLift: "squat", hide: (rx) => !sppPsq(rx), rest: "Rest 2:00", rt: 120,
       rxLine: (rx) => sppPsq(rx).sets + " × " + sppPsq(rx).reps + " @ " + sppPsq(rx).pct + "%",
@@ -404,7 +408,7 @@ export const SS = {
       w: (rx) => (rx.nordicPF ? "Hamstring at 3 or more on Sunday's check: the Nordics only if they're pain-free." : "Stop the set the moment the lower back rounds.") },
     /* THE ABS, the easy day's way: the trunk held still, never to failure,
        and last, so nothing heavy comes after it */
-    { L: "K", n: "Side Plank + Dead Bug", m: 5, pair: 1, rxLine: () => "back to back · 30 s after each pair",
+    { L: "K", n: "Side Plank + Dead Bug", since: "2026-11-09", m: 5, pair: 1, rxLine: () => "back to back · 30 s after each pair",
       items: (rx) => [SIDE_PLANK(rx, { rest: "straight into the dead bug", rt: 0 }),
         { n: "Dead bug", s: hs(rx, 2) + " × 10 each side · slow", cue: "Lie on your back, arms pointing at the ceiling, knees bent above your hips. Press your lower back into the floor, slowly lower one arm and the opposite leg to just above the floor, bring them back, then switch.", id: "s_deadbug", k: "chk", rest: "Rest 30 s", rt: 30 }],
       why: "Back to back, 30 seconds after each pair. Easy work that holds the trunk still, never to failure: the hard days do the growing." }] },
@@ -446,9 +450,9 @@ export const SS = {
       items: (rx) => [{ n: "Cable lateral raise", s: hs(rx, 3) + " × 15–20 · " + DROP, cue: "Cable at hand height, the handle in your far hand with the cable behind your back. Raise your arm out to shoulder height and lower slowly.", id: "s_clat_sat", k: "wr", sets: hs(rx, 3), reps: "15–20" }] },
     /* THE ABS: the side plank, then rotation under load, turned from the
        hips — before the 4 × 4, with nothing heavy after it */
-    { L: "J", n: "Side Plank", m: 3, rest: "Rest 30 s", rt: 30, rxLine: (rx) => hs(rx, 2) + " × 30–45 s each side",
+    { L: "J", n: "Side Plank", since: "2026-11-09", m: 3, rest: "Rest 30 s", rt: 30, rxLine: (rx) => hs(rx, 2) + " × 30–45 s each side",
       items: (rx) => [SIDE_PLANK(rx)] },
-    { L: "K", n: "Landmine Rotation", m: 4, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 3) + " × 6–8 each side",
+    { L: "K", n: "Landmine Rotation", since: "2026-11-09", m: 4, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 3) + " × 6–8 each side",
       items: (rx) => [{ n: "Landmine rotation", s: hs(rx, 3) + " × 6–8 each side · controlled", cue: "One end of a barbell in a landmine or a corner, the other end at arm's length in front of your chest, feet wide. Swing it down to one hip by turning your hips and pivoting your back foot, arms straight, then across to the other side, trunk braced. Start with the bar plus 5–10 kg.", id: "s_landrot", k: "wr", sets: hs(rx, 3), reps: "6–8/side" }],
       why: "Rotation under load, driven from the hips: the force side of the turn the throws train fast." },
     { L: "H", n: (rx) => (rx.e === "vo2s" ? "The 3 × 4 Intervals" : "The 4 × 4 Intervals"), m: 30, star: 1, hard: 1, eng: 1, engKey: "e",

@@ -218,7 +218,8 @@ describe("the sprints' buttons", () => {
     await at(2026, 11, 12, live(), { "o8s-done": { "mSw2-mon": eight } });
     expect(JSON.parse(localStorage.getItem("o8s-done"))["mSw2-mon"]).toEqual(eight.concat(["K"]));
     expect(JSON.parse(localStorage.getItem("o8s-settings")).v16).toBe(true);
-    expect(week()).toMatch(/MONDAY · Mon 9 Nov71 MIN[^]{0,200}?rear delts9\/9/);
+    week();
+    expect(document.querySelector("[data-day-count='mon']").textContent).toBe("8/8");
     /* a Monday whose box jumps are skipped after the change stays as it is */
     cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
     await at(2026, 11, 19, Object.assign(live(), { v16: true }), { "o8s-done": { "mSw3-mon": eight } });
@@ -563,6 +564,41 @@ describe("the landmine presses, the side neck raise and the medicine-ball drops"
     expect(hist.some((t) => /^One-Arm Landmine Press\+20 kg/.test(t))).toBe(true);
     expect(hist.some((t) => /^Push Press50 kg/.test(t))).toBe(true);
     expect(hist.some((t) => /^Standing Overhead Press40 kg/.test(t))).toBe(true);
+  });
+});
+
+describe("a card added later doesn't count against days trained before it", () => {
+  /* the plan in use: Prep from 26 October, Strength, Power and Physique started on Monday 2 November */
+  const live = () => base({ plans: [{ from: "2026-10-26", made: "2026-10-25", inputs: PREP }, { from: "2026-11-02", made: "2026-11-01", inputs: Object.assign({}, SPP, { restart: true }) }], season: SPP });
+  /* the first two weeks as they were ticked: every card that was on the day at the time */
+  const DONE = {
+    "mSw1-mon": ["A", "C", "D", "E", "F", "G"], "mSw1-tue": ["A", "C", "D", "E", "F", "G", "H"], "mSw1-wed": ["A", "B", "C", "D", "E", "R"],
+    "mSw1-thu": ["A", "B", "C", "D", "F", "G", "H", "I"], "mSw1-sat": ["A", "B", "C", "D", "E", "F", "G", "H"], "mSw1-sun": ["A", "B", "C", "D", "E", "F", "G", "H", "R", "I"],
+    "mSw2-mon": ["A", "C", "D", "E", "F", "G", "N", "Q"], "mSw2-tue": ["A", "K", "C", "D", "E", "F", "G", "H", "I"], "mSw2-wed": ["A", "B", "C", "D", "E", "R"],
+    "mSw2-thu": ["A", "B", "C", "D", "F", "G", "J", "H", "I", "K"],
+  };
+  const week = () => { fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "MORE" })); fireEvent.click(screen.getByRole("button", { name: "PLAN" })); fireEvent.click(screen.getByRole("button", { name: "THIS WEEK" })); };
+  const counts = () => { const o = {}; document.querySelectorAll("[data-day-count]").forEach((e) => { o[e.getAttribute("data-day-count")] = e.textContent; }); return o; };
+  it("week 1, seen on Sunday 8 November: every finished day reads finished, against the cards it had", async () => {
+    await at(2026, 11, 8, live(), { "o8s-done": DONE });
+    week();
+    expect(counts()).toEqual({ mon: "6/6", tue: "7/7", wed: "6/6", thu: "8/8", fri: "", sat: "8/8", sun: "10/10" });
+  });
+  it("week 2, seen on Thursday 12 November: Monday against 8, Tuesday 9, Wednesday 6, Thursday 10; the days to come against today's cards", async () => {
+    await at(2026, 11, 12, live(), { "o8s-done": DONE });
+    week();
+    expect(counts()).toEqual({ mon: "8/8", tue: "9/9", wed: "6/6", thu: "10/10", fri: "", sat: "0/10", sun: "0/10" });
+  });
+  it("from a card's date on it counts: week 3's Monday without its box jumps is 8 of 9, its Wednesday without the neck and drops 6 of 7", async () => {
+    await at(2026, 11, 19, Object.assign(live(), { v16: true }), { "o8s-done": { "mSw3-mon": ["A", "C", "D", "E", "F", "G", "N", "Q"], "mSw3-tue": ["A", "K", "C", "D", "E", "F", "G", "H", "I"], "mSw3-wed": ["A", "B", "C", "D", "E", "R"] } });
+    week();
+    expect(counts()).toMatchObject({ mon: "8/9", tue: "9/9", wed: "6/7" });
+  });
+  it("the day's own page is as it was: Tuesday 3 November still lists the throws and the pressure rounds", async () => {
+    await at(2026, 11, 3, live());
+    const rows = wholeDay();
+    expect(rows).toContain("Rotational Shot-Put Throw + Hook Throw");
+    expect(rows).toContain("Pressure Rounds");
   });
 });
 

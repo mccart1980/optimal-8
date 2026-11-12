@@ -6,7 +6,7 @@ import { SPP_ROWS, sppRx, sppSess, sppTests, sppVelPhase, sppRamp, sppPhotoDay, 
 import { targetFor, TYPICAL } from "./velocity.js";
 import { parseKey, inScope, scopeOf, weekLabel, ergSeries, series, DASH_IDS, lastSession, rangeTop, topOfRange, liftHistory } from "./metrics.js";
 import { libFor } from "./library.js";
-import { sessionCatalog, boxJumpsDone } from "./App.jsx";
+import { sessionCatalog, boxJumpsDone, countsOn } from "./App.jsx";
 
 /* ================================================================
    OPTIMAL 8 · STRENGTH, POWER AND PHYSIQUE — the proof.
@@ -662,5 +662,61 @@ describe("12 · more power: Monday's box jumps and Thursday's five sled runs", (
     expect(sppMd).toMatch(/\| Monday \| Broad jump, best of three, after the warm-up and the box jumps\. Then the squat top triple\. \|/);
     expect(sppMd).toMatch(/\*\*The sled, five runs\.\*\*[^\n]*\(Alcaraz, 2018; Morin, 2017\)/);
     expect(sppMd).toMatch(/\*\*Two jump days\.\*\*/);
+  });
+});
+
+describe("13 · a card added later doesn't count against days trained before it", () => {
+  /* the programme began on Monday 2 November 2026; these went in after that, and count from the day after they did */
+  const SINCE = {
+    mon: { K: "2026-11-13", N: "2026-11-08", Q: "2026-11-08" },
+    tue: { K: "2026-11-06", I: "2026-11-09" },
+    wed: { F: "2026-11-13" },
+    thu: { J: "2026-11-08", K: "2026-11-09" },
+    sat: { J: "2026-11-09", K: "2026-11-09" },
+    sun: {},
+  };
+  const DAYS6 = ["mon", "tue", "wed", "thu", "sat", "sun"], OFF = { mon: 0, tue: 1, wed: 2, thu: 3, sat: 5, sun: 6 };
+  const iso = (week, d) => { const t = new Date(Date.UTC(2026, 10, 2 + (week - 1) * 7 + OFF[d])); return t.toISOString().slice(0, 10); };
+  /* the cards a day is measured against: its real blocks that week, less any that came later */
+  const counted = (week, d) => sppSess(d).b.filter((b) => b.L && !(b.hide && b.hide(sppRx(week))) && countsOn(b, iso(week, d))).map((b) => b.L);
+  it("each card added after the programme began carries the date it counts from; the rest carry none", () => {
+    DAYS6.forEach((d) => { const got = {}; sppSess(d).b.forEach((b) => { if (b.since) got[b.L] = b.since; }); expect([d, got]).toEqual([d, SINCE[d]]); });
+    expect(sppSess("mon").b.find((b) => b.since === "2026-11-13").n).toBe("Box Jumps");
+    expect(sppSess("tue").b.find((b) => b.since === "2026-11-09").n).toBe("Pressure Rounds");
+    expect(sppSess("wed").b.find((b) => b.since).n).toBe("Side Neck Raise + Medicine-Ball Drops");
+    expect(sppSess("thu").b.filter((b) => b.since).map((b) => b.n)).toEqual(["Trap Bar Shrug", "Side Plank + Dead Bug"]);
+    expect(sppSess("sat").b.filter((b) => b.since).map((b) => b.n)).toEqual(["Side Plank", "Landmine Rotation"]);
+  });
+  it("a card counts on its date and after, never before; a card with no date always counts; no date for the day, and every card counts", () => {
+    const b = { L: "I", since: "2026-11-09" };
+    expect([countsOn(b, "2026-11-03"), countsOn(b, "2026-11-08"), countsOn(b, "2026-11-09"), countsOn(b, "2026-11-10"), countsOn(b, "2027-03-02")]).toEqual([false, false, true, true, true]);
+    expect([countsOn({ L: "A" }, "2026-11-03"), countsOn(b, null), countsOn(b, undefined)]).toEqual([true, true, true]);
+  });
+  it("week 1, as it was trained: each day is measured against the cards it had", () => {
+    expect(counted(1, "mon")).toEqual(["A", "C", "D", "E", "F", "G"]);
+    expect(counted(1, "tue")).toEqual(["A", "C", "D", "E", "F", "G", "H"]);
+    expect(counted(1, "wed")).toEqual(["A", "B", "C", "D", "E", "R"]);
+    expect(counted(1, "thu")).toEqual(["A", "B", "C", "D", "F", "G", "H", "I"]);
+    expect(counted(1, "sat")).toEqual(["A", "B", "C", "D", "E", "F", "G", "H"]);
+    expect(counted(1, "sun")).toHaveLength(10);
+  });
+  it("week 2: Monday has the neck and rear delts but not the box jumps' own card; Tuesday the throws and the pressure rounds; Wednesday not yet the neck and drops; Thursday everything", () => {
+    expect(counted(2, "mon")).toEqual(["A", "C", "D", "E", "F", "G", "N", "Q"]);
+    expect(counted(2, "tue")).toEqual(["A", "K", "C", "D", "E", "F", "G", "H", "I"]);
+    expect(counted(2, "wed")).toEqual(["A", "B", "C", "D", "E", "R"]);
+    expect(counted(2, "thu")).toEqual(["A", "B", "C", "D", "F", "G", "J", "H", "I", "K"]);
+    expect(counted(2, "sat")).toEqual(["A", "B", "C", "D", "E", "F", "G", "J", "K", "H"]);
+  });
+  it("from week 3 on, and whenever the programme is run again, every card counts", () => {
+    const all = (week, d) => sppSess(d).b.filter((b) => b.L && !(b.hide && b.hide(sppRx(week)))).map((b) => b.L);
+    [3, 5, 9].forEach((w) => DAYS6.forEach((d) => expect([w, d, counted(w, d)]).toEqual([w, d, all(w, d)])));
+    DAYS6.forEach((d) => sppSess(d).b.forEach((b) => expect(countsOn(b, "2027-02-15")).toBe(true)));
+  });
+  it("the pages don't change: a card with a date is still on every week's page", () => {
+    const CAT = sessionCatalog(["spp"]).filter((c) => c.set === "spp" && c.week === 1 && c.edge == null);
+    const names = (d) => CAT.filter((c) => c.day === d).map((c) => c.n);
+    expect(names("tue")).toContain("Pressure Rounds");
+    expect(names("mon")).toContain("Box Jumps");
+    expect(names("wed")).toContain("Side Neck Raise + Medicine-Ball Drops");
   });
 });

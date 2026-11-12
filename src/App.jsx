@@ -287,7 +287,7 @@ const seasonRxFor = (mac, w, edge) => {
   if (!row) return mac === "P" ? Object.assign({}, prepRx(1), { w, lift: "slow", ph: "accumulate", doc: 1, prep: 1 }) : mac === "S" ? Object.assign({}, sppRx(1), { w, kw: w, doc: 1, spp: 1 }) : mac === "T" || mac === "H" ? transRx(w) : { w, ph: "c1", pre: 1 };
   const rx = rowRx(row, edge);
   if (row.program === "prep") return gated(Object.assign({}, rx, { w, kw: w, lift: rx.ph, ph: prepPhaseOf(rx.doc), bw: null, prep: 1 }), "P", w);
-  if (row.program === "spp") return gated(Object.assign({}, rx, { w, kw: w, bw: null, spp: 1 }), "S", w);
+  if (row.program === "spp") return gated(Object.assign({}, rx, { w, kw: w, bw: null, spp: 1, mon: row.mon }), "S", w);
   if (row.program === "camp" || row.program === "pre") return gated(Object.assign({}, rx, { kw: w }), "C", w);
   return Object.assign({}, rx, { kw: w });
 };
@@ -857,6 +857,14 @@ function blocksFor(day, rx) {
   return b;
 }
 const realBlocks = (day, rx) => blocksFor(day, rx).filter((x) => x.L);
+/* The cards a day's ticks are measured against. A card added to a programme
+   after it began carries the first date it counts from (since). A day before
+   that date was trained without the card, so the card doesn't count against
+   it: the day is measured against the cards it had. The week's prescription
+   carries its Monday (mon) where the season knows it. */
+export const countsOn = (block, isoDay) => !(isoDay && block.since && isoDay < block.since);
+const countedBlocks = (day, rx) => { const iso = rx && rx.mon ? addDays(rx.mon, DAYS.indexOf(day)) : null;
+  return realBlocks(day, rx).filter((x) => countsOn(x, iso)); };
 /* The running order for today, with the day's readiness already resolved
    into it: on a red day the hard steps are not shown as struck-through
    conditions, they are simply not in the order. */
@@ -2544,7 +2552,7 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
 
       {DAYS.map((d, di) => { const dk = dayKey(macro, week, d); const n = (done[dk] || []).length;
         const sess = sessFor(d, rx);
-        const tot = rx.hell ? 0 : (!MODE.camp && d === "sat" && rx.test ? 1 : realBlocks(d, rx).length); const full = tot > 0 && n >= tot;
+        const tot = rx.hell ? 0 : (!MODE.camp && d === "sat" && rx.test ? 1 : countedBlocks(d, rx).length); const full = tot > 0 && n >= tot;
         const sl = sleepDay(d, rx);
         const blank = (MODE.camp || MODE.trans) && !sess;
         const ac = sess ? sess.ac : C.ash;
@@ -2558,7 +2566,7 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
                 </div>
                 <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.ash, marginTop: 3 })}>{sl ? "SLEEP. No alarm." + (d === "fri" ? " RANGE at home in the evening." : "") : blank ? (MODE.camp ? campBlank(d, rx).h : "The head check holds the transition — nothing until a doctor has cleared you") : !MODE.camp && d === "sat" && rx.test ? "Sprint · jump · throws · squat · bench · pull · tape" : sess.t}</div>
               </span>
-              <span style={Object.assign({}, mno, { fontSize: 10, color: full ? C.moss : n ? C.brass : C.ash, flexShrink: 0 })}>{tot ? n + "/" + tot : ""}</span>
+              <span data-day-count={d} style={Object.assign({}, mno, { fontSize: 10, color: full ? C.moss : n ? C.brass : C.ash, flexShrink: 0 })}>{tot ? (MODE.spp ? Math.min(n, tot) : n) + "/" + tot : ""}</span>
             </button>
           </Card>);
       })}
@@ -2752,7 +2760,7 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
                 return (
                   <div key={w} style={{ display: "flex", alignItems: "center", gap: 4 }}>
                     <span style={Object.assign({}, mno, { fontSize: 7.5, color: C.ash, width: 20 })}>{w}</span>
-                    {DAYS.map((d) => { const dk = dayKey(macro, w, d); const n = (done[dk] || []).length; const tot = rx.hell ? 0 : (!MODE.camp && d === "sat" && rx.test ? 1 : realBlocks(d, rx).length);
+                    {DAYS.map((d) => { const dk = dayKey(macro, w, d); const n = (done[dk] || []).length; const tot = rx.hell ? 0 : (!MODE.camp && d === "sat" && rx.test ? 1 : countedBlocks(d, rx).length);
                       const f = tot ? n / tot : 0;
                       return <div key={d} style={{ flex: 1, height: 12, borderRadius: 2, background: tot === 0 ? "transparent" : f >= 1 ? C.moss : f > 0 ? "#B7D0F2" : C.card, border: "1px solid " + C.line }} />; })}
                   </div>);
@@ -3714,12 +3722,12 @@ export default function App() {
   const weekStats = useMemo(() => { let g = 0, y = 0, r = 0, slow = 0, spr = 0, dn = 0, planned = 0; const rx = rxFor(shown.week);
     DAYS.forEach((d) => { const k = dayKey(shown.macro, shown.week, d); const rv = readyMap[k]; if (rv === "G") g++; if (rv === "Y") y++; if (rv === "R") r++;
       if (boxMap[k] === "slow") slow++; if (sparMap[k]) spr++;
-      const tot = rx.hell ? 0 : (!MODE.camp && d === "sat" && rx.test ? 1 : realBlocks(d, rx).length); if (tot) { planned++; if ((done[k] || []).length >= tot) dn++; } });
+      const tot = rx.hell ? 0 : (!MODE.camp && d === "sat" && rx.test ? 1 : countedBlocks(d, rx).length); if (tot) { planned++; if ((done[k] || []).length >= tot) dn++; } });
     return { g, y, r, slow, spar: spr, done: dn, planned }; }, [readyMap, boxMap, sparMap, done, shown.macro, shown.week, program, season, st.edge, st.lastTen]);
   const weekDoneMap = useMemo(() => { const out = {};
     const wks = MODE.mac ? segmentOf(seasonRow(vw.macro, vw.week)).map((r) => r.kw) : Array.from({ length: L }, (_, i) => i + 1);
     for (const w of wks) { const rx = rxFor(w); let dn = 0, tot = 0;
-    DAYS.forEach((d) => { const t = rx.hell ? 0 : (!MODE.camp && d === "sat" && rx.test ? 1 : realBlocks(d, rx).length); if (t) { tot++; if ((done[dayKey(vw.macro, w, d)] || []).length >= t) dn++; } });
+    DAYS.forEach((d) => { const t = rx.hell ? 0 : (!MODE.camp && d === "sat" && rx.test ? 1 : countedBlocks(d, rx).length); if (t) { tot++; if ((done[dayKey(vw.macro, w, d)] || []).length >= t) dn++; } });
     out[w] = tot ? dn / tot : null; } return out; }, [done, vw.macro, vw.week, L, program, season, st.edge, st.lastTen]);
 
   /* ---------------- IRON MIND ----------------
