@@ -1,6 +1,6 @@
-# Optimal 8
+# Fighter
 
-The companion app for the Optimal 8 fighter build (v1.5) with Iron Mind v5
+Fighter is the companion app for the Optimal 8 fighter build (v1.5) with Iron Mind v5
 running inside it — a 16-week strength and conditioning cycle, the twenty
 minutes of RANGE that runs at home every evening, and the mental training that
 attaches to it. One app, one day, one streak. It runs in your phone's browser,
@@ -20,8 +20,15 @@ added it to your home screen.
 3. Scroll down the list and tap **Add to Home Screen**.
 4. Tap **Add** in the top right.
 
-You'll get an "8" icon on your home screen. Open it from there and it runs
-full screen with no browser bars, like any other app.
+You'll get Fighter's bull icon on your home screen. Open it from there and it
+runs full screen with no browser bars, like any other app.
+
+**Already on your home screen under the old name and icon?** The phone only
+picks up a new name and icon when the app is added again, and deleting it from
+the home screen deletes everything in it. So: back it up first (MORE →
+SETTINGS → Backup → **EXPORT TO FILE**, and save the file), delete the old icon,
+add the app again from Safari as above, then restore the backup (**IMPORT FROM
+FILE**). Check your history is all there before you delete the backup file.
 
 Once it's installed you can use it on a plane, in a basement gym, anywhere with
 no signal. When you next open it with a connection it quietly picks up any new

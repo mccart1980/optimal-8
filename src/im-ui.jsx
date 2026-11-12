@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { C, dsp, bdy, mno, num, mmss, buzz, fmtDate, Card, Eye, Lab, Fld, Btn, Chip, Note, Seg } from "./ui.jsx";
+import { C, soft, dsp, bdy, mno, num, mmss, buzz, fmtDate, Card, Eye, Lab, Fld, Btn, Chip, Note, Seg } from "./ui.jsx";
 import {
   SAFETY, CARDINAL, FLOOR_TEXT, REVIEW_Q, WALKING, BREATH_STAGE, PRESETS, presetById,
   MED_STAGE, HOW_TO_SIT, THE_CATCH, GOODWILL_LINE, DEATH_LINE, ELEVEN, GUIDED, guidedById,
@@ -394,7 +394,7 @@ export function SitTool({ stage, imWeek, isSunday, sound, onClose, onSave, sitLe
         <Btn on={R.s.run ? R.pause : R.start} c={C.violet} fill={!R.s.run && !R.s.done} dis={R.s.done} s={{ width: "100%", marginTop: 12, padding: "16px 0", fontSize: 16 }}>{R.s.done ? "DONE" : R.s.run ? "PAUSE" : "START THE SIT"}</Btn>
       </Card>
 
-      <button onClick={clean} aria-label="Clean cycle" style={Object.assign({}, dsp, { width: "100%", minHeight: 96, borderRadius: 8, cursor: "pointer", background: C.moss, color: C.ink, border: "none", fontSize: 26, fontWeight: 800, letterSpacing: 2, marginBottom: 10 })}>
+      <button onClick={clean} aria-label="Clean cycle" style={Object.assign({}, dsp, { width: "100%", minHeight: 96, borderRadius: 8, cursor: "pointer", background: soft(C.moss), color: C.chalk, border: "2px solid " + C.moss, fontSize: 26, fontWeight: 800, letterSpacing: 2, marginBottom: 10 })}>
         CLEAN CYCLE<div style={Object.assign({}, mno, { fontSize: 13, letterSpacing: 1, fontWeight: 500, marginTop: 4 })}>{cycles} TOTAL · RUN OF {run} · BEST {best}</div>
       </button>
       <Btn on={drift} c={C.oxide} s={{ width: "100%", minHeight: 60, fontSize: 17, marginBottom: 10 }}>DRIFT — BACK TO ONE ({drifts})</Btn>
@@ -741,7 +741,7 @@ export function GatesPanel({ IM, compact }) {
             {G.lines.map((ln, i) => { const m = met(ln[0], ln[2]);
               return (
                 <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0", borderBottom: i < G.lines.length - 1 ? "1px solid " + C.line : "none" }}>
-                  <span style={Object.assign({}, mno, { width: 24, height: 24, flexShrink: 0, borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, background: m === true ? C.moss : "transparent", color: m === true ? C.ink : C.ash, border: "1px solid " + (m === true ? C.moss : C.line) })}>{m === true ? "✓" : m === false ? "" : "·"}</span>
+                  <span style={Object.assign({}, mno, { width: 24, height: 24, flexShrink: 0, borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, background: m === true ? soft(C.moss) : "transparent", color: m === true ? C.chalk : C.ash, border: "1px solid " + (m === true ? C.moss : C.line) })}>{m === true ? "✓" : m === false ? "" : "·"}</span>
                   <span style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, flex: 1, lineHeight: 1.4 })}>{ln[1]}</span>
                   <span style={Object.assign({}, mno, { fontSize: 10, color: m === true ? C.moss : C.ash, flexShrink: 0 })}>{shown(ln[0], ln[2])}</span>
                 </div>); })}

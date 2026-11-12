@@ -44,7 +44,7 @@ export function CampWeekTable({ rows, week, setWeek }) {
             {rows.map(({ row, rx }) => {
               const r = campRow(rx, prev), sel = row.kw === week, ph = CPH[rx.ph] || CPH.c1; prev = rx;
               return (
-                <tr key={row.kw} onClick={() => setWeek && setWeek(row.kw)} style={{ cursor: setWeek ? "pointer" : "default", background: sel ? "rgba(210,160,71,.14)" : "transparent" }}>
+                <tr key={row.kw} onClick={() => setWeek && setWeek(row.kw)} style={{ cursor: setWeek ? "pointer" : "default", background: sel ? "#E3EEFB" : "transparent" }}>
                   <Cell c={sel ? C.brass : ph.ac} b>{row.idx}</Cell>
                   <Cell c={C.ash}>{rowDates(row)}</Cell>
                   <Cell c={ph.ac} b>{row.id} · {rx.block}</Cell>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { C as M, dsp, bdy, mno, buzz, num, iso, parseISO } from "./ui.jsx";
+import { C as M, soft, dsp, bdy, mno, buzz, num, iso, parseISO } from "./ui.jsx";
 import { B, SHOP, AS_YOU_USE, YIELDS, PHASES, MEASURES, UPPER, WEEKLY, tapeSeries, verdicts, SLOTS, blockOf, stepBlockOf, lowFibreOpts, hhmm, SACHET, CREATINE } from "./fuel.js";
 
 /* ================================================================
@@ -26,7 +26,7 @@ const Eye = ({ children, c, s }) => <div style={Object.assign({}, mno, { fontSiz
 const Lab = ({ children }) => <div style={Object.assign({}, mno, { fontSize: FS(8), color: C.ash, marginBottom: 3, letterSpacing: 1, textTransform: "uppercase" })}>{children}</div>;
 const Fld = ({ v, on, ph, type, s }) => <input value={v == null ? "" : v} onChange={(e) => on(e.target.value)} placeholder={ph} inputMode={type === "date" ? undefined : "decimal"} type={type || "text"}
   style={Object.assign({}, mno, { width: "100%", background: C.ink, border: "1px solid " + C.line, borderRadius: 4, color: C.bone, fontSize: FS(16), padding: "10px 8px", textAlign: "center", minHeight: TAP }, s)} />;
-const Btn = ({ children, on, c, fill, s, dis, small }) => <button onClick={on} disabled={dis} style={Object.assign({}, dsp, { fontSize: small ? FS(12) : FS(14), fontWeight: 700, letterSpacing: 1.2, background: fill ? (c || C.ember) : "transparent", color: fill ? C.ink : (c || C.ember), border: "1px solid " + (c || C.ember), borderRadius: 5, padding: small ? "8px 10px" : "12px 14px", cursor: dis ? "default" : "pointer", opacity: dis ? .4 : 1, minHeight: TAP }, s)}>{children}</button>;
+const Btn = ({ children, on, c, fill, s, dis, small }) => <button onClick={on} disabled={dis} style={Object.assign({}, dsp, { fontSize: small ? FS(12) : FS(14), fontWeight: 700, letterSpacing: 1.2, background: fill ? soft(c || C.ember) : "transparent", color: fill ? C.bone : (c || C.ember), border: "1px solid " + (c || C.ember), borderRadius: 5, padding: small ? "8px 10px" : "12px 14px", cursor: dis ? "default" : "pointer", opacity: dis ? .4 : 1, minHeight: TAP }, s)}>{children}</button>;
 const Chip = ({ children, c, s }) => <span style={Object.assign({}, mno, { fontSize: FS(8.5), letterSpacing: 1.2, color: c || C.ash, border: "1px solid " + (c || C.line), borderRadius: 3, padding: "2px 6px", textTransform: "uppercase", maxWidth: "100%" }, s)}>{children}</span>;
 const Note = ({ children, c, bold, s }) => <div style={Object.assign({}, bdy, { fontSize: FS(12.5), color: c || C.ash, lineHeight: 1.5, marginTop: 8, fontWeight: bold ? 600 : 400 }, s)}>{children}</div>;
 
@@ -230,7 +230,7 @@ export function Cook({ cook, setCook, foods, setFoods, K, prep, setPrep }) {
           return (
             <div key={i} onClick={() => { setPrep(Object.assign({}, prep, { [i]: !on })); buzz(25); }}
               style={{ display: "flex", gap: 11, alignItems: "flex-start", padding: "10px 0", borderTop: "1px solid " + C.line, cursor: "pointer" }}>
-              <span style={Object.assign({}, mno, { width: 26, height: 26, borderRadius: 4, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: FS(13), fontWeight: 700, background: on ? C.sage : "transparent", color: C.ink, border: "1px solid " + (on ? C.sage : C.line) })}>{on ? "✓" : ""}</span>
+              <span style={Object.assign({}, mno, { width: 26, height: 26, borderRadius: 4, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: FS(13), fontWeight: 700, background: on ? soft(C.sage) : "transparent", color: C.bone, border: "1px solid " + (on ? C.sage : C.line) })}>{on ? "✓" : ""}</span>
               <span style={{ flex: 1, minWidth: 0 }}>
                 <div style={Object.assign({}, bdy, { fontSize: FS(13.5), fontWeight: 600, color: on ? C.ash : C.bone, textDecoration: on ? "line-through" : "none" })}>{x[0]}</div>
                 <div style={Object.assign({}, bdy, { fontSize: FS(11.5), color: C.ash, marginTop: 2, lineHeight: 1.45 })}>{x[1]}</div>
@@ -277,7 +277,7 @@ export function Shop({ shop, setShop, used, today }) {
           {g[1].map((it, i) => { const k = gi + "-" + i, on = !!shop[k];
             return (
               <div key={k} onClick={() => setShop(Object.assign({}, shop, { [k]: !on }))} style={{ display: "flex", gap: 11, alignItems: "center", padding: "9px 0", borderTop: i ? "1px solid " + C.line : "none", cursor: "pointer" }}>
-                <span style={Object.assign({}, mno, { width: 26, height: 26, borderRadius: 4, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: FS(13), fontWeight: 700, background: on ? C.sage : "transparent", color: C.ink, border: "1px solid " + (on ? C.sage : C.line) })}>{on ? "✓" : ""}</span>
+                <span style={Object.assign({}, mno, { width: 26, height: 26, borderRadius: 4, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: FS(13), fontWeight: 700, background: on ? soft(C.sage) : "transparent", color: C.bone, border: "1px solid " + (on ? C.sage : C.line) })}>{on ? "✓" : ""}</span>
                 <span style={{ flex: 1, minWidth: 0 }}>
                   <div style={Object.assign({}, bdy, { fontSize: SZ.row, fontWeight: 600, color: on ? C.ash : C.bone, textDecoration: on ? "line-through" : "none" })}>{it[0]}</div>
                   <div style={Object.assign({}, bdy, { fontSize: SZ.amount, color: C.ash, marginTop: 3 })}>{it[1]}</div>
@@ -431,8 +431,8 @@ const WaterChips = ({ row, checks }) => {
   const lit = row.sachet && (!row.sachetIf || (checks || {})[row.sachetIf] === "dark");
   return (
     <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 8 }}>
-      {row.sachet ? <span style={Object.assign({}, mno, { fontSize: FS(9), letterSpacing: 1, padding: "3px 7px", borderRadius: 3, color: lit ? C.ink : C.ash, background: lit ? C.honey : "transparent", border: "1px solid " + (lit ? C.honey : C.line) })}>{SACHET} {row.sachet}</span> : null}
-      {row.cre ? <span style={Object.assign({}, mno, { fontSize: FS(9), letterSpacing: 1, padding: "3px 7px", borderRadius: 3, color: C.ink, background: C.sage, border: "1px solid " + C.sage })}>{CREATINE}</span> : null}
+      {row.sachet ? <span style={Object.assign({}, mno, { fontSize: FS(9), letterSpacing: 1, padding: "3px 7px", borderRadius: 3, color: lit ? C.bone : C.ash, background: lit ? soft(C.honey) : "transparent", border: "1px solid " + (lit ? C.honey : C.line) })}>{SACHET} {row.sachet}</span> : null}
+      {row.cre ? <span style={Object.assign({}, mno, { fontSize: FS(9), letterSpacing: 1, padding: "3px 7px", borderRadius: 3, color: C.bone, background: soft(C.sage), border: "1px solid " + C.sage })}>{CREATINE}</span> : null}
     </div>);
 };
 
@@ -507,7 +507,7 @@ export function WaterBody({ row, checks, setCheck }) {
         <div style={{ display: "flex", gap: 6, marginTop: 10 }}>
           {["pale", "dark"].map((v) => { const sel = cur === v;
             return <button key={v} onClick={() => { setCheck(row.check, sel ? null : v); buzz(20); }}
-              style={Object.assign({}, dsp, { flex: 1, fontSize: 17, fontWeight: 700, letterSpacing: 1, padding: "10px 12px", borderRadius: 4, cursor: "pointer", minHeight: TAP, background: sel ? (v === "dark" ? C.copper : C.sage) : "transparent", color: sel ? C.ink : C.ash, border: "1px solid " + (sel ? (v === "dark" ? C.copper : C.sage) : C.line) })}>{v === "pale" ? "PALE STRAW" : "DARK"}</button>; })}
+              style={Object.assign({}, dsp, { flex: 1, fontSize: 17, fontWeight: 700, letterSpacing: 1, padding: "10px 12px", borderRadius: 4, cursor: "pointer", minHeight: TAP, background: sel ? soft(v === "dark" ? C.copper : C.sage) : "transparent", color: sel ? C.bone : C.ash, border: "1px solid " + (sel ? (v === "dark" ? C.copper : C.sage) : C.line) })}>{v === "pale" ? "PALE STRAW" : "DARK"}</button>; })}
         </div>) : null}
     </div>);
 }
@@ -547,7 +547,7 @@ export function DayFuel({ phase, plan, eaten, total, drunk, target, notes, sauna
           <div style={{ width: pct + "%", height: "100%", background: drunk >= target ? C.sage : C.frost, borderRadius: 2, transition: "width .3s" }} /></div>
         <div style={{ display: "flex", gap: 6, marginTop: 10 }}>
           {showSauna ? <button onClick={() => { setSauna(!sauna); buzz(20); }}
-            style={Object.assign({}, mno, { flex: 1, fontSize: 15, letterSpacing: 1, padding: "8px 4px", borderRadius: 4, cursor: "pointer", minHeight: TAP, background: sauna ? C.copper : "transparent", color: sauna ? C.ink : C.ash, border: "1px solid " + (sauna ? C.copper : C.line) })}>SAUNA TODAY</button> : null}
+            style={Object.assign({}, mno, { flex: 1, fontSize: 15, letterSpacing: 1, padding: "8px 4px", borderRadius: 4, cursor: "pointer", minHeight: TAP, background: sauna ? soft(C.copper) : "transparent", color: sauna ? C.bone : C.ash, border: "1px solid " + (sauna ? C.copper : C.line) })}>SAUNA TODAY</button> : null}
           <button onClick={() => setInfo(!info)} style={Object.assign({}, mno, { flex: 1, fontSize: 15, letterSpacing: 1, padding: "8px 4px", borderRadius: 4, cursor: "pointer", minHeight: TAP, background: "transparent", color: C.ash, border: "1px solid " + C.line })}>{info ? "HIDE THE RULES" : "THE FOUR WATER RULES"}</button>
         </div>
         {info ? (

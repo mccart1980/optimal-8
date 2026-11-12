@@ -8,7 +8,7 @@ import sppDocMd from "../optimal-8-strength-power-physique.md?raw";
 import guideDoc from "../guide.md?raw";
 import guideFuelDoc from "../guide-fuel.md?raw";
 import {
-  C, FONTS, dsp, bdy, mno, buzz, mmss, r25, num, DAYS, DSH, iso, mondayOf, parseISO, todayKey, addDays, fmtDate,
+  C, soft, FONTS, dsp, bdy, mno, buzz, mmss, r25, num, DAYS, DSH, iso, mondayOf, parseISO, todayKey, addDays, fmtDate,
   load, save, Card, Eye, Lab, Fld, Btn, Chip, Note, Seg, TEXT_STEPS, stepScale,
 } from "./ui.jsx";
 import { DocView } from "./mdview.jsx";
@@ -105,13 +105,13 @@ import ironMindV4Md from "../iron-mind-v4-2.md?raw";
    ================================================================ */
 
 /* ---------- file backup (Web Share where available, download otherwise) ---------- */
-const backupName = () => "optimal-8-backup-" + new Date().toISOString().slice(0, 10) + ".json";
+const backupName = () => "fighter-backup-" + new Date().toISOString().slice(0, 10) + ".json";
 async function shareOrDownload(text) {
   const name = backupName();
   try {
     if (typeof navigator !== "undefined" && navigator.canShare && typeof File === "function") {
       const file = new File([text], name, { type: "application/json" });
-      if (navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: "Optimal 8 backup" }); return "shared"; }
+      if (navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: "Fighter backup" }); return "shared"; }
     }
   } catch (e) { if (e && e.name === "AbortError") return "cancelled"; }
   try {
@@ -1234,7 +1234,7 @@ function Plates({ kg, bar, onClose }) {
   const perSide = (kg - b) / 2; const out = []; let rem = perSide;
   if (perSide > 0) P.forEach((p) => { const n = Math.floor(rem / p + 1e-9); if (n > 0) { out.push([p, n]); rem = +(rem - n * p).toFixed(3); } });
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(16,20,22,.94)", zIndex: 110, display: "flex", alignItems: "center", justifyContent: "center", padding: 20, paddingTop: "calc(20px + env(safe-area-inset-top))", paddingBottom: "calc(20px + env(safe-area-inset-bottom))" }} onClick={onClose}>
+    <div style={{ position: "fixed", inset: 0, background: "rgba(19,36,61,.55)", zIndex: 110, display: "flex", alignItems: "center", justifyContent: "center", padding: 20, paddingTop: "calc(20px + env(safe-area-inset-top))", paddingBottom: "calc(20px + env(safe-area-inset-bottom))" }} onClick={onClose}>
       <div style={{ background: C.card, border: "1px solid " + C.brass, borderRadius: 8, padding: 20, maxWidth: 340, width: "100%" }} onClick={(e) => e.stopPropagation()}>
         <Eye c={C.brass}>Plates per side</Eye>
         <div style={Object.assign({}, mno, { fontSize: 42, fontWeight: 700, color: C.chalk, margin: "2px 0 10px" })}>{kg}<span style={{ fontSize: 17, color: C.ash }}> kg</span></div>
@@ -1352,7 +1352,7 @@ const jointFlagFor = (log, macro, week) => { if (week < 2) return false;
 function ProtoSheet({ id, close }) {
   const p = PROTO[id]; if (!p) return null;
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(16,20,22,.9)", zIndex: 90, display: "flex", alignItems: "flex-end" }} onClick={close}>
+    <div style={{ position: "fixed", inset: 0, background: "rgba(19,36,61,.55)", zIndex: 90, display: "flex", alignItems: "flex-end" }} onClick={close}>
       <div className="rise" onClick={(e) => e.stopPropagation()} style={{ background: C.card, borderTop: "3px solid " + p.c, borderRadius: "12px 12px 0 0", width: "100%", maxWidth: 640, margin: "0 auto", maxHeight: "86vh", overflowY: "auto", padding: 16, paddingBottom: "calc(16px + env(safe-area-inset-bottom))" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
           <div><Eye c={p.c} s={{ marginBottom: 2 }}>Protocol</Eye><div style={Object.assign({}, dsp, { fontSize: 24, fontWeight: 800, letterSpacing: 1, color: C.chalk })}>{p.n}</div><div style={Object.assign({}, mno, { fontSize: 10, color: C.ash, marginTop: 3 })}>{p.s.toUpperCase()}</div></div>
@@ -2434,17 +2434,17 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
         <div style={{ display: "flex", gap: 2, marginTop: 14 }}>
           {wks.map((n) => { const r = rxFor(n), ph = PH[r.ph] || PH.c1; const sel = n === week; const dn = weekDoneMap && weekDoneMap[n];
             /* Strength, Power and Physique marks its lighter weeks and its test week */
-            const tint = MODE.spp ? (r.light ? "rgba(102,132,90,.35)" : r.testWeek ? "rgba(79,132,168,.45)" : "rgba(138,149,158,.13)")
-              : (r.hell ? "rgba(194,78,51,.35)" : r.dl || r.reload ? "rgba(102,132,90,.35)" : r.test || r.tp ? "rgba(79,132,168,.45)" : (r.topSq ? "rgba(210,160,71,.35)" : "rgba(138,149,158,.13)"));
-            return <div key={n} onClick={() => setView({ macro, week: n })} style={{ flex: 1, height: 30, borderRadius: 3, cursor: "pointer", background: sel ? ph.ac : tint, border: sel ? "none" : "1px solid " + C.line, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2 }}>
-              <span style={Object.assign({}, mno, { fontSize: 7, color: sel ? C.ink : C.ash })}>{row ? (seasonRow(MODE.mac, n) || {}).id || n : n}</span>
+            const tint = MODE.spp ? (r.light ? "#DDF3E4" : r.testWeek ? "#D6EFF2" : "#EDF2F8")
+              : (r.hell ? "#FADFD8" : r.dl || r.reload ? "#DDF3E4" : r.test || r.tp ? "#D6EFF2" : (r.topSq ? "#DCE9FA" : "#EDF2F8"));
+            return <div key={n} onClick={() => setView({ macro, week: n })} style={{ flex: 1, height: 30, borderRadius: 3, cursor: "pointer", background: sel ? soft(ph.ac) : tint, border: "1px solid " + (sel ? ph.ac : C.line), display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2 }}>
+              <span style={Object.assign({}, mno, { fontSize: 7, color: sel ? C.chalk : C.ash })}>{row ? (seasonRow(MODE.mac, n) || {}).id || n : n}</span>
               {dn != null ? <span style={{ width: 4, height: 4, borderRadius: 2, background: dn >= 1 ? C.moss : dn > 0 ? C.brass : "transparent" }} /> : null}
             </div>; })}
         </div>
         <div style={{ display: "flex", gap: 9, marginTop: 7, flexWrap: "wrap" }}>
-          {(MODE.camp ? [["EASY + TESTS", "rgba(102,132,90,.6)"], ["SHARPEN / FIGHT WEEK", "rgba(79,132,168,.7)"]]
-            : MODE.spp ? [["LIGHTER", "rgba(102,132,90,.6)"], ["TEST", "rgba(79,132,168,.7)"]]
-            : [["TOP TRIPLE", "rgba(210,160,71,.6)"], ["DELOAD", "rgba(102,132,90,.6)"], ["TEST", "rgba(79,132,168,.7)"]].concat(L > 16 ? [["HELL WEEK", "rgba(194,78,51,.6)"]] : [])).map((x) =>
+          {(MODE.camp ? [["EASY + TESTS", "#B9E6C8"], ["SHARPEN / FIGHT WEEK", "#B3E0E6"]]
+            : MODE.spp ? [["LIGHTER", "#B9E6C8"], ["TEST", "#B3E0E6"]]
+            : [["TOP TRIPLE", "#BCD5F4"], ["DELOAD", "#B9E6C8"], ["TEST", "#B3E0E6"]].concat(L > 16 ? [["HELL WEEK", "#F3C1B5"]] : [])).map((x) =>
             <span key={x[0]} style={Object.assign({}, mno, { fontSize: 8, color: C.ash, display: "flex", alignItems: "center", gap: 4 })}><span style={{ width: 9, height: 9, borderRadius: 2, background: x[1], display: "inline-block" }} />{x[0]}</span>)}
         </div>
         {isCur ? <Chip c={C.moss} s={{ marginTop: 12, display: "inline-block" }}>This is the current week</Chip>
@@ -2645,7 +2645,7 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
       <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 12 }}>
         {(camp ? [["dash", "DASH"], ["ref", "REFEREE"], ["camp", "CAMP"], ["numbers", "MAXES"], ["measure", "MEASURE"], ["photos", "PHOTOS"], ["body", "BODY"], ["calis", "CALIS"], ["range", "RANGE"], ["iron", "IRON MIND"]]
           : [["dash", "DASH"], ["ref", "REFEREE"], ["numbers", "NUMBERS"], ["progress", "PROGRESS"], ["measure", "MEASURE"], ["photos", "PHOTOS"], ["body", "BODY"], ["calis", "CALIS"], ["range", "RANGE"], ["iron", "IRON MIND"]]).map((x) => <button key={x[0]} onClick={() => setSub(x[0])}
-          style={Object.assign({}, dsp, { flex: "1 1 20%", fontSize: 9.5, fontWeight: 700, letterSpacing: .3, padding: "11px 1px", borderRadius: 4, cursor: "pointer", minHeight: 44, background: sub === x[0] ? C.brass : "transparent", color: sub === x[0] ? C.ink : C.ash, border: "1px solid " + (sub === x[0] ? C.brass : C.line) })}>{x[1]}</button>)}
+          style={Object.assign({}, dsp, { flex: "1 1 20%", fontSize: 9.5, fontWeight: 700, letterSpacing: .3, padding: "11px 1px", borderRadius: 4, cursor: "pointer", minHeight: 44, background: sub === x[0] ? soft(C.brass) : "transparent", color: sub === x[0] ? C.chalk : C.ash, border: "1px solid " + (sub === x[0] ? C.brass : C.line) })}>{x[1]}</button>)}
       </div>
 
       {sub === "dash" ? <Dashboard log={log} morning={morning || {}} st={st || {}} camp={view} body={body} fuel={fuel} addBody={addBody} dateOf={dateOf} iron={IM}
@@ -2743,7 +2743,7 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
                     <span style={Object.assign({}, mno, { fontSize: 7.5, color: C.ash, width: 20 })}>{w}</span>
                     {DAYS.map((d) => { const dk = dayKey(macro, w, d); const n = (done[dk] || []).length; const tot = rx.hell ? 0 : (!MODE.camp && d === "sat" && rx.test ? 1 : realBlocks(d, rx).length);
                       const f = tot ? n / tot : 0;
-                      return <div key={d} style={{ flex: 1, height: 12, borderRadius: 2, background: tot === 0 ? "transparent" : f >= 1 ? C.moss : f > 0 ? "rgba(210,160,71,.55)" : C.card, border: "1px solid " + C.line }} />; })}
+                      return <div key={d} style={{ flex: 1, height: 12, borderRadius: 2, background: tot === 0 ? "transparent" : f >= 1 ? C.moss : f > 0 ? "#B7D0F2" : C.card, border: "1px solid " + C.line }} />; })}
                   </div>);
               })}
             </div>
@@ -2834,7 +2834,7 @@ function PlanView({ program, title }) {
       <div style={{ display: "flex", gap: 5, marginBottom: 12, flexWrap: "wrap" }}>
         {PLAN_DOCS.map((x) => (
           <button key={x[0]} onClick={() => setDoc(x[0])}
-            style={Object.assign({}, dsp, { flex: "1 1 30%", fontSize: 15, fontWeight: 700, letterSpacing: .6, padding: "12px 2px", borderRadius: 4, cursor: "pointer", minHeight: 48, background: doc === x[0] ? x[2] : "transparent", color: doc === x[0] ? C.ink : C.ash, border: "1px solid " + (doc === x[0] ? x[2] : C.line) })}>{x[1]}</button>))}
+            style={Object.assign({}, dsp, { flex: "1 1 30%", fontSize: 15, fontWeight: 700, letterSpacing: .6, padding: "12px 2px", borderRadius: 4, cursor: "pointer", minHeight: 48, background: doc === x[0] ? soft(x[2]) : "transparent", color: doc === x[0] ? C.chalk : C.ash, border: "1px solid " + (doc === x[0] ? x[2] : C.line) })}>{x[1]}</button>))}
       </div>
       <Note s={{ marginTop: 0, marginBottom: 10 }}>Every document in full, on the phone, with no signal — the training, the mind and the food. Everything the app runs comes off these pages.</Note>
       <DocView key={D0[0]} md={D0[3]} accent={D0[2]} />
@@ -2846,7 +2846,7 @@ function PlanView({ program, title }) {
    ================================================================ */
 const Toggle = ({ on, set, n, s, c }) => (
   <div onClick={set} style={{ display: "flex", gap: 10, alignItems: "center", padding: "10px 0", borderBottom: "1px solid " + C.line, cursor: "pointer", minHeight: 44 }}>
-    <span style={{ width: 40, height: 24, borderRadius: 12, background: on ? (c || C.moss) : C.ink, border: "1px solid " + (on ? (c || C.moss) : C.line), position: "relative", flexShrink: 0 }}>
+    <span style={{ width: 40, height: 24, borderRadius: 12, background: on ? soft(c || C.moss) : C.ink, border: "1px solid " + (on ? (c || C.moss) : C.line), position: "relative", flexShrink: 0 }}>
       <span style={{ position: "absolute", top: 2, left: on ? 18 : 2, width: 18, height: 18, borderRadius: 9, background: C.chalk, transition: "left .15s" }} /></span>
     <span style={{ flex: 1 }}>
       <div style={Object.assign({}, bdy, { fontSize: 13.5, fontWeight: 600, color: C.chalk })}>{n}</div>
@@ -2952,7 +2952,7 @@ function BoxingSwitch({ on, set }) {
     <div style={{ marginBottom: 12 }}>
       <button data-testid="boxing-tonight" onClick={() => { set(!on); buzz(20); }}
         style={Object.assign({}, mno, { width: "100%", fontSize: 17, fontWeight: 700, letterSpacing: 1, padding: "12px 8px", borderRadius: 4, cursor: "pointer", minHeight: 48,
-          background: on ? C.oxide : "transparent", color: on ? C.ink : C.ash, border: "1px solid " + (on ? C.oxide : C.line) })}>{on ? "✓ BOXING TONIGHT" : "BOXING TONIGHT"}</button>
+          background: on ? soft(C.oxide) : "transparent", color: on ? C.chalk : C.ash, border: "1px solid " + (on ? C.oxide : C.line) })}>{on ? "✓ BOXING TONIGHT" : "BOXING TONIGHT"}</button>
       {on ? <Note c={C.chalk}>{BOXING_SAY}</Note> : null}
     </div>);
 }
@@ -3028,7 +3028,7 @@ function Settings({ st, setSt, current, L, exportData, importData, IM, calis, se
             {DAYS.map((d) => { const on = !!(st.boxDays || {})[d];
               return <button key={d} onClick={() => { const n = Object.assign({}, st.boxDays); if (on) delete n[d]; else n[d] = 1; upd({ boxDays: n }); }}
                 style={Object.assign({}, mno, { flex: "1 1 21%", fontSize: 15, fontWeight: 700, letterSpacing: 1, padding: "10px 2px", borderRadius: 4, cursor: "pointer", minHeight: 44,
-                  background: on ? C.oxide : "transparent", color: on ? C.ink : C.ash, border: "1px solid " + (on ? C.oxide : C.line) })}>{DSH[d]}</button>; })}
+                  background: on ? soft(C.oxide) : "transparent", color: on ? C.chalk : C.ash, border: "1px solid " + (on ? C.oxide : C.line) })}>{DSH[d]}</button>; })}
           </div>
           <Note>On a boxing evening the 5pm load goes in if the day hasn't one, dinner moves to 20:15, after the boxing, and the casein comes off. The BOXING TONIGHT switch on FOOD changes any one day.</Note>
         </div>
@@ -3054,7 +3054,7 @@ function Settings({ st, setSt, current, L, exportData, importData, IM, calis, se
           ["sound", "Bell sounds and the feed chime", "Round bells and 3-2-1 pips on the timers, and a chime when a feed or a drink is due while the app is open. Vibration stays on either way."],
           ["autoRest", "Auto rest clock", "Confirming a set starts that exercise's rest countdown by itself."]].map((x) => (
           <div key={x[0]} onClick={() => upd({ [x[0]]: !st[x[0]] })} style={{ display: "flex", gap: 10, alignItems: "center", padding: "10px 0", borderBottom: "1px solid " + C.line, cursor: "pointer" }}>
-            <span style={{ width: 40, height: 24, borderRadius: 12, background: st[x[0]] ? C.moss : C.ink, border: "1px solid " + (st[x[0]] ? C.moss : C.line), position: "relative", flexShrink: 0 }}>
+            <span style={{ width: 40, height: 24, borderRadius: 12, background: st[x[0]] ? soft(C.moss) : C.ink, border: "1px solid " + (st[x[0]] ? C.moss : C.line), position: "relative", flexShrink: 0 }}>
               <span style={{ position: "absolute", top: 2, left: st[x[0]] ? 18 : 2, width: 18, height: 18, borderRadius: 9, background: C.chalk, transition: "left .15s" }} /></span>
             <span style={{ flex: 1 }}>
               <div style={Object.assign({}, bdy, { fontSize: 13.5, fontWeight: 600, color: C.chalk })}>{x[1]}</div>
@@ -3103,7 +3103,7 @@ function Settings({ st, setSt, current, L, exportData, importData, IM, calis, se
                   <button key={i} onClick={() => setCalis(Object.assign({}, calis, { lvl: Object.assign({}, calis.lvl, { [ln.id]: i }) }))}
                     aria-label={ln.n + " level " + x.l}
                     style={Object.assign({}, dsp, { minWidth: 44, minHeight: 44, flex: "0 0 auto", padding: "0 12px", fontSize: 14, fontWeight: 700, letterSpacing: 1, borderRadius: 4, cursor: "pointer",
-                      background: lev.i === i ? ln.c : "transparent", color: lev.i === i ? C.ink : C.ash, border: "1px solid " + (lev.i === i ? ln.c : C.line) })}>{x.l}</button>))}
+                      background: lev.i === i ? soft(ln.c) : "transparent", color: lev.i === i ? C.chalk : C.ash, border: "1px solid " + (lev.i === i ? ln.c : C.line) })}>{x.l}</button>))}
               </div>
               <div style={{ background: C.ink, border: "1px solid " + C.line, borderRadius: 5, padding: "10px 11px", marginTop: 9 }}>
                 <div style={Object.assign({}, mno, { fontSize: 8, color: ln.c, letterSpacing: 1.2, marginBottom: 5 })}>LEVEL {lev.l} · WHAT YOU DO</div>
@@ -3139,7 +3139,7 @@ function Settings({ st, setSt, current, L, exportData, importData, IM, calis, se
                 <div style={Object.assign({}, mno, { fontSize: 8, color: x[3], letterSpacing: 1.2, marginBottom: 6 })}>{G.to ? "GATE TO " + (x[4] === "hard" ? "LEVEL " : "STAGE ") + G.to : "THE CEILING"}</div>
                 {G.lines.map((ln, i) => { const m = IM.gateMet(ln[0], ln[2]);
                   return <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 0" }}>
-                    <span style={Object.assign({}, mno, { width: 20, height: 20, flexShrink: 0, borderRadius: 3, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, background: m === true ? C.moss : "transparent", color: m === true ? C.ink : C.ash, border: "1px solid " + (m === true ? C.moss : C.line) })}>{m === true ? "✓" : m === null ? "·" : ""}</span>
+                    <span style={Object.assign({}, mno, { width: 20, height: 20, flexShrink: 0, borderRadius: 3, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, background: m === true ? soft(C.moss) : "transparent", color: m === true ? C.chalk : C.ash, border: "1px solid " + (m === true ? C.moss : C.line) })}>{m === true ? "✓" : m === null ? "·" : ""}</span>
                     <span style={Object.assign({}, bdy, { fontSize: 12, color: C.chalk, flex: 1, lineHeight: 1.4 })}>{ln[1]}</span>
                     <span style={Object.assign({}, mno, { fontSize: 9.5, color: m === true ? C.moss : C.ash, flexShrink: 0 })}>{IM.gateShown(ln[0], ln[2])}</span>
                   </div>; })}
@@ -3170,7 +3170,7 @@ function Settings({ st, setSt, current, L, exportData, importData, IM, calis, se
         </div>
         <input ref={fileRef} type="file" accept="application/json,.json" style={{ display: "none" }} aria-hidden="true" tabIndex={-1}
           onChange={async (e) => { const f = e.target.files && e.target.files[0]; e.target.value = ""; if (!f) return;
-            try { const txt = await readTextFile(f); JSON.parse(txt); importData(txt); } catch (err) { setMsg("That file isn't an Optimal 8 backup."); } }} />
+            try { const txt = await readTextFile(f); JSON.parse(txt); importData(txt); } catch (err) { setMsg("That file isn't a Fighter backup."); } }} />
         <Note>EXPORT TO FILE saves a .json backup you can keep in Files or send to yourself. IMPORT FROM FILE loads one back in. The morning numbers, the erg outputs, the bar speeds and the photos all travel in it — the photos as base64, which is what makes a backup with photos in it a big file.</Note>
         {msg ? <Note c={C.brass}>{msg}</Note> : null}
         {showIo ? <div style={{ marginTop: 8 }}>
@@ -3294,9 +3294,9 @@ function HellWeek({ current, maxes, bw, hwLog, setHwLog, L }) {
           <div>
             <div style={{ display: "flex", gap: 6, marginBottom: 10 }}>
               {[[17, "HELL WEEK", C.oxide], [18, "RELOAD", C.moss]].map((x) => (
-                <div key={x[0]} style={{ flex: 1, background: week === x[0] ? x[2] : C.ink, border: "1px solid " + x[2], borderRadius: 5, padding: "12px 8px", textAlign: "center" }}>
-                  <div style={Object.assign({}, mno, { fontSize: 8.5, color: week === x[0] ? C.ink : C.ash, letterSpacing: 1.2 })}>WEEK {x[0]}</div>
-                  <div style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1, color: week === x[0] ? C.ink : x[2], marginTop: 2 })}>{x[1]}</div>
+                <div key={x[0]} style={{ flex: 1, background: week === x[0] ? soft(x[2]) : C.ink, border: "1px solid " + x[2], borderRadius: 5, padding: "12px 8px", textAlign: "center" }}>
+                  <div style={Object.assign({}, mno, { fontSize: 8.5, color: week === x[0] ? C.chalk : C.ash, letterSpacing: 1.2 })}>WEEK {x[0]}</div>
+                  <div style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1, color: week === x[0] ? C.chalk : x[2], marginTop: 2 })}>{x[1]}</div>
                 </div>))}
             </div>
             <Note c={C.chalk} s={{ marginTop: 0 }}>Weeks 15–16 taper and test, week 17 is Hell Week, week 18 is the reload, then straight into week 1 of the next macrocycle. You've just tapered — the freshest you'll be all cycle, and Saturday's test gives the Retention single a current max.</Note>
@@ -3305,8 +3305,8 @@ function HellWeek({ current, maxes, bw, hwLog, setHwLog, L }) {
       </Card>
       <Card ac={T.col}>
         <div style={{ display: "flex", gap: 5, marginBottom: 12 }}>
-          {[1, 2, 3].map((n) => <button key={n} onClick={() => setTier(n)} style={{ flex: 1, background: n === tier ? HWT[n].col : "transparent", border: "1px solid " + (n === tier ? HWT[n].col : C.line), borderRadius: 4, padding: "9px 3px", cursor: "pointer" }}>
-            <div style={Object.assign({}, dsp, { fontSize: 11.5, fontWeight: 700, color: n === tier ? C.ink : C.ash, letterSpacing: .6 })}>{HWT[n].n}</div></button>)}
+          {[1, 2, 3].map((n) => <button key={n} onClick={() => setTier(n)} style={{ flex: 1, background: n === tier ? soft(HWT[n].col) : "transparent", border: "1px solid " + (n === tier ? HWT[n].col : C.line), borderRadius: 4, padding: "9px 3px", cursor: "pointer" }}>
+            <div style={Object.assign({}, dsp, { fontSize: 11.5, fontWeight: 700, color: n === tier ? C.chalk : C.ash, letterSpacing: .6 })}>{HWT[n].n}</div></button>)}
         </div>
         <div style={Object.assign({}, mno, { fontSize: 10, color: C.ash })}>{T.freq.toUpperCase()} · BODYWEIGHT {bw} KG</div>
         <div style={{ background: C.ink, border: "1px solid " + C.line, borderRadius: 5, padding: "10px 12px", marginTop: 9 }}><Eye c={T.col} s={{ marginBottom: 4 }}>Gate</Eye><div style={Object.assign({}, bdy, { fontSize: 13, fontWeight: 600, color: C.chalk })}>{T.gate}</div></div>
@@ -3373,7 +3373,7 @@ function HellWeek({ current, maxes, bw, hwLog, setHwLog, L }) {
                     <div style={{ display: "flex", gap: 5 }}>
                       {[["clean", "MADE CLEAN", 5, C.moss], ["grind", "MADE GRINDING", 3, C.brass], ["miss", "MISSED", 1, C.oxide]].map((o) =>
                         <button key={o[0]} onClick={() => setRaw(Object.assign({}, raw, { "2r3": raw["2r3"] === o[0] ? "" : o[0] }))}
-                          style={Object.assign({}, dsp, { flex: 1, fontSize: 10, fontWeight: 700, padding: "8px 2px", borderRadius: 4, cursor: "pointer", background: raw["2r3"] === o[0] ? o[3] : "transparent", color: raw["2r3"] === o[0] ? C.ink : C.ash, border: "1px solid " + (raw["2r3"] === o[0] ? "transparent" : C.line) })}>{o[1]}<br />{o[2]} pts</button>)}
+                          style={Object.assign({}, dsp, { flex: 1, fontSize: 10, fontWeight: 700, padding: "8px 2px", borderRadius: 4, cursor: "pointer", background: raw["2r3"] === o[0] ? soft(o[3]) : "transparent", color: raw["2r3"] === o[0] ? C.chalk : C.ash, border: "1px solid " + (raw["2r3"] === o[0] ? "transparent" : C.line) })}>{o[1]}<br />{o[2]} pts</button>)}
                     </div>
                   </div>) : null}
                 {d.extra ? (
@@ -3381,7 +3381,7 @@ function HellWeek({ current, maxes, bw, hwLog, setHwLog, L }) {
                     <div style={Object.assign({}, bdy, { fontSize: 13, fontWeight: 600, color: C.chalk, marginBottom: 6 })}>{d.extra.n}{d.extra.pts ? " (+" + d.extra.pts + ")" : ""}</div>
                     <div style={{ display: "flex", gap: 6 }}>
                       {["y", "n"].map((vv) => <button key={vv} onClick={() => setRaw(Object.assign({}, raw, { [d.d + d.extra.k]: raw[d.d + d.extra.k] === vv ? "" : vv }))}
-                        style={Object.assign({}, dsp, { flex: 1, fontSize: 12, fontWeight: 700, padding: "8px 0", borderRadius: 4, cursor: "pointer", background: raw[d.d + d.extra.k] === vv ? (vv === "y" ? C.moss : C.oxide) : "transparent", color: raw[d.d + d.extra.k] === vv ? C.ink : C.ash, border: "1px solid " + (raw[d.d + d.extra.k] === vv ? "transparent" : C.line) })}>{vv === "y" ? "YES" : "NO"}</button>)}
+                        style={Object.assign({}, dsp, { flex: 1, fontSize: 12, fontWeight: 700, padding: "8px 0", borderRadius: 4, cursor: "pointer", background: raw[d.d + d.extra.k] === vv ? soft(vv === "y" ? C.moss : C.oxide) : "transparent", color: raw[d.d + d.extra.k] === vv ? C.chalk : C.ash, border: "1px solid " + (raw[d.d + d.extra.k] === vv ? "transparent" : C.line) })}>{vv === "y" ? "YES" : "NO"}</button>)}
                     </div>
                   </div>) : null}
                 {d.extra2 ? d.extra2.map((e) => <div key={e.k} style={{ marginBottom: 10 }}><Lab>{e.n}</Lab><Fld v={raw[d.d + e.k]} on={(vv) => setRaw(Object.assign({}, raw, { [d.d + e.k]: vv }))} ph="—" /></div>) : null}
@@ -3393,7 +3393,7 @@ function HellWeek({ current, maxes, bw, hwLog, setHwLog, L }) {
         <Eye c={C.cobalt}>Composure — judged per test, immediately</Eye>
         {HWCOMP.map((c, i) => { const on = comp.indexOf(i) >= 0;
           return <div key={i} onClick={() => { const n = comp.slice(); const x = n.indexOf(i); if (x >= 0) n.splice(x, 1); else n.push(i); setComp(n); }} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 0", borderBottom: i < HWCOMP.length - 1 ? "1px solid " + C.line : "none", cursor: "pointer" }}>
-            <span style={Object.assign({}, mno, { width: 24, height: 24, borderRadius: 4, flexShrink: 0, background: on ? C.moss : C.ink, border: "1px solid " + (on ? C.moss : C.line), color: C.ink, fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" })}>{on ? "✓" : ""}</span>
+            <span style={Object.assign({}, mno, { width: 24, height: 24, borderRadius: 4, flexShrink: 0, background: on ? soft(C.moss) : C.ink, border: "1px solid " + (on ? C.moss : C.line), color: C.chalk, fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" })}>{on ? "✓" : ""}</span>
             <span style={Object.assign({}, bdy, { fontSize: 12.5, color: on ? C.chalk : C.ash, flex: 1, lineHeight: 1.4 })}>{c[0]}</span>
             <span style={Object.assign({}, mno, { fontSize: 11, color: on ? C.moss : C.ash })}>{c[1]}</span></div>; })}
       </Card>
@@ -4202,17 +4202,17 @@ export default function App() {
                   const r = shownSeg ? shownSeg[i] : null;
                   return <button key={w} onClick={() => goWeek(w)} aria-label={"Week " + (r ? r.idx || i + 1 : w)}
                     style={Object.assign({}, dsp, { minHeight: 48, fontSize: 20, fontWeight: 800, borderRadius: 6, cursor: "pointer",
-                      background: on ? C.brass : "transparent", color: on ? C.ink : now ? C.moss : C.chalk, border: "2px solid " + (on ? C.brass : now ? C.moss : C.line) })}>{r ? (r.hold ? "H" : r.program === "transition" ? "T" + r.idx : r.id) : w}</button>; })}
+                      background: on ? soft(C.brass) : "transparent", color: on ? C.chalk : now ? C.moss : C.chalk, border: "2px solid " + (on ? C.brass : now ? C.moss : C.line) })}>{r ? (r.hold ? "H" : r.program === "transition" ? "T" + r.idx : r.id) : w}</button>; })}
               </div>) : null}
             {/* the days of that week */}
             <div style={{ display: "flex", gap: 4, marginTop: 8 }}>
               {DAYS.map((k) => { const active = shown.day === k, isNow = k === today && shown.week === current.week && shown.macro === current.macro;
                 return <button key={k} onClick={() => goDay(k)} aria-pressed={active}
                   style={Object.assign({}, dsp, { flex: 1, minWidth: 0, fontSize: 18, fontWeight: 800, padding: "8px 0", borderRadius: 6, cursor: "pointer", minHeight: 48,
-                    background: active ? dayAc(k) : "transparent", color: active ? C.ink : isNow ? C.moss : C.chalk, border: "2px solid " + (active ? dayAc(k) : isNow ? C.moss : C.line) })}>{DSH[k]}</button>; })}
+                    background: active ? soft(dayAc(k)) : "transparent", color: active ? C.chalk : isNow ? C.moss : C.chalk, border: "2px solid " + (active ? dayAc(k) : isNow ? C.moss : C.line) })}>{DSH[k]}</button>; })}
             </div>
             {isToday ? null : (
-              <button onClick={() => { setSelDay(null); setWeekPick(false); }} style={Object.assign({}, dsp, { width: "100%", marginTop: 8, minHeight: 48, fontSize: 20, fontWeight: 800, letterSpacing: 1, borderRadius: 6, cursor: "pointer", background: C.moss, color: C.ink, border: "2px solid " + C.moss })}>◀ BACK TO TODAY</button>)}
+              <button onClick={() => { setSelDay(null); setWeekPick(false); }} style={Object.assign({}, dsp, { width: "100%", marginTop: 8, minHeight: 48, fontSize: 20, fontWeight: 800, letterSpacing: 1, borderRadius: 6, cursor: "pointer", background: soft(C.moss), color: C.chalk, border: "2px solid " + C.moss })}>◀ BACK TO TODAY</button>)}
           </div>
         ) : (
           <div style={{ padding: "12px 16px", paddingLeft: "max(16px, env(safe-area-inset-left))", paddingRight: "max(16px, env(safe-area-inset-right))", maxWidth: 640, margin: "0 auto" }}>
@@ -4303,7 +4303,7 @@ export default function App() {
                   <div>
                     <div style={{ display: "flex", gap: 6, marginBottom: 12, flexWrap: "wrap" }}>
                       {[["breathe", "BREATHE", C.cobalt], ["sit", "SIT", C.violet], ["hardship", "HARDSHIP", C.oxide], ["life", "LIFE", C.brass], ["season", "SEASON", C.brass], ["hell", "HELL WEEK", C.oxide]].map((x) => <button key={x[0]} onClick={() => setIsub(x[0])}
-                        style={Object.assign({}, dsp, { flex: "1 1 30%", fontSize: 18, fontWeight: 700, letterSpacing: .8, padding: "11px 2px", borderRadius: 6, cursor: "pointer", minHeight: 52, background: isub === x[0] ? x[2] : "transparent", color: isub === x[0] ? C.ink : C.ash, border: "1px solid " + (isub === x[0] ? x[2] : C.line) })}>{x[1]}</button>)}
+                        style={Object.assign({}, dsp, { flex: "1 1 30%", fontSize: 18, fontWeight: 700, letterSpacing: .8, padding: "11px 2px", borderRadius: 6, cursor: "pointer", minHeight: 52, background: isub === x[0] ? soft(x[2]) : "transparent", color: isub === x[0] ? C.chalk : C.ash, border: "1px solid " + (isub === x[0] ? x[2] : C.line) })}>{x[1]}</button>)}
                     </div>
                     {isub === "breathe" ? <BreatheView IM={IM} />
                       : isub === "sit" ? <SitView IM={IM} />

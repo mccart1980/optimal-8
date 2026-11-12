@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { C, dsp, bdy, mno, mmss, buzz, Fld } from "./ui.jsx";
+import { C, soft, dsp, bdy, mno, mmss, buzz, Fld } from "./ui.jsx";
 
 /* ================================================================
    ONE THING AT A TIME
@@ -37,7 +37,7 @@ export function CardHead({ name, lib, desc, pres, colour }) {
 
 export function BigBtn({ children, on, c, fill, dis, label, s, pressed }) {
   const col = c || C.moss;
-  return <button onClick={on} disabled={dis} aria-label={label} aria-pressed={pressed} style={Object.assign(big(fill ? col : "transparent", fill ? C.ink : col, col), { opacity: dis ? .45 : 1 }, s)}>{children}</button>;
+  return <button onClick={on} disabled={dis} aria-label={label} aria-pressed={pressed} style={Object.assign(big(fill ? soft(col) : "transparent", fill ? C.chalk : col, col), { opacity: dis ? .45 : 1 }, s)}>{children}</button>;
 }
 
 /* ---------- the row of set buttons ----------
@@ -53,7 +53,7 @@ export function SetButtons({ n, sets, label, onTap, adjust, speed }) {
           return (
             <button key={i} data-set-btn={i + 1} onClick={() => onTap(i)} aria-label={(ok ? "Undo set " : "Set ") + (i + 1)}
               style={Object.assign({}, mno, { flex: "1 1 30%", minWidth: 96, minHeight: 72, borderRadius: 8, cursor: "pointer", padding: "8px 6px",
-                background: ok ? C.moss : C.ink, color: ok ? C.ink : C.chalk, border: "2px solid " + (ok ? C.moss : C.line) })}>
+                background: ok ? soft(C.moss) : C.ink, color: C.chalk, border: "2px solid " + (ok ? C.moss : C.line) })}>
               <div style={{ fontSize: T3, fontWeight: 700, letterSpacing: 1 }}>{ok ? "✓ " : ""}SET {i + 1}</div>
               <div style={{ fontSize: T3, marginTop: 2 }}>{label(i)}</div>
             </button>); })}
@@ -86,7 +86,7 @@ export function Checklist({ rows, ticks, onTick }) {
           <button key={i} onClick={() => onTick(i)} aria-label={(ticks[i] ? "Untick " : "Tick ") + r.n}
             style={{ display: "flex", gap: 12, width: "100%", textAlign: "left", alignItems: "flex-start", background: "transparent", border: "none", borderTop: "1px solid " + C.line, padding: "12px 0", cursor: "pointer", minHeight: TAP }}>
             <span style={Object.assign({}, mno, { width: 40, height: 40, flexShrink: 0, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: T3, fontWeight: 700,
-              background: ticks[i] ? C.moss : "transparent", color: ticks[i] ? C.ink : C.ash, border: "2px solid " + (ticks[i] ? C.moss : C.line) })}>{ticks[i] ? "✓" : ""}</span>
+              background: ticks[i] ? soft(C.moss) : "transparent", color: ticks[i] ? C.chalk : C.ash, border: "2px solid " + (ticks[i] ? C.moss : C.line) })}>{ticks[i] ? "✓" : ""}</span>
             <span style={{ flex: 1, minWidth: 0 }}>
               <span style={Object.assign({}, bdy, { display: "block", fontSize: T3, fontWeight: 700, color: ticks[i] ? C.ash : C.chalk })}>{r.n}{r.s ? <span style={Object.assign({}, mno, { fontWeight: 400, color: C.brass })}>{"  " + r.s}</span> : null}</span>
               {r.text ? <span style={Object.assign({}, bdy, { display: "block", fontSize: T3, color: C.ash, lineHeight: 1.5, marginTop: 4 })}>{r.text}</span> : null}
@@ -209,7 +209,7 @@ export function Chapter({ title, items, open, onToggle, onPick, onTick, curId })
       {open ? items.map((it) => (
         <div key={it.id} data-flow-id={it.id} data-flow-name={it.n} data-flow-time={it.clock || ""} style={{ display: "flex", alignItems: "center", gap: 10, borderTop: "1px solid " + C.line, padding: "8px 14px" }}>
           <button onClick={() => onTick(it)} aria-label={(it.done ? "Untick " : "Tick ") + it.n}
-            style={Object.assign({}, mno, { width: 48, height: 48, flexShrink: 0, borderRadius: 6, cursor: "pointer", fontSize: T3, fontWeight: 700, background: it.done ? C.moss : "transparent", color: it.done ? C.ink : C.ash, border: "2px solid " + (it.done ? C.moss : C.line) })}>{it.done ? "✓" : ""}</button>
+            style={Object.assign({}, mno, { width: 48, height: 48, flexShrink: 0, borderRadius: 6, cursor: "pointer", fontSize: T3, fontWeight: 700, background: it.done ? soft(C.moss) : "transparent", color: it.done ? C.chalk : C.ash, border: "2px solid " + (it.done ? C.moss : C.line) })}>{it.done ? "✓" : ""}</button>
           <button onClick={() => onPick(it)} style={{ flex: 1, minWidth: 0, textAlign: "left", background: "transparent", border: "none", cursor: "pointer", padding: "4px 0", minHeight: 48 }}>
             <span style={Object.assign({}, mno, { display: "block", fontSize: T3, color: it.id === curId ? C.brass : C.ash })}>{it.clock}{it.id === curId ? " · NOW" : ""}</span>
             <span style={Object.assign({}, bdy, { display: "block", fontSize: T3, fontWeight: 700, color: it.done ? C.ash : C.chalk, lineHeight: 1.35 })}>{it.n}</span>

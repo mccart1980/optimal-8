@@ -5,14 +5,23 @@ import React from "react";
    atoms every page is built from. App.jsx and the Iron Mind modules
    both draw from here so the two halves of the app look like one.
    ================================================================ */
-/* Every colour used as text clears 4.5:1 against both the ink and the
-   card behind it. The four accents were a shade too dark for that, so
-   they have been lifted; used as a fill behind ink text they are better
-   for it, not worse. */
+/* White, blue and pastel. The page is the palest blue, the cards white,
+   the text navy. The names stay as they were so the code reads the same:
+   brass is now the app's blue, cobalt a teal. Every colour used as text
+   clears 4.5:1 against the page, the bars and the cards.
+   A colour never sits behind text at full strength: a selected button,
+   a ticked set or a lit chip takes the colour's pastel, soft(), with
+   navy text on it, and the colour itself as its border. */
 export const C = {
-  ink: "#101416", slab: "#171C20", card: "#1D2429", line: "#2E383F", ash: "#9CA7B0", chalk: "#F2EDE1",
-  moss: "#7FA46F", oxide: "#E06A4C", brass: "#D8A94F", cobalt: "#6FA3C8", violet: "#9D8FCB",
+  ink: "#F3F7FC", slab: "#E6EEF8", card: "#FFFFFF", line: "#C9D7E8", ash: "#4A5C75", chalk: "#13243D",
+  moss: "#257046", oxide: "#B93B27", brass: "#1D5BAA", cobalt: "#0F6B7A", violet: "#6447B0",
 };
+const SOFT = {
+  [C.moss]: "#CDEFD8", [C.oxide]: "#F9D5CC", [C.brass]: "#D2E3F9", [C.cobalt]: "#C9ECF0", [C.violet]: "#E3DAF7",
+  [C.ash]: "#E3E9F1", [C.chalk]: "#DCE6F2",
+};
+/* the pastel of a colour, for a fill with navy text on it */
+export const soft = (c) => SOFT[c] || c;
 
 /* The three steps of the text-size setting, on top of whatever the
    phone itself asks for. */
@@ -30,7 +39,7 @@ html, body { background: ${C.ink}; -webkit-text-size-adjust: 100%; text-size-adj
 @supports not (zoom: 1) { .o8-root { font-size: calc(100% * var(--o8-zoom, 1)); } }
 input, button, textarea { font-family: inherit; }
 input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
-input[type=date] { color-scheme: dark; }
+input[type=date] { color-scheme: light; }
 button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid ${C.brass}; outline-offset: 2px; }
 @keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: .45 } }
 @keyframes rise { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
@@ -72,20 +81,20 @@ export const Eye = ({ children, c, s }) => <div style={Object.assign({}, mno, { 
 export const Lab = ({ children }) => <div style={Object.assign({}, mno, { fontSize: 12, color: C.ash, marginBottom: 4, letterSpacing: .8, textTransform: "uppercase" })}>{children}</div>;
 export const Fld = ({ v, on, ph, a, type, s }) => <input value={v == null ? "" : v} onChange={(e) => on(e.target.value)} placeholder={ph} inputMode={type === "text" ? "text" : type === "time" ? undefined : "decimal"} type={type === "date" || type === "time" ? type : "text"}
   style={Object.assign({}, mno, { width: "100%", background: C.ink, border: "1px solid " + C.line, borderRadius: 4, color: C.chalk, fontSize: 19, padding: "11px 8px", textAlign: a || "center", minHeight: 48 }, s)} />;
-export const Btn = ({ children, on, c, fill, s, dis, small, label }) => <button onClick={on} disabled={dis} aria-label={label} style={Object.assign({}, dsp, { fontSize: small ? 16 : 18, fontWeight: 700, letterSpacing: 1.1, background: fill ? (c || C.brass) : "transparent", color: fill ? C.ink : (c || C.brass), border: "1px solid " + (c || C.brass), borderRadius: 5, padding: small ? "10px 12px" : "14px 16px", cursor: dis ? "default" : "pointer", opacity: dis ? .45 : 1, minHeight: 48 }, s)}>{children}</button>;
+export const Btn = ({ children, on, c, fill, s, dis, small, label }) => <button onClick={on} disabled={dis} aria-label={label} style={Object.assign({}, dsp, { fontSize: small ? 16 : 18, fontWeight: 700, letterSpacing: 1.1, background: fill ? soft(c || C.brass) : "transparent", color: fill ? C.chalk : (c || C.brass), border: "1px solid " + (c || C.brass), borderRadius: 5, padding: small ? "10px 12px" : "14px 16px", cursor: dis ? "default" : "pointer", opacity: dis ? .45 : 1, minHeight: 48 }, s)}>{children}</button>;
 export const Chip = ({ children, c, s }) => <span style={Object.assign({}, mno, { fontSize: 12, letterSpacing: 1, color: c || C.ash, border: "1px solid " + (c || C.line), borderRadius: 3, padding: "3px 7px", textTransform: "uppercase", whiteSpace: "nowrap", display: "inline-block" }, s)}>{children}</span>;
 export const Note = ({ children, c, bold, s }) => <div style={Object.assign({}, bdy, { fontSize: 18, color: c || C.ash, lineHeight: 1.5, marginTop: 8, fontWeight: bold ? 600 : 400 }, s)}>{children}</div>;
 /* `col`: the options one under another, for labels too long to share a row */
 export const Seg = ({ opts, val, on, c, col }) => (
   <div style={Object.assign({ display: "flex", gap: 5 }, col ? { flexDirection: "column" } : {})}>
     {opts.map((o) => <button key={o[0]} onClick={() => on(o[0])} style={Object.assign({}, dsp, { flex: 1, fontSize: 18, fontWeight: 700, letterSpacing: .6, padding: "11px 4px", borderRadius: 4, cursor: "pointer", minHeight: 52,
-      background: val === o[0] ? (o[2] || c || C.brass) : "transparent", color: val === o[0] ? C.ink : C.ash, border: "1px solid " + (val === o[0] ? (o[2] || c || C.brass) : C.line) })}>{o[1]}</button>)}
+      background: val === o[0] ? soft(o[2] || c || C.brass) : "transparent", color: val === o[0] ? C.chalk : C.ash, border: "1px solid " + (val === o[0] ? (o[2] || c || C.brass) : C.line) })}>{o[1]}</button>)}
   </div>);
 
 /* A tick row — the Iron Mind day is built out of these. 44px minimum. */
 export const Tick = ({ on, ok, title, sub, c, right }) => (
   <div style={{ display: "flex", alignItems: "center", gap: 11, padding: "9px 0", borderBottom: "1px solid " + C.line }}>
-    <button onClick={on} aria-label={(ok ? "Untick " : "Tick ") + title} style={{ width: 48, height: 48, flexShrink: 0, borderRadius: 6, cursor: "pointer", background: ok ? (c || C.moss) : "transparent", border: "1px solid " + (ok ? (c || C.moss) : C.line), color: ok ? C.ink : C.ash, fontSize: 19, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>{ok ? "✓" : "○"}</button>
+    <button onClick={on} aria-label={(ok ? "Untick " : "Tick ") + title} style={{ width: 48, height: 48, flexShrink: 0, borderRadius: 6, cursor: "pointer", background: ok ? soft(c || C.moss) : "transparent", border: "1px solid " + (ok ? (c || C.moss) : C.line), color: ok ? C.chalk : C.ash, fontSize: 19, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>{ok ? "✓" : "○"}</button>
     <span style={{ flex: 1, minWidth: 0 }}>
       <div style={Object.assign({}, bdy, { fontSize: 18, fontWeight: 600, color: ok ? C.ash : C.chalk, lineHeight: 1.35, textDecoration: ok ? "line-through" : "none" })}>{title}</div>
       {sub ? <div style={Object.assign({}, bdy, { fontSize: 16, color: C.ash, marginTop: 3, lineHeight: 1.45 })}>{sub}</div> : null}
