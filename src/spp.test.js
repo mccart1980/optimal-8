@@ -781,3 +781,53 @@ describe("14 · Tuesday's landmine rotation", () => {
     expect(sppMd).not.toMatch(/Saturday's landmine rotation trains it/);
   });
 });
+
+describe("15 · repeat the week", () => {
+  const SPP = { spp: true };
+  const base = P("2026-11-02", "2026-10-29", SPP);
+  const rep = (from, made) => P(from, made, Object.assign({ repeat: true }, SPP));
+  const s = buildSeason({ plans: [base, rep("2026-11-16", "2026-11-13")], today: "2026-11-13" });
+  const sRows = s.rows.filter((r) => r.program === "spp");
+  it("week 2 runs again from the plan's Monday, and every week after it moves back one: week 12 is 25 January, its Sunday 31", () => {
+    expect(sRows.slice(0, 5).map((r) => [r.mon, r.id])).toEqual([["2026-11-02", "S1"], ["2026-11-09", "S2"], ["2026-11-16", "S2"], ["2026-11-23", "S3"], ["2026-11-30", "S4"]]);
+    expect(sRows.slice(0, 12).pop()).toMatchObject({ id: "S11", mon: "2027-01-18" });
+    expect(sRows[12]).toMatchObject({ id: "S12", mon: "2027-01-25", sun: "2027-01-31" });
+    expect(sRows[13]).toMatchObject({ id: "S1", cycle: 2, mon: "2027-02-01" });
+  });
+  it("the done weeks stay as they were: the repeat is a new week key, so Monday 9 November's ticks and logs stay on its own", () => {
+    expect(sRows.slice(0, 4).map((r) => [r.mac, r.kw, r.doc])).toEqual([["S", 1, 1], ["S", 2, 2], ["S", 3, 2], ["S", 4, 3]]);
+    expect(sRows.slice(2, 13).every((r) => r.carried && r.cycle === 1)).toBe(true);
+    expect(rowRx(sRows[2]).doc).toBe(2);
+    expect(rowRx(sRows[3]).doc).toBe(3);
+  });
+  it("one line says it: S2 again from the Monday, test week from 25 January, then the cycle again", () => {
+    expect(describeSeason(s, "2026-11-16")).toMatch(/^Strength, Power and Physique carries on: S2 · S3 · S4 · S5 · S6 · S7 · S8 · S9 · S10 · S11 · S12, test week from Mon,? 25 Jan; then the 12-week cycle again from Mon,? 1 Feb\.$/);
+  });
+  it("without it, the same plan carries on as it did: week 3 on 16 November, test week 18 January", () => {
+    const plain = buildSeason({ plans: [base], today: "2026-11-13" });
+    expect(plain.rows.find((r) => r.mon === "2026-11-16")).toMatchObject({ id: "S3" });
+    expect(plain.rows.find((r) => r.mon === "2027-01-18")).toMatchObject({ id: "S12" });
+  });
+  it("a fight entered once the twelve weeks finish: the full camp for 3 April starts Monday 1 February and is 9 weeks, with the usual lead-in week on 25 January", () => {
+    const f = buildSeason({ plans: [base, rep("2026-11-16", "2026-11-13"), P("2027-02-01", "2027-01-31", { booked: true, fight: "2027-04-03", rounds: 3, mins: 2, rest: 60 })], today: "2027-01-31" });
+    const camp = f.rows.filter((r) => r.program === "camp");
+    expect(camp).toHaveLength(9);
+    expect(camp[0].mon).toBe("2027-02-01");
+    expect(f.rows.filter((r) => r.program === "spp").pop()).toMatchObject({ id: "S11", mon: "2027-01-18" });
+    expect(f.rows.find((r) => r.mon === "2027-01-25")).toMatchObject({ program: "pre" });
+  });
+  it("a later re-plan doesn't undo it: carrying on from 30 November keeps the repeat and the weeks after it", () => {
+    const later = buildSeason({ plans: [base, rep("2026-11-16", "2026-11-13"), P("2026-11-30", "2026-11-27", SPP)], today: "2026-11-27" });
+    expect(later.rows.filter((r) => r.program === "spp").slice(0, 6).map((r) => r.id)).toEqual(["S1", "S2", "S2", "S3", "S4", "S5"]);
+    expect(later.rows.find((r) => r.mon === "2027-01-25")).toMatchObject({ id: "S12" });
+  });
+  it("repeat the week again later: each repeat moves everything back another week", () => {
+    const twice = buildSeason({ plans: [base, rep("2026-11-16", "2026-11-13"), rep("2026-11-30", "2026-11-27")], today: "2026-11-27" });
+    expect(twice.rows.filter((r) => r.program === "spp").slice(0, 6).map((r) => r.id)).toEqual(["S1", "S2", "S2", "S3", "S3", "S4"]);
+    expect(twice.rows.find((r) => r.id === "S12")).toMatchObject({ mon: "2027-02-01" });
+  });
+  it("the document: season-builder.md says what it does", () => {
+    expect(builderMd).toMatch(/\*\*REPEAT WEEK \d+\*\*/);
+    expect(builderMd).toMatch(/moves back a week/);
+  });
+});

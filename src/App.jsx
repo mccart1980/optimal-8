@@ -2880,9 +2880,10 @@ function FightSettings({ st, replan, season, dayIso }) {
   /* START AGAIN is never kept: it belongs to the plan from this Monday */
   const pending = (st.plans || []).find((p) => p.from === from);
   const restartNow = !!(pending && pending.inputs && pending.inputs.restart);
-  const cur = Object.assign({ booked: false, classic: false, spp: false }, FIGHT_DEFAULTS, st.season || {}, restartNow ? { restart: true } : {});
+  const repeatNow = !!(pending && pending.inputs && pending.inputs.repeat);
+  const cur = Object.assign({ booked: false, classic: false, spp: false }, FIGHT_DEFAULTS, st.season || {}, restartNow ? { restart: true } : {}, repeatNow ? { repeat: true } : {});
   const [draft, setDraft] = useState(cur);
-  useEffect(() => { setDraft(cur); }, [JSON.stringify(st.season || {}), restartNow]);
+  useEffect(() => { setDraft(cur); }, [JSON.stringify(st.season || {}), restartNow, repeatNow]);
   const d = draft;
   const set = (patch) => setDraft(Object.assign({}, d, patch));
   const changed = JSON.stringify(Object.assign({}, cur)) !== JSON.stringify(Object.assign({}, d));
@@ -2955,8 +2956,10 @@ function FightSettings({ st, replan, season, dayIso }) {
             : "The weeks you've done stay done, and it carries on from the week you're on."}</Note></div>) : null}
       {sppRunning && !d.booked && !d.classic ? (
         <div data-testid="spp-running" style={{ marginTop: 10 }}><Lab>The cycle you're on</Lab>
-          <Seg opts={[["on", "CARRY ON"], ["again", isSpp ? "START AGAIN" : "START NOW"]]} val={d.restart ? "again" : "on"} on={(v) => set({ restart: v === "again" || undefined })} c={C.brass} />
-          <Note>{isSpp ? (d.restart ? "Week 1 again from " + fmtDate(from) + "." : "The weeks you've done stay done, and it carries on from the week you're on.")
+          <Seg opts={isSpp ? [["on", "CARRY ON"], ["repeat", "REPEAT WEEK " + prevRow.doc], ["again", "START AGAIN"]] : [["on", "CARRY ON"], ["again", "START NOW"]]}
+            val={d.restart ? "again" : d.repeat ? "repeat" : "on"} on={(v) => set({ restart: v === "again" || undefined, repeat: v === "repeat" || undefined })} c={C.brass} />
+          <Note>{isSpp ? (d.restart ? "Week 1 again from " + fmtDate(from) + "." : d.repeat ? "Week " + prevRow.doc + " again from " + fmtDate(from) + ". Everything after it moves back a week; what you've ticked and logged stays."
+              : "The weeks you've done stay done, and it carries on from the week you're on.")
             : d.restart ? "Prep from " + fmtDate(from) + ". Strength, Power and Physique stops here."
             : "Strength, Power and Physique carries on to its test week" + (handOver ? ", then Prep from " + fmtDate(handOver) : "") + "."}</Note></div>) : null}
       <Btn c={C.brass} fill dis={!changed || !validFight} s={{ width: "100%", marginTop: 12 }} on={() => replan(d)}>{onlyWeight ? "SET THE WEIGHT PLAN" : changed ? "RE-PLAN FROM " + fmtDate(from).toUpperCase() : "THIS IS THE PLAN"}</Btn>
@@ -3500,7 +3503,7 @@ const kgStr = (x) => (x == null || String(x).trim() === "" ? "" : String(Number(
 function trainingChanged(was, now) {
   const a = Object.assign({ booked: false, classic: false, spp: false }, FIGHT_DEFAULTS, was || {}), b = Object.assign({ booked: false, classic: false, spp: false }, FIGHT_DEFAULTS, now || {});
   const keys = ["booked", "fight", "rounds", "mins", "rest", "fitness", "emphasis", "classic", "spp"];
-  return keys.some((k) => String(a[k]) !== String(b[k])) || ((a.weighIn === "day") !== (b.weighIn === "day")) || !!a.restart !== !!b.restart;
+  return keys.some((k) => String(a[k]) !== String(b[k])) || ((a.weighIn === "day") !== (b.weighIn === "day")) || !!a.restart !== !!b.restart || !!a.repeat !== !!b.repeat;
 }
 /* BOXING TONIGHT: the day's own switch on FOOD, or else the weekday ticked
    in Settings */
@@ -3518,12 +3521,13 @@ function nextDraws(prev, cfg, today) {
 }
 /* "fitness low → moderate · emphasis none → power". `running`: the program
    running into the plan's Monday, for what START AGAIN or START NOW does */
-function changeLine(was, now, running) {
+function changeLine(was, now, running, weekDoc) {
   const a = Object.assign({ booked: false, classic: false, spp: false }, FIGHT_DEFAULTS, was || {}), b = Object.assign({ booked: false, classic: false, spp: false }, FIGHT_DEFAULTS, now || {});
   a.program = progOf(a); b.program = progOf(b);
   const keys = b.booked ? ["booked", "fight", "rounds", "mins", "rest", "weighIn", "fitness", "emphasis", "limit", "tol", "natural"] : b.program === "prep" ? ["booked", "program", "fitness"] : ["booked", "program"];
   const same = (k) => (WEIGHT_FIELDS.indexOf(k) >= 0 ? kgStr(a[k]) === kgStr(b[k]) : String(a[k]) === String(b[k]));
   const line = keys.filter((k) => !same(k)).map((k) => FIELD_NAMES[k] + " " + showVal(k, a[k]) + " → " + showVal(k, b[k])).join(" · ");
+  if (b.repeat && !b.restart && !b.booked && b.program === "spp" && running === "spp") return (line ? line + " · " : "") + "Strength, Power and Physique repeats week " + weekDoc;
   if (!b.restart) return line;
   const again = !b.booked && b.program === "spp" ? (running === "spp" ? "Strength, Power and Physique starts again at week 1" : "Strength, Power and Physique starts now")
     : !b.booked && running === "spp" ? "Prep starts now" : "Prep starts again at week 1";
@@ -4125,10 +4129,10 @@ export default function App() {
     /* the program running into the plan's Monday */
     const was = season.rows.find((r) => r.mon === addDays(from, -7));
     const runningNow = was && was.program === "spp" && was.doc !== 12 ? "spp" : was && was.program === "prep" && was.doc !== 14 ? "prep" : null;
-    const what = why || changeLine(st.season, inputs, runningNow) || "Re-planned";
+    const what = why || changeLine(st.season, inputs, runningNow, was && was.doc) || "Re-planned";
     const line = what + ". From " + fmtDate(from) + ": " + (inputs.classic && !inputs.booked ? "Optimal 8 Fighter, the classic." : describeSeason(s2, from));
     /* START AGAIN goes in the plan, never in the answers */
-    const kept = Object.assign({}, inputs); delete kept.restart;
+    const kept = Object.assign({}, inputs); delete kept.restart; delete kept.repeat;
     setSt(Object.assign({}, st, { season: kept, plans: plans2, fightDate: inputs.booked ? inputs.fight : null, planNote: line, planNoteAt: dayIso, wdraws }));
     setSelDay(null); setViewRaw(null);
   };

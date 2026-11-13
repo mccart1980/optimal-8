@@ -711,3 +711,31 @@ describe("picking it in Settings", () => {
     expect(title()).toBe("Strength & Power · Week 1 · Size");
   });
 });
+
+describe("repeat the week", () => {
+  const PLANS = [{ from: "2026-10-26", made: "2026-10-25", inputs: PREP }, { from: "2026-11-02", made: "2026-11-01", inputs: Object.assign({}, SPP, { restart: true }) }];
+  it("on Friday 13 November, in week 2: REPEAT WEEK 2 sits between CARRY ON and START AGAIN; re-planned, week 2 runs again from Monday 16 November and week 3 is on 23 November; the repeat isn't kept as an answer", async () => {
+    await at(2026, 11, 13, base({ plans: PLANS, season: SPP }));
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "MORE" }));
+    fireEvent.click(screen.getByRole("button", { name: "SETTINGS" }));
+    await screen.findByText("Fight booked?");
+    const run = screen.getByTestId("spp-running");
+    ["CARRY ON", "REPEAT WEEK 2", "START AGAIN"].forEach((n) => expect(within(run).getByRole("button", { name: n })).toBeInTheDocument());
+    fireEvent.click(within(run).getByRole("button", { name: "REPEAT WEEK 2" }));
+    expect(run.textContent).toMatch(/Week 2 again from Mon,? 16 Nov\. Everything after it moves back a week; what you've ticked and logged stays\./);
+    fireEvent.click(screen.getByRole("button", { name: /^RE-PLAN FROM MON,? 16 NOV/ }));
+    await waitFor(() => expect(saved().plans.length).toBe(3));
+    const st = saved();
+    expect(st.plans[2]).toMatchObject({ from: "2026-11-16", inputs: { spp: true, repeat: true } });
+    expect(st.season.repeat).toBeUndefined();
+    expect(st.season.restart).toBeUndefined();
+    expect(st.planNote).toMatch(/^Strength, Power and Physique repeats week 2\. From Mon,? 16 Nov: Strength, Power and Physique carries on: S2 · S3 · S4 · S5 · S6 · S7 · S8 · S9 · S10 · S11 · S12, test week from Mon,? 25 Jan; then the 12-week cycle again from Mon,? 1 Feb\.$/);
+    const kept = localStorage.getItem("o8s-settings");
+    cleanup();
+    await at(2026, 11, 16, kept);
+    expect(title()).toBe("Strength & Power · Week 2 · Size");
+    cleanup();
+    await at(2026, 11, 23, kept);
+    expect(title()).toBe("Strength & Power · Week 3 · Size");
+  });
+});

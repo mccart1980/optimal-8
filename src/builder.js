@@ -265,9 +265,11 @@ function genPlan(plan, ctx, horizon) {
   /* a Strength, Power and Physique cycle running into this plan's first
      Monday carries on to its test week, unless you start now */
   const srun = !rows.length && ctx.sppRun && !inp.restart ? ctx.sppRun : [];
+  /* REPEAT THE WEEK: the week you're on runs again, so the carry starts at
+     its number, not the next one; everything after it moves back a week */
   const sppCarry = () => { if (!srun.length) return 0;
     const c = srun[0].cycle || 1;
-    sppRows(CYCLE12.slice(srun[srun.length - 1].doc), c, { carried: 1, plan: srun[0].plan }).forEach((r) => push(r));
+    sppRows(CYCLE12.slice(srun[srun.length - 1].doc - (inp.repeat ? 1 : 0)), c, { carried: 1, plan: srun[0].plan }).forEach((r) => push(r));
     return c; };
   if (!booked && inp.spp) {
     /* STRENGTH, POWER AND PHYSIQUE. A Prep that's running carries on to its
