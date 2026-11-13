@@ -589,16 +589,77 @@ describe("a card added later doesn't count against days trained before it", () =
     week();
     expect(counts()).toEqual({ mon: "8/8", tue: "9/9", wed: "6/6", thu: "10/10", fri: "", sat: "0/10", sun: "0/10" });
   });
-  it("from a card's date on it counts: week 3's Monday without its box jumps is 8 of 9, its Wednesday without the neck and drops 6 of 7", async () => {
+  it("from a card's date on it counts: week 3's Monday without its box jumps is 8 of 9, its Tuesday without the landmine rotation 9 of 10, its Wednesday without the neck and drops 6 of 7", async () => {
     await at(2026, 11, 19, Object.assign(live(), { v16: true }), { "o8s-done": { "mSw3-mon": ["A", "C", "D", "E", "F", "G", "N", "Q"], "mSw3-tue": ["A", "K", "C", "D", "E", "F", "G", "H", "I"], "mSw3-wed": ["A", "B", "C", "D", "E", "R"] } });
     week();
-    expect(counts()).toMatchObject({ mon: "8/9", tue: "9/9", wed: "6/7" });
+    expect(counts()).toMatchObject({ mon: "8/9", tue: "9/10", wed: "6/7" });
   });
   it("the day's own page is as it was: Tuesday 3 November still lists the throws and the pressure rounds", async () => {
     await at(2026, 11, 3, live());
     const rows = wholeDay();
     expect(rows).toContain("Rotational Shot-Put Throw + Hook Throw");
     expect(rows).toContain("Pressure Rounds");
+  });
+});
+
+describe("Tuesday's landmine rotation", () => {
+  /* the plan in use: Prep from 26 October, Strength, Power and Physique started on Monday 2 November */
+  const live = () => base({ plans: [{ from: "2026-10-26", made: "2026-10-25", inputs: PREP }, { from: "2026-11-02", made: "2026-11-01", inputs: Object.assign({}, SPP, { restart: true }) }], season: SPP });
+  const modes = (card) => [...card.querySelectorAll("[data-set-mode]")].map((e) => e.getAttribute("data-set-mode") + ":" + e.getAttribute("data-set-id") + ":" + e.getAttribute("data-set-unit"));
+  const week = () => { fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "MORE" })); fireEvent.click(screen.getByRole("button", { name: "PLAN" })); fireEvent.click(screen.getByRole("button", { name: "THIS WEEK" })); };
+  const counts = () => { const o = {}; document.querySelectorAll("[data-day-count]").forEach((e) => { o[e.getAttribute("data-day-count")] = e.textContent; }); return o; };
+  const TUE = ["A", "K", "C", "D", "E", "F", "G", "H", "I"];
+  it("Tuesday 17 November: straight after the landmine press, before the rows and dips; 3 sets in added kilos, a set starts 1:00", async () => {
+    await at(2026, 11, 17, live());
+    const rows = wholeDay();
+    const i = rows.indexOf("One-Arm Landmine Press");
+    expect(rows.slice(i, i + 3)).toEqual(["One-Arm Landmine Press", "Landmine Rotation", "Chest-Supported Row + Weighted Dip"]);
+    const card = pick("Landmine Rotation");
+    expect(within(card).getAllByTestId("card-pres")[0].textContent).toBe("3 × 6–8 each side · controlled · Rest 60 s");
+    expect(modes(card)).toEqual(["add:s_landrot:reps"]);
+    expect(within(card).getByTestId("weight-box").textContent).toMatch(/ADDED WEIGHT \(KG\)/);
+    expect(card.querySelectorAll("[data-set-btn]")).toHaveLength(3);
+    fireEvent.click(within(card).getByRole("button", { name: "Set 1" }));
+    expect(screen.getByTestId("timer-count").textContent).toBe("1:00");
+  });
+  it("one exercise on two days: Tuesday's weight starts from Saturday's, and Saturday's from Tuesday's", async () => {
+    const set = (w, r) => ({ ok: true, w, r });
+    await at(2026, 11, 17, live(), { "o8s-log": { "mSw2-sat-s_landrot": { sets: [set("10", "8"), set("10", "8"), set("10", "7")], n: "Landmine rotation", d: "2026-11-14" } } });
+    let card = pick("Landmine Rotation");
+    expect(within(card).getByTestId("last-time").textContent).toMatch(/^LAST TIME · SAT,? 14 NOV · \+10 KG × 8 · 8 · 7$/);
+    expect(within(card).getByTestId("weight-box").querySelector("input").value).toBe("10");
+    cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
+    await at(2026, 11, 21, live(), { "o8s-log": { "mSw3-tue-s_landrot": { sets: [set("12.5", "7"), set("12.5", "7"), set("12.5", "6")], n: "Landmine rotation", d: "2026-11-17" } } });
+    card = pick("Landmine Rotation");
+    expect(within(card).getByTestId("last-time").textContent).toMatch(/^LAST TIME · TUE,? 17 NOV · \+12\.5 KG × 7 · 7 · 6$/);
+    expect(within(card).getByTestId("weight-box").querySelector("input").value).toBe("12.5");
+  });
+  it("a red morning: the landmine press comes off, the rotation stays; two sets in weeks 4, 8 and test week", async () => {
+    await at(2026, 11, 17, live(), { "o8s-ready": { "mSw3-tue": "R" } });
+    const red = wholeDay();
+    expect(red).not.toContain("One-Arm Landmine Press");
+    expect(red[red.indexOf("Landmine Rotation") + 1]).toBe("Chest-Supported Row + Weighted Dip");
+    for (const [m, d] of [[11, 24], [12, 22], [1, 19]]) {
+      cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
+      await at(m === 1 ? 2027 : 2026, m, d, live());
+      const rows = wholeDay();
+      expect(rows[rows.indexOf("Landmine Rotation") - 1]).toBe("One-Arm Landmine Press");
+      expect(pick("Landmine Rotation").querySelectorAll("[data-set-btn]")).toHaveLength(2);
+    }
+  });
+  it("THIS WEEK: Tuesday 10 November, trained before it, still reads 9/9; Tuesday 17 November counts it, 9/10 without and 10/10 with", async () => {
+    await at(2026, 11, 12, live(), { "o8s-done": { "mSw2-tue": TUE } });
+    week();
+    expect(counts().tue).toBe("9/9");
+    cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
+    await at(2026, 11, 19, live(), { "o8s-done": { "mSw3-tue": TUE } });
+    week();
+    expect(counts().tue).toBe("9/10");
+    cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
+    await at(2026, 11, 19, live(), { "o8s-done": { "mSw3-tue": TUE.concat("J") } });
+    week();
+    expect(counts().tue).toBe("10/10");
+    expect(document.body.textContent).toMatch(/the landmine press and landmine rotations, rows, dips/);
   });
 });
 

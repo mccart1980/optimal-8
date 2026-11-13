@@ -153,6 +153,13 @@ const DROP = "the last set to failure, then 30% lighter and go again";
 const CRUNCH = (rx) => ({ n: "Cable crunch", s: hs(rx, 3) + " × 10–15 · one or two left", cue: "Kneel facing a high cable, the rope held either side of your head. Curl your ribs down towards your hips, so your back rounds and your hips stay still, then uncurl slowly. Add weight when 15 is easy.", id: "s_crunch", k: "wr", sets: hs(rx, 3), reps: "10–15", rest: "Rest 60 s", rt: 60 });
 /* THE SIDE PLANK: Thursday's and Saturday's ab finish, a hold, in seconds */
 const SIDE_PLANK = (rx, o) => Object.assign({ n: "Side plank", s: hs(rx, 2) + " × 30–45 s each side", cue: "Lie on your side propped on your forearm, elbow under your shoulder. Lift your hips so you're straight from head to feet, and hold. Then the other side.", id: "s_splank", k: "chk" }, o || {});
+/* THE LANDMINE ROTATION: rotation under load, turned from the hips —
+   Tuesday's, straight after the landmine press with the bar still in
+   the landmine, and Saturday's, before the 4 × 4. One exercise, so each
+   day's weight starts from the other's */
+const LAND_ROT = (L, since) => ({ L, n: "Landmine Rotation", since, m: 4, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 3) + " × 6–8 each side",
+  items: (rx) => [{ n: "Landmine rotation", s: hs(rx, 3) + " × 6–8 each side · controlled", cue: "One end of a barbell in a landmine or a corner, the other end at arm's length in front of your chest, feet wide. Swing it down to one hip by turning your hips and pivoting your back foot, arms straight, then across to the other side, trunk braced. Start with the bar plus 5–10 kg.", id: "s_landrot", k: "wr", sets: hs(rx, 3), reps: "6–8/side" }],
+  why: "Rotation under load, driven from the hips: the force side of the turn the throws train fast." });
 const RUN_FIELDS = [{ k: "w", l: "DISTANCE (KM)" }, { k: "hr", l: "AVERAGE HEART RATE (BPM)" }];
 
 /* ---------- the warm-ups ---------- */
@@ -262,8 +269,8 @@ export const SS = {
       items: (rx) => [{ n: "Chest-supported rear-delt raise", s: hs(rx, 3) + " × 15–20 · one or two left", cue: "Lie face down on an incline bench with light dumbbells hanging straight down. Raise your arms out to the sides to shoulder height, little fingers leading, squeeze the backs of your shoulders, then lower slowly.", id: "s_rdraise", k: "wr", sets: hs(rx, 3), reps: "15–20" }] }] },
 
   /* ---------------- TUESDAY ---------------- */
-  tue: { n: "TUESDAY", t: "Upper strength — rotational throws, then bench and weighted chin-ups, the landmine press, rows, dips, lateral raises and the ab wheel, then the bursts and the pressure rounds", ac: C.cobalt, box: 1,
-    intro: "Rotational throws while you're fresh, then bench, weighted chin-ups and the landmine press heavy, then rows and dips for size, then 6-second bursts and the pressure rounds on the assault bike.", b: [
+  tue: { n: "TUESDAY", t: "Upper strength — rotational throws, then bench and weighted chin-ups, the landmine press and landmine rotations, rows, dips, lateral raises and the ab wheel, then the bursts and the pressure rounds", ac: C.cobalt, box: 1,
+    intro: "Rotational throws while you're fresh, then bench, weighted chin-ups and the landmine press heavy, then landmine rotations, then rows and dips for size, then 6-second bursts and the pressure rounds on the assault bike.", b: [
     { L: "A", n: "Warm-up", m: 6, p: "S_WU_TUE", rxLine: () => "6 min · bands, push-ups, two easy throws of each" },
     /* ROTATION: the second throws of the week, three and four days from
        Saturday's, the straight and the hook — first, while you're fresh */
@@ -302,6 +309,7 @@ export const SS = {
       rxLine: (rx) => hs(rx, by(rx, LMP)[0]) + " × " + by(rx, LMP)[1] + " each side",
       items: (rx) => [{ n: "One-arm landmine press", s: hs(rx, by(rx, LMP)[0]) + " × " + by(rx, LMP)[1] + " each side · the heaviest that leaves two in you", cue: "One end of a barbell in a landmine or a corner, the other end at your shoulder in one hand. Split stance, the opposite foot forward, ribs down. Press the bar up and forward until your arm is straight, leaning into it, then lower it under control. Never lean back. Log the weight you add to the bar.", id: "s_lmpress", k: "wr", sets: hs(rx, by(rx, LMP)[0]), reps: by(rx, LMP)[1] + "/side" }],
       why: "Shoulders pressed heavy, one side at a time, with no bar straight overhead." },
+    LAND_ROT("J", "2026-11-14"),
     { L: "E", n: (rx) => (rx.upper4 ? "Chest-Supported Row + Push-Ups" : "Chest-Supported Row + Weighted Dip"), m: 9, pair: 1,
       rxLine: () => "alternate · 90 s after each",
       items: (rx) => [{ n: "Chest-supported dumbbell row", s: hs(rx, 3) + " × 8–10 · one or two left", cue: "Chest on a bench set at about 30 degrees, a dumbbell in each hand. Row your elbows back to your hips, squeeze, then lower to a full stretch.", id: "s_csrow", k: "wr", sets: hs(rx, 3), reps: "8–10", rest: "Rest 90 s · then the " + (rx.upper4 ? "push-ups" : "dip"), rt: 90 },
@@ -452,9 +460,7 @@ export const SS = {
        hips — before the 4 × 4, with nothing heavy after it */
     { L: "J", n: "Side Plank", since: "2026-11-09", m: 3, rest: "Rest 30 s", rt: 30, rxLine: (rx) => hs(rx, 2) + " × 30–45 s each side",
       items: (rx) => [SIDE_PLANK(rx)] },
-    { L: "K", n: "Landmine Rotation", since: "2026-11-09", m: 4, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 3) + " × 6–8 each side",
-      items: (rx) => [{ n: "Landmine rotation", s: hs(rx, 3) + " × 6–8 each side · controlled", cue: "One end of a barbell in a landmine or a corner, the other end at arm's length in front of your chest, feet wide. Swing it down to one hip by turning your hips and pivoting your back foot, arms straight, then across to the other side, trunk braced. Start with the bar plus 5–10 kg.", id: "s_landrot", k: "wr", sets: hs(rx, 3), reps: "6–8/side" }],
-      why: "Rotation under load, driven from the hips: the force side of the turn the throws train fast." },
+    LAND_ROT("K", "2026-11-09"),
     { L: "H", n: (rx) => (rx.e === "vo2s" ? "The 3 × 4 Intervals" : "The 4 × 4 Intervals"), m: 30, star: 1, hard: 1, eng: 1, engKey: "e",
       timer: (rx) => ({ kind: "vo2", opt: { n: 4, short: rx.e === "vo2s" ? 1 : 0, wu: 5, cd: 3 }, title: rx.e === "vo2s" ? "THE 3 × 4" : "THE 4 × 4" }),
       rxLine: (rx) => (SPPENG[rx.e] || SPPENG.vo2).d,
