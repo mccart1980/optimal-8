@@ -366,3 +366,44 @@ Every exercise, session, test and move in the program, in two or three plain lin
 **THE MOVEMENT SESSION** — Thirty minutes at home, slow and controlled: breathe down, loaded joint circles, a slow Turkish get-up, the squat flow, the hip flow and the shoulder flow. The app times each move.
 
 **TRANSITION WEEK** — The week or two after a fight. Three days of only RANGE, the sit and walking; then easy base rides, the movement session and calisthenics at half sets. Nothing heavier than 70%, no sprints, no rounds. First, if you were stopped or dropped, or have any headache, fogginess, dizziness or sensitivity to light: a doctor clears you before any training.
+## OPTIMAL 8 · MOVE
+
+**EASY BIKE, TWO MINUTES** — Pedal easy for two minutes, easy enough to talk. Just to get warm.
+
+**90/90 SWITCHES, BY LEVEL** — Sit on the floor, both knees bent to right angles, one leg in front with the shin across you, the other out to the side behind you. Swing both knees over to face the other way, and back. Your level says what your hands do.
+
+**COSSACK SQUAT, BY LEVEL** — Feet very wide, toes slightly out. Sit all the way down over one leg; the other leg straight, heel down and toes up. Chest up, the bent leg's heel flat. Pause 3 seconds at the bottom, then come up and go to the other side. Your level says what you hold.
+
+**SPANISH SQUAT HOLD, BY LEVEL** — A heavy band round the rack at knee height and behind both knees. Sit back to the depth your level says, shins vertical, leaning into the band, and hold dead still. Hard: 7 out of 10. It burns above the kneecap, never inside the knee. For the knee tendons.
+
+**HIP AIRPLANES, BY LEVEL** — Stand on one leg and hinge until your chest is level with the floor. Slowly turn your chest down to face the floor, then open it right up to the ceiling, the hip doing the turning. Your level says whether a hand is on the rack or a plate is at your chest.
+
+**TURKISH GET-UP, SLOW** — Lie on your back with the weight your level says pressed straight up in one hand, the same-side knee bent. Roll onto the other elbow, then that hand. Lift your hips, sweep the straight leg back under you to kneel, and stand up. Then reverse it back down. Hold every position for 3 seconds. The weight points at the ceiling the whole way, and your eyes stay on it.
+
+**BIRD DOG** — On all fours, back flat, as if a glass of water sat on it. Reach your right arm forward and your left leg back until both are level with your body, and hold. Hand and knee back down, then the other pair. The back stays still while the hips and shoulders move, with very little load on the spine.
+
+**CABLE EXTERNAL ROTATION AT SHOULDER HEIGHT** — A cable or band at shoulder height in front of you. Upper arm out to the side at shoulder height, elbow bent to a right angle, forearm pointing forward. Rotate the forearm up until it points at the ceiling, hold 2 seconds, and lower slowly. For the back of the shoulder, the muscles that slow the arm down.
+
+**PUSH-UP PLUS** — A push-up, and at the top push the floor further away so your shoulder blades spread apart, then back to a normal top before the next rep. It trains the muscle that turns the shoulder blade upward for reaching overhead.
+
+**GOBLET SQUAT PRY** — Hold a kettlebell or dumbbell at your chest and sit to the bottom of a squat, heels down. Elbows inside your knees, push your knees out and shift slowly side to side over each ankle.
+
+**PRONE Y-RAISE** — Face down on a bench set at 30–45 degrees, very light dumbbells, thumbs up. Raise your arms up and out in a Y to ear height, hold 2 seconds, and lower. Overhead strength with no load on your back.
+
+**SIDE-LYING DUMBBELL EXTERNAL ROTATION** — Lie on your side, a rolled towel under the top elbow, elbow bent to a right angle against your side, a light dumbbell in that hand. Rotate the dumbbell up as far as you can, then lower slowly.
+
+**WORLD'S GREATEST STRETCH** — A long lunge forward. Drop the same-side elbow to the inside of the front foot, then turn that arm up to the ceiling and follow it with your eyes. Step through to the other side. Hip flexor, groin, hamstring and mid-back in one.
+
+**ELBOW TO THE CEILING** — On all fours, one hand behind your head. Turn your chest and point that elbow at the ceiling, then back down. At the higher level, kneel on one knee with a light plate held at your chest and turn toward the front knee.
+
+**SINGLE-LEG CALF HOLD** — Stand on one foot on a step or plate, the other hand on the rack, a dumbbell in the same hand as the working leg at the higher levels. Rise halfway up onto your toes and hold. Heavy enough that 30 seconds is hard: that's what changes the Achilles.
+
+**COPENHAGEN PLANK, KNEE OR ANKLE** — Lie on your side, propped on your forearm. Level 1: your top leg's knee on a bench, the bottom leg underneath. Level 2: your top ankle on the bench. Lift your hips until your body is a straight line, and hold. The inner thigh, the muscle you pivot off, and the side of the trunk.
+
+**BACK EXTENSION** — On the 45-degree back extension: hips on the pad, ankles locked under the rollers, arms crossed on your chest. Weeks 1–4, hold your body in a straight line from head to heels. From week 5, curl down slowly one bit of your spine at a time as far as you go, then rise back up to a straight line, and no further; 2 seconds at the top.
+
+**JEFFERSON CURL** — Stand on a box, legs straight, a light dumbbell held in both hands. Chin to chest, then roll down one vertebra at a time for 5 seconds, as far as your hamstrings let you, the weight hanging below your feet; roll back up the same way in 5 seconds. Only once its gate is passed: a back hold of 2 minutes or more, fingertips to the floor, and four weeks with no back pain.
+
+**THE BACK HOLD** — Standard 11, on MOVE's test weeks, in the back extension's slot: on the 45-degree back extension, body in a straight line, arms crossed. Hold as long as you can and log the seconds. The target is 3 minutes.
+
+**THE FIFTEEN STANDARDS** — Optimal 8 · Move's tests, in weeks 1, 5, 9 and 13 and every eight weeks after, on the Sunday weekly check: floor to standing, one leg with eyes closed, the deep squat, the 90/90, the toe touch, the wall overhead, hands behind the back, knee to wall, the dead hang, single-leg calf raises, the back hold (in Sunday's session), the couch position, the seated turn, the neck turn and the wrist bend. RANGE stays at 20 minutes until the range standards are met.

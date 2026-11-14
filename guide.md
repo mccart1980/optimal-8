@@ -52,6 +52,9 @@ The app builds everything from that. The engine always comes first. Change anyth
 ## STRENGTH, POWER AND PHYSIQUE
 Twelve weeks: three of size, a lighter week, three of strength, a lighter week, three of power, then the test week. Monday and Thursday are the legs, heavy then fast; Tuesday and Saturday the upper body, heavy then fast, with 6-second bursts and the pressure rounds on the assault bike after Tuesday's and the 4 × 4 on the bike after Saturday's; Wednesday and Sunday are size for chest, back, shoulders and arms, then a 30-minute run breathing through your nose. Friday is off. Two exercises on one card are a pair: a set of one, the rest, a set of the other. The ramp to the working sets is on each main lift's card. Every other exercise with a weight has a box for it above the sets, with last time's sets over it; NUMBERS charts them. The food is yours: the app runs the day as printed.
 
+## OPTIMAL 8 · MOVE
+It runs beside Strength, Power and Physique from Monday 16 November. Every gym morning opens with the movement block in the warm-up's place. In the evenings, RANGE runs five nights, Session A is on Wednesday and Session B on Sunday; the morning five goes. Thursday ends with the Copenhagen plank, and Sunday has the back extension after the hammer curls. Every move with levels shows yours on its card: tap UP when it's been clean twice running, DOWN when the pain rule says. The fifteen standards come up on the Sunday weekly check in Move's weeks 1, 5, 9 and 13, then every eight weeks; PROGRESS → RANGE keeps them. RANGE drops to THE KEEP once the range standards are met. MORE → SETTINGS has the date week 1 began. The whole program is in PLAN → MOVE.
+
 ## LIGHTER WEEKS
 The app marks them. Everything is lighter on purpose. Do not add anything. This is where the gains actually land.
 

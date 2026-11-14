@@ -89,6 +89,7 @@ export function Checklist({ rows, ticks, onTick }) {
               background: ticks[i] ? soft(C.moss) : "transparent", color: ticks[i] ? C.chalk : C.ash, border: "2px solid " + (ticks[i] ? C.moss : C.line) })}>{ticks[i] ? "✓" : ""}</span>
             <span style={{ flex: 1, minWidth: 0 }}>
               <span style={Object.assign({}, bdy, { display: "block", fontSize: T3, fontWeight: 700, color: ticks[i] ? C.ash : C.chalk })}>{r.n}{r.s ? <span style={Object.assign({}, mno, { fontWeight: 400, color: C.brass })}>{"  " + r.s}</span> : null}</span>
+              {r.level ? <span data-testid="row-level" style={Object.assign({}, mno, { display: "block", fontSize: T3, color: C.violet, lineHeight: 1.4, marginTop: 4 })}>{r.level}</span> : null}
               {r.text ? <span style={Object.assign({}, bdy, { display: "block", fontSize: T3, color: C.ash, lineHeight: 1.5, marginTop: 4 })}>{r.text}</span> : null}
             </span>
           </button>))}

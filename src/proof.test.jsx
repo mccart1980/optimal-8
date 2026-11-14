@@ -3,6 +3,7 @@ import campMd from "../optimal-8-camp.md?raw";
 import prepMd from "../optimal-8-prep.md?raw";
 import builderMd from "../season-builder.md?raw";
 import sppMd from "../optimal-8-strength-power-physique.md?raw";
+import moveMd from "../optimal-8-move.md?raw";
 import { sessionCatalog, seasonWeeks } from "./App.jsx";
 import { GRID } from "./proof-grid.js";
 
@@ -210,7 +211,7 @@ describe("the standing rules", () => {
 });
 
 /* ---------------- 5 · nothing invented ---------------- */
-const DOCS = (prepMd + "\n" + campMd + "\n" + builderMd + "\n" + sppMd);
+const DOCS = (prepMd + "\n" + campMd + "\n" + builderMd + "\n" + sppMd + "\n" + moveMd);
 const norm = (t) => String(t).toLowerCase().replace(/[‘’']/g, "").replace(/[–—-]/g, " ").replace(/[^a-z0-9%.×]+/g, " ").replace(/\s+/g, " ");
 const DOCN = norm(DOCS);
 /* the library entries whose own name isn't how the pages say it, with
@@ -236,6 +237,7 @@ const SAID_AS = {
   "LYING NECK CURLS": "lying neck curl", "LYING NECK EXTENSIONS": "lying neck extension", "SIDE NECK RAISES": "side neck raise",
   "CHEST-SUPPORTED REAR-DELT RAISES": "chest supported rear delt raise",
   "FOREARM SIDE PLANK": "side plank",
+  "EASY BIKE, TWO MINUTES": "easy bike, 2 minutes", "COPENHAGEN PLANK, KNEE OR ANKLE": "copenhagen plank", "SPANISH SQUAT HOLD, BY LEVEL": "spanish squat hold", "HIP AIRPLANES, BY LEVEL": "hip airplanes", "COSSACK SQUAT, BY LEVEL": "cossack squat", "90/90 SWITCHES, BY LEVEL": "90/90 switches",
 };
 const SESSION_SAID = { vo2: "4 minute intervals", rz: "repeat bursts", rz1: "bursts 1 × 8", lac: "40 second repeats", lac2: "40 s repeats 2 × 6", tempo: "tempo",
   thr: "threshold", erg: "rounds on the erg", erg8: "rounds on the erg", ergrounds: "rounds on the erg", fp: "fight pace", fightpace: "fight pace",

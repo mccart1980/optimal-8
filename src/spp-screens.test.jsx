@@ -54,7 +54,7 @@ describe("the week and its main lifts", () => {
     await at(2027, 2, 15, spp());
     expect(title()).toBe("Strength & Power · Week 1 · Size");
     const rows = wholeDay();
-    ["Warm-up", "Box Jumps", "Back Squat", "Romanian Deadlift", "Bulgarian Split Squat", "Seated Leg Curl", "Standing Calf Raise + Hanging Leg Raise"]
+    ["The movement block", "Box Jumps", "Back Squat", "Romanian Deadlift", "Bulgarian Split Squat", "Seated Leg Curl", "Standing Calf Raise + Hanging Leg Raise"]
       .forEach((n, i, a) => { expect(rows).toContain(n); if (i) expect(before(rows, a[i - 1], n)).toBe(true); });
     // the two nasal runs are the easy work: no easy hour
     expect(rows).not.toContain("The easy hour");
@@ -242,7 +242,8 @@ describe("the sprints' buttons", () => {
     cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
     await at(2026, 11, 23, live());
     const light = wholeDay();
-    expect(light.slice(light.indexOf("Warm-up"), light.indexOf("Warm-up") + 3)).toEqual(["Warm-up", "Box Jumps", "Load-Velocity Profile — Squat"]);
+    /* Optimal 8 · Move's week 2: the movement block in the warm-up's place */
+    expect(light.slice(light.indexOf("The movement block"), light.indexOf("The movement block") + 3)).toEqual(["The movement block", "Box Jumps", "Load-Velocity Profile — Squat"]);
     expect(pick("Box Jumps").querySelectorAll("[data-set-btn]")).toHaveLength(2);
     cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
     await at(2026, 11, 16, live(), { "o8s-ready": { "mSw3-mon": "R" } });
@@ -378,7 +379,7 @@ describe("the pressure rounds and the ab finishes", () => {
     await at(2026, 11, 10, live(), { "o8s-ready": { "mSw2-tue": "R" } });
     expect(wholeDay()).not.toContain("Pressure Rounds");
   });
-  it("Thursday ends with the side plank and the dead bug, back to back: the plank counts seconds with no clock after it, the dead bug's set starts 0:30; one set each in week 4", async () => {
+  it("Thursday ends with the side plank and the dead bug, back to back, until Optimal 8 · Move: the plank counts seconds with no clock after it, the dead bug's set starts 0:30; from Move's week 1 the Copenhagen plank, one set in week 4", async () => {
     await at(2026, 11, 5, live());
     const rows = wholeDay();
     expect(rows.indexOf("Side Plank + Dead Bug")).toBe(rows.indexOf("Nordic Curls") + 1);
@@ -393,7 +394,10 @@ describe("the pressure rounds and the ab finishes", () => {
     expect(screen.getByTestId("timer-count").textContent).toBe("0:30");
     cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
     await at(2026, 11, 26, live());
-    expect([...pick("Side Plank + Dead Bug").querySelectorAll("[data-pair-part]")].map((p) => p.querySelectorAll("[data-set-btn]").length)).toEqual([1, 1]);
+    const late = wholeDay();
+    expect(late).not.toContain("Side Plank + Dead Bug");
+    expect(late.indexOf("Copenhagen Plank, Knee or Ankle")).toBe(late.indexOf("Nordic Curls") + 1);
+    expect(pick("Copenhagen Plank, Knee or Ankle").querySelectorAll("[data-set-btn]")).toHaveLength(1);
   });
   it("Saturday: the side plank, then the landmine rotation in added kilos, before the 4 × 4; a plank set starts 0:30, a rotation set 1:00; both run on a red morning", async () => {
     await at(2026, 11, 7, live());
@@ -737,5 +741,106 @@ describe("repeat the week", () => {
     cleanup();
     await at(2026, 11, 23, kept);
     expect(title()).toBe("Strength & Power · Week 3 · Size");
+  });
+});
+
+describe("Optimal 8 · Move", () => {
+  /* the plan in use: Prep from 26 October, Strength, Power and Physique from Monday 2 November; Move's week 1 is 16 November, SPP's week 3 */
+  const live = (extra) => base(Object.assign({ plans: [{ from: "2026-10-26", made: "2026-10-25", inputs: PREP }, { from: "2026-11-02", made: "2026-11-01", inputs: Object.assign({}, SPP, { restart: true }) }], season: SPP }, extra || {}));
+  const again = () => { cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true"); };
+  const levelIds = (card) => [...card.querySelectorAll("[data-level-id]")].map((e) => e.getAttribute("data-level-id"));
+  it("Monday 16 November: the movement block in the warm-up's place, every move with levels showing its level; UP saves it; no morning five. The Monday before is as it was", async () => {
+    await at(2026, 11, 16, live());
+    expect(title()).toBe("Strength & Power · Week 3 · Size");
+    let rows = wholeDay();
+    expect(rows).not.toContain("The morning five");
+    expect(rows).not.toContain("Warm-up");
+    expect(rows.slice(rows.indexOf("The movement block"), rows.indexOf("The movement block") + 3)).toEqual(["The movement block", "Box Jumps", "Back Squat"]);
+    const card = pick("The movement block");
+    expect(within(card).getByTestId("card-pres").textContent).toBe("11 min · hips, knees and lower back");
+    expect(within(card).getAllByTestId("row-level").map((e) => e.textContent)).toEqual(["LEVEL 1 OF 3 — Hands on the floor behind you", "LEVEL 1 OF 5 — Holding a rack upright",
+      "LEVEL 1 OF 3 — 6-second holds", "LEVEL 1 OF 3 — A quarter squat"]);
+    expect(card.textContent).toMatch(/Pedal easy for two minutes, easy enough to talk\./);
+    expect(levelIds(card)).toEqual(["mv_9090", "mv_cossack", "mv_birddog", "mv_spanish"]);
+    const cos = card.querySelector("[data-level-id='mv_cossack']");
+    fireEvent.click(within(cos).getByRole("button", { name: "▲ UP" }));
+    expect(screen.getByTestId("now-card").querySelector("[data-level-id='mv_cossack'] [data-testid='move-level-line']").textContent).toBe("LEVEL 2 OF 5 — No support");
+    expect(JSON.parse(localStorage.getItem("o8s-log"))["move-lv"]).toEqual({ lv: { mv_cossack: 2 } });
+    expect(within(screen.getByTestId("now-card")).getAllByTestId("row-level")[1].textContent).toBe("LEVEL 2 OF 5 — No support");
+    again();
+    await at(2026, 11, 9, live());
+    rows = wholeDay();
+    expect(rows).toContain("The morning five");
+    expect(rows).toContain("Warm-up");
+    expect(rows).not.toContain("The movement block");
+  });
+  it("the evenings: RANGE re-aimed, 27 cards, five nights; Session A on Wednesday, its levels on the cards; Thursday ends with the Copenhagen plank and its level", async () => {
+    await at(2026, 11, 16, live());
+    expect(pick("RANGE").textContent).toMatch(/CARD 1 OF 27/);
+    again();
+    await at(2026, 11, 18, live(), { "o8s-log": { "move-lv": { lv: { mv_curlup: 2 } } } });
+    let rows = wholeDay();
+    expect(rows).not.toContain("RANGE");
+    const a = pick("Session A · hips, lower back, balance");
+    expect(a.textContent).toMatch(/CARD 1 OF 16/);
+    expect(levelIds(a)).toEqual(["mv_curlup", "mv_bridge", "mv_floor", "mv_balance", "mv_rnordic", "mv_squat", "mv_kneel", "mv_slr"]);
+    fireEvent.click(within(a).getByRole("button", { name: "Next card" }));
+    fireEvent.click(within(a).getByRole("button", { name: "Next card" }));
+    expect(a.textContent).toMatch(/McGILL CURL-UP.*LEVEL 2 OF 3 — Elbows lifted/);
+    again();
+    await at(2026, 11, 19, live());
+    rows = wholeDay();
+    expect(rows).toContain("RANGE");
+    expect(rows.indexOf("Copenhagen Plank, Knee or Ankle")).toBe(rows.indexOf("Nordic Curls") + 1);
+    const cp = pick("Copenhagen Plank, Knee or Ankle");
+    expect(cp.querySelectorAll("[data-set-btn]")).toHaveLength(2);
+    expect(levelIds(cp)).toEqual(["mv_copen"]);
+    expect(within(cp).getByTestId("move-level-line").textContent).toBe("LEVEL 1 OF 2 — Knee on the bench");
+  });
+  it("Sunday 22 November, Move's first test week: the back hold after the hammer curls, logged from the session into the standards; the fifteen standards on the weekly list; the lower back scored; Session B in the evening", async () => {
+    await at(2026, 11, 22, live());
+    const rows = wholeDay();
+    expect(rows.indexOf("The Back Hold")).toBe(rows.indexOf("Hammer Curl") + 1);
+    expect(rows).toContain("Session B · shoulders, mid-back, neck, wrists, ankles");
+    expect(rows).not.toContain("RANGE");
+    expect(rows).toContain("The fifteen standards");
+    const bh = pick("The Back Hold");
+    expect(bh.textContent).toMatch(/Standard 11, on MOVE's test weeks/);
+    fireEvent.change(bh.querySelector("input"), { target: { value: "95" } });
+    expect(JSON.parse(localStorage.getItem("o8s-log"))["mSw3-sun-mv11"]).toEqual({ w: "95" });
+    const labels = [...pick("Weekly Check").querySelectorAll("label")].map((l) => l.textContent);
+    expect(labels.indexOf("LOWER BACK (0–10)")).toBe(labels.indexOf("HIPS (0–10)") + 1);
+    expect(labels).toContain("EVENINGS YOU DID RANGE OR A MOVEMENT SESSION (0–7)");
+    const st = pick("The fifteen standards");
+    fireEvent.click(within(st).getByRole("button", { name: "▶ THE STANDARDS" }));
+    expect(screen.getAllByText("THE FIFTEEN STANDARDS").length).toBeGreaterThan(0);
+    expect(screen.getByTestId("move-gym-field").textContent).toBe("95 S · FROM SUNDAY'S SESSION");
+  });
+  it("Sunday 29 November: the back extension held still, 3 × 30 s; Sunday 15 November is as it was", async () => {
+    await at(2026, 11, 29, live());
+    const rows = wholeDay();
+    expect(rows).not.toContain("The fifteen standards");
+    expect(within(pick("Back Extension")).getByTestId("card-pres").textContent).toMatch(/^3 × 30 s · body straight/);
+    again();
+    await at(2026, 11, 15, live());
+    const before = wholeDay();
+    expect(before).not.toContain("Back Extension");
+    expect(before).toContain("The morning five");
+    expect(before).toContain("RANGE");
+    expect(before).not.toContain("Session B · shoulders, mid-back, neck, wrists, ankles");
+  });
+  it("PROGRESS: the standards, test week by test week; Settings moves week 1, and the weeks before it keep the warm-up", async () => {
+    await at(2026, 12, 15, live(), { "o8s-log": { "mSw3-range-mv1": { w: "8" }, "mSw3-range-mv3": { w: "45" }, "mSw3-sun-mv11": { w: "95" }, "mSw7-range-mv1": { w: "10" }, "mSw7-range-mv3": { w: "80" } } });
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "PROGRESS" }));
+    fireEvent.click(screen.getAllByRole("button", { name: "RANGE" })[0]);
+    const t = screen.getByTestId("move-track");
+    expect(t.querySelector("[data-track-standard='s1']").textContent).toBe("1. Floor to standing · 10 out of 10WEEK 1 · 8WEEK 5 · 10 ✓");
+    expect(t.querySelector("[data-track-standard='s3']").textContent).toBe("3. Deep squat · 2 minWEEK 1 · 45WEEK 5 · 80");
+    expect(t.querySelector("[data-track-standard='s11']").textContent).toBe("11. Back hold · 3 minWEEK 1 · 95WEEK 5 · —");
+    again();
+    await at(2026, 11, 16, live({ moveStart: "2026-11-23" }));
+    const rows = wholeDay();
+    expect(rows).toContain("Warm-up");
+    expect(rows).toContain("The morning five");
   });
 });

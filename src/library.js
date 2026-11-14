@@ -86,6 +86,11 @@ const ROW_NAMES = {
   "first, one minute of legs": "POGO HOPS",
   "the warm-up you rehearsed": ["EASY BIKE (WARM-UP)", "BAND PULL-APARTS", "GOBLET SQUAT", "PUSH-UPS", "90/90 HIP SWITCHES", "POGO HOPS"],
   "band pull-aparts and external rotations": ["BAND PULL-APARTS", "BAND EXTERNAL ROTATIONS"],
+  /* Optimal 8 · Move */
+  "back extension hold": "BACK EXTENSION",
+  "back extension full range": "BACK EXTENSION",
+  "back extension full range a plate at your chest": "BACK EXTENSION",
+  "back hold": "THE BACK HOLD",
   "weighted chin-ups + the muscle-up line": ["WEIGHTED CHIN-UPS", "MUSCLE-UP LINE"],
   "bodyweight dip": "WEIGHTED DIPS",
   "weighted chin-up + the muscle-up line": ["WEIGHTED CHIN-UPS", "MUSCLE-UP LINE"],

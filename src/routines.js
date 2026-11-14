@@ -1,4 +1,5 @@
 import homeMd from "../home-routines.md?raw";
+import { levelLine, movePhase } from "./move.js";
 
 /* ================================================================
    THE HOME ROUTINES — home-routines.md, card by card
@@ -102,6 +103,28 @@ export const MOVE_CARDS = numberedCards(sectionOf(S, "THE MOVEMENT SESSION")).ma
   return card(src ? Object.assign({}, c, { words: src.words, from: src.no }) : c);
 });
 
+/* ---------------- OPTIMAL 8 · MOVE ----------------
+   RANGE FOR MOVE: RANGE re-aimed, the five evenings Sessions A and B
+   don't take. Session A on Wednesday evening, Session B on Sunday's. A
+   card whose move has levels shows the level you're on; in OWN (week 9
+   on) the pigeon is two minutes with a push-and-relax at halfway. */
+const asRange = (c) => { const as = c.words.match(/^As RANGE card (\d+)\.?$/);
+  const src = as ? rangeCard(Number(as[1])) : null; return card(src ? Object.assign({}, c, { words: src.words, from: src.no }) : c); };
+export const MOVE_RANGE_CARDS = numberedCards(sectionOf(S, "RANGE FOR MOVE")).map(card);
+export const SESSION_A_CARDS = numberedCards(sectionOf(S, "SESSION A")).map(asRange);
+export const SESSION_B_CARDS = numberedCards(sectionOf(S, "SESSION B")).map(asRange);
+/* the cards whose moves have levels, by name */
+const LV_BY_NAME = [[/CURL-UP/, "mv_curlup"], [/^SIDE BRIDGE/, "mv_bridge"], [/^FLOOR TO STANDING/, "mv_floor"], [/^ONE-LEG BALANCE/, "mv_balance"],
+  [/^REVERSE NORDIC/, "mv_rnordic"], [/^DEEP SQUAT$/, "mv_squat"], [/^90\/90 TO KNEELING/, "mv_kneel"], [/^STRAIGHT-LEG LIFT-OFFS/, "mv_slr"],
+  [/^TURN-OUT LIFTS/, "mv_turnout"], [/^LOADED KNEE TO WALL/, "mv_ktw"], [/^SINGLE-LEG CALF RAISE/, "mv_scalf"]];
+export const levelIdOf = (name) => { const hit = LV_BY_NAME.find((x) => x[0].test(name)); return hit ? hit[1] : null; };
+const OWN_PIGEON = " At halfway: press your front shin into the floor for 5 seconds, relax, and fold further.";
+export const sessionCards = (which, mw, lv) => (which === "A" ? SESSION_A_CARDS : SESSION_B_CARDS).map((c) => {
+  const id = levelIdOf(c.n);
+  let x = id ? Object.assign({}, c, { level: levelLine(lv, id), lv: id }) : c;
+  if (/^PIGEON/.test(c.n) && movePhase(mw) === "own") x = Object.assign({}, x, { secs: 120, amt: "2:00", words: c.words + OWN_PIGEON, halfway: true });
+  return x; });
+
 /* ---------------- THE SKILL BLOCK ---------------- */
 export const SKILL_CARDS = numberedCards(sectionOf(S, "THE SKILL BLOCK")).map(card);
 /* the handstand card carries the level's instruction under its words */
@@ -110,7 +133,8 @@ export const skillCards = (hs) => SKILL_CARDS.map((c) => (/HANDSTAND/.test(c.n) 
 
 /* the amounts in the section headings: "about 20 minutes", "5 minutes" */
 const minsOf = (start) => { const k = Object.keys(S).find((x) => x.indexOf(start) === 0); const m = k ? k.match(/(\d+)\s*minutes/) : null; return m ? Number(m[1]) : null; };
-export const ROUTINE_MINS = { range: minsOf("RANGE · "), fight: minsOf("RANGE — FIGHT WEEK"), keep: minsOf("THE KEEP"), move: minsOf("THE MOVEMENT SESSION"), skill: minsOf("THE SKILL BLOCK") };
+export const ROUTINE_MINS = { range: minsOf("RANGE · "), fight: minsOf("RANGE — FIGHT WEEK"), keep: minsOf("THE KEEP"), move: minsOf("THE MOVEMENT SESSION"), skill: minsOf("THE SKILL BLOCK"),
+  moveRange: minsOf("RANGE FOR MOVE"), sessA: minsOf("SESSION A"), sessB: minsOf("SESSION B") };
 
 /* the line under a card's words: HOLD with a clock, or the reps */
 export const doseLine = (c) => (c.kind === "hold" ? "HOLD" : "REPS " + c.amt);
