@@ -2,7 +2,8 @@ import { describe, it, expect } from "vitest";
 import sppMd from "../optimal-8-strength-power-physique.md?raw";
 import builderMd from "../season-builder.md?raw";
 import { buildSeason, rowRx, describeSeason, CYCLE12, CYCLE16 } from "./builder.js";
-import { SPP_ROWS, sppRx, sppSess, sppTests, sppVelPhase, sppRamp, sppPhotoDay, sppMainLine, sppPp, sppSled, SPPROTO, SPPENG, SPP_READY_LINE } from "./spp.js";
+import { SPP_ROWS, sppRx, sppSess, sppTests, sppVelPhase, sppRamp, sppPhotoDay, sppMainLine, sppPp, sppSled, SPPROTO, SPPENG, SPP_READY_LINE,
+  ENGINE_SINCE, sppEasyHour, sppSunRun } from "./spp.js";
 import { targetFor, TYPICAL } from "./velocity.js";
 import { parseKey, inScope, scopeOf, weekLabel, ergSeries, series, DASH_IDS, lastSession, rangeTop, topOfRange, liftHistory } from "./metrics.js";
 import { libFor } from "./library.js";
@@ -375,13 +376,15 @@ describe("8 · rotation and the trunk", () => {
     expect(trunk.hard).toBeUndefined();
     expect(sppMd).toMatch(/\*\*Pallof press\*\*, 3 × 10 each side\. Rest 60 seconds after each pair/);
   });
-  it("the week's minutes: Tuesday about 98 with the pressure rounds, the landmine rotation and the movement block, Sunday about 85 with the movement block and the back extension, as the document's table says", () => {
+  it("the week's minutes: Tuesday about 98 with the pressure rounds, the landmine rotation and the movement block, Sunday about 85 with the movement block and the back extension, 95 with the 40-minute run, as the document's table says", () => {
     const mv = (w) => Object.assign({}, sppRx(w), { mw: 1 });
     expect([1, 5, 9].map((w) => sppSess("tue").m(sppRx(w)))).toEqual([92, 98, 99]);
     expect([1, 5, 9].map((w) => sppSess("tue").m(mv(w)))).toEqual([94, 100, 101]);
     expect([sppSess("sun").m(sppRx(1)), sppSess("sun").m(mv(1))]).toEqual([76, 85]);
     expect(sppMd).toMatch(/\| Tuesday \|[^\n]*\| ~98 min \|/);
-    expect(sppMd).toMatch(/\| Sunday \|[^\n]*the back extension and the Pallof press[^\n]*\| ~85 min \|/);
+    /* and from the engine base's first week, Sunday's nasal run at 40: about 95 */
+    expect(sppSess("sun").m(Object.assign(mv(1), { eb: true }))).toBe(95);
+    expect(sppMd).toMatch(/\| Sunday \|[^\n]*the back extension and the Pallof press, then a 40-minute nasal run \| ~95 min \|/);
   });
 });
 
@@ -434,7 +437,7 @@ describe("9 · the abs, the traps, the rear delts and the neck", () => {
     expect(sppMd).toMatch(/\*\*Chest-supported rear-delt raise\*\* — 3 × 15–20\. Rest 60 seconds\./);
     expect(sppMd).toMatch(/\| Wednesday \| \*\*Physique A\*\* — chest and back for size, rear delts and cable crunches/);
   });
-  it("the week's minutes and the document: Monday ~79, Wednesday ~79, Thursday ~91 with the Copenhagen plank, Sunday ~85, about eight and three-quarter hours with Optimal 8 · Move", () => {
+  it("the week's minutes and the document: Monday ~79, Wednesday ~79, Thursday ~91 with the Copenhagen plank, Sunday ~85, ~95 with the engine base, about nine and three-quarter hours with the easy hour", () => {
     const mv = (w) => Object.assign({}, sppRx(w), { mw: 1 });
     expect([1, 5, 9].map((w) => sppSess("mon").m(sppRx(w)))).toEqual([71, 75, 75]);
     expect([1, 5, 9].map((w) => sppSess("mon").m(mv(w)))).toEqual([77, 81, 81]);
@@ -444,7 +447,7 @@ describe("9 · the abs, the traps, the rear delts and the neck", () => {
     expect(sppMd).toMatch(/\| Monday \|[^\n]*then the neck and rear delts \| ~79 min \|/);
     expect(sppMd).toMatch(/\| Wednesday \|[^\n]*cable crunches[^\n]*\| ~79 min \|/);
     expect(sppMd).toMatch(/\| Thursday \|[^\n]*trap bar shrugs[^\n]*then the Copenhagen plank \| ~91 min \|/);
-    expect(sppMd).toMatch(/About eight and three-quarter hours a week\./);
+    expect(sppMd).toMatch(/About nine and three-quarter hours a week\./);
     expect(sppMd).toMatch(/\*\*Cable crunch\*\*, 3 × 10–15\. Rest 60 seconds after each pair/);
     expect(sppMd).toMatch(/\*\*Trap bar shrug\*\* — 3 × 8–12\. Rest 75 seconds\. Straight after the deadlift/);
     expect(sppMd).toMatch(/\*\*Lying neck curl\*\*, 3 × 15–20, back to back with 9/);
@@ -474,7 +477,7 @@ describe("10 · the pressure rounds and the ab finishes", () => {
     expect([out.id, out.k]).toEqual(["s_press", "out"]);
     expect(sppMd).toMatch(/\*\*Pressure rounds\*\* — 3 rounds, 2 in weeks 4, 8 and 12\. Straight after the bursts, on the same bike/);
     expect(sppMd).toMatch(/\| Tuesday \|[^\n]*6-second bursts and the pressure rounds on the assault bike \| ~98 min \|/);
-    expect(sppMd).toMatch(/two weeks running, the pressure rounds come out for the rest of the twelve weeks/);
+    expect(sppMd).toMatch(/two weeks running, the Saturday easy hour comes out first\. If it happens again, two more weeks running, the pressure rounds come out too, for the rest of the twelve weeks\./);
   });
   it("Thursday's ab finish: before Optimal 8 · Move, the side plank back to back with the dead bug; from its week 1, the Copenhagen plank, 2 × 20–30 s each side, 30 seconds between, last, with its level", () => {
     const thu = names(1, "thu");
@@ -507,7 +510,7 @@ describe("10 · the pressure rounds and the ab finishes", () => {
     expect(card(1, "sat", "Landmine Rotation").lib.map((e) => e.n)).toEqual(["LANDMINE ROTATION"]);
     ["Side Plank", "Landmine Rotation"].forEach((n) => expect(block("sat", n).hard).toBeUndefined());
     expect([1, 5, 9].map((w) => sppSess("sat").m(sppRx(w)))).toEqual([93, 95, 95]);
-    expect(sppMd).toMatch(/\| Saturday \|[^\n]*side planks and landmine rotations, then the 4 × 4 intervals \| ~98 min \|/);
+    expect(sppMd).toMatch(/\| Saturday \|[^\n]*side planks and landmine rotations, then the 4 × 4 intervals; in the evening, the easy hour on the bike \| ~98 min \+ 45 \|/);
     expect(sppMd).toMatch(/10\. \*\*Landmine rotation\*\* — 3 × 6–8 each side, controlled\. Rest 60 seconds\./);
   });
   it("the side plank's entry leaves the classic's side plank reach-through as it was, with no entry", () => {
@@ -588,8 +591,8 @@ describe("11 · the landmine presses, the side neck raise and the medicine-ball 
     expect([1, 5, 9].map((w) => sppSess("tue").m(sppRx(w)))).toEqual([92, 98, 99]);
     expect(ALL.map((w) => sppSess("wed").m(sppRx(w)))).toEqual(ALL.map(() => 75));
     expect([1, 4, 5, 8, 9, 12].map((w) => sppSess("sat").m(sppRx(w)))).toEqual([93, 87, 95, 87, 95, 88]);
-    expect(sppMd).toMatch(/About 98 minutes\./);
-    expect(sppMd).toMatch(/About eight and three-quarter hours a week\./);
+    expect(sppMd).toMatch(/About 98 minutes, and the easy hour in the evening\./);
+    expect(sppMd).toMatch(/About nine and three-quarter hours a week\./);
   });
   it("the new entries leave every other programme's rows as they were", () => {
     expect(libFor("Push press").map((e) => e.n)).toEqual(["PUSH PRESS"]);
@@ -773,7 +776,7 @@ describe("14 · Tuesday's landmine rotation", () => {
     expect([countsOn(b, "2026-11-10"), countsOn(b, "2026-11-17")]).toEqual([false, true]);
     expect(sppSess("tue").b.filter((x) => x.L).map((x) => x.L).filter((L, i, a) => a.indexOf(L) !== i)).toEqual([]);
   });
-  it("Tuesday about 96 minutes before Optimal 8 · Move, 98 with it; the week about eight and three-quarter hours with it; the title lines name it", () => {
+  it("Tuesday about 96 minutes before Optimal 8 · Move, 98 with it; the week about nine and three-quarter hours with it and the easy hour; the title lines name it", () => {
     expect([1, 4, 5, 8, 9, 12].map((w) => sppSess("tue").m(sppRx(w)))).toEqual([92, 80, 98, 80, 99, 89]);
     const week = (w) => ["mon", "tue", "wed", "thu", "sat", "sun"].reduce((a, d) => a + sppSess(d).m(sppRx(w)), 0);
     expect([1, 5, 9].map(week)).toEqual([496, 512, 513]);
@@ -783,7 +786,7 @@ describe("14 · Tuesday's landmine rotation", () => {
     expect(sppSess("tue").intro).toMatch(/the landmine press heavy, then landmine rotations, then rows and dips for size/);
   });
   it("the document: the week's table, Tuesday's item 6 and the renumbered list, the hours, and why", () => {
-    expect(sppMd).toMatch(/Friday is off\. About eight and three-quarter hours a week\./);
+    expect(sppMd).toMatch(/Friday is off\. About nine and three-quarter hours a week\./);
     expect(sppMd).toMatch(/\| Tuesday \| \*\*Upper strength\*\* — rotational throws, then bench, weighted chins and the landmine press heavy, then landmine rotations, rows and dips, then 6-second bursts and the pressure rounds on the assault bike \| ~98 min \|/);
     expect(sppMd).toMatch(/\n6\. \*\*Landmine rotation\*\* — 3 × 6–8 each side, controlled\. Rest 60 seconds\. Straight after the landmine press, with the bar still in the landmine\./);
     expect(sppMd).toMatch(/\n7\. \*\*Chest-supported dumbbell row\*\*, alternated with 8 —/);
@@ -842,5 +845,49 @@ describe("15 · repeat the week", () => {
   it("the document: season-builder.md says what it does", () => {
     expect(builderMd).toMatch(/\*\*REPEAT WEEK \d+\*\*/);
     expect(builderMd).toMatch(/moves back a week/);
+  });
+});
+
+describe("the engine base: the Saturday easy hour and Sunday's 40-minute run, from Monday 16 November", () => {
+  const eb = (w) => Object.assign({}, sppRx(w), { eb: true, mw: 1 });
+  const run = (d, rx) => sppSess(d).b.find((b) => b.n === "The Nasal Run");
+  const v = (x, rx) => (typeof x === "function" ? x(rx) : x);
+  const CAT = sessionCatalog(["spp"]).filter((c) => c.set === "spp" && c.edge == null);
+  const card = (w, d, n) => CAT.find((c) => c.week === w && c.day === d && c.n === n);
+  it("from the week of 16 November; 45 minutes on Saturday evening, 30 in the lighter weeks and test week; none before", () => {
+    expect(ENGINE_SINCE).toBe("2026-11-16");
+    expect([1, 2, 3, 4, 5, 8, 9, 11, 12].map((w) => sppEasyHour(eb(w)))).toEqual([45, 45, 45, 30, 45, 30, 45, 45, 30]);
+    expect(sppEasyHour(sppRx(1))).toBe(0);
+  });
+  it("Sunday's nasal run: 40 minutes, 30 in the lighter weeks and test week and before the engine base; Wednesday's stays 30", () => {
+    expect([1, 4, 5, 8, 9, 12].map((w) => sppSunRun(eb(w)))).toEqual([40, 30, 40, 30, 40, 30]);
+    expect(sppSunRun(sppRx(1))).toBe(30);
+    const sun = run("sun"), wed = run("wed");
+    expect([v(sun.m, eb(1)), sun.rxLine(eb(1)), sun.timer(eb(1)).opt.min]).toEqual([40, "40 min easy, nose only · 65–75% of peak", 40]);
+    expect([v(sun.m, eb(4)), sun.rxLine(eb(4)), sun.timer(eb(4)).opt.min]).toEqual([30, "30 min easy, nose only · 65–75% of peak", 30]);
+    expect([v(sun.m, sppRx(1)), sun.rxLine(sppRx(1))]).toEqual([30, "30 min easy, nose only · 65–75% of peak"]);
+    expect([v(wed.m, eb(1)), wed.rxLine(eb(1)), wed.timer(eb(1)).opt.min]).toEqual([30, "30 min easy, nose only · 65–75% of peak", 30]);
+    /* the catalog's weeks are all past 16 November */
+    expect([1, 4, 5].map((w) => card(w, "sun", "The Nasal Run").pres)).toEqual(["40 min easy, nose only · 65–75% of peak", "30 min easy, nose only · 65–75% of peak", "40 min easy, nose only · 65–75% of peak"]);
+  });
+  it("the lifting and the hard sessions don't change: every day but Sunday the same minutes, Sunday 10 more", () => {
+    ["mon", "tue", "wed", "thu", "sat"].forEach((d) => [1, 4, 9, 12].forEach((w) => expect(sppSess(d).m(eb(w))).toBe(sppSess(d).m(Object.assign({}, sppRx(w), { mw: 1 })))));
+    expect([1, 4, 9, 12].map((w) => sppSess("sun").m(eb(w)) - sppSess("sun").m(Object.assign({}, sppRx(w), { mw: 1 })))).toEqual([10, 0, 10, 0]);
+    const week = (w) => ["mon", "tue", "wed", "thu", "sat", "sun"].reduce((a, d) => a + sppSess(d).m(eb(w)), 0) + sppEasyHour(eb(w));
+    expect([1, 4, 5, 9, 12].map(week)).toEqual([576, 498, 592, 593, 525]);
+  });
+  it("its words: the Saturday easy hour in the library, and the document's engine, Saturday, Sunday and rules", () => {
+    expect(libFor("the saturday easy hour").map((e) => e.n)).toEqual(["THE SATURDAY EASY HOUR"]);
+    expect(libFor("the saturday easy hour")[0].text).toMatch(/^Strength, Power and Physique's: 45 minutes on a bike, easy enough to talk in full sentences, breathing in and out through your nose the whole way, at 65–75% of your peak heart rate/);
+    expect(sppMd).toMatch(/\*\*The engine base from Monday 16 November\.\*\* Saturday evening gets the easy hour, 45 minutes on the bike, and Sunday's nasal run goes to 40 minutes\. The lifting and the hard engine sessions don't change\./);
+    expect(sppMd).toMatch(/\*\*Then, in the evening · the easy hour, 45 minutes\*\*\n\nAt least six hours after the session/);
+    expect(sppMd).toMatch(/\*\*Then · the nasal run, 40 minutes\*\*\n\nEasy, breathing through your nose only, as on Wednesday\. 30 minutes in the lighter weeks and test week\./);
+    expect(sppMd).toMatch(/\*\*The nasal runs · Wednesday 30 minutes, Sunday 40\*\*/);
+    expect(sppMd).toMatch(/\*\*The Saturday easy hour · 45 minutes, in the evening\*\*/);
+    expect(sppMd).toMatch(/There's no third hard session, and no hard engine work in the 24 hours before Monday or Thursday\./);
+    expect(sppMd).toMatch(/the size work runs as written, and so do the nasal runs and the easy hour\./);
+    expect(sppMd).toMatch(/the Saturday easy hour goes first, then the nasal runs, because the boxing covers that work\./);
+    expect(sppMd).toMatch(/\*\*The base built, the hard work held\.\*\*/);
+    expect(sppMd).not.toMatch(/engine held where it is/);
   });
 });

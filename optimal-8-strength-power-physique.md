@@ -1,6 +1,6 @@
 # OPTIMAL 8 · STRENGTH, POWER AND PHYSIQUE
 
-**Twelve weeks to make you as strong, as explosive and as muscular as you can be, six days a week, with your engine held where it is. It runs in three blocks — size, then strength, then power — and every block keeps all three going. It's its own programme, beside Prep and Optimal 8 Fighter: Settings → Fight booked? No → What runs → STRENGTH, POWER, PHYSIQUE. Neither of them changes.**
+**Twelve weeks to make you as strong, as explosive and as muscular as you can be, six days a week, with the base of your engine built underneath. It runs in three blocks — size, then strength, then power — and every block keeps all three going. It's its own programme, beside Prep and Optimal 8 Fighter: Settings → Fight booked? No → What runs → STRENGTH, POWER, PHYSIQUE. Neither of them changes.**
 
 Picked while a Prep is running, the Prep carries on to its test day and the twelve weeks start the Monday after. The weeks are S1 to S12 in the app; after S12 the cycle starts again from the new working maxes. Book a fight and the fight's plan takes over from the next Monday. The food is yours: the app runs the day as printed.
 
@@ -8,9 +8,11 @@ Picked while a Prep is running, the Prep carries on to its test day and the twel
 
 ## THE WEEK
 
-Six sessions: four heavy or fast, two for size with an easy run after. Friday is off. About eight and three-quarter hours a week.
+Six sessions: four heavy or fast, two for size with an easy run after, and an easy hour on the bike on Saturday evening. Friday is off. About nine and three-quarter hours a week.
 
 **Optimal 8 · Move runs beside it from Monday 16 November.** Every session opens with its movement block in the warm-up's place; Thursday's side plank and dead bug become the Copenhagen plank; Sunday adds the back extension after the hammer curls; Monday's calf raise goes heavier and slower. Its evenings, its standards and every move's levels are in its own document, Optimal 8 · Move.
+
+**The engine base from Monday 16 November.** Saturday evening gets the easy hour, 45 minutes on the bike, and Sunday's nasal run goes to 40 minutes. The lifting and the hard engine sessions don't change. Before that week, the two 30-minute runs held the engine where it was.
 
 | Day | Session | Time |
 | --- | --- | --- |
@@ -19,10 +21,10 @@ Six sessions: four heavy or fast, two for size with an easy run after. Friday is
 | Wednesday | **Physique A** — chest and back for size, rear delts and cable crunches, the neck and medicine-ball drops, then a 30-minute nasal run | ~79 min |
 | Thursday | **Lower power** — sled, sprints and jumps, then the trap bar heavy, trap bar shrugs and a second squat, then the Copenhagen plank | ~91 min |
 | Friday | Off — sleep | — |
-| Saturday | **Upper power** — throws, bench throws and the landmine push press, then bench and back for size, side planks and landmine rotations, then the 4 × 4 intervals | ~98 min |
-| Sunday | **Physique B** — shoulders, traps, abs, arms and calves, the back extension and the Pallof press, then a 30-minute nasal run | ~85 min |
+| Saturday | **Upper power** — throws, bench throws and the landmine push press, then bench and back for size, side planks and landmine rotations, then the 4 × 4 intervals; in the evening, the easy hour on the bike | ~98 min + 45 |
+| Sunday | **Physique B** — shoulders, traps, abs, arms and calves, the back extension and the Pallof press, then a 40-minute nasal run | ~95 min |
 
-Heavy and fast days alternate with size days, and the easy runs sit on the size days. That keeps the runs and the fatigue away from the sessions where speed and heavy weights matter most.
+Heavy and fast days alternate with size days, and the easy runs sit on the size days. That keeps the runs and the fatigue away from the sessions where speed and heavy weights matter most. The easy hour goes on Saturday evening, at least six hours after the session: Saturday's power work is upper body, and Monday's squat is two days away.
 
 ---
 
@@ -189,7 +191,7 @@ Before Optimal 8 · Move the finish was the side plank, 2 × 30–45 seconds eac
 
 ## SATURDAY · UPPER POWER
 
-Throws, bench throws and the landmine push press while you're fresh from Friday's rest, then bench and back for size, an ab finish, then the 4 × 4. About 98 minutes.
+Throws, bench throws and the landmine push press while you're fresh from Friday's rest, then bench and back for size, an ab finish, then the 4 × 4. About 98 minutes, and the easy hour in the evening.
 
 **The movement block · 10 minutes** — mid-back, shoulders and Achilles
 
@@ -214,11 +216,15 @@ Throws, bench throws and the landmine push press while you're fresh from Friday'
 
 On the bike: 5 minutes easy, then four hard efforts of 4 minutes with 3 minutes easy between, then 3 minutes easy. The timer runs all of it. The heart rates and what to log are in The engine, below.
 
+**Then, in the evening · the easy hour, 45 minutes**
+
+At least six hours after the session: 45 minutes on a bike, breathing in and out through your nose the whole way, at 65–75% of your peak heart rate. 30 minutes in the lighter weeks and test week. If you use the sauna, switch it on in FOOD that day and it comes straight after. The details are in The engine, below.
+
 ---
 
 ## SUNDAY · PHYSIQUE B
 
-Shoulders, traps, abs, arms and calves for size, and the Pallof press, then a 30-minute nasal run and the weekly check.
+Shoulders, traps, abs, arms and calves for size, and the Pallof press, then a 40-minute nasal run and the weekly check.
 
 **The movement block · 10 minutes** — the whole body
 
@@ -240,9 +246,9 @@ Shoulders, traps, abs, arms and calves for size, and the Pallof press, then a 30
 11. **Seated calf raise**, 3 × 12–15, back to back with 12. Pad on your knees. Lower your heels to a full stretch and hold for two seconds, then rise all the way up.
 12. **Pallof press**, 3 × 10 each side. Rest 60 seconds after each pair. A band or cable at chest height beside you, standing side-on. Hold the handle at your chest, press your hands straight out and hold two seconds without letting it twist you, then bring them back. When 10 is easy, stand further from the anchor.
 
-**Then · the nasal run, 30 minutes**
+**Then · the nasal run, 40 minutes**
 
-Easy, breathing through your nose only, as on Wednesday.
+Easy, breathing through your nose only, as on Wednesday. 30 minutes in the lighter weeks and test week.
 
 **The weekly check.** Bodyweight, waist, resting heart rate, the morning colours, your joints and your lower back, sleep, lights-out, energy and your evenings of RANGE or a movement session — Prep's weekly check. In Optimal 8 · Move's test weeks, its fifteen standards too. In weeks 4, 8 and 12 it takes your arm and shoulders too, and the app asks for the photos.
 
@@ -250,14 +256,25 @@ Easy, breathing through your nose only, as on Wednesday.
 
 ## THE ENGINE
 
-Two easy nasal runs and one hard interval session hold your engine where it is for all twelve weeks, and Tuesday's bursts and pressure rounds add a little power, repeat-effort fitness and fight pace on top. Intensity is what holds it, so the hard session has to stay genuinely hard.
+The base is built and the hard work is held. The two nasal runs and the Saturday easy hour are about two hours a week of easy work: they build the base of your engine, the part that builds slowly and lasts. The 4 × 4 holds the top of it, and Tuesday's bursts and pressure rounds add a little power, repeat-effort fitness and fight pace on top. Intensity is what holds the top, so the hard session has to stay genuinely hard.
 
-**The nasal runs · Wednesday and Sunday, 30 minutes**
+There's no third hard session, and no hard engine work in the 24 hours before Monday or Thursday. Every free slot would put a third one within a day of Monday's squat or Thursday's sprints and jumps, which is where cardio costs power. It's also the part of the engine that fades within two or three weeks, so the camp brings it, closer to the fight.
+
+**The nasal runs · Wednesday 30 minutes, Sunday 40**
 
 - Breathe in and out through your nose the whole way. If you need your mouth, slow down.
 - Heart rate around 65–75% of your peak: the easy zone the app gives you. Flat ground or a treadmill.
 - Never on Monday, Thursday or Saturday. The runs stay off the heavy and fast days.
+- Sunday's is 30 minutes in the lighter weeks and test week.
 - Log the distance and your average heart rate.
+
+**The Saturday easy hour · 45 minutes, in the evening**
+
+- On a bike, at least six hours after the morning's session. The bike spares your Achilles and knees; it isn't that it costs the lifting less than running would.
+- Nose only, at 65–75% of your peak heart rate, the same easy zone as the runs. If you need your mouth, slow down.
+- 30 minutes in the lighter weeks and test week.
+- Log your average heart rate. The same ride at a lower heart rate is the base growing.
+- The sauna, if you use one: switch it on in FOOD on the day and it comes straight after, 15–20 minutes, with its water. Never straight into cold.
 
 **The 4 × 4 · Saturday, after the session**
 
@@ -276,7 +293,7 @@ Eight 6-second bursts on the assault bike, 40 seconds easy spinning between, 2 m
 
 Three rounds of 3 minutes on the same assault bike, with 1 minute's rest between. In each round, a 5-second burst all out every 20 seconds, nine a round, and a steady pace between them, never stopping. A minute easy before and 2 minutes easy after: about 15 minutes, and the timer runs all of it. Clear the bike's screen after the bursts, then log its total at the end and your peak heart rate. Two rounds in the lighter weeks and test week, read only against other twos.
 
-They're the fight sim: bursts with seconds to recover, the way you fight. They cost the power work a little, so they're watched. If Thursday's sled times get slower at the same load, or your jump and throw sets keep ending early, two weeks running, the pressure rounds come out for the rest of the twelve weeks.
+They're the fight sim: bursts with seconds to recover, the way you fight. They cost the power work a little, so they're watched. If Thursday's sled times get slower at the same load, or your jump and throw sets keep ending early, two weeks running, the Saturday easy hour comes out first. If it happens again, two more weeks running, the pressure rounds come out too, for the rest of the twelve weeks.
 
 ---
 
@@ -285,10 +302,10 @@ They're the fight sim: bursts with seconds to recover, the way you fight. They c
 These protect the work, and none of them is optional.
 
 1. **Lighter weeks, 4 and 8.** The squat, bench and trap bar are replaced by their profiles in THE PROFILE: five loads, two fast reps each. Trap bar jumps and bench throws get their four-load profiles. Everything else, the jumps, sled and sprints included, is half the sets, rounded up, the 4 × 4 becomes 3 × 4, the bursts become four, and the pressure rounds two.
-2. **The morning check.** Yellow: every load on the bar 7% lighter, and the 4 × 4 at 90%. Red: the heavy lifts, the sprints, jumps and throws, the 4 × 4, the bursts and the pressure rounds come off; the size work runs as written. Three red mornings in a week make the next week a lighter week.
+2. **The morning check.** Yellow: every load on the bar 7% lighter, and the 4 × 4 at 90%. Red: the heavy lifts, the sprints, jumps and throws, the 4 × 4, the bursts and the pressure rounds come off; the size work runs as written, and so do the nasal runs and the easy hour. Three red mornings in a week make the next week a lighter week.
 3. **Pain.** Anything over 3 out of 10 while you do it, or worse the next morning, stops that exercise for the day; the jumps, sprints and holds have the button for it. Sunday's check runs the tendon gate: Achilles or knee at 3 or more means no reactive jumps the next week, the tendon holds carried on, and once it's back under 3 they restart one stage down for a week; a hamstring at 3 or more means no flying sprints and the Nordics only if they're pain-free; an elbow or a shoulder at 4 or more turns the next week's dips into push-ups and takes Sunday's curls and triceps work off. The same pain two weeks running means a physio.
 4. **Sleep.** Friday is off. Aim for seven hours a night, which at a 3 am start means asleep by 8 pm.
-5. **Boxing evenings.** If you're still boxing, it's extra load on top of all this. When it tips you into red mornings, the nasal runs go first, because the boxing covers that work.
+5. **Boxing evenings.** If you're still boxing, it's extra load on top of all this. When it tips you into red mornings, the Saturday easy hour goes first, then the nasal runs, because the boxing covers that work.
 6. **No true maxes.** Top triples on pins, never singles.
 7. **Bloods and blood pressure** before each cycle: full blood count, lipids, liver, kidneys and blood pressure. With what you're running, those are the numbers that matter.
 
@@ -324,6 +341,7 @@ The next cycle starts from the new numbers, with one tilt towards whatever moved
 - The first cycle moves fastest, because what time off took comes back quicker than it was built.
 - After that, at 45 and already trained, the big lifts move a few per cent a cycle, not tens. That's a good result, not a failure.
 - Power is the hardest quality to raise at your age, and it fades fastest. That's why the fast work runs in every block, never just the last one.
+- The engine: a deeper base by test week, a few per cent, not a transformation, shown as a lower heart rate on the same easy work. The camp builds the fight-specific engine on top of it.
 - The programme gives the stimulus; food and sleep make the look. Short nights will cost you more than any set or rep in here.
 
 ---
@@ -344,7 +362,8 @@ Every choice below rests on trials where trials exist. Where it rests on coachin
 - **Pressing up and forward, not straight overhead.** A bar can only finish straight overhead if the shoulders reach all the way up. When they're stiff, the lower back arches to make up the difference, with the bar's weight on it. The landmine's bar travels up and forward, so both presses finish in front of you. The barbell push press produced as much power as a jump squat (Lake, 2014), and one arm moves less weight, so some leg power is given up; Thursday's jumps, sled and sprints cover it. The swap is a coaching call from how the lifts work, not a trial.
 - **A neck trained in every direction, and a brace that fires on time.** Monday trains the neck forward and back, Wednesday side to side. In pooled trials, neck training with a load made the neck stronger bending forward and to the side (Ivanic, 2024). No trial yet shows that a stronger neck prevents concussion, but a 2025 expert consensus sets out how to train it for the knocks the head takes in sport (Fownes-Walpole, 2025). Wednesday's medicine-ball drops train the trunk to brace the instant something lands on it. No study backs the drops; they're long-standing coaching practice.
 - **Exercises chosen for the stretch.** Overhead triceps extensions grew the triceps 1.4 times as much as pushdowns (Maeo, 2023). Seated leg curls grew the hamstrings more than lying ones, 14% against 9% (Maeo, 2021). The incline curls, deep presses and full-stretch raises follow the same idea.
-- **The engine held, not built.** Endurance can be held for up to 15 weeks on as little as two sessions a week, as long as the intensity stays (Spiering, 2021). The 4 × 4 at 90–95% of peak heart rate raised fitness more than steady or threshold work (Helgerud, 2007). Cardio barely holds back strength or muscle size, but it does blunt explosive power, mostly when both are in the same session (Schumann, 2022). So there's one long hard session, not two; the bursts and the pressure rounds are 25 minutes on an upper-body day, two days clear of Thursday's sprints and jumps; and the runs are easy and kept off the fast days.
+- **The base built, the hard work held.** Aerobic endurance and maximum strength both build slowly and both last about a month once built, so block periodisation builds them together, early; the fight-specific engine fades within two or three weeks, so it's built in the camp (Issurin, 2008). Cardio barely holds back strength or muscle size, but it does blunt explosive power, mostly in the same session; three or more hours apart, the cost wasn't significant (Schumann, 2022). In trained lifters the cost showed when the two were within 20 minutes of each other, not when they were more than two hours apart (Petré, 2021). Men lose more lower-body strength and power to it than women (Huiberts, 2024), and 24 hours between them suited strength and power best (Robineau, 2016). So the easy work is easy and hours from the lifting, and the hard work is two sessions on the upper-body days, two days clear of Thursday's sprints and jumps. An older review found running cost more than cycling (Wilson, 2012); newer ones don't confirm it (Schumann, 2022; Sabag, 2018), so the bike is for the joints, not the interference. Endurance can be held for up to 15 weeks on as little as two hard sessions a week, as long as the intensity stays (Spiering, 2021). The 4 × 4 at 90–95% of peak heart rate raised fitness more than steady or threshold work (Helgerud, 2007), and people in their 40s gained as much from it as people in their 20s, about 11% in eight weeks at three a week (Støren, 2017). A bigger base also speeds recovery between hard efforts (Tomlin and Wenger, 2001): between bursts, and between rounds.
+- **The sauna after the easy hour.** In six runners, three weeks of it after training raised the time they could run to exhaustion by 32% and their blood plasma by 7% (Scoon, 2007); in 20 runners, fitness rose 8% against 2% without it (Kirby, 2021). The studies are small and the proof is weak, but it takes nothing from the lifting.
 - **The pressure rounds: three, not six.** Even a 3 × 2 fight is mostly aerobic, about 77% of its energy (Davis, 2014), but it's fought in short bursts with seconds between them: elite boxers work at about 18 to 1 activity to rest, novices at 9 to 1 (Slimani, 2017). The pressure rounds copy that on the bike. What conditioning costs power and size grows with how often and how long it is (Wilson, 2012), so it's three rounds, on one day. The full fight sim comes in the camp.
 - **Hard days and easy days.** Heavy and fast sessions alternate with size work and easy running, and upper and lower body each get a heavy day and a fast day, as the conjugate method splits them. That shape comes from coaching practice — Charlie Francis's sprinters, Westside's lifters — more than from trials.
 
@@ -368,6 +387,15 @@ Every choice below rests on trials where trials exist. Where it rests on coachin
 - The energetics of semicontact 3 × 2-min amateur boxing — Davis et al., 2014
 - Performance aspects and physiological responses in male amateur boxing competitions — Slimani et al., 2017
 - Concurrent training: a meta-analysis examining interference of aerobic and resistance exercises — Wilson et al., 2012
+- Block periodization versus traditional training theory: a review — Issurin, Journal of Sports Medicine and Physical Fitness, 2008
+- Development of Maximal Dynamic Strength During Concurrent Resistance and Endurance Training in Untrained, Moderately Trained, and Trained Individuals — Petré et al., Sports Medicine, 2021
+- Concurrent Strength and Endurance Training: A Systematic Review and Meta-Analysis on the Impact of Sex and Training Status — Huiberts et al., Sports Medicine, 2024
+- Specific Training Effects of Concurrent Aerobic and Strength Exercises Depend on Recovery Duration — Robineau et al., Journal of Strength and Conditioning Research, 2016
+- The compatibility of concurrent high intensity interval training and resistance training for muscular strength and hypertrophy — Sabag et al., Journal of Sports Sciences, 2018
+- The Effect of Age on the VO2max Response to High-Intensity Interval Training — Støren et al., Medicine and Science in Sports and Exercise, 2017
+- The relationship between aerobic fitness and recovery from high intensity intermittent exercise — Tomlin and Wenger, Sports Medicine, 2001
+- Effect of post-exercise sauna bathing on the endurance performance of competitive male runners — Scoon et al., Journal of Science and Medicine in Sport, 2007
+- Intermittent post-exercise sauna bathing improves markers of exercise capacity in hot and temperate conditions in trained middle-distance runners — Kirby et al., European Journal of Applied Physiology, 2021
 - Power and impulse applied during push press exercise — Lake, Mundy and Comfort, 2014
 - Efficacy of exercise interventions on prevention of sport-related concussion and related outcomes — Ivanic et al., British Journal of Sports Medicine, 2024
 - Combining evidence and practice to optimise neck training aimed at reducing head acceleration events in sport — Fownes-Walpole et al., British Journal of Sports Medicine, 2025

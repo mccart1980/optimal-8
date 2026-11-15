@@ -252,12 +252,20 @@ const checkItems = (rx) => [{ n: "Bodyweight", s: "kg", id: "wr_bw", k: "out", u
     { n: "Energy", s: "1–10", id: "wr_en", k: "out", u: "1–10" },
     { n: rx.mw ? "Evenings you did RANGE or a movement session" : "Evenings you did RANGE", s: "0–7", id: "wr_home", k: "out", u: "0–7" }]);
 
+/* THE ENGINE BASE · from Monday 16 November: the Saturday easy hour on the
+   bike, and Sunday's nasal run at 40 minutes, 30 in the lighter weeks and
+   test week. Before it, the two 30-minute runs held the engine where it was;
+   the hard sessions don't change. */
+export const ENGINE_SINCE = "2026-11-16";
+export const sppEasyHour = (rx) => (rx.eb ? (rx.half ? 30 : 45) : 0);
+export const sppSunRun = (rx) => (rx.eb && !rx.half ? 40 : 30);
+
 /* the nasal run, Wednesday and Sunday, after the session */
-const nasalRun = (L) => ({ L, n: "The Nasal Run", m: 30, eng: 1, engKey: "base",
-  timer: () => ({ kind: "z2", opt: { min: 30, label: "EASY — NOSE ONLY · 65–75% OF PEAK" }, title: "THE NASAL RUN" }),
-  rxLine: () => "30 min easy, nose only · 65–75% of peak",
+const nasalRun = (L, sun) => { const min = (rx) => (sun ? sppSunRun(rx) : 30); return { L, n: "The Nasal Run", m: min, eng: 1, engKey: "base",
+  timer: (rx) => ({ kind: "z2", opt: { min: min(rx), label: "EASY — NOSE ONLY · 65–75% OF PEAK" }, title: "THE NASAL RUN" }),
+  rxLine: (rx) => min(rx) + " min easy, nose only · 65–75% of peak",
   items: [{ n: "The nasal run", s: "distance and average heart rate", cue: "Easy, on the road or a treadmill, breathing in and out through your nose the whole way. If you need your mouth, slow down.", id: "s_run", k: "out", u: "km · bpm", fields: RUN_FIELDS }],
-  why: "Two easy runs and one hard interval session hold the engine where it is. Easy and on the size days, so they take nothing from the heavy and fast sessions." });
+  why: "Easy, and on the size days, so they take nothing from the heavy and fast sessions." }; };
 
 /* ================================================================
    THE SEVEN PAGES, in running order
@@ -526,7 +534,7 @@ export const SS = {
 
   /* ---------------- SUNDAY ---------------- */
   sun: { n: "SUNDAY", t: "Physique B — shoulders, traps and cable crunches, arms and calves, and the Pallof press, then the nasal run and the weekly check", ac: C.brass, free: 1,
-    intro: "Shoulders, traps, abs, arms and calves for size, and the Pallof press, then a 30-minute nasal run.", b: [
+    intro: "Shoulders, traps, abs, arms and calves for size, and the Pallof press, then the nasal run.", b: [
     moveA("sun", "S_WU_SUN", 4, "4 min · bands, a light set of the first two"),
     { L: "B", n: "Cable Lateral Raise", m: 6, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 4) + " × 12–20",
       items: (rx) => [{ n: "Cable lateral raise", s: hs(rx, 4) + " × 12–20 · " + DROP, cue: "Cable at hand height, the handle in your far hand with the cable behind your back. Raise your arm out to shoulder height, leading with the elbow, and lower slowly.", id: "s_clat_sun", k: "wr", sets: hs(rx, 4), reps: "12–20" }] },
@@ -554,7 +562,7 @@ export const SS = {
       items: (rx) => [{ n: "Seated calf raise", s: hs(rx, 3) + " × 12–15 · 2 s at the bottom", cue: "Pad on your knees. Lower your heels to a full stretch and hold for two seconds, then rise all the way up.", id: "s_scalf", k: "wr", sets: hs(rx, 3), reps: "12–15", rest: "straight into the Pallof press", rt: 0 },
         { n: "Pallof press", s: hs(rx, 3) + " × 10 each side", cue: "A band or cable at chest height beside you, standing side-on. Hold the handle at your chest, press your hands straight out and hold two seconds without letting it twist you, then bring them back. When 10 is easy, stand further from the anchor.", id: "s_pallof", k: "chk", rest: "Rest 60 s", rt: 60 }],
       why: "Back to back, a minute after each pair." },
-    nasalRun("R"),
+    nasalRun("R", 1),
     { L: "I", n: "Weekly Check", m: 2, review: 1, rangeTests: 1,
       items: (rx) => checkItems(rx),
       note: "Three red mornings in a week: run the next week as a lighter week. Achilles or knee at 3 or more: no reactive jumps next week, the tendon holds carry on. Hamstring at 3 or more: no flying sprints next week, Nordics only if pain-free. That's the tendon gate, and it runs whatever the strap says. An elbow or a shoulder at 4 or more: next week's dips become push-ups and Sunday's curls and triceps work comes off." }] },

@@ -56,7 +56,7 @@ describe("the week and its main lifts", () => {
     const rows = wholeDay();
     ["The movement block", "Box Jumps", "Back Squat", "Romanian Deadlift", "Bulgarian Split Squat", "Seated Leg Curl", "Standing Calf Raise + Hanging Leg Raise"]
       .forEach((n, i, a) => { expect(rows).toContain(n); if (i) expect(before(rows, a[i - 1], n)).toBe(true); });
-    // the two nasal runs are the easy work: no easy hour
+    // the easy hour is Saturday's, not Monday's
     expect(rows).not.toContain("The easy hour");
     const card = pick("Back Squat");
     expect(within(card).getByTestId("lift-ramp").textContent).toBe("RAMP · BAR × 8 · 55 KG × 5 · 77.5 KG × 3 · 90 KG × 2 · A MINUTE BETWEEN");
@@ -842,5 +842,40 @@ describe("Optimal 8 · Move", () => {
     const rows = wholeDay();
     expect(rows).toContain("Warm-up");
     expect(rows).toContain("The morning five");
+  });
+});
+
+describe("the engine base", () => {
+  /* the plan in use: Prep from 26 October, Strength, Power and Physique from Monday 2 November; the engine base from 16 November, SPP's week 3 */
+  const live = (extra) => base(Object.assign({ plans: [{ from: "2026-10-26", made: "2026-10-25", inputs: PREP }, { from: "2026-11-02", made: "2026-11-01", inputs: Object.assign({}, SPP, { restart: true }) }], season: SPP }, extra || {}));
+  const again = () => { cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true"); };
+  it("Saturday 21 November: the easy hour in the evening, before RANGE, 45 minutes on the bike with the easy zone and its own timer; ticked, it's logged. Saturday 14 November has none; Saturday 28 November, the lighter week, 30", async () => {
+    await at(2026, 11, 21, live());
+    let rows = wholeDay();
+    expect(rows.indexOf("RANGE")).toBe(rows.indexOf("The easy hour") + 1);
+    const card = pick("The easy hour");
+    expect(within(card).getByTestId("card-pres").textContent).toBe("45 min on the bike · nose only · + 500 ml water");
+    expect(card.textContent).toMatch(/Strength, Power and Physique's: 45 minutes on a bike, easy enough to talk in full sentences/);
+    expect(screen.getByTestId("easy-zone-range").textContent).toMatch(/^117–135/);
+    fireEvent.click(within(card).getByRole("button", { name: "▶ START · 45 MIN" }));
+    expect(screen.getByTestId("timer-title").textContent).toBe("THE EASY HOUR");
+    expect(screen.getByTestId("timer-part").textContent).toMatch(/^EASY — NOSE ONLY/);
+    again();
+    await at(2026, 11, 21, live());
+    fireEvent.click(within(pick("The easy hour")).getByRole("button", { name: "DONE" }));
+    expect(JSON.parse(localStorage.getItem("o8s-log"))["mSw3-easyhour"]).toMatchObject({ ok: true, d: "sat" });
+    again();
+    await at(2026, 11, 14, live());
+    expect(wholeDay()).not.toContain("The easy hour");
+    again();
+    await at(2026, 11, 28, live());
+    expect(within(pick("The easy hour")).getByTestId("card-pres").textContent).toBe("30 min on the bike · nose only · + 500 ml water");
+  });
+  it("Sunday's nasal run: 40 minutes on 22 November, 30 in the lighter week and before the engine base; Wednesday's stays 30", async () => {
+    for (const [d, want] of [[22, "40 min"], [29, "30 min"], [15, "30 min"], [18, "30 min"]]) {
+      await at(2026, 11, d, live());
+      expect(within(pick("The Nasal Run")).getByTestId("card-pres").textContent).toBe(want + " easy, nose only · 65–75% of peak");
+      again();
+    }
   });
 });

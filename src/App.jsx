@@ -58,6 +58,7 @@ import {
 } from "./prep.js";
 import {
   SPP_PH, SPPENG, SPPENG_MENU, SPPROTO, SPP_READY_LINE, sppSess, sppRx, sppTests, sppVelPhase, sppPhotoDay, sppMainLine, sppPsq, sppPp, sppSprints,
+  ENGINE_SINCE, sppEasyHour, sppSunRun,
 } from "./spp.js";
 import {
   buildSeason, rowOn, rowForDay, rowByKey, rowRx, rowDates, monOf as mondayIso, planStartFor, describeSeason, fitnessFromFade,
@@ -307,7 +308,8 @@ const seasonRxFor = (mac, w, edge) => {
   const rx = rowRx(row, edge);
   if (row.program === "prep") return gated(Object.assign({}, rx, { w, kw: w, lift: rx.ph, ph: prepPhaseOf(rx.doc), bw: null, prep: 1 }), "P", w);
   if (row.program === "spp") { const mw = moveWeekOf(row.mon, MOVE.start);
-    return gated(Object.assign({}, rx, { w, kw: w, bw: null, spp: 1, mon: row.mon, mw, jeff: mw && movePhase(mw) === "own" ? jeffOn(row) : false }), "S", w); }
+    return gated(Object.assign({}, rx, { w, kw: w, bw: null, spp: 1, mon: row.mon, mw, jeff: mw && movePhase(mw) === "own" ? jeffOn(row) : false,
+      eb: !!row.mon && row.mon >= ENGINE_SINCE }), "S", w); }
   if (row.program === "camp" || row.program === "pre") return gated(Object.assign({}, rx, { kw: w }), "C", w);
   return Object.assign({}, rx, { kw: w });
 };
@@ -2254,8 +2256,11 @@ function Today(props) {
      RANGE, the skill block and the movement session run one move per
      card, each hold timed, each move coming up by itself. */
   const ev = [];
-  /* Strength, Power and Physique's easy work is its two nasal runs: no easy hour */
-  const weekend = MODE.spp ? false : MODE.camp ? (day === "sun" && !!rx.sim) : (day === "sat" || day === "sun");
+  /* Strength, Power and Physique's easy hour is Saturday evening's, from
+     the engine base's first week; before it, its easy work was the two
+     nasal runs */
+  const sppEH = MODE.spp ? sppEasyHour(rx) : 0;
+  const weekend = MODE.spp ? (day === "sat" && sppEH > 0) : MODE.camp ? (day === "sun" && !!rx.sim) : (day === "sat" || day === "sun");
   const saunaWater = (a) => fuelItems.find((x) => x.anchor === a);
   /* the sauna and its two water rows: in PREP and CAMP straight after the
      easy session or the easy hour, never before them; the classic
@@ -2272,7 +2277,7 @@ function Today(props) {
     }
     return out;
   };
-  const o8Evening = MODE.prep || MODE.camp;
+  const o8Evening = MODE.prep || MODE.camp || MODE.spp;
   if (!o8Evening) saunaRows().forEach((x) => ev.push(x));
   if (o8Evening && rx.thirty && day === "thu") {
     const em = rx.wedEasy || 30;
@@ -2282,9 +2287,12 @@ function Today(props) {
   if (weekend) {
     const EH = MODE.camp ? CAMP_EASY_HOUR : EASY_HOUR;
     const ek = "m" + macro + "w" + week + "-easyhour", evl = log[ek] || {};
-    ev.push({ id: "ev-easy", colour: C.moss, n: "The easy hour", s: titleCase(EH.tag.split(" · ")[0]) + (rx.twoThirds && rx.easyHour ? " · " + rx.easyHour.join("–") + " min" : "") + " · + " + EASY_WATER + " ml water", mins: rx.twoThirds && rx.easyHour ? rx.easyHour[1] : 40, lib: libFor("easy hour"), easy: o8Zone,
-      done: !!evl.ok, mark: (val) => { const n = Object.assign({}, log); n[ek] = Object.assign({}, evl, { ok: !!val, d: val ? day : null }); setLog(n); ftick("w-easy", val); },
-      input: () => <Input label="AVERAGE HEART RATE" v={evl.hr} on={(val) => { const n = Object.assign({}, log); n[ek] = Object.assign({}, log[ek], { hr: val }); setLog(n); }} /> });
+    const ehDone = { done: !!evl.ok, mark: (val) => { const n = Object.assign({}, log); n[ek] = Object.assign({}, evl, { ok: !!val, d: val ? day : null }); setLog(n); ftick("w-easy", val); },
+      input: () => <Input label="AVERAGE HEART RATE" v={evl.hr} on={(val) => { const n = Object.assign({}, log); n[ek] = Object.assign({}, log[ek], { hr: val }); setLog(n); }} /> };
+    if (MODE.spp) ev.push(Object.assign({ id: "ev-easy", colour: C.moss, n: "The easy hour", s: sppEH + " min on the bike · nose only · + " + EASY_WATER + " ml water", mins: sppEH,
+      lib: libFor("the saturday easy hour"), easy: o8Zone,
+      tool: { label: "▶ START · " + sppEH + " MIN", run: () => startZ({ kind: "z2", opt: { min: sppEH, label: "EASY — NOSE ONLY · 65–75% OF PEAK" }, title: "THE EASY HOUR" }) } }, ehDone));
+    else ev.push(Object.assign({ id: "ev-easy", colour: C.moss, n: "The easy hour", s: titleCase(EH.tag.split(" · ")[0]) + (rx.twoThirds && rx.easyHour ? " · " + rx.easyHour.join("–") + " min" : "") + " · + " + EASY_WATER + " ml water", mins: rx.twoThirds && rx.easyHour ? rx.easyHour[1] : 40, lib: libFor("easy hour"), easy: o8Zone }, ehDone));
   }
   if (o8Evening) saunaRows().forEach((x) => ev.push(x));
   if ((MODE.prep && moveTonight(rx, day)) || (MODE.camp && !rx.fightWeek && (day === "sat" || (day === "wed" && rx.move)))) {
@@ -2561,7 +2569,8 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
           <Row k="The intervals (Sat)" val={(rx.e === "vo2s" ? "3 × 4" : "4 × 4") + (rx.testWeek ? " — the engine test" : "")} />
           <Row k="Bursts (Tue)" val={(rx.bk === "sb4" ? "4" : "8") + " × 6 seconds on the assault bike"} />
           <Row k="Pressure rounds (Tue)" val={(rx.pr === "pr2" ? "2" : "3") + " × 3 minutes, straight after the bursts"} />
-          <Row k="Nasal runs" val="Wednesday and Sunday · 30 min" />
+          <Row k="Nasal runs" val={rx.eb ? "Wednesday 30 min · Sunday " + sppSunRun(rx) + " min" : "Wednesday and Sunday · 30 min"} />
+          {rx.eb ? <Row k="The easy hour (Sat evening)" val={sppEasyHour(rx) + " min on the bike, nose only"} /> : null}
           <Row k="Everything else" val={rx.half ? "half the sets, rounded up" : "as written"} />
           <Row k="Tests" val={sppTests(rx.doc).join(" · ") || "none"} />
         </Card>) : null}

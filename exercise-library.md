@@ -292,6 +292,8 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **EASY HOUR / THURSDAY EASY THIRTY** — An easy walk, ride or run at chatting pace, breathing through your nose. Easy enough that it helps you recover.
 
+**THE SATURDAY EASY HOUR** — Strength, Power and Physique's: 45 minutes on a bike, easy enough to talk in full sentences, breathing in and out through your nose the whole way, at 65–75% of your peak heart rate, the easy zone the app shows. At least six hours after the morning's session. If you need your mouth, slow down. Log your average heart rate: the same ride at a lower heart rate is the base growing. 30 minutes in the lighter weeks and test week.
+
 **SAUNA** — 15–20 minutes, straight after the easy session or the easy hour, never before it. 500 ml of water before, 500 ml with a sachet after. Never straight into cold.
 
 **SPEED MICRODOSE** — Fight-week sharpener, 25 minutes: warm-up, three 20-metre sprints at 90%, a few box jumps and throws. Fast, nothing tiring, done.
