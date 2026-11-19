@@ -42,16 +42,20 @@ describe("proof 1 — the master camp's session pages", () => {
       }
     });
   });
-  it("Tuesday: broad jumps 3 × 2, box jumps 3 × 3 (4 × 3 in weeks 6–8), shuttles from week 3, speed from week 6, the pistol line, the holds, the trunk", () => {
+  it("Tuesday: broad jumps 3 × 2, box jumps 3 × 3 (4 × 3 in weeks 6–8), shuttles from week 3, speed from week 6, the pistol line, the lower pushes, the trunk with the side plank, the towel calf raise", () => {
     W.filter((w) => w !== 9).forEach((w) => {
       expect(pres("master", w, "tue", "Broad jump")).toMatch(/^3 × 2/);
       expect(pres("master", w, "tue", "Box jump")).toMatch(new RegExp("^" + (w >= 6 ? 4 : 3) + " × 3"));
       expect(has("master", w, "tue", "Shuttle bursts")).toBe(w >= 3);
       expect(has("master", w, "tue", "Flying sprint 20 m")).toBe(w >= 6);
       expect(pres("master", w, "tue", "The Pistol Line")).toMatch(/^2 × 5 per leg/);
-      expect(pres("master", w, "tue", "Spanish Squat Hold")).toMatch(/^3 × 30 seconds/);
-      expect(pres("master", w, "tue", "THE BRACE")).toMatch(new RegExp("^" + (w === 5 ? 2 : 3) + " rounds · the Copenhagen plank in " + (w === 5 ? "every round" : "the first 2")));
+      expect(has("master", w, "tue", "Spanish Squat Hold")).toBe(false);
+      expect(pres("master", w, "tue", "Achilles pushes")).toMatch(/^5 × 4 each leg · 3 s on, 3 s off · as hard as you can/);
+      expect(pres("master", w, "tue", "THE BRACE")).toMatch(new RegExp("^" + (w === 5 ? 2 : 3) + " rounds · the side plank in " + (w === 5 ? "every round" : "the first 2")));
       expect(pres("master", w, "tue", "Seated calf raise")).toMatch(/^3 × 12/);
+      /* the camp's weeks 2 and 6 are Optimal 8 · Move's weeks 9 and 13, test weeks: the tendon numbers */
+      if (w === 2 || w === 6) expect(pres("master", w, "tue", "Towel calf raise, heaviest 5")).toMatch(/^the heaviest you can lift for 5 clean reps · a tendon number/);
+      else expect(pres("master", w, "tue", "Towel calf raise")).toMatch(/^2 × 6–10 · 3 s up, 2 s at the top, 3 s down, 2 s at the bottom/);
     });
     /* the camp test week hands on: the burst decrement was measured there */
     expect(has("master", 1, "tue", "THE BURST TEST")).toBe(false);
@@ -246,9 +250,11 @@ const SESSION_SAID = { vo2: "4 minute intervals", rz: "repeat bursts", rz1: "bur
 
 describe("proof 5 — nothing invented", () => {
   it("every exercise on every generated card is a library entry the documents name", () => {
-    const out = new Set();
+    const out = new Set(), seen = new Set();
     CAT.forEach((c) => (c.lib || []).concat(...c.rows.map((r) => r.lib || [])).forEach((e) => {
-      if (!e) return;
+      /* each entry once: the same entry on many cards is the same check */
+      if (!e || seen.has(e)) return;
+      seen.add(e);
       const said = SAID_AS[e.n] || e.n;
       if (DOCN.indexOf(norm(said)) < 0 && !e.names.some((x) => DOCN.indexOf(norm(x)) >= 0)) out.add(e.n);
     }));

@@ -48,7 +48,8 @@ export const TENDON_SINCE = "2026-11-23";
 export const tendonWeekOf = (mon) => { if (!mon) return 0;
   const a = iso(mondayOf(parseISO(TENDON_SINCE))), b = iso(mondayOf(parseISO(mon)));
   return b < a ? 0 : Math.round((parseISO(b) - parseISO(a)) / 604800000) + 1; };
-export const pushEffort = (tw, o) => (o && o.red ? "half effort, a red morning" : o && o.gate ? "7 out of 10, the tendon gate"
+export const pushEffort = (tw, o) => (o && o.red ? "half effort, a red morning" : o && o.fw ? "half effort, the camp's final week"
+  : o && o.trans ? "7 out of 10, the transition" : o && o.gate ? "7 out of 10, the tendon gate"
   : tw && tw <= 2 ? "8 out of 10, the first two weeks" : "as hard as you can");
 
 /* ---------------- THE LEVELS ----------------

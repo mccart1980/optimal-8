@@ -111,8 +111,10 @@ export function theBrace(o) {
       { id: "abwheel", n: "Ab wheel rollout", l: "AB WHEEL × 8–12", s: 35 },
       { id: "pallof", n: "Pallof press", l: "PALLOF PRESS × 10 PER SIDE", s: 55 },
       { id: "drops", n: "Medicine-ball drops", l: "MEDICINE-BALL DROPS × 8", s: 35, out: "Medicine ball" },
-      { id: "copen", n: "Copenhagen plank", l: "COPENHAGEN PLANK · 25 S PER SIDE", s: 55, upto: o.copen(rx) }],
-    line: (rx) => " · the Copenhagen plank in " + (o.copen(rx) >= o.rounds(rx) ? "every round" : o.copen(rx) === 1 ? "the first round" : "the first " + o.copen(rx)),
+      /* from the tendon work's week 1 the side plank, so the groin rests the day before the hip pair */
+      rx && rx.tw ? { id: "splank", n: "Side plank", l: "SIDE PLANK · 25 S PER SIDE", s: 55, upto: o.copen(rx) }
+        : { id: "copen", n: "Copenhagen plank", l: "COPENHAGEN PLANK · 25 S PER SIDE", s: 55, upto: o.copen(rx) }],
+    line: (rx) => " · the " + (rx && rx.tw ? "side" : "Copenhagen") + " plank in " + (o.copen(rx) >= o.rounds(rx) ? "every round" : o.copen(rx) === 1 ? "the first round" : "the first " + o.copen(rx)),
     w: "Never on the ribs. The drops land on the brace just above your belly button; up a kilo when all eight land on a brace that doesn't give, from 3 kg up to 6.",
     why: o.why });
 }

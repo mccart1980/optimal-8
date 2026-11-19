@@ -1,6 +1,6 @@
 # OPTIMAL 8 · MOVE
 
-**Twelve weeks to give you the best range of movement you can have in every joint, and to make you strong in every position you can get into. The joints are your hips, lower back, mid-back, shoulders, knees, ankles and feet, neck and wrists. Balance, landing and getting up and down are trained too, and every tendon that takes your training gets loaded on purpose. MOVE sits beside Strength, Power and Physique as a full part of the program, equal to strength, power and the engine. Every gym morning starts with it, five evenings finish with it, and Wednesday and Sunday evenings are all of it. It uses whatever works for each job, an exercise or a stretch, and every move has levels you climb and standards you test.**
+**Twelve weeks, then for good, in every program, to give you the best range of movement you can have in every joint, and to make you strong in every position you can get into. The joints are your hips, lower back, mid-back, shoulders, knees, ankles and feet, neck and wrists. Balance, landing and getting up and down are trained too, and every tendon that takes your training gets loaded on purpose. MOVE sits beside Strength, Power and Physique as a full part of the program, equal to strength, power and the engine. Every gym morning starts with it, five evenings finish with it, and Wednesday and Sunday evenings are all of it. It uses whatever works for each job, an exercise or a stretch, and every move has levels you climb and standards you test.**
 
 The aim is range you can use and load, and a body that takes what you throw at it. Nobody is injury-proof; this is built to make you as hard to break as the evidence knows how, and to keep you moving well at 70.
 
@@ -380,11 +380,16 @@ In each test week, on Monday, two numbers are logged: the heaviest towel calf ra
 
 ---
 
-## THE CAMP
+## MOVE IN EVERY PROGRAM
 
-From the first Monday of the camp, RANGE carries on, because every programme shares it. The morning block, Sessions A and B and the session swaps belong to Strength, Power and Physique, so the camp would go back to its own warm-ups and RANGE every evening.
+MOVE and its tendon work run in Prep, the camp, the transition and Optimal 8 Fighter as they do in Strength, Power and Physique. Its week count carries on from program to program; it never starts again. Each program's document has its own table.
 
-**My recommendation:** carry Sessions A and B, the movement blocks, the back extension and the whole tendon work into the camp. Nine weeks without them would give back much of what you've built. It's your call in January.
+- **The movement blocks**, in the warm-up's place: Monday hips, ankles and overhead · Tuesday hips, balance and sprint prep · Wednesday hips, knees and lower back · Thursday lower back and shoulders · Saturday hips, balance and sprint prep · Sunday the whole body, then the power prep. A warm-up's own lift sets and primers are the block's last rows.
+- **The lower pushes** on Tuesday, Thursday and Saturday: Tuesday after the pistol line, Thursday in the Spanish squat hold's and the Achilles hold's place, Saturday straight after the side bounds. **The hip pair** at the end of Wednesday and Saturday. **The towel calf raise** in Tuesday's Achilles hold's place, on the standing machine, 2 × 6–10. **The back extension** after Sunday's core block. THE BRACE's Copenhagen becomes the side plank, and Fighter's Tuesday trunk block loses its Copenhagen, so the groin rests the day before the hip pair.
+- **The evenings**, as here: RANGE on Monday, Tuesday, Thursday, Friday and Saturday, Session A on Wednesday, Session B on Sunday, and the upper pushes on Tuesday and Thursday. The morning five and the old movement session go; the skill block and the sit stay.
+- **The tendon numbers** on Tuesday of a test week: the towel calf raise's and the single-leg leg extension's heaviest 5.
+- **The camp's final week** runs as the camp has it, with one dose of each: the lower pushes in its Tuesday session and the upper pushes that evening, both at half effort. **The week before a camp** keeps its own sessions as written, and its evenings are MOVE's, as here. In both weeks the morning five stays gone.
+- **The transition:** RANGE from the first day; from the fourth day Session A and Session B, and the lower pushes on Monday and Thursday with the upper pushes those evenings, at 7 out of 10. Nothing on a day the head check holds.
 
 ---
 

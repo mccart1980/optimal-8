@@ -162,7 +162,7 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **MEDICINE-BALL DROPS** — Lie on your back, knees bent, a 3 kg ball held at arm's length over your stomach. Breathe in, then let it go and breathe out hard through your teeth as you brace. It lands on the brace just above your belly button; catch it on the bounce. Drops 5 to 8 land a hand's width to each side, alternating. Never on the ribs. Go up a kilo when all eight land on a brace that doesn't give, from 3 kg up to 6.
 
-**THE BRACE** — The body-shot block, Tuesday: ab wheel rollouts × 8–12, the Pallof press × 10 per side, medicine-ball drops × 8, and the Copenhagen plank for 25 seconds a side in the first two rounds. Back to back, twenty seconds between exercises, a minute after each round.
+**THE BRACE** — The body-shot block, Tuesday: ab wheel rollouts × 8–12, the Pallof press × 10 per side, medicine-ball drops × 8, and a plank on your side for 25 seconds a side in the first two rounds: the Copenhagen plank, or, once the tendon work's hip pair is in your week, the forearm side plank, so the groin rests the day before it. Back to back, twenty seconds between exercises, a minute after each round.
 
 **SPANISH SQUAT HOLD** — A thick band around the back of both knees, anchored to the rack in front of you. Lean back into it so your shins stay upright and sit into a half squat. Hold dead still. It burns above the kneecap, never inside the knee.
 
@@ -408,7 +408,7 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **STAR SIDE PLANK, BY LEVEL** — A side plank on your forearm, elbow under your shoulder, feet stacked, body in a straight line. Lift your top leg straight up about 30 cm, toes pointing forward, hold for 3 seconds, and lower for 3; your hips stay up the whole set. Four, then the other side. Your level says what you're on: your bottom knee, bent, with the top leg straight; your feet; or your straight arm, the top arm reaching to the ceiling. The outer hip, both sides at once: the top leg lifts, and the bottom hip holds you up.
 
-**TOWEL CALF RAISE** — The standing calf raise with a rolled towel under your toes, so they're bent up as far as they go at the top. 3 seconds up, 2 seconds at the top, 3 seconds down and 2 seconds at the bottom stretch, heavy enough that 10 is the most you could do. The towel winds up the band under your foot, so the raise loads the sole of the foot as well as the Achilles.
+**TOWEL CALF RAISE** — The standing calf raise, on the machine, with a rolled towel under your toes, so they're bent up as far as they go at the top. 3 seconds up, 2 seconds at the top, 3 seconds down and 2 seconds at the bottom stretch, heavy enough that 10 is the most you could do. The towel winds up the band under your foot, so the raise loads the sole of the foot as well as the Achilles.
 
 **THE TENDON NUMBERS / SINGLE-LEG LEG EXTENSION, HEAVIEST 5 / TOWEL CALF RAISE, HEAVIEST 5** — In each of Optimal 8 · Move's test weeks, on the first lower-push morning. In the knee pushes' place: on the leg extension, one leg at a time, work up in a few sets to the heaviest you can lift for 5 clean reps, and log each leg. In the calf raise's place: the towel calf raise at its usual tempo, worked up to the heaviest 5 clean reps, and logged. They show what the muscle and tendon can take together.
 

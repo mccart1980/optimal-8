@@ -45,6 +45,26 @@ About seven and three-quarter hours in the gym a week at peak and three at home.
 
 ---
 
+## OPTIMAL 8 · MOVE AND ITS TENDON WORK — IN THE CAMP TOO
+
+**Optimal 8 · Move and its tendon work run through the camp.** The pages below are the camp as written; MOVE lays over them like this:
+
+| Day | The morning | The evening |
+| --- | --- | --- |
+| Monday | Move's hips, ankles and overhead block in the warm-up's place, the ring support hold and the bodyweight dips its last rows | RANGE |
+| Tuesday | Move's hips, balance and sprint prep block in the warm-up's place · the lower pushes in the Spanish squat hold's place · THE BRACE's Copenhagen becomes the side plank, so the groin rests the day before the hip pair · the Achilles hold becomes the towel calf raise | The upper pushes, then RANGE |
+| Wednesday | Move's hips, knees and lower back block in the warm-up's place, the trap bar warm-up sets its last rows · the hip pair at the end | Session A |
+| Thursday | Move's lower back and shoulders block in the warm-up's place · the lower pushes in the Spanish squat hold's and the Achilles hold's place | The upper pushes, then the rest of the evening as written, and RANGE |
+| Saturday | Move's hips, balance and sprint prep block in the warm-up's place · the lower pushes straight after the side bounds, before the squat · the hip pair at the end | RANGE |
+| Sunday | Move's whole-body block, then the power prep · the back extension after the core block | Session B, the upper pushes in it |
+| Every day | The morning five goes, and so does the movement session: Sessions A and B do its job | The skill block and the sit stay |
+
+**The camp's final week** runs as the camp has it, with one dose of each: the lower pushes in its Tuesday session and the upper pushes that evening, both at half effort. None after that until the transition. **The week before a camp** keeps its own sessions as written, and its evenings are MOVE's: RANGE, Session A on Wednesday, Session B on Sunday, the upper pushes on Tuesday and Thursday. In both weeks the morning five stays gone: no end-range back bending in the first hour up.
+
+Every push is eased in over a second, held 3 seconds, breathing out, with 3 seconds off: the first two weeks of the tendon work at 8 out of 10, then as hard as you can; a red morning at half effort; Achilles or knee at 3 or more on Sunday's check, the lower pushes at 7 out of 10 in the holds' place, and no reactive jumps. Move's fifteen standards take the range and flexibility tests' place, in Move's test weeks, and its week count carries on from whatever ran before. Every exercise, level and rule is in Optimal 8 · Move.
+
+---
+
 ## THE TEN WEEKS — EVERY NUMBER, EVERY WEEK, WITH DATES
 
 **The blocks.** Week 1 FOUNDATION — one week of slow lowering and base off the test-day numbers. Weeks 2–4 BUILD — paused, then fast in clusters; the rounds at fight rest. Week 5 EASY + TESTS. Weeks 6–8 PEAK — contrast, depth jumps, top speed twice a week, repeat bursts, eight rounds, the sauna. Week 9 SHARPEN. Week 10 FIGHT WEEK.

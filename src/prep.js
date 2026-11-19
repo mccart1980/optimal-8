@@ -1,6 +1,6 @@
 import { C } from "./ui.jsx";
 import { clusterTimer } from "./edge.js";
-import { jumpOf, JUMP_GATE_LINE, TOP_CUE, STOP_RULE } from "./safety.js";
+import { jumpOf, jumpGate, TOP_CUE, STOP_RULE } from "./safety.js";
 import { SLED_FIELDS, roundFields, SETTLE_FIELDS, PACE_FIELDS, HONEST_FIELDS, LIGHTS_FIELDS, WW_CHECK_CUE, sessionBoxes, engHR } from "./camp.js";
 import { MON_WU, dipsAndRows, armsCircuit, shouldersCircuit, theBrace, carryBlock } from "./circuits.js";
 
@@ -601,7 +601,7 @@ export const PS = {
       rest: "Rest 2:00", rt: 120, rxLine: (rx) => rx.js[0] + " × " + rx.js[1] + " · " + jumpOf(rx.jump).box,
       items: (rx) => [{ n: jumpOf(rx.jump).item, s: rx.js[0] + " × " + rx.js[1] + " · " + jumpOf(rx.jump).box, cue: jumpOf(rx.jump).cue, id: "p_react", k: "chk" }],
       w: (rx) => jumpOf(rx.jump).w,
-      why: (rx) => (rx.restart ? "Back under 3 on Sunday's check: the jumps restart one stage down for a week. " : "") + JUMP_GATE_LINE },
+      why: (rx) => (rx.restart ? "Back under 3 on Sunday's check: the jumps restart one stage down for a week. " : "") + jumpGate(rx) },
     { L: "D", n: (rx) => (boundAngle(rx.d) === "45" ? "Side Bounds — 45°" : "Side Bounds — straight sideways"), m: 6, hard: 1, hide: (rx) => !!rx.testWeek, rest: "Rest 90 s", rt: 90, rxLine: (rx) => rx.bsets + " × 4 per side",
       items: (rx) => [{ n: boundAngle(rx.d) === "45" ? "Side bound — forward-and-across at 45°" : "Side bound — straight sideways", s: rx.bsets + " × 4 per side",
         cue: "Stand on one leg, jump " + (boundAngle(rx.d) === "45" ? "forward-and-across at 45 degrees, the angle you cut a ring off at," : "straight sideways") + " as far as you can, land on the other" + (rx.bound === "cont" ? " and bounce straight back the other way — no stick." : " and stick it dead still for two seconds."), id: "p_bound", k: "chk" }],

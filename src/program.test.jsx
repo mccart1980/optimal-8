@@ -40,10 +40,10 @@ describe("the programs, as the gym runs them", () => {
     expect(n.some((x) => /throw/i.test(x))).toBe(false);
   });
 
-  it("PREP opens the Sunday with the warm-up and then the four punch throws", () => {
-    const n = names("prep", 2, "sun");
-    expect(n[0]).toBe("Warm-up");
-    expect(n[1]).toBe("The Four Punch Throws");
+  it("PREP opens the Sunday with the warm-up and then the four punch throws; from Optimal 8 · Move's week 1, with the movement block", () => {
+    const at = (set) => CAT.filter((c) => c.set === set && c.program === "prep" && c.week === 2 && c.day === "sun" && c.edge !== false && !c.lastTen).map((c) => c.n);
+    expect(at("cycle").slice(0, 2)).toEqual(["Warm-up", "The Four Punch Throws"]);
+    expect(at("master").slice(0, 2)).toEqual(["The movement block", "The Four Punch Throws"]);
   });
 
   it("PREP's Wednesday has the bench press and the bench throws from week 1, no ring dips, and the farmer's carry last", () => {
@@ -113,7 +113,8 @@ describe("the programs, as the gym runs them", () => {
   it("runs Monday's dips and ring rows and the arms circuit before the base, in PREP and in CAMP", () => {
     ["prep", "camp"].forEach((p) => {
       const n = names(p, 2, "mon");
-      expect(before(n, "Warm-up", "Dips + Ring Rows")).toBe(true);
+      /* the master season runs Optimal 8 · Move: its movement block in the warm-up's place */
+      expect(before(n, "The movement block", "Dips + Ring Rows")).toBe(true);
       expect(before(n, "Dips + Ring Rows", "The Arms Circuit")).toBe(true);
       expect(before(n, "The Arms Circuit", p === "prep" ? "Base — easy, nose only" : "Easy, nose only")).toBe(true);
       expect(before(n, "Hands", "Band Deceleration Catch")).toBe(true);

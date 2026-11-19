@@ -91,10 +91,13 @@ are four tabs: **TODAY · PROGRESS · FOOD · MORE**.
   ease you back in. Or Optimal 8 · Strength, Power and Physique
   (optimal-8-strength-power-physique.md): its twelve weeks, S1–S12, on repeat —
   picked inside a Prep, the Prep carries on to its test day first, unless you
-  START NOW. Optimal 8 · Move (optimal-8-move.md) runs beside it from Monday
-  16 November: the movement block every gym morning, RANGE re-aimed, Sessions
-  A and B, levels and fifteen standards (src/move.js). Optimal 8 Fighter is
-  still there as the classic.
+  START NOW. Optimal 8 · Move (optimal-8-move.md) runs in every program from
+  Monday 16 November: the movement block every gym morning, RANGE re-aimed,
+  Sessions A and B, levels and fifteen standards (src/move.js), and from
+  Monday 23 November its tendon work — the lower pushes, the hip pair, the
+  towel calf raise and the upper pushes. Prep, the camp, the transition and
+  the classic get it laid over their own pages (src/movex.js). Optimal 8
+  Fighter is still there as the classic.
 - **Yes:** the date, the rounds and minutes, the rest between rounds (1 minute
   unless you change it), the weigh-in (the day before or on the day), how fit
   you are right now (low, moderate, good) and one emphasis (none, power,

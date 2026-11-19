@@ -123,7 +123,7 @@ export const levelIdOf = (name) => { const hit = LV_BY_NAME.find((x) => x[0].tes
    from the tendon work's week 1. Each card says how hard: 8 out of 10 in
    the first two weeks, half effort on a red day, then as hard as you can. */
 export const UPPER_PUSH_CARDS = numberedCards(sectionOf(S, "THE UPPER PUSHES")).map(card);
-export const upperPushCards = (tw, red) => UPPER_PUSH_CARDS.map((c) => Object.assign({}, c, { level: pushEffort(tw, { red }).replace("a red morning", "a red day").toUpperCase() }));
+export const upperPushCards = (tw, red, o) => UPPER_PUSH_CARDS.map((c) => Object.assign({}, c, { level: pushEffort(tw, Object.assign({ red }, o || {})).replace("a red morning", "a red day").toUpperCase() }));
 const OWN_PIGEON = " At halfway: press your front shin into the floor for 5 seconds, relax, and fold further.";
 /* RANGE FOR MOVE: its one-leg balance cards show your balance level */
 export const moveRangeCards = (lv) => MOVE_RANGE_CARDS.map((c) => (/^ONE-LEG BALANCE/.test(c.n) ? Object.assign({}, c, { level: levelLine(lv, "mv_balance"), lv: "mv_balance" }) : c));

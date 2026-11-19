@@ -445,7 +445,7 @@ As RANGE card 25.
 
 ## THE UPPER PUSHES · Tuesday and Thursday evenings before RANGE, and in Session B · about 8 minutes · Optimal 8 · Move
 
-The shoulder and wrist tendons, three evenings a week from Monday 23 November, in a doorway. Every push: ease in over a second, push for 3 seconds as hard as the card says, breathing out the whole time, then relax for 3 seconds. Nothing moves: the push is the work. Four pushes make a set. One arm at a time, the arms in turn, five sets each.
+The shoulder and wrist tendons, three evenings a week from Monday 23 November, in a doorway; in the transition, Monday and Thursday at 7 out of 10, and in the camp's final week one evening, its Tuesday, at half effort. Every push: ease in over a second, push for 3 seconds as hard as the card says, breathing out the whole time, then relax for 3 seconds. Nothing moves: the push is the work. Four pushes make a set. One arm at a time, the arms in turn, five sets each.
 
 **1 · SHOULDER PUSHES** · REPS 5 × 4 EACH ARM
 Stand side-on in a doorway, the frame beside your working arm. Elbow bent to a right angle and held against your side, a rolled towel squeezed between your elbow and your ribs. Turn your forearm a little way in across your stomach, then stand so the back of your wrist rests against the frame. Push the back of your wrist out into the frame, as if swinging your forearm out to the side, for 3 seconds, breathing out; relax for 3. Four pushes, then the other arm.

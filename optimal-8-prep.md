@@ -10,6 +10,24 @@ Optimal 8 Fighter's sessions, your calisthenics, RANGE, the tendon block, Iron M
 
 ---
 
+## OPTIMAL 8 · MOVE AND ITS TENDON WORK — IN PREP TOO
+
+**From Monday 16 November 2026 Optimal 8 · Move runs in Prep, and its tendon work from Monday 23 November.** The pages below are Prep as written; MOVE lays over them like this:
+
+| Day | The morning | The evening |
+| --- | --- | --- |
+| Monday | Move's hips, ankles and overhead block in the warm-up's place, the ring support hold and the bodyweight dips its last rows | RANGE |
+| Tuesday | Move's hips, balance and sprint prep block in the warm-up's place · the lower pushes in the Spanish squat hold's place · THE BRACE's Copenhagen becomes the side plank, so the groin rests the day before the hip pair · the Achilles hold becomes the towel calf raise | The upper pushes, then RANGE |
+| Wednesday | Move's hips, knees and lower back block in the warm-up's place, the trap bar warm-up sets its last rows · the hip pair at the end | Session A |
+| Thursday | Move's lower back and shoulders block in the warm-up's place · the lower pushes in the Spanish squat hold's and the Achilles hold's place | The upper pushes, then the rest of the evening as written, and RANGE |
+| Saturday | Move's hips, balance and sprint prep block in the warm-up's place · the lower pushes straight after the side bounds, before the squat · the hip pair at the end | RANGE |
+| Sunday | Move's whole-body block, then the power prep · the back extension after the core block | Session B, the upper pushes in it |
+| Every day | The morning five goes, and so does the movement session: Sessions A and B do its job | The skill block and the sit stay |
+
+Every push is eased in over a second, held 3 seconds, breathing out, with 3 seconds off: the first two weeks of the tendon work at 8 out of 10, then as hard as you can; a red morning at half effort; Achilles or knee at 3 or more on Sunday's check, the lower pushes at 7 out of 10 in the holds' place, and no reactive jumps. Move's fifteen standards take the range and flexibility tests' place, in Move's test weeks, and its week count carries on from whatever ran before. Every exercise, level and rule is in Optimal 8 · Move.
+
+---
+
 ## THE CALENDAR — THE FOURTEEN WEEKS, THEN THE CAMP
 
 Every week of Prep, by its number. A shorter Prep keeps some of them and drops the rest, in the season builder's order; every week it keeps runs exactly as written here.

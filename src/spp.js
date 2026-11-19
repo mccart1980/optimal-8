@@ -1,5 +1,5 @@
 import { C } from "./ui.jsx";
-import { jumpOf, JUMP_GATE_LINE } from "./safety.js";
+import { jumpOf, jumpGate } from "./safety.js";
 import { SLED_FIELDS, LIGHTS_FIELDS, sessionBoxes, engHR } from "./camp.js";
 import { BENCH_THROW_NOTE, topItem } from "./prep.js";
 import { movePhase, isMoveTestWeek, TENDON_SINCE, pushEffort } from "./move.js";
@@ -241,10 +241,10 @@ const moveA = (d, wu, m, line) => ({ L: "A", n: "Warm-up", m: (rx) => (rx.mw ? m
    five: one of the two tendon numbers. */
 const LEG_FIELDS = [{ k: "r", l: "RIGHT LEG (KG)" }, { k: "l", l: "LEFT LEG (KG)" }];
 const PUSH_WHY = "Heavy enough to change a tendon: about a minute of hard pushing for each, three mornings a week, for good. Ease in over a second, breathe out through every push, and never jerk it.";
-const lowerPushes = (L, o) => { o = o || {};
-  const eff = (rx) => pushEffort(rx.tw, { red: o.red, gate: rx.pushGate });
+export const lowerPushes = (L, o) => { o = o || {};
+  const eff = (rx) => pushEffort(rx.tw, { red: o.red, fw: o.fw, trans: o.trans, gate: rx.pushGate });
   const tn = (rx) => !!o.mon && isMoveTestWeek(rx.mw);
-  const B = { L, n: "The Lower Pushes", since: TENDON_SINCE, m: 10, hide: (rx) => !rx.tw, rest: "Rest while the other leg pushes", rt: 0,
+  const B = { L, n: "The Lower Pushes", since: TENDON_SINCE, m: 10, hide: (rx) => !rx.tw || (o.hide ? !!o.hide(rx) : false), rest: "Rest while the other leg pushes", rt: 0,
     rxLine: (rx) => "5 × 4 each leg, the legs in turn · " + eff(rx),
     items: (rx) => [{ n: "Achilles pushes", s: "5 × 4 each leg · 3 s on, 3 s off · " + eff(rx), cue: "On the Smith machine, the safety stops just above the bar. One leg, the ball of the foot on a plate, the heel dropped below it, knee straight, the bar across your upper back against the stops. Push the ball of your foot down as if rising onto your toes.", id: "s_achpush", k: "chk" },
       tn(rx) ? { n: "Single-leg leg extension, heaviest 5", s: "the heaviest you can lift for 5 clean reps, each leg · a tendon number", cue: "In place of today's knee pushes. Work up in a few sets to the heaviest you can lift for 5 clean reps, one leg at a time. Log both legs.", id: "s_tn_legext", k: "out", u: "kg each leg", fields: LEG_FIELDS, rest: "Rest 2:00 between the heavy sets", rt: 120 }
@@ -256,7 +256,7 @@ const lowerPushes = (L, o) => { o = o || {};
 /* THE HIP PAIR: the Copenhagen lifts and the star side plank, from the
    tendon work's week 1, in the Copenhagen plank's place on Thursday and
    Saturday — the groin and the outer hip, each a card of its own */
-const hipPair = (L) => ({ L, n: "The Hip Pair", since: TENDON_SINCE, m: 5, hide: (rx) => !rx.tw, rest: "Rest 20 s", rt: 20,
+export const hipPair = (L) => ({ L, n: "The Hip Pair", since: TENDON_SINCE, m: 5, hide: (rx) => !rx.tw, rest: "Rest 20 s", rt: 20,
   rxLine: () => "2 × 4 each side of each · 3-second holds",
   items: () => [{ n: "Copenhagen lifts", s: "2 × 4 each side · up in 1 s, hold 3 s, down in 3 s", cue: "Lie on your side, propped on your forearm, the top leg on a bench, the bottom leg underneath. Lift your hips until your body is a straight line, hold, then lower until your hip touches down.", id: "s_copenlift", k: "chk", lv: "mv_copen" },
     { n: "Star side plank", s: "2 × 4 each side · lift the top leg, hold 3 s, lower in 3 s", cue: "A side plank on your forearm, feet stacked. Lift the top leg straight up about 30 cm, toes forward, hold, lower. Hips up the whole set.", id: "s_star", k: "chk", lv: "mv_star" }],
@@ -265,7 +265,7 @@ const hipPair = (L) => ({ L, n: "The Hip Pair", since: TENDON_SINCE, m: 5, hide:
 /* THE BACK EXTENSION: Sunday, straight after the hammer curls, by MOVE's
    phase — held still, then through its range, then the Jefferson curl
    once its gate is passed; the back hold on the test weeks */
-const backExt = (rx) => {
+export const backExt = (rx) => {
   if (isMoveTestWeek(rx.mw)) return { n: "The back hold", title: "The Back Hold", s: "as long as you can · standard 11", cue: "On the 45-degree back extension, body straight, arms crossed. Hold as long as you can and put the seconds in.", id: "mv11", k: "out", u: "seconds" };
   const ph = movePhase(rx.mw);
   if (ph === "restore") return { n: "Back extension hold", s: "3 × 30 s · body straight", cue: "On the 45-degree back extension, hips on the pad, ankles locked. Body in a straight line from head to heels, arms crossed, and hold.", id: "s_bkext", k: "chk" };
@@ -490,7 +490,7 @@ export const SS = {
       rxLine: (rx) => hs(rx, 4) + " × 3 · " + jumpOf(rx.jump).box,
       items: (rx) => [{ n: jumpOf(rx.jump).item, s: hs(rx, 4) + " × 3 · " + jumpOf(rx.jump).box, cue: jumpOf(rx.jump).cue, id: "s_react", k: "chk" }],
       w: (rx) => jumpOf(rx.jump).w,
-      why: (rx) => (rx.restart ? "Back under 3 on Sunday's check: the jumps restart one stage down for a week. " : "") + JUMP_GATE_LINE },
+      why: (rx) => (rx.restart ? "Back under 3 on Sunday's check: the jumps restart one stage down for a week. " : "") + jumpGate(rx) },
     { L: "P", n: "Load-Velocity Profile — Trap Bar", m: 12, star: 1, profile: "tbdl", hide: (rx) => !rx.profile,
       rxLine: () => "five loads × 2 reps, then the trap bar jump at four",
       items: [{ n: "Trap bar at five loads", s: FIVE, cue: "Two reps at each load, as fast as the bar will move, the watch recording the mean speed.", id: "s_prof_tb", k: "chk" },

@@ -1,7 +1,7 @@
 import { C } from "./ui.jsx";
 import { mondayOf, parseISO } from "./ui.jsx";
 import { clusterTimer } from "./edge.js";
-import { jumpOf, JUMPS, JUMP_GATE_LINE, STOP_RULE, HEAD_DOCTOR, HEAD_AE } from "./safety.js";
+import { jumpOf, JUMPS, jumpGate, STOP_RULE, HEAD_DOCTOR, HEAD_AE } from "./safety.js";
 import { MON_WU, dipsAndRows, armsCircuit, theBrace, carryBlock } from "./circuits.js";
 
 /* ================================================================
@@ -845,7 +845,7 @@ export const CS = {
         : rx.engine ? "Engine week: low-box depth jumps — drop landings from low fitness — never full depth jumps. "
         : rx.ramp && rx.cw < 4 ? "The tendon ramp: drop landings in the camp's first two weeks, low-box depth jumps from week 3, full depth jumps not before week 4. "
         : rx.emphasis === "durability" ? "The durability emphasis: low-box depth jumps instead of full depth jumps all camp, at the same sets and reps. " : "")
-        + "Weeks 1–5 low-box depth jumps; weeks 6–8 depth jumps. " + JUMP_GATE_LINE, tr: 2 },
+        + "Weeks 1–5 low-box depth jumps; weeks 6–8 depth jumps. " + jumpGate(rx), tr: 2 },
     { L: "D", n: (rx) => (boundAngleC(rx) === "45" ? "Side Bounds — 45°" : "Side Bounds — straight sideways"), m: 6, rest: "Rest 90 s", rt: 90, hide: (rx) => !!rx.tp,
       rxLine: (rx) => rx.bsets + " × 4 per side",
       items: (rx) => [{ n: (boundAngleC(rx) === "45" ? "Side bound — forward-and-across at 45°" : "Side bound — straight sideways") + (rx.bound === "stick" ? ", stick the landing" : ", continuous"), s: rx.bsets + " × 4 per side",

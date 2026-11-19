@@ -30,6 +30,7 @@ import {
 import { Lines, CheckTaps } from "./today.jsx";
 import { CardHead, BigBtn, SetButtons, Input, Checklist, RoutineRunner, Chapter, T1, T2, T3 } from "./now.jsx";
 import { Sheet } from "./im-ui.jsx";
+import { withMove, withFinalWeek, OPROTO } from "./movex.js";
 import { SIGHS, MORNING_FIVE, RANGE_CARDS, FIGHT_WEEK_CARDS, KEEP_CARDS, MOVE_CARDS, moveRangeCards, sessionCards, upperPushCards, skillCards, ROUTINE_MINS } from "./routines.js";
 import { MOVE_SINCE, MOVE_PROGRAM_INTRO, MOVE_PH, moveWeekOf, movePhase, isMoveTestWeek, LEVEL_KEY, levelLine, stepLevel, MOVE_TEST_IDS, rangeStandardsMet, jeffersonGate, END_KEY, tendonWeekOf } from "./move.js";
 import { MoveLevels, MoveTests, MoveTrack } from "./move-ui.jsx";
@@ -41,13 +42,13 @@ import {
 import { RangeTests, RangeTrack } from "./range-ui.jsx";
 import {
   CAMP_L, CAMP_START_DEFAULT, CPH, CENG, CENG_MENU, CS, CPROTO,
-  campSess, campBlank, daysOut,
+  campSess, campBlank, daysOut, CSFW,
   CAMP_DAILY_CHECK, WORKING_WEIGHT_RULE, SCORED_WEEKS_LINE,
   CAMP_EASY_HOUR, PHASE_NAME, campBench,
 } from "./camp.js";
 import { EDGE_OFF_LINE, EDGE_INTRO, EDGE_GUARDRAIL, EDGE_ITEMS, TENDON_GATE, edgeCutIndex, tendonGate, jumpYellow, EASY_THIRTY, SAUNA_BASE, saunaDays } from "./edge.js";
 import {
-  jumpOf, stageDown, JUMP_GATE_LINE, TOP_RAMP, topMax, TOP_NOT_MAX, STOP_PCT, stopRounds, stopState, stopStateShares, roundFilled, fadePct, PAIN_LINE, painRow,
+  jumpOf, stageDown, jumpGate, TOP_RAMP, topMax, TOP_NOT_MAX, STOP_PCT, stopRounds, stopState, stopStateShares, roundFilled, fadePct, PAIN_LINE, painRow,
   HEAD_Q, HEAD_SYMPTOMS, HEAD_DOCTOR, HEAD_AE, HEAD_WHY, HEAD_CLEARED,
 } from "./safety.js";
 import { CampWeekTable, FightWeekTable, CampWorkPanel, CampNumbers, CampWeekCard } from "./camp-ui.jsx";
@@ -268,7 +269,7 @@ const prevRow = (row) => (row && SEASON.s && row.seq > 0 ? SEASON.s.rows[row.seq
 const moveVal = (lg, wkKey, id) => { const e = id === "mv11" ? lg[wkKey + "-sun-mv11"] : lg[wkKey + "-range-" + id]; return e ? e.w : ""; };
 /* the last MOVE test before a row (the row's own week not counted) */
 const lastMoveTest = (row) => { let r = prevRow(row);
-  for (let i = 0; r && i < 40; i++, r = prevRow(r)) { const mw = r.program === "spp" ? moveWeekOf(r.mon, MOVE.start) : null; if (!mw) return null;
+  for (let i = 0; r && i < 40; i++, r = prevRow(r)) { const mw = r.mon ? moveWeekOf(r.mon, MOVE.start) : null; if (!mw) return null;
     if (isMoveTestWeek(mw)) return "m" + r.mac + "w" + r.kw; }
   return null; };
 /* THE JEFFERSON CURL'S GATE, from the log: the last back hold and toe
@@ -277,6 +278,18 @@ const jeffOn = (row) => { const k = lastMoveTest(row); if (!k) return false;
   const scores = []; let r = prevRow(row);
   for (let i = 0; r && i < 4; i++, r = prevRow(r)) { const e = GATE.log["m" + r.mac + "w" + r.kw + "-sun-wr_lb"]; scores.push(e ? e.w : ""); }
   return jeffersonGate({ backHold: moveVal(GATE.log, k, "mv11"), palms: moveVal(GATE.log, k, "mv5"), toeCm: moveVal(GATE.log, k, "mv5_cm"), backScores: scores }); };
+/* OPTIMAL 8 · MOVE in every program: a row's MOVE week, its tendon week
+   and the Jefferson curl's gate, by the row's Monday. Not under `mon`,
+   which a row's ticks are dated by. */
+const JEFF = new WeakMap();
+const jeffMemo = (row) => { const h = JEFF.get(row); if (h && h.log === GATE.log && h.start === MOVE.start) return h.v;
+  const v = jeffOn(row); JEFF.set(row, { log: GATE.log, start: MOVE.start, v }); return v; };
+const moveOf = (row) => { const mw = row && row.mon ? moveWeekOf(row.mon, MOVE.start) : null;
+  return { mw, tw: mw ? tendonWeekOf(row.mon) : 0, jeff: mw && movePhase(mw) === "own" ? jeffMemo(row) : false }; };
+/* the classic's weeks have no rows: its Monday is counted from its start */
+const classicMove = (rx, mac, w) => { const c = SEASON.cstart; if (!c || !c.start) return rx;
+  const mon = iso(new Date(mondayOf(parseISO(c.start)).getTime() + (((mac - c.base) * c.L) + (w - 1)) * 604800000));
+  const mw = moveWeekOf(mon, MOVE.start); return mw ? Object.assign({}, rx, { mw, tw: tendonWeekOf(mon), jeff: false }) : rx; };
 /* which program a row runs */
 const MAC_PROGRAM = { P: "prep", C: "camp", T: "transition", H: "transition", B: "camp", S: "spp" };
 /* Point MODE at a row's program before anything reads a prescription.
@@ -306,12 +319,12 @@ const seasonRxFor = (mac, w, edge) => {
   const row = seasonRow(mac, w);
   if (!row) return mac === "P" ? Object.assign({}, prepRx(1), { w, lift: "slow", ph: "accumulate", doc: 1, prep: 1 }) : mac === "S" ? Object.assign({}, sppRx(1), { w, kw: w, doc: 1, spp: 1 }) : mac === "T" || mac === "H" ? transRx(w) : { w, ph: "c1", pre: 1 };
   const rx = rowRx(row, edge);
-  if (row.program === "prep") return gated(Object.assign({}, rx, { w, kw: w, lift: rx.ph, ph: prepPhaseOf(rx.doc), bw: null, prep: 1 }), "P", w);
+  if (row.program === "prep") return gated(Object.assign({}, rx, { w, kw: w, lift: rx.ph, ph: prepPhaseOf(rx.doc), bw: null, prep: 1 }, moveOf(row)), "P", w);
   if (row.program === "spp") { const mw = moveWeekOf(row.mon, MOVE.start);
     return gated(Object.assign({}, rx, { w, kw: w, bw: null, spp: 1, mon: row.mon, mw, jeff: mw && movePhase(mw) === "own" ? jeffOn(row) : false,
       eb: !!row.mon && row.mon >= ENGINE_SINCE, tw: mw ? tendonWeekOf(row.mon) : 0 }), "S", w); }
-  if (row.program === "camp" || row.program === "pre") return gated(Object.assign({}, rx, { kw: w }), "C", w);
-  return Object.assign({}, rx, { kw: w });
+  if (row.program === "camp" || row.program === "pre") return gated(Object.assign({}, rx, { kw: w }, moveOf(row)), "C", w);
+  return Object.assign({}, rx, { kw: w }, moveOf(row));
 };
 /* THE TENDON GATE, from the Sunday check, separately from the colours:
    Achilles or knee at 3 or more — no reactive jumps next week, the tendon
@@ -373,7 +386,7 @@ const rxFor = (w, day) => {
   if (MODE.mac) return seasonRxFor(MODE.mac, w, MODE.trans || MODE.pre ? true : edgeOnFor(w, day));
   let rx = baseRxFor(w); if (MODE.lastTen) rx = lastTenRx(rx);
   /* the Fighter's Sunday check gates its reactive jumps the same way */
-  return MODE.fmac != null ? gated(rx, MODE.fmac, w) : rx;
+  return MODE.fmac != null ? gated(classicMove(rx, MODE.fmac, w), MODE.fmac, w) : rx;
 };
 /* the running program's line for a week — the header, the day and the
    week map all read this one */
@@ -555,7 +568,7 @@ const PROTO = {
       ["RANGE only", "no skill block"],
       ["If you skip it", "nothing shows this week. By week 6 the hips tighten back to where they were, the internal-rotation lift stops moving, and the tests say so in numbers."]] },
 };
-Object.assign(PROTO, CPROTO, PPROTO, SPPROTO);
+Object.assign(PROTO, CPROTO, PPROTO, SPPROTO, OPROTO);
 
 /* v1.5 — thirty to forty easy nasal minutes on a weekend afternoon: the
    aerobic base that left with the Friday alarm, put back where it costs no
@@ -751,7 +764,7 @@ const S = {
       rxLine: (rx) => rx.js[0] + " × " + rx.js[1], w: (rx) => jumpOf(rx.jump).w,
       why: (rx) => (rx.restart ? "Back under 3 on Sunday's check: the jumps restart one stage down for a week. " : "")
         + (rx.jump === "depth" ? "Weeks 11–16: reactive strength, concentrated before the peak." : rx.jump === "lowbox" ? "Weeks 6–10: the step between drop landings and full depth jumps." : "Weeks 1–5: no jump — this teaches your knees and tendons to absorb.")
-        + " " + JUMP_GATE_LINE, tr: 2 },
+        + " " + jumpGate(rx), tr: 2 },
     { L: "D", n: "Side Bounds", m: 7, rest: "Rest 90s", rt: 90,
       items: [{ n: (rx) => (rx.bound === "stick" ? "Side bound — stick the landing" : "Side bound — continuous"), s: "3 × 4/side",
         cue: (rx) => (rx.bound === "stick" ? "Stand on one leg, jump sideways as far as you can, land on the other leg and stick the landing dead still for 2 seconds." : "Weeks 11–14: no stick — bounce straight back the other way."), id: "latbound", k: "chk" }],
@@ -857,10 +870,15 @@ const S = {
 /* The day's page: the camp's when Camp Mode is on, the Fighter's when it
    isn't. Camp days with no page of their own (week 1's Monday, fight week
    after the bell, the hand-back) return null and get a card instead. */
-const sessFor = (day, rx) => (MODE.trans ? transitionSess(day, rx)
-  : MODE.prep ? prepSess(day)
-  : MODE.spp ? sppSess(day)
-  : MODE.camp ? campSess(day, rx || rxFor(1)) : S[day]);
+const sessFor = (day, rx) => {
+  if (MODE.spp) return sppSess(day);
+  const S0 = MODE.trans ? transitionSess(day, rx) : MODE.prep ? prepSess(day) : MODE.camp ? campSess(day, rx || rxFor(1)) : S[day];
+  /* OPTIMAL 8 · MOVE, laid over the day: the camp's final week has only
+     its Tuesday's lower pushes, and the week before a camp has none */
+  if (MODE.camp && rx && rx.pre) return S0;
+  if (MODE.camp && rx && rx.fightWeek) return S0 && S0 === CSFW.tue ? withFinalWeek(S0) : S0;
+  return withMove(MODE.trans ? "trans" : MODE.prep ? "prep" : MODE.camp ? "camp" : "fighter", day, S0);
+};
 
 /* Is this day a sleep day? Friday, in both programs. */
 const sleepDay = (day, rx) => {
@@ -1098,6 +1116,8 @@ const sayOf = (c, rx) => {
    { program, week, day, n, lib, rows, say }. `rows` are the moves inside
    a warm-up or a round card, each with its own entry. `seasons` walks
    other seasons in place of the catalog's own (and no Fighter). */
+/* the classic Fighter's own page for a day, as written */
+export const fighterSess = (day) => S[day] || null;
 export function sessionCatalog(only, seasons) {
   const keepM = Object.assign({}, MODE), keepS = SEASON.s, keepC = SEASON.classic, keepE = Object.assign({}, EDGE);
   const out = [];
@@ -2144,11 +2164,11 @@ function Today(props) {
     weekly.push(im("S:bolt", C.cobalt, "BOLT score", "one hold", 2, "bolt",
       Object.assign(fromLib("bolt"), { tool: { label: "▶ THE BOLT STOPWATCH", run: () => openTool({ kind: "breath", id: "bolt" }) } })));
     /* OPTIMAL 8 · MOVE: its fifteen standards take the range tests' place */
-    if (MODE.spp && rx.mw && isMoveTestWeek(rx.mw)) {
+    if (rx.mw && isMoveTestWeek(rx.mw)) {
       weekly.push(im("S:movetests", C.violet, "The fifteen standards", "measured · about 12 min", 12, "movetests",
         { lib: libFor("the fifteen standards"), tool: { label: "▶ THE STANDARDS", run: () => openTool({ kind: "movetests" }) } }));
     }
-    const rangeTestDay = MODE.spp && rx.mw ? false : MODE.camp ? !!(rx.dl || (rx.tests && rx.tests.tue === "retest9")) : MODE.prep ? !!prepRx(rx.doc || week).tests : isTestWeek(rw);
+    const rangeTestDay = rx.mw ? false : MODE.camp ? !!(rx.dl || (rx.tests && rx.tests.tue === "retest9")) : MODE.prep ? !!prepRx(rx.doc || week).tests : isTestWeek(rw);
     if (rangeTestDay) {
       const k = "rangetests";
       weekly.push(im("S:rangetests", C.oxide, MODE.prep ? "The range and flexibility tests" : "The four range tests", "measured", 10, k,
@@ -2302,23 +2322,29 @@ function Today(props) {
     else ev.push(Object.assign({ id: "ev-easy", colour: C.moss, n: "The easy hour", s: titleCase(EH.tag.split(" · ")[0]) + (rx.twoThirds && rx.easyHour ? " · " + rx.easyHour.join("–") + " min" : "") + " · + " + EASY_WATER + " ml water", mins: rx.twoThirds && rx.easyHour ? rx.easyHour[1] : 40, lib: libFor("easy hour"), easy: o8Zone }, ehDone));
   }
   if (o8Evening) saunaRows().forEach((x) => ev.push(x));
-  if ((MODE.prep && moveTonight(rx, day)) || (MODE.camp && !rx.fightWeek && (day === "sat" || (day === "wed" && rx.move)))) {
+  if (!rx.mw && ((MODE.prep && moveTonight(rx, day)) || (MODE.camp && !rx.fightWeek && (day === "sat" || (day === "wed" && rx.move))))) {
     ev.push(im("ev-move", C.violet, "The movement session", ROUTINE_MINS.move + " min", ROUTINE_MINS.move, "move", routine(MOVE_CARDS)));
   }
   /* OPTIMAL 8 · MOVE: Session A on Wednesday evening, Session B on
      Sunday's, RANGE FOR MOVE the other five — THE KEEP once the last
      standards met every range target */
-  const mvOn = MODE.spp && !!rx.mw;
+  /* in every program and every week but the camp's final week, the week
+     before a camp too; the transition's first three days are RANGE alone */
+  const fwk = MODE.camp && !!rx.fightWeek, trans3 = MODE.trans && rx.w === 1 && (day === "mon" || day === "tue" || day === "wed");
+  const mvOn = !!rx.mw && !fwk;
   /* THE UPPER PUSHES: Tuesday and Thursday evenings before RANGE, and in
-     Session B on Sunday, from the tendon work's week 1 */
+     Session B on Sunday, from the tendon work's week 1. The transition's
+     are Monday's and Thursday's, at 7 out of 10, from its fourth day; the
+     camp's final week has one, on its Tuesday, at half effort. */
   const upRed = effReady === "R";
-  if (mvOn && rx.tw && (day === "tue" || day === "thu")) {
-    ev.push(im("ev-upper", C.violet, "The upper pushes", ROUTINE_MINS.upper + " min · shoulders and wrists", ROUTINE_MINS.upper, "upper", routine(upperPushCards(rx.tw, upRed))));
+  const upOn = !!rx.tw && (fwk ? day === "tue" : !mvOn ? false : MODE.trans ? !rx.hold && (day === "thu" || (day === "mon" && rx.w > 1)) : (day === "tue" || day === "thu"));
+  if (upOn) {
+    ev.push(im("ev-upper", C.violet, "The upper pushes", ROUTINE_MINS.upper + " min · shoulders and wrists", ROUTINE_MINS.upper, "upper", routine(upperPushCards(rx.tw, upRed, { fw: fwk, trans: MODE.trans }))));
   }
-  if (mvOn && (day === "wed" || day === "sun")) {
-    const isA = day === "wed", mvLv = (log[LEVEL_KEY] || {}).lv || {}, cards = sessionCards(isA ? "A" : "B", rx.mw, mvLv, rx.tw, upRed);
+  if (mvOn && (day === "sun" || (day === "wed" && !trans3))) {
+    const isA = day === "wed", mvLv = (log[LEVEL_KEY] || {}).lv || {}, cards = sessionCards(isA ? "A" : "B", rx.mw, mvLv, MODE.trans ? 0 : rx.tw, upRed);
     const mvStep = (id, by) => { const n = Object.assign({}, log); n[LEVEL_KEY] = { lv: stepLevel(mvLv, id, by) }; setLog(n); buzz(20); };
-    const mins = isA ? ROUTINE_MINS.sessA : rx.tw ? ROUTINE_MINS.sessBPush : ROUTINE_MINS.sessB;
+    const mins = isA ? ROUTINE_MINS.sessA : rx.tw && !MODE.trans ? ROUTINE_MINS.sessBPush : ROUTINE_MINS.sessB;
     ev.push(im(isA ? "ev-sessa" : "ev-sessb", C.violet, isA ? "Session A · hips, lower back, balance" : "Session B · shoulders, mid-back, neck, wrists, ankles", mins + " min", mins, isA ? "moveA" : "moveB",
       Object.assign(routine(cards), { input: () => <MoveLevels ids={cards.filter((c) => c.lv).map((c) => c.lv)} lv={mvLv} onStep={mvStep} /> })));
   } else {
@@ -2369,7 +2395,7 @@ function Today(props) {
   if (mScales) mScales.t = wake;
   /* OPTIMAL 8 · MOVE: no morning five — the movement block does its job,
      and nothing bends the back to its end in the first hour up */
-  const all = (headItem ? [headItem] : []).concat(mScales ? [mScales] : [], [mNumbers], fuelItems.filter((x) => x.id === "w-wake"), MODE.spp && rx.mw ? [mSighs, mOne, mCheck] : [mSighs, mOne, mFive, mCheck],
+  const all = (headItem ? [headItem] : []).concat(mScales ? [mScales] : [], [mNumbers], fuelItems.filter((x) => x.id === "w-wake"), rx.mw ? [mSighs, mOne, mCheck] : [mSighs, mOne, mFive, mCheck],
     fuelItems.filter((x) => x.id !== "w-wake" && !x.anchor && x.id !== "w-sess" && x.t <= startMin),
     fuelItems.filter((x) => x.id === "w-sess"), sessItems,
     fuelItems.filter((x) => x.id !== "w-wake" && !x.anchor && x.id !== "w-sess" && x.t > startMin),
@@ -3192,7 +3218,7 @@ function Settings({ st, setSt, current, L, exportData, importData, IM, calis, se
         <div style={{ padding: "12px 0", borderBottom: "1px solid " + C.line }}>
           <Lab>MOVE week 1 began</Lab>
           <Fld type="date" v={st.moveStart || MOVE_SINCE} on={(val) => { if (val) upd({ moveStart: iso(mondayOf(parseISO(val))) }); }} a="left" />
-          <Note>It runs beside Strength, Power and Physique: the movement block every gym morning, Session A on Wednesday evening, Session B on Sunday's, RANGE the other five, and the fifteen standards in weeks 1, 5, 9 and 13.</Note>
+          <Note>It runs in every program: the movement block every gym morning, Session A on Wednesday evening, Session B on Sunday's, RANGE the other five, and the fifteen standards in weeks 1, 5, 9 and 13. Its tendon work starts on Monday 23 November.</Note>
         </div>
 
         <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
@@ -3754,6 +3780,7 @@ export default function App() {
   SEASON.s = season;
   const classic = !plans.length || (!!season.classic && !rowOn(season, dayIso));
   SEASON.classic = classic;
+  SEASON.cstart = classic ? { start: st.start, base: st.macroBase, L: st.iron ? 18 : 16 } : null;
   /* THE EDGE: the switch, and the mornings the check has recorded */
   EDGE.manual = st.edge !== false;
   EDGE.ready = readyMap;
@@ -3845,7 +3872,7 @@ export default function App() {
     }
     return out.slice(-8); }, [st.macroBase, current.macro, current.week, L, rangeWeekOf, program, season, classic]);
   /* OPTIMAL 8 · MOVE's test weeks, for TRACK */
-  const moveTestWeeks = useMemo(() => (classic ? [] : season.rows.filter((r) => r.mon <= dayIso && r.program === "spp").map((r) => ({ r, mw: moveWeekOf(r.mon, st.moveStart || MOVE_SINCE) }))
+  const moveTestWeeks = useMemo(() => (classic ? [] : season.rows.filter((r) => r.mon <= dayIso).map((r) => ({ r, mw: moveWeekOf(r.mon, st.moveStart || MOVE_SINCE) }))
     .filter((x) => isMoveTestWeek(x.mw)).map((x) => ({ key: "m" + x.r.mac + "w" + x.r.kw, label: "Week " + x.mw })).slice(-8)), [season, classic, dayIso, st.moveStart]);
   const imWeek = useMemo(() => imWeekOn(st, dayIso), [imStart, dayIso]);
   const fightWeekNow = fightWeekOn(st, dayIso);

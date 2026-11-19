@@ -296,7 +296,13 @@ const resolve = (val) => {
 
 /* Every entry a row is, or null. Exact names first, then the row's own
    table, then a word-for-word prefix of two words or more either way. */
+const LIB_MEMO = new Map();
 export function libFor(name) {
+  const k = String(name == null ? "" : name);
+  if (!LIB_MEMO.has(k)) LIB_MEMO.set(k, libLookup(name));
+  return LIB_MEMO.get(k);
+}
+function libLookup(name) {
   const cands = candidates(name);
   for (const k of cands) if (BY_KEY[k]) return [BY_KEY[k]];
   for (const k of cands) if (ROW_KEYS[k]) return resolve(ROW_KEYS[k]);

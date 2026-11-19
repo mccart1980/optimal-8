@@ -35,6 +35,9 @@ export const stageDown = (k) => JUMP_STAGES[Math.max(0, JUMP_STAGES.indexOf(k) -
 /* the gentler of two stages */
 export const lowerStage = (a, b) => (JUMP_STAGES.indexOf(a) <= JUMP_STAGES.indexOf(b) ? a : b);
 export const JUMP_GATE_LINE = "Achilles or knee at 3 or more on Sunday's check: no reactive jumps that week — the tendon holds carry on.";
+/* from the tendon work's week 1 the holds are the lower pushes */
+export const JUMP_GATE_PUSHES = "Achilles or knee at 3 or more on Sunday's check: no reactive jumps that week — the lower pushes carry on, at 7 out of 10.";
+export const jumpGate = (rx) => (rx && rx.tw ? JUMP_GATE_PUSHES : JUMP_GATE_LINE);
 
 /* ---------------- the top triple ---------------- */
 /* "after the warm-up sets, 50% × 5 → 65% × 3 → 75% × 2 → 85% × 1, then

@@ -68,6 +68,24 @@ After a max-single week or test day, your new number becomes the max, and every 
 
 ---
 
+## OPTIMAL 8 · MOVE AND ITS TENDON WORK — IN FIGHTER TOO
+
+**Optimal 8 · Move runs in Fighter for any week from Monday 16 November 2026, and its tendon work from Monday 23 November.** The pages below are Fighter as written; MOVE lays over them like this:
+
+| Day | The morning | The evening |
+| --- | --- | --- |
+| Monday | Move's hips, ankles and overhead block in the warm-up's place, the bench ramp its last rows | RANGE |
+| Tuesday | Move's hips, balance and sprint prep block in the warm-up's place, the crawls gone · the lower pushes straight after the pistol line · the Copenhagen plank leaves the trunk block for Wednesday's hip pair · the Achilles hold becomes the towel calf raise | The upper pushes, then RANGE |
+| Wednesday | Move's hips, knees and lower back block in the warm-up's place, the trap bar and squat warm-up sets its last rows · the hip pair at the end | Session A |
+| Thursday | Move's lower back and shoulders block in the warm-up's place, the crawls gone · the lower pushes in the Spanish squat hold's and the Achilles hold's place | The upper pushes, then RANGE |
+| Saturday | Move's hips, balance and sprint prep block in the warm-up's place · the lower pushes straight after the side bounds, before the squat · the hip pair at the end | RANGE |
+| Sunday | Move's whole-body block, then the power prep · the back extension after the core block | Session B, the upper pushes in it |
+| Every day | The morning five goes | The skill block and the sit stay |
+
+Every push is eased in over a second, held 3 seconds, breathing out, with 3 seconds off: the first two weeks of the tendon work at 8 out of 10, then as hard as you can; a red morning at half effort; Achilles or knee at 3 or more on Sunday's check, the lower pushes at 7 out of 10 in the holds' place, and no reactive jumps. Move's fifteen standards take the four range tests' place, in Move's test weeks, and its week count carries on from whatever ran before. Every exercise, level and rule is in Optimal 8 · Move.
+
+---
+
 ## YOUR NUMBERS, WEEK BY WEEK
 
 Squat and bench use the same sets and reps each week. "Max single" means work up to one top lift (there's a step-by-step ramp on the Saturday and Sunday pages). The pause squat is a percentage of your back-squat max — and a paused triple at 75% is a hard triple, because a two-second pause takes 10–15% off what you can lift. That column never goes above 75%.
@@ -739,7 +757,7 @@ This program is a base phase: it assumes the evenings are free. The day your coa
 | Saturday | The leg & power session, as written — sprints, drop jumps, side bounds, squat, jump circuit, push press. If Sunday is sparring, the jump circuit is cut to one round. | ~85 min |
 | Sunday | Punch throws (2 rounds), trunk, Nordics, weekly check. No fight sim — the ring did it. | ~40 min |
 
-RANGE and the morning five stay in camp — they're the cheapest injury insurance you own. Calisthenics in camp: the handstand at home stays; the rings, the pistols, the L-sits and the slow lane stop — boxing nights leave no room for a fourth pressing exposure or a tendon experiment.
+RANGE stays in camp — it's the cheapest injury insurance you own (the morning five went with Optimal 8 · Move: the movement block does its job). Calisthenics in camp: the handstand at home stays; the rings, the pistols, the L-sits and the slow lane stop — boxing nights leave no room for a fourth pressing exposure or a tendon experiment.
 
 Boxing nights: the head-contact rule is the law. The morning after any sparring is the LIGHT SESSION or nothing — no heavy lifts, no sprints, no jumps for 24 hours.
 
