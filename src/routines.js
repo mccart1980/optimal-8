@@ -119,6 +119,8 @@ const LV_BY_NAME = [[/CURL-UP/, "mv_curlup"], [/^SIDE BRIDGE/, "mv_bridge"], [/^
   [/^TURN-OUT LIFTS/, "mv_turnout"], [/^LOADED KNEE TO WALL/, "mv_ktw"], [/^SINGLE-LEG CALF RAISE/, "mv_scalf"]];
 export const levelIdOf = (name) => { const hit = LV_BY_NAME.find((x) => x[0].test(name)); return hit ? hit[1] : null; };
 const OWN_PIGEON = " At halfway: press your front shin into the floor for 5 seconds, relax, and fold further.";
+/* RANGE FOR MOVE: its one-leg balance cards show your balance level */
+export const moveRangeCards = (lv) => MOVE_RANGE_CARDS.map((c) => (/^ONE-LEG BALANCE/.test(c.n) ? Object.assign({}, c, { level: levelLine(lv, "mv_balance"), lv: "mv_balance" }) : c));
 export const sessionCards = (which, mw, lv) => (which === "A" ? SESSION_A_CARDS : SESSION_B_CARDS).map((c) => {
   const id = levelIdOf(c.n);
   let x = id ? Object.assign({}, c, { level: levelLine(lv, id), lv: id }) : c;

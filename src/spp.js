@@ -207,9 +207,9 @@ Object.assign(SPPROTO, {
     i: [["Easy bike", "2 min", null, "Easy bike, two minutes"], ["Leg swings", "×10 each way, each leg"], ["Hip airplanes", "2 × 4 each side", "mv_airplane", "Hip airplanes, by level"],
       ["World's greatest stretch", "3 each side"],
       ["A-skips", "2 × 15 m"], ["SPRINT BUILD-UPS", ""], ["20 m @ 60%", "×1"], ["20 m @ 75%", "×1"], ["20 m @ 90%", "×1"]] },
-  S_MV_SAT: { n: "The movement block", s: "10 min · Sat", c: C.cobalt, mv: 1, area: "Mid-back, shoulders and Achilles",
+  S_MV_SAT: { n: "The movement block", s: "11 min · Sat", c: C.cobalt, mv: 1, area: "Mid-back, shoulders and Achilles",
     i: [["Elbow to the ceiling", "6 each side", "mv_elbow"], ["Cable external rotation at shoulder height", "2 × 10–12 each arm · 2-second hold"],
-      ["Push-up plus", "×10"], ["Single-leg calf hold", "3 × 30 s each leg, alternating · heavy enough that 30 s is hard", "mv_calfhold"],
+      ["Push-up plus", "×10"], ["Achilles pushes", "5 × 4 pushes · 3 s as hard as you can, 3 s off · 30 s between sets"],
       ["Then two easy throws of each", "at half effort"]] },
   S_MV_SUN: { n: "The movement block", s: "10 min · Sun", c: C.cobalt, mv: 1, area: "The whole body",
     i: [["Turkish get-up", "2 each side · slow, 3 s in every position", "mv_getup", "Turkish get-up, slow"], ["Suitcase carry", "2 × 30 m each hand"],
@@ -217,7 +217,7 @@ Object.assign(SPPROTO, {
 });
 /* a day's first block: the warm-up before MOVE, the movement block from
    its week 1 */
-const MOVE_MINS = { mon: 11, tue: 8, wed: 9, thu: 12, sat: 10, sun: 10 };
+const MOVE_MINS = { mon: 11, tue: 8, wed: 9, thu: 12, sat: 11, sun: 10 };
 const moveA = (d, wu, m, line) => ({ L: "A", n: "Warm-up", m: (rx) => (rx.mw ? MOVE_MINS[d] : m),
   p: (rx) => (rx.mw ? "S_MV_" + d.toUpperCase() : wu),
   rxLine: (rx) => { if (!rx.mw) return line; const a = SPPROTO["S_MV_" + d.toUpperCase()].area; return MOVE_MINS[d] + " min · " + a.charAt(0).toLowerCase() + a.slice(1); } });
@@ -423,7 +423,7 @@ export const SS = {
     nasalRun("R")] },
 
   /* ---------------- THURSDAY ---------------- */
-  thu: { n: "THURSDAY", t: "Lower power — the sled, flying sprints and jumps, trap bar jumps, the trap bar deadlift and shrugs, the pause squat, Nordics, then side planks and dead bugs", ac: C.brass, box: 1,
+  thu: { n: "THURSDAY", t: "Lower power — the sled, flying sprints and jumps, trap bar jumps, the trap bar deadlift and shrugs, the pause squat, Nordics, then the Copenhagen plank", ac: C.brass, box: 1,
     intro: "Sled, sprints and jumps while you're fresh, then the trap bar heavy, heavy shrugs on the same bar and a second, lighter squat, then an ab finish. Friday's rest after it.", b: [
     moveA("thu", "S_WU_THU", 10, "10 min · bike, swings, skips, lunges, then the three build-ups"),
     { L: "B", n: "Heavy Sled Sprint", m: (rx) => (rx.half ? 8 : 12), star: 1, hard: 1, rest: "Rest 2:00", rt: 120,
@@ -484,14 +484,14 @@ export const SS = {
     { L: "K", n: "Copenhagen Plank, Knee or Ankle", since: "2026-11-09", m: (rx) => (rx.half ? 2 : 3), hide: (rx) => !rx.mw, rest: "Rest 30 s", rt: 30,
       rxLine: (rx) => hs(rx, 2) + " × 20–30 s each side",
       items: (rx) => [{ n: "Copenhagen plank, knee or ankle", s: hs(rx, 2) + " × 20–30 s each side", cue: "Lie on your side, propped on your forearm, your top leg's knee (or ankle) on a bench and the bottom leg underneath. Lift your hips until your body is a straight line, and hold.", id: "s_copen", k: "chk", lv: "mv_copen" }],
-      why: "It cut groin problems by 41%, and it trains the side of the trunk the side plank did." }] },
+      why: "Twice a week, here and on Saturday: in footballers, a Copenhagen programme three times a week in pre-season and once a week after cut the risk of groin problems by 41%. It trains the side of the trunk the side plank did." }] },
 
   /* ---------------- FRIDAY ---------------- */
   fri: { n: "FRIDAY", t: "Off — sleep", m: 0, ac: C.moss, sleep: 1, free: 1,
     intro: "No alarm. Saturday is the longest session of the week.", b: [] },
 
   /* ---------------- SATURDAY ---------------- */
-  sat: { n: "SATURDAY", t: "Upper power — throws, bench throws and the landmine push press, then bench and back for size, side planks and landmine rotations, then the 4 × 4", ac: C.oxide, free: 1,
+  sat: { n: "SATURDAY", t: "Upper power — throws, bench throws and the landmine push press, then bench and back for size, Copenhagen planks and landmine rotations, then the 4 × 4", ac: C.oxide, free: 1,
     intro: "Throws, bench throws and the landmine push press while you're fresh from Friday's rest, then bench and back for size, an ab finish, then the 4 × 4.", b: [
     moveA("sat", "S_WU_SAT", 6, "6 min · bands, push-ups, two easy throws of each"),
     { L: "B", n: "Medicine-Ball Chest Pass + Rotational Scoop Throw", m: 7, star: 1, hard: 1, pair: 1, rxLine: () => "alternate · 60 s after each",
@@ -523,8 +523,14 @@ export const SS = {
       items: (rx) => [{ n: "Cable lateral raise", s: hs(rx, 3) + " × 15–20 · " + DROP, cue: "Cable at hand height, the handle in your far hand with the cable behind your back. Raise your arm out to shoulder height and lower slowly.", id: "s_clat_sat", k: "wr", sets: hs(rx, 3), reps: "15–20" }] },
     /* THE ABS: the side plank, then rotation under load, turned from the
        hips — before the 4 × 4, with nothing heavy after it */
-    { L: "J", n: "Side Plank", since: "2026-11-09", m: 3, rest: "Rest 30 s", rt: 30, rxLine: (rx) => hs(rx, 2) + " × 30–45 s each side",
+    { L: "J", n: "Side Plank", since: "2026-11-09", m: 3, hide: (rx) => !!rx.mw, rest: "Rest 30 s", rt: 30, rxLine: (rx) => hs(rx, 2) + " × 30–45 s each side",
       items: (rx) => [SIDE_PLANK(rx)] },
+    /* THE COPENHAGEN PLANK, from MOVE week 1, in the side plank's place:
+       the groin's second dose of the week, and the side of the trunk */
+    { L: "J", n: "Copenhagen Plank, Knee or Ankle", since: "2026-11-09", m: 3, hide: (rx) => !rx.mw, rest: "Rest 30 s", rt: 30,
+      rxLine: (rx) => hs(rx, 2) + " × 20–30 s each side",
+      items: (rx) => [{ n: "Copenhagen plank, knee or ankle", s: hs(rx, 2) + " × 20–30 s each side", cue: "Lie on your side, propped on your forearm, your top leg's knee (or ankle) on a bench and the bottom leg underneath. Lift your hips until your body is a straight line, and hold.", id: "s_copen", k: "chk", lv: "mv_copen" }],
+      why: "The groin's second dose of the week, with Thursday's, and the side of the trunk the side plank trained." },
     LAND_ROT("K", "2026-11-09"),
     { L: "H", n: (rx) => (rx.e === "vo2s" ? "The 3 × 4 Intervals" : "The 4 × 4 Intervals"), m: 30, star: 1, hard: 1, eng: 1, engKey: "e",
       timer: (rx) => ({ kind: "vo2", opt: { n: 4, short: rx.e === "vo2s" ? 1 : 0, wu: 5, cd: 3 }, title: rx.e === "vo2s" ? "THE 3 × 4" : "THE 4 × 4" }),

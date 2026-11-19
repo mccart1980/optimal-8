@@ -49,7 +49,6 @@ export const LEVELS = {
   mv_pry: { n: "Goblet squat pry", l: ["Holding a post with one hand", "The weight, heels flat", "45 seconds"] },
   mv_airplane: { n: "Hip airplanes", l: ["A hand on the rack", "No hand", "A 5 kg plate held at your chest"] },
   mv_elbow: { n: "Elbow to the ceiling", l: ["On all fours", "Kneeling on one knee, a light plate at your chest"] },
-  mv_calfhold: { n: "Single-leg calf hold", l: ["Bodyweight", "A 10 kg dumbbell in the same hand", "20 kg", "30 kg"] },
   mv_getup: { n: "Turkish get-up", l: ["No weight: a shoe balanced on your fist", "8 kg", "12 kg", "16 kg", "20 kg"] },
   mv_copen: { n: "Copenhagen plank", l: ["Knee on the bench", "Ankle on the bench"] },
   mv_curlup: { n: "McGill curl-up", l: ["Elbows on the floor", "Elbows lifted", "Elbows lifted, a deep breath in and out during each hold"] },
@@ -87,7 +86,7 @@ export const MOVE_TESTS = [
     how: "Arms folded, eyes closed, stand on one leg. The time until the other foot touches or your arms come out.",
     fields: [{ id: "mv2_r", n: "Right leg (seconds)", k: "n" }, { id: "mv2_l", n: "Left leg (seconds)", k: "n" }], met: (g) => all(g, ["mv2_r", "mv2_l"], atLeast(20)) },
   { id: "s3", n: "Deep squat", area: "Hips, knees, ankles", tgt: "2 min", range: 1,
-    how: "No weight, no hands. Sit to the bottom of a squat, heels down and chest up. The time you hold it.",
+    how: "No weight, no hands. Sit to the bottom of a squat, heels down and back flat. The time you hold it.",
     fields: [{ id: "mv3", n: "Seconds at the bottom", k: "n" }], met: (g) => all(g, ["mv3"], atLeast(120)) },
   { id: "s4", n: "90/90", area: "Hips", tgt: "Both sides, and the switch", range: 1,
     how: "Sit in the 90/90 with both sitting bones on the floor, each side; then switch sides with no hands.",
@@ -119,19 +118,26 @@ export const MOVE_TESTS = [
   { id: "s12", n: "Couch position", area: "Hips", tgt: "60 s each side", range: 1,
     how: "Back knee on a cushion against the sofa, front foot flat, buttock squeezed. Chest fully upright for 60 seconds, lower back not arched.",
     fields: [{ id: "mv12_r", n: "Right knee down", k: "yn" }, { id: "mv12_l", n: "Left knee down", k: "yn" }], met: (g) => all(g, ["mv12_r", "mv12_l"], yes) },
-  { id: "s13", n: "Seated turn", area: "Mid-back", tgt: "60° each way", range: 1,
+  { id: "s13", n: "Seated turn", area: "Mid-back", tgt: "50° each way", range: 1,
     how: "Sit on the floor, legs straight, a stick across your shoulders. Turn as far as you can each way; film it from above and read the angle.",
-    fields: [{ id: "mv13_r", n: "To the right (degrees)", k: "n" }, { id: "mv13_l", n: "To the left (degrees)", k: "n" }], met: (g) => all(g, ["mv13_r", "mv13_l"], atLeast(60)) },
-  { id: "s14", n: "Neck turn", area: "Neck", tgt: "Chin in line with the shoulder",
-    how: "Sitting tall, turn your head as far as it goes each way.",
-    fields: [{ id: "mv14_r", n: "To the right", k: "yn" }, { id: "mv14_l", n: "To the left", k: "yn" }], met: (g) => all(g, ["mv14_r", "mv14_l"], yes) },
+    fields: [{ id: "mv13_r", n: "To the right (degrees)", k: "n" }, { id: "mv13_l", n: "To the left (degrees)", k: "n" }], met: (g) => all(g, ["mv13_r", "mv13_l"], atLeast(50)) },
+  { id: "s14", n: "Neck turn", area: "Neck", tgt: "70° each way, within 10° of each other",
+    how: "Sitting tall, shoulders still, turn your head as far as it goes each way; film it from above, as for the seated turn, and read the angle.",
+    fields: [{ id: "mv14_r", n: "To the right (degrees)", k: "n" }, { id: "mv14_l", n: "To the left (degrees)", k: "n" }],
+    met: (g) => all(g, ["mv14_r", "mv14_l"], atLeast(70)) && Math.abs(num(g("mv14_r")) - num(g("mv14_l"))) <= 10 },
   { id: "s15", n: "Wrist bend", area: "Wrists", tgt: "A right angle, pain-free", range: 1,
     how: "On all fours, palms flat, fingers forward, arms straight. Move your shoulders forward past your hands until the wrists are bent to a right angle.",
     fields: [{ id: "mv15_r", n: "Right hand", k: "yn" }, { id: "mv15_l", n: "Left hand", k: "yn" }], met: (g) => all(g, ["mv15_r", "mv15_l"], yes) },
 ];
 export const MOVE_TEST_IDS = [].concat(...MOVE_TESTS.map((t) => t.fields.map((f) => f.id)));
-/* every range standard met: RANGE can drop to THE KEEP */
-export const rangeStandardsMet = (g) => MOVE_TESTS.filter((t) => t.range).every((t) => t.met(g));
+/* YOUR END: a range standard your build won't let you reach. Marked on
+   the standards' sheet, only once this test and the last both fell short;
+   the rest of the rule (no gain, a hard block or a pinch, a physio's look
+   at any pinch) is yours to keep. A marked standard counts as met. */
+export const END_KEY = "move-end";
+export const canMarkEnd = (t, g, prevG) => !!t.range && !t.met(g) && !!prevG && !t.met(prevG);
+/* every range standard met, or marked as your end: RANGE can drop to THE KEEP */
+export const rangeStandardsMet = (g, ends) => MOVE_TESTS.filter((t) => t.range).every((t) => t.met(g) || !!(ends && ends[t.id]));
 /* one standard, as one line: "8 · 12 s", "YES", "—" */
 export const testSummary = (t, g) => {
   const vals = t.fields.filter((f) => !/_cm$/.test(f.id) || t.fields.length === 1).map((f) => { const v = g(f.id);

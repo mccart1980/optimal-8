@@ -3,8 +3,8 @@ import moveMd from "../optimal-8-move.md?raw";
 import homeMd from "../home-routines.md?raw";
 import sppMd from "../optimal-8-strength-power-physique.md?raw";
 import { MOVE_SINCE, moveWeekOf, movePhase, isMoveTestWeek, LEVELS, LEVEL_KEY, levelOf, levelLine, stepLevel,
-  MOVE_TESTS, MOVE_TEST_IDS, rangeStandardsMet, testSummary, jeffersonGate } from "./move.js";
-import { MOVE_RANGE_CARDS, SESSION_A_CARDS, SESSION_B_CARDS, RANGE_CARDS, sessionCards, levelIdOf, ROUTINE_MINS } from "./routines.js";
+  MOVE_TESTS, MOVE_TEST_IDS, rangeStandardsMet, testSummary, jeffersonGate, canMarkEnd, END_KEY } from "./move.js";
+import { MOVE_RANGE_CARDS, SESSION_A_CARDS, SESSION_B_CARDS, RANGE_CARDS, sessionCards, moveRangeCards, levelIdOf, ROUTINE_MINS } from "./routines.js";
 import { sppRx, sppSess, SPPROTO } from "./spp.js";
 import { libFor } from "./library.js";
 import { sessionCatalog } from "./App.jsx";
@@ -43,7 +43,8 @@ describe("Optimal 8 · Move · its weeks", () => {
 describe("Optimal 8 · Move · the levels", () => {
   it("every move starts at level 1, a step stays inside its levels, and the line names the level", () => {
     expect(LEVEL_KEY).toBe("move-lv");
-    expect(Object.keys(LEVELS).length).toBe(21);
+    expect(Object.keys(LEVELS).length).toBe(20);
+    expect(LEVELS.mv_calfhold).toBeUndefined();
     Object.values(LEVELS).forEach((L) => { expect(L.n).toBeTruthy(); expect(L.l.length).toBeGreaterThanOrEqual(2); });
     expect(levelOf({}, "mv_cossack")).toBe(1);
     expect(levelOf({ mv_cossack: 9 }, "mv_cossack")).toBe(5);
@@ -59,15 +60,14 @@ describe("Optimal 8 · Move · the levels", () => {
   it("the levels are the document's, move by move", () => {
     expect(moveMd).toMatch(/Level 1: hold a rack upright\. Level 2: no support\. Level 3: 8–12 kg held at your chest\. Level 4: 16–20 kg\. Level 5: 24 kg or more\./);
     expect(moveMd).toMatch(/Level 1: no weight \(a shoe balanced on your fist\)\. Level 2: 8 kg\. Level 3: 12 kg\. Level 4: 16 kg\. Level 5: 20 kg\./);
-    expect(moveMd).toMatch(/Level 1: bodyweight\. Level 2: a 10 kg dumbbell in the same hand\. Level 3: 20 kg\. Level 4: 30 kg\./);
     expect(moveMd).toMatch(/Level 1: knee on the bench\. Level 2: ankle on the bench\./);
-    expect([LEVELS.mv_cossack.l.length, LEVELS.mv_getup.l.length, LEVELS.mv_calfhold.l.length, LEVELS.mv_copen.l.length]).toEqual([5, 5, 4, 2]);
+    expect([LEVELS.mv_cossack.l.length, LEVELS.mv_getup.l.length, LEVELS.mv_copen.l.length]).toEqual([5, 5, 2]);
   });
 });
 
 describe("Optimal 8 · Move · the fifteen standards", () => {
   const ALL_MET = { mv1: "10", mv2_r: "20", mv2_l: "25", mv3: "120", mv4_r: "y", mv4_l: "y", mv4_sw: "y", mv5: "y", mv6: "y", mv7_r: "0", mv7_l: "-2",
-    mv8_r: "12", mv8_l: "13", mv9: "60", mv10_r: "25", mv10_l: "25", mv11: "180", mv12_r: "y", mv12_l: "y", mv13_r: "60", mv13_l: "65", mv14_r: "y", mv14_l: "y", mv15_r: "y", mv15_l: "y" };
+    mv8_r: "12", mv8_l: "13", mv9: "60", mv10_r: "25", mv10_l: "25", mv11: "180", mv12_r: "y", mv12_l: "y", mv13_r: "50", mv13_l: "55", mv14_r: "72", mv14_l: "78", mv15_r: "y", mv15_l: "y" };
   const g = (o) => (id) => (o[id] == null ? "" : o[id]);
   it("fifteen, in the document's order; the back hold is entered in Sunday's session", () => {
     expect(MOVE_TESTS.map((t) => t.id)).toEqual(Array.from({ length: 15 }, (x, i) => "s" + (i + 1)));
@@ -86,8 +86,9 @@ describe("Optimal 8 · Move · the fifteen standards", () => {
     expect(rangeStandardsMet(g(Object.assign({}, ALL_MET, { mv3: "119" })))).toBe(false);
     expect(rangeStandardsMet(g(Object.assign({}, ALL_MET, { mv7_l: "3" })))).toBe(false);
     expect(rangeStandardsMet(g(Object.assign({}, ALL_MET, { mv13_l: "" })))).toBe(false);
+    expect(rangeStandardsMet(g(Object.assign({}, ALL_MET, { mv13_l: "49" })))).toBe(false);
     expect(rangeStandardsMet(g({}))).toBe(false);
-    expect(moveMd).toMatch(/RANGE stays at 20 minutes until the range standards \(3 to 8, 12, 13 and 15\) are met\./);
+    expect(moveMd).toMatch(/RANGE stays at about 21 minutes until the range standards \(3 to 8, 12, 13 and 15\) are met or marked as your end\./);
   });
   it("each standard's line: numbers as entered, YES and NO, a dash when it's empty", () => {
     const t = (id) => MOVE_TESTS.find((x) => x.id === id);
@@ -95,6 +96,54 @@ describe("Optimal 8 · Move · the fifteen standards", () => {
     expect(testSummary(t("s4"), g({ mv4_r: "y", mv4_l: "n" }))).toBe("YES · NO · —");
     expect(testSummary(t("s5"), g({ mv5: "n", mv5_cm: "4" }))).toBe("NO");
     expect(testSummary(t("s3"), g({}))).toBe("—");
+  });
+});
+
+describe("Optimal 8 · Move · the targets put right, and YOUR END", () => {
+  const T = (id) => MOVE_TESTS.find((x) => x.id === id);
+  const g = (o) => (id) => (o[id] == null ? "" : o[id]);
+  it("the seated turn is 50° each way; the neck turn 70° each way, within 10° of each other, in degrees; the deep squat's back flat", () => {
+    expect([T("s13").tgt, T("s14").tgt]).toEqual(["50° each way", "70° each way, within 10° of each other"]);
+    expect([T("s13").met(g({ mv13_r: "50", mv13_l: "52" })), T("s13").met(g({ mv13_r: "50", mv13_l: "48" }))]).toEqual([true, false]);
+    expect(T("s14").fields.map((f) => [f.id, f.k])).toEqual([["mv14_r", "n"], ["mv14_l", "n"]]);
+    expect([T("s14").met(g({ mv14_r: "70", mv14_l: "80" })), T("s14").met(g({ mv14_r: "70", mv14_l: "81" })), T("s14").met(g({ mv14_r: "69", mv14_l: "72" })), T("s14").met(g({ mv14_r: "y", mv14_l: "y" }))])
+      .toEqual([true, false, false, false]);
+    expect(testSummary(T("s14"), g({ mv14_r: "72", mv14_l: "75" }))).toBe("72 · 75");
+    expect(T("s3").how).toMatch(/heels down and back flat/);
+    expect(moveMd).toMatch(/\| 13 \| Mid-back \|[^\n]*\| 50° each way \|/);
+    expect(moveMd).toMatch(/\| 14 \| Neck \|[^\n]*film it from above, as for the seated turn, and read the angle \| 70° each way, within 10° of each other \|/);
+    expect(moveMd).toMatch(/\| 3 \| Hips, knees, ankles \|[^\n]*heels down, back flat \|/);
+    expect(moveMd).toMatch(/healthy adults average about 42° on this test, give or take 9°/);
+    expect(moveMd).toMatch(/healthy adults aged 36–55 turn about 62° each way, losing about 2° a decade/);
+  });
+  it("YOUR END: offered only on a range standard short this test and the last; marked, it counts as met for THE KEEP", () => {
+    const short = g({ mv3: "80" }), shortBefore = g({ mv3: "75" }), metBefore = g({ mv3: "130" });
+    expect(END_KEY).toBe("move-end");
+    expect(canMarkEnd(T("s3"), short, shortBefore)).toBe(true);
+    expect(canMarkEnd(T("s3"), short, null)).toBe(false);
+    expect(canMarkEnd(T("s3"), short, metBefore)).toBe(false);
+    expect(canMarkEnd(T("s3"), g({ mv3: "125" }), shortBefore)).toBe(false);
+    /* not on the standards that don't hold the keep back */
+    expect(canMarkEnd(T("s1"), g({ mv1: "6" }), g({ mv1: "6" }))).toBe(false);
+    expect(canMarkEnd(T("s14"), g({ mv14_r: "60", mv14_l: "60" }), g({ mv14_r: "60", mv14_l: "60" }))).toBe(false);
+    const ALL = { mv3: "120", mv4_r: "y", mv4_l: "y", mv4_sw: "y", mv5: "y", mv6: "y", mv7_r: "0", mv7_l: "0", mv8_r: "12", mv8_l: "12", mv12_r: "y", mv12_l: "y", mv13_r: "50", mv13_l: "50", mv15_r: "y", mv15_l: "y" };
+    const noPalms = g(Object.assign({}, ALL, { mv5: "n", mv5_cm: "3" }));
+    expect(rangeStandardsMet(noPalms)).toBe(false);
+    expect(rangeStandardsMet(noPalms, { s5: "2027-01-24" })).toBe(true);
+    expect(rangeStandardsMet(noPalms, { s3: "2027-01-24" })).toBe(false);
+    expect(moveMd).toMatch(/\*\*When your build is the limit: YOUR END\.\*\*/);
+    expect(moveMd).toMatch(/1\. This test and the last both fell short, with no gain\.\n2\. The end feels like a hard block or a pinch, not a stretch\.\n3\. A physio has looked at any pinch\./);
+    expect(moveMd).toMatch(/about 80% of hips had the bump, and it cost only 3–6° of bend and turn-in/);
+  });
+  it("Saturday: the Achilles pushes in the calf hold's place, and the Copenhagen in the side plank's: the groin twice a week", () => {
+    const sat = SPPROTO.S_MV_SAT.i.find((r) => r[0] === "Achilles pushes");
+    expect(sat[1]).toBe("5 × 4 pushes · 3 s as hard as you can, 3 s off · 30 s between sets");
+    expect(libFor("Achilles pushes").map((e) => e.n)).toEqual(["ACHILLES PUSHES"]);
+    expect(libFor("Achilles pushes")[0].text).toMatch(/push up into the pinned bar as hard as you can for 3 seconds, and relax for 3/);
+    expect(moveMd).toMatch(/In a 14-week trial, 3-second pushes at 90% of maximum made the Achilles stiffer; the same work at 55% didn't/);
+    expect(moveMd).toMatch(/\| \*\*Groin\*\* \| Thursday's and Saturday's Copenhagen · Monday's Cossacks \| 3 times a week \|/);
+    expect(moveMd).toMatch(/In footballers, a Copenhagen programme three times a week in pre-season and once a week after cut the risk of groin problems by 41%\./);
+    expect(moveMd).not.toMatch(/It cut groin problems by 41%/);
   });
 });
 
@@ -114,7 +163,7 @@ describe("Optimal 8 · Move · the Jefferson curl's gate", () => {
 
 describe("Optimal 8 · Move · the movement block, every gym morning", () => {
   const DAYS = { mon: ["S_MV_MON", 11, "hips, knees and lower back", "S_WU_MON", 5], tue: ["S_MV_TUE", 8, "lower back and shoulders"], wed: ["S_MV_WED", 9, "hips, ankles and overhead"],
-    thu: ["S_MV_THU", 12, "hips, balance and sprint prep"], sat: ["S_MV_SAT", 10, "mid-back, shoulders and Achilles"], sun: ["S_MV_SUN", 10, "the whole body"] };
+    thu: ["S_MV_THU", 12, "hips, balance and sprint prep"], sat: ["S_MV_SAT", 11, "mid-back, shoulders and Achilles"], sun: ["S_MV_SUN", 10, "the whole body"] };
   it("from MOVE week 1 the first block is the day's movement block, its minutes the document's; before it, the old warm-up", () => {
     Object.entries(DAYS).forEach(([d, [p, m, area]]) => {
       const a = sppSess(d).b[0];
@@ -128,7 +177,7 @@ describe("Optimal 8 · Move · the movement block, every gym morning", () => {
     expect(moveMd).toMatch(/### TUESDAY · LOWER BACK AND SHOULDERS · 8 min/);
     expect(moveMd).toMatch(/### WEDNESDAY · HIPS, ANKLES AND OVERHEAD · 9 min/);
     expect(moveMd).toMatch(/### THURSDAY · HIPS, BALANCE AND SPRINT PREP · 12 min/);
-    expect(moveMd).toMatch(/### SATURDAY · MID-BACK, SHOULDERS AND ACHILLES · 10 min/);
+    expect(moveMd).toMatch(/### SATURDAY · MID-BACK, SHOULDERS AND ACHILLES · 11 min/);
     expect(moveMd).toMatch(/### SUNDAY · THE WHOLE BODY · 10 min/);
     expect(sppMd).toMatch(/\*\*The movement block · 11 minutes\*\* — hips, knees and lower back/);
     expect(sppMd).toMatch(/\*\*The movement block · 12 minutes\*\* — hips, balance and sprint prep/);
@@ -139,7 +188,7 @@ describe("Optimal 8 · Move · the movement block, every gym morning", () => {
     expect(rows("S_MV_TUE")).toEqual(["Bird dog @mv_birddog", "Cable external rotation at shoulder height", "Push-up plus", "Then two easy throws of each"]);
     expect(rows("S_MV_WED")).toEqual(["Goblet squat pry @mv_pry", "Prone Y-raise", "Side-lying dumbbell external rotation", "Push-up plus", "Then a light set"]);
     expect(rows("S_MV_THU")).toEqual(["Easy bike", "Leg swings", "Hip airplanes @mv_airplane", "World's greatest stretch", "A-skips", "SPRINT BUILD-UPS", "20 m @ 60%", "20 m @ 75%", "20 m @ 90%"]);
-    expect(rows("S_MV_SAT")).toEqual(["Elbow to the ceiling @mv_elbow", "Cable external rotation at shoulder height", "Push-up plus", "Single-leg calf hold @mv_calfhold", "Then two easy throws of each"]);
+    expect(rows("S_MV_SAT")).toEqual(["Elbow to the ceiling @mv_elbow", "Cable external rotation at shoulder height", "Push-up plus", "Achilles pushes", "Then two easy throws of each"]);
     expect(rows("S_MV_SUN")).toEqual(["Turkish get-up @mv_getup", "Suitcase carry", "Band pull-apart", "Then a light set"]);
     expect(SPPROTO.S_MV_MON.i[4][1]).toBe("3 × 45 s · hard, 7 out of 10 · 30 s between");
     expect(SPPROTO.S_MV_SUN.i[1][1]).toBe("2 × 30 m each hand");
@@ -153,9 +202,9 @@ describe("Optimal 8 · Move · the movement block, every gym morning", () => {
     expect(libs.filter((x) => !x[1])).toEqual([]);
     const of = (n) => libs.find((x) => x[0] === n)[1];
     expect(["Easy bike", "90/90 hip switches", "Cossack squats", "Bird dog", "Spanish squat hold", "Hip airplanes", "Turkish get-up", "Push-up plus", "Goblet squat pry",
-      "Prone Y-raise", "Elbow to the ceiling", "Single-leg calf hold"].map(of))
+      "Prone Y-raise", "Elbow to the ceiling", "Achilles pushes"].map(of))
       .toEqual(["EASY BIKE, TWO MINUTES", "90/90 SWITCHES, BY LEVEL", "COSSACK SQUAT, BY LEVEL", "BIRD DOG", "SPANISH SQUAT HOLD, BY LEVEL", "HIP AIRPLANES, BY LEVEL", "TURKISH GET-UP, SLOW",
-        "PUSH-UP PLUS", "GOBLET SQUAT PRY", "PRONE Y-RAISE", "ELBOW TO THE CEILING", "SINGLE-LEG CALF HOLD"]);
+        "PUSH-UP PLUS", "GOBLET SQUAT PRY", "PRONE Y-RAISE", "ELBOW TO THE CEILING", "ACHILLES PUSHES"]);
     /* the warm-ups before Move, and the other programs, keep their own */
     expect([libFor("Easy bike")[0].n, libFor("Spanish squat hold")[0].n, libFor("90/90 hip switch")[0].n]).toEqual(["EASY BIKE (WARM-UP)", "SPANISH SQUAT HOLD", "90/90 HIP SWITCHES"]);
     expect(libFor("Easy bike, two minutes")[0].text).toMatch(/^Pedal easy for two minutes/);
@@ -229,17 +278,28 @@ describe("Optimal 8 · Move · what it changes in the sessions", () => {
 });
 
 describe("Optimal 8 · Move · the evenings", () => {
-  it("RANGE FOR MOVE: 27 cards, about 20 minutes; the hamstring, cross-body and doorway stretches in; RANGE itself unchanged for the other programs", () => {
-    expect(MOVE_RANGE_CARDS.length).toBe(27);
-    expect(ROUTINE_MINS.moveRange).toBe(20);
+  it("RANGE FOR MOVE: 26 cards, about 21 minutes; the hamstring, cross-body and doorway stretches and one-leg balance in; the couch and hamstring at 2 minutes a side; RANGE itself unchanged for the other programs", () => {
+    expect(MOVE_RANGE_CARDS.length).toBe(26);
+    expect(ROUTINE_MINS.moveRange).toBe(21);
     const n = MOVE_RANGE_CARDS.map((c) => c.n);
-    expect(n.slice(14, 16)).toEqual(["HAMSTRING STRETCH — RIGHT LEG UP", "HAMSTRING STRETCH — LEFT LEG UP"]);
-    expect(n.slice(21, 23)).toEqual(["CROSS-BODY STRETCH — RIGHT ARM", "CROSS-BODY STRETCH — LEFT ARM"]);
-    expect(n.slice(23, 25)).toEqual(["KETTLEBELL ARM BAR — RIGHT ARM", "KETTLEBELL ARM BAR — LEFT ARM"]);
-    expect(n.slice(25)).toEqual(["DOORWAY CHEST STRETCH — RIGHT ARM", "DOORWAY CHEST STRETCH — LEFT ARM"]);
-    expect(n.some((x) => /THREAD|SQUAT-TO-STAND|SLEEPER|WALL SLIDE/.test(x))).toBe(false);
+    expect(n[0]).toBe("SETTLE");
+    expect(MOVE_RANGE_CARDS[0].secs).toBe(30);
+    expect(n.slice(11, 15)).toEqual(["COUCH STRETCH — RIGHT KNEE DOWN", "COUCH STRETCH — LEFT KNEE DOWN", "HAMSTRING STRETCH — RIGHT LEG UP", "HAMSTRING STRETCH — LEFT LEG UP"]);
+    expect(MOVE_RANGE_CARDS.slice(11, 15).map((c) => [c.secs, c.halfway])).toEqual([[120, true], [120, true], [120, true], [120, true]]);
+    expect(n.slice(15, 18)).toEqual(["DEEP SQUAT HOLD", "ONE-LEG BALANCE — RIGHT LEG", "ONE-LEG BALANCE — LEFT LEG"]);
+    expect(MOVE_RANGE_CARDS.slice(16, 18).map((c) => c.secs)).toEqual([30, 30]);
+    expect(n.slice(20, 22)).toEqual(["CROSS-BODY STRETCH — RIGHT ARM", "CROSS-BODY STRETCH — LEFT ARM"]);
+    expect(n.slice(22, 24)).toEqual(["KETTLEBELL ARM BAR — RIGHT ARM", "KETTLEBELL ARM BAR — LEFT ARM"]);
+    expect(n.slice(24)).toEqual(["DOORWAY CHEST STRETCH — RIGHT ARM", "DOORWAY CHEST STRETCH — LEFT ARM"]);
+    expect(n.some((x) => /THREAD|SQUAT-TO-STAND|SLEEPER|WALL SLIDE|STIFFEST SPOT|COSSACK|AIRPLANE/.test(x))).toBe(false);
     expect(RANGE_CARDS.map((c) => c.n).some((x) => /THREAD/.test(x))).toBe(true);
-    expect(homeMd).toMatch(/## RANGE FOR MOVE · five evenings a week · about 20 minutes · Optimal 8 · Move/);
+    expect(homeMd).toMatch(/## RANGE FOR MOVE · five evenings a week · about 21 minutes · Optimal 8 · Move/);
+    /* the balance cards show your balance level */
+    expect(moveRangeCards({ mv_balance: 2 }).filter((c) => c.level).map((c) => [c.n, c.level])).toEqual([
+      ["ONE-LEG BALANCE — RIGHT LEG", "LEVEL 2 OF 3 — Eyes closed"], ["ONE-LEG BALANCE — LEFT LEG", "LEVEL 2 OF 3 — Eyes closed"]]);
+    expect(moveMd).toMatch(/A 2024 pooling of 189 studies found range keeps improving up to about 10 minutes a week per muscle, however the week is split\./);
+    expect(moveMd).toMatch(/Harder stretching hasn't built more range than easy stretching/);
+    expect(moveMd).not.toMatch(/Low-intensity stretching built more usable range/);
   });
   it("Session A, Wednesday evening, 30 minutes: hips, lower back, balance, getting up and down — 16 cards", () => {
     expect(SESSION_A_CARDS.map((c) => c.n)).toEqual(["SETTLE", "CAT-CAMEL", "McGILL CURL-UP", "SIDE BRIDGE", "FLOOR TO STANDING", "ONE-LEG BALANCE", "REVERSE NORDIC", "DEEP SQUAT",
@@ -253,7 +313,7 @@ describe("Optimal 8 · Move · the evenings", () => {
       "TURN-IN LIFTS", "BEHIND-THE-BACK SHOULDER STRETCH", "DEAD HANG", "LOADED KNEE TO WALL — RIGHT FOOT FORWARD", "LOADED KNEE TO WALL — LEFT FOOT FORWARD", "SINGLE-LEG CALF RAISE",
       "KETTLEBELL ARM BAR — RIGHT ARM", "KETTLEBELL ARM BAR — LEFT ARM"]);
     expect(ROUTINE_MINS.sessB).toBe(30);
-    expect(SESSION_B_CARDS.slice(-2).map((c) => c.words)).toEqual(MOVE_RANGE_CARDS.slice(23, 25).map((c) => c.words));
+    expect(SESSION_B_CARDS.slice(-2).map((c) => c.words)).toEqual(MOVE_RANGE_CARDS.slice(22, 24).map((c) => c.words));
     expect(moveMd).toMatch(/## SUNDAY EVENING · SESSION B · SHOULDERS, MID-BACK, NECK, WRISTS, ANKLES AND FEET · 30 min/);
   });
   it("the cards with levels show your level; in OWN the pigeons are 2 minutes with the halfway push and relax", () => {

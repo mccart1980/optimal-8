@@ -30,8 +30,8 @@ import {
 import { Lines, CheckTaps } from "./today.jsx";
 import { CardHead, BigBtn, SetButtons, Input, Checklist, RoutineRunner, Chapter, T1, T2, T3 } from "./now.jsx";
 import { Sheet } from "./im-ui.jsx";
-import { SIGHS, MORNING_FIVE, RANGE_CARDS, FIGHT_WEEK_CARDS, KEEP_CARDS, MOVE_CARDS, MOVE_RANGE_CARDS, sessionCards, skillCards, ROUTINE_MINS } from "./routines.js";
-import { MOVE_SINCE, MOVE_PROGRAM_INTRO, MOVE_PH, moveWeekOf, movePhase, isMoveTestWeek, LEVEL_KEY, levelLine, stepLevel, MOVE_TEST_IDS, rangeStandardsMet, jeffersonGate } from "./move.js";
+import { SIGHS, MORNING_FIVE, RANGE_CARDS, FIGHT_WEEK_CARDS, KEEP_CARDS, MOVE_CARDS, moveRangeCards, sessionCards, skillCards, ROUTINE_MINS } from "./routines.js";
+import { MOVE_SINCE, MOVE_PROGRAM_INTRO, MOVE_PH, moveWeekOf, movePhase, isMoveTestWeek, LEVEL_KEY, levelLine, stepLevel, MOVE_TEST_IDS, rangeStandardsMet, jeffersonGate, END_KEY } from "./move.js";
 import { MoveLevels, MoveTests, MoveTrack } from "./move-ui.jsx";
 import { SeasonView, GuideView, ProfileTool } from "./season-ui.jsx";
 import { programTitle, PROGRAM_NAME } from "./program.js";
@@ -2309,8 +2309,8 @@ function Today(props) {
     ev.push(im(isA ? "ev-sessa" : "ev-sessb", C.violet, isA ? "Session A · hips, lower back, balance" : "Session B · shoulders, mid-back, neck, wrists, ankles", mins + " min", mins, isA ? "moveA" : "moveB",
       Object.assign(routine(cards), { input: () => <MoveLevels ids={cards.filter((c) => c.lv).map((c) => c.lv)} lv={mvLv} onStep={mvStep} /> })));
   } else {
-    const mvKeep = mvOn && (() => { const k = lastMoveTest(seasonRow(macro, week)); return !!k && rangeStandardsMet((id) => moveVal(log, k, id)); })();
-    const RG = mvOn ? (mvKeep ? { n: "THE KEEP", cards: KEEP_CARDS, mins: ROUTINE_MINS.keep } : { n: "RANGE", cards: MOVE_RANGE_CARDS, mins: ROUTINE_MINS.moveRange })
+    const mvKeep = mvOn && (() => { const k = lastMoveTest(seasonRow(macro, week)); return !!k && rangeStandardsMet((id) => moveVal(log, k, id), (log[END_KEY] || {}).ends); })();
+    const RG = mvOn ? (mvKeep ? { n: "THE KEEP", cards: KEEP_CARDS, mins: ROUTINE_MINS.keep } : { n: "RANGE", cards: moveRangeCards((log[LEVEL_KEY] || {}).lv || {}), mins: ROUTINE_MINS.moveRange })
       : rangeRoutine(rw, MODE.camp && !!rx.fightWeek);
     ev.push(im("ev-range", C.violet, RG.n, RG.mins + " min", RG.mins, "mobility", routine(RG.cards)));
   }
@@ -2707,7 +2707,7 @@ function LiftHistory({ rows }) {
         : <Note s={{ fontStyle: "italic" }}>Nothing logged yet. Type the weight in the box above an exercise's sets, then tap the sets.</Note>}
     </Card>);
 }
-function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L, IM, calis, camp, view: viewIn, title, rangeWeeks, rangeGet, moveWeeks, moveGet, campRows, fight, sub: subIn, setSub: setSubIn, st, morning, photos, setPhotos, fuel, dateOf, dayIso, photoDay, ergUnit, tape, setTape, fuelPhase, weightOn }) {
+function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L, IM, calis, camp, view: viewIn, title, rangeWeeks, rangeGet, moveWeeks, moveGet, moveEnds, campRows, fight, sub: subIn, setSub: setSubIn, st, morning, photos, setPhotos, fuel, dateOf, dayIso, photoDay, ergUnit, tape, setTape, fuelPhase, weightOn }) {
   const [subOwn, setSubOwn] = useState("dash");
   const sub = subIn || subOwn;
   const setSub = (x) => { setSubOwn(x); if (setSubIn) setSubIn(x); };
@@ -2892,7 +2892,7 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
               </Card>); })}
         </div>) : null}
 
-      {sub === "range" ? <div><MoveTrack weeks={moveWeeks || []} get={moveGet} /><RangeTrack weeks={rangeWeeks || []} get={rangeGet} /></div> : null}
+      {sub === "range" ? <div><MoveTrack weeks={moveWeeks || []} get={moveGet} ends={moveEnds} /><RangeTrack weeks={rangeWeeks || []} get={rangeGet} /></div> : null}
       {sub === "iron" ? <IronTrack IM={IM} /> : null}
     </div>);
 }
@@ -4279,8 +4279,11 @@ export default function App() {
             return <RangeTests week={tool.week || current.week} rangeWeek={rangeWeekOf(tool.macro || current.macro, tool.week || current.week)}
               get={(id) => rangeGet(k, id)} put={(id, v) => rangePut(k, id, v)} onClose={() => setTool(null)} flex={MODE.prep} />; })()
         : tool.kind === "movetests" ? (() => { const k = rangeKey(tool.macro || current.macro, tool.week || current.week), row = seasonRow(tool.macro || current.macro, tool.week || current.week);
+            const pk = row ? lastMoveTest(row) : null, ends = (log[END_KEY] || {}).ends || {};
+            /* YOUR END: marked or undone, with the day it was marked */
+            const onEnd = (id) => { const n = Object.assign({}, log), e = Object.assign({}, ends); if (e[id]) delete e[id]; else e[id] = dayIso; n[END_KEY] = { ends: e }; setLog(n); buzz(20); };
             return <MoveTests mw={row ? moveWeekOf(row.mon, MOVE.start) : 1} get={(id) => rangeGet(k, id)} put={(id, v) => rangePut(k, id, v)}
-              gymGet={(id) => moveVal(log, k, id)} onClose={() => setTool(null)} />; })()
+              gymGet={(id) => moveVal(log, k, id)} prevGet={pk ? (id) => moveVal(log, pk, id) : null} ends={ends} onEnd={onEnd} onClose={() => setTool(null)} />; })()
         : null) : null}
 
       <div style={{ borderBottom: "1px solid " + C.line, background: C.slab, position: "sticky", top: 0, zIndex: 30, paddingTop: "env(safe-area-inset-top)" }}>
@@ -4345,7 +4348,7 @@ export default function App() {
               </div>) : null}
             {tab === "track" ? <Track current={current} maxes={maxes} onSetMax={onSetMax} maxHist={maxHist} log={log} body={body} addBody={addBody} done={done} L={L} IM={IM} calis={calis} camp={MODE.camp}
               view={MODE.camp ? true : MODE.prep || MODE.trans ? "prep" : MODE.spp ? "spp" : false} title={headerTitle}
-              rangeWeeks={rangeTestWeeks} rangeGet={rangeGet} moveWeeks={moveTestWeeks} moveGet={(k, id) => moveVal(log, k, id)} campRows={campRowsNow}
+              rangeWeeks={rangeTestWeeks} rangeGet={rangeGet} moveWeeks={moveTestWeeks} moveGet={(k, id) => moveVal(log, k, id)} moveEnds={(log[END_KEY] || {}).ends} campRows={campRowsNow}
               sub={trackSub} setSub={(x) => { setTrackSub(x); setPhotoDate(null); }} st={st} morning={morning} photos={photos} setPhotos={setPhotos} fuel={fuelForDash} dateOf={dateOf}
               tape={tape} setTape={setTape} fuelPhase={fuelPhaseOf(st, current.week, dayIso)} weightOn={!!wDay(dayIso)}
               dayIso={photoDate || dayIso} photoDay={photoDay} ergUnit={st.ergUnit || "w"} /> : null}

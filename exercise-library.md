@@ -398,7 +398,7 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **ELBOW TO THE CEILING** — On all fours, one hand behind your head. Turn your chest and point that elbow at the ceiling, then back down. At the higher level, kneel on one knee with a light plate held at your chest and turn toward the front knee.
 
-**SINGLE-LEG CALF HOLD** — Stand on one foot on a step or plate, the other hand on the rack, a dumbbell in the same hand as the working leg at the higher levels. Rise halfway up onto your toes and hold. Heavy enough that 30 seconds is hard: that's what changes the Achilles.
+**ACHILLES PUSHES** — On the Smith machine: the balls of both feet on a plate, the bar across your shoulders resting on the safety pins, set where your heels are just off the floor. Ease into it over a second, then push up into the pinned bar as hard as you can for 3 seconds, and relax for 3. Four pushes a set, five sets, 30 seconds between. The bar doesn't move: the push is the work. Pushes this hard made the Achilles stiffer in a 14-week trial; easier holds didn't.
 
 **COPENHAGEN PLANK, KNEE OR ANKLE** — Lie on your side, propped on your forearm. Level 1: your top leg's knee on a bench, the bottom leg underneath. Level 2: your top ankle on the bench. Lift your hips until your body is a straight line, and hold. The inner thigh, the muscle you pivot off, and the side of the trunk.
 
@@ -408,4 +408,4 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **THE BACK HOLD** — Standard 11, on MOVE's test weeks, in the back extension's slot: on the 45-degree back extension, body in a straight line, arms crossed. Hold as long as you can and log the seconds. The target is 3 minutes.
 
-**THE FIFTEEN STANDARDS** — Optimal 8 · Move's tests, in weeks 1, 5, 9 and 13 and every eight weeks after, on the Sunday weekly check: floor to standing, one leg with eyes closed, the deep squat, the 90/90, the toe touch, the wall overhead, hands behind the back, knee to wall, the dead hang, single-leg calf raises, the back hold (in Sunday's session), the couch position, the seated turn, the neck turn and the wrist bend. RANGE stays at 20 minutes until the range standards are met.
+**THE FIFTEEN STANDARDS** — Optimal 8 · Move's tests, in weeks 1, 5, 9 and 13 and every eight weeks after, on the Sunday weekly check: floor to standing, one leg with eyes closed, the deep squat, the 90/90, the toe touch, the wall overhead, hands behind the back, knee to wall, the dead hang, single-leg calf raises, the back hold (in Sunday's session), the couch position, the seated turn, the neck turn and the wrist bend. RANGE stays at about 20 minutes until the range standards are met, or marked as your end on the sheet once two tests in a row have fallen short.

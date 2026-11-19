@@ -399,7 +399,7 @@ describe("the pressure rounds and the ab finishes", () => {
     expect(late.indexOf("Copenhagen Plank, Knee or Ankle")).toBe(late.indexOf("Nordic Curls") + 1);
     expect(pick("Copenhagen Plank, Knee or Ankle").querySelectorAll("[data-set-btn]")).toHaveLength(1);
   });
-  it("Saturday: the side plank, then the landmine rotation in added kilos, before the 4 × 4; a plank set starts 0:30, a rotation set 1:00; both run on a red morning", async () => {
+  it("Saturday: the side plank, then the landmine rotation in added kilos, before the 4 × 4; a plank set starts 0:30, a rotation set 1:00; both run on a red morning; from Move's week 1 the Copenhagen plank", async () => {
     await at(2026, 11, 7, live());
     const rows = wholeDay();
     const i = rows.indexOf("Cable Lateral Raise");
@@ -422,6 +422,10 @@ describe("the pressure rounds and the ab finishes", () => {
     expect(red).toContain("Side Plank");
     expect(red).toContain("Landmine Rotation");
     expect(red).not.toContain("The 4 × 4 Intervals");
+    cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
+    await at(2026, 11, 21, live());
+    const late = wholeDay(), j = late.indexOf("Cable Lateral Raise");
+    expect(late.slice(j, j + 4)).toEqual(["Cable Lateral Raise", "Copenhagen Plank, Knee or Ankle", "Landmine Rotation", "The 4 × 4 Intervals"]);
   });
 });
 
@@ -776,7 +780,7 @@ describe("Optimal 8 · Move", () => {
   });
   it("the evenings: RANGE re-aimed, 27 cards, five nights; Session A on Wednesday, its levels on the cards; Thursday ends with the Copenhagen plank and its level", async () => {
     await at(2026, 11, 16, live());
-    expect(pick("RANGE").textContent).toMatch(/CARD 1 OF 27/);
+    expect(pick("RANGE").textContent).toMatch(/CARD 1 OF 26/);
     again();
     await at(2026, 11, 18, live(), { "o8s-log": { "move-lv": { lv: { mv_curlup: 2 } } } });
     let rows = wholeDay();
@@ -877,5 +881,60 @@ describe("the engine base", () => {
       expect(within(pick("The Nasal Run")).getByTestId("card-pres").textContent).toBe(want + " easy, nose only · 65–75% of peak");
       again();
     }
+  });
+});
+
+describe("Optimal 8 · Move, put right", () => {
+  const live = (extra) => base(Object.assign({ plans: [{ from: "2026-10-26", made: "2026-10-25", inputs: PREP }, { from: "2026-11-02", made: "2026-11-01", inputs: Object.assign({}, SPP, { restart: true }) }], season: SPP }, extra || {}));
+  const again = () => { cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true"); };
+  /* the range standards all met at Move's weeks 1 and 5 (SPP weeks 3 and 7) but the toe touch */
+  const MET = { mv3: "120", mv4_r: "y", mv4_l: "y", mv4_sw: "y", mv5: "n", mv5_cm: "4", mv6: "y", mv7_r: "0", mv7_l: "0", mv8_r: "12", mv8_l: "12", mv12_r: "y", mv12_l: "y", mv13_r: "52", mv13_l: "50", mv15_r: "y", mv15_l: "y" };
+  const LOG = {}; ["mSw3", "mSw7"].forEach((w) => Object.keys(MET).forEach((k) => { LOG[w + "-range-" + k] = { w: MET[k] }; }));
+  const sheetCard = (id) => document.querySelector("[data-move-test='" + id + "']").parentElement;
+  it("Saturday 21 November: the Achilles pushes in the block, 11 minutes; the Copenhagen plank in the session, at its level; RANGE's 26 cards with one-leg balance at your level", async () => {
+    await at(2026, 11, 21, live(), { "o8s-log": { "move-lv": { lv: { mv_balance: 2 } } } });
+    let card = pick("The movement block");
+    expect(within(card).getByTestId("card-pres").textContent).toBe("11 min · mid-back, shoulders and Achilles");
+    expect(card.textContent).toMatch(/Achilles pushes\s*5 × 4 pushes · 3 s as hard as you can, 3 s off · 30 s between sets/);
+    expect(card.textContent).toMatch(/push up into the pinned bar as hard as you can for 3 seconds, and relax for 3/);
+    card = pick("Copenhagen Plank, Knee or Ankle");
+    expect(within(card).getAllByTestId("move-level-line").map((e) => e.textContent)).toEqual(["LEVEL 1 OF 2 — Knee on the bench"]);
+    expect(card.querySelectorAll("[data-set-btn]")).toHaveLength(2);
+    const range = pick("RANGE");
+    expect(range.textContent).toMatch(/CARD 1 OF 26/);
+    for (let k = 0; k < 16; k++) fireEvent.click(within(range).getByRole("button", { name: "Next card" }));
+    expect(range.textContent).toMatch(/CARD 17 OF 26ONE-LEG BALANCE — RIGHT LEG/);
+    expect(range.textContent).toMatch(/LEVEL 2 OF 3 — Eyes closed/);
+  });
+  it("the standards: the neck turn in degrees; no end to mark at the first test; at the second, the toe touch short both times can be marked YOUR END, and it counts for THE KEEP and shows in PROGRESS", async () => {
+    await at(2026, 11, 22, live(), { "o8s-log": LOG });
+    fireEvent.click(within(pick("The fifteen standards")).getByRole("button", { name: "▶ THE STANDARDS" }));
+    expect(screen.queryAllByRole("button", { name: "THIS IS MY END" })).toHaveLength(0);
+    expect(sheetCard("s14").querySelectorAll("input")).toHaveLength(2);
+    expect(within(sheetCard("s14")).queryAllByRole("button", { name: "YES" })).toHaveLength(0);
+    again();
+    await at(2026, 12, 20, live(), { "o8s-log": LOG });
+    fireEvent.click(within(pick("The fifteen standards")).getByRole("button", { name: "▶ THE STANDARDS" }));
+    expect(screen.getAllByRole("button", { name: "THIS IS MY END" })).toHaveLength(1);
+    expect(within(sheetCard("s5")).getByTestId("move-end").textContent).toMatch(/^Only if all three are true: this test and the last both fell short with no gain/);
+    fireEvent.click(within(sheetCard("s5")).getByRole("button", { name: "THIS IS MY END" }));
+    expect(JSON.parse(localStorage.getItem("o8s-log"))["move-end"]).toEqual({ ends: { s5: "2026-12-20" } });
+    expect(sheetCard("s5").querySelector("[data-move-test='s5']").textContent).toBe("5. Toe touchYOUR END");
+    expect(within(sheetCard("s5")).getAllByRole("button", { name: "UNDO — NOT MY END" })).toHaveLength(1);
+    expect(screen.getByText("Every range standard met or marked as your end: from next week RANGE drops to THE KEEP, 10 minutes.")).toBeInTheDocument();
+    const saved = JSON.parse(localStorage.getItem("o8s-log"));
+    again();
+    await at(2026, 12, 21, live(), { "o8s-log": saved });
+    let rows = wholeDay();
+    expect(rows).toContain("THE KEEP");
+    expect(rows).not.toContain("RANGE");
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "PROGRESS" }));
+    fireEvent.click(screen.getAllByRole("button", { name: "RANGE" })[0]);
+    expect(screen.getByTestId("move-track").querySelector("[data-track-standard='s5']").textContent).toBe("5. Toe touch · Palms flat · YOUR ENDWEEK 1 · NOWEEK 5 · NO");
+    again();
+    await at(2026, 12, 21, live(), { "o8s-log": LOG });
+    rows = wholeDay();
+    expect(rows).toContain("RANGE");
+    expect(rows).not.toContain("THE KEEP");
   });
 });

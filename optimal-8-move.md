@@ -25,9 +25,9 @@ What each area needs, and where it's trained. **Block** is the gym morning, **A*
 | **Mid-back**: turning, arching | RANGE: roller, open book · B: seated turn | Block: elbow to the ceiling · B: chest lifts | Gym: landmine rotations · the get-up | 13 |
 | **Shoulders**: overhead, turning in and out, behind, shoulder blades | RANGE: hang, prayer, cross-body, chest, arm bar | Block: Y-raise, push-up plus · B: overhead, turn-in and turn-out lifts | Block: cable and dumbbell rotations · gym: chins, presses, rows, dips | 6, 7, 9 |
 | **Knees** | RANGE: deep squat, couch | A: deep squat · Block: Cossacks | Block: Spanish squat · A: reverse Nordic · gym: squats, split squats, jumps | 3 |
-| **Ankles and feet** | B: loaded knee-to-wall | Block: airplanes, A: balance | Gym: heavy slow calf raises · Block: calf holds · B: single-leg calf raises · sprints and jumps | 8, 10 |
+| **Ankles and feet** | B: loaded knee-to-wall | Block: airplanes, A: balance | Gym: heavy slow calf raises · Block: Achilles pushes · B: single-leg calf raises · sprints and jumps | 8, 10 |
 | **Neck and wrists** | B: neck range, wrist rocks | B: neck end-range pushes, palm lifts | Gym: the neck work twice a week · push-ups · hang and carries for grip | 9, 14, 15 |
-| **Balance, landing, getting up and down** | — | A: one-leg balance, floor to standing · Block: airplanes | The get-up · jumps and landings | 1, 2 |
+| **Balance, landing, getting up and down** | — | RANGE and A: one-leg balance · A: floor to standing · Block: airplanes | The get-up · jumps and landings | 1, 2 |
 
 ---
 
@@ -36,10 +36,10 @@ What each area needs, and where it's trained. **Block** is the gym morning, **A*
 | When | What | Minutes |
 | --- | --- | --- |
 | Every gym morning | **THE MOVEMENT BLOCK**, the first thing in every session. It replaces the warm-up, and it's training, not a warm-up. | 8–12 |
-| In the sessions | Thursday's side plank and dead bug become the Copenhagen plank · Sunday gains the back extension, and the hammer curls stay · Monday's calf raise goes heavier and slower | about 0 |
+| In the sessions | Thursday's side plank and dead bug, and Saturday's side plank, become the Copenhagen plank · Sunday gains the back extension, and the hammer curls stay · Monday's calf raise goes heavier and slower | about 0 |
 | Wednesday evening | **MOVEMENT SESSION A** · hips, lower back, balance, getting up and down · in place of that night's RANGE | 30 |
 | Sunday evening | **MOVEMENT SESSION B** · shoulders, mid-back, neck, wrists, ankles and feet · in place of that night's RANGE | 30 |
-| Monday, Tuesday, Thursday, Friday, Saturday evenings | **RANGE**, re-aimed | 20 |
+| Monday, Tuesday, Thursday, Friday, Saturday evenings | **RANGE**, re-aimed | 21 |
 | Gone | The morning five on waking (rule 3 says why) | −5 a day |
 
 | Day | Morning block | Evening |
@@ -49,7 +49,7 @@ What each area needs, and where it's trained. **Block** is the gym morning, **A*
 | Wednesday | **Hips, ankles and overhead** · 9 min | **SESSION A** · 30 min |
 | Thursday | **Hips, balance and sprint prep** · 12 min | RANGE |
 | Friday | — | RANGE |
-| Saturday | **Mid-back, shoulders and Achilles** · 10 min | RANGE |
+| Saturday | **Mid-back, shoulders and Achilles** · 11 min | RANGE |
 | Sunday | **The whole body** · 10 min | **SESSION B** · 30 min |
 
 ---
@@ -78,7 +78,7 @@ Tested in weeks 1, 5, 9 and 13, then every 8 weeks. Fourteen are done at home in
 | --- | --- | --- | --- |
 | 1 | Getting up | **Floor to standing.** Sit cross-legged on the floor, then stand up | 10 out of 10: lose a point for each hand, knee or lean you use |
 | 2 | Balance | **One leg, eyes closed.** Arms folded | 20 s each leg |
-| 3 | Hips, knees, ankles | **Deep squat.** No weight, no hands | 2 min at the bottom, heels down, chest up |
+| 3 | Hips, knees, ankles | **Deep squat.** No weight, no hands | 2 min at the bottom, heels down, back flat |
 | 4 | Hips | **90/90.** Sitting bones down each side; switch sides with no hands | Both sides, and the switch |
 | 5 | Hips, lower back | **Toe touch.** Feet together, knees straight | Palms flat on the floor |
 | 6 | Shoulders | **Wall overhead.** Back, head and bottom against a wall, straight arms overhead | Thumbs touch the wall, lower back stays flat |
@@ -88,18 +88,28 @@ Tested in weeks 1, 5, 9 and 13, then every 8 weeks. Fourteen are done at home in
 | 10 | Achilles | **Single-leg calf raise.** All the way up, on the flat | 25 each leg |
 | 11 | Lower back | **Back hold.** On the 45-degree back extension, body straight, arms crossed | 3 min |
 | 12 | Hips | **Couch position.** Back knee on a cushion against the sofa, front foot flat, buttock squeezed | 60 s each side, chest fully upright, lower back not arched |
-| 13 | Mid-back | **Seated turn.** Sit on the floor, legs straight, a stick across your shoulders. Turn as far as you can each way; film it from above and read the angle | 60° each way |
-| 14 | Neck | **Neck turn.** Sitting tall, turn your head as far as it goes | Chin in line with the shoulder, each way |
+| 13 | Mid-back | **Seated turn.** Sit on the floor, legs straight, a stick across your shoulders. Turn as far as you can each way; film it from above and read the angle | 50° each way |
+| 14 | Neck | **Neck turn.** Sitting tall, shoulders still, turn your head as far as it goes; film it from above, as for the seated turn, and read the angle | 70° each way, within 10° of each other |
 | 15 | Wrists | **Wrist bend.** On all fours, palms flat, fingers forward, arms straight. Move your shoulders forward past your hands | Wrists bent to a right angle, pain-free, both hands |
 
 **Why these targets:**
 - **Floor to standing:** low scores went with about 5 times the death rate at 51–80.
-- **One leg:** failing a 10-second stand with eyes open went with 84% higher death risk at 51–75. 20 seconds with your eyes closed is my athlete's target.
+- **One leg:** failing a 10-second stand with eyes open went with 84% higher death risk at 51–75. Men in their 40s average about 12 seconds with eyes closed, best of three, so 20 seconds is my athlete's target.
 - **Dead hang:** grip 5 kg weaker went with 16% higher death risk.
 - **Calf raise:** 25 is the median for healthy adults.
 - **Back hold:** under about 3 minutes on the lab version predicted back pain within a year. Ours uses the 45-degree bench, which is easier than the lab table, so 3 minutes is my target, not a lab norm.
+- **Seated turn:** healthy adults average about 42° on this test, give or take 9°, and the golf screen passes anyone over 45°. 50° is well above average and reachable. I first set it at 60°, beyond nearly everyone.
+- **Neck turn:** healthy adults aged 36–55 turn about 62° each way, losing about 2° a decade, so 70° is above average. Level sides matter as much as the number. Phone compass apps aren't accurate enough for it, so it's filmed like the seated turn. I first set it at chin in line with the shoulder, about 90°, which almost nobody reaches.
 
 The life-and-death figures come from studies showing a link, not cause. They're still the right targets.
+
+**When your build is the limit: YOUR END.** Bone shape sets some people's end range: the hip socket, a bony bump on the hip joint, a bony block at the front of the ankle, how long your arms are against your legs. It usually costs a few degrees, not the whole target: in young footballers, about 80% of hips had the bump, and it cost only 3–6° of bend and turn-in. So the rule is strict. A range standard (3 to 8, 12, 13 or 15) can be marked as your end on the standards' sheet only when all three are true:
+
+1. This test and the last both fell short, with no gain.
+2. The end feels like a hard block or a pinch, not a stretch.
+3. A physio has looked at any pinch.
+
+Marked, it counts as met for THE KEEP and shows as YOUR END in PROGRESS. From then on the work there is getting strong at the end you have, not chasing more. It's still tested every time: if it moves, it moves. The app offers the button only once two tests in a row have fallen short; the other two parts are yours to keep.
 
 ---
 
@@ -140,17 +150,17 @@ The band pull-aparts and band dislocates go.
 4. **World's greatest stretch** — 3 each side, in place of the walking lunges. A long lunge forward. Drop the same-side elbow to the inside of the front foot, then turn that arm up to the ceiling and follow it with your eyes. Step through to the other side.
 5. **A-skips and the three build-ups**, as now.
 
-**In Thursday's session: the side plank and dead bug become the Copenhagen plank** — 2 × 20–30 s each side, 30 s between. Lie on your side, propped on your forearm. Put your top leg's knee on a bench, the bottom leg underneath. Lift your hips until your body is a straight line, and hold. Level 1: knee on the bench. Level 2: ankle on the bench. It cut groin problems by 41%, and it trains the side of the trunk the side plank did.
+**In Thursday's session: the side plank and dead bug become the Copenhagen plank** — 2 × 20–30 s each side, 30 s between. Lie on your side, propped on your forearm. Put your top leg's knee on a bench, the bottom leg underneath. Lift your hips until your body is a straight line, and hold. Level 1: knee on the bench. Level 2: ankle on the bench. It's twice a week, with Saturday's. In footballers, a Copenhagen programme three times a week in pre-season and once a week after cut the risk of groin problems by 41%. It trains the side of the trunk the side plank did.
 
-### SATURDAY · MID-BACK, SHOULDERS AND ACHILLES · 10 min · before the throws (was 6)
+### SATURDAY · MID-BACK, SHOULDERS AND ACHILLES · 11 min · before the throws (was 6)
 
 1. **Elbow to the ceiling** — 6 each side. On all fours, one hand behind your head. Turn your chest and point that elbow at the ceiling, then back down. Level 2: kneeling on one knee, a light plate held at your chest, turning toward the front knee.
 2. **Cable external rotation at shoulder height** — as Tuesday.
 3. **Push-up plus** — 10.
-4. **Single-leg calf hold** — 3 × 30 s each leg, alternating legs. Stand on one foot on a step or plate, the other hand on the rack. Rise halfway up onto your toes and hold. Level 1: bodyweight. Level 2: a 10 kg dumbbell in the same hand. Level 3: 20 kg. Level 4: 30 kg. Heavy enough that 30 seconds is hard. For the Achilles.
+4. **Achilles pushes** — 5 sets of 4 pushes, 30 s between sets. On the Smith machine: the balls of both feet on a plate, the bar across your shoulders resting on the safety pins, set where your heels are just off the floor. Ease into it over a second, then push up into the pinned bar as hard as you can for 3 seconds, and relax for 3. The bar doesn't move: the push is the work. In a 14-week trial, pushes this hard made the Achilles stiffer and easier ones didn't, so this replaces the calf hold, which sat near the easier level.
 5. **Two easy throws of each kind**, as now.
 
-The side plank stays in Saturday's session.
+**In Saturday's session: the side plank becomes the Copenhagen plank**, 2 × 20–30 s each side at your level, as on Thursday. The groin's second dose of the week.
 
 ### SUNDAY · THE WHOLE BODY · 10 min · before the first pair (was 4)
 
@@ -212,9 +222,9 @@ At home, with the bar, a mat, a stick (a broom handle) and a dumbbell. It replac
 
 ---
 
-## RANGE · five evenings a week · 20 min · re-aimed
+## RANGE · five evenings a week · 21 min · re-aimed
 
-Monday, Tuesday, Thursday, Friday and Saturday. Same order and same holds as now, with five cards out and three in. Every card not described here is described in the home-routines document.
+Monday, Tuesday, Thursday, Friday and Saturday. Same order as now, with eight cards out and four in, the settle cut to 30 seconds, and the couch and hamstring stretches at 2 minutes a side. Every card not described here is described in the home-routines document.
 
 **Out:**
 - **Thread the needle** — the open book does its job.
@@ -222,15 +232,20 @@ Monday, Tuesday, Thursday, Friday and Saturday. Same order and same holds as now
 - **Sleeper stretch** — in a 4-week trial it was no better than doing nothing.
 - **Wall slides** — the lowest value on the page.
 - **Light band rotations** — they're in the gym now, with real load.
+- **The roller's stiffest spot** — rolling's gains last minutes. The arch over the roller stays.
+- **Cossack squats and hip airplanes** — Monday's and Thursday's blocks already have them, with load.
 
 **In:**
-- **Hamstring stretch in a doorway** — 60 s each side, after the couch stretch. Lie on your back in a doorway, one leg straight up the door frame, the other straight along the floor through the doorway. Shuffle closer until you feel a clear stretch behind the thigh. At halfway: press your heel into the frame for 5 seconds, relax, shuffle closer. Your spine stays flat on the floor.
+- **Hamstring stretch in a doorway** — 2 min each side, after the couch stretch. Lie on your back in a doorway, one leg straight up the door frame, the other straight along the floor through the doorway. Shuffle closer until you feel a clear stretch behind the thigh. At halfway: press your heel into the frame for 5 seconds, relax, shuffle closer. Your spine stays flat on the floor.
 - **Cross-body stretch** — 45 s each side, in place of the sleeper stretch. Lie on your back. Bring one arm across your chest at shoulder height. With the other hand, pull it in by the elbow towards the opposite shoulder. At halfway: push the arm back against your hand for 5 seconds, relax, pull further. In a 4-week trial it gained 20° of shoulder rotation, against 12° for the sleeper stretch and 6° for nothing.
 - **Doorway chest stretch** — 45 s each side, in place of the wall slides. Forearm flat on the door frame, elbow at shoulder height. Step through with the same-side foot until your chest stretches. At halfway: press the forearm into the frame for 5 seconds, relax, step further.
+- **One-leg balance** — 30 s each leg, after the deep squat hold, arms folded, at your level: eyes open, then eyes closed, then eyes closed on a folded towel. Balance work in the injury trials ran several times a week; Session A alone is once.
 
-**How hard: 3 to 5 out of 10.** A clear stretch you can breathe through slowly, never forced. Low-intensity stretching built more usable range than hard stretching did.
+**The couch stretch goes to 2 minutes each side too.** A 2024 pooling of 189 studies found range keeps improving up to about 10 minutes a week per muscle, however the week is split. At 60–70 seconds a night, the couch and hamstring stretches got about 5, and they're two of the standards that come last.
 
-**RANGE stays at 20 minutes until the range standards (3 to 8, 12, 13 and 15) are met.** It doesn't drop to THE KEEP at its week 13 in mid-January.
+**How hard: 3 to 5 out of 10.** A clear stretch you can breathe through slowly, never forced. Harder stretching hasn't built more range than easy stretching, so there's nothing to gain by forcing it.
+
+**RANGE stays at about 21 minutes until the range standards (3 to 8, 12, 13 and 15) are met or marked as your end.** It doesn't drop to THE KEEP at its week 13 in mid-January.
 
 ---
 
@@ -240,14 +255,14 @@ Every tendon your training leans on gets loaded on purpose, heavy enough to chan
 
 | Tendon | Where | How often |
 | --- | --- | --- |
-| **Achilles** | Monday's heavy slow calf raise · Saturday's calf holds · Session B's single-leg calf raises · Sunday's seated calf raise · the sprints and jumps | 5 times a week |
+| **Achilles** | Monday's heavy slow calf raise · Saturday's Achilles pushes · Session B's single-leg calf raises · Sunday's seated calf raise · the sprints and jumps | 5 times a week |
 | **Knee** | Monday's Spanish squat · the squats, split squats and jumps | 2 times a week |
-| **Groin** | Thursday's Copenhagen · the Cossacks | 2 times a week |
+| **Groin** | Thursday's and Saturday's Copenhagen · Monday's Cossacks | 3 times a week |
 | **Hamstring** | Thursday's Nordics · Monday's Romanian deadlifts | 2 times a week |
 | **Shoulder** | The cable rotations Tuesday and Saturday · Wednesday's dumbbell rotations · Session B's turn-out and turn-in lifts | 4 times a week |
 | **Elbow and forearm** | The hangs, carries, chins and rows | 4 or more times a week |
 
-Tendons change only at 70% effort or more, and over about 14 weeks.
+Tendons change only under heavy load, over about 14 weeks. In a 14-week trial, 3-second pushes at 90% of maximum made the Achilles stiffer; the same work at 55% didn't, though the calf still got stronger. That's why Saturday's pushes are as hard as you can push, and Monday's calf raise is heavy.
 
 ---
 
@@ -270,7 +285,7 @@ Tendons change only at 70% effort or more, and over about 14 weeks.
 3. **No end-range back bending in the first hour after waking.** Cat-camel, the Jefferson curl and any bending forward to the floor wait until you've been up an hour. That's why the morning five goes: its cat-camel came first thing. Teaching back-pain patients to avoid early-morning bending cut their pain by about a third, in a small trial.
 4. **A pinch is not a stretch.** If the deep squat, the 90/90 or the couch position pinches at the front of the hip, or an overhead position pinches at the top of the shoulder, stop going deeper there and see a physio. That's the joint, and stretching won't change it.
 5. **The neck is never forced.** Slow, easy range, and pushes into your own hand only.
-6. **Red mornings.** The movement block still runs; it's the part that helps. The Spanish squat and calf holds go at 5 out of 10, not 7.
+6. **Red mornings.** The movement block still runs; it's the part that helps. The Spanish squat goes at 5 out of 10, not 7, and the Achilles pushes at about half effort.
 7. **Lighter and test weeks in Strength, Power and Physique.** MOVE runs as written.
 8. **After an injury.** RESTORE is built for it. Start at level 1 and let the pain rule decide; don't jump phases early.
 
@@ -287,7 +302,7 @@ Tendons change only at 70% effort or more, and over about 14 weeks.
 
 From the first Monday of the camp, RANGE carries on, because every programme shares it. The morning block, Sessions A and B and the session swaps belong to Strength, Power and Physique, so the camp would go back to its own warm-ups and RANGE every evening.
 
-**My recommendation:** carry Sessions A and B and the block's tendon and back parts into the camp: the bird dog, the Spanish squat, the calf holds, the Copenhagen and the back extension. Nine weeks without them would give back much of what you've built. It's your call in January.
+**My recommendation:** carry Sessions A and B and the block's tendon and back parts into the camp: the bird dog, the Spanish squat, the Achilles pushes, the Copenhagen and the back extension. Nine weeks without them would give back much of what you've built. It's your call in January.
 
 ---
 
@@ -297,7 +312,7 @@ From the first Monday of the camp, RANGE carries on, because every programme sha
 - **Weeks 5–12:** usable range climbs as the end-range strength comes in.
 - **Weeks 12–14:** the tendons become measurably stiffer. They still do this at 74.
 - **Six months:** most of the standards met.
-- **Last to come:** the toe touch, the wall overhead, the couch position and the seated turn. A joint limited by its bone won't change, which is what rule 4 is for.
+- **Last to come:** the toe touch, the wall overhead, the couch position and the seated turn. A joint limited by its bone won't change: that's what rule 4 and YOUR END are for.
 
 ---
 
@@ -309,21 +324,21 @@ From the first Monday of the camp, RANGE carries on, because every programme sha
 | Tuesday session | ~96 | ~98 |
 | Wednesday session | ~75 | ~79 |
 | Thursday session | ~91 | ~91 |
-| Saturday session | ~94 | ~98 |
+| Saturday session | ~94 | ~99 |
 | Sunday session | ~76 | ~85 |
 | Morning five at home | 35 a week | 0 |
 | Wednesday evening | RANGE, 20 | Session A, 30 |
 | Sunday evening | RANGE, 20 | Session B, 30 |
 
-- **In the gym:** about 25 minutes a week more.
-- **At home:** 15 minutes a week less.
-- **Overall:** your week is about 10 minutes longer. Movement work goes from about 3½ hours a week to about 3¾.
+- **In the gym:** about 26 minutes a week more.
+- **At home:** about 10 minutes a week less.
+- **Overall:** your week is about 16 minutes longer. Movement work goes from about 3½ hours a week to just under 4.
 
 ---
 
 ## WHY IT'S BUILT THIS WAY
 
-- **Stretching builds range, and the method matters less than doing it.** Static holds and push-and-relax beat moving stretches for lasting range. Beyond a modest dose (about 5 minutes a week per muscle, most days), more time hasn't been shown to add much.
+- **Stretching builds range, and the method matters less than doing it.** Static holds and push-and-relax beat moving stretches for lasting range. Range keeps improving up to about 10 minutes a week per muscle, however you split the week; past that, more time adds little. How hard you stretch made no clear difference.
 - **Full-range lifting builds as much range as stretching,** and eccentric training builds flexibility.
 - **Strength is specific to the position you train it in.** Training at long muscle lengths carries over to more joint angles, and in a trial, strength at the end of the range built more usable range than hard stretching. Hence the lift-offs, the end-range holds and the loaded Cossacks.
 - **Exercise prevents injuries; stretching doesn't.**
@@ -337,8 +352,8 @@ From the first Monday of the camp, RANGE carries on, because every programme sha
   
   Low back-extensor endurance predicted back pain within a year.
 - **Joints cover for each other.** Limited inward hip turn is the hip measure most linked to back pain, though the evidence is weak.
-- **Specific exercises protect specific injuries:** the Copenhagen for the groin (41% fewer problems), Nordics for the hamstrings (about half), and a shoulder rotation warm-up for the shoulders (28% fewer).
-- **Tendons need heavy load:** 70% effort or more, over about 14 weeks. They still respond at 74. In a UK study of Achilles ruptures, the typical patient was 45, 79% were men, and 65% happened in sport.
+- **Specific exercises protect specific injuries:** the Copenhagen for the groin (41% lower risk, three times a week in pre-season and once a week after), Nordics for the hamstrings (about half), and a shoulder rotation warm-up for the shoulders (28% fewer).
+- **Tendons need heavy load:** pushes at 90% of maximum changed the Achilles where 55% didn't, over 14 weeks. They still respond at 74. In a UK study of Achilles ruptures, the typical patient was 45, 79% were men, and 65% happened in sport.
 - **Long holds just before power work cost about 4.6%,** so the gym mornings are movement and short holds, and the long holds are in the evening.
 - **Range gains hold in active people,** which is why THE KEEP waits until you've arrived.
 ### The rest of the field, checked
@@ -384,6 +399,13 @@ Every major coach and system was checked for anything better. This is what each 
 - Demoulin C. et al. Spinal muscle evaluation using the Sorensen test. Joint Bone Spine, 2006.
 - Is there an association between hip range of motion and nonspecific low back pain? A systematic review. Musculoskelet Sci Pract, 2019.
 - Harøy J. et al. The Adductor Strengthening Programme prevents groin problems. BJSM, 2019.
+- Ingram L.A. et al. Optimising the dose of static stretching to improve flexibility: a systematic review, meta-analysis and multivariate meta-regression. Sports Medicine, 2024.
+- Arampatzis A. et al. Adaptational responses of the human Achilles tendon by modulation of the applied cyclic strain magnitude. J Exp Biol, 2007.
+- Johnson K.D. et al. Reliability of thoracic spine rotation range-of-motion measurements in healthy adults. J Athl Train, 2012.
+- Zárate-Tejero C. et al. Association between age, sex and cervical and upper cervical rotation tests. Ther Adv Chronic Dis, 2023.
+- Tousignant-Laflamme Y. et al. Reliability and criterion validity of two applications of the iPhone to measure cervical range of motion in healthy participants. J Neuroeng Rehabil, 2013.
+- Springer B.A. et al. Normative values for the unipedal stance test with eyes open and closed. J Geriatr Phys Ther, 2007.
+- van Klij P. et al. The relationship between cam morphology and hip and groin symptoms and signs in young male football players. Scand J Med Sci Sports, 2020.
 - van Dyk N. et al. Including the Nordic hamstring exercise in injury prevention programmes halves the rate of hamstring injuries. BJSM, 2019.
 - Andersson S.H. et al. Preventing overuse shoulder injuries among throwing athletes. BJSM, 2017.
 - Behm D.G. et al. Acute effects of muscle stretching on physical performance. Appl Physiol Nutr Metab, 2016.

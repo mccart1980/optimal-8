@@ -246,97 +246,94 @@ Stand tall with your eyes closed and notice where your body is.
 
 ---
 
-## RANGE FOR MOVE · five evenings a week · about 20 minutes · Optimal 8 · Move
+## RANGE FOR MOVE · five evenings a week · about 21 minutes · Optimal 8 · Move
 
-RANGE re-aimed: Monday, Tuesday, Thursday, Friday and Saturday evenings while Optimal 8 · Move runs. Five cards out (thread the needle, squat-to-stand, the sleeper stretch, wall slides, the light band rotations) and three in (the hamstring, the cross-body and the doorway chest stretches). **How hard: 3 to 5 out of 10** — a clear stretch you can breathe through slowly, never forced.
+RANGE re-aimed: Monday, Tuesday, Thursday, Friday and Saturday evenings while Optimal 8 · Move runs. Out of RANGE: thread the needle, squat-to-stand, the sleeper stretch, wall slides and the light band rotations, and the roller's stiffest spot, the Cossack squats and the hip airplanes, which the mornings already cover. In: the hamstring, the cross-body and the doorway chest stretches, and one-leg balance. The couch and hamstring stretches are 2 minutes a side: about 10 minutes a week each, where range stops getting better. **How hard: 3 to 5 out of 10** — a clear stretch you can breathe through slowly, never forced.
 
 ### Settle
 
-**1 · SETTLE** · HOLD 60 s
-Lie on your back, calves up on a chair. Five slow breaths: in through your nose for a count of 4, out for a count of 8.
+**1 · SETTLE** · HOLD 30 s
+Lie on your back, calves up on a chair. Three slow breaths: in through your nose for a count of 4, out for a count of 8.
 
 ### Mid-back
 
 **2 · FOAM ROLLER — ARCH OVER IT** · REPS 8
-Sit on the floor with the roller behind you and lie back so it's across your mid-back, hands behind your head. Arch back over it, then sit up a little and move the roller an inch higher. 8 times, working up your back. Notice where it feels stiffest.
+Sit on the floor with the roller behind you and lie back so it's across your mid-back, hands behind your head. Arch back over it, then sit up a little and move the roller an inch higher. 8 times, working up your back.
 
-**3 · FOAM ROLLER — THE STIFFEST SPOT** · HOLD 45 s
-Put the roller back under the spot that felt stiffest. Arch back over it and stay there, breathing out slowly.
-
-**4 · OPEN BOOK — RIGHT ARM** · HOLD 70 s
+**3 · OPEN BOOK — RIGHT ARM** · HOLD 70 s
 Lie on your left side, knees bent and stacked, both arms straight out in front. Open your right arm over to the other side and let your chest follow, knees staying down. Hold 3 seconds, bring it back, and keep repeating. At halfway, at the end of an opening: press your right hand up toward the ceiling (against nothing) for 5 seconds, relax, and open further.
 
-**5 · OPEN BOOK — LEFT ARM** · HOLD 70 s
+**4 · OPEN BOOK — LEFT ARM** · HOLD 70 s
 Lie on your right side, knees bent and stacked, both arms out in front. Open your left arm over to the other side and let your chest follow, knees down. Hold 3 seconds, come back, and keep repeating. At halfway: press your left hand toward the ceiling for 5 seconds, relax, and open further.
 
-**6 · LOADED ROTATION** · REPS 6 EACH SIDE
+**5 · LOADED ROTATION** · REPS 6 EACH SIDE
 Lie on your left side, knees bent, a light dumbbell held straight up in your right hand. Keeping your knees down, take the weight over to the other side in an arc, then back. 6 times, then lie on your right side and do 6 with your left hand.
 
 ### Hips
 
-**7 · 90/90 — RIGHT LEG IN FRONT** · HOLD 45 s
+**6 · 90/90 — RIGHT LEG IN FRONT** · HOLD 45 s
 Sit on the floor. Right leg in front of you, knee bent to a right angle, shin across your body. Left leg out to the side behind you, knee bent to a right angle. Both sitting bones on the floor. Fold your chest down over your right shin, breathing out slowly.
 
-**8 · 90/90 — RIGHT LEG IN FRONT: PUSH AND RELAX** · REPS 3
+**7 · 90/90 — RIGHT LEG IN FRONT: PUSH AND RELAX** · REPS 3
 Same position. Press your right shin down into the floor for 5 seconds, relax, then fold a little further. 3 times.
 
-**9 · 90/90 — LIFT YOUR LEFT FOOT** · REPS 8
+**8 · 90/90 — LIFT YOUR LEFT FOOT** · REPS 8
 Same position; sit up tall. Lift your left foot (the one behind you) off the floor without leaning. Hold 3 seconds, lower. 8 times. It barely moves at first, and that's normal.
 
-**10 · 90/90 — LEFT LEG IN FRONT** · HOLD 45 s
+**9 · 90/90 — LEFT LEG IN FRONT** · HOLD 45 s
 Swap over: left leg in front, knee bent to a right angle, shin across your body. Right leg out to the side behind you, knee bent to a right angle. Both sitting bones down. Fold your chest down over your left shin, breathing out slowly.
 
-**11 · 90/90 — LEFT LEG IN FRONT: PUSH AND RELAX** · REPS 3
+**10 · 90/90 — LEFT LEG IN FRONT: PUSH AND RELAX** · REPS 3
 Same position. Press your left shin down into the floor for 5 seconds, relax, then fold a little further. 3 times.
 
-**12 · 90/90 — LIFT YOUR RIGHT FOOT** · REPS 8
+**11 · 90/90 — LIFT YOUR RIGHT FOOT** · REPS 8
 Same position; sit up tall. Lift your right foot (the one behind you) off the floor without leaning. Hold 3 seconds, lower. 8 times.
 
-**13 · COUCH STRETCH — RIGHT KNEE DOWN** · HOLD 70 s
+**12 · COUCH STRETCH — RIGHT KNEE DOWN** · HOLD 2:00
 Kneel with your right knee on a cushion against the sofa, right foot up on the sofa behind you, left foot flat on the floor in front. Squeeze your right buttock and lift your chest tall. At halfway: drive your right knee down into the cushion for 5 seconds, relax, and lift taller.
 
-**14 · COUCH STRETCH — LEFT KNEE DOWN** · HOLD 70 s
+**13 · COUCH STRETCH — LEFT KNEE DOWN** · HOLD 2:00
 Left knee on the cushion, left foot up on the sofa behind you, right foot flat in front. Squeeze your left buttock and lift your chest tall. At halfway: drive your left knee down for 5 seconds, relax, and lift taller.
 
-**15 · HAMSTRING STRETCH — RIGHT LEG UP** · HOLD 60 s
+**14 · HAMSTRING STRETCH — RIGHT LEG UP** · HOLD 2:00
 Lie on your back in a doorway, your right leg straight up the door frame, your left leg straight along the floor through the doorway. Shuffle closer until you feel a clear stretch behind the thigh, your back flat on the floor. At halfway: press your right heel into the frame for 5 seconds, relax, and shuffle closer.
 
-**16 · HAMSTRING STRETCH — LEFT LEG UP** · HOLD 60 s
+**15 · HAMSTRING STRETCH — LEFT LEG UP** · HOLD 2:00
 In the doorway, your left leg straight up the door frame, your right leg straight along the floor. Shuffle closer until the back of the thigh stretches, your back flat. At halfway: press your left heel into the frame for 5 seconds, relax, and shuffle closer.
 
-**17 · COSSACK SQUATS** · REPS 6 EACH SIDE
-Feet very wide. Sit all the way down over your right leg, keeping your left leg straight with the heel on the floor and toes up. Pause 3 seconds at the bottom, come back up, then go down over the left leg. 6 each side, alternating.
-
-**18 · DEEP SQUAT HOLD** · HOLD 70 s
+**16 · DEEP SQUAT HOLD** · HOLD 70 s
 Hold a weight at your chest and sit right down into the bottom of a squat, heels on the floor. Use your elbows to push your knees out. Breathe out slowly.
 
-**19 · HIP AIRPLANES** · REPS 5 EACH SIDE
-Stand on your right leg, holding a chair with your left hand. Tip your chest forward until it's level with the floor. Slowly turn your chest down to face the floor, then open it up toward the ceiling. 5 times, then stand on your left leg.
+**17 · ONE-LEG BALANCE — RIGHT LEG** · HOLD 30 s
+Stand on your right leg, arms folded across your chest, at your level: eyes open, then eyes closed, then eyes closed on a folded towel. If the other foot touches down, lift it and carry on.
+
+**18 · ONE-LEG BALANCE — LEFT LEG** · HOLD 30 s
+Stand on your left leg, arms folded, at your level. If the other foot touches down, lift it and carry on.
 
 ### Shoulders
 
-**20 · HANG** · HOLD 70 s
+**19 · HANG** · HOLD 70 s
 Hang from the bar with your feet on the floor as much as you need, shoulders relaxed up by your ears, breathing out. No bar: put your hands on a table, step back, bend at the hips and let your chest sink between your arms.
 
-**21 · PRAYER STRETCH** · HOLD 70 s
+**20 · PRAYER STRETCH** · HOLD 70 s
 Kneel in front of a chair, elbows on the seat, hands behind your head. Let your chest sink toward the floor. At halfway: press your elbows into the seat for 5 seconds, relax, and sink further.
 
-**22 · CROSS-BODY STRETCH — RIGHT ARM** · HOLD 45 s
+**21 · CROSS-BODY STRETCH — RIGHT ARM** · HOLD 45 s
 Lie on your back. Bring your right arm across your chest at shoulder height and, with your left hand, pull it in by the elbow towards your left shoulder. At halfway: push the arm back against your hand for 5 seconds, relax, and pull further.
 
-**23 · CROSS-BODY STRETCH — LEFT ARM** · HOLD 45 s
+**22 · CROSS-BODY STRETCH — LEFT ARM** · HOLD 45 s
 On your back, your left arm across your chest at shoulder height, your right hand pulling it in by the elbow towards your right shoulder. At halfway: push back against your hand for 5 seconds, relax, and pull further.
 
-**24 · KETTLEBELL ARM BAR — RIGHT ARM** · HOLD 35 s
+**23 · KETTLEBELL ARM BAR — RIGHT ARM** · HOLD 35 s
 Lie on your back, a light kettlebell pressed straight up in your right hand, right knee bent. Roll onto your left side and slowly straighten your right leg behind you until you're lying on your front. The bell keeps pointing at the ceiling, arm straight, shoulder pulled down away from your ear. Breathe there.
 
-**25 · KETTLEBELL ARM BAR — LEFT ARM** · HOLD 35 s
+**24 · KETTLEBELL ARM BAR — LEFT ARM** · HOLD 35 s
 On your back, the bell pressed up in your left hand, left knee bent. Roll onto your right side and straighten your left leg behind you until you're on your front. The bell points at the ceiling, arm straight, shoulder down. Breathe there.
 
-**26 · DOORWAY CHEST STRETCH — RIGHT ARM** · HOLD 45 s
+**25 · DOORWAY CHEST STRETCH — RIGHT ARM** · HOLD 45 s
 Right forearm flat on a door frame, elbow at shoulder height. Step through with your right foot until your chest stretches. At halfway: press the forearm into the frame for 5 seconds, relax, and step further.
 
-**27 · DOORWAY CHEST STRETCH — LEFT ARM** · HOLD 45 s
+**26 · DOORWAY CHEST STRETCH — LEFT ARM** · HOLD 45 s
 Left forearm flat on the door frame, elbow at shoulder height. Step through with your left foot until your chest stretches. At halfway: press the forearm into the frame for 5 seconds, relax, and step further.
 
 ---

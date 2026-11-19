@@ -10,7 +10,7 @@ Picked while a Prep is running, the Prep carries on to its test day and the twel
 
 Six sessions: four heavy or fast, two for size with an easy run after, and an easy hour on the bike on Saturday evening. Friday is off. About nine and three-quarter hours a week.
 
-**Optimal 8 · Move runs beside it from Monday 16 November.** Every session opens with its movement block in the warm-up's place; Thursday's side plank and dead bug become the Copenhagen plank; Sunday adds the back extension after the hammer curls; Monday's calf raise goes heavier and slower. Its evenings, its standards and every move's levels are in its own document, Optimal 8 · Move.
+**Optimal 8 · Move runs beside it from Monday 16 November.** Every session opens with its movement block in the warm-up's place; Thursday's side plank and dead bug, and Saturday's side plank, become the Copenhagen plank; Sunday adds the back extension after the hammer curls; Monday's calf raise goes heavier and slower. Its evenings, its standards and every move's levels are in its own document, Optimal 8 · Move.
 
 **The engine base from Monday 16 November.** Saturday evening gets the easy hour, 45 minutes on the bike, and Sunday's nasal run goes to 40 minutes. The lifting and the hard engine sessions don't change. Before that week, the two 30-minute runs held the engine where it was.
 
@@ -21,7 +21,7 @@ Six sessions: four heavy or fast, two for size with an easy run after, and an ea
 | Wednesday | **Physique A** — chest and back for size, rear delts and cable crunches, the neck and medicine-ball drops, then a 30-minute nasal run | ~79 min |
 | Thursday | **Lower power** — sled, sprints and jumps, then the trap bar heavy, trap bar shrugs and a second squat, then the Copenhagen plank | ~91 min |
 | Friday | Off — sleep | — |
-| Saturday | **Upper power** — throws, bench throws and the landmine push press, then bench and back for size, side planks and landmine rotations, then the 4 × 4 intervals; in the evening, the easy hour on the bike | ~98 min + 45 |
+| Saturday | **Upper power** — throws, bench throws and the landmine push press, then bench and back for size, Copenhagen planks and landmine rotations, then the 4 × 4 intervals; in the evening, the easy hour on the bike | ~99 min + 45 |
 | Sunday | **Physique B** — shoulders, traps, abs, arms and calves, the back extension and the Pallof press, then a 40-minute nasal run | ~95 min |
 
 Heavy and fast days alternate with size days, and the easy runs sit on the size days. That keeps the runs and the fatigue away from the sessions where speed and heavy weights matter most. The easy hour goes on Saturday evening, at least six hours after the session: Saturday's power work is upper body, and Monday's squat is two days away.
@@ -183,7 +183,7 @@ Sled, sprints and jumps while you're fresh, then the trap bar heavy, heavy shrug
 6. **Trap bar shrug** — 3 × 8–12. Rest 75 seconds. Straight after the deadlift, on the same bar. Stand inside the trap bar, arms straight. Shrug straight up towards your ears, hold for a second, then lower to a full stretch. Never roll the shoulders.
 7. **Pause squat** — size 3 × 5 @ 65%, strength 3 × 3 @ 72.5%, power 3 × 2 @ 75%, all of your squat working max. Rest 2 minutes. Monday's squat with a dead stop at the bottom for two seconds, staying tight, then up as fast as the bar will move.
 8. **Nordic curl** — 3 × 4–6. Rest 90 seconds. Kneel with your heels anchored under a pad. Keep your body straight from knees to head and lower yourself forward as slowly as you can, catch yourself with your hands, and push back up.
-9. **Copenhagen plank** — 2 × 20–30 seconds each side. Rest 30 seconds. Lie on your side, propped on your forearm, your top leg's knee (or, at level 2, ankle) on a bench and the bottom leg underneath. Lift your hips until your body is a straight line, and hold. It cut groin problems by 41%, and it trains the side of the trunk.
+9. **Copenhagen plank** — 2 × 20–30 seconds each side. Rest 30 seconds. Lie on your side, propped on your forearm, your top leg's knee (or, at level 2, ankle) on a bench and the bottom leg underneath. Lift your hips until your body is a straight line, and hold. Twice a week, with Saturday's: in footballers, a Copenhagen programme three times a week in pre-season and once a week after cut the risk of groin problems by 41%. It trains the side of the trunk too.
 
 Before Optimal 8 · Move the finish was the side plank, 2 × 30–45 seconds each side, back to back with the dead bug, 2 × 10 each side, 30 seconds after each pair.
 
@@ -191,12 +191,12 @@ Before Optimal 8 · Move the finish was the side plank, 2 × 30–45 seconds eac
 
 ## SATURDAY · UPPER POWER
 
-Throws, bench throws and the landmine push press while you're fresh from Friday's rest, then bench and back for size, an ab finish, then the 4 × 4. About 98 minutes, and the easy hour in the evening.
+Throws, bench throws and the landmine push press while you're fresh from Friday's rest, then bench and back for size, an ab finish, then the 4 × 4. About 99 minutes, and the easy hour in the evening.
 
-**The movement block · 10 minutes** — mid-back, shoulders and Achilles
+**The movement block · 11 minutes** — mid-back, shoulders and Achilles
 
 1. **Elbow to the ceiling**, 6 each side. **Cable external rotation at shoulder height**, 2 × 10–12 each arm. **Push-up plus**, 10.
-2. **Single-leg calf hold**, 3 × 30 seconds each leg, heavy enough that 30 seconds is hard.
+2. **Achilles pushes**, 5 sets of 4, 30 seconds between sets. On the Smith machine, the balls of both feet on a plate, the bar on the safety pins where your heels are just off the floor: push up into it as hard as you can for 3 seconds, relax for 3.
 3. Two easy throws of each kind.
 
 **The session**
@@ -209,7 +209,7 @@ Throws, bench throws and the landmine push press while you're fresh from Friday'
 6. **Pull-up** — 3 × 8–10, with weight on a belt once 10 is easy. Palms facing away, hands just outside shoulder width. From a dead hang, pull until your chin is over the bar.
 7. **One-arm dumbbell row** — 3 × 8–12 each side. Rest 60 seconds. One knee and one hand on a bench, the dumbbell hanging at full stretch. Row it to your hip, then lower slowly.
 8. **Cable lateral raise** — 3 × 15–20. Rest 60 seconds. Cable at hand height, the handle in your far hand with the cable behind your back. Raise your arm out to shoulder height and lower slowly. On the last set, at failure, drop the weight by about 30% and go again.
-9. **Side plank** — 2 × 30–45 seconds each side. Rest 30 seconds. Lie on your side propped on your forearm, elbow under your shoulder. Lift your hips so you're straight from head to feet, and hold. Then the other side.
+9. **Copenhagen plank** — 2 × 20–30 seconds each side, at your level, as on Thursday. Rest 30 seconds. Lie on your side, propped on your forearm, your top leg's knee (or, at level 2, ankle) on a bench and the bottom leg underneath. Lift your hips until your body is a straight line, and hold. The groin's second dose of the week, and the side of the trunk. Before Optimal 8 · Move it was the side plank, 2 × 30–45 seconds each side.
 10. **Landmine rotation** — 3 × 6–8 each side, controlled. Rest 60 seconds. One end of a barbell in a landmine or a corner, the other end at arm's length in front of your chest, feet wide. Swing it down to one hip by turning your hips and pivoting your back foot, arms straight, then across to the other side, trunk braced. Start with the bar plus 5–10 kg.
 
 **Then · the 4 × 4 intervals, about 30 minutes**
@@ -358,7 +358,7 @@ Every choice below rests on trials where trials exist. Where it rests on coachin
 - **The sled, five runs.** Heavy sled sprints improve the first metres of a sprint and the forward push (Alcaraz, 2018; Morin, 2017). A sled run has no landing, so it's the power work that costs the joints least, and five runs is still well under the ten, twice a week, that Morin's trial used.
 - **Two jump days.** Thursday carries the main jumps; Monday's box jumps, before the squat, make a second day. Box jumps land the softest of all the jumps, and a few fast jumps sharpen the heavy sets that follow. Two short jump days is coaching practice, and the Sunday tendon check still governs the rebound jumps.
 - **Rotation twice a week, and a trunk that holds.** The legs make a punch's force; the trunk turns it and carries it to the fist. Tuesday's shot-put and hook throws and Saturday's scoop throw train that turn fast, the straight and the hook; the landmine rotation, Tuesday and Saturday, trains it under load; and the Pallof press trains the trunk to hold against a twist. That rests on how the punch works and on coaching practice, not a trial.
-- **Abs, traps, rear delts and the neck.** Abs grow like any other muscle, on load and hard sets: 12 a week from the leg raises, the ab wheel and the cable crunches, which take weight. On top, Thursday and Saturday finish the lifting with trunk work that's never taken to failure: the Copenhagen plank on Thursday, and side planks then landmine rotations on Saturday. The traps get heavy shrugs twice a week, the rear delts direct work three times and the neck its own work twice. That's a coaching call for the build you're after, not a trial.
+- **Abs, traps, rear delts and the neck.** Abs grow like any other muscle, on load and hard sets: 12 a week from the leg raises, the ab wheel and the cable crunches, which take weight. On top, Thursday and Saturday finish the lifting with trunk work that's never taken to failure: the Copenhagen plank on Thursday, and the Copenhagen plank then landmine rotations on Saturday. The traps get heavy shrugs twice a week, the rear delts direct work three times and the neck its own work twice. That's a coaching call for the build you're after, not a trial.
 - **Pressing up and forward, not straight overhead.** A bar can only finish straight overhead if the shoulders reach all the way up. When they're stiff, the lower back arches to make up the difference, with the bar's weight on it. The landmine's bar travels up and forward, so both presses finish in front of you. The barbell push press produced as much power as a jump squat (Lake, 2014), and one arm moves less weight, so some leg power is given up; Thursday's jumps, sled and sprints cover it. The swap is a coaching call from how the lifts work, not a trial.
 - **A neck trained in every direction, and a brace that fires on time.** Monday trains the neck forward and back, Wednesday side to side. In pooled trials, neck training with a load made the neck stronger bending forward and to the side (Ivanic, 2024). No trial yet shows that a stronger neck prevents concussion, but a 2025 expert consensus sets out how to train it for the knocks the head takes in sport (Fownes-Walpole, 2025). Wednesday's medicine-ball drops train the trunk to brace the instant something lands on it. No study backs the drops; they're long-standing coaching practice.
 - **Exercises chosen for the stretch.** Overhead triceps extensions grew the triceps 1.4 times as much as pushdowns (Maeo, 2023). Seated leg curls grew the hamstrings more than lying ones, 14% against 9% (Maeo, 2021). The incline curls, deep presses and full-stretch raises follow the same idea.
