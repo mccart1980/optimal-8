@@ -3,9 +3,9 @@ import moveMd from "../optimal-8-move.md?raw";
 import homeMd from "../home-routines.md?raw";
 import sppMd from "../optimal-8-strength-power-physique.md?raw";
 import { MOVE_SINCE, moveWeekOf, movePhase, isMoveTestWeek, LEVELS, LEVEL_KEY, levelOf, levelLine, stepLevel,
-  MOVE_TESTS, MOVE_TEST_IDS, rangeStandardsMet, testSummary, jeffersonGate, canMarkEnd, END_KEY } from "./move.js";
-import { MOVE_RANGE_CARDS, SESSION_A_CARDS, SESSION_B_CARDS, RANGE_CARDS, sessionCards, moveRangeCards, levelIdOf, ROUTINE_MINS } from "./routines.js";
-import { sppRx, sppSess, SPPROTO } from "./spp.js";
+  MOVE_TESTS, MOVE_TEST_IDS, rangeStandardsMet, testSummary, jeffersonGate, canMarkEnd, END_KEY, TENDON_SINCE, tendonWeekOf, pushEffort } from "./move.js";
+import { MOVE_RANGE_CARDS, SESSION_A_CARDS, SESSION_B_CARDS, RANGE_CARDS, sessionCards, moveRangeCards, levelIdOf, ROUTINE_MINS, UPPER_PUSH_CARDS, upperPushCards } from "./routines.js";
+import { sppRx, sppSess, SPPROTO, SPP_READY_LINE } from "./spp.js";
 import { libFor } from "./library.js";
 import { sessionCatalog } from "./App.jsx";
 
@@ -16,8 +16,8 @@ import { sessionCatalog } from "./App.jsx";
    ================================================================ */
 
 const mv = (w, m, extra) => Object.assign({}, sppRx(w), { mw: m }, extra || {});
-const block = (d, n) => sppSess(d).b.find((b) => b.n === n);
-const shown = (d, rx) => sppSess(d).b.filter((b) => b.L && !(b.hide && b.hide(rx))).map((b) => b.n);
+const block = (d, n) => sppSess(d).b.find((b) => (typeof b.n === "function" ? b.n({}) : b.n) === n);
+const shown = (d, rx) => sppSess(d).b.filter((b) => b.L && !(b.hide && b.hide(rx))).map((b) => (typeof b.n === "function" ? b.n(rx) : b.n));
 const v = (x, rx) => (typeof x === "function" ? x(rx) : x);
 
 describe("Optimal 8 · Move · its weeks", () => {
@@ -43,7 +43,7 @@ describe("Optimal 8 · Move · its weeks", () => {
 describe("Optimal 8 · Move · the levels", () => {
   it("every move starts at level 1, a step stays inside its levels, and the line names the level", () => {
     expect(LEVEL_KEY).toBe("move-lv");
-    expect(Object.keys(LEVELS).length).toBe(20);
+    expect(Object.keys(LEVELS).length).toBe(21);
     expect(LEVELS.mv_calfhold).toBeUndefined();
     Object.values(LEVELS).forEach((L) => { expect(L.n).toBeTruthy(); expect(L.l.length).toBeGreaterThanOrEqual(2); });
     expect(levelOf({}, "mv_cossack")).toBe(1);
@@ -53,7 +53,8 @@ describe("Optimal 8 · Move · the levels", () => {
     expect(levelLine({ mv_cossack: 3 }, "mv_cossack")).toBe("LEVEL 3 OF 5 — 8–12 kg held at your chest");
     let lv = stepLevel({}, "mv_copen", 1);
     expect(lv).toEqual({ mv_copen: 2 });
-    expect(stepLevel(lv, "mv_copen", 1)).toEqual({ mv_copen: 2 });
+    expect(stepLevel(lv, "mv_copen", 1)).toEqual({ mv_copen: 3 });
+    expect(stepLevel(stepLevel(lv, "mv_copen", 1), "mv_copen", 1)).toEqual({ mv_copen: 3 });
     expect(stepLevel(stepLevel(lv, "mv_copen", -1), "mv_copen", -1)).toEqual({ mv_copen: 1 });
     expect(stepLevel({ mv_9090: 2 }, "mv_cossack", 1)).toEqual({ mv_9090: 2, mv_cossack: 2 });
   });
@@ -61,7 +62,9 @@ describe("Optimal 8 · Move · the levels", () => {
     expect(moveMd).toMatch(/Level 1: hold a rack upright\. Level 2: no support\. Level 3: 8–12 kg held at your chest\. Level 4: 16–20 kg\. Level 5: 24 kg or more\./);
     expect(moveMd).toMatch(/Level 1: no weight \(a shoe balanced on your fist\)\. Level 2: 8 kg\. Level 3: 12 kg\. Level 4: 16 kg\. Level 5: 20 kg\./);
     expect(moveMd).toMatch(/Level 1: knee on the bench\. Level 2: ankle on the bench\./);
-    expect([LEVELS.mv_cossack.l.length, LEVELS.mv_getup.l.length, LEVELS.mv_copen.l.length]).toEqual([5, 5, 2]);
+    expect([LEVELS.mv_cossack.l.length, LEVELS.mv_getup.l.length, LEVELS.mv_copen.l.length, LEVELS.mv_star.l.length]).toEqual([5, 5, 3, 3]);
+    expect(moveMd).toMatch(/Level 1: your top knee on the bench\. Level 2: your top ankle\. Level 3: your top ankle, and lift your bottom leg to touch the underside of the bench each time\./);
+    expect(moveMd).toMatch(/Level 1: from your bottom knee, the top leg straight\. Level 2: from your feet\. Level 3: on your straight arm, the top arm reaching to the ceiling\./);
   });
 });
 
@@ -137,11 +140,12 @@ describe("Optimal 8 · Move · the targets put right, and YOUR END", () => {
   });
   it("Saturday: the Achilles pushes in the calf hold's place, and the Copenhagen in the side plank's: the groin twice a week", () => {
     const sat = SPPROTO.S_MV_SAT.i.find((r) => r[0] === "Achilles pushes");
-    expect(sat[1]).toBe("5 × 4 pushes · 3 s as hard as you can, 3 s off · 30 s between sets");
+    expect(sat[1]).toBe("5 × 4 each leg · 3 s on, 3 s off · 8 out of 10");
     expect(libFor("Achilles pushes").map((e) => e.n)).toEqual(["ACHILLES PUSHES"]);
-    expect(libFor("Achilles pushes")[0].text).toMatch(/push up into the pinned bar as hard as you can for 3 seconds, and relax for 3/);
+    expect(libFor("Achilles pushes")[0].text).toMatch(/^On the Smith machine, with the safety stops set just above the bar so it can't rise\. Stand on one leg/);
+    expect(libFor("Achilles pushes")[0].text).toMatch(/push the ball of your foot down, as if rising onto your toes, for 3 seconds, breathing out; relax for 3\./);
     expect(moveMd).toMatch(/In a 14-week trial, 3-second pushes at 90% of maximum made the Achilles stiffer; the same work at 55% didn't/);
-    expect(moveMd).toMatch(/\| \*\*Groin\*\* \| Thursday's and Saturday's Copenhagen · Monday's Cossacks \| 3 times a week \|/);
+    expect(moveMd).toMatch(/\| \*\*Groin\*\* \| Monday's Cossacks \| The Copenhagen lifts \| 2 times a week \|/);
     expect(moveMd).toMatch(/In footballers, a Copenhagen programme three times a week in pre-season and once a week after cut the risk of groin problems by 41%\./);
     expect(moveMd).not.toMatch(/It cut groin problems by 41%/);
   });
@@ -173,13 +177,18 @@ describe("Optimal 8 · Move · the movement block, every gym morning", () => {
       expect(SPPROTO[p].n).toBe("The movement block");
     });
     expect([v(block("mon", "Warm-up").p, sppRx(1)), v(block("mon", "Warm-up").m, sppRx(1))]).toEqual(["S_WU_MON", 5]);
-    expect(moveMd).toMatch(/### MONDAY · HIPS, KNEES AND LOWER BACK · 11 min/);
+    /* from the tendon work's week 1, Monday's without the Spanish squat and Saturday's without the Achilles pushes */
+    const tw = mv(1, 2, { tw: 1 });
+    expect(["mon", "tue", "sat"].map((d) => [v(sppSess(d).b[0].p, tw), v(sppSess(d).b[0].m, tw), v(sppSess(d).b[0].rxLine, tw)]))
+      .toEqual([["S_MV_MON_T", 8, "8 min · hips, knees and lower back"], ["S_MV_TUE", 8, "8 min · lower back and shoulders"], ["S_MV_SAT_T", 7, "7 min · mid-back and shoulders"]]);
+    expect(moveMd).toMatch(/### MONDAY · HIPS, KNEES AND LOWER BACK · 8 min · before the box jumps \(11 until 23 November; the warm-up was 5\)/);
     expect(moveMd).toMatch(/### TUESDAY · LOWER BACK AND SHOULDERS · 8 min/);
     expect(moveMd).toMatch(/### WEDNESDAY · HIPS, ANKLES AND OVERHEAD · 9 min/);
     expect(moveMd).toMatch(/### THURSDAY · HIPS, BALANCE AND SPRINT PREP · 12 min/);
-    expect(moveMd).toMatch(/### SATURDAY · MID-BACK, SHOULDERS AND ACHILLES · 11 min/);
+    expect(moveMd).toMatch(/### SATURDAY · MID-BACK AND SHOULDERS · 7 min · before the lower pushes \(11 until 23 November, with the Achilles pushes; the warm-up was 6\)/);
     expect(moveMd).toMatch(/### SUNDAY · THE WHOLE BODY · 10 min/);
-    expect(sppMd).toMatch(/\*\*The movement block · 11 minutes\*\* — hips, knees and lower back/);
+    expect(sppMd).toMatch(/\*\*The movement block · 8 minutes\*\* — hips, knees and lower back/);
+    expect(sppMd).toMatch(/\*\*The movement block · 7 minutes\*\* — mid-back and shoulders/);
     expect(sppMd).toMatch(/\*\*The movement block · 12 minutes\*\* — hips, balance and sprint prep/);
   });
   it("the moves, day by day, with the moves that have levels marked", () => {
@@ -189,6 +198,8 @@ describe("Optimal 8 · Move · the movement block, every gym morning", () => {
     expect(rows("S_MV_WED")).toEqual(["Goblet squat pry @mv_pry", "Prone Y-raise", "Side-lying dumbbell external rotation", "Push-up plus", "Then a light set"]);
     expect(rows("S_MV_THU")).toEqual(["Easy bike", "Leg swings", "Hip airplanes @mv_airplane", "World's greatest stretch", "A-skips", "SPRINT BUILD-UPS", "20 m @ 60%", "20 m @ 75%", "20 m @ 90%"]);
     expect(rows("S_MV_SAT")).toEqual(["Elbow to the ceiling @mv_elbow", "Cable external rotation at shoulder height", "Push-up plus", "Achilles pushes", "Then two easy throws of each"]);
+    expect(rows("S_MV_MON_T")).toEqual(["Easy bike", "90/90 hip switches @mv_9090", "Cossack squats @mv_cossack", "Bird dog @mv_birddog"]);
+    expect(rows("S_MV_SAT_T")).toEqual(["Elbow to the ceiling @mv_elbow", "Cable external rotation at shoulder height", "Push-up plus", "Then two easy throws of each"]);
     expect(rows("S_MV_SUN")).toEqual(["Turkish get-up @mv_getup", "Suitcase carry", "Band pull-apart", "Then a light set"]);
     expect(SPPROTO.S_MV_MON.i[4][1]).toBe("3 × 45 s · hard, 7 out of 10 · 30 s between");
     expect(SPPROTO.S_MV_SUN.i[1][1]).toBe("2 × 30 m each hand");
@@ -213,9 +224,9 @@ describe("Optimal 8 · Move · the movement block, every gym morning", () => {
     const CAT = sessionCatalog(["spp"]).filter((c) => c.set === "spp" && c.edge == null);
     const warm = CAT.find((c) => c.week === 1 && c.day === "mon" && c.kind === "warm");
     expect(warm.n).toBe("The movement block");
-    expect(warm.pres).toBe("11 min · hips, knees and lower back");
+    expect(warm.pres).toBe("8 min · hips, knees and lower back");
     expect(warm.rows.map((r) => [r.n, r.lv, r.lib[0].n])).toEqual([["Easy bike", null, "EASY BIKE, TWO MINUTES"], ["90/90 hip switches", "mv_9090", "90/90 SWITCHES, BY LEVEL"],
-      ["Cossack squats", "mv_cossack", "COSSACK SQUAT, BY LEVEL"], ["Bird dog", "mv_birddog", "BIRD DOG"], ["Spanish squat hold", "mv_spanish", "SPANISH SQUAT HOLD, BY LEVEL"]]);
+      ["Cossack squats", "mv_cossack", "COSSACK SQUAT, BY LEVEL"], ["Bird dog", "mv_birddog", "BIRD DOG"]]);
   });
 });
 
@@ -225,7 +236,8 @@ describe("Optimal 8 · Move · what it changes in the sessions", () => {
     expect([calf(mv(1, 1)).s, calf(mv(1, 1)).reps]).toEqual(["3 × 6–10 · 3 s up, 3 s down, 2 s at the bottom", "6–10"]);
     expect([calf(sppRx(1)).s, calf(sppRx(1)).reps]).toEqual(["3 × 10–15 · 2 s at the bottom", "10–15"]);
     expect(block("mon", "Standing Calf Raise + Hanging Leg Raise").m).toBe(6);
-    expect(sppMd).toMatch(/\*\*Standing calf raise\*\*, 3 × 6–10, back to back with 7: 3 seconds up, 3 seconds down, 2 seconds at the bottom\./);
+    expect(sppMd).toMatch(/\*\*Towel calf raise\*\*, 3 × 6–10, back to back with 8\./);
+    expect(sppMd).toMatch(/Before Monday 23 November it was the standing calf raise without the towel or the pause at the top; before Optimal 8 · Move, 3 × 10–15\./);
     expect(moveMd).toMatch(/3 × 6–10, 3 seconds up and 3 seconds down, 2 seconds at the bottom stretch/);
   });
   it("Thursday: the Copenhagen plank in place of the side plank and dead bug, only from MOVE week 1", () => {
@@ -327,5 +339,110 @@ describe("Optimal 8 · Move · the evenings", () => {
     expect(pig(a)[0].words).toMatch(/At halfway: press your front shin into the floor for 5 seconds, relax, and fold further\.$/);
     expect(pig(sessionCards("A", 8, {})).map((c) => c.secs)).toEqual([90, 90]);
     expect(sessionCards("B", 1, {}).filter((c) => c.level).map((c) => c.lv)).toEqual(["mv_turnout", "mv_ktw", "mv_ktw", "mv_scalf"]);
+  });
+});
+
+describe("Optimal 8 · Move · the tendon work, from Monday 23 November", () => {
+  const tw = (w, t, extra) => mv(w, 2, Object.assign({ tw: t }, extra || {}));
+  const pushes = (d) => sppSess(d).b.find((b) => b.n === "The Lower Pushes");
+  it("its week 1 is Monday 23 November; before it, none; the first two weeks at 8 out of 10, then as hard as you can; a red day at half effort; the tendon gate at 7", () => {
+    expect(TENDON_SINCE).toBe("2026-11-23");
+    expect(["2026-11-16", "2026-11-22", "2026-11-23", "2026-11-28", "2026-11-30", "2026-12-07", "2027-02-15", null].map(tendonWeekOf)).toEqual([0, 0, 1, 1, 2, 3, 13, 0]);
+    expect([1, 2, 3, 13].map((t) => pushEffort(t))).toEqual(["8 out of 10, the first two weeks", "8 out of 10, the first two weeks", "as hard as you can", "as hard as you can"]);
+    expect([pushEffort(1, { red: 1 }), pushEffort(5, { gate: 1 }), pushEffort(1, { red: 1, gate: 1 })]).toEqual(["half effort, a red morning", "7 out of 10, the tendon gate", "half effort, a red morning"]);
+    expect(SPP_READY_LINE.R).toMatch(/the size work runs, and the pushes at half effort$/);
+  });
+  it("the lower pushes: Monday straight after the jumps, Thursday straight after the trap bar jumps, Saturday straight after the block — before the heavy lifting, and only from its week 1", () => {
+    const at = (d, rx) => shown(d, rx);
+    const mon = at("mon", tw(1, 1)), thu = at("thu", tw(1, 1)), sat = at("sat", tw(1, 1));
+    expect(mon.slice(0, 4)).toEqual(["Warm-up", "Box Jumps", "The Lower Pushes", "Back Squat"]);
+    expect(thu.slice(thu.indexOf("Trap Bar Jump"), thu.indexOf("Trap Bar Jump") + 3)).toEqual(["Trap Bar Jump", "The Lower Pushes", "Trap Bar Deadlift"]);
+    expect(sat.slice(0, 3)).toEqual(["Warm-up", "The Lower Pushes", "Medicine-Ball Chest Pass + Rotational Scoop Throw"]);
+    expect(at("mon", tw(12, 3)).slice(2, 5)).toEqual(["Broad Jump", "The Lower Pushes", "Back Squat"]);
+    ["mon", "tue", "wed", "thu", "sat", "sun"].forEach((d) => expect(at(d, mv(1, 2))).not.toContain("The Lower Pushes"));
+    ["tue", "wed", "sun"].forEach((d) => expect(at(d, tw(1, 1))).not.toContain("The Lower Pushes"));
+    ["mon", "thu", "sat"].forEach((d) => { const b = pushes(d); expect([d, b.L, b.since, b.m, b.hard, b.rt]).toEqual([d, "T", TENDON_SINCE, 10, undefined, 0]); });
+  });
+  it("each push one leg at a time, 5 × 4 each leg, the effort on the card; a red morning's twin at half effort; the tendon gate at 7 out of 10", () => {
+    const b = pushes("thu"), [a, k] = b.items(tw(1, 1));
+    expect([a.n, a.id, a.k, a.s]).toEqual(["Achilles pushes", "s_achpush", "chk", "5 × 4 each leg · 3 s on, 3 s off · 8 out of 10, the first two weeks"]);
+    expect([k.n, k.id, k.k, k.s]).toEqual(["Knee pushes", "s_kneepush", "chk", "5 × 4 each leg · 3 s on, 3 s off · 8 out of 10, the first two weeks"]);
+    expect(b.rxLine(tw(5, 3))).toBe("5 × 4 each leg, the legs in turn · as hard as you can");
+    expect(b.items(tw(5, 3, { pushGate: 1 }))[0].s).toBe("5 × 4 each leg · 3 s on, 3 s off · 7 out of 10, the tendon gate");
+    expect(b.red.items(tw(5, 3))[1].s).toBe("5 × 4 each leg · 3 s on, 3 s off · half effort, a red morning");
+    expect([b.red.n, b.red.L, b.red.red]).toEqual(["The Lower Pushes", "T", undefined]);
+    expect(libFor("Achilles pushes")[0].text).toMatch(/Four pushes, then the other leg: five sets each\./);
+    expect(libFor("Knee pushes").map((e) => e.n)).toEqual(["KNEE PUSHES"]);
+    expect(libFor("Knee pushes")[0].text).toMatch(/the start position set so your knee is bent to a right angle, and the pin at the bottom of the stack/);
+  });
+  it("the tendon numbers: in MOVE's test weeks, Monday's knee pushes become the single-leg leg extension and its calf raise the towel calf raise, the heaviest five each; Thursday and Saturday push as usual", () => {
+    const t = tw(1, 3, { mw: 5 });
+    expect(isMoveTestWeek(5)).toBe(true);
+    const [a, x] = pushes("mon").items(t);
+    expect([a.id, x.n, x.id, x.k, x.u, x.fields.map((f) => f.l)]).toEqual(["s_achpush", "Single-leg leg extension, heaviest 5", "s_tn_legext", "out", "kg each leg", ["RIGHT LEG (KG)", "LEFT LEG (KG)"]]);
+    expect(pushes("thu").items(t)[1].id).toBe("s_kneepush");
+    expect(pushes("sat").items(t)[1].id).toBe("s_kneepush");
+    const calf = block("mon", "Standing Calf Raise + Hanging Leg Raise").items(t)[0];
+    expect([calf.n, calf.id, calf.k, calf.u]).toEqual(["Towel calf raise, heaviest 5", "s_tn_calf", "out", "kg"]);
+    expect(pushes("mon").items(tw(1, 3, { mw: 6 }))[1].id).toBe("s_kneepush");
+    expect(libFor("Single-leg leg extension, heaviest 5").map((e) => e.n)).toEqual(["THE TENDON NUMBERS / SINGLE-LEG LEG EXTENSION, HEAVIEST 5 / TOWEL CALF RAISE, HEAVIEST 5"]);
+    expect(libFor("Towel calf raise, heaviest 5").map((e) => e.n)).toEqual(["THE TENDON NUMBERS / SINGLE-LEG LEG EXTENSION, HEAVIEST 5 / TOWEL CALF RAISE, HEAVIEST 5"]);
+  });
+  it("Monday's calf raise on the towel: 3 s up, 2 at the top, 3 down, 2 at the bottom, the same sets and log", () => {
+    const g = block("mon", "Standing Calf Raise + Hanging Leg Raise");
+    const c = g.items(tw(1, 1))[0];
+    expect([c.n, c.id, c.k, c.s, c.reps]).toEqual(["Towel calf raise", "s_calf", "wr", "3 × 6–10 · 3 s up, 2 s at the top, 3 s down, 2 s at the bottom", "6–10"]);
+    expect([g.n(tw(1, 1)), g.n(mv(1, 2))]).toEqual(["Towel Calf Raise + Hanging Leg Raise", "Standing Calf Raise + Hanging Leg Raise"]);
+    expect(g.items(mv(1, 2))[0].n).toBe("Standing calf raise");
+    expect(libFor("Towel calf raise").map((e) => e.n)).toEqual(["TOWEL CALF RAISE"]);
+  });
+  it("the hip pair: the Copenhagen lifts and the star side plank, each its own card with its level, in the Copenhagen plank's place on Thursday and Saturday", () => {
+    ["thu", "sat"].forEach((d) => {
+      const s1 = shown(d, tw(1, 1));
+      expect(s1).toContain("The Hip Pair");
+      expect(s1).not.toContain("Copenhagen Plank, Knee or Ankle");
+      expect(shown(d, mv(1, 2))).toContain("Copenhagen Plank, Knee or Ankle");
+      expect(shown(d, mv(1, 2))).not.toContain("The Hip Pair");
+      const h = sppSess(d).b.find((b) => b.n === "The Hip Pair");
+      const [c, st] = h.items(tw(1, 1));
+      expect([h.since, h.m, h.rt, h.pair, h.hard]).toEqual([TENDON_SINCE, 5, 20, undefined, undefined]);
+      expect([c.n, c.id, c.lv, c.s, st.n, st.id, st.lv, st.s]).toEqual(["Copenhagen lifts", "s_copenlift", "mv_copen", "2 × 4 each side · up in 1 s, hold 3 s, down in 3 s",
+        "Star side plank", "s_star", "mv_star", "2 × 4 each side · lift the top leg, hold 3 s, lower in 3 s"]);
+    });
+    expect(shown("thu", tw(1, 1)).slice(-1)).toEqual(["The Hip Pair"]);
+    expect(libFor("Copenhagen lifts").map((e) => e.n)).toEqual(["COPENHAGEN LIFTS, BY LEVEL"]);
+    expect(libFor("Star side plank").map((e) => e.n)).toEqual(["STAR SIDE PLANK, BY LEVEL"]);
+    expect([levelLine({}, "mv_copen"), levelLine({ mv_copen: 3 }, "mv_copen"), levelLine({}, "mv_star")]).toEqual(["LEVEL 1 OF 3 — Knee on the bench",
+      "LEVEL 3 OF 3 — Ankle on the bench, the bottom leg lifted to touch it", "LEVEL 1 OF 3 — From your bottom knee, the top leg straight"]);
+  });
+  it("the minutes: Monday 7 more, Thursday 12 and Saturday 8, in the gym; the evening pushes 8, Session B 35", () => {
+    const m = (d, rx) => sppSess(d).m(rx);
+    expect(["mon", "tue", "wed", "thu", "sat", "sun"].map((d) => m(d, tw(1, 1)) - m(d, mv(1, 2)))).toEqual([7, 0, 0, 12, 8, 0]);
+    expect([ROUTINE_MINS.upper, ROUTINE_MINS.sessB, ROUTINE_MINS.sessBPush]).toEqual([8, 30, 35]);
+  });
+  it("the upper pushes: two cards, the shoulder and the wrist, 5 × 4 each arm, their effort on the card; in Session B in the turn-out lifts' place", () => {
+    expect(UPPER_PUSH_CARDS.map((c) => [c.n, c.kind, c.amt])).toEqual([["SHOULDER PUSHES", "reps", "5 × 4 EACH ARM"], ["WRIST PUSHES", "reps", "5 × 4 EACH ARM"]]);
+    expect(UPPER_PUSH_CARDS[0].words).toMatch(/^Stand side-on in a doorway, the frame beside your working arm\./);
+    expect(UPPER_PUSH_CARDS[1].words).toMatch(/^Arm out in front of you, elbow almost straight, palm down, hand in a fist, wrist dropped a little\./);
+    expect([upperPushCards(1)[0].level, upperPushCards(3)[1].level, upperPushCards(3, true)[0].level]).toEqual(["8 OUT OF 10, THE FIRST TWO WEEKS", "AS HARD AS YOU CAN", "HALF EFFORT, A RED DAY"]);
+    const b = sessionCards("B", 3, {}, 1).map((c) => c.n);
+    expect(b.length).toBe(16);
+    expect(b.slice(5, 9)).toEqual(["OVERHEAD LIFT-OFFS", "SHOULDER PUSHES", "WRIST PUSHES", "TURN-IN LIFTS"]);
+    expect(sessionCards("B", 3, {}, 0).map((c) => c.n)).toContain("TURN-OUT LIFTS");
+    expect(sessionCards("A", 3, {}, 1).length).toBe(SESSION_A_CARDS.length);
+    expect(homeMd).toMatch(/## THE UPPER PUSHES · Tuesday and Thursday evenings before RANGE, and in Session B · about 8 minutes · Optimal 8 · Move/);
+    expect(homeMd).toMatch(/## SESSION B · Sunday evening · about 30 minutes; 35 minutes with the upper pushes · Optimal 8 · Move/);
+  });
+  it("the document: the tendon work, its rules and its time", () => {
+    expect(moveMd).toMatch(/## THE TENDON WORK · from Monday 23 November/);
+    expect(moveMd).toMatch(/### The lower pushes · Monday, Thursday and Saturday mornings · about 10 minutes/);
+    expect(moveMd).toMatch(/### The upper pushes · Tuesday and Thursday evenings, and in Session B · about 8 minutes/);
+    expect(moveMd).toMatch(/### The hip pair · Thursday and Saturday · about 5 minutes/);
+    expect(moveMd).toMatch(/- \*\*The first two weeks, 23 November to 6 December:\*\* 8 out of 10, hard but not everything\./);
+    expect(moveMd).toMatch(/1\. \*\*Breathe out through every push\.\*\*/);
+    expect(moveMd).toMatch(/6\. \*\*Red mornings\.\*\* The movement block still runs; it's the part that helps\. Every push goes at half effort, that evening's too\./);
+    expect(moveMd).toMatch(/\| Sunday evening \| RANGE, 20 \| Session B, 35 \|/);
+    expect(moveMd).toMatch(/Movement and tendon work go from about 3½ hours a week to about 4¾\./);
+    expect(sppMd).toMatch(/\*\*Its tendon work goes in from Monday 23 November\.\*\*/);
   });
 });

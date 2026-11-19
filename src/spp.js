@@ -2,7 +2,7 @@ import { C } from "./ui.jsx";
 import { jumpOf, JUMP_GATE_LINE } from "./safety.js";
 import { SLED_FIELDS, LIGHTS_FIELDS, sessionBoxes, engHR } from "./camp.js";
 import { BENCH_THROW_NOTE, topItem } from "./prep.js";
-import { movePhase, isMoveTestWeek } from "./move.js";
+import { movePhase, isMoveTestWeek, TENDON_SINCE, pushEffort } from "./move.js";
 
 /* ================================================================
    OPTIMAL 8 · STRENGTH, POWER AND PHYSIQUE — as data
@@ -95,7 +95,7 @@ swk(12, { blk: "test", acc: "power", ph: "spp_test", half: 1, testWeek: 1, tape:
 export const SPP_READY_LINE = {
   G: "GREEN — the session as written",
   Y: "YELLOW — every load −7% · the 4 × 4 at 90%",
-  R: "RED — the heavy lifts, the sprints, jumps and throws, the 4 × 4, the bursts and the pressure rounds come off; the size work runs",
+  R: "RED — the heavy lifts, the sprints, jumps and throws, the 4 × 4, the bursts and the pressure rounds come off; the size work runs, and the pushes at half effort",
 };
 
 export const SPP_ROWS = SR;
@@ -209,18 +209,58 @@ Object.assign(SPPROTO, {
       ["A-skips", "2 × 15 m"], ["SPRINT BUILD-UPS", ""], ["20 m @ 60%", "×1"], ["20 m @ 75%", "×1"], ["20 m @ 90%", "×1"]] },
   S_MV_SAT: { n: "The movement block", s: "11 min · Sat", c: C.cobalt, mv: 1, area: "Mid-back, shoulders and Achilles",
     i: [["Elbow to the ceiling", "6 each side", "mv_elbow"], ["Cable external rotation at shoulder height", "2 × 10–12 each arm · 2-second hold"],
-      ["Push-up plus", "×10"], ["Achilles pushes", "5 × 4 pushes · 3 s as hard as you can, 3 s off · 30 s between sets"],
+      ["Push-up plus", "×10"], ["Achilles pushes", "5 × 4 each leg · 3 s on, 3 s off · 8 out of 10"],
       ["Then two easy throws of each", "at half effort"]] },
   S_MV_SUN: { n: "The movement block", s: "10 min · Sun", c: C.cobalt, mv: 1, area: "The whole body",
     i: [["Turkish get-up", "2 each side · slow, 3 s in every position", "mv_getup", "Turkish get-up, slow"], ["Suitcase carry", "2 × 30 m each hand"],
       ["Band pull-apart", "×15"], ["Then a light set", "of the cable lateral raise and the curl"]] },
 });
+/* from the tendon work's week 1: Monday's block without its Spanish squat
+   and Saturday's without its two-footed Achilles pushes — the lower
+   pushes take their place, on a card of their own */
+Object.assign(SPPROTO, {
+  S_MV_MON_T: Object.assign({}, SPPROTO.S_MV_MON, { s: "8 min · Mon", i: SPPROTO.S_MV_MON.i.filter((r) => r[0] !== "Spanish squat hold") }),
+  S_MV_SAT_T: Object.assign({}, SPPROTO.S_MV_SAT, { s: "7 min · Sat", area: "Mid-back and shoulders", i: SPPROTO.S_MV_SAT.i.filter((r) => r[0] !== "Achilles pushes") }),
+});
 /* a day's first block: the warm-up before MOVE, the movement block from
    its week 1 */
 const MOVE_MINS = { mon: 11, tue: 8, wed: 9, thu: 12, sat: 11, sun: 10 };
-const moveA = (d, wu, m, line) => ({ L: "A", n: "Warm-up", m: (rx) => (rx.mw ? MOVE_MINS[d] : m),
-  p: (rx) => (rx.mw ? "S_MV_" + d.toUpperCase() : wu),
-  rxLine: (rx) => { if (!rx.mw) return line; const a = SPPROTO["S_MV_" + d.toUpperCase()].area; return MOVE_MINS[d] + " min · " + a.charAt(0).toLowerCase() + a.slice(1); } });
+const MOVE_MINS_T = { mon: 8, sat: 7 };
+const mvKey = (d, rx) => "S_MV_" + d.toUpperCase() + (rx.tw && MOVE_MINS_T[d] ? "_T" : "");
+const mvMins = (d, rx) => (rx.tw && MOVE_MINS_T[d] ? MOVE_MINS_T[d] : MOVE_MINS[d]);
+const moveA = (d, wu, m, line) => ({ L: "A", n: "Warm-up", m: (rx) => (rx.mw ? mvMins(d, rx) : m),
+  p: (rx) => (rx.mw ? mvKey(d, rx) : wu),
+  rxLine: (rx) => { if (!rx.mw) return line; const a = SPPROTO[mvKey(d, rx)].area; return mvMins(d, rx) + " min · " + a.charAt(0).toLowerCase() + a.slice(1); } });
+
+/* THE LOWER PUSHES: the Achilles and the knee tendon, three gym mornings
+   a week from the tendon work's week 1 — Monday's and Thursday's straight
+   after the jumps, before the heavy lifting; Saturday's after the
+   movement block. One leg at a time, the legs in turn. A red morning
+   swaps the card for its half-effort twin. In MOVE's test weeks,
+   Monday's knee pushes become the single-leg leg extension, the heaviest
+   five: one of the two tendon numbers. */
+const LEG_FIELDS = [{ k: "r", l: "RIGHT LEG (KG)" }, { k: "l", l: "LEFT LEG (KG)" }];
+const PUSH_WHY = "Heavy enough to change a tendon: about a minute of hard pushing for each, three mornings a week, for good. Ease in over a second, breathe out through every push, and never jerk it.";
+const lowerPushes = (L, o) => { o = o || {};
+  const eff = (rx) => pushEffort(rx.tw, { red: o.red, gate: rx.pushGate });
+  const tn = (rx) => !!o.mon && isMoveTestWeek(rx.mw);
+  const B = { L, n: "The Lower Pushes", since: TENDON_SINCE, m: 10, hide: (rx) => !rx.tw, rest: "Rest while the other leg pushes", rt: 0,
+    rxLine: (rx) => "5 × 4 each leg, the legs in turn · " + eff(rx),
+    items: (rx) => [{ n: "Achilles pushes", s: "5 × 4 each leg · 3 s on, 3 s off · " + eff(rx), cue: "On the Smith machine, the safety stops just above the bar. One leg, the ball of the foot on a plate, the heel dropped below it, knee straight, the bar across your upper back against the stops. Push the ball of your foot down as if rising onto your toes.", id: "s_achpush", k: "chk" },
+      tn(rx) ? { n: "Single-leg leg extension, heaviest 5", s: "the heaviest you can lift for 5 clean reps, each leg · a tendon number", cue: "In place of today's knee pushes. Work up in a few sets to the heaviest you can lift for 5 clean reps, one leg at a time. Log both legs.", id: "s_tn_legext", k: "out", u: "kg each leg", fields: LEG_FIELDS, rest: "Rest 2:00 between the heavy sets", rt: 120 }
+        : { n: "Knee pushes", s: "5 × 4 each leg · 3 s on, 3 s off · " + eff(rx), cue: "On the leg extension, one leg: the knee in line with the pivot, the pad on the front of your ankle, the knee bent to a right angle, the pin at the bottom of the stack. Push your shin forward into the pad.", id: "s_kneepush", k: "chk" }],
+    why: PUSH_WHY };
+  if (!o.red) B.red = lowerPushes(L, Object.assign({}, o, { red: 1 }));
+  return B; };
+
+/* THE HIP PAIR: the Copenhagen lifts and the star side plank, from the
+   tendon work's week 1, in the Copenhagen plank's place on Thursday and
+   Saturday — the groin and the outer hip, each a card of its own */
+const hipPair = (L) => ({ L, n: "The Hip Pair", since: TENDON_SINCE, m: 5, hide: (rx) => !rx.tw, rest: "Rest 20 s", rt: 20,
+  rxLine: () => "2 × 4 each side of each · 3-second holds",
+  items: () => [{ n: "Copenhagen lifts", s: "2 × 4 each side · up in 1 s, hold 3 s, down in 3 s", cue: "Lie on your side, propped on your forearm, the top leg on a bench, the bottom leg underneath. Lift your hips until your body is a straight line, hold, then lower until your hip touches down.", id: "s_copenlift", k: "chk", lv: "mv_copen" },
+    { n: "Star side plank", s: "2 × 4 each side · lift the top leg, hold 3 s, lower in 3 s", cue: "A side plank on your forearm, feet stacked. Lift the top leg straight up about 30 cm, toes forward, hold, lower. Hips up the whole set.", id: "s_star", k: "chk", lv: "mv_star" }],
+  why: "The groin and the outer hip, twice a week: a 3-second hold at the top of every lift is the load tendons respond to." });
 
 /* THE BACK EXTENSION: Sunday, straight after the hammer curls, by MOVE's
    phase — held still, then through its range, then the Jefferson curl
@@ -277,6 +317,7 @@ const nasalRun = (L, sun) => { const min = (rx) => (sun ? sppSunRun(rx) : 30); r
 export const SS = {
   /* ---------------- MONDAY ---------------- */
   mon: { n: "MONDAY", t: "Lower strength — box jumps, the squat, then Romanian deadlifts, Bulgarian split squats, leg curls, calves and leg raises, then the neck and rear delts", ac: C.oxide, box: 1,
+    tt: "Lower strength — box jumps, the lower pushes, the squat, then Romanian deadlifts, Bulgarian split squats, leg curls, calves and leg raises, then the neck and rear delts",
     intro: "Box jumps while you're fresh, the squat heavy, then size for the legs, then the neck and rear delts.", b: [
     moveA("mon", "S_WU_MON", 5, "5 min · bike, the Spanish squat hold"),
     { L: "K", n: "Box Jumps", since: "2026-11-13", m: (rx) => (rx.half ? 3 : 5), star: 1, hard: 1, rest: "Rest 60 s", rt: 60,
@@ -291,6 +332,7 @@ export const SS = {
     { L: "J", n: "Broad Jump", m: 4, star: 1, hard: 1, prepTest: 1, hide: (rx) => !rx.testWeek, rxLine: () => "best of three",
       items: [{ n: "Broad jump", s: "best of three · from a line to the back of your heels", cue: "Open floor, never towards a wall. Two-foot jump forward from a line, stick the landing, and measure from the line to the back of your heels.", id: "s_bj", k: "out", u: "best distance (cm)" }],
       why: "Test week: the broad jump measures what the power work did." },
+    lowerPushes("T", { mon: 1 }),
     { L: "C", n: "Back Squat", m: mainM, star: 1, hard: 1, mainLift: "squat", vel: "squat", hide: (rx) => !!rx.profile,
       rest: (rx) => (rx.contrast ? "Rest 90 s · 3 box jumps · rest 2:00" : "Rest 3:00"), rt: (rx) => (rx.contrast ? 225 : 180),
       rxLine: (rx) => (rx.testWeek ? "the top triple" : sppMainLine(rx) + (rx.contrast ? " · 3 box jumps after each double" : "")),
@@ -312,10 +354,15 @@ export const SS = {
       rxLine: (rx) => hs(rx, 3) + " × 10–12",
       items: (rx) => [{ n: "Seated leg curl", s: hs(rx, 3) + " × 10–12 · " + DROP.split(",")[0], cue: "Knees lined up with the machine's pivot, the pad behind your legs just above your heels, the top pad down on your thighs, chest leaning slightly forward. Curl all the way, then lower slowly to a full stretch.", id: "s_legcurl", k: "wr", sets: hs(rx, 3), reps: "10–12" }],
       why: "Seated leg curls grew the hamstrings more than lying ones, 14% against 9% (Maeo, 2021)." },
-    { L: "G", n: "Standing Calf Raise + Hanging Leg Raise", m: 6, pair: 1,
+    { L: "G", n: (rx) => (rx.tw ? "Towel Calf Raise + Hanging Leg Raise" : "Standing Calf Raise + Hanging Leg Raise"), m: 6, pair: 1,
       rxLine: () => "back to back · 60 s after each pair",
-      /* from MOVE week 1, heavier and slower: more load on the Achilles */
-      items: (rx) => [{ n: "Standing calf raise", s: hs(rx, 3) + (rx.mw ? " × 6–10 · 3 s up, 3 s down, 2 s at the bottom" : " × 10–15 · 2 s at the bottom"), cue: "All the way down to a full stretch, hold two seconds, then all the way up.", id: "s_calf", k: "wr", sets: hs(rx, 3), reps: rx.mw ? "6–10" : "10–15", rest: "straight into the leg raise", rt: 0 },
+      /* from MOVE week 1, heavier and slower: more load on the Achilles;
+         from the tendon work's week 1, on a towel, for the sole of the foot
+         too, and in MOVE's test weeks the heaviest five, a tendon number */
+      items: (rx) => [rx.tw && isMoveTestWeek(rx.mw)
+        ? { n: "Towel calf raise, heaviest 5", s: "the heaviest you can lift for 5 clean reps · a tendon number", cue: "In place of today's calf raise sets. On the towel, work up in a few sets to the heaviest you can lift for 5 clean reps at the usual tempo, and log it.", id: "s_tn_calf", k: "out", u: "kg", rest: "straight into the leg raise", rt: 0 }
+        : rx.tw ? { n: "Towel calf raise", s: hs(rx, 3) + " × 6–10 · 3 s up, 2 s at the top, 3 s down, 2 s at the bottom", cue: "A rolled towel under your toes, so they're bent up as far as they go at the top. All the way down to a full stretch, then all the way up.", id: "s_calf", k: "wr", sets: hs(rx, 3), reps: "6–10", rest: "straight into the leg raise", rt: 0 }
+        : { n: "Standing calf raise", s: hs(rx, 3) + (rx.mw ? " × 6–10 · 3 s up, 3 s down, 2 s at the bottom" : " × 10–15 · 2 s at the bottom"), cue: "All the way down to a full stretch, hold two seconds, then all the way up.", id: "s_calf", k: "wr", sets: hs(rx, 3), reps: rx.mw ? "6–10" : "10–15", rest: "straight into the leg raise", rt: 0 },
         { n: "Hanging leg raise", s: hs(rx, 3) + " × 8–12", cue: "Hang from the bar, curl your pelvis up and lift your knees to your chest without swinging, then lower slowly. Straight legs once that gets easy.", id: "hlr", k: "wr", sets: hs(rx, 3), reps: "8–12", rest: "Rest 60 s", rt: 60 }],
       why: "Back to back, a minute after each pair." },
     /* THE NECK: front and back, light and slow, once a week */
@@ -424,6 +471,7 @@ export const SS = {
 
   /* ---------------- THURSDAY ---------------- */
   thu: { n: "THURSDAY", t: "Lower power — the sled, flying sprints and jumps, trap bar jumps, the trap bar deadlift and shrugs, the pause squat, Nordics, then the Copenhagen plank", ac: C.brass, box: 1,
+    tt: "Lower power — the sled, flying sprints and jumps, trap bar jumps, the lower pushes, the trap bar deadlift and shrugs, the pause squat, Nordics, then the hip pair",
     intro: "Sled, sprints and jumps while you're fresh, then the trap bar heavy, heavy shrugs on the same bar and a second, lighter squat, then an ab finish. Friday's rest after it.", b: [
     moveA("thu", "S_WU_THU", 10, "10 min · bike, swings, skips, lunges, then the three build-ups"),
     { L: "B", n: "Heavy Sled Sprint", m: (rx) => (rx.half ? 8 : 12), star: 1, hard: 1, rest: "Rest 2:00", rt: 120,
@@ -452,6 +500,7 @@ export const SS = {
       rxLine: (rx) => (rx.testWeek ? 3 : 4) + " × 3 @ your peak-power load",
       items: (rx) => [{ n: "Trap bar jump", s: (rx.testWeek ? 3 : 4) + " × 3 @ your peak-power load", cue: "Stand inside the bar, dip and jump as high as you can, land soft with bent knees, reset, go again.", id: "s_tbjump", k: "wr", mk: "tbdl", pct: rx.tjPct, sets: rx.testWeek ? 3 : 4, reps: 3 }],
       w: "Every jump as high as you can make it. A jump clearly lower than the first ends the set." },
+    lowerPushes("T"),
     { L: "G", n: "Trap Bar Deadlift", m: mainM, star: 1, hard: 1, mainLift: "tbdl", vel: "tbdl", hide: (rx) => !!rx.profile,
       rest: (rx) => (rx.contrast ? "Rest 90 s · 3 broad jumps · rest 2:00" : "Rest 3:00"), rt: (rx) => (rx.contrast ? 225 : 180),
       rxLine: (rx) => (rx.testWeek ? "the top triple" : sppMainLine(rx) + (rx.contrast ? " · 3 broad jumps after each double" : "")),
@@ -481,10 +530,11 @@ export const SS = {
       why: "Back to back, 30 seconds after each pair. Easy work that holds the trunk still, never to failure: the hard days do the growing." },
     /* THE COPENHAGEN PLANK, from MOVE week 1, in the side plank and dead
        bug's place: the groin, and the side of the trunk */
-    { L: "K", n: "Copenhagen Plank, Knee or Ankle", since: "2026-11-09", m: (rx) => (rx.half ? 2 : 3), hide: (rx) => !rx.mw, rest: "Rest 30 s", rt: 30,
+    { L: "K", n: "Copenhagen Plank, Knee or Ankle", since: "2026-11-09", m: (rx) => (rx.half ? 2 : 3), hide: (rx) => !rx.mw || !!rx.tw, rest: "Rest 30 s", rt: 30,
       rxLine: (rx) => hs(rx, 2) + " × 20–30 s each side",
       items: (rx) => [{ n: "Copenhagen plank, knee or ankle", s: hs(rx, 2) + " × 20–30 s each side", cue: "Lie on your side, propped on your forearm, your top leg's knee (or ankle) on a bench and the bottom leg underneath. Lift your hips until your body is a straight line, and hold.", id: "s_copen", k: "chk", lv: "mv_copen" }],
-      why: "Twice a week, here and on Saturday: in footballers, a Copenhagen programme three times a week in pre-season and once a week after cut the risk of groin problems by 41%. It trains the side of the trunk the side plank did." }] },
+      why: "Twice a week, here and on Saturday: in footballers, a Copenhagen programme three times a week in pre-season and once a week after cut the risk of groin problems by 41%. It trains the side of the trunk the side plank did." },
+    hipPair("K")] },
 
   /* ---------------- FRIDAY ---------------- */
   fri: { n: "FRIDAY", t: "Off — sleep", m: 0, ac: C.moss, sleep: 1, free: 1,
@@ -492,8 +542,10 @@ export const SS = {
 
   /* ---------------- SATURDAY ---------------- */
   sat: { n: "SATURDAY", t: "Upper power — throws, bench throws and the landmine push press, then bench and back for size, Copenhagen planks and landmine rotations, then the 4 × 4", ac: C.oxide, free: 1,
+    tt: "Upper power — the lower pushes, then throws, bench throws and the landmine push press, then bench and back for size, the hip pair and landmine rotations, then the 4 × 4",
     intro: "Throws, bench throws and the landmine push press while you're fresh from Friday's rest, then bench and back for size, an ab finish, then the 4 × 4.", b: [
     moveA("sat", "S_WU_SAT", 6, "6 min · bands, push-ups, two easy throws of each"),
+    lowerPushes("T"),
     { L: "B", n: "Medicine-Ball Chest Pass + Rotational Scoop Throw", m: 7, star: 1, hard: 1, pair: 1, rxLine: () => "alternate · 60 s after each",
       items: (rx) => [{ n: "Medicine-ball chest pass", s: hs(rx, 3) + " × 5 · 4–6 kg ball, into a wall", cue: "Stand a metre from a solid wall with the ball at your chest and throw it into the wall as hard and fast as you can, then catch the rebound.", id: "s_chestpass", k: "chk", rest: "Rest 60 s · then the scoop throw", rt: 60 },
         { n: "Rotational scoop throw", s: hs(rx, 3) + " × 4 each side", cue: "Side-on to the wall, ball at your back hip. Drive off your back foot and turn your hips through to throw it into the wall.", id: "s_scoop", k: "chk", rest: "Rest 60 s · then the chest pass", rt: 60 }],
@@ -527,10 +579,11 @@ export const SS = {
       items: (rx) => [SIDE_PLANK(rx)] },
     /* THE COPENHAGEN PLANK, from MOVE week 1, in the side plank's place:
        the groin's second dose of the week, and the side of the trunk */
-    { L: "J", n: "Copenhagen Plank, Knee or Ankle", since: "2026-11-09", m: 3, hide: (rx) => !rx.mw, rest: "Rest 30 s", rt: 30,
+    { L: "J", n: "Copenhagen Plank, Knee or Ankle", since: "2026-11-09", m: 3, hide: (rx) => !rx.mw || !!rx.tw, rest: "Rest 30 s", rt: 30,
       rxLine: (rx) => hs(rx, 2) + " × 20–30 s each side",
       items: (rx) => [{ n: "Copenhagen plank, knee or ankle", s: hs(rx, 2) + " × 20–30 s each side", cue: "Lie on your side, propped on your forearm, your top leg's knee (or ankle) on a bench and the bottom leg underneath. Lift your hips until your body is a straight line, and hold.", id: "s_copen", k: "chk", lv: "mv_copen" }],
       why: "The groin's second dose of the week, with Thursday's, and the side of the trunk the side plank trained." },
+    hipPair("J"),
     LAND_ROT("K", "2026-11-09"),
     { L: "H", n: (rx) => (rx.e === "vo2s" ? "The 3 × 4 Intervals" : "The 4 × 4 Intervals"), m: 30, star: 1, hard: 1, eng: 1, engKey: "e",
       timer: (rx) => ({ kind: "vo2", opt: { n: 4, short: rx.e === "vo2s" ? 1 : 0, wu: 5, cd: 3 }, title: rx.e === "vo2s" ? "THE 3 × 4" : "THE 4 × 4" }),
@@ -571,7 +624,7 @@ export const SS = {
     nasalRun("R", 1),
     { L: "I", n: "Weekly Check", m: 2, review: 1, rangeTests: 1,
       items: (rx) => checkItems(rx),
-      note: "Three red mornings in a week: run the next week as a lighter week. Achilles or knee at 3 or more: no reactive jumps next week, the tendon holds carry on. Hamstring at 3 or more: no flying sprints next week, Nordics only if pain-free. That's the tendon gate, and it runs whatever the strap says. An elbow or a shoulder at 4 or more: next week's dips become push-ups and Sunday's curls and triceps work comes off." }] },
+      note: "Three red mornings in a week: run the next week as a lighter week. Achilles or knee at 3 or more: no reactive jumps next week, and the lower pushes at 7 out of 10. Hamstring at 3 or more: no flying sprints next week, Nordics only if pain-free. That's the tendon gate, and it runs whatever the strap says. An elbow or a shoulder at 4 or more: next week's dips become push-ups and Sunday's curls and triceps work comes off." }] },
 };
 
 

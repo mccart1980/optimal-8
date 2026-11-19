@@ -54,7 +54,7 @@ describe("the week and its main lifts", () => {
     await at(2027, 2, 15, spp());
     expect(title()).toBe("Strength & Power · Week 1 · Size");
     const rows = wholeDay();
-    ["The movement block", "Box Jumps", "Back Squat", "Romanian Deadlift", "Bulgarian Split Squat", "Seated Leg Curl", "Standing Calf Raise + Hanging Leg Raise"]
+    ["The movement block", "Box Jumps", "Achilles pushes", "Knee pushes", "Back Squat", "Romanian Deadlift", "Bulgarian Split Squat", "Seated Leg Curl", "Towel Calf Raise + Hanging Leg Raise"]
       .forEach((n, i, a) => { expect(rows).toContain(n); if (i) expect(before(rows, a[i - 1], n)).toBe(true); });
     // the easy hour is Saturday's, not Monday's
     expect(rows).not.toContain("The easy hour");
@@ -379,7 +379,7 @@ describe("the pressure rounds and the ab finishes", () => {
     await at(2026, 11, 10, live(), { "o8s-ready": { "mSw2-tue": "R" } });
     expect(wholeDay()).not.toContain("Pressure Rounds");
   });
-  it("Thursday ends with the side plank and the dead bug, back to back, until Optimal 8 · Move: the plank counts seconds with no clock after it, the dead bug's set starts 0:30; from Move's week 1 the Copenhagen plank, one set in week 4", async () => {
+  it("Thursday ends with the side plank and the dead bug, back to back, until Optimal 8 · Move: the plank counts seconds with no clock after it, the dead bug's set starts 0:30; from the tendon work's week 1 the hip pair, two sets each, in week 4 too", async () => {
     await at(2026, 11, 5, live());
     const rows = wholeDay();
     expect(rows.indexOf("Side Plank + Dead Bug")).toBe(rows.indexOf("Nordic Curls") + 1);
@@ -396,8 +396,9 @@ describe("the pressure rounds and the ab finishes", () => {
     await at(2026, 11, 26, live());
     const late = wholeDay();
     expect(late).not.toContain("Side Plank + Dead Bug");
-    expect(late.indexOf("Copenhagen Plank, Knee or Ankle")).toBe(late.indexOf("Nordic Curls") + 1);
-    expect(pick("Copenhagen Plank, Knee or Ankle").querySelectorAll("[data-set-btn]")).toHaveLength(1);
+    expect(late).not.toContain("Copenhagen Plank, Knee or Ankle");
+    expect(late.slice(late.indexOf("Nordic Curls"), late.indexOf("Nordic Curls") + 3)).toEqual(["Nordic Curls", "Copenhagen lifts", "Star side plank"]);
+    expect(pick("Copenhagen lifts").querySelectorAll("[data-set-btn]")).toHaveLength(2);
   });
   it("Saturday: the side plank, then the landmine rotation in added kilos, before the 4 × 4; a plank set starts 0:30, a rotation set 1:00; both run on a red morning; from Move's week 1 the Copenhagen plank", async () => {
     await at(2026, 11, 7, live());
@@ -799,7 +800,7 @@ describe("Optimal 8 · Move", () => {
     const cp = pick("Copenhagen Plank, Knee or Ankle");
     expect(cp.querySelectorAll("[data-set-btn]")).toHaveLength(2);
     expect(levelIds(cp)).toEqual(["mv_copen"]);
-    expect(within(cp).getByTestId("move-level-line").textContent).toBe("LEVEL 1 OF 2 — Knee on the bench");
+    expect(within(cp).getByTestId("move-level-line").textContent).toBe("LEVEL 1 OF 3 — Knee on the bench");
   });
   it("Sunday 22 November, Move's first test week: the back hold after the hammer curls, logged from the session into the standards; the fifteen standards on the weekly list; the lower back scored; Session B in the evening", async () => {
     await at(2026, 11, 22, live());
@@ -891,14 +892,14 @@ describe("Optimal 8 · Move, put right", () => {
   const MET = { mv3: "120", mv4_r: "y", mv4_l: "y", mv4_sw: "y", mv5: "n", mv5_cm: "4", mv6: "y", mv7_r: "0", mv7_l: "0", mv8_r: "12", mv8_l: "12", mv12_r: "y", mv12_l: "y", mv13_r: "52", mv13_l: "50", mv15_r: "y", mv15_l: "y" };
   const LOG = {}; ["mSw3", "mSw7"].forEach((w) => Object.keys(MET).forEach((k) => { LOG[w + "-range-" + k] = { w: MET[k] }; }));
   const sheetCard = (id) => document.querySelector("[data-move-test='" + id + "']").parentElement;
-  it("Saturday 21 November: the Achilles pushes in the block, 11 minutes; the Copenhagen plank in the session, at its level; RANGE's 26 cards with one-leg balance at your level", async () => {
+  it("Saturday 21 November: the Achilles pushes in the block, 11 minutes, one leg at a time at 8 out of 10, the stops above the bar; the Copenhagen plank in the session, at its level; RANGE's 26 cards with one-leg balance at your level", async () => {
     await at(2026, 11, 21, live(), { "o8s-log": { "move-lv": { lv: { mv_balance: 2 } } } });
     let card = pick("The movement block");
     expect(within(card).getByTestId("card-pres").textContent).toBe("11 min · mid-back, shoulders and Achilles");
-    expect(card.textContent).toMatch(/Achilles pushes\s*5 × 4 pushes · 3 s as hard as you can, 3 s off · 30 s between sets/);
-    expect(card.textContent).toMatch(/push up into the pinned bar as hard as you can for 3 seconds, and relax for 3/);
+    expect(card.textContent).toMatch(/Achilles pushes\s*5 × 4 each leg · 3 s on, 3 s off · 8 out of 10/);
+    expect(card.textContent).toMatch(/On the Smith machine, with the safety stops set just above the bar so it can't rise\. Stand on one leg/);
     card = pick("Copenhagen Plank, Knee or Ankle");
-    expect(within(card).getAllByTestId("move-level-line").map((e) => e.textContent)).toEqual(["LEVEL 1 OF 2 — Knee on the bench"]);
+    expect(within(card).getAllByTestId("move-level-line").map((e) => e.textContent)).toEqual(["LEVEL 1 OF 3 — Knee on the bench"]);
     expect(card.querySelectorAll("[data-set-btn]")).toHaveLength(2);
     const range = pick("RANGE");
     expect(range.textContent).toMatch(/CARD 1 OF 26/);
@@ -936,5 +937,99 @@ describe("Optimal 8 · Move, put right", () => {
     rows = wholeDay();
     expect(rows).toContain("RANGE");
     expect(rows).not.toContain("THE KEEP");
+  });
+});
+
+describe("Optimal 8 · Move · the tendon work, from Monday 23 November", () => {
+  const live = (extra) => base(Object.assign({ plans: [{ from: "2026-10-26", made: "2026-10-25", inputs: PREP }, { from: "2026-11-02", made: "2026-11-01", inputs: Object.assign({}, SPP, { restart: true }) }], season: SPP }, extra || {}));
+  const again = () => { cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true"); };
+  const pres = (card) => within(card).getAllByTestId("card-pres").map((e) => e.textContent);
+  const btns = (card) => [...card.querySelectorAll("[data-set-btn]")].map((e) => e.textContent);
+  const modes = (card) => [...card.querySelectorAll("[data-set-mode]")].map((e) => e.getAttribute("data-set-mode") + ":" + e.getAttribute("data-set-id") + ":" + e.getAttribute("data-set-unit"));
+  const levels = (card) => within(card).queryAllByTestId("move-level-line").map((e) => e.textContent);
+  it("Monday 23 November: the block is 8 minutes without the Spanish squat; the lower pushes after the box jumps and the profile, before the Romanian deadlift, one leg at a time at 8 out of 10, five sets of four pushes that start no clock; the calf raise on a towel", async () => {
+    await at(2026, 11, 23, live());
+    const rows = wholeDay();
+    expect(rows.slice(rows.indexOf("The movement block"), rows.indexOf("The movement block") + 6)).toEqual(["The movement block", "Box Jumps", "Load-Velocity Profile — Squat", "Achilles pushes", "Knee pushes", "Romanian Deadlift"]);
+    expect(rows).toContain("Towel Calf Raise + Hanging Leg Raise");
+    const block = pick("The movement block");
+    expect(within(block).getByTestId("card-pres").textContent).toBe("8 min · hips, knees and lower back");
+    expect(block.textContent).not.toMatch(/Spanish squat/);
+    let card = pick("Achilles pushes");
+    expect(pres(card)).toEqual(["5 × 4 each leg · 3 s on, 3 s off · 8 out of 10, the first two weeks · Rest while the other leg pushes"]);
+    expect(card.textContent).toMatch(/On the Smith machine, with the safety stops set just above the bar so it can't rise\./);
+    expect(btns(card)).toEqual(["SET 14", "SET 24", "SET 34", "SET 44", "SET 54"]);
+    expect(modes(card)).toEqual(["bw:s_achpush:reps"]);
+    fireEvent.click(within(card).getByRole("button", { name: "Set 1" }));
+    expect(screen.queryByTestId("timer-title")).toBe(null);
+    expect(JSON.parse(localStorage.getItem("o8s-log"))["mSw4-mon-s_achpush"].sets[0]).toEqual({ ok: true, r: "4" });
+    card = pick("Knee pushes");
+    expect(modes(card)).toEqual(["bw:s_kneepush:reps"]);
+    expect(card.textContent).toMatch(/the start position set so your knee is bent to a right angle, and the pin at the bottom of the stack/);
+    card = pick("Towel Calf Raise + Hanging Leg Raise");
+    expect(card.textContent).toMatch(/The standing calf raise with a rolled towel under your toes/);
+  });
+  it("a red morning: the pushes stay, at half effort; from week 3 as hard as you can; Achilles or knee at 3 or more on Sunday's check, 7 out of 10", async () => {
+    await at(2026, 11, 30, live(), { "o8s-ready": { "mSw5-mon": "R" } });
+    expect(wholeDay()).not.toContain("Box Jumps");
+    expect(pres(pick("Achilles pushes"))).toEqual(["5 × 4 each leg · 3 s on, 3 s off · half effort, a red morning · Rest while the other leg pushes"]);
+    expect(pres(pick("Knee pushes"))[0]).toMatch(/half effort, a red morning/);
+    again();
+    await at(2026, 12, 7, live());
+    expect(pres(pick("Achilles pushes"))[0]).toMatch(/· as hard as you can ·/);
+    again();
+    await at(2026, 12, 7, live(), { "o8s-log": { "mSw5-sun-wr_ach": { w: "3" } } });
+    expect(pres(pick("Knee pushes"))[0]).toMatch(/· 7 out of 10, the tendon gate ·/);
+  });
+  it("Thursday 26 November: the lower pushes after the trap bar's profile; the hip pair last, each at its level, two sets that start 0:20; the upper pushes before RANGE in the evening, two cards at 8 out of 10", async () => {
+    await at(2026, 11, 26, live());
+    const rows = wholeDay();
+    expect(rows.slice(rows.indexOf("Load-Velocity Profile — Trap Bar"), rows.indexOf("Load-Velocity Profile — Trap Bar") + 3)).toEqual(["Load-Velocity Profile — Trap Bar", "Achilles pushes", "Knee pushes"]);
+    expect(rows.indexOf("RANGE")).toBe(rows.indexOf("The upper pushes") + 1);
+    let card = pick("Copenhagen lifts");
+    expect(levels(card)).toEqual(["LEVEL 1 OF 3 — Knee on the bench"]);
+    expect(btns(card)).toEqual(["SET 14", "SET 24"]);
+    fireEvent.click(within(card).getByRole("button", { name: "Set 1" }));
+    expect(screen.getByTestId("timer-count").textContent).toBe("0:20");
+    fireEvent.click(screen.getByRole("button", { name: "CLOSE TIMER" }));
+    card = pick("Star side plank");
+    expect(levels(card)).toEqual(["LEVEL 1 OF 3 — From your bottom knee, the top leg straight"]);
+    expect(card.textContent).toMatch(/Lift your top leg straight up about 30 cm, toes pointing forward, hold for 3 seconds, and lower for 3/);
+    const up = pick("The upper pushes");
+    expect(within(up).getByTestId("card-pres").textContent).toBe("8 min · shoulders and wrists");
+    expect(up.textContent).toMatch(/CARD 1 OF 2SHOULDER PUSHES/);
+    expect(within(up).getByTestId("routine-level").textContent).toBe("8 OUT OF 10, THE FIRST TWO WEEKS");
+    fireEvent.click(within(up).getByRole("button", { name: "Next card" }));
+    expect(up.textContent).toMatch(/CARD 2 OF 2WRIST PUSHES/);
+  });
+  it("Saturday 28 November: the block is 7 minutes, mid-back and shoulders, the Achilles pushes out of it; the lower pushes straight after; the hip pair in the Copenhagen plank's place", async () => {
+    await at(2026, 11, 28, live());
+    const rows = wholeDay();
+    expect(rows.slice(rows.indexOf("The movement block"), rows.indexOf("The movement block") + 4)).toEqual(["The movement block", "Achilles pushes", "Knee pushes", "Medicine-Ball Chest Pass + Rotational Scoop Throw"]);
+    expect(rows.slice(rows.indexOf("Cable Lateral Raise"), rows.indexOf("Cable Lateral Raise") + 4)).toEqual(["Cable Lateral Raise", "Copenhagen lifts", "Star side plank", "Landmine Rotation"]);
+    const block = pick("The movement block");
+    expect(within(block).getByTestId("card-pres").textContent).toBe("7 min · mid-back and shoulders");
+    expect(block.textContent).not.toMatch(/Achilles pushes/);
+    expect(rows).not.toContain("The upper pushes");
+  });
+  it("Sunday 29 November: Session B is 35 minutes, 16 cards, the shoulder and wrist pushes in the turn-out lifts' place; a red Tuesday's upper pushes at half effort; Monday 14 December, Move's test week, the tendon numbers", async () => {
+    await at(2026, 11, 29, live());
+    const b = pick("Session B · shoulders, mid-back, neck, wrists, ankles");
+    expect(within(b).getByTestId("card-pres").textContent).toBe("35 min");
+    expect(b.textContent).toMatch(/CARD 1 OF 16/);
+    for (let k = 0; k < 6; k++) fireEvent.click(within(b).getByRole("button", { name: "Next card" }));
+    expect(b.textContent).toMatch(/CARD 7 OF 16SHOULDER PUSHES/);
+    expect(within(b).getByTestId("routine-level").textContent).toBe("8 OUT OF 10, THE FIRST TWO WEEKS");
+    again();
+    await at(2026, 12, 1, live(), { "o8s-ready": { "mSw5-tue": "R" } });
+    expect(within(pick("The upper pushes")).getByTestId("routine-level").textContent).toBe("HALF EFFORT, A RED DAY");
+    again();
+    await at(2026, 12, 14, live());
+    const rows = wholeDay();
+    expect(rows.slice(rows.indexOf("Box Jumps"), rows.indexOf("Box Jumps") + 4)).toEqual(["Box Jumps", "Achilles pushes", "Single-leg leg extension, heaviest 5", "Back Squat"]);
+    const t = pick("Single-leg leg extension, heaviest 5");
+    expect(pres(t)).toEqual(["the heaviest you can lift for 5 clean reps, each leg · a tendon number · Rest 2:00 between the heavy sets"]);
+    expect(t.querySelectorAll("input")).toHaveLength(2);
+    expect(pick("Towel Calf Raise + Hanging Leg Raise").textContent).toMatch(/Towel calf raise, heaviest 5/);
   });
 });

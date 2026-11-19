@@ -35,6 +35,22 @@ export const MOVE_PH = {
 /* the standards: weeks 1, 5, 9 and 13, then every eight weeks */
 export const isMoveTestWeek = (mw) => !!mw && isTestWeek(mw);
 
+/* ---------------- THE TENDON WORK ----------------
+   From Monday 23 November: the lower pushes on three gym mornings with a
+   day between, the upper pushes on Tuesday, Thursday and Sunday evenings,
+   the hip pair twice a week and the towel calf raise once. Every push is
+   eased in over a second, then 3 seconds as hard as you can, breathing
+   out, and 3 seconds off; four pushes a set, one side at a time. The
+   first two weeks at 8 out of 10; a red morning at half effort; Achilles
+   or knee at 3 or more on Sunday's check, the lower pushes at 7 out of 10.
+   tw is the week of the tendon work, 0 before it starts. */
+export const TENDON_SINCE = "2026-11-23";
+export const tendonWeekOf = (mon) => { if (!mon) return 0;
+  const a = iso(mondayOf(parseISO(TENDON_SINCE))), b = iso(mondayOf(parseISO(mon)));
+  return b < a ? 0 : Math.round((parseISO(b) - parseISO(a)) / 604800000) + 1; };
+export const pushEffort = (tw, o) => (o && o.red ? "half effort, a red morning" : o && o.gate ? "7 out of 10, the tendon gate"
+  : tw && tw <= 2 ? "8 out of 10, the first two weeks" : "as hard as you can");
+
 /* ---------------- THE LEVELS ----------------
    Every move with levels starts at level 1. You own a level when the
    whole prescription is clean, no pain over 2 out of 10, two sessions
@@ -50,7 +66,8 @@ export const LEVELS = {
   mv_airplane: { n: "Hip airplanes", l: ["A hand on the rack", "No hand", "A 5 kg plate held at your chest"] },
   mv_elbow: { n: "Elbow to the ceiling", l: ["On all fours", "Kneeling on one knee, a light plate at your chest"] },
   mv_getup: { n: "Turkish get-up", l: ["No weight: a shoe balanced on your fist", "8 kg", "12 kg", "16 kg", "20 kg"] },
-  mv_copen: { n: "Copenhagen plank", l: ["Knee on the bench", "Ankle on the bench"] },
+  mv_copen: { n: "Copenhagen", l: ["Knee on the bench", "Ankle on the bench", "Ankle on the bench, the bottom leg lifted to touch it"] },
+  mv_star: { n: "Star side plank", l: ["From your bottom knee, the top leg straight", "From your feet", "On your straight arm, the top arm to the ceiling"] },
   mv_curlup: { n: "McGill curl-up", l: ["Elbows on the floor", "Elbows lifted", "Elbows lifted, a deep breath in and out during each hold"] },
   mv_bridge: { n: "Side bridge", l: ["From your knees", "From your feet", "Rolling through a front plank to the other side"] },
   mv_floor: { n: "Floor to standing", l: ["One hand", "No hands"] },

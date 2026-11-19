@@ -1,5 +1,5 @@
 import homeMd from "../home-routines.md?raw";
-import { levelLine, movePhase } from "./move.js";
+import { levelLine, movePhase, pushEffort } from "./move.js";
 
 /* ================================================================
    THE HOME ROUTINES — home-routines.md, card by card
@@ -118,14 +118,21 @@ const LV_BY_NAME = [[/CURL-UP/, "mv_curlup"], [/^SIDE BRIDGE/, "mv_bridge"], [/^
   [/^REVERSE NORDIC/, "mv_rnordic"], [/^DEEP SQUAT$/, "mv_squat"], [/^90\/90 TO KNEELING/, "mv_kneel"], [/^STRAIGHT-LEG LIFT-OFFS/, "mv_slr"],
   [/^TURN-OUT LIFTS/, "mv_turnout"], [/^LOADED KNEE TO WALL/, "mv_ktw"], [/^SINGLE-LEG CALF RAISE/, "mv_scalf"]];
 export const levelIdOf = (name) => { const hit = LV_BY_NAME.find((x) => x[0].test(name)); return hit ? hit[1] : null; };
+/* THE UPPER PUSHES: the shoulder and the wrist, Tuesday and Thursday
+   evenings before RANGE, and in Session B in the turn-out lifts' place,
+   from the tendon work's week 1. Each card says how hard: 8 out of 10 in
+   the first two weeks, half effort on a red day, then as hard as you can. */
+export const UPPER_PUSH_CARDS = numberedCards(sectionOf(S, "THE UPPER PUSHES")).map(card);
+export const upperPushCards = (tw, red) => UPPER_PUSH_CARDS.map((c) => Object.assign({}, c, { level: pushEffort(tw, { red }).replace("a red morning", "a red day").toUpperCase() }));
 const OWN_PIGEON = " At halfway: press your front shin into the floor for 5 seconds, relax, and fold further.";
 /* RANGE FOR MOVE: its one-leg balance cards show your balance level */
 export const moveRangeCards = (lv) => MOVE_RANGE_CARDS.map((c) => (/^ONE-LEG BALANCE/.test(c.n) ? Object.assign({}, c, { level: levelLine(lv, "mv_balance"), lv: "mv_balance" }) : c));
-export const sessionCards = (which, mw, lv) => (which === "A" ? SESSION_A_CARDS : SESSION_B_CARDS).map((c) => {
+export const sessionCards = (which, mw, lv, tw, red) => [].concat(...(which === "A" ? SESSION_A_CARDS : SESSION_B_CARDS).map((c) => {
+  if (tw && /^TURN-OUT LIFTS/.test(c.n)) return upperPushCards(tw, red);
   const id = levelIdOf(c.n);
   let x = id ? Object.assign({}, c, { level: levelLine(lv, id), lv: id }) : c;
   if (/^PIGEON/.test(c.n) && movePhase(mw) === "own") x = Object.assign({}, x, { secs: 120, amt: "2:00", words: c.words + OWN_PIGEON, halfway: true });
-  return x; });
+  return [x]; }));
 
 /* ---------------- THE SKILL BLOCK ---------------- */
 export const SKILL_CARDS = numberedCards(sectionOf(S, "THE SKILL BLOCK")).map(card);
@@ -136,7 +143,9 @@ export const skillCards = (hs) => SKILL_CARDS.map((c) => (/HANDSTAND/.test(c.n) 
 /* the amounts in the section headings: "about 20 minutes", "5 minutes" */
 const minsOf = (start) => { const k = Object.keys(S).find((x) => x.indexOf(start) === 0); const m = k ? k.match(/(\d+)\s*minutes/) : null; return m ? Number(m[1]) : null; };
 export const ROUTINE_MINS = { range: minsOf("RANGE · "), fight: minsOf("RANGE — FIGHT WEEK"), keep: minsOf("THE KEEP"), move: minsOf("THE MOVEMENT SESSION"), skill: minsOf("THE SKILL BLOCK"),
-  moveRange: minsOf("RANGE FOR MOVE"), sessA: minsOf("SESSION A"), sessB: minsOf("SESSION B") };
+  moveRange: minsOf("RANGE FOR MOVE"), sessA: minsOf("SESSION A"), sessB: minsOf("SESSION B"), upper: minsOf("THE UPPER PUSHES"),
+  /* Session B with the upper pushes in the turn-out lifts' place: "35 minutes with the upper pushes" */
+  sessBPush: (() => { const k = Object.keys(S).find((x) => x.indexOf("SESSION B") === 0); const m = k ? k.match(/(\d+)\s*minutes with the upper pushes/) : null; return m ? Number(m[1]) : null; })() };
 
 /* the line under a card's words: HOLD with a clock, or the reps */
 export const doseLine = (c) => (c.kind === "hold" ? "HOLD" : "REPS " + c.amt);

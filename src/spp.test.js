@@ -128,14 +128,14 @@ describe("3 · the session pages", () => {
   const names = (w, d) => day(w, d).map((c) => c.n);
   const card = (w, d, n) => day(w, d).find((c) => c.n === n);
   it("Monday: box jumps, the squat, then the Romanian deadlift, the split squat, the leg curl, the calves and leg raises, then the neck and rear delts", () => {
-    expect(names(1, "mon")).toEqual(["The movement block", "Box Jumps", "Back Squat", "Romanian Deadlift", "Bulgarian Split Squat", "Seated Leg Curl", "Standing Calf Raise + Hanging Leg Raise", "Lying Neck Curl + Lying Neck Extension", "Chest-Supported Rear-Delt Raise"]);
+    expect(names(1, "mon")).toEqual(["The movement block", "Box Jumps", "Achilles pushes", "Knee pushes", "Back Squat", "Romanian Deadlift", "Bulgarian Split Squat", "Seated Leg Curl", "Towel Calf Raise + Hanging Leg Raise", "Lying Neck Curl + Lying Neck Extension", "Chest-Supported Rear-Delt Raise"]);
     expect(card(1, "mon", "Back Squat").pres).toBe("4 × 6 · 75% · Rest 3:00");
     expect(card(5, "mon", "Back Squat").pres).toBe("5 × 3 · 85% · Rest 3:00");
     expect(card(11, "mon", "Back Squat").pres).toBe("4 × 2 · 95% · Rest 90 s · 3 box jumps · rest 2:00");
     expect(card(11, "mon", "Back Squat").lib.map((e) => e.n)).toEqual(["BACK SQUAT", "BOX JUMPS"]);
     expect([1, 5, 9].map((w) => card(w, "mon", "Romanian Deadlift").pres.split(" · ")[0])).toEqual(["3 × 8", "3 × 6", "3 × 5"]);
     expect([1, 5, 9].map((w) => card(w, "mon", "Bulgarian Split Squat").pres.split(" · ")[0])).toEqual(["3 × 8 each leg", "3 × 6 each leg", "2 × 6 each leg"]);
-    expect(card(1, "mon", "Standing Calf Raise + Hanging Leg Raise").kind).toBe("pair");
+    expect(card(1, "mon", "Towel Calf Raise + Hanging Leg Raise").kind).toBe("pair");
   });
   it("Tuesday: the rotational throws, then bench and weighted chin-ups as a pair, the landmine press, the landmine rotation, rows and dips, lateral raises, the ab wheel, then the bursts and the pressure rounds", () => {
     expect(names(1, "tue")).toEqual(["The movement block", "Rotational Shot-Put Throw + Hook Throw", "Bench Press + Weighted Chin-Up", "One-Arm Landmine Press", "Landmine Rotation", "Chest-Supported Row + Weighted Dip", "Cable Lateral Raise", "Ab Wheel Rollout", "Assault Bike Bursts", "Pressure Rounds"]);
@@ -152,8 +152,8 @@ describe("3 · the session pages", () => {
     expect(names(1, "sun")).toEqual(["The movement block", "Cable Lateral Raise", "Face Pull", "Dumbbell Shrug + Cable Crunch", "EZ-Bar Curl + Overhead Triceps Extension", "Incline Dumbbell Curl + Dumbbell Skull Crusher", "Hammer Curl", "Back Extension", "Seated Calf Raise + Pallof Press", "The Nasal Run", "Weekly Check"]);
     expect(card(1, "sun", "Cable Lateral Raise").pres).toMatch(/^4 × 12–20 · the last set to failure, then 30% lighter and go again/);
   });
-  it("Thursday: the sled, the sprints and the jumps first, then trap bar jumps, the trap bar and its shrugs, the pause squat, the Nordics, then the Copenhagen plank", () => {
-    expect(names(1, "thu")).toEqual(["The movement block", "Heavy Sled Sprint", "Flying Sprints", "Box Jumps", "Trap Bar Jump", "Trap Bar Deadlift", "Trap Bar Shrug", "Pause Squat", "Nordic Curls", "Copenhagen Plank, Knee or Ankle"]);
+  it("Thursday: the sled, the sprints and the jumps first, then trap bar jumps, the lower pushes, the trap bar and its shrugs, the pause squat, the Nordics, then the hip pair", () => {
+    expect(names(1, "thu")).toEqual(["The movement block", "Heavy Sled Sprint", "Flying Sprints", "Box Jumps", "Trap Bar Jump", "Achilles pushes", "Knee pushes", "Trap Bar Deadlift", "Trap Bar Shrug", "Pause Squat", "Nordic Curls", "Copenhagen lifts", "Star side plank"]);
     expect(names(5, "thu")).toContain("Low-Box Depth Jumps");
     expect(names(9, "thu")).toContain("Depth Jumps");
     expect(card(5, "thu", "Low-Box Depth Jumps").pres).toMatch(/^4 × 3 · 20 cm box/);
@@ -162,8 +162,8 @@ describe("3 · the session pages", () => {
     expect([1, 5, 9].map((w) => card(w, "thu", "Pause Squat").pres)).toEqual(["3 × 5 · 2-second pause · 65% · Rest 2:00", "3 × 3 · 2-second pause · 72.5% · Rest 2:00", "3 × 2 · 2-second pause · 75% · Rest 2:00"]);
     expect(card(10, "thu", "Trap Bar Deadlift").pres).toBe("4 × 2 · 92.5% · Rest 90 s · 3 broad jumps · rest 2:00");
   });
-  it("Saturday: the throws, the bench throw, the landmine push press, then bench and pull-ups, rows, lateral raises, the Copenhagen plank (the side plank before Move) and the landmine rotation, then the 4 × 4", () => {
-    expect(names(1, "sat")).toEqual(["The movement block", "Medicine-Ball Chest Pass + Rotational Scoop Throw", "Bench Throw (Smith)", "One-Arm Landmine Push Press", "Bench Press, Touch and Go + Pull-Up", "One-Arm Dumbbell Row", "Cable Lateral Raise", "Copenhagen Plank, Knee or Ankle", "Landmine Rotation", "The 4 × 4 Intervals"]);
+  it("Saturday: the lower pushes, the throws, the bench throw, the landmine push press, then bench and pull-ups, rows, lateral raises, the hip pair and the landmine rotation, then the 4 × 4", () => {
+    expect(names(1, "sat")).toEqual(["The movement block", "Achilles pushes", "Knee pushes", "Medicine-Ball Chest Pass + Rotational Scoop Throw", "Bench Throw (Smith)", "One-Arm Landmine Push Press", "Bench Press, Touch and Go + Pull-Up", "One-Arm Dumbbell Row", "Cable Lateral Raise", "Copenhagen lifts", "Star side plank", "Landmine Rotation", "The 4 × 4 Intervals"]);
     expect([1, 5, 9].map((w) => card(w, "sat", "One-Arm Landmine Push Press").pres)).toEqual(["4 × 5 each side · every rep fast · Rest 2:00", "5 × 3 each side · every rep fast · Rest 2:00", "5 × 3 each side · every rep fast · Rest 2:00"]);
     expect(card(1, "sat", "Bench Throw (Smith)").lib.some((e) => e.n === "BENCH THROW" && /safety stops/.test(e.text))).toBe(true);
     expect(card(4, "sat", "The 3 × 4 Intervals").pres).toMatch(/3 × 4 minutes at 90–95% of your peak heart rate/);
@@ -187,7 +187,7 @@ describe("3 · the session pages", () => {
     expect(names(4, "thu")).not.toContain("Trap Bar Deadlift");
     expect(names(4, "thu")).not.toContain("Trap Bar Jump");
     expect(names(4, "sat")).not.toContain("Bench Throw (Smith)");
-    expect(names(4, "sat").slice(0, 4)).toEqual(["The movement block", "Medicine-Ball Chest Pass + Rotational Scoop Throw", "Load-Velocity Profile — Bench Throw", "One-Arm Landmine Push Press"]);
+    expect(names(4, "sat").slice(0, 6)).toEqual(["The movement block", "Achilles pushes", "Knee pushes", "Medicine-Ball Chest Pass + Rotational Scoop Throw", "Load-Velocity Profile — Bench Throw", "One-Arm Landmine Push Press"]);
     expect(card(4, "tue", "Weighted Chin-Up, Palms Toward You").pres.split(" · ")[0]).toBe("2 × 6");
     expect(card(8, "tue", "Weighted Chin-Up, Palms Toward You").pres.split(" · ")[0]).toBe("3 × 4");
     expect(card(4, "wed", "Dumbbell Lateral Raise").pres.split(" · ")[0]).toBe("2 × 12–20");
@@ -201,7 +201,7 @@ describe("3 · the session pages", () => {
     expect(day(12, "tue").filter((c) => c.kind === "top").map((c) => c.n)).toEqual(["Bench Press"]);
     expect(card(12, "tue", "Weighted chin-up, palms toward you — top triple").kind).toBe("out");
     expect(day(12, "thu").filter((c) => c.kind === "top").map((c) => c.n)).toEqual(["Trap Bar Deadlift"]);
-    expect(names(12, "thu")).toEqual(["The movement block", "Heavy Sled Sprint", "Trap Bar Jump", "Trap Bar Deadlift", "Trap Bar Shrug", "Nordic Curls", "Copenhagen Plank, Knee or Ankle"]);
+    expect(names(12, "thu")).toEqual(["The movement block", "Heavy Sled Sprint", "Trap Bar Jump", "Achilles pushes", "Knee pushes", "Trap Bar Deadlift", "Trap Bar Shrug", "Nordic Curls", "Copenhagen lifts", "Star side plank"]);
     expect(card(12, "thu", "Trap Bar Jump").pres.split(" · ")[0]).toBe("3 × 3 @ your peak-power load");
     expect(day(12, "sat").filter((c) => c.kind === "top").map((c) => c.n)).toEqual([]);
     day(12, "mon").concat(day(12, "tue"), day(12, "thu"), day(12, "sat")).filter((c) => c.kind === "top").forEach((c) => expect(c.lib[0].n).toBe("TOP TRIPLE"));
@@ -351,7 +351,7 @@ describe("7 · the sprints: a button a run, and the rest", () => {
 describe("8 · rotation and the trunk", () => {
   const CAT = sessionCatalog(["spp"]).filter((c) => c.set === "spp");
   const card = (w, d, n) => CAT.find((c) => c.week === w && c.day === d && c.n === n && c.edge == null);
-  const block = (d, n) => sppSess(d).b.find((b) => b.n === n);
+  const block = (d, n) => sppSess(d).b.find((b) => (typeof b.n === "function" ? b.n({}) : b.n) === n);
   const throws = block("tue", "Rotational Shot-Put Throw + Hook Throw"), trunk = block("sun", "Seated Calf Raise + Pallof Press");
   it("Tuesday's throws: the shot-put and the hook, 3 × 3 each side, alternated with 45 seconds, two sets in weeks 4, 8 and 12, off on a red morning", () => {
     expect(card(1, "tue", "Rotational Shot-Put Throw + Hook Throw").kind).toBe("pair");
@@ -391,7 +391,7 @@ describe("8 · rotation and the trunk", () => {
 describe("9 · the abs, the traps, the rear delts and the neck", () => {
   const CAT = sessionCatalog(["spp"]).filter((c) => c.set === "spp");
   const card = (w, d, n) => CAT.find((c) => c.week === w && c.day === d && c.n === n && c.edge == null);
-  const block = (d, n) => sppSess(d).b.find((b) => b.n === n);
+  const block = (d, n) => sppSess(d).b.find((b) => (typeof b.n === "function" ? b.n({}) : b.n) === n);
   const setsOf = (it) => Number(String(it.s).match(/^(\d+) ×/)[1]);
   const items = (d, n, w) => block(d, n).items(sppRx(w));
   const names = (w, d) => CAT.filter((c) => c.week === w && c.day === d && c.edge == null).filter((c, i, a) => a.findIndex((x) => x.i === c.i) === i).map((c) => c.n);
@@ -437,27 +437,27 @@ describe("9 · the abs, the traps, the rear delts and the neck", () => {
     expect(sppMd).toMatch(/\*\*Chest-supported rear-delt raise\*\* — 3 × 15–20\. Rest 60 seconds\./);
     expect(sppMd).toMatch(/\| Wednesday \| \*\*Physique A\*\* — chest and back for size, rear delts and cable crunches/);
   });
-  it("the week's minutes and the document: Monday ~79, Wednesday ~79, Thursday ~91 with the Copenhagen plank, Sunday ~85, ~95 with the engine base, about nine and three-quarter hours with the easy hour", () => {
+  it("the week's minutes and the document: Monday ~86, Wednesday ~79, Thursday ~103 with the lower pushes and the hip pair, Sunday ~85, ~95 with the engine base, about ten and a quarter hours with the easy hour", () => {
     const mv = (w) => Object.assign({}, sppRx(w), { mw: 1 });
     expect([1, 5, 9].map((w) => sppSess("mon").m(sppRx(w)))).toEqual([71, 75, 75]);
     expect([1, 5, 9].map((w) => sppSess("mon").m(mv(w)))).toEqual([77, 81, 81]);
     expect([sppSess("wed").m(sppRx(1)), sppSess("wed").m(mv(1))]).toEqual([75, 79]);
     expect([1, 5, 9].map((w) => sppSess("thu").m(sppRx(w)))).toEqual([89, 93, 93]);
     expect([1, 5, 9].map((w) => sppSess("thu").m(mv(w)))).toEqual([89, 93, 93]);
-    expect(sppMd).toMatch(/\| Monday \|[^\n]*then the neck and rear delts \| ~79 min \|/);
+    expect(sppMd).toMatch(/\| Monday \|[^\n]*then the neck and rear delts \| ~86 min \|/);
     expect(sppMd).toMatch(/\| Wednesday \|[^\n]*cable crunches[^\n]*\| ~79 min \|/);
-    expect(sppMd).toMatch(/\| Thursday \|[^\n]*trap bar shrugs[^\n]*then the Copenhagen plank \| ~91 min \|/);
-    expect(sppMd).toMatch(/About nine and three-quarter hours a week\./);
+    expect(sppMd).toMatch(/\| Thursday \|[^\n]*trap bar shrugs[^\n]*then the hip pair \| ~103 min \|/);
+    expect(sppMd).toMatch(/About ten and a quarter hours a week\./);
     expect(sppMd).toMatch(/\*\*Cable crunch\*\*, 3 × 10–15\. Rest 60 seconds after each pair/);
     expect(sppMd).toMatch(/\*\*Trap bar shrug\*\* — 3 × 8–12\. Rest 75 seconds\. Straight after the deadlift/);
-    expect(sppMd).toMatch(/\*\*Lying neck curl\*\*, 3 × 15–20, back to back with 9/);
+    expect(sppMd).toMatch(/\*\*Lying neck curl\*\*, 3 × 15–20, back to back with 10/);
   });
 });
 
 describe("10 · the pressure rounds and the ab finishes", () => {
   const CAT = sessionCatalog(["spp"]).filter((c) => c.set === "spp");
   const card = (w, d, n) => CAT.find((c) => c.week === w && c.day === d && c.n === n && c.edge == null);
-  const block = (d, n) => sppSess(d).b.find((b) => b.n === n);
+  const block = (d, n) => sppSess(d).b.find((b) => (typeof b.n === "function" ? b.n({}) : b.n) === n);
   const items = (d, n, w) => block(d, n).items(sppRx(w));
   const names = (w, d) => CAT.filter((c) => c.week === w && c.day === d && c.edge == null).filter((c, i, a) => a.findIndex((x) => x.i === c.i) === i).map((c) => c.n);
   it("Tuesday's pressure rounds: last, straight after the bursts; three rounds, two in weeks 4, 8 and 12; a 5-second burst every 20 seconds; off on a red morning", () => {
@@ -479,10 +479,10 @@ describe("10 · the pressure rounds and the ab finishes", () => {
     expect(sppMd).toMatch(/\| Tuesday \|[^\n]*6-second bursts and the pressure rounds on the assault bike \| ~98 min \|/);
     expect(sppMd).toMatch(/two weeks running, the Saturday easy hour comes out first\. If it happens again, two more weeks running, the pressure rounds come out too, for the rest of the twelve weeks\./);
   });
-  it("Thursday's ab finish: before Optimal 8 · Move, the side plank back to back with the dead bug; from its week 1, the Copenhagen plank, 2 × 20–30 s each side, 30 seconds between, last, with its level", () => {
+  it("Thursday's ab finish: before Optimal 8 · Move, the side plank back to back with the dead bug; from its week 1, the Copenhagen plank, 2 × 20–30 s each side, 30 seconds between, last, with its level; from the tendon work's week 1, the hip pair", () => {
     const thu = names(1, "thu");
-    expect(thu[thu.length - 1]).toBe("Copenhagen Plank, Knee or Ankle");
-    expect(card(1, "thu", "Copenhagen Plank, Knee or Ankle").lib.map((e) => e.n)).toEqual(["COPENHAGEN PLANK, KNEE OR ANKLE"]);
+    expect(thu.slice(-2)).toEqual(["Copenhagen lifts", "Star side plank"]);
+    expect(libFor("Copenhagen plank, knee or ankle").map((e) => e.n)).toEqual(["COPENHAGEN PLANK, KNEE OR ANKLE"]);
     const mv = (w) => Object.assign({}, sppRx(w), { mw: 1 });
     const cp = block("thu", "Copenhagen Plank, Knee or Ankle");
     const c = cp.items(mv(1))[0];
@@ -490,16 +490,17 @@ describe("10 · the pressure rounds and the ab finishes", () => {
     expect(cp.items(mv(4))[0].s).toBe("1 × 20–30 s each side");
     expect([cp.m(mv(1)), cp.m(mv(4)), cp.hard, cp.since]).toEqual([3, 2, undefined, "2026-11-09"]);
     expect([cp.hide(sppRx(1)), cp.hide(mv(1)), block("thu", "Side Plank + Dead Bug").hide(sppRx(1)), block("thu", "Side Plank + Dead Bug").hide(mv(1))]).toEqual([true, false, false, true]);
+    expect([cp.hide(Object.assign(mv(1), { tw: 1 })), block("thu", "The Hip Pair").hide(mv(1)), block("thu", "The Hip Pair").hide(Object.assign(mv(1), { tw: 1 }))]).toEqual([true, true, false]);
     const [sp, db] = items("thu", "Side Plank + Dead Bug", 1);
     expect([sp.id, sp.k, sp.s, sp.rt, db.id, db.k, db.s, db.rt]).toEqual(["s_splank", "chk", "2 × 30–45 s each side", 0, "s_deadbug", "chk", "2 × 10 each side · slow", 30]);
     expect(items("thu", "Side Plank + Dead Bug", 4).map((i) => i.s)).toEqual(["1 × 30–45 s each side", "1 × 10 each side · slow"]);
     expect(block("thu", "Side Plank + Dead Bug").m).toBe(5);
-    expect(sppMd).toMatch(/9\. \*\*Copenhagen plank\*\* — 2 × 20–30 seconds each side\. Rest 30 seconds\./);
-    expect(sppMd).toMatch(/Before Optimal 8 · Move the finish was the side plank, 2 × 30–45 seconds each side, back to back with the dead bug, 2 × 10 each side, 30 seconds after each pair\./);
+    expect(sppMd).toMatch(/10\. \*\*The hip pair\*\* — about 5 minutes, at your levels\. Rest 20 seconds between sets\./);
+    expect(sppMd).toMatch(/Before Optimal 8 · Move the finish was the side plank, 2 × 30–45 seconds each side, back to back with the dead bug, 2 × 10 each side, 30 seconds after each pair\. From Optimal 8 · Move's week 1 to Monday 23 November it was the Copenhagen plank, 2 × 20–30 seconds each side\./);
   });
   it("Saturday's ab finish: the side plank until Optimal 8 · Move, the Copenhagen plank from its week 1, then the landmine rotation in added kilos, before the 4 × 4; neither comes off on a red morning", () => {
     const sat = names(1, "sat");
-    expect(sat.slice(-4)).toEqual(["Cable Lateral Raise", "Copenhagen Plank, Knee or Ankle", "Landmine Rotation", "The 4 × 4 Intervals"]);
+    expect(sat.slice(-5)).toEqual(["Cable Lateral Raise", "Copenhagen lifts", "Star side plank", "Landmine Rotation", "The 4 × 4 Intervals"]);
     const shown = (rx) => sppSess("sat").b.filter((b) => !(b.hide && b.hide(rx))).map((b) => b.n);
     expect(shown(sppRx(1)).includes("Side Plank")).toBe(true);
     expect(shown(sppRx(1)).includes("Copenhagen Plank, Knee or Ankle")).toBe(false);
@@ -507,9 +508,9 @@ describe("10 · the pressure rounds and the ab finishes", () => {
     const cp = items("sat", "Copenhagen Plank, Knee or Ankle", 1)[0];
     expect([cp.id, cp.k, cp.s, cp.lv, block("sat", "Copenhagen Plank, Knee or Ankle").rt, block("sat", "Copenhagen Plank, Knee or Ankle").m]).toEqual(["s_copen", "chk", "2 × 20–30 s each side", "mv_copen", 30, 3]);
     expect(items("sat", "Copenhagen Plank, Knee or Ankle", 12)[0].s).toMatch(/^1 ×/);
-    expect(card(1, "sat", "Copenhagen Plank, Knee or Ankle").lib.map((e) => e.n)).toEqual(["COPENHAGEN PLANK, KNEE OR ANKLE"]);
-    expect(sppMd).toMatch(/9\. \*\*Copenhagen plank\*\* — 2 × 20–30 seconds each side, at your level, as on Thursday\. Rest 30 seconds\./);
-    expect(sppMd).toMatch(/Before Optimal 8 · Move it was the side plank, 2 × 30–45 seconds each side\./);
+    expect(shown(Object.assign({}, sppRx(1), { mw: 1, tw: 1 })).filter((n) => /Copenhagen|Side Plank|Hip Pair/.test(n))).toEqual(["The Hip Pair"]);
+    expect(sppMd).toMatch(/10\. \*\*The hip pair\*\* — the Copenhagen lifts and the star side plank, 2 × 4 each side of each, at your levels, as on Thursday/);
+    expect(sppMd).toMatch(/Before Optimal 8 · Move it was the side plank, 2 × 30–45 seconds each side; then, until Monday 23 November, the Copenhagen plank, 2 × 20–30 seconds each side\./);
     const sp = items("sat", "Side Plank", 1)[0], lr = items("sat", "Landmine Rotation", 1)[0];
     expect([sp.id, sp.k, sp.s, block("sat", "Side Plank").rt]).toEqual(["s_splank", "chk", "2 × 30–45 s each side", 30]);
     expect([lr.id, lr.k, lr.s, lr.sets, lr.reps, block("sat", "Landmine Rotation").rt]).toEqual(["s_landrot", "wr", "3 × 6–8 each side · controlled", 3, "6–8/side", 60]);
@@ -517,10 +518,10 @@ describe("10 · the pressure rounds and the ab finishes", () => {
     expect(items("sat", "Landmine Rotation", 8)[0].s).toMatch(/^2 ×/);
     expect(items("sat", "Side Plank", 12)[0].s).toMatch(/^1 ×/);
     expect(card(1, "sat", "Landmine Rotation").lib.map((e) => e.n)).toEqual(["LANDMINE ROTATION"]);
-    ["Side Plank", "Copenhagen Plank, Knee or Ankle", "Landmine Rotation"].forEach((n) => expect(block("sat", n).hard).toBeUndefined());
+    ["Side Plank", "Copenhagen Plank, Knee or Ankle", "The Hip Pair", "Landmine Rotation"].forEach((n) => expect(block("sat", n).hard).toBeUndefined());
     expect([1, 5, 9].map((w) => sppSess("sat").m(sppRx(w)))).toEqual([93, 95, 95]);
-    expect(sppMd).toMatch(/\| Saturday \|[^\n]*Copenhagen planks and landmine rotations, then the 4 × 4 intervals; in the evening, the easy hour on the bike \| ~99 min \+ 45 \|/);
-    expect(sppMd).toMatch(/10\. \*\*Landmine rotation\*\* — 3 × 6–8 each side, controlled\. Rest 60 seconds\./);
+    expect(sppMd).toMatch(/\| Saturday \|[^\n]*the hip pair and landmine rotations, then the 4 × 4 intervals; in the evening, the easy hour on the bike \| ~107 min \+ 45 \|/);
+    expect(sppMd).toMatch(/11\. \*\*Landmine rotation\*\* — 3 × 6–8 each side, controlled\. Rest 60 seconds\./);
   });
   it("the side plank's entry leaves the classic's side plank reach-through as it was, with no entry", () => {
     expect(libFor("Side plank").map((e) => e.n)).toEqual(["FOREARM SIDE PLANK"]);
@@ -533,7 +534,7 @@ describe("11 · the landmine presses, the side neck raise and the medicine-ball 
   const day = (w, d) => CAT.filter((c) => c.week === w && c.day === d && c.edge == null).filter((c, i, a) => a.findIndex((x) => x.i === c.i) === i);
   const names = (w, d) => day(w, d).map((c) => c.n);
   const card = (w, d, n) => day(w, d).find((c) => c.n === n);
-  const block = (d, n) => sppSess(d).b.find((b) => b.n === n);
+  const block = (d, n) => sppSess(d).b.find((b) => (typeof b.n === "function" ? b.n({}) : b.n) === n);
   const items = (d, n, w) => block(d, n).items(sppRx(w));
   const ALL = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   it("Tuesday's one-arm landmine press, in place of the standing overhead press: 3 × 8 each side, then 4 × 5, then 3 × 4, two minutes' rest, the weight added to the bar", () => {
@@ -563,15 +564,15 @@ describe("11 · the landmine presses, the side neck raise and the medicine-ball 
     expect(card(5, "sat", "One-Arm Landmine Push Press").pres).toBe("5 × 3 each side · every rep fast · Rest 2:00");
     expect(card(1, "sat", "One-Arm Landmine Push Press").lib.map((e) => e.n)).toEqual(["ONE-ARM LANDMINE PUSH PRESS"]);
     expect([1, 4, 5, 8, 9, 12].map((w) => b.m(sppRx(w)))).toEqual([13, 8, 15, 8, 15, 8]);
-    expect(sppMd).toMatch(/4\. \*\*One-arm landmine push press\*\* — size 4 × 5 each side, strength and power 5 × 3, every rep as fast as you can\. Rest 2 minutes\./);
-    expect(sppMd).toMatch(/\| Saturday \| \*\*Upper power\*\* — throws, bench throws and the landmine push press,/);
+    expect(sppMd).toMatch(/5\. \*\*One-arm landmine push press\*\* — size 4 × 5 each side, strength and power 5 × 3, every rep as fast as you can\. Rest 2 minutes\./);
+    expect(sppMd).toMatch(/\| Saturday \| \*\*Upper power\*\* — the lower pushes, then throws, bench throws and the landmine push press,/);
   });
   it("the lighter weeks and test week: Saturday's profile is the bench throw's alone, the landmine push press runs at half the sets, and it has no top triple", () => {
-    [4, 8].forEach((w) => expect(names(w, "sat").slice(2, 4)).toEqual(["Load-Velocity Profile — Bench Throw", "One-Arm Landmine Push Press"]));
+    [4, 8].forEach((w) => expect(names(w, "sat").slice(4, 6)).toEqual(["Load-Velocity Profile — Bench Throw", "One-Arm Landmine Push Press"]));
     expect(block("sat", "Load-Velocity Profile — Bench Throw").items.map((x) => x.id)).toEqual(["s_prof_bt"]);
     expect(card(4, "sat", "Load-Velocity Profile — Bench Throw").pres).toBe("the bench throw at four loads · 2 reps each, the watch recording");
     expect([4, 8, 12].map((w) => card(w, "sat", "One-Arm Landmine Push Press").pres.split(" · ")[0])).toEqual(["2 × 5 each side", "3 × 3 each side", "3 × 3 each side"]);
-    expect(names(12, "sat").slice(0, 4)).toEqual(["The movement block", "Medicine-Ball Chest Pass + Rotational Scoop Throw", "Bench Throw (Smith)", "One-Arm Landmine Push Press"]);
+    expect(names(12, "sat").slice(0, 6)).toEqual(["The movement block", "Achilles pushes", "Knee pushes", "Medicine-Ball Chest Pass + Rotational Scoop Throw", "Bench Throw (Smith)", "One-Arm Landmine Push Press"]);
     expect(day(12, "sat").some((c) => c.kind === "top")).toBe(false);
     expect(sppSess("sat").b.some((x) => x.profile === "pp")).toBe(false);
     expect(sppRx(4).em).toMatch(/^Lighter: the squat, bench and trap bar are their profiles/);
@@ -600,8 +601,8 @@ describe("11 · the landmine presses, the side neck raise and the medicine-ball 
     expect([1, 5, 9].map((w) => sppSess("tue").m(sppRx(w)))).toEqual([92, 98, 99]);
     expect(ALL.map((w) => sppSess("wed").m(sppRx(w)))).toEqual(ALL.map(() => 75));
     expect([1, 4, 5, 8, 9, 12].map((w) => sppSess("sat").m(sppRx(w)))).toEqual([93, 87, 95, 87, 95, 88]);
-    expect(sppMd).toMatch(/About 99 minutes, and the easy hour in the evening\./);
-    expect(sppMd).toMatch(/About nine and three-quarter hours a week\./);
+    expect(sppMd).toMatch(/About 107 minutes, and the easy hour in the evening\./);
+    expect(sppMd).toMatch(/About ten and a quarter hours a week\./);
   });
   it("the new entries leave every other programme's rows as they were", () => {
     expect(libFor("Push press").map((e) => e.n)).toEqual(["PUSH PRESS"]);
@@ -618,13 +619,13 @@ describe("12 · more power: Monday's box jumps and Thursday's five sled runs", (
   const day = (w, d) => CAT.filter((c) => c.week === w && c.day === d && c.edge == null).filter((c, i, a) => a.findIndex((x) => x.i === c.i) === i);
   const names = (w, d) => day(w, d).map((c) => c.n);
   const card = (w, d, n) => day(w, d).find((c) => c.n === n);
-  const block = (d, n) => sppSess(d).b.find((b) => b.n === n);
+  const block = (d, n) => sppSess(d).b.find((b) => (typeof b.n === "function" ? b.n({}) : b.n) === n);
   const ALL = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   it("Monday: box jumps on their own card, straight after the warm-up — 4 × 3 in every block, 2 × 3 in weeks 4, 8 and 12, a minute's rest, a hard block", () => {
     ALL.forEach((w) => expect(names(w, "mon").slice(0, 2)).toEqual(["The movement block", "Box Jumps"]));
-    expect(names(1, "mon")[2]).toBe("Back Squat");
+    expect(names(1, "mon").slice(2, 5)).toEqual(["Achilles pushes", "Knee pushes", "Back Squat"]);
     expect(names(4, "mon")[2]).toBe("Load-Velocity Profile — Squat");
-    expect(names(12, "mon").slice(2, 4)).toEqual(["Broad jump", "Back Squat"]);
+    expect(names(12, "mon").slice(2, 6)).toEqual(["Broad jump", "Achilles pushes", "Knee pushes", "Back Squat"]);
     const b = block("mon", "Box Jumps");
     expect(ALL.map((w) => b.items(sppRx(w))[0].s)).toEqual(ALL.map((w) => ([4, 8, 12].includes(w) ? "2" : "4") + " × 3 · onto a knee-high box"));
     const i = b.items(sppRx(1))[0];
@@ -642,7 +643,9 @@ describe("12 · more power: Monday's box jumps and Thursday's five sled runs", (
     const a = sppSess("mon").b[0], mv = Object.assign({}, sppRx(1), { mw: 1 });
     expect([a.p(sppRx(1)), a.m(sppRx(1)), a.rxLine(sppRx(1))]).toEqual(["S_WU_MON", 5, "5 min · bike, the Spanish squat hold"]);
     expect([a.p(mv), a.m(mv), a.rxLine(mv)]).toEqual(["S_MV_MON", 11, "11 min · hips, knees and lower back"]);
-    expect(card(1, "mon", "The movement block").pres).toBe("11 min · hips, knees and lower back");
+    const tw = Object.assign({}, mv, { tw: 1 });
+    expect([a.p(tw), a.m(tw), a.rxLine(tw)]).toEqual(["S_MV_MON_T", 8, "8 min · hips, knees and lower back"]);
+    expect(card(1, "mon", "The movement block").pres).toBe("8 min · hips, knees and lower back");
   });
   it("Thursday: five sled runs, three in the lighter weeks, two in test week; the load, the rest and the log as before", () => {
     expect(ALL.map((w) => sppSled(sppRx(w)))).toEqual([5, 5, 5, 3, 5, 5, 5, 3, 5, 5, 5, 2]);
@@ -674,14 +677,14 @@ describe("12 · more power: Monday's box jumps and Thursday's five sled runs", (
   it("the minutes and the document", () => {
     expect([1, 4, 5, 9, 12].map((w) => sppSess("mon").m(sppRx(w)))).toEqual([71, 58, 75, 75, 77]);
     expect([1, 4, 5, 9, 12].map((w) => sppSess("thu").m(sppRx(w)))).toEqual([89, 68, 93, 93, 66]);
-    expect(sppMd).toMatch(/\| Monday \| \*\*Lower strength\*\* — the movement block, box jumps, then the squat heavy,[^\n]*\| ~79 min \|/);
-    expect(sppMd).toMatch(/\*\*The movement block · 11 minutes\*\* — hips, knees and lower back\n\n1\. \*\*Easy bike\*\*, 2 minutes\.\n2\. \*\*90\/90 hip switches\*\*[^\n]*\n3\. \*\*Spanish squat hold\*\*, 3 × 45 seconds[^\n]*\n\nEvery move, its levels and the reasons are in Optimal 8 · Move\. Before its week 1 this was the warm-up: the easy bike for 3 minutes and the Spanish squat hold, 2 × 30 seconds\.\n\n\*\*The session\*\*\n\n1\. \*\*Box jump\*\* — 4 × 3, all twelve weeks\. Rest 60 seconds\./);
-    expect(sppMd).toMatch(/2\. \*\*Back squat\*\* — the table's sets and percentages/);
-    expect(sppMd).toMatch(/10\. \*\*Chest-supported rear-delt raise\*\*/);
+    expect(sppMd).toMatch(/\| Monday \| \*\*Lower strength\*\* — the movement block, box jumps, the lower pushes, then the squat heavy,[^\n]*\| ~86 min \|/);
+    expect(sppMd).toMatch(/\*\*The movement block · 8 minutes\*\* — hips, knees and lower back\n\n1\. \*\*Easy bike\*\*, 2 minutes\.\n2\. \*\*90\/90 hip switches\*\*[^\n]*\n\nEvery move, its levels and the reasons are in Optimal 8 · Move\. Before its week 1 this was the warm-up: the easy bike for 3 minutes and the Spanish squat hold, 2 × 30 seconds\. Until Monday 23 November the block was 11 minutes, with the Spanish squat hold, 3 × 45 seconds; the knee pushes do its job harder\.\n\n\*\*The session\*\*\n\n1\. \*\*Box jump\*\* — 4 × 3, all twelve weeks\. Rest 60 seconds\./);
+    expect(sppMd).toMatch(/3\. \*\*Back squat\*\* — the table's sets and percentages/);
+    expect(sppMd).toMatch(/11\. \*\*Chest-supported rear-delt raise\*\*/);
     expect(sppMd).toMatch(/1\. \*\*Heavy sled sprint\*\* — 5 × 20 metres\. Rest 2 minutes\. Load 40–60% of your bodyweight on the sled\./);
     expect(sppMd).toMatch(/the jumps, sled and sprints included, is half the sets, rounded up/);
     expect(sppMd).toMatch(/\| Thursday \| The movement block, 2 sled sprints and 3 × 3 trap bar jumps/);
-    expect(sppMd).toMatch(/\| Monday \| Broad jump, best of three, after the movement block and the box jumps\. Then the squat top triple\. \|/);
+    expect(sppMd).toMatch(/\| Monday \| Broad jump, best of three, after the movement block and the box jumps\. Then the lower pushes and the squat top triple\. \|/);
     expect(sppMd).toMatch(/\*\*The sled, five runs\.\*\*[^\n]*\(Alcaraz, 2018; Morin, 2017\)/);
     expect(sppMd).toMatch(/\*\*Two jump days\.\*\*/);
   });
@@ -690,11 +693,11 @@ describe("12 · more power: Monday's box jumps and Thursday's five sled runs", (
 describe("13 · a card added later doesn't count against days trained before it", () => {
   /* the programme began on Monday 2 November 2026; these went in after that, and count from the day after they did */
   const SINCE = {
-    mon: { K: "2026-11-13", N: "2026-11-08", Q: "2026-11-08" },
+    mon: { K: "2026-11-13", T: "2026-11-23", N: "2026-11-08", Q: "2026-11-08" },
     tue: { K: "2026-11-06", J: "2026-11-14", I: "2026-11-09" },
     wed: { F: "2026-11-13" },
-    thu: { J: "2026-11-08", K: "2026-11-09" },
-    sat: { J: "2026-11-09", K: "2026-11-09" },
+    thu: { T: "2026-11-23", J: "2026-11-08", K: "2026-11-23" },
+    sat: { T: "2026-11-23", J: "2026-11-23", K: "2026-11-09" },
     sun: { J: "2026-11-16" },
   };
   const DAYS6 = ["mon", "tue", "wed", "thu", "sat", "sun"], OFF = { mon: 0, tue: 1, wed: 2, thu: 3, sat: 5, sun: 6 };
@@ -706,8 +709,9 @@ describe("13 · a card added later doesn't count against days trained before it"
     expect(sppSess("mon").b.find((b) => b.since === "2026-11-13").n).toBe("Box Jumps");
     expect(sppSess("tue").b.find((b) => b.since === "2026-11-09").n).toBe("Pressure Rounds");
     expect(sppSess("wed").b.find((b) => b.since).n).toBe("Side Neck Raise + Medicine-Ball Drops");
-    expect(sppSess("thu").b.filter((b) => b.since).map((b) => b.n)).toEqual(["Trap Bar Shrug", "Side Plank + Dead Bug", "Copenhagen Plank, Knee or Ankle"]);
-    expect(sppSess("sat").b.filter((b) => b.since).map((b) => b.n)).toEqual(["Side Plank", "Copenhagen Plank, Knee or Ankle", "Landmine Rotation"]);
+    expect(sppSess("thu").b.filter((b) => b.since).map((b) => b.n)).toEqual(["The Lower Pushes", "Trap Bar Shrug", "Side Plank + Dead Bug", "Copenhagen Plank, Knee or Ankle", "The Hip Pair"]);
+    expect(sppSess("sat").b.filter((b) => b.since).map((b) => b.n)).toEqual(["The Lower Pushes", "Side Plank", "Copenhagen Plank, Knee or Ankle", "The Hip Pair", "Landmine Rotation"]);
+    expect(sppSess("mon").b.filter((b) => b.since === "2026-11-23").map((b) => b.n)).toEqual(["The Lower Pushes"]);
     expect(sppSess("sun").b.find((b) => b.since).n).toBe("Back Extension");
   });
   it("a card counts on its date and after, never before; a card with no date always counts; no date for the day, and every card counts", () => {
@@ -749,11 +753,11 @@ describe("14 · Tuesday's landmine rotation", () => {
   const day = (w, d) => CAT.filter((c) => c.week === w && c.day === d && c.edge == null).filter((c, i, a) => a.findIndex((x) => x.i === c.i) === i);
   const names = (w, d) => day(w, d).map((c) => c.n);
   const card = (w, d, n) => day(w, d).find((c) => c.n === n);
-  const block = (d, n) => sppSess(d).b.find((b) => b.n === n);
+  const block = (d, n) => sppSess(d).b.find((b) => (typeof b.n === "function" ? b.n({}) : b.n) === n);
   const ALL = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   it("every week, straight after the one-arm landmine press, before the rows and dips; Saturday's stays where it was", () => {
     ALL.forEach((w) => { const t = names(w, "tue"); expect([w, t[t.indexOf("One-Arm Landmine Press") + 1]]).toEqual([w, "Landmine Rotation"]); });
-    ALL.forEach((w) => { const s = names(w, "sat"); const i = s.indexOf("Copenhagen Plank, Knee or Ankle"); expect([w, s.slice(i, i + 2)]).toEqual([w, ["Copenhagen Plank, Knee or Ankle", "Landmine Rotation"]]); });
+    ALL.forEach((w) => { const s = names(w, "sat"); const i = s.indexOf("Copenhagen lifts"); expect([w, s.slice(i, i + 3)]).toEqual([w, ["Copenhagen lifts", "Star side plank", "Landmine Rotation"]]); });
     expect(names(1, "tue")).toEqual(["The movement block", "Rotational Shot-Put Throw + Hook Throw", "Bench Press + Weighted Chin-Up", "One-Arm Landmine Press", "Landmine Rotation", "Chest-Supported Row + Weighted Dip", "Cable Lateral Raise", "Ab Wheel Rollout", "Assault Bike Bursts", "Pressure Rounds"]);
   });
   it("the same card as Saturday's: 3 × 6–8 each side, controlled, 60 seconds' rest, two sets in weeks 4, 8 and 12, the weight added to the bar", () => {
@@ -795,13 +799,13 @@ describe("14 · Tuesday's landmine rotation", () => {
     expect(sppSess("tue").intro).toMatch(/the landmine press heavy, then landmine rotations, then rows and dips for size/);
   });
   it("the document: the week's table, Tuesday's item 6 and the renumbered list, the hours, and why", () => {
-    expect(sppMd).toMatch(/Friday is off\. About nine and three-quarter hours a week\./);
+    expect(sppMd).toMatch(/Friday is off\. About ten and a quarter hours a week\./);
     expect(sppMd).toMatch(/\| Tuesday \| \*\*Upper strength\*\* — rotational throws, then bench, weighted chins and the landmine press heavy, then landmine rotations, rows and dips, then 6-second bursts and the pressure rounds on the assault bike \| ~98 min \|/);
     expect(sppMd).toMatch(/\n6\. \*\*Landmine rotation\*\* — 3 × 6–8 each side, controlled\. Rest 60 seconds\. Straight after the landmine press, with the bar still in the landmine\./);
     expect(sppMd).toMatch(/\n7\. \*\*Chest-supported dumbbell row\*\*, alternated with 8 —/);
     expect(sppMd).toMatch(/\n8\. \*\*Weighted dip\*\*/);
     expect(sppMd).toMatch(/\n12\. \*\*Pressure rounds\*\* — 3 rounds/);
-    expect(sppMd).toMatch(/\n10\. \*\*Landmine rotation\*\* — 3 × 6–8 each side, controlled\. Rest 60 seconds\. One end of a barbell/);
+    expect(sppMd).toMatch(/\n11\. \*\*Landmine rotation\*\* — 3 × 6–8 each side, controlled\. Rest 60 seconds\. One end of a barbell/);
     expect(sppMd).toMatch(/the landmine rotation, Tuesday and Saturday, trains it under load;/);
     expect(sppMd).not.toMatch(/Saturday's landmine rotation trains it/);
   });
@@ -894,7 +898,7 @@ describe("the engine base: the Saturday easy hour and Sunday's 40-minute run, fr
     expect(sppMd).toMatch(/\*\*The nasal runs · Wednesday 30 minutes, Sunday 40\*\*/);
     expect(sppMd).toMatch(/\*\*The Saturday easy hour · 45 minutes, in the evening\*\*/);
     expect(sppMd).toMatch(/There's no third hard session, and no hard engine work in the 24 hours before Monday or Thursday\./);
-    expect(sppMd).toMatch(/the size work runs as written, and so do the nasal runs and the easy hour\./);
+    expect(sppMd).toMatch(/the size work runs as written, and so do the nasal runs and the easy hour; the pushes run at half effort, that evening's too\./);
     expect(sppMd).toMatch(/the Saturday easy hour goes first, then the nasal runs, because the boxing covers that work\./);
     expect(sppMd).toMatch(/\*\*The base built, the hard work held\.\*\*/);
     expect(sppMd).not.toMatch(/engine held where it is/);

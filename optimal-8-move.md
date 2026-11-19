@@ -20,13 +20,13 @@ What each area needs, and where it's trained. **Block** is the gym morning, **A*
 
 | Area | Get there | Own it | Load it | Standards |
 | --- | --- | --- | --- | --- |
-| **Hips**: bending, straightening, turning in and out, opening, closing | RANGE: 90/90, couch, hamstring, deep squat · A: pigeon, frog, nerve sliders | Block: 90/90 switches, airplanes, Cossacks · A: inward-turn lifts, straight-leg lifts, 90/90 to kneeling | Gym: squats, Romanian deadlifts, split squats · Copenhagen · loaded Cossacks | 3, 4, 5, 12 |
+| **Hips**: bending, straightening, turning in and out, opening, closing | RANGE: 90/90, couch, hamstring, deep squat · A: pigeon, frog, nerve sliders | Block: 90/90 switches, airplanes, Cossacks · A: inward-turn lifts, straight-leg lifts, 90/90 to kneeling | Gym: squats, Romanian deadlifts, split squats · the Copenhagen lifts and star side plank · loaded Cossacks | 3, 4, 5, 12 |
 | **Lower back**: still, bent, arched, side, under load | A: cat-camel · RANGE: hamstring | Block: bird dog · A: curl-up, side bridge | Sunday: back extension → Jefferson curl · suitcase carry · the hinges | 5, 11 |
 | **Mid-back**: turning, arching | RANGE: roller, open book · B: seated turn | Block: elbow to the ceiling · B: chest lifts | Gym: landmine rotations · the get-up | 13 |
-| **Shoulders**: overhead, turning in and out, behind, shoulder blades | RANGE: hang, prayer, cross-body, chest, arm bar | Block: Y-raise, push-up plus · B: overhead, turn-in and turn-out lifts | Block: cable and dumbbell rotations · gym: chins, presses, rows, dips | 6, 7, 9 |
-| **Knees** | RANGE: deep squat, couch | A: deep squat · Block: Cossacks | Block: Spanish squat · A: reverse Nordic · gym: squats, split squats, jumps | 3 |
-| **Ankles and feet** | B: loaded knee-to-wall | Block: airplanes, A: balance | Gym: heavy slow calf raises · Block: Achilles pushes · B: single-leg calf raises · sprints and jumps | 8, 10 |
-| **Neck and wrists** | B: neck range, wrist rocks | B: neck end-range pushes, palm lifts | Gym: the neck work twice a week · push-ups · hang and carries for grip | 9, 14, 15 |
+| **Shoulders**: overhead, turning in and out, behind, shoulder blades | RANGE: hang, prayer, cross-body, chest, arm bar | Block: Y-raise, push-up plus · B: overhead, turn-in and turn-out lifts | Block: cable and dumbbell rotations · evenings: the shoulder pushes · gym: chins, presses, rows, dips | 6, 7, 9 |
+| **Knees** | RANGE: deep squat, couch | A: deep squat · Block: Cossacks | Gym: the knee pushes · A: reverse Nordic · gym: squats, split squats, jumps | 3 |
+| **Ankles and feet** | B: loaded knee-to-wall | Block: airplanes, A: balance | Gym: the Achilles pushes, the towel calf raise · B: single-leg calf raises · sprints and jumps | 8, 10 |
+| **Neck and wrists** | B: neck range, wrist rocks | B: neck end-range pushes, palm lifts | Gym: the neck work twice a week · evenings: the wrist pushes · push-ups · hang and carries for grip | 9, 14, 15 |
 | **Balance, landing, getting up and down** | — | RANGE and A: one-leg balance · A: floor to standing · Block: airplanes | The get-up · jumps and landings | 1, 2 |
 
 ---
@@ -35,22 +35,24 @@ What each area needs, and where it's trained. **Block** is the gym morning, **A*
 
 | When | What | Minutes |
 | --- | --- | --- |
-| Every gym morning | **THE MOVEMENT BLOCK**, the first thing in every session. It replaces the warm-up, and it's training, not a warm-up. | 8–12 |
+| Every gym morning | **THE MOVEMENT BLOCK**, the first thing in every session. It replaces the warm-up, and it's training, not a warm-up. | 7–12 |
 | In the sessions | Thursday's side plank and dead bug, and Saturday's side plank, become the Copenhagen plank · Sunday gains the back extension, and the hammer curls stay · Monday's calf raise goes heavier and slower | about 0 |
+| In the sessions, from 23 November | **THE TENDON WORK**: the lower pushes on Monday, Thursday and Saturday · the hip pair in the Copenhagen plank's place · Monday's calf raise on a towel | about 27 a week |
 | Wednesday evening | **MOVEMENT SESSION A** · hips, lower back, balance, getting up and down · in place of that night's RANGE | 30 |
-| Sunday evening | **MOVEMENT SESSION B** · shoulders, mid-back, neck, wrists, ankles and feet · in place of that night's RANGE | 30 |
+| Sunday evening | **MOVEMENT SESSION B** · shoulders, mid-back, neck, wrists, ankles and feet · in place of that night's RANGE; from 23 November, the upper pushes in it | 30; 35 |
 | Monday, Tuesday, Thursday, Friday, Saturday evenings | **RANGE**, re-aimed | 21 |
+| Tuesday and Thursday evenings, from 23 November | **THE UPPER PUSHES**, before RANGE | 8 |
 | Gone | The morning five on waking (rule 3 says why) | −5 a day |
 
 | Day | Morning block | Evening |
 | --- | --- | --- |
-| Monday | **Hips, knees and lower back** · 11 min | RANGE |
-| Tuesday | **Lower back and shoulders** · 8 min | RANGE |
+| Monday | **Hips, knees and lower back** · 8 min (11 until 23 November) | RANGE |
+| Tuesday | **Lower back and shoulders** · 8 min | THE UPPER PUSHES, then RANGE |
 | Wednesday | **Hips, ankles and overhead** · 9 min | **SESSION A** · 30 min |
-| Thursday | **Hips, balance and sprint prep** · 12 min | RANGE |
+| Thursday | **Hips, balance and sprint prep** · 12 min | THE UPPER PUSHES, then RANGE |
 | Friday | — | RANGE |
-| Saturday | **Mid-back, shoulders and Achilles** · 11 min | RANGE |
-| Sunday | **The whole body** · 10 min | **SESSION B** · 30 min |
+| Saturday | **Mid-back and shoulders** · 7 min (11 until 23 November, with the Achilles pushes) | RANGE |
+| Sunday | **The whole body** · 10 min | **SESSION B** · 35 min (30 until 23 November) |
 
 ---
 
@@ -115,15 +117,15 @@ Marked, it counts as met for THE KEEP and shows as YOUR END in PROGRESS. From th
 
 ## THE MORNING BLOCK — every gym morning
 
-### MONDAY · HIPS, KNEES AND LOWER BACK · 11 min · before the box jumps (the warm-up was 5)
+### MONDAY · HIPS, KNEES AND LOWER BACK · 8 min · before the box jumps (11 until 23 November; the warm-up was 5)
 
 1. **Easy bike** — 2 min. Easy enough to talk.
 2. **90/90 switches** — 2 × 5 each way. Sit on the floor, both knees bent to right angles, one leg in front with the shin across you, the other out to the side behind you. Swing both knees over to face the other way, and back. Level 1: hands on the floor behind you. Level 2: arms folded. Level 3: arms folded, and at each side lift the back foot off the floor for 3 seconds without leaning.
 3. **Cossack squat** — 1 × 5 each side, 3-second pause at the bottom. Feet very wide, toes slightly out. Sit all the way down over one leg; the other leg straight, heel down and toes up. Chest up, heel of the bent leg flat. Level 1: hold a rack upright. Level 2: no support. Level 3: 8–12 kg held at your chest. Level 4: 16–20 kg. Level 5: 24 kg or more.
 4. **Bird dog** — 5 each side, each held for your level's time. On all fours, back flat, as if a glass of water sat on it. Reach your right arm forward and left leg back until both are level with your body, and hold. Hand and knee back down, then the other pair. Level 1: 6-second holds. Level 2: 10 seconds. Level 3: 10 seconds, drawing small squares with the hand and the foot. It trains the back to stay still while the hips and shoulders move, with very little load on the spine.
-5. **Spanish squat hold** — 3 × 45 s, hard (7 out of 10), 30 s between. A heavy band round the rack at knee height and behind your knees. Sit back into a quarter squat with your shins vertical, leaning into the band, and hold. Level 1: quarter squat. Level 2: a heavier band. Level 3: thighs level with the floor. For the knee tendons.
+Until 23 November the block also had the **Spanish squat hold** — 3 × 45 s, hard (7 out of 10), 30 s between: a heavy band round the rack at knee height and behind your knees, a quarter squat with your shins vertical, leaning into the band. The knee pushes do its job harder.
 
-**In Monday's session: the standing calf raise goes heavier and slower** — 3 × 6–10, 3 seconds up and 3 seconds down, 2 seconds at the bottom stretch, one or two reps left. The same time as now, with more load on the Achilles.
+**In Monday's session: the standing calf raise goes heavier and slower** — 3 × 6–10, 3 seconds up and 3 seconds down, 2 seconds at the bottom stretch, one or two reps left. The same time as now, with more load on the Achilles. **From 23 November it's the towel calf raise**, and **the lower pushes** go in straight after the box jumps (THE TENDON WORK, below).
 
 ### TUESDAY · LOWER BACK AND SHOULDERS · 8 min · before the throws (was 6)
 
@@ -150,15 +152,18 @@ The band pull-aparts and band dislocates go.
 4. **World's greatest stretch** — 3 each side, in place of the walking lunges. A long lunge forward. Drop the same-side elbow to the inside of the front foot, then turn that arm up to the ceiling and follow it with your eyes. Step through to the other side.
 5. **A-skips and the three build-ups**, as now.
 
+**From 23 November, Thursday's session has the lower pushes** straight after the trap bar jumps, **and the hip pair** in the Copenhagen plank's place (THE TENDON WORK, below).
+
 **In Thursday's session: the side plank and dead bug become the Copenhagen plank** — 2 × 20–30 s each side, 30 s between. Lie on your side, propped on your forearm. Put your top leg's knee on a bench, the bottom leg underneath. Lift your hips until your body is a straight line, and hold. Level 1: knee on the bench. Level 2: ankle on the bench. It's twice a week, with Saturday's. In footballers, a Copenhagen programme three times a week in pre-season and once a week after cut the risk of groin problems by 41%. It trains the side of the trunk the side plank did.
 
-### SATURDAY · MID-BACK, SHOULDERS AND ACHILLES · 11 min · before the throws (was 6)
+### SATURDAY · MID-BACK AND SHOULDERS · 7 min · before the lower pushes (11 until 23 November, with the Achilles pushes; the warm-up was 6)
 
 1. **Elbow to the ceiling** — 6 each side. On all fours, one hand behind your head. Turn your chest and point that elbow at the ceiling, then back down. Level 2: kneeling on one knee, a light plate held at your chest, turning toward the front knee.
 2. **Cable external rotation at shoulder height** — as Tuesday.
 3. **Push-up plus** — 10.
-4. **Achilles pushes** — 5 sets of 4 pushes, 30 s between sets. On the Smith machine: the balls of both feet on a plate, the bar across your shoulders resting on the safety pins, set where your heels are just off the floor. Ease into it over a second, then push up into the pinned bar as hard as you can for 3 seconds, and relax for 3. The bar doesn't move: the push is the work. In a 14-week trial, pushes this hard made the Achilles stiffer and easier ones didn't, so this replaces the calf hold, which sat near the easier level.
-5. **Two easy throws of each kind**, as now.
+4. **Two easy throws of each kind**, as now.
+
+Until 23 November the block also had the **Achilles pushes**, which replaced the calf hold; on 21 November, 5 × 4 each leg at 8 out of 10, the Smith machine's stops set just above the bar so it can't rise. From 23 November they're on their own card, with the knee pushes: **the lower pushes** come straight after the block. **The hip pair** takes the Copenhagen plank's place (THE TENDON WORK, below).
 
 **In Saturday's session: the side plank becomes the Copenhagen plank**, 2 × 20–30 s each side at your level, as on Thursday. The groin's second dose of the week.
 
@@ -204,7 +209,7 @@ At home, with a mat and a chair. It replaces that night's RANGE.
 
 ## SUNDAY EVENING · SESSION B · SHOULDERS, MID-BACK, NECK, WRISTS, ANKLES AND FEET · 30 min
 
-At home, with the bar, a mat, a stick (a broom handle) and a dumbbell. It replaces that night's RANGE.
+At home, with the bar, a mat, a stick (a broom handle) and a dumbbell. It replaces that night's RANGE. **From 23 November it's 35 minutes: the upper pushes take the turn-out lifts' place** (card 7), and do their job harder.
 
 1. **Settle** — 1 min, as Session A.
 2. **Neck range with pushes** — each way: turn left, turn right, ear to the left shoulder, ear to the right shoulder, chin to chest. Sitting tall, go as far as you can. Put your hand against your head and push into it for 5 seconds without moving, relax, then go a little further. Hold the new end for 5 seconds. Slow and easy; never force the neck.
@@ -224,7 +229,7 @@ At home, with the bar, a mat, a stick (a broom handle) and a dumbbell. It replac
 
 ## RANGE · five evenings a week · 21 min · re-aimed
 
-Monday, Tuesday, Thursday, Friday and Saturday. Same order as now, with eight cards out and four in, the settle cut to 30 seconds, and the couch and hamstring stretches at 2 minutes a side. Every card not described here is described in the home-routines document.
+Monday, Tuesday, Thursday, Friday and Saturday; from 23 November, on Tuesday and Thursday the upper pushes come first. Same order as now, with eight cards out and four in, the settle cut to 30 seconds, and the couch and hamstring stretches at 2 minutes a side. Every card not described here is described in the home-routines document.
 
 **Out:**
 - **Thread the needle** — the open book does its job.
@@ -249,20 +254,97 @@ Monday, Tuesday, Thursday, Friday and Saturday. Same order as now, with eight ca
 
 ---
 
-## THE TENDONS
+## THE TENDON WORK · from Monday 23 November
 
-Every tendon your training leans on gets loaded on purpose, heavy enough to change it.
+Every tendon your training leans on gets loaded hard enough to change it, for good. The lower leg and knee in the gym, in the morning; the shoulder and wrist at home, in the evening; never the same tendon twice in a day.
 
-| Tendon | Where | How often |
-| --- | --- | --- |
-| **Achilles** | Monday's heavy slow calf raise · Saturday's Achilles pushes · Session B's single-leg calf raises · Sunday's seated calf raise · the sprints and jumps | 5 times a week |
-| **Knee** | Monday's Spanish squat · the squats, split squats and jumps | 2 times a week |
-| **Groin** | Thursday's and Saturday's Copenhagen · Monday's Cossacks | 3 times a week |
-| **Hamstring** | Thursday's Nordics · Monday's Romanian deadlifts | 2 times a week |
-| **Shoulder** | The cable rotations Tuesday and Saturday · Wednesday's dumbbell rotations · Session B's turn-out and turn-in lifts | 4 times a week |
-| **Elbow and forearm** | The hangs, carries, chins and rows | 4 or more times a week |
+### What builds a tendon
 
-Tendons change only under heavy load, over about 14 weeks. In a 14-week trial, 3-second pushes at 90% of maximum made the Achilles stiffer; the same work at 55% didn't, though the calf still got stronger. That's why Saturday's pushes are as hard as you can push, and Monday's calf raise is heavy.
+1. **Heavy, or nothing happens.** In a 14-week trial, 3-second pushes at 90% of maximum made the Achilles stiffer; the same work at 55% didn't, though the calf still got stronger.
+2. **Hold each push about 3 seconds, then 3 off.** That raised Achilles stiffness 57% in 14 weeks; the same work as one 12-second hold raised it 25%.
+3. **About a minute of hard pushing per tendon, three times a week.** Between 2.5 and 5 sessions and 3 to 5 minutes of hard loading a week worked about equally well. More isn't better.
+4. **Once a day, with a day between.** Three hard sessions a day for 12 days made the Achilles less stiff; once a day left it unharmed. A tendon builds new collagen for about three days after loading, and breaks old collagen down first.
+5. **Long positions put more force through the tendon:** the heel dropped, the knee bent deep, the elbow almost straight.
+6. **Never stop.** Stiffness took 2 months to start rising and was up 50% at 3 months; a month after stopping it was back where it started.
+7. **Muscle and tendon together.** Muscle grows faster than tendon, and strength that outruns its tendon is when tendons get hurt. Jumps build the muscle more than the tendon, so they don't replace this.
+
+### How every push is done
+
+Ease in over the first second, then push for 3 seconds, breathing out the whole time, and relax for 3. Nothing moves: the push is the work. Four pushes make a set. One arm or leg at a time, the sides in turn, so each rests while the other works: five sets a side is a minute of hard pushing per tendon.
+
+**How hard:**
+- **The first two weeks, 23 November to 6 December:** 8 out of 10, hard but not everything.
+- **From 7 December:** as hard as you can.
+- **A red day:** half effort, in the gym and at home.
+- **Achilles or knee at 3 or more on Sunday's check:** the lower pushes at 7 out of 10 that week, in the holds' place.
+
+### The lower pushes · Monday, Thursday and Saturday mornings · about 10 minutes
+
+On Monday straight after the box jumps, on Thursday straight after the trap bar jumps, before the heavy lifting; on Saturday straight after the movement block.
+
+1. **Achilles pushes** — 5 × 4 each leg. On the Smith machine, with the safety stops set just above the bar so it can't rise. Stand on one leg, the ball of that foot on the edge of a plate and the heel dropped a little below it, knee straight, the bar across your upper back and pressed up against the stops. The other foot is off the floor behind you, your hands on the bar. Push the ball of your foot down, as if rising onto your toes. One leg at a time gives each Achilles its full load while your back carries far less than under a two-footed push.
+2. **Knee pushes** — 5 × 4 each leg. On the leg extension, one leg: the seat set so your knee lines up with the machine's pivot, the pad on the front of your ankle, the start position set so your knee is bent to a right angle, and the pin at the bottom of the stack. Push your shin forward into the pad.
+
+They replace Monday's Spanish squat hold and Saturday's two-footed Achilles pushes. The hold sat below the load rule 1 says it takes.
+
+### The upper pushes · Tuesday and Thursday evenings, and in Session B · about 8 minutes
+
+In a doorway: the shoulder pushes, arms in turn, then the wrist pushes the same way. On Tuesday and Thursday before RANGE, at least six hours after the gym; on Sunday in Session B, in the turn-out lifts' place.
+
+1. **Shoulder pushes** — 5 × 4 each arm. Stand side-on in a doorway, the frame beside your working arm. Elbow bent to a right angle and held against your side, a rolled towel squeezed between your elbow and your ribs. Turn your forearm a little way in across your stomach, then stand so the back of your wrist rests against the frame. Push the back of your wrist out into the frame, as if swinging your forearm out to the side. It loads the back of the shoulder, which brakes your arm after every punch.
+2. **Wrist pushes** — 5 × 4 each arm. Arm out in front of you, elbow almost straight, palm down, hand in a fist, wrist dropped a little. Put your other palm on the back of the fist and push the fist up into it, the wrist not moving. It loads the tendon on the outside of the elbow that holds the wrist back: the one that wears in tennis elbow.
+
+### The hip pair · Thursday and Saturday · about 5 minutes
+
+In the Copenhagen plank's place, at the end of the session. 20 seconds between sets.
+
+1. **Copenhagen lifts** — 2 × 4 each side. Lie on your side, propped on your forearm, elbow under your shoulder, your top leg on a bench and the bottom leg underneath it. Lift your hips in a second until your body is a straight line, hold for 3 seconds, then lower for 3 until your hip touches down. Level 1: your top knee on the bench. Level 2: your top ankle. Level 3: your top ankle, and lift your bottom leg to touch the underside of the bench each time. You start at your Copenhagen plank level.
+2. **Star side plank** — 2 × 4 each side. A side plank on your forearm, elbow under your shoulder, feet stacked, body in a straight line. Lift your top leg straight up about 30 cm, toes forward, hold for 3 seconds, lower for 3; your hips stay up the whole set. Level 1: from your bottom knee, the top leg straight. Level 2: from your feet. Level 3: on your straight arm, the top arm reaching to the ceiling. Of 18 hip exercises tested, this worked the outer hip hardest, the bottom hip most and the lifting leg next. It loads the outer-hip tendons without squashing them, because the top leg goes up, never across.
+
+### The towel calf raise · Monday
+
+**Towel calf raise** — Monday's standing calf raise with a rolled towel under your toes, so they're bent up as far as they go at the top: 3 × 6–10, 3 seconds up, 2 at the top, 3 down, 2 at the bottom stretch, heavy enough that 10 is the most you could do. The towel winds up the band under your foot, so the raise loads the sole of the foot as well as the Achilles. In a trial on heel pain, this exact exercise beat stretching at three months; by six months the two were level.
+
+### Every tendon, mapped
+
+| Tendon | Already loaded heavily by | Added | How often |
+| --- | --- | --- | --- |
+| **Achilles** | Sunday's seated calf raise · Session B's single-leg calf raises · the sprints and jumps | The Achilles pushes · the towel calf raise | 3 pushes a week, 5 loads in all |
+| **Sole of the foot** | The calf raises | The towel under Monday's | Once a week, with the sprints and jumps |
+| **Knee** | Squats, split squats, jumps | The knee pushes | 3 times a week |
+| **Hamstring** | Thursday's Nordics · Monday's Romanian deadlifts | Nothing: already at the dose | 2 times a week |
+| **Groin** | Monday's Cossacks | The Copenhagen lifts | 2 times a week |
+| **Outer hip** | Split squats, single-leg work | The star side plank | 2 times a week |
+| **Ankle sides** | Calf raises, side bounds | One-leg balance, in RANGE and Session A: balance training cuts ankle sprains by about a third | 6 times a week |
+| **Shoulder** | The cable rotations Tuesday and Saturday · Wednesday's dumbbell rotations · Session B's turn-in lifts · presses and pulls | The shoulder pushes | 3 pushes a week |
+| **Biceps** | Chins, rows, curls | Nothing; one rule: control every lowering | 4 or more times a week |
+| **Triceps and chest** | Bench, dips, extensions | Nothing: already at the dose | 4 or more times a week |
+| **Forearm and wrist** | Carries, hangs, rows | The wrist pushes | 3 pushes a week |
+| **Fingers** | Hangs, carries, chins | Nothing: already at the dose | 4 or more times a week |
+| **Neck** | The neck work, Monday and Wednesday | Nothing: already trained | 2 times a week |
+
+**The honest line on the upper body.** Almost every trial on building healthy tendons is on the Achilles and knee. The shoulder, wrist and hip pushes apply the same rules; they're a coaching call, not a proven result.
+
+### The tendon numbers
+
+In each test week, on Monday, two numbers are logged: the heaviest towel calf raise for 5 clean reps, in place of that day's calf raise, and the heaviest single-leg leg extension for 5 each leg, in place of the knee pushes. About 6 minutes, every test week. They show what the muscle and tendon can take together; only an ultrasound scan measures stiffness itself.
+
+### The rules that keep tendons safe
+
+1. **Breathe out through every push.** Out through the mouth for the 3 seconds, in during the 3 off. Holding your breath on a hard push sends your blood pressure sharply up.
+2. **Ease in, never jerk.** Full force by the end of the first second.
+3. **The bar can't rise, the stack can't lift.** The Smith machine's stops above the bar, the leg extension's pin at the bottom of the stack, every time.
+4. **The pain rule.** A push that hurts more than 3 out of 10 while you do it, or leaves the tendon worse the next morning, stops for that day, and runs at half effort next time. Still there after two weeks: a physio looks at it.
+5. **Once a day, never two days running** for the same tendon. A session that moves takes its pushes with it, or they're missed; never doubled up.
+6. **Never more than two weeks without pushes.** After a longer break, the first week back is at 8 out of 10.
+7. **Control every lowering.** On chins, rows and curls, lower in 2 seconds or more and never catch a falling weight on a bent arm: that's how the biceps tendon at the elbow tears, mostly in men between 40 and 60.
+
+### What to expect
+
+- **The first two months:** stronger pushes, mostly from your nervous system. The tendon itself hasn't changed yet.
+- **From about the third month:** in trials of pushes like these, the Achilles got 50–57% stiffer in 12 to 14 weeks in men in their 20s and 22% in people around 65; knee pushes stiffened the knee tendon 16% in 12 weeks. At 45, expect somewhere in between.
+- **Stronger far more than bigger:** thickness rose about 4 to 6%. The core of an adult tendon is laid down while you're growing and essentially never renewed.
+- **It lasts only while you keep doing it.** That's why the pushes run for good, with no long gaps.
 
 ---
 
@@ -285,7 +367,7 @@ Tendons change only under heavy load, over about 14 weeks. In a 14-week trial, 3
 3. **No end-range back bending in the first hour after waking.** Cat-camel, the Jefferson curl and any bending forward to the floor wait until you've been up an hour. That's why the morning five goes: its cat-camel came first thing. Teaching back-pain patients to avoid early-morning bending cut their pain by about a third, in a small trial.
 4. **A pinch is not a stretch.** If the deep squat, the 90/90 or the couch position pinches at the front of the hip, or an overhead position pinches at the top of the shoulder, stop going deeper there and see a physio. That's the joint, and stretching won't change it.
 5. **The neck is never forced.** Slow, easy range, and pushes into your own hand only.
-6. **Red mornings.** The movement block still runs; it's the part that helps. The Spanish squat goes at 5 out of 10, not 7, and the Achilles pushes at about half effort.
+6. **Red mornings.** The movement block still runs; it's the part that helps. Every push goes at half effort, that evening's too.
 7. **Lighter and test weeks in Strength, Power and Physique.** MOVE runs as written.
 8. **After an injury.** RESTORE is built for it. Start at level 1 and let the pain rule decide; don't jump phases early.
 
@@ -302,7 +384,7 @@ Tendons change only under heavy load, over about 14 weeks. In a 14-week trial, 3
 
 From the first Monday of the camp, RANGE carries on, because every programme shares it. The morning block, Sessions A and B and the session swaps belong to Strength, Power and Physique, so the camp would go back to its own warm-ups and RANGE every evening.
 
-**My recommendation:** carry Sessions A and B and the block's tendon and back parts into the camp: the bird dog, the Spanish squat, the Achilles pushes, the Copenhagen and the back extension. Nine weeks without them would give back much of what you've built. It's your call in January.
+**My recommendation:** carry Sessions A and B, the movement blocks, the back extension and the whole tendon work into the camp. Nine weeks without them would give back much of what you've built. It's your call in January.
 
 ---
 
@@ -310,7 +392,7 @@ From the first Monday of the camp, RANGE carries on, because every programme sha
 
 - **Weeks 1–4:** the positions start to feel easier. Most early range is your nervous system letting you go further, not longer muscle.
 - **Weeks 5–12:** usable range climbs as the end-range strength comes in.
-- **Weeks 12–14:** the tendons become measurably stiffer. They still do this at 74.
+- **The tendons:** the pushes get stronger within weeks; the tendons themselves change from about the third month of the pushes, from late February. They still do this at 74.
 - **Six months:** most of the standards met.
 - **Last to come:** the toe touch, the wall overhead, the couch position and the seated turn. A joint limited by its bone won't change: that's what rule 4 and YOUR END are for.
 
@@ -320,19 +402,20 @@ From the first Monday of the camp, RANGE carries on, because every programme sha
 
 | | Now | With MOVE |
 | --- | --- | --- |
-| Monday session | ~73 | ~79 |
+| Monday session | ~73 | ~86 |
 | Tuesday session | ~96 | ~98 |
 | Wednesday session | ~75 | ~79 |
-| Thursday session | ~91 | ~91 |
-| Saturday session | ~94 | ~99 |
+| Thursday session | ~91 | ~103 |
+| Saturday session | ~94 | ~107 |
 | Sunday session | ~76 | ~85 |
 | Morning five at home | 35 a week | 0 |
+| Tuesday and Thursday evenings | RANGE, 20 | The upper pushes and RANGE, 29 |
 | Wednesday evening | RANGE, 20 | Session A, 30 |
-| Sunday evening | RANGE, 20 | Session B, 30 |
+| Sunday evening | RANGE, 20 | Session B, 35 |
 
-- **In the gym:** about 26 minutes a week more.
-- **At home:** about 10 minutes a week less.
-- **Overall:** your week is about 16 minutes longer. Movement work goes from about 3½ hours a week to just under 4.
+- **In the gym:** about 53 minutes a week more; the tendon work is 27 of them.
+- **At home:** about 10 minutes a week more; the tendon work is 20 of them.
+- **Overall:** your week is about 63 minutes longer than before MOVE, about 47 of them the tendon work from 23 November. Movement and tendon work go from about 3½ hours a week to about 4¾.
 
 ---
 
@@ -353,7 +436,7 @@ From the first Monday of the camp, RANGE carries on, because every programme sha
   Low back-extensor endurance predicted back pain within a year.
 - **Joints cover for each other.** Limited inward hip turn is the hip measure most linked to back pain, though the evidence is weak.
 - **Specific exercises protect specific injuries:** the Copenhagen for the groin (41% lower risk, three times a week in pre-season and once a week after), Nordics for the hamstrings (about half), and a shoulder rotation warm-up for the shoulders (28% fewer).
-- **Tendons need heavy load:** pushes at 90% of maximum changed the Achilles where 55% didn't, over 14 weeks. They still respond at 74. In a UK study of Achilles ruptures, the typical patient was 45, 79% were men, and 65% happened in sport.
+- **Tendons need heavy load:** pushes at 90% of maximum changed the Achilles where 55% didn't, over 14 weeks; 3-second pushes beat one long hold; three times a week is enough, and three times a day did harm. They still respond at 74. In a UK study of Achilles ruptures, the typical patient was 45, 79% were men, and 65% happened in sport.
 - **Long holds just before power work cost about 4.6%,** so the gym mornings are movement and short holds, and the long holds are in the evening.
 - **Range gains hold in active people,** which is why THE KEEP waits until you've arrived.
 ### The rest of the field, checked
@@ -431,3 +514,21 @@ Every major coach and system was checked for anything better. This is what each 
 - Wieland L.S. et al. Yoga for chronic non-specific low back pain. Cochrane Database Syst Rev, 2022.
 - Sherrington C. et al. Exercise for preventing falls in older people living in the community. Cochrane Database Syst Rev, 2019.
 - Baptista, Pereira Nery, Afreixo. Neural mobilisation and flexibility: meta-analysis update. J Stat Health Decis, 2021.
+- Bohm S. et al. Human Achilles tendon plasticity in response to cyclic strain: effect of rate and duration. J Exp Biol, 2014.
+- Bohm S., Mersmann F., Arampatzis A. Human tendon adaptation in response to mechanical loading: a systematic review and meta-analysis of exercise intervention studies on healthy adults. Sports Med Open, 2015.
+- Lazarczuk S.L. et al. Mechanical, material and morphological adaptations of healthy lower limb tendons to mechanical loading: a systematic review and meta-analysis. Sports Med, 2022.
+- Tsai M.-S. et al. Effect of the temporal coordination and volume of cyclic mechanical loading on human Achilles tendon adaptation in men. Sci Rep, 2024.
+- Epro G. et al. Human muscle-tendon unit mechanobiological responses to consecutive high strain cyclic loading. J Exp Biol, 2023.
+- Magnusson S.P., Langberg H., Kjaer M. The pathogenesis of tendinopathy: balancing the response to loading. Nat Rev Rheumatol, 2010.
+- Kubo K. et al. Effects of isometric training at different knee angles on the muscle-tendon complex in vivo. Scand J Med Sci Sports, 2006.
+- Kubo K. et al. Time course of changes in the human Achilles tendon properties and metabolism during training and detraining in vivo. Eur J Appl Physiol, 2012.
+- Massey G.J. et al. Tendinous tissue adaptation to explosive- vs. sustained-contraction strength training. Front Physiol, 2018.
+- Mersmann F., Bohm S., Arampatzis A. Imbalances in the development of muscle and tendon as risk factor for tendinopathies in youth athletes. Front Physiol, 2017.
+- Epro G. et al. The Achilles tendon is mechanosensitive in older adults: adaptations following 14 weeks versus 1.5 years of cyclic strain exercise. J Exp Biol, 2017.
+- Heinemeier K.M. et al. Lack of tissue renewal in human adult Achilles tendon is revealed by nuclear bomb 14C. FASEB J, 2013.
+- Baar K. Minimizing injury and maximizing return to play: lessons from engineered ligaments. Sports Med, 2017.
+- Rathleff M.S. et al. High-load strength training improves outcome in patients with plantar fasciitis. Scand J Med Sci Sports, 2015.
+- Ishøi L. et al. Large eccentric strength increase using the Copenhagen Adduction exercise in football. Scand J Med Sci Sports, 2016.
+- Boren K. et al. Electromyographic analysis of gluteus medius and gluteus maximus during rehabilitation exercises. Int J Sports Phys Ther, 2011.
+- Schiftan G.S. et al. The effectiveness of proprioceptive training in preventing ankle sprains in sporting populations. J Sci Med Sport, 2015.
+- Caekebeke P. et al. Acute complete and partial distal biceps tendon ruptures: what have we learned? EFORT Open Rev, 2021.

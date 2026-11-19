@@ -30,8 +30,8 @@ import {
 import { Lines, CheckTaps } from "./today.jsx";
 import { CardHead, BigBtn, SetButtons, Input, Checklist, RoutineRunner, Chapter, T1, T2, T3 } from "./now.jsx";
 import { Sheet } from "./im-ui.jsx";
-import { SIGHS, MORNING_FIVE, RANGE_CARDS, FIGHT_WEEK_CARDS, KEEP_CARDS, MOVE_CARDS, moveRangeCards, sessionCards, skillCards, ROUTINE_MINS } from "./routines.js";
-import { MOVE_SINCE, MOVE_PROGRAM_INTRO, MOVE_PH, moveWeekOf, movePhase, isMoveTestWeek, LEVEL_KEY, levelLine, stepLevel, MOVE_TEST_IDS, rangeStandardsMet, jeffersonGate, END_KEY } from "./move.js";
+import { SIGHS, MORNING_FIVE, RANGE_CARDS, FIGHT_WEEK_CARDS, KEEP_CARDS, MOVE_CARDS, moveRangeCards, sessionCards, upperPushCards, skillCards, ROUTINE_MINS } from "./routines.js";
+import { MOVE_SINCE, MOVE_PROGRAM_INTRO, MOVE_PH, moveWeekOf, movePhase, isMoveTestWeek, LEVEL_KEY, levelLine, stepLevel, MOVE_TEST_IDS, rangeStandardsMet, jeffersonGate, END_KEY, tendonWeekOf } from "./move.js";
 import { MoveLevels, MoveTests, MoveTrack } from "./move-ui.jsx";
 import { SeasonView, GuideView, ProfileTool } from "./season-ui.jsx";
 import { programTitle, PROGRAM_NAME } from "./program.js";
@@ -309,7 +309,7 @@ const seasonRxFor = (mac, w, edge) => {
   if (row.program === "prep") return gated(Object.assign({}, rx, { w, kw: w, lift: rx.ph, ph: prepPhaseOf(rx.doc), bw: null, prep: 1 }), "P", w);
   if (row.program === "spp") { const mw = moveWeekOf(row.mon, MOVE.start);
     return gated(Object.assign({}, rx, { w, kw: w, bw: null, spp: 1, mon: row.mon, mw, jeff: mw && movePhase(mw) === "own" ? jeffOn(row) : false,
-      eb: !!row.mon && row.mon >= ENGINE_SINCE }), "S", w); }
+      eb: !!row.mon && row.mon >= ENGINE_SINCE, tw: mw ? tendonWeekOf(row.mon) : 0 }), "S", w); }
   if (row.program === "camp" || row.program === "pre") return gated(Object.assign({}, rx, { kw: w }), "C", w);
   return Object.assign({}, rx, { kw: w });
 };
@@ -337,6 +337,8 @@ function gated(rx, mac, week) {
     else if (tendonGate(sundayScores(mac, week, 2)).noJumps) Object.assign(o, { jump: stageDown(rx.jump), restart: 1 });
   }
   if (g.noFlying) Object.assign(o, { noFlying: 1, speed: false, nordicPF: 1 });
+  /* Achilles or knee at 3 or more: the lower pushes carry on at 7 out of 10 */
+  if (g.noJumps) o.pushGate = 1;
   /* an elbow or a shoulder at 4 or more: next week's dips become push-ups and
      the circuits drop their curls and triceps work */
   if (Number(sc.el) >= 4) o.elbow4 = 1;
@@ -1323,6 +1325,9 @@ const lastLine = (last, md) => { const pre = md === "add" ? "+" : ""; const same
   return "LAST TIME · " + String(fmtDate(last.d)).toUpperCase() + " · " + (same ? pre + last.sets[0].w + " KG × " + last.sets.map((x) => x.r || "—").join(" · ")
     : last.sets.map((x) => pre + x.w + " × " + (x.r || "—")).join(" · ") + " KG"); };
 const SET_SECS = {}; SECS_ITEMS.forEach((id) => { SET_SECS[id] = 1; });
+/* the tendon work's pushes and lifts: their 3-second holds are in the line,
+   but a set is counted in pushes or lifts, not seconds */
+const SET_REPS = { s_achpush: 1, s_kneepush: 1, s_copenlift: 1, s_star: 1 };
 const setMode = (id) => SET_MODE[id] || "kg";
 /* the calisthenics line an item is logged against, for the level on the row */
 const LINE_OF = { ringdip: "ringdip", muscleup: "muscleup", pistol: "pistol", ringrow: "ringrow", lsit: "lsit", lever: "slowlane" };
@@ -1761,7 +1766,7 @@ function GymCardOne({ card, rx, week, macro, day, log, setLog, maxes, bw, ready,
     const so = setsOf(card, rx);
     const id = it.id, cur = log[key(id)] || {}, rows = cur.sets || [];
     const md = so.tick ? "bw" : setMode(id);
-    const sec = !!SET_SECS[id] || (md !== "kg" && (holdish(so.reps) || holdish(v(it.s, rx))));
+    const sec = !!SET_SECS[id] || (!SET_REPS[id] && md !== "kg" && (holdish(so.reps) || holdish(v(it.s, rx))));
     const ln = LINE_OF[id] && calis ? curLevel(calis, LINE_OF[id]) : null;
     const auto = it.mk && it.pct != null ? calc(it.mk, v(it.pct, rx)) : null;
     /* THE WEIGHT BOX — Strength, Power and Physique: every exercise the
@@ -2062,7 +2067,9 @@ function Today(props) {
   /* ---------------- THE GYM ----------------
      The session as cards, one per exercise. A card is done when ticked;
      a block is done when its cards are. */
-  const real = rx.hell || sleepDay(day, rx) ? [] : realBlocks(srcDay, rx).filter((x) => !(effReady === "R" && x.hard));
+  /* a red morning: the hard steps come off, and the pushes run at half
+     effort, on their card's red twin */
+  const real = rx.hell || sleepDay(day, rx) ? [] : realBlocks(srcDay, rx).filter((x) => !(effReady === "R" && x.hard)).map((x) => (effReady === "R" && x.red) || x);
   const cardsKey = dk + "-cards";
   const cardMap = (log[cardsKey] || {}).m || {};
   const sessItems = [];
@@ -2302,10 +2309,16 @@ function Today(props) {
      Sunday's, RANGE FOR MOVE the other five — THE KEEP once the last
      standards met every range target */
   const mvOn = MODE.spp && !!rx.mw;
+  /* THE UPPER PUSHES: Tuesday and Thursday evenings before RANGE, and in
+     Session B on Sunday, from the tendon work's week 1 */
+  const upRed = effReady === "R";
+  if (mvOn && rx.tw && (day === "tue" || day === "thu")) {
+    ev.push(im("ev-upper", C.violet, "The upper pushes", ROUTINE_MINS.upper + " min · shoulders and wrists", ROUTINE_MINS.upper, "upper", routine(upperPushCards(rx.tw, upRed))));
+  }
   if (mvOn && (day === "wed" || day === "sun")) {
-    const isA = day === "wed", mvLv = (log[LEVEL_KEY] || {}).lv || {}, cards = sessionCards(isA ? "A" : "B", rx.mw, mvLv);
+    const isA = day === "wed", mvLv = (log[LEVEL_KEY] || {}).lv || {}, cards = sessionCards(isA ? "A" : "B", rx.mw, mvLv, rx.tw, upRed);
     const mvStep = (id, by) => { const n = Object.assign({}, log); n[LEVEL_KEY] = { lv: stepLevel(mvLv, id, by) }; setLog(n); buzz(20); };
-    const mins = isA ? ROUTINE_MINS.sessA : ROUTINE_MINS.sessB;
+    const mins = isA ? ROUTINE_MINS.sessA : rx.tw ? ROUTINE_MINS.sessBPush : ROUTINE_MINS.sessB;
     ev.push(im(isA ? "ev-sessa" : "ev-sessb", C.violet, isA ? "Session A · hips, lower back, balance" : "Session B · shoulders, mid-back, neck, wrists, ankles", mins + " min", mins, isA ? "moveA" : "moveB",
       Object.assign(routine(cards), { input: () => <MoveLevels ids={cards.filter((c) => c.lv).map((c) => c.lv)} lv={mvLv} onStep={mvStep} /> })));
   } else {
@@ -2625,7 +2638,7 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
                   <span style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 700, letterSpacing: 1.2, color: C.chalk })}>{(sess ? sess.n : DSH[d])}{row ? " · " + fmtDate(addDays(row.mon, di)) : ""}{sess && sess.pm ? " · PM" : ""}</span>
                   <span style={Object.assign({}, mno, { fontSize: 9.5, color: sl ? C.moss : ac })}>{rx.hell || sl || blank ? "—" : !MODE.camp && d === "sat" && rx.test ? "TEST DAY" : v(sess.m, rx) + " MIN"}</span>
                 </div>
-                <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.ash, marginTop: 3 })}>{sl ? "SLEEP. No alarm." + (d === "fri" ? " RANGE at home in the evening." : "") : blank ? (MODE.camp ? campBlank(d, rx).h : "The head check holds the transition — nothing until a doctor has cleared you") : !MODE.camp && d === "sat" && rx.test ? "Sprint · jump · throws · squat · bench · pull · tape" : sess.t}</div>
+                <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.ash, marginTop: 3 })}>{sl ? "SLEEP. No alarm." + (d === "fri" ? " RANGE at home in the evening." : "") : blank ? (MODE.camp ? campBlank(d, rx).h : "The head check holds the transition — nothing until a doctor has cleared you") : !MODE.camp && d === "sat" && rx.test ? "Sprint · jump · throws · squat · bench · pull · tape" : (rx.tw && sess.tt) || sess.t}</div>
               </span>
               <span data-day-count={d} style={Object.assign({}, mno, { fontSize: 10, color: full ? C.moss : n ? C.brass : C.ash, flexShrink: 0 })}>{tot ? (MODE.spp ? Math.min(n, tot) : n) + "/" + tot : ""}</span>
             </button>
