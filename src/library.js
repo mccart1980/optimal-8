@@ -223,6 +223,7 @@ const ROW_NAMES = {
   "squat at five load": "LOAD-VELOCITY PROFILE",
   "bench and push press at four load": "LOAD-VELOCITY PROFILE",
   "bench throw at four load": "LOAD-VELOCITY PROFILE",
+  "bench at four load": "LOAD-VELOCITY PROFILE",
   "bench at five load": "LOAD-VELOCITY PROFILE",
   "push press at five load": "LOAD-VELOCITY PROFILE",
   "bolt score": "BOLT",

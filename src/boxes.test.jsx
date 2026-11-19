@@ -22,6 +22,10 @@ const fighter = (extra) => prep(Object.assign({ program: "fighter" }, extra || {
 /* the ten-round camp from the stop rule's own test */
 const camp10 = { booked: true, fight: "2027-03-13", rounds: 6, mins: 3, rest: 60, weighIn: "before", fitness: "good", emphasis: "none" };
 const ten = () => prep({ program: "prep", plans: [{ from: "2027-01-04", made: "2026-12-31", inputs: camp10 }], season: camp10, fightDate: "2027-03-13" });
+/* the same camp before the audit's switch, when a round was two machines: from Monday 2 March 2026, its ten rounds on Sunday 26 April.
+   (From the week of 23 November 2026 a round is the bike alone: audit-screens.test.jsx.) */
+const camp10old = Object.assign({}, camp10, { fight: "2026-05-09" });
+const tenOld = () => prep({ program: "prep", plans: [{ from: "2026-03-02", made: "2026-02-27", inputs: camp10old }], season: camp10old, fightDate: "2026-05-09" });
 
 async function at(isoDay, st, log) {
   vi.setSystemTime(new Date(isoDay + "T06:00:00"));
@@ -135,7 +139,7 @@ describe("the Sunday rounds on two machines", () => {
     expect(pairEntries(l, "c_fs_rd1", "c_fs_rd6", true, "sun", fadePct)[0].v).toBeCloseTo(80);
   });
   it("past the fight: 170 and 14 against 250 and 20 (68% and 70%, mean 69%) ends the rounds", async () => {
-    await at("2027-02-28", ten());
+    await at("2026-04-26", tenOld());
     pick("The 10 × 3 Simulation");
     type("ROUND 1 · SKIERG (M)", "250"); type("ROUND 1 · BIKE (CAL)", "20");
     expect(box("ROUND 7 · SKIERG (M)").inputMode).toBe("decimal");
@@ -147,7 +151,7 @@ describe("the Sunday rounds on two machines", () => {
     expect(screen.getByTestId("round-fade").textContent).toBe("THE FADE · 69%");
   });
   it("190 and 16 (76% and 80%) doesn't", async () => {
-    await at("2027-02-28", ten());
+    await at("2026-04-26", tenOld());
     pick("The 10 × 3 Simulation");
     type("ROUND 1 · SKIERG (M)", "250"); type("ROUND 1 · BIKE (CAL)", "20");
     type("ROUND 7 · SKIERG (M)", "190"); type("ROUND 7 · BIKE (CAL)", "16");

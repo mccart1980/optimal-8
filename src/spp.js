@@ -3,6 +3,7 @@ import { jumpOf, jumpGate } from "./safety.js";
 import { SLED_FIELDS, LIGHTS_FIELDS, sessionBoxes, engHR } from "./camp.js";
 import { BENCH_THROW_NOTE, topItem } from "./prep.js";
 import { movePhase, isMoveTestWeek, TENDON_SINCE, pushEffort } from "./move.js";
+import { AUDIT_SINCE, SPLEEFT_FAST, SPLEEFT_ARM } from "./audit.js";
 
 /* ================================================================
    OPTIMAL 8 · STRENGTH, POWER AND PHYSIQUE — as data
@@ -71,7 +72,7 @@ export const SPPENG_MENU = ["vo2"];
 /* THE AUDIT'S CHANGES (19 November 2026) run from the week of Monday 23
    November: rx.au is that week or a later one. Before it every page reads
    as it did. */
-export const AUDIT_SINCE = "2026-11-23";
+export { AUDIT_SINCE };
 export const sppAudit = (rx) => (rx && rx.au ? Object.assign({}, rx, { e: rx.e === "vo2s" ? "vts" : "vt", pr: rx.half ? "pa1" : "pa", at: "arm3" }) : rx);
 /* the lighter week's 3 × 4, on either machine · the 4 × 4 on the treadmill */
 export const spp44Short = (rx) => rx.e === "vo2s" || rx.e === "vts";
@@ -84,9 +85,8 @@ export const sppArms = (rx) => rx.pr === "pa" || rx.pr === "pa1";
 export const sppPowerTest = (rx) => !!rx.au && !!rx.half;
 /* the fast block's ball: 3 kg in the power block and test week */
 const ball = (rx) => (rx.au && rx.acc === "power" ? "3 kg ball" : "4–6 kg ball");
-/* Spleeft on the fast lifts: a speed after every rep, a 10% drop ends the set */
-const SPLEEFT_FAST = "Spleeft on your wrist: read the speed after every rep. A rep 10% slower than the set's fastest ends the set.";
-const SPLEEFT_ARM = "Spleeft reads the arm the watch is on: that side first, the speed read after every rep. A rep 10% slower than the set's fastest ends the set, and the other side does the same reps.";
+/* Spleeft on the fast lifts — a speed after every rep, a 10% drop ends the
+   set — is audit.js's SPLEEFT_FAST and SPLEEFT_ARM */
 const TREAD_FIELDS = [{ k: "w", l: "DISTANCE (KM)" }, { k: "hr", l: "PEAK HEART RATE (BPM)" }];
 const Z5_FIELD = [{ k: "z5", l: "MINUTES AT 90% OR ABOVE · THE POLAR'S TOP ZONE" }];
 const PP_SPEED_FIELDS = [{ k: "w", l: "RIGHT ARM (M/S)" }, { k: "l", l: "LEFT ARM (M/S)" }];

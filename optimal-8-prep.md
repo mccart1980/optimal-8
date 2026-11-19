@@ -87,18 +87,20 @@ The calendar gives percentages because you need a number to load the bar with. T
 
 **The pause squat runs off its percentage alone.** The two-second pause makes its bar speed read slow, so the watch doesn't judge it; the calendar's percentage of the squat's working max is the load, and it never goes above 75%.
 
-**The re-check, week 5.** On the lighter week, each main lift gets a working-weight check before its working sets — the trap bar and the bench on Wednesday, the squat and the push press on Saturday: a set of 3 that's hard but leaves two in you, × 1.08, rounded to 2.5 kg. The app saves it, and the week's sets read off it straight away. Coming back from time off, strength climbs faster than the bar-speed steps can follow; this catches it up.
+**The re-check, week 5.** On the lighter week, each main lift gets a working-weight check before its working sets — the trap bar and the bench on Wednesday, the squat on Saturday: a set of 3 that's hard but leaves two in you, × 1.08, rounded to 2.5 kg. The app saves it, and the week's sets read off it straight away. Coming back from time off, strength climbs faster than the bar-speed steps can follow; this catches it up.
 
-**Your profile, week 1.** On Wednesday of week 1, after the sled: trap bar at five loads — 50, 60, 70, 80, 85% of your current working max — two reps each, fast, the watch recording. On Saturday, the squat the same way, then bench and push press at four loads. Spleeft draws the line for each lift; that line is what the targets below read off. Redraw the profiles in week 10 after the top triples. The numbers below are typical; yours replace them the day the profile is drawn.
+**Your profile, week 1.** On Wednesday of week 1, after the sled: trap bar at five loads — 50, 60, 70, 80, 85% of your current working max — two reps each, fast, the watch recording. On Saturday, the squat the same way, then the bench at four loads. Spleeft draws the line for each lift; that line is what the targets below read off. Redraw the profiles in week 10 after the top triples. The numbers below are typical; yours replace them the day the profile is drawn.
 
 **The ballistic loads.** The bench throw and the trap bar jump are loaded for power, not by feel. In the week-1 and week-10 profiles, do both at four loads — the bench throw at about 20, 30, 40 and 50% of your bench, the trap bar jump at 10, 20, 30 and 40% of the trap bar working weight — two reps each, the watch recording. Power is load times speed: the load with the highest number is the one you use until the next profile.
 
-| Phase | Squat | Trap bar | Bench | Push press |
-|---|---|---|---|---|
-| Accumulate, 70–75% | 0.65–0.75 m/s | 0.60–0.70 | 0.50–0.60 | 0.90–1.10 |
-| Intensify, 80–87% | 0.40–0.55 | 0.40–0.50 | 0.30–0.40 | 0.70–0.85 |
-| Top triple, about 90% (first rep) | 0.35–0.42 | 0.33–0.40 | 0.22–0.28 | — |
-| Convert, contrast 85–88% | 0.40–0.45, the jumps fast | 0.40–0.45 | 0.30–0.35 | 0.70 |
+| Phase | Squat | Trap bar | Bench |
+|---|---|---|---|
+| Accumulate, 70–75% | 0.65–0.75 m/s | 0.60–0.70 | 0.50–0.60 |
+| Intensify, 80–87% | 0.40–0.55 | 0.40–0.50 | 0.30–0.40 |
+| Top triple, about 90% (first rep) | 0.35–0.42 | 0.33–0.40 | 0.22–0.28 |
+| Convert, contrast 85–88% | 0.40–0.45, the jumps fast | 0.40–0.45 | 0.30–0.35 |
+
+The one-arm landmine push press has no line and no target: it goes by weight and reps, every rep fast, and Spleeft's rule is on its own page, Saturday's.
 
 ---
 
@@ -146,7 +148,7 @@ PROGRESS charts every one of them, week against week, and the camp inherits them
 | Wednesday | 3:30 · STRENGTH — sled, the trap bar in its phase with lateral raises in its rest, the pause squat, the bench press and bench throws, chins and the muscle-up line, Nordics, neck holds, the farmer's carry · evening, weeks 1–5: THE MOVEMENT SESSION | ~78 min |
 | Thursday | 3:30 · THROWS + ENGINE 2 — throws and landmine, split squat, Spanish squat hold, the second conditioning session, the settle, neck, hands, band catch, the shoulders circuit · evening: the easy thirty, then the sauna in weeks 6–13 | ~81 min (~85 when the session is 28 minutes) |
 | Friday | SLEEP. No alarm. | — |
-| Saturday | 8:30 · THE LONG SESSION — get-ups, build-ups, stance starts, close and plant, sprints, reactive jumps, side bounds, the squat in its phase, push press, Romanian deadlifts, the bear-hug carry · evening: THE MOVEMENT SESSION | ~83 min |
+| Saturday | 8:30 · THE LONG SESSION — get-ups, build-ups, stance starts, close and plant, sprints, reactive jumps, side bounds, the squat in its phase, the one-arm landmine push press, Romanian deadlifts, the bear-hug carry · evening: THE MOVEMENT SESSION | ~83 min |
 | Sunday | 8:30 · THE ROUNDS — throws, the 6 × 3, the post-max sit, core with suitcase carries, the L-sit, the lever and face pulls, hands, weekly check · then the easy hour, then the sauna from week 6 | ~73 min |
 | Every day | On waking: the strap, the sighs, the one thing, the morning five, the check · evening: RANGE 20 min, the skill block Mon–Thu, the sit, the review | ~50 min |
 
@@ -158,9 +160,9 @@ Just over seven and a half hours in the gym a week in the build and heavy weeks,
 
 ## THE TESTS — WEEKS 1, 5, 10 AND 14
 
-**Week 1:** Tuesday — burst decrement before the intervals. Wednesday — the trap bar load-velocity profile after the sled. Thursday — nasal threshold before the bike. Saturday — squat, bench and push press profiles; broad jump, rotational throw, push-ups, chins, plank, Copenhagen. Sunday — the 20-minute test; the four range tests and the three flexibility tests; tape; photos; BOLT.
+**Week 1:** Tuesday — burst decrement before the intervals. Wednesday — the trap bar load-velocity profile after the sled. Thursday — nasal threshold before the bike. Saturday — the squat and bench profiles; broad jump, rotational throw, push-ups, chins, plank, Copenhagen. Sunday — the 20-minute test; the four range tests and the three flexibility tests; tape; photos; BOLT.
 
-**Week 5 (lighter):** Tuesday — burst decrement, broad jump, throw, BOLT. Wednesday — the working-weight checks on the trap bar and the bench. Thursday — nasal threshold. Saturday — the working-weight checks on the squat and the push press. Sunday — the 20-minute test instead of the rounds; range and flexibility tests; tape; photos.
+**Week 5 (lighter):** Tuesday — burst decrement, broad jump, throw, BOLT. Wednesday — the working-weight checks on the trap bar and the bench. Thursday — nasal threshold. Saturday — the working-weight check on the squat. Sunday — the 20-minute test instead of the rounds; range and flexibility tests; tape; photos.
 
 **Week 10 (easy):** working weights reset off week 9's top triples, and the profiles redrawn Wednesday and Saturday. Tuesday — burst decrement, broad jump, throw, BOLT. Thursday — nasal threshold. Sunday — 6 × 3 scored; range and flexibility tests; tape; photos.
 
@@ -195,7 +197,7 @@ Circuits build the same muscle as straight sets in far less time, which is how t
 
 **4 · 0:29 — EASY, NOSE ONLY · 40 min**
 
-Bike, SkiErg, or a run once your legs and ankles are used to it — a run builds the base faster but costs more. Heart rate on the strap and the average logged: 65–75% of the peak heart rate from the 20-minute test, no higher. The output at that heart rate is the number that should climb. Nose the whole way; if you can't hold a sentence, slow down. Forty minutes every week, after the upper-body work. Boring on purpose. Fine on an empty stomach.
+Bike, or a run once your legs and ankles are used to it — a run builds the base faster but costs more. Heart rate on the strap and the average logged: 65–75% of the peak heart rate from the 20-minute test, no higher. The output at that heart rate is the number that should climb. Nose the whole way; if you can't hold a sentence, slow down. Forty minutes every week, after the upper-body work. Boring on purpose. Fine on an empty stomach.
 
 **5 · 1:11 — HANDS · 4 min**
 
@@ -237,7 +239,7 @@ Box pistol to start — stand on one leg in front of a box, the other straight o
 
 **4 · 0:24 — ENGINE 1 · 24 min · the table says which**
 
-Bike or SkiErg — one, all camp, so the numbers compare. Nothing to log during the session: at the end, the total on the machine's screen and your peak heart rate.
+The bike, all preparation, so the numbers compare. Nothing to log during the session: at the end, the total on the machine's screen and your peak heart rate.
 
 Moderate intervals (week 1): 4 × 3 minutes at a pace where you could speak short sentences, 3 easy between. The engine measured before it's pushed.
 
@@ -354,7 +356,7 @@ Threshold (weeks 3 and 7): 2 × 8 minutes at the hardest pace you could hold for
 
 Repeat bursts (the weeks the calendar puts them here): as Tuesday's page.
 
-Rounds on the erg (week 12): 6 × 3 minutes on the bike or SkiErg at fight pace — the output you can hold across all six — 60 seconds between. Write down round 1 and round 6.
+Rounds on the erg (week 12): 6 × 3 minutes on the bike at fight pace — the output you can hold across all six — 60 seconds between. Write down round 1 and round 6.
 
 Test week (week 14): the nasal threshold test, then the 20-minute test — five easy minutes, then the most distance you can cover in 20 minutes on the machine you always use. Log the distance and the highest heart rate.
 
@@ -391,7 +393,7 @@ No alarm. Tomorrow is the long session and Sunday is the rounds, and the best th
 
 ## SATURDAY · THE LONG SESSION · 8:30 · ~83 min
 
-Fed and rested, Friday's sleep in front of it. Speed first, then reactive power, then the squat in its phase, then the push press, then the Romanian deadlifts, then the bear-hug carry. Fuel it: porridge two hours before, half the bottle and a banana twenty minutes before.
+Fed and rested, Friday's sleep in front of it. Speed first, then reactive power, then the squat in its phase, then the one-arm landmine push press, then the Romanian deadlifts, then the bear-hug carry. Fuel it: porridge two hours before, half the bottle and a banana twenty minutes before.
 
 **1 · 0:00 — WARM-UP · 16 min**
 
@@ -421,9 +423,9 @@ The same phases as the trap bar: **weeks 1–3 slow lowering** — five seconds 
 
 Lower-body maximal strength is the best predictor there is of how hard trained boxers hit. Twelve weeks builds some, expresses all of it, and the contrast block is where it becomes speed.
 
-**6 · 1:05 — PUSH PRESS · 3 × 3 · rest 2 min · 8 min**
+**6 · 1:05 — ONE-ARM LANDMINE PUSH PRESS · 3 × 3 each side · rest 2 min · 8 min**
 
-Bar on the front of the shoulders, quick shallow knee dip, drive it overhead with the legs and punch it to lockout. Legs, braced trunk, hands — the route a punch takes. Loaded like the other lifts: fast, two in reserve; weeks 11–13 at 85%; week 9 skipped (the squat top triple is enough); week 14 none. Week 5: first, the working-weight check.
+The landmine press with a leg drive: one end of a barbell in a landmine or a corner, the other end at your shoulder in one hand, split stance, the opposite foot forward. A quick dip of the knees, then drive hard with the legs and punch the bar up and forward to a straight arm. Lower it under control and reset. All the reps on one side, then the other. Legs, braced trunk, one hand — the route a punch takes, with no bar pressed straight overhead. By weight and reps, with no working max and no profile: every rep as fast as you can, Spleeft on the wrist that's pressing, and a rep 10% slower than the set's fastest ends the set. When every rep of every set is fast, add the smallest step. Week 9 skipped (the squat top triple is enough); week 14 none.
 
 **7 · 1:13 — ROMANIAN DEADLIFT · 3 × 6 · rest 75 s · 6 min** — weeks 5 and 9–13: 2 × 6 · none in week 14
 
@@ -451,7 +453,7 @@ Medicine ball — 5–6 kg for the shot-put in the build and heavy blocks, 3–5
 
 **3 · 0:26 — THE 6 × 3 SIMULATION · rest from the table · 24–28 min**
 
-Six rounds of three minutes through week 10; seven in weeks 11–13. The rest shortens by block — 90 seconds in accumulation, 60 from week 6. Each round: minute 1 on the SkiErg → minute 2 on the assault bike → minute 3 medicine-ball slams — a 5–8 kg ball overhead and driven into the floor, caught on the bounce, hard and continuous — or, if the gym has a bag, bag work, hard and technically clean.
+Six rounds of three minutes through week 10; seven in weeks 11–13. The rest shortens by block — 90 seconds in accumulation, 60 from week 6. Each round: minute 1 on the assault bike with your arms only, feet on the pegs → minute 2 on the assault bike, arms and legs → minute 3 medicine-ball slams — a 5–8 kg ball overhead and driven into the floor, caught on the bounce, hard and continuous — or, if the gym has a bag, bag work, hard and technically clean. The bike's screen counts minutes 1 and 2 as one number: log its calories for round one, clear it in the rest before the last round, and log the last round's.
 
 Rule 1: relaxed jaw, shoulders down. Finish a round with your traps by your ears and it doesn't count. Rule 2: every rest is the CORNER MINUTE — two physiological sighs the second the round ends (a full breath in through the nose, a short second sip on top, one long slow exhale through the mouth, twice), then nose only, in for 3 and out for 6, stood up, hands off the knees. Hands-on-knees gasping keeps you revved and starts the next round behind. Rule 3: on scored weeks write down round one's output and round six's. Round six divided by round one is the fade. Rule 4: rounds past the fight — the seventh, in weeks 11–13 — are capacity work, not punishment. If one drops below 75% of round one's output, or your posture goes, that round is the last; the fade is scored on the last round you finished.
 
@@ -520,7 +522,7 @@ Prep is the everyday program — the one you run whenever there's no fight — s
 
 In the week with 25 December in it, these come down by a quarter too, like the rest of that week.
 
-**The dose, hard sets a week in a build week:** heavy pressing (the bench, the dips, the push press) 10–11; the side of the shoulders 9–11; the back of the shoulders 6; the traps three sets and three carries; biceps 6 direct, and more from the rows and the chins; triceps 6 direct; the back 9. Your shoulders, traps and arms come first because they're your priorities, with the heavy pressing behind them. The legs are unchanged: two heavy days, the split squat, the sprints and the jumps already cover them.
+**The dose, hard sets a week in a build week:** heavy pressing (the bench, the dips, the landmine push press) 10–11; the side of the shoulders 9–11; the back of the shoulders 6; the traps three sets and three carries; biceps 6 direct, and more from the rows and the chins; triceps 6 direct; the back 9. Your shoulders, traps and arms come first because they're your priorities, with the heavy pressing behind them. The legs are unchanged: two heavy days, the split squat, the sprints and the jumps already cover them.
 
 **How it goes up.** The dips: when every set reaches the top of the week's range, 2.5 kg more next week. The circuits: when every round reaches the top of the range, the next dumbbell up. The carries: 2.5 kg a hand, or a heavier bag, when every run is clean. **An elbow or a shoulder at 4 or more on Sunday's check:** next week the dips become push-ups, the rows are held at the top, and the circuits drop their curls and triceps work.
 
@@ -674,6 +676,8 @@ Five additions, on by default, that turn this from a program into a professional
 **What the October audit changed, and why.** Every major system was run back over this program — block periodization, conjugate, Sheiko, autoregulation, Easy Strength, triphasic, Charlie Francis, the shock method, velocity training, ALTIS and the deceleration research, Joel Jamieson, the HIIT and polarized research, the UFC Performance Institute and the boxing research. Out, because they weren't earning their minutes: Saturday's tired throws (Thursday and Sunday throw fresh), the evening microdoses (explosive work already runs five days a week), the warm-up crawls, Sunday's get-ups and the planche leans. In, because each fills a real gap: braking into your stance, strength in the punch position, loaded sideways trunk stiffness, a jump check that reads what the strap can't, the arm-braking work twice a week, the back of the shoulder all year, a bench press you're trained on before you're tested on it, and shrugs in the size weeks. Depth jumps came down to sixteen clean contacts, and a tendon gate went in. Sheiko's lesson was taken without Sheiko's volume: you get strong at what you practise, and you don't test a lift you don't train.
 
 **What the October review changed, and why.** An outside review read the documents line by line and found four safety points worth taking. The dumbbell-release jumps went: dropped dumbbells bounce and roll, and you land where they fell — the reactive slot now climbs from drop landings to low-box depth jumps to full depth jumps. The bench throw now runs off the Smith machine's safety stops, so a missed catch lands on them, not on you. The true maxes went: for a fighter a one-rep max only sets loads, and the top triple with the bar-speed profile does that without the risk of failing a lift alone. And the tendon gate was fixed: a sore tendon gets its jumping taken away and its holds kept, not a different jump. Two rules tightened with them — the bar-speed rule now comes down on one slow reading but goes up only on two fast ones, because one reading is inside the watch's noise; and rounds past the fight stop if they fall below three-quarters of round one, because they're capacity work, not punishment.
+
+**What the November audit changed, and why.** The audit of 19 November 2026 read every program against the brief, and three things changed here, from the week of Monday 23 November 2026. The app shows every week before that Monday as it was. **The SkiErg is out:** you can't pace on it, so its numbers said nothing. In the rounds the first third of every round is the assault bike with the arms only, feet on the pegs, then the assault bike with arms and legs, then the slams or the bag, and a round logs the bike's calories. The arms get hard minutes that every other session gives to the legs; the evidence that this carries into the ring is thin, and it costs no time. The rounds on the erg are on the bike, the 20-minute test is on the bike, and the engine sessions name the bike alone. **The push press** was the barbell's, bar on the front of the shoulders and driven overhead, with its own working max, its working-weight check in week 5 and its profile in weeks 1 and 10; it's now the one-arm landmine push press, by weight and reps, because pressing straight overhead isn't for your shoulders. **A speed on every fast rep:** Spleeft reads every rep of Wednesday's bench throws and the landmine push press, and a rep 10% slower than the set's fastest ends the set. Tuesday's three flying twenties in weeks 11–13 stay: there's time in Prep to recover a hamstring, and the top-speed running protects it.
 
 **Why the six pressure-fighter additions.** You fight forward, non-stop, against men who are heavier, taller and mobile. That's four physical problems: crossing the distance a taller man keeps, again and again (stance starts, repeat sled starts, shuttle bursts); holding your ground when a heavier man leans on you (drive holds — an isometric, and the one quality the program had no exercise for); taking bigger punches (the neck at four sets of the rapid brace); and hitting up and in with more force at the same speed (the heavier ball, the landmine punch with the step-in). Fifteen minutes a week, nothing dropped, and none of it replaces what your coach does with distance, angles and the guard — it gives him a body that can get there, stay there and keep hitting.
 

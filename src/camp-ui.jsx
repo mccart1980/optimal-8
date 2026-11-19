@@ -84,7 +84,7 @@ export function CampWeekCard({ rx, dates }) {
       <Row k="Saturday squat" val={rx.sq ? liftLine(rx.sq) : "—"} />
       <Row k="Reactive jumps" val={rx.tp || rx.fightWeek ? "—" : rx.noJumps ? "none — the tendon gate" : jumpOf(rx.jump).n + " " + rx.js[0] + " × " + rx.js[1] + (rx.restart ? " · one stage down" : "")} />
       <Row k="Box jumps · side bounds" val={rx.tp || rx.fightWeek ? "—" : rx.box[0] + " × " + rx.box[1] + " · " + rx.bsets + " × 4 per side"} />
-      <Row k="Push press" val={rx.pp ? rx.pp.sets + " × " + rx.pp.reps + " @ " + rx.pp.pct + "%" : "—"} />
+      <Row k={rx.au ? "Landmine push press" : "Push press"} val={rx.pp ? rx.pp.sets + " × " + rx.pp.reps + (rx.au ? " each side, every rep fast" : " @ " + rx.pp.pct + "%") : "—"} />
       <Row k="Punch throws" val={rx.vec + " rounds"} />
       <Row k="Sunday rounds" val={r.sun} />
       <Row k="Friday" val="Sleep — no alarm" />
@@ -121,7 +121,7 @@ export function FightWeekTable({ rx }) {
           <thead><tr><Head w={96}>Day</Head><Head>What</Head></tr></thead>
           <tbody>
             {days.map((d) => { const o = daysOut(d, rx);
-              const what = o === 0 ? "FIGHT. The warm-up you rehearsed. The corner minute in every rest. The last round is a place you've already been."
+              const what = o === 0 ? (rx.au ? "The morning primer, hours before: three easy minutes on the bike, box jumps 2 × 3, rotational throws 2 × 3 per side, every one fast. Then the " : "") + "FIGHT. The warm-up you rehearsed. The corner minute in every rest. The last round is a place you've already been."
                 : o === 1 ? (rx.weighIn === "day" ? "Nothing. Feet up. The rehearsal's meals. Bed early — you weigh in tomorrow." : "Weigh-in. Nothing else. Feet up. The rehearsal's meals. Bed early.") : FW_LINES[o];
               return (
                 <tr key={d}>

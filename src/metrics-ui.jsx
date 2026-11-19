@@ -226,7 +226,8 @@ export function BarSpeedTrack({ log, camp }) {
     <Card ac={C.brass}>
       <Eye c={C.brass}>Bar speed — at the same load, per lift</Eye>
       <Note c={C.chalk} s={{ marginTop: 0 }}>A speed only means something against another speed at the same weight, so each chart holds the load with the most entries on it. {scopeOf(camp) === "fighter" ? "Metres a second, top set." : "Metres a second: the first work set, the mean of its two fastest reps."}</Note>
-      {(scopeOf(camp) === "spp" ? BAR_SPEED_LIFTS.concat(BAR_SPEED_FAST) : BAR_SPEED_LIFTS).map((l) => { const rows = all[l[0]] || []; const same = sameLoadSeries(rows);
+      {/* the fast lifts: always in Strength, Power and Physique; in the other programs once one has a speed on file */}
+      {BAR_SPEED_LIFTS.concat(scopeOf(camp) === "spp" ? BAR_SPEED_FAST : BAR_SPEED_FAST.filter((l) => (all[l[0]] || []).length)).map((l) => { const rows = all[l[0]] || []; const same = sameLoadSeries(rows);
         return (
           <div key={l[0]} style={{ marginTop: 12 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
@@ -497,7 +498,7 @@ export function MeasureSettings({ st, upd, morning, dayIso, fuel, setFuel, impor
       <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
       <Eye c={C.brass}>Erg output — the unit you log in</Eye>
       <Seg opts={[["w", "WATTS"], ["m", "METRES"], ["cal", "CALORIES"]]} val={st.ergUnit || "w"} on={(v) => upd({ ergUnit: v })} c={C.brass} />
-      <Note>Every interval session logs one number in this unit, at the end: the total on the machine's screen — calories on the bike, metres on the SkiErg — or its average watts. Pick one and keep it, or the weeks stop comparing.</Note>
+      <Note>Every interval session logs one number in this unit, at the end: the total on the bike's screen, in calories or metres, or its average watts. Pick one and keep it, or the weeks stop comparing.</Note>
 
       <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
       <Eye c={C.violet}>The fuel app — bring it across</Eye>

@@ -284,9 +284,13 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **ROUNDS ON THE ERG** — Three-minute rounds on the bike or SkiErg at the pace you could hold for the whole fight, one minute's rest between. Log the first and the last round. Rounds past your fight stop early if one drops below three-quarters of round one, or your posture goes.
 
+**ROUNDS ON THE BIKE** — Three-minute rounds on the bike at the pace you could hold for the whole fight, one minute's rest between. Log the first and the last round. Rounds past your fight stop early if one drops below three-quarters of round one, or your posture goes.
+
 **FIGHT-PACE ROUNDS** — Four three-minute rounds at fight pace, one minute's rest. Sharp, then stop.
 
 **THE ROUNDS (FIGHT SIMULATION)** — Your fight, on the machines. Each round is split into thirds — SkiErg, then assault bike, then medicine-ball slams (or the bag) — at your fight's round length, with your fight's rest between rounds. A minute each for 3-minute rounds, forty seconds each for 2-minute rounds. Log the first round and the last. Your fight's rounds are always finished; rounds past them stop early if one drops below three-quarters of round one, or your posture goes.
+
+**THE ROUNDS, ARMS-ONLY FIRST THIRD** — Your fight, on the machines. Each round is split into thirds: the assault bike with your arms only, feet on the pegs; then the assault bike with arms and legs; then medicine-ball slams (or the bag). At your fight's round length, with your fight's rest between rounds. A minute each for 3-minute rounds, forty seconds each for 2-minute rounds. The bike's screen counts both of its thirds as one number. Log its calories for round one, clear the screen in the rest before the last round, and log the last round's. Your fight's rounds are always finished; rounds past them stop early if one drops below three-quarters of round one, or your posture goes.
 
 **THE DOUBLE** — The ceiling for a short fight: one round more than your fight, five minutes easy, then your fight's rounds again. Same stations, same rest. Log the first round and the last. The stop rule covers everything past your fight's rounds.
 
@@ -347,6 +351,8 @@ Every exercise, session, test and move in the program, in two or three plain lin
 ## TESTS
 
 **THE 20-MINUTE TEST** — Five easy minutes, then as much distance as you can in 20 minutes on your usual bike or SkiErg. Log the distance and the highest heart rate you saw.
+
+**THE 20-MINUTE TEST ON THE BIKE** — Five easy minutes, then as much distance as you can in 20 minutes on your usual bike. Log the distance and the highest heart rate you saw.
 
 **BURST DECREMENT TEST** — Ten six-second flat-out bursts with thirty seconds easy between. The app compares the first burst with the last.
 

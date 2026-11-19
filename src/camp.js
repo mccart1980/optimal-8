@@ -3,6 +3,7 @@ import { mondayOf, parseISO } from "./ui.jsx";
 import { clusterTimer } from "./edge.js";
 import { jumpOf, JUMPS, jumpGate, STOP_RULE, HEAD_DOCTOR, HEAD_AE } from "./safety.js";
 import { MON_WU, dipsAndRows, armsCircuit, theBrace, carryBlock } from "./circuits.js";
+import { AUDIT_SINCE, lmPush, primer, SPLEEFT_FAST, ARMS_THIRD, BIKE_THIRD, ROUNDS_LIB, ERG_ROUNDS_LIB, T20_LIB, bikeFields } from "./audit.js";
 
 /* ================================================================
    OPTIMAL 8 · CAMP — ten weeks to the fight.
@@ -173,7 +174,9 @@ export function ergBoxes(key, short, rx) {
 export const engHR = (key) => [{ k: "hr", l: key === "easy" ? "AVERAGE HEART RATE (BPM)" : "PEAK HEART RATE (BPM)" }];
 const BASE_FIELDS = [{ k: "w", l: "DISTANCE (KM)" }, { k: "hr", l: "AVERAGE HEART RATE (BPM)" }];
 export const SLED_FIELDS = [{ k: "w", l: "LOAD (KG)" }, { k: "t", l: "TIME (S)" }];
-export const roundFields = (rd) => [{ k: "w", l: rd + " · SKIERG (M)" }, { k: "cal", l: rd + " · BIKE (CAL)" }];
+/* a round's boxes: the SkiErg's metres and the bike's calories — and from
+   the audit's week, with the SkiErg out, the bike's calories alone */
+export const roundFields = (rd, rx) => (rx && rx.au ? bikeFields(rd) : [{ k: "w", l: rd + " · SKIERG (M)" }, { k: "cal", l: rd + " · BIKE (CAL)" }]);
 export const SETTLE_FIELDS = [{ k: "w", l: "SECONDS TO LAND ON THE BREATH" }];
 export const PACE_FIELDS = [{ k: "w", l: "PACE (E.G. 2:05 OR 180 W)", kb: "text" }];
 export const HONEST_FIELDS = [{ k: "w", l: "THE HONEST HALF", ch: ["HAD TO", "CAVED"] }];
@@ -185,10 +188,14 @@ export const cengLine = (key, rx) => {
   if (key === "vo2") return (d.vo2 || 4) + " × 4 minutes HARD — breathing heavily, two or three words at most — 3 easy between" + eff;
   if (key === "tempo") return (d.tempo || 10) + " × 1 minute hard-but-controlled — about 70% of flat out — with 1 minute easy between" + eff;
   if (key === "lac" && d.lac === 2) return CENG.lac2.d;
-  if (key === "erg" || key === "erg8") { const e = rx.ergR; return e.rounds + " × " + e.mins + " minutes on the bike or SkiErg at fight pace — the output you can hold across all of them — " + e.rest + " seconds between"; }
+  if (key === "erg" || key === "erg8") { const e = rx.ergR; return e.rounds + " × " + e.mins + " minutes on the " + (rx.au ? "bike" : "bike or SkiErg") + " at fight pace — the output you can hold across all of them — " + e.rest + " seconds between"; }
   if (key === "fp") { const e = rx.fpR; return e.rounds + " × " + e.mins + " minutes at fight pace, " + e.rest + " seconds between, and stop"; }
   return CENG[key] ? CENG[key].d + eff : "";
 };
+/* the words a session's card shows: from the audit's week the rounds on
+   the erg read the entry that no longer names the SkiErg */
+export const cengLib = (key, rx) => (rx && rx.au && (key === "erg" || key === "erg8") ? ERG_ROUNDS_LIB : null);
+const ONE_MACHINE = (rx) => (rx.au ? "The bike, all camp, so the numbers compare." : "Bike or SkiErg — one, all camp, so the numbers compare.") + " Nothing to log during the session: at the end, the total on the machine's screen and your peak heart rate.";
 export const cengName = (key, rx) => {
   if (key === "erg" || key === "erg8") return "ROUNDS ON THE ERG · " + rx.ergR.rounds + " × " + rx.ergR.mins;
   if (key === "lac" && rx && rx.dose && rx.dose.lac === 2) return CENG.lac2.n;
@@ -573,7 +580,7 @@ export const CS = {
     { L: "Y", n: "The Pre-Camp Check", m: 0, hide: (rx) => !rx.preCamp, rxLine: () => "this week — bloods and blood pressure",
       items: [{ n: "Pre-camp check", s: "full blood count, lipids, liver and kidneys · blood pressure", cue: PRE_CAMP_CUE, id: "c_precamp", k: "chk" }],
       why: "Standing rule 5: before every camp. A resting ECG once a year." },
-    { L: "X", n: "The 20-Minute Test", m: 25, star: 1, hard: 1, hide: (rx) => !rx.checks,
+    { L: "X", n: "The 20-Minute Test", m: 25, star: 1, hard: 1, hide: (rx) => !rx.checks, libAs: (rx) => (rx.au ? T20_LIB : null),
       timer: () => ({ kind: "z2", opt: { min: 20, label: "20-MIN TEST — MAXIMUM DISTANCE" }, title: "20-MIN TEST" }),
       rxLine: () => "5 easy minutes, then 20 minutes for the most distance you can — today instead of the base",
       items: [{ n: "Distance", s: "the engine's ceiling", id: "c_bike20", k: "out", u: "distance (m)" },
@@ -587,7 +594,7 @@ export const CS = {
       rxLine: (rx) => (rx.base || 45) + " min · nose the whole way",
       items: [{ n: "Output", s: "write it down", id: "c_base", k: "out", u: "distance / avg HR", fields: BASE_FIELDS }],
       w: "Nose the whole way; if you can't hold a sentence, slow down.",
-      why: "Bike, SkiErg, or a run if your legs and ankles are used to it — a run builds the base faster but costs more. Heart rate on the strap and the average logged: 65–75% of your peak, no higher. The output at that heart rate is the number that should climb. Forty-five minutes through the camp, thirty in the easy week and the sharpen week. Boring on purpose. Fine on an empty stomach." },
+      why: (rx) => (rx.au ? "Bike, or a run" : "Bike, SkiErg, or a run") + " if your legs and ankles are used to it — a run builds the base faster but costs more. Heart rate on the strap and the average logged: 65–75% of your peak, no higher. The output at that heart rate is the number that should climb. Forty-five minutes through the camp, thirty in the easy week and the sharpen week. Boring on purpose. Fine on an empty stomach." },
     { L: "B", n: "Neck", m: 8, p: "C_NECK",
       timer: () => ({ kind: "hold", opt: { sets: 3, secs: 10, rest: 20, label: "4-DIRECTION HOLD" }, title: "NECK HOLDS" }),
       rxLine: (rx) => "holds · rapid tense " + setsOf(rx, 4) + " × 6 · perturbation",
@@ -632,12 +639,19 @@ export const CS = {
         .concat(rx.shuttles ? [{ n: "Shuttle bursts", s: "6 × 5 m out and back · 20 s between", cue: "Six times five metres out and back, a hard push-off at each turn, twenty seconds between. A mover with good feet makes you change direction; this trains it forward and back. Three minutes.", id: "c_shuttle", k: "chk" }] : []),
       w: OUTPUT_RULE,
       why: "Explosiveness responds to how often the nervous system is asked, not how much. Eight minutes, three mornings a week." },
-    { L: "Q", n: "Speed — flying twenties", m: 8, star: 1, hard: 1, edge: 1, rest: "Rest 2:30", rt: 150, hide: (rx) => !rx.speed,
+    { L: "Q", n: "Speed — flying twenties", m: 8, star: 1, hard: 1, edge: 1, rest: "Rest 2:30", rt: 150, hide: (rx) => !rx.speed || !!rx.au,
       rxLine: () => "build-ups at 75% and 90%, then 3 × 20 m flat out",
       items: [{ n: "Build-up 20 m", s: "one at 75%, one at 90%", cue: "Never skipped. The build-ups are what make the speed safe.", id: "c_speed_bu", k: "chk" },
         { n: "Flying sprint 20 m", s: "3 × 20 m · rest 2½ min", cue: "After the shuttles: three flying 20-metre sprints, absolutely flat out. Curved treadmill or outdoors.", id: "c_speed_tue", k: "out", u: "best time (s)" }],
       w: "A hamstring twinge on the build-ups ends the speed for the day. The Nordics never miss.",
       why: "THE EDGE. Twice a week is what sprinters do, and it's the best hamstring insurance there is — provided the build-ups never miss." },
+    /* from the audit's week Tuesday's speed is three starts from the stance:
+       the flat-out running stays on Saturday, once a week */
+    { L: "ST", n: "Speed — stance starts", since: AUDIT_SINCE, m: 4, star: 1, hard: 1, edge: 1, rest: "Rest 90 s", rt: 90, hide: (rx) => !rx.speed || !rx.au,
+      rxLine: () => "3 × 10 m from your stance",
+      items: [{ n: "Stance start 10 m", s: "3 × 10 m", cue: "After the shuttles: from your boxing stance, three ten-metre sprints, the first step explosive off the rear foot, 90 seconds between.", id: "c_stance_tue", k: "chk" }],
+      w: "A hamstring twinge ends the speed for the day. The Nordics never miss.",
+      why: "THE EDGE. The first steps, twice a week. Flat-out running stays on Saturday: once a week covers the hamstrings, and a strain late in the camp would cost it." },
     { L: "C", n: "The Pistol Line", m: 5, cal: "pistol", rest: "Rest 60 s", rt: 60, hide: (rx) => !!rx.tp, rxLine: (rx) => setsOf(rx, 2) + " × 5 per leg at your level",
       items: (rx) => [{ n: "The pistol line — at your level", s: setsOf(rx, 2) + " × 5 per leg", cue: "Box pistol to start — stand on one leg in front of a box, the other straight out in front, sit to the box under control and stand without the free foot touching — climbing to the assisted and then the full pistol.", id: "pistol", k: "wr", sets: setsOf(rx, 2), reps: "5/leg" }],
       w: "Two sets, never to failure: control, not load.",
@@ -647,10 +661,10 @@ export const CS = {
       items: (rx) => [{ n: "Spanish squat hold", s: setsOf(rx, 3) + " × 30 seconds" + HOLDS_PLUS(rx) + " · rest 30 s", cue: "As Thursday: a thick band around the back of both knees, anchored to the rack in front of you at knee height; lean back into it so the shins stay vertical, sit to a half squat, hold dead still.", id: "c_spanish_tue", k: "wr", sets: setsOf(rx, 3), reps: 30 }],
       why: "The tendon block runs twice a week now, because the jumps do." },
     { L: "D", n: (rx) => (CENG[rx.eng1] ? cengName(rx.eng1, rx) : "Engine 1"), m: (rx) => (rx.eng1 === "easy" ? 20 : 24), star: 1, hard: 1, eng: 1, engKey: "eng1", menu: 1,
-      engLine: (rx) => cengLine(rx.eng1, rx),
+      engLine: (rx) => cengLine(rx.eng1, rx), libAs: (rx) => cengLib(rx.eng1, rx),
       hide: (rx) => !rx.eng1, timer: (rx) => cengTimer(rx.eng1, false, rx),
       items: (rx) => [{ n: "Output", s: "write it down", id: "c_eng1", k: "out", u: "output / peak HR", erg: ergBoxes(rx.eng1, false, rx), fields: engHR(rx.eng1) }],
-      note: "Bike or SkiErg — one, all camp, so the numbers compare. Nothing to log during the session: at the end, the total on the machine's screen and your peak heart rate." },
+      note: ONE_MACHINE },
     { L: "E", n: "The 60-Second Settle", m: 1, settle: 1, hide: (rx) => !rx.eng1,
       timer: () => ({ kind: "settle", title: "THE SETTLE" }), rxLine: () => "60 seconds — log the seconds to land",
       items: [{ n: "Seconds to land on the breath", s: "write it down", id: "c_settle1", k: "out", u: "seconds", recov: 1, fields: SETTLE_FIELDS }],
@@ -715,10 +729,10 @@ export const CS = {
       w: "A grinding rep ends the set.",
       why: "The punch-speed lift, built on a bench you now train. The weighted dips stay in on Monday; the bench press does the heavy pressing.",
       note: (rx) => (rx.reset ? "Reset week: before the working sets, a set of 3 that's hard but leaves two in you. That weight × 1.08 is the new working max — save it in the panel above." : ""), tr: 2 },
-    { L: "D", n: "Bench Throw", m: 4, star: 1, hard: 1, rest: "Rest 90 s", rt: 90, hide: (rx) => !campThrowRow(rx),
+    { L: "D", n: "Bench Throw", m: 4, star: 1, hard: 1, rest: "Rest 90 s", rt: 90, hide: (rx) => !campThrowRow(rx), spd: (rx) => !!rx.au, spdLine: SPLEEFT_FAST,
       rxLine: () => "3 × 3 @ your peak-power load",
       items: (rx) => [{ n: "Bench throw", s: "3 × 3", cue: BENCH_THROW_CUE_C, id: "c_benchthrow", k: "wr", mk: "cw_bench", pct: rx.btPct, sets: 3, reps: 3 }],
-      w: OUTPUT_RULE,
+      w: (rx) => (rx.au ? OUTPUT_RULE + " " + SPLEEFT_FAST : OUTPUT_RULE),
       why: "The punch-speed lift.",
       note: "No Smith machine with adjustable stops: a 4–6 kg medicine ball thrown off the chest at a wall." },
     { L: "F", n: "Weighted Chin-Ups + The Muscle-Up Line", m: 8, cal: "muscleup", rest: "Rest 90 s", rt: 90,
@@ -769,7 +783,7 @@ export const CS = {
       w: "Then run the session below one round short.",
       why: (rx) => (rx.dl ? "Week 5." : "The camp's first week — it didn't follow a Prep test week, which would have measured it.") + " Eight minutes nose only, pace up every two minutes until the mouth has to open; log the pace and the honest half — did it open because it had to, or because you caved?", tr: 2 },
     { L: "E", n: (rx) => (CENG[rx.eng2] ? cengName(rx.eng2, rx) : "Engine 2"), m: (rx) => (rx.eng2 === "easy" ? 20 : 28), star: 1, hard: 1, eng: 1, engKey: "eng2",
-      engLine: (rx) => cengLine(rx.eng2, rx),
+      engLine: (rx) => cengLine(rx.eng2, rx), libAs: (rx) => cengLib(rx.eng2, rx),
       hide: (rx) => !rx.eng2, timer: (rx) => cengTimer(rx.eng2, !!rx.nasal, rx),
       /* rounds on the erg past the fight: the stop rule */
       stopRule: (rx) => ((rx.eng2 === "erg" || rx.eng2 === "erg8") && rx.ergR && rx.ergR.rounds > R6(rx) ? { R: R6(rx), total: rx.ergR.rounds } : null),
@@ -804,6 +818,7 @@ export const CS = {
 
   /* ---------------- SATURDAY · THE LONG SESSION ---------------- */
   sat: { n: "SATURDAY", t: "★ THE LONG SESSION · 8:30 — get-ups, build-ups, stance starts, close and plant, sprints, reactive jumps, side bounds, the squat in its phase, push press, the bear-hug carry", m: (rx) => (rx.spr && rx.spr.micro ? 25 : 85 + minsIf(CAMP_BEARHUG, rx)), ac: C.oxide, free: 1,
+    ta: "★ THE LONG SESSION · 8:30 — get-ups, build-ups, stance starts, close and plant, sprints, reactive jumps, side bounds, the squat in its phase, the landmine push press, the bear-hug carry",
     intro: "Fed and rested, Friday's sleep in front of it. Speed first, then reactive power, then the squat in its phase, then the push press. Fuel it: porridge two hours before, half the bottle and a banana twenty minutes before.",
     b: [
     { L: "A", n: "Warm-up — get-ups first", m: 16, p: "C_SATWU", rxLine: () => "16 min · get-ups 2/side, hips, build-ups",
@@ -876,18 +891,23 @@ export const CS = {
       timer: () => ({ kind: "hold", opt: { sets: 3, secs: 10, rest: 20, label: "4-DIRECTION HOLD" }, title: "NECK HOLDS" }),
       items: [{ n: "4-direction holds", s: "3 × 10 s each direction", id: "c_neck_sat", k: "chk" }],
       why: "The durability emphasis: neck holds on Saturday after the squat — four neck days a week." },
-    { L: "F", n: "Push Press", m: 8, hard: 1, mainLift: "cw_pp", work: "cw_pp", vel: "pp", hide: (rx) => !rx.pp, rest: "Rest 2:00", rt: 120,
+    { L: "F", n: "Push Press", m: 8, hard: 1, mainLift: "cw_pp", work: "cw_pp", vel: "pp", hide: (rx) => !rx.pp || !!rx.au, rest: "Rest 2:00", rt: 120,
       pres: (rx) => ({ sc: ppLine(rx) + " @ " + rx.pp.pct + "%", pct: rx.pp.pct }),
       rxLine: (rx) => ppLine(rx) + " @ " + rx.pp.pct + "%",
       items: (rx) => [{ n: "Push press", s: ppLine(rx), cue: "Bar on the front of the shoulders, quick shallow knee dip, drive it overhead with the legs and punch it to lockout.", id: "c_pushpress", k: "wr", mk: "cw_pp", pct: rx.pp.pct, sets: rx.pp.sets, reps: rx.pp.reps }],
       w: "Loaded like the other lifts: fast, two in reserve.",
       why: "Legs, braced trunk, hands — the route a punch takes." },
+    /* from the audit's week: the one-arm landmine push press in its place,
+       the week's own sets and reps each side */
+    lmPush({ id: "c_lmpush", m: 8, sets: (rx) => (rx.pp ? rx.pp.sets : 0), reps: (rx) => (rx.pp ? rx.pp.reps : 0) }),
     CAMP_BEARHUG] },
 
   /* ---------------- SUNDAY · THE ROUNDS ---------------- */
   sun: { n: "SUNDAY", t: "★ THE ROUNDS · 8:30 — throws, the simulation, the post-max sit, core with suitcase carries, the L-sit, the lever and face pulls, hands, weekly check", m: 80, ac: C.brass, free: 1,
     intro: "The session the camp is for. Fed and rested — porridge two hours before, half the bottle and a banana twenty minutes before, electrolytes in the bottle. Throws first, fresh; then the rounds; then the corner, trained; then the core.",
     b: [
+    /* from the audit's week the rehearsal rehearses the last morning's primer too */
+    Object.assign(primer("c_", "the rehearsal"), { hide: (rx) => !rx.au || !(rx.sim && rx.sim.rehearsal) }),
     { L: "A", n: "Warm-up", m: 11, p: "C_SUNWU", rxLine: () => "11 min · Tuesday's warm-up, the power prep and the practice throws" },
     { L: "B", n: "The Four Punch Throws", m: 12, star: 1, p: "C_VEC", hide: (rx) => !!(rx.sim && rx.sim.rehearsal),
       rest: "45 s between exercises · 90 s between rounds", rt: 45,
@@ -901,19 +921,21 @@ export const CS = {
       why: "Fresh, first thing — the only throws of the weekend, so every one is at full speed. Straights are forward drive, hooks are rotation; all four get trained. Medicine ball — 5–6 kg for the shot-put through week 5, 3–5 kg after; if it isn't flying, it's too heavy." },
     { L: "C", n: (rx) => (rx.sim && rx.sim.rehearsal ? "THE FIGHT-DAY REHEARSAL" : rx.sim && rx.sim.double ? "The Double" : "The " + (rx.sim ? rx.sim.rounds : 6) + " × " + MINS(rx) + " Simulation"),
       m: (rx) => (rx.sim ? Math.max(12, Math.round((rx.sim.rounds * (MINS(rx) * 60 + rx.sim.rest) + (rx.sim.double ? 300 : 0)) / 60) + 4) : 28), star: 1, sim: 1, hard: 1, hide: (rx) => !rx.sim,
-      timer: (rx) => ({ kind: "csim", opt: { rounds: rx.sim.rounds, rest: rx.sim.rest, mins: MINS(rx), double: rx.sim.double || null, pace: !!rx.sim.rehearsal, R: R6(rx) }, title: rx.sim.rehearsal ? "THE REHEARSAL" : rx.sim.double ? "THE DOUBLE" : "THE ROUNDS" }),
+      /* from the audit's week the SkiErg's third is the assault bike with the arms only, and a round logs the bike's calories */
+      libAs: (rx) => (rx.au && rx.sim && !rx.sim.rehearsal && !rx.sim.double ? ROUNDS_LIB : null),
+      timer: (rx) => ({ kind: "csim", opt: Object.assign({ rounds: rx.sim.rounds, rest: rx.sim.rest, mins: MINS(rx), double: rx.sim.double || null, pace: !!rx.sim.rehearsal, R: R6(rx) }, rx.au ? { arms: 1 } : {}), title: rx.sim.rehearsal ? "THE REHEARSAL" : rx.sim.double ? "THE DOUBLE" : "THE ROUNDS" }),
       /* rounds past the fight, and the whole second set of the double: the stop rule */
       stopRule: (rx) => (rx.sim.rehearsal ? null : rx.sim.double ? { R: R6(rx), total: rx.sim.rounds, double: rx.sim.double } : rx.sim.rounds > R6(rx) ? { R: R6(rx), total: rx.sim.rounds } : null),
       rxLine: (rx) => (rx.sim.double ? rx.sim.double.a + " × " + MINS(rx) + " min, " + rx.sim.double.easy + " min easy, " + rx.sim.double.b + " × " + MINS(rx) + " min" : rx.sim.rounds + " × " + MINS(rx) + " min")
         + " · rest " + rx.sim.rest + " s" + (rx.sim.scored ? " · SCORED" : rx.sim.rehearsal ? " · at fight pace, at fight time" : ""),
       items: (rx) => (rx.sim.rehearsal
         ? [{ n: MINS(rx) === 3 ? "Minute 1–3" : "Every round", s: "at fight pace on the erg or the bag", k: "txt" },
-          { n: "Round 1 output", s: "write it down", id: "c_fs_rd1", k: "out", u: "SkiErg m / bike cal", fields: roundFields("ROUND 1") },
-          { n: "Last round output", s: "write it down", id: "c_fs_rd6", k: "out", u: "SkiErg m / bike cal", fields: roundFields("LAST ROUND") }]
-        : [{ n: thirdName(rx, 1), s: "SkiErg", k: "txt" }, { n: thirdName(rx, 2), s: "Assault bike", k: "txt" },
+          { n: "Round 1 output", s: "write it down", id: "c_fs_rd1", k: "out", u: rx.au ? "bike cal" : "SkiErg m / bike cal", fields: roundFields("ROUND 1", rx) },
+          { n: "Last round output", s: "write it down", id: "c_fs_rd6", k: "out", u: rx.au ? "bike cal" : "SkiErg m / bike cal", fields: roundFields("LAST ROUND", rx) }]
+        : [{ n: thirdName(rx, 1), s: rx.au ? ARMS_THIRD : "SkiErg", k: "txt" }, { n: thirdName(rx, 2), s: rx.au ? BIKE_THIRD : "Assault bike", k: "txt" },
           { n: thirdName(rx, 3), s: "Med-ball slams — a 5–8 kg ball overhead and driven into the floor, caught on the bounce, hard and continuous — or bag work, hard and technically clean.", k: "txt" },
-          { n: "Round 1 output", s: (rx.sim.scored ? "SCORED WEEK — write it down" : "write it down"), id: "c_fs_rd1", k: "out", u: "SkiErg m / bike cal", fields: roundFields("ROUND 1") },
-          { n: "Last round output", s: rx.sim.double || rx.sim.rounds > R6(rx) ? "the last round finished divided by round one is the fade" : rx.master || !rx.R ? "round six divided by round one is the fade" : "the last round divided by round one is the fade", id: "c_fs_rd6", k: "out", u: "SkiErg m / bike cal", fields: roundFields("LAST ROUND") }]),
+          { n: "Round 1 output", s: (rx.sim.scored ? "SCORED WEEK — write it down" : "write it down"), id: "c_fs_rd1", k: "out", u: rx.au ? "bike cal" : "SkiErg m / bike cal", fields: roundFields("ROUND 1", rx) },
+          { n: "Last round output", s: rx.sim.double || rx.sim.rounds > R6(rx) ? "the last round finished divided by round one is the fade" : rx.master || !rx.R ? "round six divided by round one is the fade" : "the last round divided by round one is the fade", id: "c_fs_rd6", k: "out", u: rx.au ? "bike cal" : "SkiErg m / bike cal", fields: roundFields("LAST ROUND", rx) }]),
       rules: (rx) => [
         "Relaxed jaw, shoulders down. Finish a round with your traps by your ears and it doesn't count.",
         CORNER_MINUTE,
@@ -926,7 +948,7 @@ export const CS = {
         ? "Get up at the time you'll get up on fight day. Eat what you'll eat, when you'll eat it. Do the warm-up you'll do. Then, at the hour the fight is on, " + WORDS[R6(rx)] + " rounds of " + WORDS[MINS(rx)] + " minutes at fight pace on the erg or the bag, " + REST(rx) + " seconds between, the corner minute every rest, the post-max sit after. Not a test — a rehearsal. Everything that goes wrong today, you fix before the day it matters."
         : rx.master || !rx.R ? "Six rounds of three minutes at 60 seconds' rest from week 1; eight in weeks 6 and 7 — two past the fight; ten, once, in week 8, the last hard week. A ceiling you've stood on before the bell. Scored, and the fade decides whether it was worth it."
         : rx.sim.double ? "THE DOUBLE — the ceiling for a short fight: one round more than your fight, five minutes easy, then your fight's rounds again. Same stations, same rest. Scored, the last read."
-        : "Your fight on the machines: " + WORDS[R6(rx)] + " rounds of " + WORDS[MINS(rx)] + " minutes, " + REST(rx) + " seconds between, each round split into thirds — SkiErg, assault bike, then slams or the bag. In the build and the peak you go past the fight on purpose; the fade decides whether it was worth it."),
+        : "Your fight on the machines: " + WORDS[R6(rx)] + " rounds of " + WORDS[MINS(rx)] + " minutes, " + REST(rx) + " seconds between, each round split into thirds — " + (rx.au ? "the assault bike with the arms only, the assault bike, then slams or the bag" : "SkiErg, assault bike, then slams or the bag") + ". In the build and the peak you go past the fight on purpose; the fade decides whether it was worth it."),
       tr: 2 },
     { L: "D", n: "The Post-Max Sit", m: 3, hide: (rx) => !rx.sim,
       timer: () => ({ kind: "postmax", title: "POST-MAX SIT" }), rxLine: () => "3 min — straight off the last round",
@@ -1017,11 +1039,13 @@ export const CSFW = {
         { n: "Three physiological sighs", s: "done", cue: "A full breath in through the nose, a short second sip on top, one long slow exhale through the mouth. Three times.", id: "c12_sighs", k: "chk" }],
       w: "Then stop.",
       why: "You cannot get fitter today. You can only get fresher or more tired." }] },
-  sat: { n: "FIGHT DAY", t: "★ FIGHT", m: 0, ac: C.oxide, free: 1, fight: 1,
+  sat: { n: "FIGHT DAY", t: "★ FIGHT", ta: "★ FIGHT — the morning primer, ten minutes, hours before it", m: (rx) => (rx && rx.au ? 10 : 0), ac: C.oxide, free: 1, fight: 1,
     intro: "The warm-up you rehearsed. The corner minute in every rest. The last round is a place you've already been.",
     b: [
     { L: "W", n: "The weigh-in", m: 0, hide: (rx) => rx.weighIn !== "day", rxLine: () => "today, on the day",
       items: [{ n: "Weigh-in", s: "on the day — then eat the day as a normal Saturday and drink to the alarms", id: "c12_weighin", k: "chk" }] },
+    /* from the audit's week: ten minutes of jumps and throws, the morning of the fight */
+    primer("c12_", "the fight", 9 * 60),
     { L: "A", n: "The fight", m: 0, star: 1,
       timer: (rx) => ({ kind: "csim", opt: { rounds: R6(rx), rest: REST(rx), mins: MINS(rx), pace: 1 }, title: "THE FIGHT" }),
       rxLine: (rx) => R6(rx) + " × " + MINS(rx) + " · the corner minute in every rest",
@@ -1031,7 +1055,7 @@ export const CSFW = {
       why: "Everything you'll have tonight, you had by the Sunday of week 8. Week 9 sharpened it; fight week protected it." }] },
 };
 
-CSFW.reh = Object.assign({}, CS.sun, { n: "THE REHEARSAL", b: CS.sun.b.filter((b) => b.L === "A" || b.L === "C" || b.L === "D") });
+CSFW.reh = Object.assign({}, CS.sun, { n: "THE REHEARSAL", b: CS.sun.b.filter((b) => b.L === "PR" || b.L === "A" || b.L === "C" || b.L === "D") });
 
 /* THE WEEK BEFORE THE CAMP — when there's time before week 1: the
    pre-camp check, then Saturday's tests and the working-weight checks,
@@ -1060,7 +1084,7 @@ export const CPRE = {
     b: [
     { L: "X", n: "The 20-Minute Test", m: 25, star: 1, hard: 1,
       timer: () => ({ kind: "z2", opt: { min: 20, label: "20-MIN TEST — MAXIMUM DISTANCE" }, title: "20-MIN TEST" }),
-      rxLine: () => "5 easy minutes, then 20 minutes for the most distance you can",
+      rxLine: () => "5 easy minutes, then 20 minutes for the most distance you can", libAs: (rx) => (rx.au ? T20_LIB : null),
       items: [{ n: "Distance", s: "the engine's ceiling", id: "c_bike20", k: "out", u: "distance (m)" },
         { n: "Peak heart rate", s: "the highest you saw — it sets your heart-rate zones", id: "c_bike20hr", k: "out", u: "bpm" }],
       why: "Every easy session in the camp is paced at 65–75% of the peak it finds." }] },

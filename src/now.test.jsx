@@ -265,6 +265,7 @@ describe("the stop rule, on the rounds", () => {
     localStorage.setItem("o8s-migrated", "true");
   });
   afterEach(() => vi.useRealTimers());
+  /* from the audit's week a round logs one number, the bike's calories */
   const at10 = () => mount(new Date(2027, 1, 28, 6, 0, 0), { program: "prep", plans: [{ from: "2027-01-04", made: "2026-12-31", inputs: camp }], season: camp, fightDate: "2027-03-13" });
 
   it("past the fight, a round under 75% of round one is the last: the rest come off, and the fade is scored on it", async () => {
@@ -273,24 +274,24 @@ describe("the stop rule, on the rounds", () => {
     fireEvent.click(screen.getByRole("button", { name: "▶ START THE ROUNDS" }));
     fireEvent.click(screen.getByRole("button", { name: "MINIMISE" }));
     expect(screen.getByRole("button", { name: "Close timer" })).toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText("ROUND 1 · SKIERG (M)"), { target: { value: "100" } });
-    fireEvent.change(screen.getByLabelText("ROUND 7 · SKIERG (M)"), { target: { value: "80" } });
+    fireEvent.change(screen.getByLabelText("ROUND 1 · BIKE (CAL)"), { target: { value: "100" } });
+    fireEvent.change(screen.getByLabelText("ROUND 7 · BIKE (CAL)"), { target: { value: "80" } });
     expect(screen.queryByTestId("stop-verdict")).not.toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText("ROUND 8 · SKIERG (M)"), { target: { value: "70" } });
+    fireEvent.change(screen.getByLabelText("ROUND 8 · BIKE (CAL)"), { target: { value: "70" } });
     expect(screen.getByTestId("stop-verdict").textContent).toMatch(/^ROUND 8 WAS THE LAST — THE REST ARE OFF/);
-    expect(screen.queryByLabelText("ROUND 9 · SKIERG (M)")).not.toBeInTheDocument();
-    expect(screen.getByLabelText("LAST ROUND · SKIERG (M)").value).toBe("70");
+    expect(screen.queryByLabelText("ROUND 9 · BIKE (CAL)")).not.toBeInTheDocument();
+    expect(screen.getByLabelText("LAST ROUND · BIKE (CAL)").value).toBe("70");
     expect(screen.queryByRole("button", { name: "Close timer" })).not.toBeInTheDocument();
   });
 
   it("the posture gone — FORM GONE — makes that round the last", async () => {
     await at10();
     pick("The 10 × 3 Simulation");
-    fireEvent.change(screen.getByLabelText("ROUND 1 · SKIERG (M)"), { target: { value: "100" } });
+    fireEvent.change(screen.getByLabelText("ROUND 1 · BIKE (CAL)"), { target: { value: "100" } });
     fireEvent.click(screen.getByRole("button", { name: "Form gone in round 7" }));
     expect(screen.getByTestId("stop-verdict").textContent).toMatch(/^ROUND 7 WAS THE LAST/);
-    fireEvent.change(screen.getByLabelText("ROUND 7 · SKIERG (M)"), { target: { value: "90" } });
-    expect(screen.getByLabelText("LAST ROUND · SKIERG (M)").value).toBe("90");
+    fireEvent.change(screen.getByLabelText("ROUND 7 · BIKE (CAL)"), { target: { value: "90" } });
+    expect(screen.getByLabelText("LAST ROUND · BIKE (CAL)").value).toBe("90");
   });
 });
 

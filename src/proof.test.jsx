@@ -47,7 +47,9 @@ describe("proof 1 — the master camp's session pages", () => {
       expect(pres("master", w, "tue", "Broad jump")).toMatch(/^3 × 2/);
       expect(pres("master", w, "tue", "Box jump")).toMatch(new RegExp("^" + (w >= 6 ? 4 : 3) + " × 3"));
       expect(has("master", w, "tue", "Shuttle bursts")).toBe(w >= 3);
-      expect(has("master", w, "tue", "Flying sprint 20 m")).toBe(w >= 6);
+      /* from the audit's week Tuesday's speed is three starts from the stance; the flat-out running is Saturday's */
+      expect(has("master", w, "tue", "Speed — stance starts")).toBe(w >= 6);
+      expect(has("master", w, "tue", "Flying sprint 20 m")).toBe(false);
       expect(pres("master", w, "tue", "The Pistol Line")).toMatch(/^2 × 5 per leg/);
       expect(has("master", w, "tue", "Spanish Squat Hold")).toBe(false);
       expect(pres("master", w, "tue", "Achilles pushes")).toMatch(/^5 × 4 each leg · 3 s on, 3 s off · as hard as you can/);
@@ -85,17 +87,19 @@ describe("proof 1 — the master camp's session pages", () => {
       expect(pres("master", w, "thu", "Split Squat — rear foot elevated")).toMatch(new RegExp("^" + (w === 5 || w === 9 ? 2 : 3) + " × 6–8"));
       if (w !== 9) expect(pres("master", w, "thu", "Rotational shot-put")).toMatch(new RegExp("^2 × 3 per side · " + (w <= 5 ? "5–6" : "3–5") + " kg"));
     });
-    expect(pres("master", 4, "thu", "ROUNDS ON THE ERG · 7 × 3")).toMatch(/^7 × 3 minutes .* 60 seconds between/);
+    expect(pres("master", 4, "thu", "ROUNDS ON THE ERG · 7 × 3")).toMatch(/^7 × 3 minutes on the bike at fight pace .* 60 seconds between/);
     expect(pres("master", 9, "thu", "FIGHT-PACE ROUNDS")).toBe("4 × 3 minutes at fight pace, 60 seconds between, and stop");
   });
-  it("Saturday: stance starts, close and plant, the sprints, the reactive jumps, the side bounds, the squat, the push press", () => {
+  it("Saturday: stance starts, close and plant, the sprints, the reactive jumps, the side bounds, the squat, the landmine push press", () => {
     W.filter((w) => w !== 9).forEach((w) => {
       expect(pres("master", w, "sat", "Stance Starts")).toMatch(/^3 × 10 m/);
       expect(pres("master", w, "sat", "Close and Plant")).toMatch(/^3 × 5 m/);
       expect(pres("master", w, "sat", "Flying Sprints")).toMatch(new RegExp("^" + (w === 1 ? 4 : w === 5 ? 3 : 5) + " × 20 m"));
       expect(pres("master", w, "sat", w >= 6 ? "Depth Jumps" : "Low-Box Depth Jumps")).toMatch(w >= 6 ? /^4 × 4 · 30–40 cm box/ : /^3 × 4 · 20 cm box/);
       expect(cards("master", w, "sat").find((c) => /^Side Bounds/.test(c.n)).pres).toMatch(new RegExp("^" + (w >= 6 ? 4 : 3) + " × 4 per side"));
-      expect(pres("master", w, "sat", "Push Press")).toMatch(/^3 × 3|^2 × 3/);
+      /* from the audit's week the push press is the one-arm landmine push press: the week's sets and reps, each side */
+      expect(pres("master", w, "sat", "One-Arm Landmine Push Press")).toMatch(new RegExp("^" + (w === 5 ? 2 : 3) + " × 3 each side · every rep fast · Rest 2:00$"));
+      expect(has("master", w, "sat", "Push Press")).toBe(false);
     });
     expect(has("master", 9, "sat", "3 × 20 m @ 90%")).toBe(true);
     expect(has("master", 9, "sat", "Bench throws")).toBe(true);
@@ -115,15 +119,16 @@ describe("proof 1 — the master camp's session pages", () => {
   });
   it("with the Edge off: straight sets in week 4, no Tuesday speed, the rounds back to six", () => {
     expect(cards("master", 4, "wed", false).find((c) => c.n === "Trap Bar Deadlift").pres).toMatch(/^4 × 3 · 87%/);
-    expect(cards("master", 6, "tue", false).some((c) => c.n === "Flying sprint 20 m")).toBe(false);
+    expect(cards("master", 6, "tue", false).some((c) => c.n === "Flying sprint 20 m" || c.n === "Speed — stance starts")).toBe(false);
     expect(cards("master", 8, "sun", false).some((c) => c.n === "The 6 × 3 Simulation")).toBe(true);
   });
-  it("fight week: twenty easy, the microdose, nothing, the activation, the weigh-in, the fight", () => {
+  it("fight week: twenty easy, the microdose, nothing, the activation, the weigh-in, the morning primer and the fight", () => {
     expect(has("master", 10, "mon", "Easy, nose only")).toBe(true);
     expect(has("master", 10, "tue", "3 × 20 m flying sprints @ 90%")).toBe(true);
     expect(cards("master", 10, "wed").length).toBe(0);
     expect(has("master", 10, "thu", "Shadow boxing")).toBe(true);
-    expect(has("master", 10, "sat", "The fight")).toBe(true);
+    /* from the audit's week: ten minutes of jumps and throws that morning */
+    expect(cards("master", 10, "sat").map((c) => c.n)).toEqual(["Easy bike", "Box jumps", "Rotational throws", "The fight"]);
   });
 });
 
@@ -245,6 +250,9 @@ const SAID_AS = {
   "COPENHAGEN LIFTS, BY LEVEL": "copenhagen lifts", "STAR SIDE PLANK, BY LEVEL": "star side plank",
   /* the audit's changes, as Strength, Power and Physique's document says them */
   "PRESSURE ROUNDS, ARMS-ONLY THIRD MINUTE": "the third minute of every round is arms only", "4-MINUTE INTERVALS ON THE TREADMILL": "the 4 × 4 is written for the treadmill",
+  /* and as Prep's and the camp's say them */
+  "THE ROUNDS, ARMS-ONLY FIRST THIRD": "the first third of every round is the assault bike with the arms only", "ROUNDS ON THE BIKE": "the rounds on the erg are on the bike",
+  "THE 20-MINUTE TEST ON THE BIKE": "the 20-minute test is on the bike",
 };
 const SESSION_SAID = { vo2: "4 minute intervals", rz: "repeat bursts", rz1: "bursts 1 × 8", lac: "40 second repeats", lac2: "40 s repeats 2 × 6", tempo: "tempo",
   thr: "threshold", erg: "rounds on the erg", erg8: "rounds on the erg", ergrounds: "rounds on the erg", fp: "fight pace", fightpace: "fight pace",

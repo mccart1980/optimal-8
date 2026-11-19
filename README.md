@@ -102,6 +102,13 @@ are four tabs: **TODAY · PROGRESS · FOOD · MORE**.
   the pressure rounds' third minute arms only, the knuckle hold, a second
   dose of the medicine-ball drops, a bar speed on the trap bar jumps, bench
   throws and landmine push press, and the power tests in weeks 4, 8 and 12.
+  Prep, the camp and the classic run its changes from the same Monday, each
+  behind the week's `au` (src/audit.js): the SkiErg out — the rounds' first
+  third is the assault bike with the arms only, and a round logs the bike's
+  calories — the one-arm landmine push press in the barbell push press's
+  place, a bar speed on the bench throws and the landmine push press, three
+  stance starts as the camp's Tuesday speed, and a ten-minute primer on the
+  camp's last morning and its rehearsal's.
   Optimal 8 Fighter is still there as the classic.
 - **Yes:** the date, the rounds and minutes, the rest between rounds (1 minute
   unless you change it), the weigh-in (the day before or on the day), how fit

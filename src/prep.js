@@ -3,6 +3,7 @@ import { clusterTimer } from "./edge.js";
 import { jumpOf, jumpGate, TOP_CUE, STOP_RULE } from "./safety.js";
 import { SLED_FIELDS, roundFields, SETTLE_FIELDS, PACE_FIELDS, HONEST_FIELDS, LIGHTS_FIELDS, WW_CHECK_CUE, sessionBoxes, engHR } from "./camp.js";
 import { MON_WU, dipsAndRows, armsCircuit, shouldersCircuit, theBrace, carryBlock } from "./circuits.js";
+import { lmPush, SPLEEFT_FAST, ARMS_THIRD, BIKE_THIRD, ROUNDS_LIB, ERG_ROUNDS_LIB, T20_LIB } from "./audit.js";
 
 /* ================================================================
    OPTIMAL 8 · PREP — as data
@@ -341,6 +342,12 @@ export function prepEngTimer(key) {
     return { kind: "z2", opt: { min: 20, label: "EASY — CONVERSATIONAL" }, title: "EASY" };
   };
 }
+/* a session's line: from the audit's week the rounds on the erg are on the bike */
+const ERG_ROUNDS_BIKE = "6 × 3 minutes on the bike at fight pace — the output you can hold across all six — 60 seconds between";
+export const pengLine = (key, rx) => (rx.au && rx[key] === "ergrounds" ? ERG_ROUNDS_BIKE : (PENG[rx[key]] || PENG.easy).d);
+/* and its words on the card: the entries that no longer name the SkiErg */
+const pengLib = (key, rx) => (!rx.au ? null : rx[key] === "ergrounds" ? ERG_ROUNDS_LIB : rx[key] === "t20" ? T20_LIB : null);
+const ONE_MACHINE = (rx) => (rx.au ? "The bike, all preparation, so the numbers compare." : "Bike or SkiErg — one of them, all preparation, so the numbers compare.");
 const engMin = (key) => (rx) => (rx[key] === "easy" ? 20 : rx[key] === "t20" ? 25 : rx[key] === "ergrounds" || rx[key] === "lac2" ? 28 : 24);
 const engName = (key) => (rx) => (PENG[rx[key]] || PENG.easy).n;
 
@@ -380,7 +387,7 @@ export const PS = {
     { L: "A", n: "Base — easy, nose only", m: (rx) => rx.base, star: 1, eng: 1, engKey: "base", baseTrend: "p_base_out",
       timer: (rx) => ({ kind: "z2", opt: { min: rx.base, label: "EASY — NOSE ONLY · 65–75% OF PEAK" }, title: "BASE" }),
       rxLine: (rx) => rx.base + " min at 65–75% of peak",
-      items: (rx) => [{ n: "Average heart rate", s: "65–75% of peak, no higher", cue: "Bike, SkiErg or a run, once the legs and ankles are used to it. Nose the whole way — a sentence you cannot hold means slow down.", id: "c_base", k: "out", u: "bpm" },
+      items: (rx) => [{ n: "Average heart rate", s: "65–75% of peak, no higher", cue: (rx.au ? "Bike, or a run" : "Bike, SkiErg or a run") + ", once the legs and ankles are used to it. Nose the whole way — a sentence you cannot hold means slow down.", id: "c_base", k: "out", u: "bpm" },
         { n: "Output at that heart rate", s: "the number that should climb", cue: "A higher output at the same heart rate is the base getting deeper. That is the whole point of it.", id: "p_base_out", k: "out", u: "output" }],
       why: "Roughly three-quarters of a 6 × 3 is aerobic. Forty minutes, easy, after the upper-body work. Boring on purpose.", tr: 2 },
     { L: "C", n: "Hands", m: 4, p: "HANDS",
@@ -425,10 +432,10 @@ export const PS = {
           { n: "BOLT", s: "time to the first clear urge", cue: "Breathe normally, then breathe out normally, pinch your nose, and time how long until you feel the first clear urge to breathe.", id: "p_rt_bolt", k: "out", u: "seconds" }] : []),
       why: "The decrement halving over the preparation is the flurry holding up." },
     { L: "D", n: (rx) => engName("e1")(rx), m: engMin("e1"), star: 1, hard: 1, eng: 1, engKey: "e1",
-      timer: prepEngTimer("e1"), rxLine: (rx) => (PENG[rx.e1] || PENG.easy).d,
+      timer: prepEngTimer("e1"), rxLine: (rx) => pengLine("e1", rx), engLine: (rx) => pengLine("e1", rx), libAs: (rx) => pengLib("e1", rx),
       items: (rx) => [{ n: "Output", s: "write it down", id: "p_e1", k: "out", u: "output / peak HR", erg: sessionBoxes(rx.e1), fields: engHR(rx.e1) }],
       rules: (rx) => ((PENG[rx.e1] || {}).rule ? [(PENG[rx.e1] || {}).rule] : null),
-      why: "Bike or SkiErg — one of them, all preparation, so the numbers compare.", tr: 1 },
+      why: ONE_MACHINE, tr: 1 },
     { L: "E", n: "The 60-Second Settle", m: 1, settle: 1, timer: () => ({ kind: "settle", title: "THE SETTLE" }),
       rxLine: () => "60 seconds — log the seconds to land",
       items: [{ n: "Seconds to land on the breath", s: "write it down", cue: "Stay on the bike. Eyes closed, heart pounding, find the breath at the nostrils and stay on it.", id: "settle", k: "out", u: "seconds", recov: 1, fields: SETTLE_FIELDS }],
@@ -495,11 +502,11 @@ export const PS = {
           .concat(bp.ph === "contrast" ? [{ n: "Bench throw", s: "3 after each pair · rest 20 s before", cue: BENCH_THROW_CUE, id: "throw", k: "wr", mk: "bench", pct: rx.btPct, sets: bp.sets, reps: 3 }] : []); },
       w: "A grinding rep ends the set.",
       why: "Your main upper-body lift, from week 1, in the same phases as the trap bar: slow lowering, then normal tempo, paused, fast, contrast. You don't test a lift you don't train." },
-    { L: "D", n: "Bench Throw (Smith)", m: 4, star: 1, hard: 1, rest: "Rest 90 s", rt: 90, hide: (rx) => !prepThrow(rx.d),
+    { L: "D", n: "Bench Throw (Smith)", m: 4, star: 1, hard: 1, rest: "Rest 90 s", rt: 90, hide: (rx) => !prepThrow(rx.d), spd: (rx) => !!rx.au, spdLine: SPLEEFT_FAST,
       rxLine: (rx) => prepThrow(rx.d).join(" × ") + " @ your peak-power load",
       items: (rx) => [{ n: "Bench throw", s: prepThrow(rx.d).join(" × "), cue: BENCH_THROW_CUE, id: "throw", k: "wr", mk: "bench", pct: rx.btPct, sets: prepThrow(rx.d)[0], reps: 3 }],
       note: BENCH_THROW_NOTE,
-      w: OUTPUT_RULE, why: "The punch-speed lift, straight after the press." },
+      w: (rx) => (rx.au ? OUTPUT_RULE + " " + SPLEEFT_FAST : OUTPUT_RULE), why: "The punch-speed lift, straight after the press." },
     { L: "F", n: "Weighted Chin-Up + The Muscle-Up Line", m: 8, cal: "muscleup", rest: "Rest 90 s", rt: 90,
       rxLine: () => "3 × 5, then 2 sets of the muscle-up line",
       items: (rx) => [{ n: "Weighted chin-up", s: (rx.half ? 2 : 3) + " × 5", cue: "Palms away, weight on a belt or a dumbbell between the feet, from a dead hang, chin over the bar, lower under control.", id: "chin", k: "wr", sets: rx.half ? 2 : 3, reps: 5 },
@@ -541,7 +548,7 @@ export const PS = {
         { n: "The honest half", s: "did it open because it had to", id: "p_nasal_h", k: "out", u: "had to / caved", fields: HONEST_FIELDS }],
       why: (rx) => (rx.e2 === "t20" ? "Week 14: the nasal threshold test, then the 20-minute test instead of the session." : "Then the session that follows runs one round short.") },
     { L: "E", n: (rx) => engName("e2")(rx), m: engMin("e2"), star: 1, hard: 1, eng: 1, engKey: "e2",
-      timer: prepEngTimer("e2"), rxLine: (rx) => (PENG[rx.e2] || PENG.easy).d,
+      timer: prepEngTimer("e2"), rxLine: (rx) => pengLine("e2", rx), engLine: (rx) => pengLine("e2", rx), libAs: (rx) => pengLib("e2", rx),
       items: (rx) => (rx.e2 === "t20"
         ? [{ n: "Distance", s: "the engine's ceiling", id: "bike20", k: "out", u: "distance (m)" },
           { n: "Peak heart rate", s: "the highest you saw — it sets your heart-rate zones", id: "bike20hr", k: "out", u: "bpm" }]
@@ -569,14 +576,17 @@ export const PS = {
 
   /* ---------------- SATURDAY ---------------- */
   sat: { n: "SATURDAY", t: "The long session — get-ups, build-ups, stance starts, close and plant, sprints, reactive jumps, side bounds, the squat in its phase, push press, Romanian deadlifts, the bear-hug carry", m: 80, ac: C.oxide, free: 1,
+    ta: "The long session — get-ups, build-ups, stance starts, close and plant, sprints, reactive jumps, side bounds, the squat in its phase, the landmine push press, Romanian deadlifts, the bear-hug carry",
     intro: "Fed and rested, Friday's sleep in front of it. Speed first, then reactive power, then the squat in its phase, then the push press, then the Romanian deadlifts.", b: [
     { L: "A", n: "Warm-up — get-ups first", m: 16, p: "HIP", rxLine: () => "16 min · get-ups 2/side, hips, pogos, then the three build-ups",
       items: [{ n: "Turkish get-up", s: "2 per side, light", cue: GETUP, id: "getup", k: "chk" },
         { n: "Sprint build-ups", s: "20 m at 60%, 75%, 90%", cue: "Never skipped. One run at 60%, one at 75%, one at 90%.", id: "p_buildup", k: "chk" }] },
-    { L: "P", n: "Load-Velocity Profiles — Squat, Bench, Push Press", m: 14, hide: (rx) => !rx.profile, star: 1, profile: "squat",
-      rxLine: () => "the squat at five loads, bench and push press at four",
-      items: [{ n: "Squat at five loads", s: "50 · 60 · 70 · 80 · 85% — two reps each", cue: "Two reps at each load, as fast as the bar will move, the watch recording the mean speed.", id: "p_prof_sq", k: "chk" },
-        { n: "Bench and push press at four loads", s: "50 · 60 · 70 · 80%", cue: "The same again on the bench and the push press. The lines replace the typical numbers.", id: "p_prof_bp", k: "chk" },
+    /* from the audit's week the push press is the landmine's, with no profile: the squat and the bench alone */
+    { L: "P", n: (rx) => (rx.au ? "Load-Velocity Profiles — Squat and Bench" : "Load-Velocity Profiles — Squat, Bench, Push Press"), m: (rx) => (rx.au ? 11 : 14), hide: (rx) => !rx.profile, star: 1, profile: "squat",
+      rxLine: (rx) => (rx.au ? "the squat at five loads, the bench at four" : "the squat at five loads, bench and push press at four"),
+      items: (rx) => [{ n: "Squat at five loads", s: "50 · 60 · 70 · 80 · 85% — two reps each", cue: "Two reps at each load, as fast as the bar will move, the watch recording the mean speed.", id: "p_prof_sq", k: "chk" },
+        rx.au ? { n: "Bench at four loads", s: "50 · 60 · 70 · 80%", cue: "The same again on the bench. The lines replace the typical numbers.", id: "p_prof_bp", k: "chk" }
+          : { n: "Bench and push press at four loads", s: "50 · 60 · 70 · 80%", cue: "The same again on the bench and the push press. The lines replace the typical numbers.", id: "p_prof_bp", k: "chk" },
         { n: "Bench throw at four loads", s: "20 · 30 · 40 · 50% of the bench — two reps each", cue: "Two throws at each load, the watch recording the mean speed. Power is load times speed: the load with the highest number is the one you throw until the next profile.", id: "p_prof_bt", k: "chk" }] },
     /* week 1, Saturday 3 Oct: the broad jump and the rotational throw, fresh */
     { L: "W", n: "Broad Jump and Throw Tests", m: 6, star: 1, hide: (rx) => !rx.satTests, prepTest: 1, rxLine: () => "best of three each",
@@ -617,13 +627,16 @@ export const PS = {
         .concat(rx.lift === "contrast" ? [{ n: "The jump circuit", s: rx.cr + " rounds", cue: "After each double: rest 20 s, box jumps × 3, rest 20, trap bar jumps × 3, rest 20, band-assisted jumps × 3, then 3 minutes. The round ends the moment jump height drops.", id: "p_circuit", k: "chk" },
           { n: "Trap bar jump", s: "× 3 a round @ your peak-power load", cue: "A trap bar at your peak-power load from the profile, jump with it, land soft.", id: "p_tbjump", k: "wr", mk: "tbdl", pct: rx.tjPct, sets: rx.cr, reps: 3 }] : []),
       w: (rx) => PREP_PHASE_CUE[rx.lift], why: (rx) => PREP_PHASE_WHY[rx.lift] },
-    { L: "Y", n: "Working-Weight Check — Push Press", m: 6, star: 1, hide: (rx) => !rx.wwCheck, rxLine: () => "a set of 3, hard with two in you — then the working sets",
+    { L: "Y", n: "Working-Weight Check — Push Press", m: 6, star: 1, hide: (rx) => !rx.wwCheck || !!rx.au, rxLine: () => "a set of 3, hard with two in you — then the working sets",
       items: [wwItem("push press", "pp", "p_ww_pp")], why: WW_WHY },
-    { L: "F", n: "Push Press", m: 8, hard: 1, mainLift: "pp", vel: "pp", hide: (rx) => !!rx.noPP || !!rx.testWeek,
+    { L: "F", n: "Push Press", m: 8, hard: 1, mainLift: "pp", vel: "pp", hide: (rx) => !!rx.noPP || !!rx.testWeek || !!rx.au,
       pres: (rx) => ({ sc: rx.pp.sets + " × " + rx.pp.reps + " @ " + rx.pp.pct + "%", pct: rx.pp.pct }),
       rest: "Rest 2:00", rt: 120, rxLine: (rx) => rx.pp.sets + " × " + rx.pp.reps + " @ " + rx.pp.pct + "%",
       items: (rx) => [{ n: "Push press", s: rx.pp.sets + " × " + rx.pp.reps + " @ " + rx.pp.pct + "%", cue: "Bar on the front of the shoulders, quick shallow knee dip, drive it overhead with the legs and punch it to lockout.", id: "pushpress", k: "wr", mk: "pp", pct: rx.pp.pct, sets: rx.pp.sets, reps: rx.pp.reps }],
       why: "Legs, braced trunk, hands — the route a punch takes." },
+    /* from the audit's week: the one-arm landmine push press in its place,
+       the week's own sets and reps each side */
+    lmPush({ id: "p_lmpush", m: 8, sets: (rx) => (rx.pp && !rx.noPP && !rx.testWeek ? rx.pp.sets : 0), reps: (rx) => (rx.pp ? rx.pp.reps : 0) }),
     /* the Romanian deadlift: after the push press, before the carry; none in
        test week. A hamstring at 3 or more on Sunday's check: only if it's
        pain-free, as the Nordics */
@@ -667,7 +680,7 @@ export const PS = {
         { n: "Landmine punch", s: "5 per side", cue: "One end of a barbell in a corner, the other at your shoulder in your stance, drive the hips and punch it up and away, never a slow press.", id: "p_lm_sun", k: "chk" }],
       w: OUTPUT_RULE,
       why: "Fresh, first thing — the only throws of the weekend, so every one is at full speed. Straights are forward drive, hooks are rotation; all four get trained." },
-    { L: "X", n: "The 20-Minute Test", m: 25, star: 1, hard: 1, hide: (rx) => rx.t20 !== "sun",
+    { L: "X", n: "The 20-Minute Test", m: 25, star: 1, hard: 1, hide: (rx) => rx.t20 !== "sun", libAs: (rx) => (rx.au ? T20_LIB : null),
       timer: () => ({ kind: "z2", opt: { min: 20, label: "20-MIN TEST — MAXIMUM DISTANCE" }, title: "20-MIN TEST" }),
       rxLine: () => "5 easy minutes, then 20 minutes for the most distance you can",
       items: [{ n: "Distance", s: "the engine's ceiling", cue: "Five easy minutes, then 20 minutes for the most distance you can on the erg you will use all preparation. No pacing plan — go and find out.", id: "bike20", k: "out", u: "distance (m)" },
@@ -677,17 +690,20 @@ export const PS = {
     { L: "R", n: "Three Easy Rounds", m: 14, hide: (rx) => !rx.easyRounds, sim: 1, learn: 1,
       timer: (rx) => ({ kind: "csim", opt: { rounds: rx.easyRounds, rest: rx.rest, mins: 3, pace: 1 }, title: "THREE EASY ROUNDS" }),
       rxLine: (rx) => rx.easyRounds + " × 3 min, easy · rest " + rx.rest + " s · to learn the stations",
-      items: [{ n: "Minute 1", s: "SkiErg", k: "txt" }, { n: "Minute 2", s: "Assault bike", k: "txt" },
+      libAs: (rx) => (rx.au ? ROUNDS_LIB : null),
+      items: (rx) => [{ n: "Minute 1", s: rx.au ? ARMS_THIRD : "SkiErg", k: "txt" }, { n: "Minute 2", s: rx.au ? BIKE_THIRD : "Assault bike", k: "txt" },
         { n: "Minute 3", s: "Med-ball slams, or bag work", k: "txt" }],
       why: "Week 1: then three easy rounds to learn the stations." },
     { L: "C", n: (rx) => "The " + rx.sim + " × 3 Simulation", m: 28, star: 1, sim: 1, hard: 1, hide: (rx) => !rx.sim,
-      timer: (rx) => ({ kind: "csim", opt: { rounds: rx.sim, rest: rx.rest, R: 6 }, title: "THE ROUNDS" }),
+      timer: (rx) => ({ kind: "csim", opt: Object.assign({ rounds: rx.sim, rest: rx.rest, R: 6 }, rx.au ? { arms: 1 } : {}), title: "THE ROUNDS" }),
+      /* from the audit's week the SkiErg's minute is the assault bike with the arms only, and a round logs the bike's calories */
+      libAs: (rx) => (rx.au ? ROUNDS_LIB : null),
       rxLine: (rx) => rx.sim + " × 3 min · rest " + rx.rest + " s" + (rx.scored ? " · SCORED" : ""),
       stopRule: (rx) => (rx.sim > 6 ? { R: 6, total: rx.sim } : null),
-      items: (rx) => [{ n: "Minute 1", s: "SkiErg", k: "txt" }, { n: "Minute 2", s: "Assault bike", k: "txt" },
+      items: (rx) => [{ n: "Minute 1", s: rx.au ? ARMS_THIRD : "SkiErg", k: "txt" }, { n: "Minute 2", s: rx.au ? BIKE_THIRD : "Assault bike", k: "txt" },
         { n: "Minute 3", s: "Med-ball slams, or bag work, hard and technically clean", k: "txt" },
-        { n: "Round 1 output", s: rx.scored ? "SCORED WEEK — write it down" : "write it down", id: "c_fs_rd1", k: "out", u: "SkiErg m / bike cal", fields: roundFields("ROUND 1") },
-        { n: "Last round output", s: rx.sim > 6 ? "the last round finished divided by round one is the fade" : "round six divided by round one is the fade", id: "c_fs_rd6", k: "out", u: "SkiErg m / bike cal", fields: roundFields("LAST ROUND") }],
+        { n: "Round 1 output", s: rx.scored ? "SCORED WEEK — write it down" : "write it down", id: "c_fs_rd1", k: "out", u: rx.au ? "bike cal" : "SkiErg m / bike cal", fields: roundFields("ROUND 1", rx) },
+        { n: "Last round output", s: rx.sim > 6 ? "the last round finished divided by round one is the fade" : "round six divided by round one is the fade", id: "c_fs_rd6", k: "out", u: rx.au ? "bike cal" : "SkiErg m / bike cal", fields: roundFields("LAST ROUND", rx) }],
       rules: (rx) => ["Relaxed jaw, shoulders down. Finish a round with your traps by your ears and it does not count.", CORNER,
         "On scored weeks write down round one's output and round six's. Round six divided by round one is the fade."]
         .concat(rx.sim > 6 ? ["Rounds past the fight — the seventh, in weeks 11–13 — are capacity work, not punishment. If one drops below 75% of round one's output, or your posture goes, that round is the last; the fade is scored on the last round you finished."] : []),

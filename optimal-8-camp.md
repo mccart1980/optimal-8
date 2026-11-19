@@ -19,7 +19,7 @@ Prep and Optimal 8 Fighter are untouched. This runs in their place for ten weeks
 | Wednesday | 3:30 · STRENGTH — sled (repeat starts on even weeks), drive holds, the trap bar in its phase, the bench press and bench throws, chins and the muscle-up line, Nordics, neck holds, the farmer's carry (weeks 1–8) · evening: the movement session in weeks 1–5 | ~67 min |
 | Thursday | 3:30 · THROWS + ENGINE 2 — throws and landmine, split squat, Spanish hold, Achilles hold, the second conditioning session, the settle, neck, hands, band catch · evening: the easy thirty, then the sauna in weeks 2–8 | ~69 min |
 | Friday | SLEEP. No alarm. | — |
-| Saturday | 8:30 · THE LONG SESSION — get-ups, build-ups, stance starts, close and plant, sprints, reactive jumps, side bounds, the squat in its phase, push press, the bear-hug carry (weeks 1–8) · evening: the movement session | ~88 min |
+| Saturday | 8:30 · THE LONG SESSION — get-ups, build-ups, stance starts, close and plant, sprints, reactive jumps, side bounds, the squat in its phase, the one-arm landmine push press, the bear-hug carry (weeks 1–8) · evening: the movement session | ~88 min |
 | Sunday | 8:30 · THE ROUNDS — throws, the simulation, the post-max sit, core with suitcase carries, the L-sit, the lever and face pulls, hands, weekly check · then the easy hour, then the sauna | ~80 min |
 | Every day | On waking: the strap, the sighs, the one thing, the morning five, the check · evening: RANGE 20 min, the skill block Mon–Thu, the sit, the review | ~50 min |
 
@@ -67,7 +67,7 @@ Every push is eased in over a second, held 3 seconds, breathing out, with 3 seco
 
 ## THE TEN WEEKS — EVERY NUMBER, EVERY WEEK, WITH DATES
 
-**The blocks.** Week 1 FOUNDATION — one week of slow lowering and base off the test-day numbers. Weeks 2–4 BUILD — paused, then fast in clusters; the rounds at fight rest. Week 5 EASY + TESTS. Weeks 6–8 PEAK — contrast, depth jumps, top speed twice a week, repeat bursts, eight rounds, the sauna. Week 9 SHARPEN. Week 10 FIGHT WEEK.
+**The blocks.** Week 1 FOUNDATION — one week of slow lowering and base off the test-day numbers. Weeks 2–4 BUILD — paused, then fast in clusters; the rounds at fight rest. Week 5 EASY + TESTS. Weeks 6–8 PEAK — contrast, depth jumps, speed twice a week, repeat bursts, eight rounds, the sauna. Week 9 SHARPEN. Week 10 FIGHT WEEK.
 
 | Wk | Dates | Block | Mon BASE | Tue ENGINE 1 | Wed trap bar · phase · sets | Thu ENGINE 2 | Sat sprints · squat | Sun ROUNDS | Nordics (Wed) |
 |---|---|---|---|---|---|---|---|---|---|
@@ -112,7 +112,7 @@ Incline dumbbell curls × 10–12, overhead triceps extensions × 10–12, later
 
 **4 · 0:16 — EASY, NOSE ONLY · 45 min** (30 in weeks 5 and 9)
 
-Bike, SkiErg, or a run if your legs and ankles are used to it — a run builds the base faster but costs more. Heart rate on the strap and the average logged: 65–75% of your peak, no higher. The output at that heart rate is the number that should climb. Nose the whole way; if you can't hold a sentence, slow down. 65–75% of the peak heart rate from the 20-minute test. Boring on purpose. Fine on an empty stomach.
+Bike, or a run if your legs and ankles are used to it — a run builds the base faster but costs more. Heart rate on the strap and the average logged: 65–75% of your peak, no higher. The output at that heart rate is the number that should climb. Nose the whole way; if you can't hold a sentence, slow down. 65–75% of the peak heart rate from the 20-minute test. Boring on purpose. Fine on an empty stomach.
 
 **5 · 1:01 — NECK · 8 min**
 
@@ -146,7 +146,7 @@ Broad jumps, 3 × 2 — two-foot jump forward for distance, stick the landing de
 
 **SHUTTLE BURSTS — from week 3:** six times five metres out and back, a hard push-off at each turn, twenty seconds between. A mover with good feet makes you change direction; the side bounds train it sideways, this trains it forward and back. Three minutes.
 
-**SPEED — from week 6, after the shuttles:** one 20-metre build-up at 75%, one at 90%, then three flying 20-metre sprints, absolutely flat out, rest 2½ minutes. Curved treadmill or outdoors. Twice a week is what sprinters do, and it's the best hamstring insurance there is — provided the build-ups never miss. Eight minutes.
+**SPEED — from week 6, after the shuttles:** three 10-metre starts from your stance, the first step explosive off the rear foot, 90 seconds between. Four minutes. The flat-out running is Saturday's alone: once a week covers the hamstrings, and a strain this late would cost the camp.
 
 **3 · 0:16 — THE PISTOL LINE · 2 × 5 per leg at your level · rest 60 s · 5 min**
 
@@ -156,7 +156,7 @@ Box pistol to start — stand on one leg in front of a box, the other straight o
 
 **4 · 0:21 — ENGINE 1 · 24 min · the table says which**
 
-Bike or SkiErg — one, all camp, so the numbers compare. Nothing to log during the session: at the end, the total on the machine's screen and your peak heart rate.
+The bike, all camp, so the numbers compare. Nothing to log during the session: at the end, the total on the machine's screen and your peak heart rate.
 
 4-minute intervals: 4 × 4 minutes HARD — breathing heavily, two or three words at most — 3 easy between. The best-proven builder of the aerobic ceiling there is.
 
@@ -254,7 +254,7 @@ Threshold (week 3): 2 × 8 minutes at the hardest pace you could hold for half a
 
 Repeat bursts (the weeks the calendar puts them here): as Tuesday's page.
 
-Rounds on the erg (week 4: seven; week 7: eight): 3-minute rounds on the bike or SkiErg at fight pace — the output you can hold across all of them — 60 seconds between. Past the fight, on purpose. Write down the first round and the last. The fight's six are always finished; past them, if a round drops below 75% of round one's output, or your posture goes, that round is the last.
+Rounds on the erg (week 4: seven; week 7: eight): 3-minute rounds on the bike at fight pace — the output you can hold across all of them — 60 seconds between. Past the fight, on purpose. Write down the first round and the last. The fight's six are always finished; past them, if a round drops below 75% of round one's output, or your posture goes, that round is the last.
 
 Fight-pace rounds (week 9): 4 × 3 minutes at the pace you held in week 7, 60 seconds between, and stop. Sharp, not tired.
 
@@ -280,7 +280,7 @@ No alarm. Tomorrow is the long session and Sunday is the rounds, and the best th
 
 ## SATURDAY · THE LONG SESSION · 8:30 · ~83 min
 
-Fed and rested, Friday's sleep in front of it. Speed first, then reactive power, then the squat in its phase, then the push press, then the bear-hug carry. Fuel it: porridge two hours before, half the bottle and a banana twenty minutes before.
+Fed and rested, Friday's sleep in front of it. Speed first, then reactive power, then the squat in its phase, then the one-arm landmine push press, then the bear-hug carry. Fuel it: porridge two hours before, half the bottle and a banana twenty minutes before.
 
 **1 · 0:00 — WARM-UP · 16 min**
 
@@ -310,9 +310,9 @@ The same phases as the trap bar: **week 1 slow lowering** at 72% of test week's 
 
 Lower-body maximal strength is the best predictor there is of how hard trained boxers hit. Twelve weeks builds some, expresses all of it, and the contrast block is where it becomes speed.
 
-**6 · 1:03 — PUSH PRESS · 3 × 3 · rest 2 min · 8 min**
+**6 · 1:03 — ONE-ARM LANDMINE PUSH PRESS · 3 × 3 each side · rest 2 min · 8 min**
 
-Bar on the front of the shoulders, quick shallow knee dip, drive it overhead with the legs and punch it to lockout. Legs, braced trunk, hands — the route a punch takes. Loaded like the other lifts: fast, two in reserve; weeks 6–8 at 85%; week 9 at 70%.
+The landmine press with a leg drive: one end of a barbell in a landmine or a corner, the other end at your shoulder in one hand, split stance, the opposite foot forward. A quick dip of the knees, then drive hard with the legs and punch the bar up and forward to a straight arm. Lower it under control and reset. All the reps on one side, then the other. Legs, braced trunk, one hand — the route a punch takes, with no bar pressed straight overhead. By weight and reps, with no working max: every rep as fast as you can, Spleeft on the wrist that's pressing, and a rep 10% slower than the set's fastest ends the set. When every rep of every set is fast, add the smallest step. Week 5: 2 × 3 each side.
 
 **7 · 1:11 — BEAR-HUG CARRY · 2 × 30 m · rest 60 s · 3 min · weeks 1–8** — hug a heavy sandbag tight to your chest, elbows in, stand tall, walk 30 metres, breathing short and sharp through your nose behind a braced stomach, as in Prep.
 
@@ -332,7 +332,7 @@ Medicine ball — 5–6 kg for the shot-put in the build and heavy blocks, 3–5
 
 **3 · 0:26 — THE 6 × 3 SIMULATION · rest from the table · 24–28 min**
 
-Six rounds of three minutes at 60 seconds' rest from week 1; eight in weeks 6 and 7 — two past the fight; ten, once, in week 8, the last hard week. A ceiling you've stood on before the bell. Scored, and the fade decides whether it was worth it. Each round: minute 1 on the SkiErg → minute 2 on the assault bike → minute 3 medicine-ball slams — a 5–8 kg ball overhead and driven into the floor, caught on the bounce, hard and continuous — or, if the gym has a bag, bag work, hard and technically clean.
+Six rounds of three minutes at 60 seconds' rest from week 1; eight in weeks 6 and 7 — two past the fight; ten, once, in week 8, the last hard week. A ceiling you've stood on before the bell. Scored, and the fade decides whether it was worth it. Each round: minute 1 on the assault bike with your arms only, feet on the pegs → minute 2 on the assault bike, arms and legs → minute 3 medicine-ball slams — a 5–8 kg ball overhead and driven into the floor, caught on the bounce, hard and continuous — or, if the gym has a bag, bag work, hard and technically clean. The bike's screen counts minutes 1 and 2 as one number: log its calories for round one, clear it in the rest before the last round, and log the last round's.
 
 Rule 1: relaxed jaw, shoulders down. Finish a round with your traps by your ears and it doesn't count. Rule 2: every rest is the CORNER MINUTE — two physiological sighs the second the round ends (a full breath in through the nose, a short second sip on top, one long slow exhale through the mouth, twice), then nose only, in for 3 and out for 6, stood up, hands off the knees. Hands-on-knees gasping keeps you revved and starts the next round behind. Rule 3: on scored weeks write down round one's output and round six's. Round six divided by round one is the fade. Rule 4: rounds past the fight are capacity work, not punishment. The six are always finished; after them, if a round drops below 75% of round one's output, or your posture goes, that round is the last. The fade is scored on the last round you finished.
 
@@ -465,7 +465,7 @@ Wrist circles × 10 each way. Hollow hold, 2 × 20 seconds — on your back, low
 
 ## WEEK 9 · SHARPEN · 1–7 MARCH
 
-The camp's work is done; week 9 converts it. Volume drops by about 40%; intensity stays; everything is short and fast and finished fresh. **Monday:** 30 minutes easy, neck, hands. **Tuesday:** the retests, short — burst decrement, broad jump, throw, BOLT, the range tests — inside a 40-minute session, then one set of eight repeat bursts, sharp, and the settle. **Wednesday:** sled 3 runs; 2 × 2 on the trap bar at 80%, fast; bench throws 3 × 3; chins 2 × 5; Nordics 2 × 3; neck holds. **Thursday:** three easy throws, then 4 × 3 minutes at fight pace on the erg, 60 seconds between, and the settle; neck, hands. **Friday:** sleep. **Saturday:** the SPEED MICRODOSE — get-ups, warm-up and build-ups, 3 × 20 m at 90%, box jumps 2 × 3, rotational throws 2 × 3 per side, bench throws 3 × 3; 25 minutes, everything fast, nothing tired. **Sunday 7 March: THE FIGHT-DAY REHEARSAL.** Get up at the time you'll get up on the 13th. Eat what you'll eat, when you'll eat it. Do the warm-up you'll do. Then, at the hour the fight is on, six rounds of three minutes at fight pace on the erg or the bag, 60 seconds between, the corner minute every rest, the post-max sit after. Not a test — a rehearsal. Everything that goes wrong today, you fix before the day it matters.
+The camp's work is done; week 9 converts it. Volume drops by about 40%; intensity stays; everything is short and fast and finished fresh. **Monday:** 30 minutes easy, neck, hands. **Tuesday:** the retests, short — burst decrement, broad jump, throw, BOLT, the range tests — inside a 40-minute session, then one set of eight repeat bursts, sharp, and the settle. **Wednesday:** sled 3 runs; 2 × 2 on the trap bar at 80%, fast; bench throws 3 × 3; chins 2 × 5; Nordics 2 × 3; neck holds. **Thursday:** three easy throws, then 4 × 3 minutes at fight pace on the erg, 60 seconds between, and the settle; neck, hands. **Friday:** sleep. **Saturday:** the SPEED MICRODOSE — get-ups, warm-up and build-ups, 3 × 20 m at 90%, box jumps 2 × 3, rotational throws 2 × 3 per side, bench throws 3 × 3; 25 minutes, everything fast, nothing tired. **Sunday 7 March: THE FIGHT-DAY REHEARSAL.** Get up at the time you'll get up on the 13th. Do the morning primer, as you will that morning. Eat what you'll eat, when you'll eat it. Do the warm-up you'll do. Then, at the hour the fight is on, six rounds of three minutes at fight pace on the erg or the bag, 60 seconds between, the corner minute every rest, the post-max sit after. Not a test — a rehearsal. Everything that goes wrong today, you fix before the day it matters.
 
 ---
 
@@ -480,7 +480,7 @@ You cannot get fitter this week. You can only get fresher or more tired. Every d
 | Wednesday 10 Mar | Nothing. RANGE at half dose, the sit. |
 | Thursday 11 Mar | ACTIVATION · 20 min: Tuesday's warm-up, band pull-aparts and external rotations, three easy throws per side, two minutes of shadow boxing at pace, three physiological sighs, done. |
 | Friday 12 Mar | Weigh-in if there is one — Making Weight's weigh-in day if you're making weight, the rehearsal's meals if not. Nothing else. Feet up. Bed early. |
-| Saturday 13 Mar | FIGHT. The warm-up you rehearsed. The corner minute in every rest. Round six is a place you've already been. |
+| Saturday 13 Mar | THE MORNING PRIMER, hours before, ten minutes: three easy minutes on the bike, box jumps 2 × 3, rotational throws 2 × 3 per side, every one fast, a minute between sets. Then the FIGHT. The warm-up you rehearsed. The corner minute in every rest. Round six is a place you've already been. |
 
 Food this week holds — the day as printed, or, if you're making weight, your last step and then Making Weight's light days. The commonest way to lose a fight in the last week is to eat less because you're training less and arrive at the ring empty.
 
@@ -508,7 +508,7 @@ Skill. Hitting hard on contact, snap and retraction, distance, timing, the guard
 
 Five additions, on by default, that give this camp a professional camp's density in the same hours. None of them is grinding volume; every one is more high-quality exposure at a recovery cost the monitoring can see.
 
-1. **Speed twice a week** — three flying twenties on Tuesday after the shuttles, from week 6. Build-ups every time. The Nordics never miss.
+1. **Speed twice a week** — three 10-metre stance starts on Tuesday after the shuttles, from week 6; the flying sprints stay on Saturday. The Nordics never miss.
 2. **Cluster sets in the build block** — week 4: five sets of two-plus-two at 87%, twenty seconds on the pins between the pairs. Pins set; the velocity rule ends the set.
 3. **More plyometric contacts** in weeks 6–8 — box jumps 4 × 3 and side bounds 4 × 4; depth jumps held at 4 × 4, because sixteen clean landings beat twenty-five tired ones. The tendon block runs twice a week, the tendon gate applies, and the output rule is law.
 4. **Rounds past the fight** — eight in weeks 6 and 7, ten once in week 8. Scored; the fade governs.
@@ -525,6 +525,8 @@ Five additions, on by default, that give this camp a professional camp's density
 **What the October audit changed, and why.** Every major system was run back over this program — block periodization, conjugate, Sheiko, autoregulation, Easy Strength, triphasic, Charlie Francis, the shock method, velocity training, ALTIS and the deceleration research, Joel Jamieson, the HIIT and polarized research, the UFC Performance Institute and the boxing research. Out, because they weren't earning their minutes: Saturday's tired throws (Thursday and Sunday throw fresh), the evening microdoses (explosive work already runs five days a week), the warm-up crawls, Sunday's get-ups and the planche leans. In, because each fills a real gap: braking into your stance, strength in the punch position, loaded sideways trunk stiffness, a jump check that reads what the strap can't, the arm-braking work twice a week, the back of the shoulder all year, a bench press you're trained on before you're tested on it, and shrugs in the size weeks. Depth jumps came down to sixteen clean contacts, and a tendon gate went in. Sheiko's lesson was taken without Sheiko's volume: you get strong at what you practise, and you don't test a lift you don't train.
 
 **What the October review changed, and why.** An outside review read the documents line by line and found four safety points worth taking. The dumbbell-release jumps went: dropped dumbbells bounce and roll, and you land where they fell — the reactive slot now climbs from drop landings to low-box depth jumps to full depth jumps. The bench throw now runs off the Smith machine's safety stops, so a missed catch lands on them, not on you. The true maxes went: for a fighter a one-rep max only sets loads, and the top triple with the bar-speed profile does that without the risk of failing a lift alone. And the tendon gate was fixed: a sore tendon gets its jumping taken away and its holds kept, not a different jump. Two rules tightened with them — the bar-speed rule now comes down on one slow reading but goes up only on two fast ones, because one reading is inside the watch's noise; and rounds past the fight stop if they fall below three-quarters of round one, because they're capacity work, not punishment.
+
+**What the November audit changed, and why.** The audit of 19 November 2026 read every program against the brief, and five things changed here, from the week of Monday 23 November 2026. The app shows every week before that Monday as it was. **The SkiErg is out:** you can't pace on it, so its numbers said nothing. In the rounds the first third of every round is the assault bike with the arms only, feet on the pegs, then the assault bike with arms and legs, then the slams or the bag, and a round logs the bike's calories. The arms get hard minutes that every other session gives to the legs; the evidence that this carries into the ring is thin, and it costs no time. The rounds on the erg are on the bike, the 20-minute test is on the bike, and the engine sessions name the bike alone. **The push press** was the barbell's, bar on the front of the shoulders and driven overhead; it's now the one-arm landmine push press, because pressing straight overhead isn't for your shoulders. **Tuesday's speed** was three flying twenties; it's now three 10-metre stance starts. One flat-out day a week, Saturday's, covers the hamstrings, and nothing in the ring needs top running speed twice. **A speed on every fast rep:** Spleeft reads every rep of the bench throws and the landmine push press, and a rep 10% slower than the set's fastest ends the set. **The last morning has a primer:** ten minutes of jumps and throws, hours before the fight, rehearsed on the rehearsal's morning. A short, fast session in the two days before competing can leave you sharper; the evidence is limited (Harrison, 2019).
 
 **Why the camp keeps a third of what Prep built.** Ten weeks without the upper-body work would erode what Prep built, and the look peaks on fight night only if it's still there. About a third of the dose holds muscle: the dips and rows on Monday, one round of the arms circuit, THE BRACE and the two carries — about twenty minutes a week. The engine sessions don't change, and the sharpen week and fight week run as they always have.
 

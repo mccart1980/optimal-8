@@ -89,9 +89,16 @@ describe("the programs, as the gym runs them", () => {
     expect(pq(12).pres).toMatch(/^FAST · 3 × 3 · 70%/);
     expect(pq(15).pres).toMatch(/^FAST · 2 × 3 · 70%/);
     expect(pq(16)).toBeUndefined();
-    const sat = names("prep", 2, "sat");
+    /* the cycle's weeks are before the audit's switch, the master season's after it:
+       there the push press is the one-arm landmine push press */
+    const satOf = (set) => CAT.filter((c) => c.set === set && c.program === "prep" && c.week === 2 && c.day === "sat" && c.edge !== false && !c.lastTen).map((c) => c.n);
+    const sat = satOf("cycle"), satAu = satOf("master");
     expect(before(sat, "Push Press", "Romanian Deadlift")).toBe(true);
     expect(before(sat, "Romanian Deadlift", "Bear-Hug Carry")).toBe(true);
+    expect(sat).not.toContain("One-Arm Landmine Push Press");
+    expect(before(satAu, "One-Arm Landmine Push Press", "Romanian Deadlift")).toBe(true);
+    expect(before(satAu, "Romanian Deadlift", "Bear-Hug Carry")).toBe(true);
+    expect(satAu).not.toContain("Push Press");
     const rdl = (w) => day("prep", w, "sat").find((c) => c.n === "Romanian Deadlift");
     expect(rdl(2).pres).toBe("3 × 6 · Rest 75 s");
     expect(rdl(2).lib.map((e) => e.n)).toEqual(["ROMANIAN DEADLIFT"]);

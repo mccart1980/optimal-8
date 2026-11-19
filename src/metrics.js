@@ -261,7 +261,10 @@ export function sleepWeek(morning, days) {
    ================================================================ */
 export const BAR_SPEED_ITEMS = { squat: "squat", bench: "bench", tbdl: "tbdl", pushpress: "pp", c_squat: "cw_squat", c_tbdl: "cw_tbdl", c_bench: "cw_bench", c_pushpress: "cw_pp",
   /* Strength, Power and Physique's fast lifts, from the audit's week */
-  s_tbjump: "tbjump", throw: "bthrow", s_lmpush: "lmpush" };
+  s_tbjump: "tbjump", throw: "bthrow", s_lmpush: "lmpush",
+  /* and the other programs': the camp's bench throw, and the landmine push
+     press in Prep, the camp and Fighter */
+  c_benchthrow: "bthrow", p_lmpush: "lmpush", c_lmpush: "lmpush", lmpush: "lmpush" };
 export const BAR_SPEED_FAST = [["tbjump", "Trap Bar Jump"], ["bthrow", "Bench Throw"], ["lmpush", "Landmine Push Press"]];
 export const BAR_SPEED_LIFTS = [["squat", "Back Squat"], ["bench", "Flat Bench"], ["tbdl", "Trap Bar Deadlift"], ["pp", "Push Press"]];
 const WORK_OF = { cw_squat: "squat", cw_tbdl: "tbdl", cw_bench: "bench", cw_pp: "pp" };

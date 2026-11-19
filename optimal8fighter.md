@@ -42,13 +42,13 @@ About 7 hours in the gym at peak, three hours at home across the week. Easy week
 
 **How the weights work.** Every barbell weight is a percentage of the most you can lift once (your "max").
 
-You already know two: squat and bench. You find the other two in week 1: trap bar deadlift (Wednesday) and push press (Saturday). How: put light weight on, do 3 reps, add 10–20 kg, do 3 more. Keep going until 3 reps is hard but you had two more in you. Take that weight, add 8%, and that's your max. Example: hard triple at 150 kg → 150 × 1.08 = 162 kg.
+You already know two: squat and bench. You find the third in week 1: the trap bar deadlift (Wednesday). The one-arm landmine push press has no max: it goes by weight and reps. How: put light weight on, do 3 reps, add 10–20 kg, do 3 more. Keep going until 3 reps is hard but you had two more in you. Take that weight, add 8%, and that's your max. Example: hard triple at 150 kg → 150 × 1.08 = 162 kg.
 
 Worked example all the way through this document: squat max 140 kg. Week 1 says squat 4 × 6 @ 75%. 75% of 140 = 105 kg. That's it. Round to the nearest 2.5 kg.
 
 After a max-single week or test day, your new number becomes the max, and every percentage moves up with it.
 
-**THE FAST-BAR RULE — new, and it matters.** A percentage of a number measured weeks ago goes stale fast when you're getting stronger quickly. So on the four main lifts — squat, bench, trap bar, push press — after your last work set, ask one question: *did the last rep move as fast as the first?* If yes, raise that lift's max by 2.5% before next week (squat and trap bar: round to the nearest 5 kg; bench and push press: 2.5 kg). Once per lift per week, no more. In the app, that's the max number in Settings. Max-single weeks and test day replace the number outright. The grind rule still runs the other way: a grinding rep ends the set, and two grinding sets on one lift in a week means take 2.5% back off. If a lift hits the fast-bar rule three weeks running, expect the week-4 or week-9 max to come in well above 102% — take the second attempt.
+**THE FAST-BAR RULE — new, and it matters.** A percentage of a number measured weeks ago goes stale fast when you're getting stronger quickly. So on the three main lifts — squat, bench, trap bar — after your last work set, ask one question: *did the last rep move as fast as the first?* If yes, raise that lift's max by 2.5% before next week (squat and trap bar: round to the nearest 5 kg; bench: 2.5 kg). Once per lift per week, no more. In the app, that's the max number in Settings. Top-triple weeks and test day replace the number outright. The grind rule still runs the other way: a grinding rep ends the set, and two grinding sets on one lift in a week means take 2.5% back off. If a lift hits the fast-bar rule three weeks running, expect the week-4 or week-9 top triple to come in well up.
 
 **Rests.** Shorter than the Singles version on every strength lift: 2 minutes on the main lifts (2½ on the heavy triples in weeks 7–9 and on max days), 75–90 seconds on the accessories. Speed, jumps, sprints and throws keep their full rests — those are trained by quality, and a short rest turns them into conditioning. If a strength set feels flat after 2 minutes, take 2½. The number on the page is the default, not a stopwatch you fail.
 
@@ -88,22 +88,22 @@ Every push is eased in over a second, held 3 seconds, breathing out, with 3 seco
 
 ## YOUR NUMBERS, WEEK BY WEEK
 
-Squat and bench use the same sets and reps each week. "Max single" means work up to one top lift (there's a step-by-step ramp on the Saturday and Sunday pages). The pause squat is a percentage of your back-squat max — and a paused triple at 75% is a hard triple, because a two-second pause takes 10–15% off what you can lift. That column never goes above 75%.
+Squat and bench use the same sets and reps each week. "Top triple" means work up to one top set of three, hard but with one or two reps left in you (there's a step-by-step ramp on the Saturday and Sunday pages); that weight × 1.08 is your new working max. Never a true max. The pause squat is a percentage of your back-squat max — and a paused triple at 75% is a hard triple, because a two-second pause takes 10–15% off what you can lift. That column never goes above 75%.
 
-| Week | Squat (Sat) & bench (Mon) | Pause squat (Wed) | Trap bar (Wed) | Push press (Sat) |
+| Week | Squat (Sat) & bench (Mon) | Pause squat (Wed) | Trap bar (Wed) | Landmine push press (Sat), each side |
 |---|---|---|---|---|
-| 1 | 4 × 6 @ 75% | 3 × 3 @ 65% | find your 3RM | find your 3RM |
-| 2 | 4 × 5 @ 78% | 3 × 3 @ 68% | 4 × 3 @ 80% | 4 × 3 @ 82% |
-| 3 | 4 × 5 @ 80% | 3 × 3 @ 70% | 4 × 3 @ 80% | 4 × 3 @ 82% |
-| 4 | MAX SINGLE, then 2 × 3 @ 85% | — | 4 × 3 @ 80% | — (squat max day; bench max is Sunday) |
-| 5 | EASY WEEK · 2 × 5 @ 65% | 2 × 3 @ 60% | 2 × 3 @ 65% | 2 × 3 @ 65% |
-| 6 | 4 × 4 @ 82% | 3 × 3 @ 70% | 4 × 3 @ 85% | 4 × 3 @ 85% |
-| 7 | 4 × 3 @ 85% | 3 × 3 @ 72% | 4 × 3 @ 85% | 4 × 3 @ 85% |
-| 8 | 4 × 3 @ 87% | 3 × 3 @ 75% | 4 × 3 @ 85% | 4 × 3 @ 85% |
-| 9 | MAX SINGLE, then 2 × 2 @ 88% | — | 3 × 2 @ 88% | — (squat max day; bench max is Sunday) |
-| 10 | EASY WEEK · 2 × 4 @ 65% | 2 × 3 @ 60% | 2 × 3 @ 65% | 2 × 3 @ 65% |
-| 11–14 | 2 × 2 @ 88%, done fast | SPEED 3 × 3 @ 70% | 3 × 3 @ 80%, fast | 3 × 3 @ 80%, fast |
-| 15 | 2 × 2 @ 85% | 2 × 2 @ 70% | 2 × 2 @ 85% | 2 × 2 @ 85% |
+| 1 | 4 × 6 @ 75% | 3 × 3 @ 65% | find your 3RM | 4 × 3 |
+| 2 | 4 × 5 @ 78% | 3 × 3 @ 68% | 4 × 3 @ 80% | 4 × 3 |
+| 3 | 4 × 5 @ 80% | 3 × 3 @ 70% | 4 × 3 @ 80% | 4 × 3 |
+| 4 | TOP TRIPLE, then 2 × 3 @ 85% | — | 4 × 3 @ 80% | — (squat top-triple day; the bench's is Sunday) |
+| 5 | EASY WEEK · 2 × 5 @ 65% | 2 × 3 @ 60% | 2 × 3 @ 65% | 2 × 3 |
+| 6 | 4 × 4 @ 82% | 3 × 3 @ 70% | 4 × 3 @ 85% | 4 × 3 |
+| 7 | 4 × 3 @ 85% | 3 × 3 @ 72% | 4 × 3 @ 85% | 4 × 3 |
+| 8 | 4 × 3 @ 87% | 3 × 3 @ 75% | 4 × 3 @ 85% | 4 × 3 |
+| 9 | TOP TRIPLE, then 2 × 2 @ 88% | — | 3 × 2 @ 88% | — (squat top-triple day; the bench's is Sunday) |
+| 10 | EASY WEEK · 2 × 4 @ 65% | 2 × 3 @ 60% | 2 × 3 @ 65% | 2 × 3 |
+| 11–14 | 2 × 2 @ 88%, done fast | SPEED 3 × 3 @ 70% | 3 × 3 @ 80%, fast | 3 × 3 |
+| 15 | 2 × 2 @ 85% | 2 × 2 @ 70% | 2 × 2 @ 85% | 2 × 2 |
 | 16 | 1 × 2 @ 85% (bench 2 × 2) | — | 1 × 2 @ 80% | — |
 
 | Week | Sprints (Sat) | Jump circuit rounds (Sat) | Nordics (Sun) | Tuesday bike | Thursday bike | Fight sim rest (Sun) |
@@ -133,8 +133,8 @@ Sled runs (Wednesday): 5 a week. Week 1: 4. Easy weeks: 3.
 
 ## TRAINING ALONE — NON-NEGOTIABLE
 
-- **Squat:** safety pins in the rack, set just below your lowest position, on every set over 80%. No pins in the gym = no max singles; stop at a heavy 3.
-- **Bench:** pins at chest height, and never clamp collars on the bar — if you get stuck you tip the plates off. Bench max singles only happen on Sundays, fresh, first thing.
+- **Squat:** safety pins in the rack, set just below your lowest position, on every set over 80%. No pins in the gym = no top triple; stop at a comfortable 3.
+- **Bench:** pins at chest height, and never clamp collars on the bar — if you get stuck you tip the plates off. The bench top triple only happens on Sundays, fresh, first thing.
 - **Trap bar at 3am:** the one heavy lift allowed at that hour. Nothing passes over your body, and a rep you're not sure of gets set down, not fought.
 - **Nordics:** heels anchored under something solid. Stop the set the moment your lower back rounds.
 - **Drop jumps:** rubber hex dumbbells, drop them straight down, land on clear floor.
@@ -248,7 +248,7 @@ The split squat on Thursday is the loaded single-leg strength. This is the unloa
 
 **4 · 0:21 — BIKE SESSION · 24 min · check the week table — Tuesday's column**
 
-Bike or SkiErg — pick one and keep it all 16 weeks so your numbers compare. Write down your output.
+The bike, all 16 weeks, so your numbers compare. Write down your output.
 
 4-minute intervals: 4 rounds of 4 minutes HARD (breathing heavily, could speak 2–3 words at most) with 3 easy minutes between. The single best session there is for building your engine.
 
@@ -452,7 +452,7 @@ Warm-up sets first, here, not at the start of the session: 40% × 3, 60% × 2, 7
 
 How: bar on your back, break at the hips and knees together, sit to just below parallel, drive up hard. Every rep fast on the way up; a grinding rep ends the set. Last set: fast-bar rule — last rep as fast as the first, add 2.5% to your squat max for next week.
 
-MAX SINGLE — weeks 4 and 9 only (about 20 min). Instead of the normal sets: after your warm-up sets, go 50% × 5 → 65% × 3 → 75% × 2 → 85% × 1 → 92% × 1 → then ONE attempt at 100–102% of your current max. A second attempt only if the first flew up, or if the fast-bar rule has been firing for three weeks. Pins set, no exceptions. Then do the back-off sets from the table at 85% of the NEW number. Write the new max down — every weight for the next month comes off it.
+TOP TRIPLE — weeks 4 and 9 only (about 20 min). Instead of the normal sets: after your warm-up sets, go 50% × 5 → 65% × 3 → 75% × 2 → 85% × 1, then sets of three going up 2.5–5% at a time until one is hard but leaves one or two in you. Stop there. Pins set, no exceptions. That weight × 1.08 is your new working max — never a true max. Then do the back-off sets from the table at 85% of the NEW number. Write the new working max down — every weight for the next month comes off it.
 
 **6 · 1:06 — THE JUMP CIRCUIT · rounds from the week table · 18 min (weeks 11–14: 22)**
 
@@ -470,9 +470,9 @@ Rest 2½–3 minutes, go again. End the round the moment jump height drops. If r
 
 Weeks 11–14: this circuit moves to the FRONT — do it as step 5, before the squat, while you're freshest. The squat (2 × 2 @ 88%) becomes step 6.
 
-**7 · 1:24 — PUSH PRESS · sets, reps and % from the week table · rest 2 min · 10 min**
+**7 · 1:24 — ONE-ARM LANDMINE PUSH PRESS · sets and reps each side from the week table · rest 2 min · 10 min**
 
-How: bar on the front of your shoulders. Quick shallow knee dip, then drive the bar overhead with your LEGS and punch it to lockout. Down under control. Week 1: find your 3RM here, same ramp method as the trap bar. Last set: fast-bar rule. Weeks 4 and 9: skip the push press — the squat max is enough maximal work for one day; the bench max is Sunday morning, first thing.
+How: the landmine press with a leg drive. One end of a barbell in a landmine or a corner, the other end at your shoulder in one hand, split stance, the opposite foot forward. A quick dip of the knees, then drive hard with your LEGS and punch the bar up and forward to a straight arm. Lower it under control and reset. All the reps on one side, then the other. By weight and reps, with no max: every rep as fast as you can, Spleeft on the wrist that's pressing, and a rep 10% slower than the set's fastest ends the set. When every rep of every set is fast, add the smallest step. Weeks 4 and 9: skip it — the squat top triple is enough heavy work for one day; the bench's is Sunday morning, first thing.
 
 Legs → braced trunk → hands. The same route a punch takes, and the heaviest thing your shoulders and traps see all week — which is why the traps and shoulders don't need a size block.
 
@@ -488,7 +488,7 @@ Second free morning. Punches, then the week's hamstring work while the legs are 
 
 **1 · 0:00 — WARM-UP · 14 min** — Turkish get-ups, 2 per side, light (as Saturday), then Tuesday's warm-up without the crawls, plus: broad jumps 3 × 2 · medicine-ball chest passes 3 × 3 as hard as you can · 3 × 10-second bike sprints with a minute between · then three EASY practice throws of each of the four throws below.
 
-Weeks 4 and 9 only — the BENCH MAX SINGLE comes first, straight after the warm-up (adds ~12 min). Bench warm-up sets: bar × 10, 40% × 5, 60% × 3. Then the ramp: 50% × 5 → 65% × 3 → 75% × 2 → 85% × 1 → 92% × 1 → one attempt at 100–102% of your current max. Pins at chest height, no collars. Write the new max down.
+Weeks 4 and 9 only — the BENCH TOP TRIPLE comes first, straight after the warm-up (adds ~12 min). Bench warm-up sets: bar × 10, 40% × 5, 60% × 3. Then the ramp: 50% × 5 → 65% × 3 → 75% × 2 → 85% × 1, then sets of three going up 2.5–5% at a time until one is hard but leaves one or two in you. Pins at chest height, no collars. That weight × 1.08 is your new working max — never a true max. Write it down.
 
 **2 · 0:14 — THE FOUR PUNCH THROWS · rounds from the week table (3, or 4 in weeks 11–14; 2 in weeks 15–16) · 16 min**
 
@@ -514,7 +514,7 @@ Before the rounds, on purpose: the hardest eccentric work of the week goes on fr
 
 **4 · 0:38 — FIGHT SIMULATION · 6 rounds × 3 minutes · rest from the week table · 24 min**
 
-Each round: minute 1 on the SkiErg → minute 2 on the assault bike → minute 3 landmine punches (odd rounds) or medicine-ball slams (even rounds). If your gym has a bag, minute 3 is bag work — hard and technically clean.
+Each round: minute 1 on the assault bike with your arms only, feet on the pegs → minute 2 on the assault bike, arms and legs → minute 3 landmine punches (odd rounds) or medicine-ball slams (even rounds). The bike's screen counts minutes 1 and 2 as one number: log its calories for round 1, clear it in the rest before round 6, and log round 6's. If your gym has a bag, minute 3 is bag work — hard and technically clean.
 
 Rule 1 — relaxed jaw, shoulders down. Finish a round with your traps by your ears and that round doesn't count, whatever the number says.
 
@@ -526,7 +526,7 @@ On SCORED weeks (4, 9, 14): write down round 1's output and round 6's output. Ro
 
 Three-minute rounds, never enough rest, holding output across six — nothing else you own trains the actual shape of a fight.
 
-Weeks 1 and 16 — THE 20-MINUTE BIKE TEST instead of the fight rounds: 5 easy minutes, then 20 minutes for the most distance you can, on the same bike or SkiErg every time. No pacing plan — go and find out. Write down two numbers: the distance, and the highest heart rate you saw. That peak is your practical maximum; from now on every easy ride sits around 65–75% of it. Week 1 is the baseline; week 16 is the verdict.
+Weeks 1 and 16 — THE 20-MINUTE BIKE TEST instead of the fight rounds: 5 easy minutes, then 20 minutes for the most distance you can, on the same bike every time. No pacing plan — go and find out. Write down two numbers: the distance, and the highest heart rate you saw. That peak is your practical maximum; from now on every easy ride sits around 65–75% of it. Week 1 is the baseline; week 16 is the verdict.
 
 **5 · 1:02 — THE POST-MAX SIT · 3 min**
 
@@ -727,8 +727,8 @@ Fresh after two easy weeks. These are your real numbers, and every percentage fo
 2. **Depth jump** — 3 attempts, best rebound height. Film it in slow-mo, take the flight time (feet off to feet on) in seconds: height in cm ≈ 123 × flight time². A 0.5-second flight is about 31 cm.
 3. **Diagonal throw** — 3 per side, best distance.
 4. **Shot-put throw** — 3 per side, best distance.
-5. **Back squat** — true max single, pins set. Ramp as on the Saturday page.
-6. **Bench press** — true max single, pins, no collars.
+5. **Back squat** — top triple, pins set: the heaviest clean set of three, one or two left in you. Ramp as on the Saturday page. That weight × 1.08 is the new working max.
+6. **Bench press** — top triple, pins, no collars, the same way.
 7. **Trap bar** — heavy 3RM (× 1.08 = new max).
 8. **Tape and bodyweight** — arm, shoulders, waist.
 9. **Sunday** — the 20-minute bike test in place of the fight rounds (Sunday page). Distance and peak heart rate.
@@ -784,6 +784,8 @@ Total training time is about three hours a week lower than the Singles version. 
 ---
 
 ## THE THINKING (read at home, not in the gym)
+
+**What the November audit changed, and why.** The audit of 19 November 2026 read every program against the brief, and four things changed here. **No maximum singles.** Weeks 4 and 9 and test day are top triples: a set of three that leaves one or two in you, × 1.08, sets the same loads without the risk of failing a lift alone under the bar. The app already ran them that way; these pages now say so. The other three run from the week of Monday 23 November 2026, and the app shows every week before that Monday as it was. **The SkiErg is out:** you can't pace on it, so its numbers said nothing. In the fight rounds minute 1 is the assault bike with the arms only, feet on the pegs, and a round logs the bike's calories; the engine sessions and the 20-minute test are on the bike. **The push press** was the barbell's, bar on the front of the shoulders and driven overhead, with its own max found in week 1; it's now the one-arm landmine push press, by weight and reps, because pressing straight overhead isn't for your shoulders. **A speed on every fast rep:** Spleeft reads every rep of Monday's bench throws and the landmine push press, and a rep 10% slower than the set's fastest ends the set.
 
 **What this version is.** Optimal 8 Singles with the aesthetics taken out, the mobility taken home, the weekday sessions capped under an hour, the weekend sessions cut to what the fighter needs, shorter strength rests, and one new rule. Everything that makes you hit harder, move faster, last longer or stay in one piece is unchanged and at the same numbers.
 

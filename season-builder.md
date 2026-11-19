@@ -91,7 +91,7 @@ When the fight is closer than the shortest camp:
 
 ## THE FORMAT — ROUNDS, MINUTES, REST
 
-**The rounds simulation** is your fight: your round length, your number of rounds, your rest. Each round splits into thirds — SkiErg, assault bike, then medicine-ball slams or the bag. That's a minute each for 3-minute rounds, forty seconds each for 2-minute rounds. The corner minute runs in every rest.
+**The rounds simulation** is your fight: your round length, your number of rounds, your rest. Each round splits into thirds — the assault bike with the arms only, feet on the pegs, the assault bike with arms and legs, then medicine-ball slams or the bag. Until the week of Monday 23 November 2026 the first third was the SkiErg. That's a minute each for 3-minute rounds, forty seconds each for 2-minute rounds. The corner minute runs in every rest.
 
 **How many rounds, week by week** — R is the number of rounds in your fight:
 

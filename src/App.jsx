@@ -31,6 +31,7 @@ import { Lines, CheckTaps } from "./today.jsx";
 import { CardHead, BigBtn, SetButtons, Input, Checklist, RoutineRunner, Chapter, T1, T2, T3 } from "./now.jsx";
 import { Sheet } from "./im-ui.jsx";
 import { withMove, withFinalWeek, OPROTO } from "./movex.js";
+import { auditOn, SPLEEFT_FAST, ARMS_THIRD, BIKE_THIRD, ROUNDS_LIB, T20_LIB, lmPush } from "./audit.js";
 import { SIGHS, MORNING_FIVE, RANGE_CARDS, FIGHT_WEEK_CARDS, KEEP_CARDS, MOVE_CARDS, moveRangeCards, sessionCards, upperPushCards, skillCards, ROUTINE_MINS } from "./routines.js";
 import { MOVE_SINCE, MOVE_PROGRAM_INTRO, MOVE_PH, moveWeekOf, movePhase, isMoveTestWeek, LEVEL_KEY, levelLine, stepLevel, MOVE_TEST_IDS, rangeStandardsMet, jeffersonGate, END_KEY, tendonWeekOf } from "./move.js";
 import { MoveLevels, MoveTests, MoveTrack } from "./move-ui.jsx";
@@ -285,11 +286,13 @@ const JEFF = new WeakMap();
 const jeffMemo = (row) => { const h = JEFF.get(row); if (h && h.log === GATE.log && h.start === MOVE.start) return h.v;
   const v = jeffOn(row); JEFF.set(row, { log: GATE.log, start: MOVE.start, v }); return v; };
 const moveOf = (row) => { const mw = row && row.mon ? moveWeekOf(row.mon, MOVE.start) : null;
-  return { mw, tw: mw ? tendonWeekOf(row.mon) : 0, jeff: mw && movePhase(mw) === "own" ? jeffMemo(row) : false }; };
-/* the classic's weeks have no rows: its Monday is counted from its start */
+  return { mw, tw: mw ? tendonWeekOf(row.mon) : 0, jeff: mw && movePhase(mw) === "own" ? jeffMemo(row) : false, au: auditOn(row && row.mon) }; };
+/* the classic's weeks have no rows: its Monday is counted from its start.
+   The audit's changes run by the same Monday, with or without MOVE. */
 const classicMove = (rx, mac, w) => { const c = SEASON.cstart; if (!c || !c.start) return rx;
   const mon = iso(new Date(mondayOf(parseISO(c.start)).getTime() + (((mac - c.base) * c.L) + (w - 1)) * 604800000));
-  const mw = moveWeekOf(mon, MOVE.start); return mw ? Object.assign({}, rx, { mw, tw: tendonWeekOf(mon), jeff: false }) : rx; };
+  const mw = moveWeekOf(mon, MOVE.start), au = auditOn(mon);
+  return mw || au ? Object.assign({}, rx, mw ? { mw, tw: tendonWeekOf(mon), jeff: false } : {}, au ? { au } : {}) : rx; };
 /* which program a row runs */
 const MAC_PROGRAM = { P: "prep", C: "camp", T: "transition", H: "transition", B: "camp", S: "spp" };
 /* Point MODE at a row's program before anything reads a prescription.
@@ -313,6 +316,10 @@ const lastTenRx = (rx) => {
   });
 };
 const baseRxFor = (w) => R[w] || R[1];
+/* Fighter's one-arm landmine push press, from the audit's week: the week's
+   push press sets and reps, each side; week 1, with no ramp to find a
+   number, runs week 2's 4 × 3 */
+const fLm = (rx) => (rx.pp && rx.pp.sc ? { sets: rx.pp.sets || 4, reps: rx.pp.reps || 3 } : { sets: 0, reps: 0 });
 /* A week of the season, as the builder writes it. The block phase names
    the week; the lift phase names what the bar does inside it. */
 const seasonRxFor = (mac, w, edge) => {
@@ -399,7 +406,9 @@ function steps(kind, o) {
   const S = [], W = (l, s, c) => S.push({ l, s, t: "w", c }), Rs = (l, s, c) => S.push({ l, s, t: "r", c });
   o = o || {};
   if (kind === "sim") { const r = o.rounds || 6, rest = o.rest == null ? 60 : o.rest;
-    for (let i = 1; i <= r; i++) { W("RD " + i + " · MIN 1 — SKIERG", 60); W("RD " + i + " · MIN 2 — ASSAULT BIKE", 60); W("RD " + i + " · MIN 3 — " + (i % 2 ? "LANDMINE PUNCHES" : "MED-BALL SLAMS") + (o.max3 ? " · MAXIMAL" : ""), 60); if (i < r && rest > 0) Rs("REST — ROUND-RECOVERY BREATHING · 2 SIGHS, THEN IN 3 OUT 6", rest); } }
+    for (let i = 1; i <= r; i++) { if (o.arms) { W("RD " + i + " · MIN 1 — ASSAULT BIKE, ARMS ONLY", 60, "Feet on the pegs."); W("RD " + i + " · MIN 2 — ASSAULT BIKE, ARMS AND LEGS", 60, "Feet back on the pedals."); }
+      else { W("RD " + i + " · MIN 1 — SKIERG", 60); W("RD " + i + " · MIN 2 — ASSAULT BIKE", 60); }
+      W("RD " + i + " · MIN 3 — " + (i % 2 ? "LANDMINE PUNCHES" : "MED-BALL SLAMS") + (o.max3 ? " · MAXIMAL" : ""), 60); if (i < r && rest > 0) Rs("REST — ROUND-RECOVERY BREATHING · 2 SIGHS, THEN IN 3 OUT 6", rest); } }
   else if (kind === "vo2") { const r = (o.n || 4) - (o.short ? 1 : 0);
     /* Strength, Power and Physique's 4 × 4 runs its own easy minutes either side */
     if (o.wu) Rs("EASY — " + o.wu + " MINUTES", o.wu * 60);
@@ -426,6 +435,7 @@ function steps(kind, o) {
       for (let i = 1; i <= r; i++) {
         const tag = (o.double ? (pi ? "SECOND · " : "FIRST · ") : "") + "RD " + i;
         if (o.pace) W((o.double ? tag : "ROUND " + i + " OF " + r) + " — FIGHT PACE", third * 3);
+        else if (o.arms) { W(tag + " · FIRST THIRD — ASSAULT BIKE, ARMS ONLY", third, "Feet on the pegs."); W(tag + " · SECOND THIRD — ASSAULT BIKE, ARMS AND LEGS", third, "Feet back on the pedals."); W(tag + " · LAST THIRD — MED-BALL SLAMS OR THE BAG", third); }
         else { W(tag + " · FIRST THIRD — SKIERG", third); W(tag + " · SECOND THIRD — ASSAULT BIKE", third); W(tag + " · LAST THIRD — MED-BALL SLAMS OR THE BAG", third); }
         if (i < r) Rs("THE CORNER MINUTE — 2 SIGHS, THEN NOSE ONLY, IN 3 OUT 6", rest, watched(pi, i) ? STOP_STEP : "Stood up, hands off the knees. Relaxed jaw, shoulders down."); } }); }
   else if (kind === "rz") { /* repeat bursts — the flurry, trained. Strength, Power and Physique's
@@ -607,9 +617,9 @@ const S = {
   mon: { n: "MONDAY", t: "Upper Strength + Power Dose + Rings", m: 65, ac: C.oxide, box: 1,
     intro: "Upper strength and the first of the week's three power doses. Nothing is taken to failure.", b: [
     { L: "A", n: "Warm-up", m: 8, p: "SH" },
-    { L: "B", n: "Bench Throw (Smith)", m: 11, star: 1, hard: 1, hide: (rx) => !!rx.upperC, rest: "Rest 2:00", rt: 120,
+    { L: "B", n: "Bench Throw (Smith)", m: 11, star: 1, hard: 1, hide: (rx) => !!rx.upperC, rest: "Rest 2:00", rt: 120, spd: (rx) => !!rx.au, spdLine: SPLEEFT_FAST,
       items: [{ n: "Bench throw", s: (rx) => rx.throw[0] + " × " + rx.throw[1] + " @ ~⅓ of bench max", cue: "On a Smith machine with its safety stops set so the bar rests on them a couple of centimetres above your chest. Light bar: lower it to the stops, throw it so hard it leaves your hands, catch it with soft elbows, and lower it back to the stops. A missed catch lands on the stops, never on you.", id: "throw", k: "wr", mk: "bench", pct: [30, 45], sets: (rx) => rx.throw[0], reps: (rx) => rx.throw[1] }],
-      w: "Stop the set the instant a throw is visibly lower than the last.",
+      w: (rx) => (rx.au ? SPLEEFT_FAST : "Stop the set the instant a throw is visibly lower than the last."),
       why: "This is your punch-speed lift. A normal bench decelerates through its last third to protect the elbows; throwing the bar removes the brake, and the safety stops catch a missed one. In weeks 11–14 it merges into the circuit below.",
       note: "No Smith machine with adjustable stops: throw a 4–6 kg medicine ball off your chest at a wall, 5 × 5, as hard as you can.", tr: 2 },
     { L: "C", n: "Power dose — box jumps", m: 6, star: 1, hard: 1, hide: (rx) => !!rx.test, rest: "Rest 60–90s", rt: 75,
@@ -662,7 +672,7 @@ const S = {
       why: "The split squat on Thursday is the loaded single-leg strength. This is the unloaded single-leg skill — balance, ankle, knee tracking, the pivot foot learning to own the whole body." },
     { L: "D", n: (rx) => (ENG[rx.eng] ? ENG[rx.eng].n : "Bike session"), m: engMin("eng"), star: 1, hard: 1, eng: 1, menu: 1, hide: (rx) => !rx.eng, timer: engTimer("eng"),
       items: [{ n: "Output", s: "write it down", id: "cond", k: "out", u: "output / peak HR" }],
-      note: "Bike or SkiErg — pick one and keep it all 16 weeks so your numbers compare. Write down your output." },
+      note: (rx) => (rx.au ? "The bike, all 16 weeks, so your numbers compare. Write down your output." : "Bike or SkiErg — pick one and keep it all 16 weeks so your numbers compare. Write down your output.") },
     { L: "E", n: "The 60-Second Settle", m: 1, settle: 1, hide: (rx) => !rx.eng || !!rx.test, timer: () => ({ kind: "settle", title: "THE SETTLE" }), rxLine: () => "60 seconds — log the seconds to land",
       items: [{ n: "Seconds to land on the breath", s: "write it down", id: "settle", k: "out", u: "seconds" }],
       why: "This is the corner between rounds, trained, for nothing, every Tuesday and Thursday." },
@@ -797,10 +807,12 @@ const S = {
       w: "End the round the moment jump height drops.",
       why: "If round 2 jumps as high as round 1, the rest can be a bit shorter; if it doesn't, it was too short.",
       note: (rx) => (rx.lowerLead ? "Weeks 11–14: this circuit moves to the FRONT — before the squat, while you're freshest." : ""), tr: 2 },
-    { L: "G", n: "Push Press", m: 10, hard: 1, mainLift: "pp", calib: "pp", fb: "pp", hide: (rx) => !rx.pp || !rx.pp.sc, rest: "Rest 2:00", rt: 120,
+    { L: "G", n: "Push Press", m: 10, hard: 1, mainLift: "pp", calib: "pp", fb: "pp", hide: (rx) => !rx.pp || !rx.pp.sc || !!rx.au, rest: "Rest 2:00", rt: 120,
       items: (rx) => [{ n: "Push press", s: rx.pp.sc, cue: "Bar on the front of your shoulders. Quick shallow knee dip, then drive the bar overhead with your LEGS and punch it to lockout. Down under control.", id: "pushpress", k: "wr", mk: "pp", pct: rx.pp.pct, sets: rx.pp.sets, reps: rx.pp.reps }],
       why: "Legs → braced trunk → hands. The same route a punch takes, and the heaviest thing your shoulders and traps see all week — which is why the traps and shoulders don't need a size block.",
-      note: "Weeks 4 and 9: skipped. The squat top triple is enough heavy work for one day." }] },
+      note: "Weeks 4 and 9: skipped. The squat top triple is enough heavy work for one day." },
+    /* from the audit's week: one arm, up and forward, in the barbell's place */
+    lmPush({ id: "lmpush", m: 10, sets: (rx) => fLm(rx).sets, reps: (rx) => fLm(rx).reps })] },
 
   /* ---------------- SUNDAY ---------------- */
   sun: { n: "SUNDAY", t: "★ Get-ups · Punch Throws · Nordics · Fight Rounds · Post-Max Sit · Core + L-Sit · Lever", m: (rx) => (rx.test ? 44 : rx.topBe ? 92 : rx.sim.skip ? 56 : 80), ac: C.brass, free: 1, box: 1,
@@ -823,17 +835,21 @@ const S = {
     { L: "H", n: "Nordic Curls", m: 8, noTaper: 1, hide: (rx) => !rx.nor || !!rx.test, rest: "Rest 2:00", rt: 120,
       rxLine: (rx) => rx.nor[0] + " × " + rx.nor[1] + " — ramped",
       items: [{ n: "Nordic curl", s: (rx) => rx.nor[0] + " × " + rx.nor[1] + " — ramped", cue: "Kneel with your heels anchored under something solid. Keeping your body straight from knees to head, lower yourself forward as SLOWLY as you can, catch yourself with your hands, push back up. Stop the set the moment your lower back rounds — not at the rep count.", id: "nordic", k: "wr", sets: (rx) => rx.nor[0], reps: (rx) => rx.nor[1] }],
-      why: "Before the rounds, on purpose: the hardest eccentric work of the week goes on fresh hamstrings, not on ones that have just done twenty-four minutes of rounds — a maximal eccentric on a tired muscle is how the protective exercise becomes the injury. The rounds after it are bike, ski and landmine, which don't need a fresh hamstring. And it's still the last day, so the soreness has two leg-easy days to leave before Wednesday. Strong hamstrings on the way down is the best-proven injury protection in all of sport; the reps ramp up over the first month — follow the table. (Week 16: skip.)" },
+      why: (rx) => "Before the rounds, on purpose: the hardest eccentric work of the week goes on fresh hamstrings, not on ones that have just done twenty-four minutes of rounds — a maximal eccentric on a tired muscle is how the protective exercise becomes the injury. The rounds after it are bike" + (rx.au ? "" : ", ski") + " and landmine, which don't need a fresh hamstring. And it's still the last day, so the soreness has two leg-easy days to leave before Wednesday. Strong hamstrings on the way down is the best-proven injury protection in all of sport; the reps ramp up over the first month — follow the table. (Week 16: skip.)" },
     { L: "D", n: "Fight Simulation", m: 24, star: 1, sim: 1, hard: 1, hide: (rx) => !!rx.sim.skip || rx.w === 1 || !!rx.test,
-      timer: (rx) => ({ kind: "sim", opt: { rounds: rx.sim.rounds || 6, rest: rx.sim.rest, max3: rx.sim.max3 }, title: "FIGHT SIM" }),
-      items: [{ n: "Minute 1", s: "SkiErg", k: "txt" }, { n: "Minute 2", s: "Assault bike", k: "txt" }, { n: "Minute 3", s: "Landmine punches (odd rounds) or med-ball slams (even)", k: "txt" },
-        { n: "Round 1 output", s: "SkiErg m / bike cal", id: "fs_rd1", k: "out", u: "SkiErg m / bike cal" }, { n: "Round 6 output", s: "SkiErg m / bike cal", id: "fs_rd6", k: "out", u: "SkiErg m / bike cal" }],
+      timer: (rx) => ({ kind: "sim", opt: Object.assign({ rounds: rx.sim.rounds || 6, rest: rx.sim.rest, max3: rx.sim.max3 }, rx.au ? { arms: 1 } : {}), title: "FIGHT SIM" }),
+      /* from the audit's week the SkiErg's minute is the assault bike with the arms only, and a round logs the bike's calories */
+      libAs: (rx) => (rx.au ? ROUNDS_LIB : null),
+      items: (rx) => { const u = rx.au ? "bike cal" : "SkiErg m / bike cal";
+        return [{ n: "Minute 1", s: rx.au ? ARMS_THIRD : "SkiErg", k: "txt" }, { n: "Minute 2", s: rx.au ? BIKE_THIRD : "Assault bike", k: "txt" }, { n: "Minute 3", s: "Landmine punches (odd rounds) or med-ball slams (even)", k: "txt" },
+          { n: "Round 1 output", s: u, id: "fs_rd1", k: "out", u }, { n: "Round 6 output", s: u, id: "fs_rd6", k: "out", u }]; },
       rxLine: (rx) => (rx.sim.rounds || 6) + " × 3 min · rest " + rx.sim.rest + "s" + (rx.sim.tested ? " · SCORED" : rx.sim.max3 ? " · minute 3 flat out" : ""),
       rules: ["Relaxed jaw, shoulders down. Finish a round with your traps by your ears and that round doesn't count, whatever the number says.", "Nose-breathe through rounds 1–3 as a pacing tool, not a test. Mouth open whenever you need it; the round still counts.", "Every rest is ROUND-RECOVERY BREATHING: two physiological sighs the second the round ends (a full breath in through the nose, a short second sip on top, one long slow exhale through the mouth — twice), then nose only, in for 3 and out for 6, for the rest of the break. Stand up, hands off the knees. Hands-on-knees gasping through an open mouth keeps you revved and starts the next round behind; this is the one purely mental minute a fight gives you, and this is where it's practised."],
       recovery: 1,
       why: "Three-minute rounds, never enough rest, holding output across six — nothing else you own trains the actual shape of a fight. The whole game is getting the fade toward 100%.", tr: 3 },
     { L: "E", n: "20-Minute Bike Test", m: 25, star: 1, hard: 1, hide: (rx) => !(rx.w === 1 || rx.w === 16), timer: () => ({ kind: "z2", opt: { min: 20, label: "20-MIN TEST" }, title: "20-MIN TEST" }),
-      items: [{ n: "20 minutes, maximum distance", s: "same bike or SkiErg every time", cue: "5 easy minutes, then 20 minutes for the most distance you can. No pacing plan — go and find out. Write down two numbers: the distance, and the highest heart rate you saw. That peak is your practical maximum; from now on every easy ride sits around 65–75% of it.", id: "bike20", k: "out", u: "distance (m)" },
+      libAs: (rx) => (rx.au ? T20_LIB : null),
+      items: [{ n: "20 minutes, maximum distance", s: (rx) => (rx.au ? "the same bike every time" : "same bike or SkiErg every time"), cue: "5 easy minutes, then 20 minutes for the most distance you can. No pacing plan — go and find out. Write down two numbers: the distance, and the highest heart rate you saw. That peak is your practical maximum; from now on every easy ride sits around 65–75% of it.", id: "bike20", k: "out", u: "distance (m)" },
         { n: "Peak heart rate", s: "highest you saw", id: "bike20hr", k: "out", u: "bpm" }],
       rxLine: () => "20 min max distance — the engine test",
       why: "Replaces the fight rounds in weeks 1 and 16. Week 1 is the baseline; week 16 is the verdict.", tr: 2 },
@@ -997,12 +1013,12 @@ function gymCards(blocks, rx, o) {
     if ((timer && ROUND_KINDS[timer.kind]) || b.sim || squatContrast) {
       const tm = squatContrast ? { kind: "contrast", opt: { rounds: rx.cr || 3, rest: 180, items: ["BACK SQUAT — 2 REPS", "BOX JUMP ×3", "TRAP BAR JUMP ×3", "BAND-ASSISTED JUMP ×3"] }, title: "SQUAT CONTRAST CIRCUIT" } : timer;
       const parts = squatContrast ? ["Back squat", "Box jumps", "Trap bar jumps", "Band-assisted jumps"].map((n) => ({ n, lib: libFor(n) }))
-        : b.sim ? ["The rounds", "The corner minute"].map((n) => ({ n, lib: libFor(n) }))
+        : b.sim ? [v(b.libAs, rx) || "The rounds", "The corner minute"].map((n) => ({ n, lib: libFor(n) }))
         : its.filter((x) => x.k !== "out").map((x) => ({ n: cleanName(v(x.n, rx)), lib: libFor(v(x.n, rx)) }));
       /* a circuit shows its own entry first, if it has one, then every exercise in it */
       const lib = tm && tm.kind === "circuit"
         ? [].concat(libFor(tm.title) || [], ...parts.map((p) => p.lib || [])).filter((e, i, a) => a.indexOf(e) === i)
-        : firstLib(tm && tm.title, name) || [].concat(...parts.map((p) => p.lib || []));
+        : firstLib(v(b.libAs, rx), tm && tm.title, name) || [].concat(...parts.map((p) => p.lib || []));
       out.push(Object.assign({}, base, { key: b.L, kind: "round", n: squatContrast ? "Squat contrast circuit" : tm && tm.title === "BENCH CONTRAST" ? "Bench contrast" : name,
         pres: v(b.rxLine, rx) ? String(v(b.rxLine, rx)) + (row.load ? " · " + row.load : "") : blockPres, timer: tm, parts, lib: lib && lib.length ? lib : null,
         outs: its.filter((x) => x.k === "out"), lifts: its.filter((x) => x.k === "wr" && x.mk) }));
@@ -1012,7 +1028,7 @@ function gymCards(blocks, rx, o) {
     if (b.eng || b.settle || (timer && ENGINE_KINDS[timer.kind]) || b.profile || b.jumpCheck) {
       const E = b.eng ? engMap()[rx[b.engKey || "eng"]] : null;
       out.push(Object.assign({}, base, { key: b.L, kind: "eng", n: name,
-        pres: b.engKey === "base" ? v(b.rxLine, rx) : b.engLine ? b.engLine(rx) : E ? E.d : (v(b.rxLine, rx) || blockPres), lib: firstLib(name, E && E.n, its[0] && v(its[0].n, rx)),
+        pres: b.engKey === "base" ? v(b.rxLine, rx) : b.engLine ? b.engLine(rx) : E ? E.d : (v(b.rxLine, rx) || blockPres), lib: firstLib(v(b.libAs, rx), name, E && E.n, its[0] && v(its[0].n, rx)),
         outs: its.filter((x) => x.k === "out"), checks: its.filter((x) => x.k === "chk") }));
       return;
     }
@@ -1175,6 +1191,9 @@ export function seasonWeeks(seasons) {
 }
 
 const MAXES = [["squat", "Back Squat"], ["bench", "Flat Bench"], ["tbdl", "Trap Bar Deadlift"], ["pp", "Push Press"]];
+/* Fighter's numbers are working maxes too: its heaviest lifts are top
+   triples, and the landmine push press has no number */
+export const FIGHTER_MAXES_RULE = "Squat and bench: working maxes — your heaviest clean set of 3, with one or two reps left in you, × 1.08. Never a best single. Trap bar: week 1 finds it (hard triple × 1.08), or enter one here. The push press's number is the barbell's, kept for the weeks before 23 November 2026; the landmine push press has none.";
 /* PREP and CAMP load from working maxes, never a best single */
 export const SEASON_MAXES_RULE = "Every number here is a working max: your heaviest clean set of 3, with one or two reps left in you, × 1.08, rounded to 2.5 kg. A set of 3 at 120 kg is 130. Never a best single — that's the ego number, and every weight in the plan would come out too heavy.";
 /* The camp loads every lift from a WORKING WEIGHT, never a max. They live
@@ -1339,7 +1358,7 @@ const BW_ITEMS = ["ringrow", "ringdip", "muscleup", "pistol", "lsit", "lever", "
   "hands2", "c_hands_mon", "c_hands_thu", "c_hands_sun", "s_pushup"];
 /* Strength, Power and Physique's weighted chin-ups, dips and pull-ups log
    the weight on the belt */
-const ADD_ITEMS = ["chin", "c_chinup", "achilles", "achilles_c", "s_chin", "s_dip", "s_pullup", "s_landrot", "s_lmpress", "s_lmpush"];
+const ADD_ITEMS = ["chin", "c_chinup", "achilles", "achilles_c", "s_chin", "s_dip", "s_pullup", "s_landrot", "s_lmpress", "s_lmpush", "p_lmpush", "c_lmpush", "lmpush"];
 /* the ones prescribed as a hold, so the number is seconds and not reps */
 const SECS_ITEMS = ["lsit", "lever", "spanish", "c_spanish", "copen", "c_copen", "c_copenplank",
   "hands2", "c_hands_mon", "c_hands_thu", "c_hands_sun", "achilles", "achilles_c"];
@@ -1721,8 +1740,11 @@ function GymCardOne({ card, rx, week, macro, day, log, setLog, maxes, bw, ready,
     const ol = card.outs || [];
     const firstId = ol[0] ? ol[0].id : null, lastId = ol.length > 1 ? ol[ol.length - 1].id : null;
     const pk = "past_" + card.key, pe = log[key(pk)] || {}, past = pe.p || [];
-    /* two machines a round: the stop rule reads each round's share */
+    /* two machines a round: the stop rule reads each round's share. Its
+       boxes are the machines the round's own boxes name — the SkiErg and
+       the bike, or from the audit's week the bike alone */
     const two = twoM(ol[0]), first = firstId ? log[key(firstId)] || {} : {};
+    const machines = two ? (v(ol[0].fields, rx) || []).map((f) => [f.k, String(f.l).slice(String(f.l).indexOf(" · "))]) : [];
     const r1 = two ? (roundFilled(first) ? 1 : null) : firstId ? num(first.w) : null;
     const state = (p, form) => (two ? stopStateShares(first, p, form, rounds) : stopState(r1, p, form, rounds));
     const stt = state(past, pe.form);
@@ -1731,7 +1753,7 @@ function GymCardOne({ card, rx, week, macro, day, log, setLog, maxes, bw, ready,
       n[key(pk)] = form == null ? { p } : { p, form };
       const s2 = state(p, form);
       if (s2.done && lastId && s2.last != null) n[key(lastId)] = Object.assign({}, log[key(lastId)],
-        two ? { w: s2.last.w == null ? "" : String(s2.last.w), cal: s2.last.cal == null ? "" : String(s2.last.cal) } : { w: String(s2.last) }, engKind ? { kind: engKind, d: engDay } : {});
+        two ? Object.assign({}, ...machines.map(([k]) => ({ [k]: s2.last[k] == null ? "" : String(s2.last[k]) }))) : { w: String(s2.last) }, engKind ? { kind: engKind, d: engDay } : {});
       setLog(n);
       if (s2.done && s2.why !== "all" && stopTimer) stopTimer();
     };
@@ -1742,7 +1764,7 @@ function GymCardOne({ card, rx, week, macro, day, log, setLog, maxes, bw, ready,
         {r1 ? null : <div style={Object.assign({}, mno, { fontSize: T3, color: C.ash, marginTop: 8 })}>ROUND ONE'S OUTPUT FIRST</div>}
         {rounds.slice(0, upto).map((rd, i) => (
           <div key={rd.k} style={{ display: "flex", gap: 8, alignItems: "flex-end" }}>
-            {two ? [["w", " · SKIERG (M)"], ["cal", " · BIKE (CAL)"]].map(([k, l]) => { const cur = past[i] && typeof past[i] === "object" ? past[i] : past[i] ? { w: past[i] } : {};
+            {two ? machines.map(([k, l]) => { const cur = past[i] && typeof past[i] === "object" ? past[i] : past[i] ? { w: past[i] } : {};
               return <div key={k} style={{ flex: 2 }}><Input label={rd.label + l} v={cur[k]} on={(val) => { const p = past.slice(); p[i] = Object.assign({}, cur, { [k]: val }); write(p, pe.form); }} /></div>; })
               : <div style={{ flex: 2 }}><Input label={rd.label + " OUTPUT"} v={past[i]} on={(val) => { const p = past.slice(); p[i] = val; write(p, pe.form); }} /></div>}
             <div style={{ flex: 1 }}><BigBtn on={() => write(past.slice(), pe.form === i ? null : i)} c={C.oxide} fill={pe.form === i} label={"Form gone in " + rd.label.toLowerCase()} s={{ minHeight: 56, padding: "8px 6px", fontSize: T3 }}>FORM GONE</BigBtn></div>
@@ -2266,7 +2288,13 @@ function Today(props) {
   chimeRows.current = fuelItems;
 
   let tt = startMin;
-  sessItems.forEach((x) => { x.t = noSess ? startMin + 10 : tt; tt += ((x.mins || 0) + (x.tr || 0)) * squeeze; });
+  /* a block with its own clock time — the camp's morning primer, hours
+     before the fight — keeps it; the rest run on from the session's start */
+  const ownT = {};
+  sessItems.forEach((x) => {
+    const at = x.gym && x.gym.b && x.gym.b.at != null ? x.gym.b.at : null;
+    if (at != null && !noSess) { x.t = ownT[x.L] == null ? at : ownT[x.L]; ownT[x.L] = x.t + (x.mins || 0); return; }
+    x.t = noSess ? startMin + 10 : tt; tt += ((x.mins || 0) + (x.tr || 0)) * squeeze; });
   const sessEnd = tt;
 
   /* ---------------- THE DAY ---------------- */
@@ -2419,7 +2447,9 @@ function Today(props) {
   const gymIds = {}; sessItems.forEach((x) => { gymIds[x.id] = 1; });
   const evIds = {}; ev.concat([lightsItem], weekly).forEach((x) => { evIds[x.id] = 1; });
   all.forEach((x) => { x.clock = hhmm(x.t);
-    x.chapter = gymIds[x.id] || x.id === "w-sess" ? "GYM" : evIds[x.id] || x.t >= evStart ? "EVENING"
+    /* a gym block with its own clock time ahead of the session — the morning primer — sits in the morning */
+    const early = !!(x.gym && x.gym.b && x.gym.b.at != null && x.t < startMin);
+    x.chapter = (gymIds[x.id] && !early) || x.id === "w-sess" ? "GYM" : evIds[x.id] || x.t >= evStart ? "EVENING"
       : x.t < startMin ? "MORNING" : !noSess && x.t <= sessEnd ? "GYM" : "THE DAY"; });
 
   /* ---------------- NOW ---------------- */
@@ -2645,7 +2675,7 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
             <Row k="Sprints" val={rx.spr + " × 20m" + (rx.sprPct < 100 ? " @ 90%" : "")} />
             <Row k="Jumps (Sat)" val={rx.noJumps ? "none — the tendon gate" : jumpOf(rx.jump).n + " " + rx.js[0] + " × " + rx.js[1] + (rx.restart ? " · one stage down" : "")} />
             <Row k="Trap bar" val={rx.tb.sc} />
-            <Row k="Push press" val={rx.pp && rx.pp.sc ? rx.pp.sc : rx.topBe ? "skipped — squat top-triple day" : "—"} />
+            <Row k={rx.au ? "Landmine push press" : "Push press"} val={rx.pp && rx.pp.sc ? (rx.au ? fLm(rx).sets + " × " + fLm(rx).reps + " each side, every rep fast" : rx.pp.sc) : rx.topBe ? "skipped — squat top-triple day" : "—"} />
             <Row k="Nordics" val={rx.nor ? rx.nor[0] + " × " + rx.nor[1] : "—"} />
             <Row k="Punch throws" val={rx.vec + " rounds"} />
             <Row k="Rows / split squat" val={(rx.acc <= 2 ? 2 : 3) + "–" + (rx.acc <= 2 ? 3 : 4) + " sets"} />
@@ -2658,7 +2688,7 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
             
             <Row k="Top triples" val={rx.topSq ? "Squat Sat · Bench Sun" : rx.test ? "TEST DAY" : "none"} />
             {rx.pq && !rx.pq.fast ? <Note>The pause squat is a percentage of your back-squat max — and a paused triple at 75% is a hard triple, because a two-second pause takes 10–15% off what you can lift. That column never goes above 75%.</Note> : null}
-            {rx.cal ? <Note c={C.brass} bold>Calibration week: ramp to a 3RM on the trap bar (Wed) and the push press (Sat). The app turns them into maxes.</Note> : null}
+            {rx.cal ? <Note c={C.brass} bold>{rx.au ? "Calibration week: ramp to a 3RM on the trap bar (Wed). The app turns it into the max." : "Calibration week: ramp to a 3RM on the trap bar (Wed) and the push press (Sat). The app turns them into maxes."}</Note> : null}
             {rx.mid ? <Note c={C.oxide} bold>Mid-check. Not your real numbers — you are fatigued. A direction check.</Note> : null}
             {rx.dl ? <Note c={C.moss} bold>Deload. Sprints and jumps stay in at reduced volume — the 5-day residual doesn't pause.</Note> : null}
           </div>)}
@@ -2678,7 +2708,7 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
                   <span style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 700, letterSpacing: 1.2, color: C.chalk })}>{(sess ? sess.n : DSH[d])}{row ? " · " + fmtDate(addDays(row.mon, di)) : ""}{sess && sess.pm ? " · PM" : ""}</span>
                   <span style={Object.assign({}, mno, { fontSize: 9.5, color: sl ? C.moss : ac })}>{rx.hell || sl || blank ? "—" : !MODE.camp && d === "sat" && rx.test ? "TEST DAY" : v(sess.m, rx) + " MIN"}</span>
                 </div>
-                <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.ash, marginTop: 3 })}>{sl ? "SLEEP. No alarm." + (d === "fri" ? " RANGE at home in the evening." : "") : blank ? (MODE.camp ? campBlank(d, rx).h : "The head check holds the transition — nothing until a doctor has cleared you") : !MODE.camp && d === "sat" && rx.test ? "Sprint · jump · throws · squat · bench · pull · tape" : (rx.tw && sess.tt) || sess.t}</div>
+                <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.ash, marginTop: 3 })}>{sl ? "SLEEP. No alarm." + (d === "fri" ? " RANGE at home in the evening." : "") : blank ? (MODE.camp ? campBlank(d, rx).h : "The head check holds the transition — nothing until a doctor has cleared you") : !MODE.camp && d === "sat" && rx.test ? "Sprint · jump · throws · squat · bench · pull · tape" : (rx.au && sess.ta) || (rx.tw && sess.tt) || sess.t}</div>
               </span>
               <span data-day-count={d} style={Object.assign({}, mno, { fontSize: 10, color: full ? C.moss : n ? C.brass : C.ash, flexShrink: 0 })}>{tot ? (MODE.spp ? Math.min(n, tot) : n) + "/" + tot : ""}</span>
             </button>
@@ -2828,7 +2858,7 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
                 </div>);
             })}
             {MODE.mac ? <Note>{SEASON_MAXES_RULE}</Note>
-              : <Note>Squat and bench: your best single. Trap bar and push press: week 1 finds them (hard triple × 1.08), or enter one here.</Note>}
+              : <Note>{FIGHTER_MAXES_RULE}</Note>}
           </Card>
           {camp ? <Note c={C.ash} s={{ fontStyle: "italic" }}>Camp Mode is on: the camp loads from working weights, not these. Your maxes wait here, untouched, until the switch goes off.</Note> : null}
           {scopeOf(view) === "spp" ? <LiftHistory rows={liftHistory(log, view)} /> : null}
