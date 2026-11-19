@@ -96,8 +96,13 @@ are four tabs: **TODAY · PROGRESS · FOOD · MORE**.
   Sessions A and B, levels and fifteen standards (src/move.js), and from
   Monday 23 November its tendon work — the lower pushes, the hip pair, the
   towel calf raise and the upper pushes. Prep, the camp, the transition and
-  the classic get it laid over their own pages (src/movex.js). Optimal 8
-  Fighter is still there as the classic.
+  the classic get it laid over their own pages (src/movex.js). From the same
+  Monday, Strength, Power and Physique runs the changes of the audit of 19
+  November (AUDIT_SINCE, src/spp.js): the 4 × 4 written for the treadmill,
+  the pressure rounds' third minute arms only, the knuckle hold, a second
+  dose of the medicine-ball drops, a bar speed on the trap bar jumps, bench
+  throws and landmine push press, and the power tests in weeks 4, 8 and 12.
+  Optimal 8 Fighter is still there as the classic.
 - **Yes:** the date, the rounds and minutes, the rest between rounds (1 minute
   unless you change it), the weigh-in (the day before or on the day), how fit
   you are right now (low, moderate, good) and one emphasis (none, power,

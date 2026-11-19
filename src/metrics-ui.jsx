@@ -6,8 +6,8 @@ import { fadePct } from "./safety.js";
 import {
   MORNING_FIELDS, rolling7, baseline, morningFlag, RHR_OVER, HRV_UNDER,
   recoveryDrop, recoveryBand, easyZone, peakOk, ergUnitLabel, ergTotal, ergMean, recalibrated,
-  BAR_SPEED_LIFTS, barSpeeds, sameLoadSeries, PHOTO_VIEWS, PHOTO_NOTE, photoWeeks,
-  bodyNow, trend, series, pairSeries, pairEntries, CAMP_TARGET, r1, scopeOf, DASH_IDS, SETTLE_IDS, ergSeries,
+  BAR_SPEED_LIFTS, BAR_SPEED_FAST, barSpeeds, sameLoadSeries, PHOTO_VIEWS, PHOTO_NOTE, photoWeeks,
+  bodyNow, trend, series, seriesMean, pairSeries, pairEntries, CAMP_TARGET, r1, scopeOf, DASH_IDS, SETTLE_IDS, ergSeries,
 } from "./metrics.js";
 
 /* ================================================================
@@ -226,7 +226,7 @@ export function BarSpeedTrack({ log, camp }) {
     <Card ac={C.brass}>
       <Eye c={C.brass}>Bar speed — at the same load, per lift</Eye>
       <Note c={C.chalk} s={{ marginTop: 0 }}>A speed only means something against another speed at the same weight, so each chart holds the load with the most entries on it. {scopeOf(camp) === "fighter" ? "Metres a second, top set." : "Metres a second: the first work set, the mean of its two fastest reps."}</Note>
-      {BAR_SPEED_LIFTS.map((l) => { const rows = all[l[0]] || []; const same = sameLoadSeries(rows);
+      {(scopeOf(camp) === "spp" ? BAR_SPEED_LIFTS.concat(BAR_SPEED_FAST) : BAR_SPEED_LIFTS).map((l) => { const rows = all[l[0]] || []; const same = sameLoadSeries(rows);
         return (
           <div key={l[0]} style={{ marginTop: 12 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
@@ -407,7 +407,9 @@ export function Dashboard({ log, morning, st, camp: view, body, fuel, addBody, d
     /* the reactivity count, Sunday by Sunday, oldest first */
     const reactRows = iron ? iron.weekRows.filter((r) => r.react != null).map((r) => ({ d: addDays(r.mon, 6), v: r.react })) : [];
     /* Strength, Power and Physique: the 4 × 4's total, the broad jump, the tape */
-    const sp = spp ? { e44Rows: ergSeries(log, ids.e44, view, "vo2"), bjRows: series(log, ids.bj, view), armRows: series(log, ids.arm, view, "sun"), shRows: series(log, ids.sh, view, "sun") } : {};
+    const sp = spp ? { e44Rows: ergSeries(log, ids.e44, view, "vo2"), bjRows: series(log, ids.bj, view), armRows: series(log, ids.arm, view, "sun"), shRows: series(log, ids.sh, view, "sun"),
+      /* the audit's numbers: the 4 × 4's distance on the treadmill, the throw, the push press speed, the arms-only test */
+      t44Rows: series(log, ids.e44, view, "sat"), rtRows: series(log, ids.rt, view), ppsRows: seriesMean(log, ids.pps, view, ["w", "l"]), arm3Rows: ergSeries(log, ids.arm3, view, "arm3") } : {};
     return Object.assign({ fadeRows, t20Rows, burstRows, recRows, rhrRows: mRows("rhr"), hrvRows: mRows("hrv"), reactRows }, sp);
   }, [log, morning, view, iron]);
 
@@ -424,7 +426,11 @@ export function Dashboard({ log, morning, st, camp: view, body, fuel, addBody, d
           <React.Fragment>
             <DashRow n="The 4 × 4 — the total at the end" t={trend(D.e44Rows, "up")} u={ergUnitLabel(st.ergUnit)} date={dat(D.e44Rows)}
               note={D.e44Rows.length && D.e44Rows[D.e44Rows.length - 1].hr != null ? "At a peak of " + D.e44Rows[D.e44Rows.length - 1].hr + " bpm. More at the same peak, or the same at a lower one, is the engine held." : null} />
+            {D.t44Rows.length ? <DashRow n="The 4 × 4 on the treadmill — the distance" t={trend(D.t44Rows, "up")} u="km" date={dat(D.t44Rows)} /> : null}
             <DashRow n="Broad jump — test week" t={trend(D.bjRows, "up")} u="cm" date={dat(D.bjRows)} />
+            {D.rtRows.length ? <DashRow n="Rotational throw — weeks 4, 8 and 12" t={trend(D.rtRows, "up")} u="m" date={dat(D.rtRows)} /> : null}
+            {D.ppsRows.length ? <DashRow n="Push press speed — weeks 4, 8 and 12" t={trend(D.ppsRows, "up")} u="m/s" date={dat(D.ppsRows)} /> : null}
+            {D.arm3Rows.length ? <DashRow n="The arms-only test — 3 minutes" t={trend(D.arm3Rows, "up")} u={ergUnitLabel(st.ergUnit)} date={dat(D.arm3Rows)} /> : null}
             <DashRow n="Arm" t={trend(D.armRows, "up")} u="cm" date={dat(D.armRows)} />
             <DashRow n="Shoulders" t={trend(D.shRows, "up")} u="cm" date={dat(D.shRows)} />
           </React.Fragment>) : (

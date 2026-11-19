@@ -50,7 +50,46 @@ export const SPPENG = {
   pr2: { n: "PRESSURE ROUNDS", d: "On the assault bike, straight after the bursts: 1 minute easy, then 2 rounds of 3 minutes with 1 minute's rest between — in each, a 5-second burst all out every 20 seconds, a steady pace between — then 2 minutes easy. Two in the lighter weeks and test week",
     tgt: "The total on the bike's screen, against the last two." },
 };
+/* THE AUDIT'S ENGINE, from Monday 23 November 2026: the 4 × 4 written for
+   the treadmill it's run on, uphill at 5%, with the distance logged; the
+   pressure rounds with the third minute of every round arms only, feet
+   on the assault bike's pegs; and in weeks 4, 8 and 12 one round, then
+   the 3-minute arms-only test in the second round's place. */
+Object.assign(SPPENG, {
+  vt: { n: "4-MINUTE INTERVALS ON THE TREADMILL", d: "On the treadmill at 5%: 5 minutes easy, then 4 × 4 minutes at 90–95% of your peak heart rate with 3 easy between, then 3 minutes easy",
+    tgt: "The distance on the treadmill's screen, at the same peak heart rate or a lower one." },
+  vts: { n: "4-MINUTE INTERVALS ON THE TREADMILL", d: "On the treadmill at 5%: 5 minutes easy, then 3 × 4 minutes at 90–95% of your peak heart rate with 3 easy between, then 3 minutes easy — the lighter week's 3 × 4",
+    tgt: "The distance on the treadmill's screen, against the last 3 × 4." },
+  pa: { n: "PRESSURE ROUNDS, ARMS-ONLY THIRD MINUTE", d: "On the assault bike, straight after the bursts: 1 minute easy, then 3 rounds of 3 minutes with 1 minute's rest between — in each, a 5-second burst all out every 20 seconds, a steady pace between, and the third minute arms only, feet on the pegs — then 2 minutes easy",
+    tgt: "The total on the bike's screen, against the last three with the arms-only minute." },
+  pa1: { n: "PRESSURE ROUNDS, ARMS-ONLY THIRD MINUTE", d: "On the assault bike, straight after the bursts: 1 minute easy, then 1 round of 3 minutes — a 5-second burst all out every 20 seconds, a steady pace between, and the third minute arms only, feet on the pegs — then 1 minute easy, and the arms-only test. One round in the lighter weeks and test week",
+    tgt: "The total on the bike's screen, against the last single round." },
+  arm3: { n: "THE ARMS-ONLY TEST", d: "On the assault bike, straight after the pressure round: clear its screen, feet on the pegs, then 3 minutes arms only for the biggest total you can make, then 2 minutes easy",
+    tgt: "The total on the bike's screen, against the last test." },
+});
 export const SPPENG_MENU = ["vo2"];
+/* THE AUDIT'S CHANGES (19 November 2026) run from the week of Monday 23
+   November: rx.au is that week or a later one. Before it every page reads
+   as it did. */
+export const AUDIT_SINCE = "2026-11-23";
+export const sppAudit = (rx) => (rx && rx.au ? Object.assign({}, rx, { e: rx.e === "vo2s" ? "vts" : "vt", pr: rx.half ? "pa1" : "pa", at: "arm3" }) : rx);
+/* the lighter week's 3 × 4, on either machine · the 4 × 4 on the treadmill */
+export const spp44Short = (rx) => rx.e === "vo2s" || rx.e === "vts";
+export const sppTread = (rx) => rx.e === "vt" || rx.e === "vts";
+/* the pressure rounds: how many, and whether the third minute is arms only */
+export const sppPrRounds = (rx) => (rx.pr === "pr2" ? 2 : rx.pr === "pa1" ? 1 : 3);
+export const sppArms = (rx) => rx.pr === "pa" || rx.pr === "pa1";
+/* the power tests — the throw for distance, the push press speed and the
+   arms-only test — in the half weeks: 4, 8 and 12 */
+export const sppPowerTest = (rx) => !!rx.au && !!rx.half;
+/* the fast block's ball: 3 kg in the power block and test week */
+const ball = (rx) => (rx.au && rx.acc === "power" ? "3 kg ball" : "4–6 kg ball");
+/* Spleeft on the fast lifts: a speed after every rep, a 10% drop ends the set */
+const SPLEEFT_FAST = "Spleeft on your wrist: read the speed after every rep. A rep 10% slower than the set's fastest ends the set.";
+const SPLEEFT_ARM = "Spleeft reads the arm the watch is on: that side first, the speed read after every rep. A rep 10% slower than the set's fastest ends the set, and the other side does the same reps.";
+const TREAD_FIELDS = [{ k: "w", l: "DISTANCE (KM)" }, { k: "hr", l: "PEAK HEART RATE (BPM)" }];
+const Z5_FIELD = [{ k: "z5", l: "MINUTES AT 90% OR ABOVE · THE POLAR'S TOP ZONE" }];
+const PP_SPEED_FIELDS = [{ k: "w", l: "RIGHT ARM (M/S)" }, { k: "l", l: "LEFT ARM (M/S)" }];
 
 /* ---------- the twelve weeks, row by row ----------
    blk: the week's block · acc: the block the rest of the week is written
@@ -104,10 +143,12 @@ export const sppRx = (doc) => SR[doc] || SR[1];
 export const sppWeekRx = (row) => Object.assign({}, sppRx(row.doc), { id: row.id, doc: row.doc, cycle: row.cycle || 1, preCamp: !!row.preCamp });
 
 /* the tests each row carries, as one line */
-export function sppTests(doc) {
+export function sppTests(doc, au) {
   const rx = sppRx(doc), out = [];
   if (rx.profile) out.push("the load-velocity profiles");
   if (rx.testWeek) out.push("the broad jump", "the top triples", "the 4 × 4 as the engine test");
+  if (au && rx.half) out.push("the rotational throw for distance", "the push press speed", "the arms-only test");
+  if (au && rx.testWeek) out.push("the trap bar jump and bench throw profiles");
   if (rx.tape) out.push("tape", "photos");
   return out;
 }
@@ -222,11 +263,16 @@ Object.assign(SPPROTO, {
   S_MV_MON_T: Object.assign({}, SPPROTO.S_MV_MON, { s: "8 min · Mon", i: SPPROTO.S_MV_MON.i.filter((r) => r[0] !== "Spanish squat hold") }),
   S_MV_SAT_T: Object.assign({}, SPPROTO.S_MV_SAT, { s: "7 min · Sat", area: "Mid-back and shoulders", i: SPPROTO.S_MV_SAT.i.filter((r) => r[0] !== "Achilles pushes") }),
 });
+/* from the audit's week, Monday 23 November: Monday's block ends with
+   three easy box jumps, so the first hard jump isn't a cold one */
+Object.assign(SPPROTO, {
+  S_MV_MON_A: Object.assign({}, SPPROTO.S_MV_MON_T, { i: SPPROTO.S_MV_MON_T.i.concat([["Then three easy box jumps", "at half effort"]]) }),
+});
 /* a day's first block: the warm-up before MOVE, the movement block from
    its week 1 */
 const MOVE_MINS = { mon: 11, tue: 8, wed: 9, thu: 12, sat: 11, sun: 10 };
 const MOVE_MINS_T = { mon: 8, sat: 7 };
-const mvKey = (d, rx) => "S_MV_" + d.toUpperCase() + (rx.tw && MOVE_MINS_T[d] ? "_T" : "");
+const mvKey = (d, rx) => "S_MV_" + d.toUpperCase() + (rx.tw && MOVE_MINS_T[d] ? (d === "mon" && rx.au ? "_A" : "_T") : "");
 const mvMins = (d, rx) => (rx.tw && MOVE_MINS_T[d] ? MOVE_MINS_T[d] : MOVE_MINS[d]);
 const moveA = (d, wu, m, line) => ({ L: "A", n: "Warm-up", m: (rx) => (rx.mw ? mvMins(d, rx) : m),
   p: (rx) => (rx.mw ? mvKey(d, rx) : wu),
@@ -380,8 +426,14 @@ export const SS = {
     moveA("tue", "S_WU_TUE", 6, "6 min · bands, push-ups, two easy throws of each"),
     /* ROTATION: the second throws of the week, three and four days from
        Saturday's, the straight and the hook — first, while you're fresh */
+    /* THE POWER TEST for the turn of a punch, weeks 4, 8 and 12: the same
+       4 kg ball, in open space, for distance — first, after the block's
+       easy throws */
+    { L: "X", n: "Rotational Throw for Distance", since: AUDIT_SINCE, m: 3, star: 1, hard: 1, prepTest: 1, hide: (rx) => !sppPowerTest(rx), rxLine: () => "best of three each side",
+      items: [{ n: "Rotational throw for distance", s: "best of three each side · the 4 kg ball", cue: "Open floor, never towards a wall. The 4 kg ball at your shoulder, side-on in your stance. Drive off your back hip and throw it flat and as far as you can; measure from your front foot to where it first lands. Three each side, and log the best of the six.", id: "s_rthrow", k: "out", u: "best distance (m)" }],
+      why: "The power test for the turn of a punch, in weeks 4, 8 and 12: the same ball and the same floor every time, so the distance is the only thing that changes." },
     { L: "K", n: "Rotational Shot-Put Throw + Hook Throw", since: "2026-11-06", m: 5, star: 1, hard: 1, pair: 1, rxLine: () => "alternate · 45 s after each",
-      items: (rx) => [{ n: "Rotational shot-put throw", s: hs(rx, 3) + " × 3 each side · 4–6 kg ball, into a wall", cue: "Ball at your shoulder, side-on to the wall in your stance. Drive off your back hip and push the ball into the wall hard and flat, like a straight punch.", id: "s_shotput", k: "chk", rest: "Rest 45 s · then the hook throw", rt: 45 },
+      items: (rx) => [{ n: "Rotational shot-put throw", s: hs(rx, 3) + " × 3 each side · " + ball(rx) + ", into a wall", cue: "Ball at your shoulder, side-on to the wall in your stance. Drive off your back hip and push the ball into the wall hard and flat, like a straight punch.", id: "s_shotput", k: "chk", rest: "Rest 45 s · then the hook throw", rt: 45 },
         { n: "Hook throw", s: hs(rx, 3) + " × 3 each side", cue: "Ball at chest height in bent arms, side-on to the wall. Pivot hard off your lead leg and sling the ball sideways into the wall.", id: "s_hookthrow", k: "chk", rest: "Rest 45 s · then the shot-put", rt: 45 }],
       w: "Every throw as hard as you can make it. A throw clearly weaker than the first ends the set." },
     { L: "B", n: "Load-Velocity Profile — Bench", m: 10, star: 1, profile: "bench", hide: (rx) => !rx.profile,
@@ -427,6 +479,11 @@ export const SS = {
       items: (rx) => [{ n: "Cable lateral raise", s: hs(rx, 3) + " × 12–15 · one or two left", cue: "Cable at hand height, stand side-on, the handle in your far hand with the cable running behind your back. Raise your arm out to the side to shoulder height, leading with the elbow, then lower slowly.", id: "s_clat_tue", k: "wr", sets: hs(rx, 3), reps: "12–15" }] },
     { L: "G", n: "Ab Wheel Rollout", m: 4, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 3) + " × 8–10",
       items: (rx) => [{ n: "Ab wheel rollout", s: hs(rx, 3) + " × 8–10", cue: "Kneeling, roll forward as far as you can without your lower back sagging, then pull back with your abs.", id: "abwheel", k: "wr", sets: hs(rx, 3), reps: "8–10" }] },
+    /* THE KNUCKLE HOLD: the hand is the part of a boxer injured most, and
+       a wrist that stays straight under load is the gym's share of it */
+    { L: "Y", n: "Knuckle Hold", since: AUDIT_SINCE, m: 2, hide: (rx) => !rx.au, rest: "Rest 30 s", rt: 30, rxLine: (rx) => hs(rx, 3) + " × 20 s",
+      items: (rx) => [{ n: "Knuckle hold", s: hs(rx, 3) + " × 20 s · on your fists, wrists dead straight", cue: "Push-up position on your fists on a mat, wrists dead straight, forearm and knuckles in one line. Hold.", id: "s_knuckle", k: "chk" }],
+      why: "The hand is the part of a boxer injured most. This is the gym's share of protecting it: a wrist that stays straight under load." },
     /* THE BURSTS: six seconds flat out, forty easy, on the assault bike —
        a little power and repeat-effort fitness for ten minutes on a day
        the legs are fresh, halfway between Saturday's 4 × 4 and Thursday */
@@ -438,12 +495,24 @@ export const SS = {
     /* THE PRESSURE ROUNDS: the fight sim — 3-minute rounds, a 5-second
        burst all out every 20 seconds and a steady pace between, straight
        after the bursts on the same bike. Three, two in the half weeks */
-    { L: "I", n: "Pressure Rounds", since: "2026-11-09", m: (rx) => (rx.pr === "pr2" ? 10 : 14), hard: 1, eng: 1, engKey: "pr",
-      timer: (rx) => ({ kind: "pressure", opt: { rounds: rx.pr === "pr2" ? 2 : 3, mins: 3, every: 20, secs: 5, rest: 60, wu: 1, cd: 2 }, title: rx.pr === "pr2" ? "2 PRESSURE ROUNDS" : "3 PRESSURE ROUNDS" }),
+    { L: "I", n: (rx) => (sppArms(rx) ? "Pressure Rounds, Arms-Only Third Minute" : "Pressure Rounds"), since: "2026-11-09", m: (rx) => (rx.pr === "pa1" ? 5 : rx.pr === "pr2" ? 10 : 14), hard: 1, eng: 1, engKey: "pr",
+      timer: (rx) => ({ kind: "pressure", opt: Object.assign({ rounds: sppPrRounds(rx), mins: 3, every: 20, secs: 5, rest: 60, wu: 1, cd: rx.pr === "pa1" ? 1 : 2 }, sppArms(rx) ? { arms: 1 } : {}),
+        title: sppPrRounds(rx) === 1 ? "1 PRESSURE ROUND" : sppPrRounds(rx) + " PRESSURE ROUNDS" }),
       rxLine: (rx) => (SPPENG[rx.pr] || SPPENG.pr).d,
-      items: (rx) => [{ n: "Output", s: "the total on the bike's screen · the peak heart rate", id: "s_press", k: "out", u: "output / peak HR", erg: sessionBoxes(rx.pr), fields: engHR(rx.pr) }],
-      w: "Every burst all out; between them a steady pace, and never stop pedalling.",
-      why: "Bursts with seconds to recover, the way you fight. Clear the bike's screen after the bursts, so its total is the rounds' alone. If Thursday's sled times get slower at the same load, or your jump and throw sets keep ending early, two weeks running, the pressure rounds come out for the rest of the twelve weeks.", tr: 1 }] },
+      items: (rx) => [{ n: "Output", s: "the total on the bike's screen · the peak heart rate" + (sppArms(rx) ? " · the minutes at 90% or above" : ""), id: "s_press", k: "out", u: "output / peak HR", erg: sessionBoxes(rx.pr),
+        fields: sppArms(rx) ? engHR(rx.pr).concat(Z5_FIELD) : engHR(rx.pr) }],
+      w: (rx) => (sppArms(rx) ? "Every burst all out; between them a steady pace, and never stop. The third minute of every round: feet on the pegs, arms only." : "Every burst all out; between them a steady pace, and never stop pedalling."),
+      why: (rx) => (sppArms(rx) ? "Bursts with seconds to recover, the way you fight, and the third minute on your arms alone, because they're what has to keep working. Clear the bike's screen after the bursts, so its total is the rounds' alone. The minutes at 90% or above are the time in the Polar's top heart-rate zone for the whole session. " : "Bursts with seconds to recover, the way you fight. Clear the bike's screen after the bursts, so its total is the rounds' alone. ")
+        + "If Thursday's sled times get slower at the same load, or your jump and throw sets keep ending early, two weeks running, the pressure rounds come out for the rest of the twelve weeks.", tr: 1 },
+    /* THE ARMS-ONLY TEST, weeks 4, 8 and 12, in the second round's place:
+       three minutes on the arms alone for the biggest total — the arms'
+       own engine number */
+    { L: "Z", n: "The Arms-Only Test", since: AUDIT_SINCE, m: 5, hard: 1, eng: 1, engKey: "at", hide: (rx) => rx.pr !== "pa1",
+      timer: () => ({ kind: "armtest", opt: { mins: 3, cd: 2 }, title: "THE ARMS-ONLY TEST" }),
+      rxLine: () => SPPENG.arm3.d,
+      items: () => [{ n: "Output", s: "the total on the bike's screen · the peak heart rate", id: "s_arm3", k: "out", u: "output / peak HR", erg: sessionBoxes("arm3"), fields: engHR("arm3") }],
+      w: "Feet on the pegs, legs still. Three minutes on your arms alone for the biggest total you can make: start hard and hold on.",
+      why: "The arms' own engine number, in weeks 4, 8 and 12, in the second pressure round's place. Clear the bike's screen first, so the total is the test's alone.", tr: 1 }] },
 
   /* ---------------- WEDNESDAY ---------------- */
   wed: { n: "WEDNESDAY", t: "Physique A — chest and back for size, rear delts and cable crunches, lateral raises, the neck and medicine-ball drops, then the nasal run", ac: C.moss, box: 1,
@@ -496,10 +565,15 @@ export const SS = {
       items: [{ n: "Trap bar at five loads", s: FIVE, cue: "Two reps at each load, as fast as the bar will move, the watch recording the mean speed.", id: "s_prof_tb", k: "chk" },
         { n: "Trap bar jump at four loads", s: "10 · 20 · 30 · 40% of the trap bar — two reps each", cue: "Two jumps at each load, the watch recording the mean speed. The load with the highest power is the one you jump with until the next profile.", id: "s_prof_tj", k: "chk" }],
       why: PROFILE_WHY },
-    { L: "F", n: "Trap Bar Jump", m: 6, star: 1, hard: 1, hide: (rx) => !!rx.profile, rest: "Rest 90 s", rt: 90,
+    /* TEST WEEK redraws the jump's line, in its sets' place */
+    { L: "Q", n: "Load-Velocity Profile — Trap Bar Jump", since: AUDIT_SINCE, m: 6, star: 1, profile: "tbjump", hide: (rx) => !(rx.au && rx.testWeek),
+      rxLine: () => "the trap bar jump at four loads · 2 reps each, the watch recording",
+      items: [{ n: "Trap bar jump at four loads", s: "10 · 20 · 30 · 40% of the trap bar — two reps each", cue: "Two jumps at each load, the watch recording the mean speed. The load with the highest power is the one you jump with until the next profile.", id: "s_prof_tj", k: "chk" }],
+      why: "Test week redraws the jump's line in its sets' place: the twelve weeks' power as a number, and the right load for the next cycle." },
+    { L: "F", n: "Trap Bar Jump", m: 6, star: 1, hard: 1, spd: (rx) => !!rx.au, spdLine: SPLEEFT_FAST, hide: (rx) => !!rx.profile || (!!rx.au && !!rx.testWeek), rest: "Rest 90 s", rt: 90,
       rxLine: (rx) => (rx.testWeek ? 3 : 4) + " × 3 @ your peak-power load",
       items: (rx) => [{ n: "Trap bar jump", s: (rx.testWeek ? 3 : 4) + " × 3 @ your peak-power load", cue: "Stand inside the bar, dip and jump as high as you can, land soft with bent knees, reset, go again.", id: "s_tbjump", k: "wr", mk: "tbdl", pct: rx.tjPct, sets: rx.testWeek ? 3 : 4, reps: 3 }],
-      w: "Every jump as high as you can make it. A jump clearly lower than the first ends the set." },
+      w: (rx) => (rx.au ? "Every jump as high as you can make it. " + SPLEEFT_FAST : "Every jump as high as you can make it. A jump clearly lower than the first ends the set.") },
     lowerPushes("T"),
     { L: "G", n: "Trap Bar Deadlift", m: mainM, star: 1, hard: 1, mainLift: "tbdl", vel: "tbdl", hide: (rx) => !!rx.profile,
       rest: (rx) => (rx.contrast ? "Rest 90 s · 3 broad jumps · rest 2:00" : "Rest 3:00"), rt: (rx) => (rx.contrast ? 225 : 180),
@@ -547,24 +621,29 @@ export const SS = {
     moveA("sat", "S_WU_SAT", 6, "6 min · bands, push-ups, two easy throws of each"),
     lowerPushes("T"),
     { L: "B", n: "Medicine-Ball Chest Pass + Rotational Scoop Throw", m: 7, star: 1, hard: 1, pair: 1, rxLine: () => "alternate · 60 s after each",
-      items: (rx) => [{ n: "Medicine-ball chest pass", s: hs(rx, 3) + " × 5 · 4–6 kg ball, into a wall", cue: "Stand a metre from a solid wall with the ball at your chest and throw it into the wall as hard and fast as you can, then catch the rebound.", id: "s_chestpass", k: "chk", rest: "Rest 60 s · then the scoop throw", rt: 60 },
+      items: (rx) => [{ n: "Medicine-ball chest pass", s: hs(rx, 3) + " × 5 · " + ball(rx) + ", into a wall", cue: "Stand a metre from a solid wall with the ball at your chest and throw it into the wall as hard and fast as you can, then catch the rebound.", id: "s_chestpass", k: "chk", rest: "Rest 60 s · then the scoop throw", rt: 60 },
         { n: "Rotational scoop throw", s: hs(rx, 3) + " × 4 each side", cue: "Side-on to the wall, ball at your back hip. Drive off your back foot and turn your hips through to throw it into the wall.", id: "s_scoop", k: "chk", rest: "Rest 60 s · then the chest pass", rt: 60 }],
       w: "Every throw as hard as you can make it. A throw clearly weaker than the first ends the set." },
-    { L: "P", n: "Load-Velocity Profile — Bench Throw", m: 6, star: 1, profile: "bthrow", hide: (rx) => !rx.profile,
+    { L: "P", n: "Load-Velocity Profile — Bench Throw", m: 6, star: 1, profile: "bthrow", hide: (rx) => !(rx.profile || (rx.au && rx.testWeek)),
       rxLine: () => "the bench throw at four loads · 2 reps each, the watch recording",
       items: [{ n: "Bench throw at four loads", s: "20 · 30 · 40 · 50% of the bench — two reps each", cue: "Two throws at each load, the watch recording the mean speed. The load with the highest power is the one you throw until the next profile.", id: "s_prof_bt", k: "chk" }],
       why: PROFILE_WHY },
-    { L: "C", n: "Bench Throw (Smith)", m: 7, star: 1, hard: 1, hide: (rx) => !!rx.profile, rest: "Rest 2:00", rt: 120,
+    { L: "C", n: "Bench Throw (Smith)", m: 7, star: 1, hard: 1, spd: (rx) => !!rx.au, spdLine: SPLEEFT_FAST, hide: (rx) => !!rx.profile || (!!rx.au && !!rx.testWeek), rest: "Rest 2:00", rt: 120,
       rxLine: (rx) => hs(rx, 4) + " × 3 @ your peak-power load",
       items: (rx) => [{ n: "Bench throw", s: hs(rx, 4) + " × 3 @ your peak-power load", cue: "Smith machine, with its safety stops set so the bar rests a couple of centimetres above your chest. Lower the bar to the stops, throw it so hard it leaves your hands, catch it with soft elbows and lower it back to the stops.", id: "throw", k: "wr", mk: "bench", pct: rx.btPct, sets: hs(rx, 4), reps: 3 }],
-      note: BENCH_THROW_NOTE, w: "Every throw as fast as you can make it. A throw clearly slower than the first ends the set." },
+      note: BENCH_THROW_NOTE, w: (rx) => (rx.au ? "Every throw as fast as you can make it. " + SPLEEFT_FAST : "Every throw as fast as you can make it. A throw clearly slower than the first ends the set.") },
+    /* THE PUSH PRESS SPEED TEST, weeks 4, 8 and 12: the same weight every
+       time, so the speed is the only thing that can change */
+    { L: "X", n: "Push Press Speed Test", since: AUDIT_SINCE, m: 2, star: 1, hard: 1, prepTest: 1, hide: (rx) => !sppPowerTest(rx), rxLine: () => "3 reps each side at the bar plus 20 kg",
+      items: [{ n: "Push press speed test", s: "3 reps each side · the bar plus 20 kg, every time", cue: "The one-arm landmine push press with 20 kg on the bar, Spleeft on the wrist that's pressing. Three reps as fast as you can, swap the watch to the other wrist, three reps on that side. Log each side's fastest rep.", id: "s_ppspeed", k: "out", u: "fastest rep (m/s)", fields: PP_SPEED_FIELDS }],
+      why: "The punch's own power number, in weeks 4, 8 and 12: the same weight every time, so the speed is the only thing that can change." },
     /* THE LANDMINE PUSH PRESS: the legs start the bar and one arm finishes
        it, up and forward — the week's fast press, with no bar overhead */
-    { L: "D", n: "One-Arm Landmine Push Press", m: (rx) => (rx.half ? 8 : rx.acc === "size" ? 13 : 15), star: 1, hard: 1, rest: "Rest 2:00", rt: 120,
+    { L: "D", n: "One-Arm Landmine Push Press", m: (rx) => (rx.half ? 8 : rx.acc === "size" ? 13 : 15), star: 1, hard: 1, spd: (rx) => !!rx.au, spdLine: SPLEEFT_ARM, rest: "Rest 2:00", rt: 120,
       rxLine: (rx) => sppPp(rx).sets + " × " + sppPp(rx).reps + " each side · every rep fast",
       items: (rx) => [{ n: "One-arm landmine push press", s: sppPp(rx).sets + " × " + sppPp(rx).reps + " each side · every rep fast", cue: "The landmine press with a leg drive: the end of the bar at your shoulder, split stance, the opposite foot forward. A quick dip of the knees, then drive hard with the legs and punch the bar up and forward to a straight arm. Lower it under control and reset. Log the weight you add to the bar.",
         id: "s_lmpush", k: "wr", sets: sppPp(rx).sets, reps: sppPp(rx).reps + "/side" }],
-      w: "Every rep as fast as you can make it. A rep clearly slower than the first ends the set.",
+      w: (rx) => (rx.au ? "Every rep as fast as you can make it. " + SPLEEFT_ARM : "Every rep as fast as you can make it. A rep clearly slower than the first ends the set."),
       why: "When every rep of every set is fast, add the smallest step next time.", tr: 1 },
     { L: "E", n: "Bench Press, Touch and Go + Pull-Up", m: 11, pair: 1, rxLine: () => "alternate · 90 s after each",
       items: (rx) => [{ n: "Bench press, touch and go", s: hs(rx, 3) + " × " + by(rx, BTG).reps + " @ " + by(rx, BTG).pct + "%", cue: "Tuesday's bench without the pause: lower under control, touch your chest and press." + (rx.acc === "power" ? " Fast." : ""), id: "s_bench_tg", k: "wr", mk: "bench", pct: by(rx, BTG).pct, sets: hs(rx, 3), reps: by(rx, BTG).reps, rest: "Rest 90 s · then the pull-up", rt: 90 },
@@ -585,11 +664,13 @@ export const SS = {
       why: "The groin's second dose of the week, with Thursday's, and the side of the trunk the side plank trained." },
     hipPair("J"),
     LAND_ROT("K", "2026-11-09"),
-    { L: "H", n: (rx) => (rx.e === "vo2s" ? "The 3 × 4 Intervals" : "The 4 × 4 Intervals"), m: 30, star: 1, hard: 1, eng: 1, engKey: "e",
-      timer: (rx) => ({ kind: "vo2", opt: { n: 4, short: rx.e === "vo2s" ? 1 : 0, wu: 5, cd: 3 }, title: rx.e === "vo2s" ? "THE 3 × 4" : "THE 4 × 4" }),
+    { L: "H", n: (rx) => (spp44Short(rx) ? "The 3 × 4 Intervals" : "The 4 × 4 Intervals"), m: 30, star: 1, hard: 1, eng: 1, engKey: "e",
+      timer: (rx) => ({ kind: "vo2", opt: { n: 4, short: spp44Short(rx) ? 1 : 0, wu: 5, cd: 3 }, title: spp44Short(rx) ? "THE 3 × 4" : "THE 4 × 4" }),
       rxLine: (rx) => (SPPENG[rx.e] || SPPENG.vo2).d,
-      items: (rx) => [{ n: "Output", s: "the total on the bike's screen · the peak heart rate", id: "s_44", k: "out", u: "output / peak HR", erg: sessionBoxes(rx.e), fields: engHR(rx.e) }],
-      why: (rx) => (rx.testWeek ? "Test week: the 4 × 4 is the engine test. " : "") + "Use the same bike every week. Progress is more on the screen at the same peak heart rate, or the same at a lower one.", tr: 1 }] },
+      items: (rx) => [sppTread(rx) ? { n: "Output", s: "the distance on the treadmill's screen · the peak heart rate", id: "s_44", k: "out", u: "distance / peak HR", fields: TREAD_FIELDS, lastKm: 1 }
+        : { n: "Output", s: "the total on the bike's screen · the peak heart rate", id: "s_44", k: "out", u: "output / peak HR", erg: sessionBoxes(rx.e), fields: engHR(rx.e) }],
+      why: (rx) => (rx.testWeek ? "Test week: the 4 × 4 is the engine test. " : "") + (sppTread(rx) ? "The same treadmill every week, set to 5%. The first minute of each effort climbs into the band and the last three sit in it; walk or jog the easy minutes. Progress is more distance at the same peak heart rate, or the same at a lower one."
+        : "Use the same bike every week. Progress is more on the screen at the same peak heart rate, or the same at a lower one."), tr: 1 }] },
 
   /* ---------------- SUNDAY ---------------- */
   sun: { n: "SUNDAY", t: "Physique B — shoulders, traps and cable crunches, arms and calves, and the Pallof press, then the nasal run and the weekly check", ac: C.brass, free: 1,
@@ -603,6 +684,10 @@ export const SS = {
       items: (rx) => [{ n: "Dumbbell shrug", s: hs(rx, 3) + " × 10–15 · a second's hold at the top", cue: "Heavy dumbbells at your sides. Lift your shoulders straight up towards your ears, hold for a second, then lower to a full stretch.", id: "s_shrug", k: "wr", sets: hs(rx, 3), reps: "10–15", rest: "straight into the cable crunch", rt: 0 },
         CRUNCH(rx)],
       why: "Back to back, a minute after each pair." },
+    /* THE DROPS' SECOND DOSE, with Wednesday's: the brace that fires on time */
+    { L: "M", n: "Medicine-Ball Drops", since: AUDIT_SINCE, m: 2, hide: (rx) => !rx.au, rest: "Rest 45 s", rt: 45, rxLine: (rx) => hs(rx, 2) + " × 8",
+      items: (rx) => [{ n: "Medicine-ball drops", s: hs(rx, 2) + " × 8 · Wednesday's ball", cue: "Lie on your back, knees bent, the ball held at arm's length over your stomach. Breathe out hard through your teeth and brace as you let it go; it lands just above your belly button, and you catch it on the bounce. Never on the ribs.", id: "s_drops_sun", k: "chk" }],
+      why: "The brace's second dose of the week, with Wednesday's: a trunk that fires on time when something lands on it." },
     { L: "E", n: "EZ-Bar Curl + Overhead Triceps Extension", m: 7, pair: 1, hide: (rx) => !!rx.upper4, rxLine: () => "alternate · 60 s after each",
       items: (rx) => [{ n: "EZ-bar curl", s: hs(rx, 3) + " × 8–12 · one or two left", cue: "Elbows pinned at your sides. Curl up, then take two seconds to lower to straight arms.", id: "s_ezcurl", k: "wr", sets: hs(rx, 3), reps: "8–12", rest: "Rest 60 s · then the triceps", rt: 60 },
         { n: "Overhead cable triceps extension", s: hs(rx, 3) + " × 10–15 · one or two left", cue: "Elbows pointing at the ceiling, lower your hands behind your head to a deep stretch, then straighten your arms.", id: "s_ohtri", k: "wr", sets: hs(rx, 3), reps: "10–15", rest: "Rest 60 s · then the curl", rt: 60 }],

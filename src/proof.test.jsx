@@ -243,6 +243,8 @@ const SAID_AS = {
   "FOREARM SIDE PLANK": "side plank",
   "EASY BIKE, TWO MINUTES": "easy bike, 2 minutes", "COPENHAGEN PLANK, KNEE OR ANKLE": "copenhagen plank", "SPANISH SQUAT HOLD, BY LEVEL": "spanish squat hold", "HIP AIRPLANES, BY LEVEL": "hip airplanes", "COSSACK SQUAT, BY LEVEL": "cossack squat", "90/90 SWITCHES, BY LEVEL": "90/90 switches",
   "COPENHAGEN LIFTS, BY LEVEL": "copenhagen lifts", "STAR SIDE PLANK, BY LEVEL": "star side plank",
+  /* the audit's changes, as Strength, Power and Physique's document says them */
+  "PRESSURE ROUNDS, ARMS-ONLY THIRD MINUTE": "the third minute of every round is arms only", "4-MINUTE INTERVALS ON THE TREADMILL": "the 4 × 4 is written for the treadmill",
 };
 const SESSION_SAID = { vo2: "4 minute intervals", rz: "repeat bursts", rz1: "bursts 1 × 8", lac: "40 second repeats", lac2: "40 s repeats 2 × 6", tempo: "tempo",
   thr: "threshold", erg: "rounds on the erg", erg8: "rounds on the erg", ergrounds: "rounds on the erg", fp: "fight pace", fightpace: "fight pace",

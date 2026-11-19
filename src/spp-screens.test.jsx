@@ -372,9 +372,10 @@ describe("the pressure rounds and the ab finishes", () => {
     expect([screen.getByTestId("timer-part").textContent, screen.getByTestId("timer-count").textContent]).toEqual(["REST — 1 MINUTE", "1:00"]);
     cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
     await at(2026, 11, 24, live());
-    fireEvent.click(within(pick("Pressure Rounds")).getAllByRole("button", { name: /START/ })[0]);
-    expect(screen.getByTestId("timer-title").textContent).toBe("2 PRESSURE ROUNDS");
-    expect(screen.getAllByText(/STEP 1 \/ 39 · 10:00 LEFT/).length).toBeGreaterThan(0);
+    /* from the audit's week, Monday 23 November: the lighter week runs one round, its third minute arms only, then the arms-only test */
+    fireEvent.click(within(pick("Pressure Rounds, Arms-Only Third Minute")).getAllByRole("button", { name: /START/ })[0]);
+    expect(screen.getByTestId("timer-title").textContent).toBe("1 PRESSURE ROUND");
+    expect(screen.getAllByText(/STEP 1 \/ 20 · 5:00 LEFT/).length).toBeGreaterThan(0);
     cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
     await at(2026, 11, 10, live(), { "o8s-ready": { "mSw2-tue": "R" } });
     expect(wholeDay()).not.toContain("Pressure Rounds");
@@ -504,7 +505,8 @@ describe("the landmine presses, the side neck raise and the medicine-ball drops"
     const rows = wholeDay();
     const i = rows.indexOf("Load-Velocity Profile — Bench Throw");
     expect(i).toBeGreaterThan(0);
-    expect(rows[i + 1]).toBe("One-Arm Landmine Push Press");
+    /* from the audit's week the push press speed test sits between them */
+    expect(rows.slice(i + 1, i + 3)).toEqual(["Push press speed test", "One-Arm Landmine Push Press"]);
     expect(rows).not.toContain("Bench Throw (Smith)");
     const prof = pick("Load-Velocity Profile — Bench Throw");
     expect(within(prof).getByTestId("card-pres").textContent).toBe("the bench throw at four loads · 2 reps each, the watch recording");
@@ -515,7 +517,9 @@ describe("the landmine presses, the side neck raise and the medicine-ball drops"
     await at(2027, 1, 23, live());
     const test = wholeDay();
     expect(test.some((r) => /top triple/i.test(r))).toBe(false);
-    expect(test).toContain("Bench Throw (Smith)");
+    /* from the audit's week, test week redraws the bench throw's profile in its sets' place */
+    expect(test).not.toContain("Bench Throw (Smith)");
+    expect(test).toContain("Load-Velocity Profile — Bench Throw");
     expect(sets(pick("One-Arm Landmine Push Press"))).toEqual(["3 × 3 each side", 3]);
   });
   it("Wednesday: the side neck raise and the medicine-ball drops, back to back, after the lateral raise and before the nasal run; the neck's set goes straight into the drops, the drops' set starts 0:45; two sets each in week 4; they run on a red morning", async () => {
@@ -1154,5 +1158,163 @@ describe("Optimal 8 · Move in every program — Prep, the camp, the transition 
     expect(rows.filter((r) => /pushes|Towel calf/.test(r))).toEqual([]);
     expect(rows.filter((r) => /Spanish squat hold|Achilles hold/i.test(r)).length > 0).toBe(true);
     expect(pres(pick("THE BRACE"))[0]).toMatch(/the Copenhagen plank in/);
+  });
+});
+
+describe("the audit's changes, from Monday 23 November", () => {
+  /* the plan in use: Prep from 26 October, Strength, Power and Physique started on Monday 2 November.
+     Week 4, the lighter week, is from 23 November; week 5 from 30 November; week 9, the power block,
+     from 28 December; week 12, test week, from 18 January */
+  const live = (extra) => base(Object.assign({ plans: [{ from: "2026-10-26", made: "2026-10-25", inputs: PREP }, { from: "2026-11-02", made: "2026-11-01", inputs: Object.assign({}, SPP, { restart: true }) }], season: SPP }, extra || {}));
+  const again = () => { cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true"); };
+  const skip = () => fireEvent.click(screen.getAllByRole("button", { name: "SKIP" }).pop());
+  const part = () => [screen.getByTestId("timer-part").textContent, screen.getByTestId("timer-count").textContent];
+  const pres = (card) => within(card).getAllByTestId("card-pres").map((e) => e.textContent);
+  it("Tuesday 1 December: the knuckle hold after the ab wheel, three sets of 20 seconds; the pressure rounds' third minute is arms only, from burst 7 of 9, 58 steps, and they log the minutes at 90% or above. Tuesday 17 November is as it was", async () => {
+    await at(2026, 12, 1, live());
+    const rows = wholeDay(), i = rows.indexOf("Ab Wheel Rollout");
+    expect(rows.slice(i, i + 4)).toEqual(["Ab Wheel Rollout", "Knuckle Hold", "Assault Bike Bursts", "Pressure Rounds, Arms-Only Third Minute"]);
+    expect(rows).not.toContain("The Arms-Only Test");
+    expect(rows).not.toContain("Rotational throw for distance");
+    let card = pick("Knuckle Hold");
+    expect(pres(card)).toEqual(["3 × 20 s · on your fists, wrists dead straight · Rest 30 s"]);
+    expect(card.querySelectorAll("[data-set-btn]")).toHaveLength(3);
+    card = pick("Pressure Rounds, Arms-Only Third Minute");
+    expect(pres(card)).toEqual(["On the assault bike, straight after the bursts: 1 minute easy, then 3 rounds of 3 minutes with 1 minute's rest between — in each, a 5-second burst all out every 20 seconds, a steady pace between, and the third minute arms only, feet on the pegs — then 2 minutes easy"]);
+    expect(card.textContent).toMatch(/Minute three, arms only: your feet on the pegs on the fork, legs still/);
+    expect(card.textContent).toMatch(/PEAK HEART RATE \(BPM\)MINUTES AT 90% OR ABOVE · THE POLAR'S TOP ZONE/);
+    fireEvent.click(within(card).getAllByRole("button", { name: /START/ })[0]);
+    expect(screen.getByTestId("timer-title").textContent).toBe("3 PRESSURE ROUNDS");
+    expect(screen.getAllByText(/STEP 1 \/ 58 · 14:00 LEFT/).length).toBeGreaterThan(0);
+    skip();
+    expect(part()).toEqual(["BURST 1 OF 9 — ALL OUT", "0:05"]);
+    for (let k = 0; k < 11; k++) skip();
+    expect(part()).toEqual(["ROUND 1 OF 3 · STEADY — NEVER STOP", "0:15"]);
+    skip();
+    expect(part()).toEqual(["BURST 7 OF 9 — ARMS ONLY, ALL OUT", "0:05"]);
+    skip();
+    expect(part()).toEqual(["ROUND 1 OF 3 · ARMS ONLY, STEADY — NEVER STOP", "0:15"]);
+    again();
+    await at(2026, 11, 17, live());
+    const was = wholeDay();
+    expect(was).toContain("Pressure Rounds");
+    expect(was).not.toContain("Knuckle Hold");
+  });
+  it("Tuesday 24 November, the lighter week: the rotational throw for distance first; two knuckle holds; one pressure round, then the arms-only test, 3 minutes and 2 easy", async () => {
+    await at(2026, 11, 24, live());
+    const rows = wholeDay(), b = rows.indexOf("The movement block"), k = rows.indexOf("Knuckle Hold");
+    expect(rows.slice(b, b + 3)).toEqual(["The movement block", "Rotational throw for distance", "Rotational Shot-Put Throw + Hook Throw"]);
+    expect(rows.slice(k, k + 4)).toEqual(["Knuckle Hold", "Assault Bike Bursts", "Pressure Rounds, Arms-Only Third Minute", "The Arms-Only Test"]);
+    let card = pick("Rotational throw for distance");
+    expect(pres(card)).toEqual(["best of three each side · the 4 kg ball"]);
+    expect(card.textContent).toMatch(/Open floor, never towards a wall\. The 4 kg ball at your shoulder/);
+    expect(pick("Knuckle Hold").querySelectorAll("[data-set-btn]")).toHaveLength(2);
+    card = pick("The Arms-Only Test");
+    expect(pres(card)).toEqual(["On the assault bike, straight after the pressure round: clear its screen, feet on the pegs, then 3 minutes arms only for the biggest total you can make, then 2 minutes easy"]);
+    fireEvent.click(within(card).getAllByRole("button", { name: /START/ })[0]);
+    expect(screen.getByTestId("timer-title").textContent).toBe("THE ARMS-ONLY TEST");
+    expect(screen.getByTestId("timer-part").textContent).toBe("ARMS ONLY — 3 MINUTES, THE BIGGEST TOTAL YOU CAN MAKE");
+    expect(screen.getAllByText(/STEP 1 \/ 2 · 5:00 LEFT/).length).toBeGreaterThan(0);
+  });
+  it("Monday 23 November: the movement block ends with three easy box jumps; Monday 16 November's doesn't", async () => {
+    await at(2026, 11, 23, live());
+    expect(pick("The movement block").textContent).toMatch(/Then three easy box jumps\s*at half effort/);
+    again();
+    await at(2026, 11, 16, live());
+    expect(pick("The movement block").textContent).not.toMatch(/easy box jumps/);
+  });
+  it("Thursday 3 December: the trap bar jump has the bar-speed box and Spleeft's rule; Thursday 19 November has neither. Saturday 5 December: the bench throw's and the landmine push press's, the push press's for the arm the watch is on, and its speed is kept", async () => {
+    await at(2026, 12, 3, live());
+    let card = pick("Trap Bar Jump");
+    expect(within(card).getByTestId("speed-rule").textContent).toBe("SPLEEFT ON YOUR WRIST: READ THE SPEED AFTER EVERY REP. A REP 10% SLOWER THAN THE SET'S FASTEST ENDS THE SET.");
+    expect(within(card).getByTestId("bar-speed").textContent).toMatch(/SET 1 · MEAN OF ITS TWO FASTEST REPS \(M\/S\)$/);
+    again();
+    await at(2026, 11, 19, live());
+    expect(within(pick("Trap Bar Jump")).queryByTestId("bar-speed")).toBe(null);
+    again();
+    await at(2026, 12, 5, live());
+    expect(within(pick("Bench Throw (Smith)")).getByTestId("speed-rule").textContent).toMatch(/^SPLEEFT ON YOUR WRIST: READ THE SPEED AFTER EVERY REP\./);
+    card = pick("One-Arm Landmine Push Press");
+    expect(within(card).getByTestId("speed-rule").textContent).toBe("SPLEEFT READS THE ARM THE WATCH IS ON: THAT SIDE FIRST, THE SPEED READ AFTER EVERY REP. A REP 10% SLOWER THAN THE SET'S FASTEST ENDS THE SET, AND THE OTHER SIDE DOES THE SAME REPS.");
+    fireEvent.change(within(card).getByTestId("bar-speed").querySelector("input"), { target: { value: "1.45" } });
+    expect(JSON.parse(localStorage.getItem("o8s-log"))["mSw5-sat-s_lmpush"].bs).toBe("1.45");
+  });
+  it("Saturday 5 December: the 4 × 4 on the treadmill at 5%, the distance and the peak heart rate logged; the Saturday after reads it back. Saturday 21 November's is on the bike, as it was", async () => {
+    await at(2026, 12, 5, live());
+    let card = pick("The 4 × 4 Intervals");
+    expect(pres(card)).toEqual(["On the treadmill at 5%: 5 minutes easy, then 4 × 4 minutes at 90–95% of your peak heart rate with 3 easy between, then 3 minutes easy"]);
+    expect(card.textContent).toMatch(/The treadmill set to 5%\. Five minutes easy, then four minutes hard/);
+    expect(card.textContent).toMatch(/DISTANCE \(KM\)PEAK HEART RATE \(BPM\)/);
+    expect(card.textContent).not.toMatch(/SESSION AVERAGE/);
+    const inputs = card.querySelectorAll("input");
+    expect(inputs).toHaveLength(2);
+    fireEvent.change(inputs[0], { target: { value: "3.2" } });
+    fireEvent.change(card.querySelectorAll("input")[1], { target: { value: "172" } });
+    expect(JSON.parse(localStorage.getItem("o8s-log"))["mSw5-sat-s_44"]).toMatchObject({ w: "3.2", hr: "172", kind: "vt" });
+    again();
+    await at(2026, 12, 12, live(), { "o8s-log": { "mSw5-sat-s_44": { w: "3.2", hr: "172", kind: "vt", d: "2026-12-05" } } });
+    expect(within(pick("The 4 × 4 Intervals")).getByTestId("last-run").textContent).toBe("LAST TIME · 3.2 KM · PEAK 172 BPM");
+    again();
+    await at(2026, 11, 21, live());
+    card = pick("The 4 × 4 Intervals");
+    expect(pres(card)[0]).toMatch(/^On the bike: 5 minutes easy/);
+    expect(card.textContent).toMatch(/SESSION AVERAGE/);
+  });
+  it("Saturday 28 November: the push press speed test between the bench throw's profile and the push press, a box an arm. Sunday 29 November: one set of drops after the shrug and the crunch; two on 6 December; none on 22 November", async () => {
+    await at(2026, 11, 28, live());
+    const card = pick("Push press speed test");
+    expect(pres(card)).toEqual(["3 reps each side · the bar plus 20 kg, every time"]);
+    expect(card.textContent).toMatch(/Swap the watch to the other wrist and do three on that side\./);
+    expect(card.textContent).toMatch(/RIGHT ARM \(M\/S\)LEFT ARM \(M\/S\)/);
+    again();
+    await at(2026, 11, 29, live());
+    const sun = wholeDay();
+    expect(sun[sun.indexOf("Dumbbell Shrug + Cable Crunch") + 1]).toBe("Medicine-Ball Drops");
+    let drops = pick("Medicine-Ball Drops");
+    expect(pres(drops)).toEqual(["1 × 8 · Wednesday's ball · Rest 45 s"]);
+    expect(drops.querySelectorAll("[data-set-btn]")).toHaveLength(1);
+    again();
+    await at(2026, 12, 6, live());
+    drops = pick("Medicine-Ball Drops");
+    expect(pres(drops)).toEqual(["2 × 8 · Wednesday's ball · Rest 45 s"]);
+    expect(drops.querySelectorAll("[data-set-btn]")).toHaveLength(2);
+    again();
+    await at(2026, 11, 22, live());
+    expect(wholeDay()).not.toContain("Medicine-Ball Drops");
+  });
+  it("the power block and test week: a 3 kg ball for Tuesday 29 December's throws; Thursday 21 January the trap bar jump's profile in its sets' place; Saturday 23 January the bench throw's profile, then the speed test", async () => {
+    await at(2026, 12, 29, live());
+    expect(pres(pick("Rotational Shot-Put Throw + Hook Throw"))[1]).toBe("3 × 3 each side · 3 kg ball, into a wall · Rest 45 s · then the hook throw");
+    again();
+    await at(2027, 1, 21, live());
+    const thu = wholeDay();
+    expect(thu).toContain("Load-Velocity Profile — Trap Bar Jump");
+    expect(thu).not.toContain("Trap Bar Jump");
+    expect(within(pick("Load-Velocity Profile — Trap Bar Jump")).getByRole("button", { name: "DRAW THE PROFILE" })).toBeInTheDocument();
+    again();
+    await at(2027, 1, 23, live());
+    const sat = wholeDay(), i = sat.indexOf("Load-Velocity Profile — Bench Throw");
+    expect(sat.slice(i, i + 3)).toEqual(["Load-Velocity Profile — Bench Throw", "Push press speed test", "One-Arm Landmine Push Press"]);
+    expect(sat).not.toContain("Bench Throw (Smith)");
+  });
+  it("PROGRESS: the dashboard reads the treadmill's distance, the throw, the push press speed as the mean of the two arms, and the arms-only test; THIS WEEK says what the week tests", async () => {
+    const seed = { "mSw5-sat-s_44": { w: "3.2", hr: "172", kind: "vt", d: "2026-12-05" }, "mSw4-tue-s_rthrow": { w: "9.5" }, "mSw4-sat-s_ppspeed": { w: "1.9", l: "1.7" },
+      "mSw4-tue-s_arm3_erg": { v: ["41"], kind: "arm3", d: "2026-11-24" }, "mSw4-tue-s_arm3": { hr: "165" } };
+    await at(2026, 12, 11, live(), { "o8s-log": seed });
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "PROGRESS" }));
+    const text = document.body.textContent;
+    expect(text).toMatch(/The 4 × 4 on the treadmill — the distanceLAST LOGGED SAT,? 5 DEC.{0,3}3\.2 km/);
+    expect(text).toMatch(/Rotational throw — weeks 4, 8 and 12LAST LOGGED TUE,? 24 NOV.{0,3}9\.5 m/);
+    expect(text).toMatch(/Push press speed — weeks 4, 8 and 12LAST LOGGED SAT,? 28 NOV.{0,3}1\.8 m\/s/);
+    expect(text).toMatch(/The arms-only test — 3 minutesLAST LOGGED TUE,? 24 NOV.{0,3}41 W/);
+    again();
+    await at(2026, 11, 24, live());
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "MORE" }));
+    fireEvent.click(screen.getByRole("button", { name: "PLAN" }));
+    fireEvent.click(screen.getByRole("button", { name: "THIS WEEK" }));
+    const week = document.body.textContent;
+    expect(week).toMatch(/The intervals \(Sat\)3 × 4 on the treadmill at 5%/);
+    expect(week).toMatch(/Pressure rounds \(Tue\)1 × 3 minutes, straight after the bursts, the third minute arms only; then the arms-only test/);
+    expect(week).toMatch(/Teststhe load-velocity profiles · the rotational throw for distance · the push press speed · the arms-only test · tape · photos/);
   });
 });

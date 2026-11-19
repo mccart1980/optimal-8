@@ -259,7 +259,10 @@ export function sleepWeek(morning, days) {
    chart only compares speeds at the same load, because a speed at a
    different weight isn't the same measurement.
    ================================================================ */
-export const BAR_SPEED_ITEMS = { squat: "squat", bench: "bench", tbdl: "tbdl", pushpress: "pp", c_squat: "cw_squat", c_tbdl: "cw_tbdl", c_bench: "cw_bench", c_pushpress: "cw_pp" };
+export const BAR_SPEED_ITEMS = { squat: "squat", bench: "bench", tbdl: "tbdl", pushpress: "pp", c_squat: "cw_squat", c_tbdl: "cw_tbdl", c_bench: "cw_bench", c_pushpress: "cw_pp",
+  /* Strength, Power and Physique's fast lifts, from the audit's week */
+  s_tbjump: "tbjump", throw: "bthrow", s_lmpush: "lmpush" };
+export const BAR_SPEED_FAST = [["tbjump", "Trap Bar Jump"], ["bthrow", "Bench Throw"], ["lmpush", "Landmine Push Press"]];
 export const BAR_SPEED_LIFTS = [["squat", "Back Squat"], ["bench", "Flat Bench"], ["tbdl", "Trap Bar Deadlift"], ["pp", "Push Press"]];
 const WORK_OF = { cw_squat: "squat", cw_tbdl: "tbdl", cw_bench: "bench", cw_pp: "pp" };
 
@@ -397,7 +400,9 @@ export const DASH_IDS = {
   fighter: { rd1: "fs_rd1", rd6: "fs_rd6", t20: "bike20", t20Day: "sun", b1: "c_burst1", b10: "c_burst10" },
   /* Strength, Power and Physique runs no rounds, no 20-minute test and no
      bursts: its own numbers are the 4 × 4, the broad jump and the tape */
-  spp: { rd1: null, rd6: null, t20: null, t20Day: null, b1: null, b10: null, e44: "s_44", bj: "s_bj", arm: "s_arm", sh: "s_sh" },
+  spp: { rd1: null, rd6: null, t20: null, t20Day: null, b1: null, b10: null, e44: "s_44", bj: "s_bj", arm: "s_arm", sh: "s_sh",
+    /* the audit's numbers: the throw for distance, the push press speed and the arms-only test */
+    rt: "s_rthrow", pps: "s_ppspeed", arm3: "s_arm3" },
 };
 export const SETTLE_IDS = ["settle", "settle2", "c_settle1", "c_settle2"];
 
@@ -451,6 +456,19 @@ export function series(log, id, camp, day) {
     if (day && p.day !== day) return;
     const v = num((log[k] || {}).w); if (v == null) return;
     out.push({ macro: p.macro, week: p.week, day: p.day, label: weekLabel(p.macro, p.week), v });
+  });
+  return out.sort((a, b) => (String(a.macro) === String(b.macro) ? a.week - b.week : String(a.macro) < String(b.macro) ? -1 : 1));
+}
+
+/* the same, for a number logged in more than one box: the mean of the
+   boxes filled in — the push press speed's two arms */
+export function seriesMean(log, id, camp, keys) {
+  const out = [];
+  Object.keys(log || {}).forEach((k) => {
+    const p = parseKey(k); if (!p || p.id !== id) return;
+    if (!inScope(camp, p.macro)) return;
+    const xs = keys.map((f) => num((log[k] || {})[f])).filter((x) => x != null); if (!xs.length) return;
+    out.push({ macro: p.macro, week: p.week, day: p.day, label: weekLabel(p.macro, p.week), v: Math.round(xs.reduce((a, b) => a + b, 0) / xs.length * 100) / 100 });
   });
   return out.sort((a, b) => (String(a.macro) === String(b.macro) ? a.week - b.week : String(a.macro) < String(b.macro) ? -1 : 1));
 }

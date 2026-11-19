@@ -204,6 +204,8 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **ROTATIONAL SCOOP THROW** — Side-on to a solid wall, a 4–6 kg medicine ball held low at your back hip. Drive off your back foot, turn your hips through and throw the ball into the wall as hard as you can, arms long. Catch it and reset. Both sides.
 
+**ROTATIONAL THROW FOR DISTANCE** — The power test for the turn of a punch. Open floor, never towards a wall. The 4 kg ball at your shoulder, side-on in your stance, as for the shot-put throw. Drive off your back hip and throw it flat and as far as you can. Measure from your front foot to where it first lands. Three throws each side, a full breath between, and log the best of the six. The same ball and the same floor every time.
+
 ## SIZE — CHEST, BACK AND LEGS
 
 **INCLINE DUMBBELL PRESS** — Bench at 30°. Lower the dumbbells to the sides of your upper chest at a deep stretch, then press up and slightly in.
@@ -262,11 +264,17 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **4-MINUTE INTERVALS** — Four minutes hard — you could say two or three words, no more — then three minutes easy. Four times.
 
+**4-MINUTE INTERVALS ON THE TREADMILL** — The treadmill set to 5%. Five minutes easy, then four minutes hard, at 90–95% of your peak heart rate: the first minute climbs into that band and the last three sit in it. You could say two or three words, no more. Three minutes easy between, walking or jogging on the same slope. Four times, then three minutes easy. Log the distance on the screen and your peak heart rate. The same treadmill and the same slope every week.
+
 **REPEAT BURSTS** — Six to eight seconds absolutely flat out, forty seconds easy, eight times. Five minutes easy, then eight more.
 
 **ASSAULT BIKE BURSTS** — On the assault bike, arms and legs together. Two minutes easy, then six seconds absolutely flat out and forty seconds easy spinning, eight times, then two minutes easy. If a burst is clearly weaker than the one before, take an extra twenty seconds; if two in a row are, stop there.
 
 **PRESSURE ROUNDS** — On the assault bike, straight after the bursts: clear its screen, a minute easy, then three-minute rounds with a minute's rest between. In each round, a five-second burst absolutely all out every twenty seconds, and a steady pace between them, a pace you could hold for the round. Never stop pedalling. Two minutes easy to finish.
+
+**PRESSURE ROUNDS, ARMS-ONLY THIRD MINUTE** — On the assault bike, straight after the bursts: clear its screen, a minute easy, then three-minute rounds with a minute's rest between. In each round, a five-second burst absolutely all out every twenty seconds, and a steady pace between them, a pace you could hold for the round. Minutes one and two, arms and legs together. Minute three, arms only: your feet on the pegs on the fork, legs still, your arms driving the handles through the same bursts and the same steady pace. Never stop. The timer says when to change.
+
+**THE ARMS-ONLY TEST** — On the assault bike, straight after the pressure round: clear its screen and put your feet on the pegs. Three minutes on your arms alone, legs still, for the biggest total you can make: start hard and hold on. Then two minutes easy, arms and legs. Log the total on the screen and your peak heart rate. It's read only against the test before it.
 
 **40-SECOND REPEATS** — Forty seconds flat out, eighty seconds easy, six times. The last three are meant to hurt. Don't hold back early.
 
@@ -345,6 +353,8 @@ Every exercise, session, test and move in the program, in two or three plain lin
 **NASAL THRESHOLD TEST** — Eight minutes breathing only through your nose, speeding up every two minutes until your mouth has to open. Log the pace where it opened.
 
 **BROAD JUMP AND THROW TESTS** — Your best of three broad jumps, and your best of three rotational throws a side, measured.
+
+**PUSH PRESS SPEED TEST** — The one-arm landmine push press with 20 kg on the bar, the same weight every time. Spleeft on the wrist that's pressing. Three reps as fast as you can, a full reset between each. Swap the watch to the other wrist and do three on that side. Log each side's fastest rep, in metres a second.
 
 **PUSH-UP AND CHIN-UP TESTS** — As many as you can: push-ups with your chest to a fist and two seconds down; chin-ups from a dead hang.
 

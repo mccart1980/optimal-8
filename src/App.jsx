@@ -59,7 +59,7 @@ import {
 } from "./prep.js";
 import {
   SPP_PH, SPPENG, SPPENG_MENU, SPPROTO, SPP_READY_LINE, sppSess, sppRx, sppTests, sppVelPhase, sppPhotoDay, sppMainLine, sppPsq, sppPp, sppSprints,
-  ENGINE_SINCE, sppEasyHour, sppSunRun,
+  ENGINE_SINCE, sppEasyHour, sppSunRun, AUDIT_SINCE, sppAudit, spp44Short, sppTread, sppPrRounds, sppArms,
 } from "./spp.js";
 import {
   buildSeason, rowOn, rowForDay, rowByKey, rowRx, rowDates, monOf as mondayIso, planStartFor, describeSeason, fitnessFromFade,
@@ -321,8 +321,8 @@ const seasonRxFor = (mac, w, edge) => {
   const rx = rowRx(row, edge);
   if (row.program === "prep") return gated(Object.assign({}, rx, { w, kw: w, lift: rx.ph, ph: prepPhaseOf(rx.doc), bw: null, prep: 1 }, moveOf(row)), "P", w);
   if (row.program === "spp") { const mw = moveWeekOf(row.mon, MOVE.start);
-    return gated(Object.assign({}, rx, { w, kw: w, bw: null, spp: 1, mon: row.mon, mw, jeff: mw && movePhase(mw) === "own" ? jeffOn(row) : false,
-      eb: !!row.mon && row.mon >= ENGINE_SINCE, tw: mw ? tendonWeekOf(row.mon) : 0 }), "S", w); }
+    return gated(sppAudit(Object.assign({}, rx, { w, kw: w, bw: null, spp: 1, mon: row.mon, mw, jeff: mw && movePhase(mw) === "own" ? jeffOn(row) : false,
+      eb: !!row.mon && row.mon >= ENGINE_SINCE, tw: mw ? tendonWeekOf(row.mon) : 0, au: !!row.mon && row.mon >= AUDIT_SINCE })), "S", w); }
   if (row.program === "camp" || row.program === "pre") return gated(Object.assign({}, rx, { kw: w }, moveOf(row)), "C", w);
   return Object.assign({}, rx, { kw: w }, moveOf(row));
 };
@@ -445,14 +445,22 @@ function steps(kind, o) {
        round a burst all out every `every` seconds, a steady pace between, then a minute's rest */
     const r = o.rounds || 3, every = o.every || 20, secs = o.secs || 5, n = Math.floor((o.mins || 3) * 60 / every), rest = o.rest == null ? 60 : o.rest;
     if (o.wu) Rs("EASY — " + o.wu + (o.wu === 1 ? " MINUTE" : " MINUTES"), o.wu * 60, "Then round 1: a burst every " + every + " seconds, a steady pace between.");
+    /* from Monday 23 November the last third of every round is arms only,
+       feet on the assault bike's pegs */
+    const arm0 = o.arms ? Math.floor(n * 2 / 3) : n;
     for (let i = 1; i <= r; i++) {
       for (let j = 1; j <= n; j++) {
-        W("BURST " + j + " OF " + n + " — ALL OUT", secs, secs + " seconds, everything you have.");
-        Rs("ROUND " + i + " OF " + r + " · STEADY — NEVER STOP", every - secs, "A pace you could hold for the round.");
+        const arms = j > arm0;
+        W("BURST " + j + " OF " + n + (arms ? " — ARMS ONLY, ALL OUT" : " — ALL OUT"), secs, secs + " seconds, everything you have.");
+        Rs("ROUND " + i + " OF " + r + (arms ? " · ARMS ONLY, STEADY — NEVER STOP" : " · STEADY — NEVER STOP"), every - secs,
+          o.arms && j === arm0 ? "Next burst: feet on the pegs, arms only, to the end of the round." : arms ? "Feet on the pegs. The arms keep working." : "A pace you could hold for the round.");
       }
       if (i < r) Rs("REST — " + (rest === 60 ? "1 MINUTE" : rest + " SECONDS"), rest, "Round " + i + " done. Next, round " + (i + 1) + ".");
     }
-    if (o.cd) Rs("EASY — " + o.cd + " MINUTES TO FINISH", o.cd * 60); }
+    if (o.cd) Rs("EASY — " + o.cd + (o.cd === 1 ? " MINUTE" : " MINUTES TO FINISH"), o.cd * 60, o.arms && o.cd === 1 ? "Clear the bike's screen. Next: the arms-only test." : undefined); }
+  else if (kind === "armtest") { /* three minutes on the arms alone for the biggest total, then easy */
+    W("ARMS ONLY — " + (o.mins || 3) + " MINUTES, THE BIGGEST TOTAL YOU CAN MAKE", (o.mins || 3) * 60, "Feet on the pegs, legs still. Start hard and hold on.");
+    if (o.cd) Rs("EASY — " + o.cd + " MINUTES TO FINISH", o.cd * 60, "Log the total on the screen and your peak heart rate."); }
   else if (kind === "nasal") { for (let i = 1; i <= 4; i++) W("NOSE ONLY · MIN " + (i * 2 - 1) + "–" + i * 2 + " — RAISE THE PACE", 120); }
   else if (kind === "settle") { W("EYES CLOSED — FIND THE BREATH AT THE NOSTRILS", 60); }
   else if (kind === "postmax") { W("SIT · EYES CLOSED · FIND THE BREATH AT THE NOSTRILS", 180); }
@@ -1685,6 +1693,8 @@ function GymCardOne({ card, rx, week, macro, day, log, setLog, maxes, bw, ready,
       <div key={o.id} data-out-id={o.id}>
         {o.erg ? <ErgPanel slots={o.erg} vals={ergV} unit={(st && st.ergUnit) || "w"} prevTotal={lastErgTotal(log, macro, engKind, engDay, key(ergK))}
           onVal={(i, val) => { const nv = ergV.slice(); while (nv.length < o.erg.length) nv.push(""); nv[i] = val; setE(ergK, Object.assign({}, ergE, { v: nv }, engKind ? { kind: engKind, d: engDay } : {})); }} /> : null}
+        {o.lastKm && engKind ? (() => { const p = lastOfKind(log, engKind, key(o.id));
+          return p ? <div data-testid="last-run" style={Object.assign({}, mno, { fontSize: T3, color: C.chalk, lineHeight: 1.5, marginTop: 10 })}>{"LAST TIME · " + p.w + " KM" + (num((log[p.k] || {}).hr) != null ? " · PEAK " + log[p.k].hr + " BPM" : "")}</div> : null; })() : null}
         {fs.map((f) => <OutField key={f.k} f={f} v={e[f.k]} on={(val) => putF(o.id, { [f.k]: val })} />)}
         {o.recov ? <RecoveryHR endHR={dropE.end} hr60={dropE.h60} onEnd={(val) => putDrop({ end: val })} on60={(val) => putDrop({ h60: val })} /> : null}
       </div>);
@@ -1823,13 +1833,17 @@ function GymCardOne({ card, rx, week, macro, day, log, setLog, maxes, bw, ready,
       return md === "bw" ? rs : w ? (md === "add" ? "+" : "") + w + " kg × " + rs : rs; };
     /* the bar speed: the main lifts' first work set, and nowhere else —
        the mean of its two fastest reps */
-    const speedOn = card.first !== false && (velT || (md === "kg" && BAR_SPEED_ITEMS[id] && (v(b.mainLift, rx) || b.vel)));
+    /* and, from the audit's week, the fast lifts': the trap bar jump, the
+       bench throw and the landmine push press */
+    const speedOn = card.first !== false && (velT || (md === "kg" && BAR_SPEED_ITEMS[id] && (v(b.mainLift, rx) || b.vel)) || (!!v(b.spd, rx) && !!BAR_SPEED_ITEMS[id]));
     const vcol = verdict ? (verdict.kind === "down" ? C.oxide : verdict.kind === "up" ? C.moss : C.brass) : C.line;
     const speed = speedOn ? (
       <div data-testid="bar-speed" style={{ background: C.ink, border: "1px solid " + vcol, borderRadius: 8, padding: 12 }}>
         {/* Spleeft tells one rep from the next by the stop between them: the
            bar held still at the top, not racked */}
         {velT ? <div data-testid="lockout-line" style={Object.assign({}, mno, { fontSize: T3, color: C.brass, lineHeight: 1.4 })}>SPLEEFT: HOLD THE LOCKOUT UNTIL IT BEEPS, THEN THE NEXT REP. NO NEED TO RACK THE BAR BETWEEN REPS.</div> : null}
+        {/* the fast lifts' rule, where the number is read: a speed after every rep, a 10% drop ends the set */}
+        {!velT && v(b.spd, rx) && b.spdLine ? <div data-testid="speed-rule" style={Object.assign({}, mno, { fontSize: T3, color: C.brass, lineHeight: 1.4 })}>{String(b.spdLine).toUpperCase()}</div> : null}
         <Input label={"SET 1 · MEAN OF ITS TWO FASTEST REPS (M/S)" + (velT ? " · TARGET " + velT.v : "")} v={velT ? cur.v1 : cur.bs}
           on={(val) => setE(id, Object.assign({}, cur, velT ? { v1: val, vt: velT.v, vl: velLift, vd: engDay } : { bs: val }))} ph="m/s" />
         {verdict ? <div data-testid="bar-verdict" style={Object.assign({}, dsp, { fontSize: 22, fontWeight: 800, letterSpacing: 1.2, marginTop: 10, color: vcol })}>{verdict.line}{afterKg != null ? " · " + afterKg + " KG" : ""}</div> : null}
@@ -2605,13 +2619,13 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
           <Row k="Pause squat (Thu)" val={sppPsq(rx) ? sppPsq(rx).sets + " × " + sppPsq(rx).reps + " @ " + sppPsq(rx).pct + "%" : "none this week"} />
           <Row k="Flying sprints (Thu)" val={rx.testWeek ? "none this week" : rx.noFlying ? "none — the tendon gate" : sppSprints(rx) + " × 20 m " + (rx.spr90 ? "at 90%" : "flat out")} />
           <Row k="Jumps (Thu)" val={rx.testWeek ? "none this week" : !rx.jump ? "box jumps" : rx.noJumps ? "none — the tendon gate" : jumpOf(rx.jump).n + (rx.restart ? " · one stage down" : "")} />
-          <Row k="The intervals (Sat)" val={(rx.e === "vo2s" ? "3 × 4" : "4 × 4") + (rx.testWeek ? " — the engine test" : "")} />
+          <Row k="The intervals (Sat)" val={(spp44Short(rx) ? "3 × 4" : "4 × 4") + (sppTread(rx) ? " on the treadmill at 5%" : "") + (rx.testWeek ? " — the engine test" : "")} />
           <Row k="Bursts (Tue)" val={(rx.bk === "sb4" ? "4" : "8") + " × 6 seconds on the assault bike"} />
-          <Row k="Pressure rounds (Tue)" val={(rx.pr === "pr2" ? "2" : "3") + " × 3 minutes, straight after the bursts"} />
+          <Row k="Pressure rounds (Tue)" val={sppPrRounds(rx) + " × 3 minutes, straight after the bursts" + (sppArms(rx) ? ", the third minute arms only" + (rx.pr === "pa1" ? "; then the arms-only test" : "") : "")} />
           <Row k="Nasal runs" val={rx.eb ? "Wednesday 30 min · Sunday " + sppSunRun(rx) + " min" : "Wednesday and Sunday · 30 min"} />
           {rx.eb ? <Row k="The easy hour (Sat evening)" val={sppEasyHour(rx) + " min on the bike, nose only"} /> : null}
           <Row k="Everything else" val={rx.half ? "half the sets, rounded up" : "as written"} />
-          <Row k="Tests" val={sppTests(rx.doc).join(" · ") || "none"} />
+          <Row k="Tests" val={sppTests(rx.doc, rx.au).join(" · ") || "none"} />
         </Card>) : null}
       {MODE.trans ? (
         <Card ac={C.moss}>
@@ -2697,7 +2711,7 @@ function Bars({ data, unit, color }) {
 
 /* The erg outputs, gathered by session type, so the same session is only
    ever read against another one of its own kind. */
-const ERG_TYPE_NAME = { vo2: "4-minute intervals", vo2s: "4-minute intervals · 3 × 4", sb: "6-second bursts", sb4: "6-second bursts · four", pr: "Pressure rounds", pr2: "Pressure rounds · two", mod: "Moderate intervals", lac: "40-second repeats", lac2: "40-second repeats · 2 × 6",
+const ERG_TYPE_NAME = { vo2: "4-minute intervals", vo2s: "4-minute intervals · 3 × 4", sb: "6-second bursts", sb4: "6-second bursts · four", pr: "Pressure rounds", pr2: "Pressure rounds · two", pa: "Pressure rounds · arms-only third minute", pa1: "Pressure rounds · one round", arm3: "The arms-only test", mod: "Moderate intervals", lac: "40-second repeats", lac2: "40-second repeats · 2 × 6",
   rz: "Repeat bursts", rz1: "Repeat bursts · one set", rz3: "Repeat bursts · one set", tempo: "Tempo intervals", thr: "Threshold",
   erg: "Rounds on the erg", fp: "Fight-pace rounds", easy: "Easy", easy15: "Easy flush", sim: "The simulation", t20: "The 20-minute test" };
 /* `camp` is the view: true for the camp, "prep" for Prep, false for the
@@ -2719,7 +2733,8 @@ function ergByType(log, camp, L, macro) {
       : base === "cond2" || base === "c_eng2" || base === "p_e2" ? e.kind || wk().eng2 || wk().e2
       : base === "s_44" ? e.kind || wk().e
       : base === "s_burst" ? e.kind || wk().bk
-      : base === "s_press" ? e.kind || wk().pr : null;
+      : base === "s_press" ? e.kind || wk().pr
+      : base === "s_arm3" ? "arm3" : null;
     if (!type) return;
     push(type, "w" + p.week, p.week, ergTotal(e.v || []));
   });
@@ -4209,7 +4224,7 @@ export default function App() {
     if (!curRow) { const ph = PH[baseRxFor(current.week).ph] || PH.b1; return { name: ph.n, emphasis: ph.note, tests: [] }; }
     const rx = rowRx(curRow, true);
     if (curRow.program === "prep") return { name: (PH[prepPhaseOf(curRow.doc)] || {}).n + " · " + curRow.id, emphasis: rx.em, tests: prepTests(curRow.doc) };
-    if (curRow.program === "spp") return { name: (PH[rx.ph] || {}).n + " · WEEK " + curRow.doc + " OF 12", emphasis: rx.em, tests: sppTests(curRow.doc) };
+    if (curRow.program === "spp") return { name: (PH[rx.ph] || {}).n + " · WEEK " + curRow.doc + " OF 12", emphasis: rx.em, tests: sppTests(curRow.doc, !!curRow.mon && curRow.mon >= AUDIT_SINCE) };
     if (curRow.program === "transition") return { name: "TRANSITION", emphasis: TRANSITION_INTRO, tests: [] };
     if (curRow.program === "pre") return { name: "THE WEEK BEFORE THE CAMP", emphasis: "The pre-camp check" + (rx.checks ? "; Saturday the broad jump, the throw and the working-weight checks; Sunday the 20-minute test." : "."), tests: rx.checks ? ["broad jump", "rotational throw", "working-weight checks", "the 20-minute test"] : [] };
     const ph = CPH[rx.ph] || {};
