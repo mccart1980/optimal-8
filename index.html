@@ -6,9 +6,9 @@
     <title>Fighter</title>
     <meta name="description" content="Fighter — the strength and conditioning companion." />
 
-    <!-- colours -->
-    <meta name="theme-color" content="#F3F7FC" />
-    <meta name="color-scheme" content="light" />
+    <!-- colours: light and dark, following the phone unless the app's own setting holds one -->
+    <meta name="theme-color" content="#F1F4F9" />
+    <meta name="color-scheme" content="light dark" />
 
     <!-- iOS home-screen app -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -16,17 +16,40 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Fighter" />
     <meta name="format-detection" content="telephone=no" />
-    <link rel="apple-touch-icon" href="/optimal-8/icons/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/optimal-8/icons/favicon-32.png" />
+    <!-- ?v= is the icon's version: a phone that kept a copy of the old picture has to fetch this one. Raise it whenever the icon changes. -->
+    <link rel="apple-touch-icon" href="/optimal-8/icons/apple-touch-icon.png?v=27" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/optimal-8/icons/favicon-32.png?v=27" />
 
     <style>
-      html, body { margin: 0; padding: 0; background: #F3F7FC; }
+      html, body { margin: 0; padding: 0; background: #F1F4F9; }
       body { overscroll-behavior-y: none; -webkit-text-size-adjust: 100%; }
       #root { min-height: 100vh; }
+      /* the first thing on the screen, until the app is up: the bull, on the page's own colour */
+      .o8-splash { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
+      .o8-splash .a, .o8-splash .a2 { fill: #1D5FDB; } .o8-splash .b, .o8-splash .b2 { fill: #86A9EE; } .o8-splash .k { fill: #F1F4F9; }
+      @media (prefers-color-scheme: dark) {
+        html:not([data-theme="light"]), html:not([data-theme="light"]) body { background: #0A0D12; }
+        html:not([data-theme="light"]) .o8-splash .a, html:not([data-theme="light"]) .o8-splash .a2 { fill: #F2F5F9; }
+        html:not([data-theme="light"]) .o8-splash .b, html:not([data-theme="light"]) .o8-splash .b2 { fill: #7DB0FF; }
+        html:not([data-theme="light"]) .o8-splash .k { fill: #0A0D12; }
+      }
+      html[data-theme="dark"], html[data-theme="dark"] body { background: #0A0D12; }
+      html[data-theme="dark"] .o8-splash .a, html[data-theme="dark"] .o8-splash .a2 { fill: #F2F5F9; }
+      html[data-theme="dark"] .o8-splash .b, html[data-theme="dark"] .o8-splash .b2 { fill: #7DB0FF; }
+      html[data-theme="dark"] .o8-splash .k { fill: #0A0D12; }
     </style>
+    <!-- the app's own light-or-dark setting, read before anything is drawn so the screen never flashes the wrong one -->
+    <script>
+      (function () { try {
+        var t = (JSON.parse(localStorage.getItem("o8s-settings") || "{}") || {}).theme, root = document.documentElement;
+        if (t === "light" || t === "dark") root.setAttribute("data-theme", t);
+        var dark = t === "dark" || (t !== "light" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.querySelector('meta[name="theme-color"]').setAttribute("content", dark ? "#0A0D12" : "#F1F4F9");
+      } catch (e) {} })();
+    </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"><div class="o8-splash"><svg viewBox="0 0 1024 1024" width="132" height="132" aria-hidden="true"><polygon class="a" points="415 348 372 400 307 406 237 368 190 301 179 222 206 161 235 238 276 289 332 314 393 318"/><polygon class="a2" points="631 318 692 314 748 289 789 238 818 161 845 222 834 301 787 368 717 406 652 400 609 348"/><polygon class="b" points="348 424 267 417 215 449 276 492 345 487"/><polygon class="b2" points="679 487 748 492 809 449 757 417 676 424"/><polygon class="a" points="512 318 415 348 348 420 345 512 379 607 397 670 372 737 386 813 440 852 512 863"/><polygon class="a2" points="512 863 584 852 638 813 652 737 627 670 645 607 679 512 676 420 609 348 512 318"/><polygon class="b" points="345 512 379 607 397 670 372 737 386 813 426 755 440 669 409 582"/><polygon class="b2" points="615 582 584 669 598 755 638 813 652 737 627 670 645 607 679 512"/><polygon class="k" points="386 489 478 530 474 568 399 541"/><polygon class="k" points="625 541 550 568 546 530 638 489"/><polygon class="k" points="433 753 487 768 481 805 442 796"/><polygon class="k" points="582 796 543 805 537 768 591 753"/></svg></div></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

@@ -284,3 +284,57 @@ describe("the audit's changes in Fighter, from Monday 23 November", () => {
     expect(document.body.textContent).not.toMatch(/your best single/);
   });
 });
+
+/* THE NOTES UNDER A WEEK — a block's note names what its weeks hold, so
+   from the switch it names what they hold now. A week before reads as it did. */
+describe("the block notes follow the switch, on THIS WEEK and in the GUIDE", () => {
+  const guide = () => { fireEvent.click(bar().getByRole("button", { name: "MORE" })); fireEvent.click(screen.getByRole("button", { name: "GUIDE" })); return document.body.textContent; };
+
+  it("Fighter's build block: week 1 finds the trap bar number; before the switch, the push press's as well", async () => {
+    await at(2026, 12, 7, fighter());
+    expect(week()).toContain("Nordics ramping up. Week 1 finds your trap bar number.");
+    expect(document.body.textContent).not.toContain("push press numbers");
+    expect(guide()).toContain("Week 1 finds your trap bar number.");
+    again();
+    await at(2026, 1, 5, fighter());
+    expect(week()).toContain("Week 1 finds your trap bar and push press numbers.");
+    expect(guide()).toContain("Week 1 finds your trap bar and push press numbers.");
+  });
+
+  it("Fighter's velocity block: the landmine push press's fast threes each side, where the push press's were", async () => {
+    await at(2027, 2, 15, fighter());
+    expect(week()).toContain("punch throws to 4 rounds, the trap bar to fast 3×3s at 80%, the landmine push press to fast 3×3s each side, and Wednesday's pause squat becomes a speed squat.");
+    again();
+    await at(2026, 3, 16, fighter());
+    expect(week()).toContain("punch throws to 4 rounds, trap bar and push press to fast 3×3s at 80%, and Wednesday's pause squat becomes a speed squat.");
+  });
+
+  it("the camp's peak block: speed twice a week — the stance starts on Tuesday, the flat-out running on Saturday", async () => {
+    await at(2027, 2, 8, ten());
+    expect(week()).toContain("Contrast, depth jumps, speed twice a week (three starts from your stance on Tuesday, flat-out running on Saturday), repeat bursts, eight rounds, the sauna.");
+    expect(document.body.textContent).not.toContain("top speed twice a week");
+    expect(guide()).toContain("speed twice a week (three starts from your stance on Tuesday, flat-out running on Saturday)");
+    again();
+    await at(2026, 4, 6, tenOld());
+    expect(week()).toContain("Contrast, depth jumps, top speed twice a week, repeat bursts, eight rounds, the sauna.");
+    expect(guide()).toContain("top speed twice a week");
+  });
+
+  it("the camp's Tuesday in weeks 6 to 8 reads four minutes shorter: the stance starts take four where the flying sprints took eight", async () => {
+    await at(2027, 2, 8, ten());
+    expect(week()).toContain("TUESDAY · Tue 9 Feb70 MIN");
+    again();
+    await at(2026, 4, 6, tenOld());
+    expect(week()).toContain("TUESDAY · Tue 7 Apr74 MIN");
+  });
+
+  it("Hell Week's breathing test names the machines the gym has", async () => {
+    await at(2026, 12, 7, fighter());
+    fireEvent.click(bar().getByRole("button", { name: "MORE" }));
+    fireEvent.click(screen.getByRole("button", { name: "IRON" }));
+    fireEvent.click(screen.getByRole("button", { name: "HELL WEEK" }));
+    fireEvent.click(screen.getByText("DAY 3 — BREATH CONTROL UNDER FATIGUE"));
+    expect(document.body.textContent).toContain("rower/bike · +1 notch every 2 min until forced to open your mouth");
+    expect(document.body.textContent).not.toMatch(/rower\/ski/);
+  });
+});

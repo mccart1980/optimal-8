@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { play, cueFor, setMode as setSoundMode, MODES as SOUND_MODES } from "./sound.js";
+import { Welcome } from "./welcome.jsx";
 import "./storage.js"; // installs window.storage (localStorage-backed)
 import fighterDoc from "../optimal8fighter.md?raw";
 import ironMindDoc from "../iron-mind-v5.md?raw";
@@ -9,8 +11,8 @@ import moveDocMd from "../optimal-8-move.md?raw";
 import guideDoc from "../guide.md?raw";
 import guideFuelDoc from "../guide-fuel.md?raw";
 import {
-  C, soft, FONTS, dsp, bdy, mno, buzz, mmss, r25, num, DAYS, DSH, iso, mondayOf, parseISO, todayKey, addDays, fmtDate,
-  load, save, Card, Eye, Lab, Fld, Btn, Chip, Note, Seg, TEXT_STEPS, stepScale,
+  C, soft, FONTS, RAD, Icon, CheckDot, dsp, bdy, mno, buzz, mmss, r25, num, DAYS, DSH, iso, mondayOf, parseISO, todayKey, addDays, weeksApart, addWeeks, fmtDate,
+  load, save, Card, Eye, Lab, Fld, Btn, Chip, Note, Seg, TEXT_STEPS, stepScale, THEME_STEPS, applyTheme,
 } from "./ui.jsx";
 import { DocView } from "./mdview.jsx";
 import { libFor, LIBRARY } from "./library.js";
@@ -157,13 +159,19 @@ const defaultStart = () => { const t = new Date(); const dow = (t.getDay() + 6) 
 /* ================================================================
    THE MACROCYCLE — every prescription in the app derives from here
    ================================================================ */
+/* a block's note, as its week reads: from the audit's week a note that
+   names what the audit replaced says what the week holds now (`au`: the
+   words that went, and the words in their place) */
+const phNote = (P, rx) => (P && P.note && rx && rx.au && P.au ? P.note.replace(P.au[0], P.au[1]) : (P || {}).note);
 const PH = {
   b1: { n: "BUILD", long: "BLOCK 1 · BUILD", ac: C.moss, vl: "25–30%",
-    note: "The most volume in the cycle — four sets of rows, three of split squats. Drop landings. Jump circuit at 2 rounds, punch throws at 3, Nordics ramping up. Week 1 finds your trap bar and push press numbers." },
+    note: "The most volume in the cycle — four sets of rows, three of split squats. Drop landings. Jump circuit at 2 rounds, punch throws at 3, Nordics ramping up. Week 1 finds your trap bar and push press numbers.",
+    au: ["Week 1 finds your trap bar and push press numbers.", "Week 1 finds your trap bar number."] },
   b2: { n: "FORCE", long: "BLOCK 2 · FORCE", ac: C.oxide, vl: "15–20%",
     note: "Accessories drop to 3 sets and the bar gets heavier: the rests on the main lifts go to 2½ minutes for the heavy triples. Low-box depth jumps replace the drop landings. Week 9's top triple is a direction check, not your real number — you're carrying fatigue." },
   b3: { n: "VELOCITY", long: "BLOCK 3 · VELOCITY", ac: C.brass, vl: "10–15%",
-    note: "Everything gets faster. The jump circuit leads Saturday at 4 rounds with the band-assisted jump; the squat drops to 2×2 @ 88% behind it. Monday's bench and bench throws merge into one circuit. Depth jumps replace the low-box depth jumps, side bounds go continuous, punch throws to 4 rounds, trap bar and push press to fast 3×3s at 80%, and Wednesday's pause squat becomes a speed squat. Speed fades fastest once you stop — so it's trained hardest right before the test." },
+    note: "Everything gets faster. The jump circuit leads Saturday at 4 rounds with the band-assisted jump; the squat drops to 2×2 @ 88% behind it. Monday's bench and bench throws merge into one circuit. Depth jumps replace the low-box depth jumps, side bounds go continuous, punch throws to 4 rounds, trap bar and push press to fast 3×3s at 80%, and Wednesday's pause squat becomes a speed squat. Speed fades fastest once you stop — so it's trained hardest right before the test.",
+    au: ["trap bar and push press to fast 3×3s at 80%", "the trap bar to fast 3×3s at 80%, the landmine push press to fast 3×3s each side"] },
   taper: { n: "TAPER", long: "TAPER & TEST", ac: C.cobalt, vl: "≤10%",
     note: "Volume −40% then −60%. Intensity held. A deload drops intensity to restore you; a taper drops volume and keeps intensity, because fatigue sheds faster than fitness. Sprints and jumps stay in both weeks — reduce their volume, never their intent. Saturday of week 16 is test day." },
   hell: { n: "HELL WEEK", long: "HELL WEEK", ac: C.oxide, vl: "—",
@@ -290,7 +298,7 @@ const moveOf = (row) => { const mw = row && row.mon ? moveWeekOf(row.mon, MOVE.s
 /* the classic's weeks have no rows: its Monday is counted from its start.
    The audit's changes run by the same Monday, with or without MOVE. */
 const classicMove = (rx, mac, w) => { const c = SEASON.cstart; if (!c || !c.start) return rx;
-  const mon = iso(new Date(mondayOf(parseISO(c.start)).getTime() + (((mac - c.base) * c.L) + (w - 1)) * 604800000));
+  const mon = iso(addWeeks(mondayOf(parseISO(c.start)), ((mac - c.base) * c.L) + (w - 1)));
   const mw = moveWeekOf(mon, MOVE.start), au = auditOn(mon);
   return mw || au ? Object.assign({}, rx, mw ? { mw, tw: tendonWeekOf(mon), jeff: false } : {}, au ? { au } : {}) : rx; };
 /* which program a row runs */
@@ -1222,6 +1230,16 @@ const TESTS = [
 /* ================================================================
    TIMER — one engine, docked at the bottom, expands to a round clock
    ================================================================ */
+/* the week's title on two lines: the programme small above, the week under it.
+   The words, read straight through, are the title as it always was. */
+const TitleLines = ({ text }) => { const i = String(text).indexOf(" · "); if (i < 0) return text;
+  return (<React.Fragment>
+    <span style={{ display: "block", fontSize: 12.5, fontWeight: 700, letterSpacing: 1, color: C.ash, textTransform: "uppercase", marginBottom: 1 }}>{text.slice(0, i)}</span>
+    <span style={{ display: "none" }}> · </span><span>{text.slice(i + 3)}</span>
+  </React.Fragment>); };
+
+/* the timers that are boxing rounds: the ring bell starts and ends each round */
+const BELL_KINDS = ["sim", "csim", "ergrounds", "pressure"];
 function useTimer(sound) {
   const [t, setT] = useState(null);
   const [open, setOpen] = useState(false);
@@ -1232,33 +1250,38 @@ function useTimer(sound) {
     const sy = window.speechSynthesis; if (!sy || typeof SpeechSynthesisUtterance === "undefined") return;
     sy.cancel(); const u = new SpeechSynthesisUtterance(String(text || "").replace(/\bRD\b/g, "ROUND").replace(/\bMIN\b/g, "MINUTE").replace(/·/g, ",").replace(/ — /g, ", ").toLowerCase()); u.rate = 1.05; sy.speak(u);
   } catch (e) {} }, [sound]);
-  const beep = useCallback((f, ms, vol) => { if (!sound) return; try {
-    if (!ctxRef.current) ctxRef.current = new (window.AudioContext || window.webkitAudioContext)();
-    const ctx = ctxRef.current; if (ctx.state === "suspended") ctx.resume();
-    const o = ctx.createOscillator(), g = ctx.createGain(); o.type = "sine"; o.frequency.value = f; o.connect(g); g.connect(ctx.destination);
-    const now = ctx.currentTime; g.gain.setValueAtTime(vol || 0.3, now); g.gain.exponentialRampToValueAtTime(0.0001, now + ms / 1000); o.start(now); o.stop(now + ms / 1000 + 0.03);
-  } catch (e) {} }, [sound]);
-  const bell = useCallback((kind) => { if (kind === "w") { beep(660, 180); setTimeout(() => beep(990, 320), 130); buzz([120, 60, 120]); } else if (kind === "r") { beep(440, 320); buzz(200); } else { beep(523, 180); setTimeout(() => beep(659, 180), 160); setTimeout(() => beep(784, 420), 320); buzz([150, 80, 150, 80, 320]); } }, [beep]);
-  const lock = useCallback(async (on) => { try { if (on) { if (!lockRef.current && navigator.wakeLock) lockRef.current = await navigator.wakeLock.request("screen"); } else if (lockRef.current) { await lockRef.current.release(); lockRef.current = null; } } catch (e) {} }, []);
+  /* the sounds: one engine for every timer (sound.js). A timer of boxing
+     rounds gets the ring bell; every other timer gets the tones. */
+  const cueNow = useCallback((name) => { if (sound) play(name); }, [sound]);
+  const lock = useCallback(async (on) => { try {
+    if (on) { if (!lockRef.current && navigator.wakeLock) { const l = await navigator.wakeLock.request("screen"); lockRef.current = l; l.addEventListener("release", () => { if (lockRef.current === l) lockRef.current = null; }); } }
+    else if (lockRef.current) { const l = lockRef.current; lockRef.current = null; await l.release(); }
+  } catch (e) {} }, []);
+  /* the phone lets go of the screen lock whenever the app leaves the screen: take it again on the way back */
+  useEffect(() => { const back = () => { if (document.visibilityState === "visible" && tRef.current && tRef.current.run) lock(true); };
+    document.addEventListener("visibilitychange", back); return () => document.removeEventListener("visibilitychange", back); }, [lock]);
   useEffect(() => {
     if (!t || !t.run) { lock(false); return; }
     lock(true);
     const id = setInterval(() => {
       const cur = tRef.current; if (!cur || !cur.run) return;
       const rem = Math.ceil((endRef.current - Date.now()) / 1000);
-      if (rem > 0 && rem <= 3 && beepRef.current !== cur.i + ":" + rem) { beepRef.current = cur.i + ":" + rem; beep(880, 80, .2); buzz(35); }
+      const rounds = BELL_KINDS.indexOf(cur.kind) >= 0, here = cur.steps[cur.i], after = cur.steps[cur.i + 1];
+      if (rem > 0 && rem <= 3 && beepRef.current !== cur.i + ":" + rem) { beepRef.current = cur.i + ":" + rem; cueNow("tick"); buzz(35); }
+      /* ten seconds of a round left: the clapper */
+      if (rem === 10 && rounds && here.t === "w" && here.s >= 30 && (!after || after.t !== "w") && beepRef.current !== cur.i + ":warn") { beepRef.current = cur.i + ":warn"; cueNow("warn"); }
       if (rem <= 0) {
         const n = cur.i + 1;
-        if (n < cur.steps.length) { endRef.current = Date.now() + cur.steps[n].s * 1000; bell(cur.steps[n].t); if (cur.steps.length > 1) say(cur.steps[n].l); setT(Object.assign({}, cur, { i: n, left: cur.steps[n].s })); }
-        else { bell("done"); if (cur.steps.length > 1) say("done"); setT(Object.assign({}, cur, { i: n, left: 0, run: false, done: true }));
+        if (n < cur.steps.length) { endRef.current = Date.now() + cur.steps[n].s * 1000; cueNow(cueFor(here, cur.steps[n], rounds)); buzz(cur.steps[n].t === "w" ? [120, 60, 120] : 200); if (cur.steps.length > 1) say(cur.steps[n].l); setT(Object.assign({}, cur, { i: n, left: cur.steps[n].s })); }
+        else { cueNow(cur.kind === "rest" ? "go" : cueFor(here, null, rounds)); buzz([150, 80, 150, 80, 320]); if (cur.steps.length > 1) say("done"); setT(Object.assign({}, cur, { i: n, left: 0, run: false, done: true }));
           if (cur.kind === "rest") setTimeout(() => { const c2 = tRef.current; if (c2 && c2.done && c2.kind === "rest") { setT(null); setOpen(false); } }, 1500); }
       } else if (rem !== cur.left) setT(Object.assign({}, cur, { left: rem }));
     }, 200);
     return () => clearInterval(id);
   }, [t && t.run, t && t.i, t && t.steps]);
   const start = useCallback((preset) => { const st = steps(preset.kind, preset.opt); if (!st.length) return; endRef.current = Date.now() + st[0].s * 1000; beepRef.current = "";
-    setT({ steps: st, i: 0, left: st[0].s, run: true, title: preset.title || "TIMER", kind: preset.kind, done: false }); setOpen(true); beep(880, 60, .15);
-    if (st.length > 1) say(st[0].l); }, [beep, say]);
+    setT({ steps: st, i: 0, left: st[0].s, run: true, title: preset.title || "TIMER", kind: preset.kind, done: false }); setOpen(true); cueNow(st.length > 1 ? cueFor(null, st[0], BELL_KINDS.indexOf(preset.kind) >= 0) : "tick");
+    if (st.length > 1) say(st[0].l); }, [cueNow, say]);
   const toggle = useCallback(() => { const cur = tRef.current; if (!cur || cur.done) return; if (cur.run) setT(Object.assign({}, cur, { run: false })); else { endRef.current = Date.now() + cur.left * 1000; setT(Object.assign({}, cur, { run: true })); } }, []);
   const skip = useCallback(() => { const cur = tRef.current; if (!cur) return; const n = cur.i + 1; if (n < cur.steps.length) { endRef.current = Date.now() + cur.steps[n].s * 1000; setT(Object.assign({}, cur, { i: n, left: cur.steps[n].s })); } else setT(Object.assign({}, cur, { i: n, left: 0, run: false, done: true })); }, []);
   const reset = useCallback(() => { const cur = tRef.current; if (!cur) return; endRef.current = Date.now() + cur.steps[0].s * 1000; setT(Object.assign({}, cur, { i: 0, left: cur.steps[0].s, run: false, done: false })); }, []);
@@ -1271,49 +1294,67 @@ function TimerDock({ T }) {
   const cur = t.steps[t.i] || { l: "COMPLETE", s: 1, t: "r" };
   const col = t.done ? C.moss : cur.t === "w" ? C.oxide : C.cobalt;
   const frac = t.done ? 1 : 1 - t.left / (cur.s || 1);
+  const round = { width: 44, height: 44, flexShrink: 0, borderRadius: 999, border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center", justifyContent: "center" };
   return (
-    <div style={{ position: "fixed", left: 0, right: 0, bottom: "calc(" + TAB_H + "px + env(safe-area-inset-bottom))", zIndex: 70, background: C.slab, borderTop: "1px solid " + C.line, padding: "0 0 2px" }}>
-      <div style={{ height: 4, background: C.ink }}><div style={{ width: (frac * 100) + "%", height: "100%", background: col, transition: "width .2s linear" }} /></div>
-      <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 10px", maxWidth: 640, margin: "0 auto" }}>
+    <div className="o8-glass sheet" style={{ position: "fixed", left: 0, right: 0, bottom: "calc(" + TAB_H + "px + env(safe-area-inset-bottom))", zIndex: 70, background: C.slab, borderTop: "1px solid " + C.line }}>
+      <div style={{ height: 3, background: soft(C.chalk) }}><div style={{ width: (frac * 100) + "%", height: "100%", background: col, transition: "width .25s linear" }} /></div>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 12px", maxWidth: 640, margin: "0 auto" }}>
         <div onClick={() => T.setOpen(true)} style={{ flex: 1, minWidth: 0, cursor: "pointer" }}>
-          <div style={Object.assign({}, mno, { fontSize: 9, letterSpacing: 1.2, color: col, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" })}>{t.done ? t.title + " · COMPLETE" : t.title === cur.l ? cur.l : t.title + " · " + cur.l}</div>
-          <div style={Object.assign({}, mno, { fontSize: 22, fontWeight: 700, color: C.chalk, lineHeight: 1.1 })}>{t.done ? "✓" : mmss(t.left)}<span style={{ fontSize: 8.5, color: C.ash, marginLeft: 8, whiteSpace: "nowrap" }}>{t.done ? "" : (t.steps.length > 1 ? "STEP " + (t.i + 1) + "/" + t.steps.length : "TAP TO EXPAND")}</span></div>
+          <div style={Object.assign({}, mno, { fontSize: 11, fontWeight: 700, letterSpacing: .8, color: col, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" })}>{t.done ? t.title + " · COMPLETE" : t.title === cur.l ? cur.l : t.title + " · " + cur.l}</div>
+          <div style={Object.assign({}, mno, { fontSize: 24, fontWeight: 800, color: C.chalk, lineHeight: 1.1 })}>{t.done ? "✓" : mmss(t.left)}<span style={{ fontSize: 10.5, fontWeight: 600, color: C.ash, marginLeft: 8, whiteSpace: "nowrap", letterSpacing: .6 }}>{t.done ? "" : (t.steps.length > 1 ? "STEP " + (t.i + 1) + "/" + t.steps.length : "TAP TO EXPAND")}</span></div>
         </div>
-        <Btn on={T.toggle} c={col} fill={!t.run && !t.done} small s={{ minWidth: 64 }} dis={t.done}>{t.run ? "PAUSE" : "START"}</Btn>
-        <Btn on={T.skip} c={C.ash} small dis={t.done}>SKIP</Btn>
-        <button onClick={T.close} aria-label="Close timer" style={Object.assign({}, mno, { background: "transparent", border: "1px solid " + C.line, color: C.ash, borderRadius: 4, width: 34, height: 34, cursor: "pointer", fontSize: 14 })}>×</button>
+        <button onClick={T.toggle} disabled={t.done} aria-label={t.run ? "PAUSE" : "START"} style={Object.assign({}, round, { background: col, color: C.on, opacity: t.done ? .4 : 1 })}><Icon n={t.run ? "pause" : "play"} size={22} /></button>
+        <button onClick={T.skip} disabled={t.done} aria-label="SKIP" style={Object.assign({}, round, { background: soft(C.ash), color: C.chalk, opacity: t.done ? .4 : 1 })}><Icon n="skip" size={22} /></button>
+        <button onClick={T.close} aria-label="Close timer" style={Object.assign({}, round, { background: "transparent", color: C.ash })}><Icon n="close" size={22} /></button>
       </div>
     </div>);
 }
 
+/* The whole screen: the part's name, a ring that empties as it runs with
+   the clock inside it, what to do, where you are, what's next. The screen
+   takes the part's colour and flashes as each part starts, so a change
+   shows even with the sound off. */
 function TimerFull({ T }) {
   const t = T.t; if (!t || !T.open) return null;
   const cur = t.steps[t.i] || { l: "COMPLETE", s: 1, t: "r" };
   const col = t.done ? C.moss : cur.t === "w" ? C.oxide : C.cobalt;
   const total = t.steps.reduce((a, x) => a + x.s, 0), elapsed = t.steps.slice(0, t.i).reduce((a, x) => a + x.s, 0) + (t.done ? 0 : (cur.s - t.left));
   const nxt = t.steps[t.i + 1];
+  const left = t.done ? 0 : Math.max(0, Math.min(1, t.left / (cur.s || 1)));
+  const R = 134, LEN = 2 * Math.PI * R, clock = t.done ? "✓" : mmss(t.left);
+  const side = "min(300px, calc(100vw / var(--o8-zoom, 1) - 56px), calc(100vh / var(--o8-zoom, 1) - 430px))";
   return (
-    <div style={{ position: "fixed", inset: 0, background: C.ink, zIndex: 100, display: "flex", flexDirection: "column", padding: 16, paddingTop: "calc(16px + env(safe-area-inset-top))", paddingBottom: "calc(16px + env(safe-area-inset-bottom))" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <span data-testid="timer-title" style={Object.assign({}, mno, { fontSize: 18, color: C.ash, letterSpacing: 1.4 })}>{t.title}</span>
-        <Btn on={() => T.setOpen(false)} c={C.ash} small s={{ minWidth: 44, minHeight: 44 }}>MINIMISE</Btn>
+    <div className="fade" style={{ position: "fixed", inset: 0, background: C.ink, zIndex: 100, display: "flex", flexDirection: "column", padding: 16, paddingTop: "calc(16px + env(safe-area-inset-top))", paddingBottom: "calc(16px + env(safe-area-inset-bottom))" }}>
+      <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: soft(col), opacity: t.run ? .7 : .35, transition: "opacity .4s ease, background-color .4s ease", pointerEvents: "none" }} />
+      <div key={t.i + (t.done ? "d" : "")} aria-hidden="true" className="o8-flash" style={{ position: "absolute", inset: 0, background: col, pointerEvents: "none" }} />
+      <div style={{ position: "relative", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
+        <span data-testid="timer-title" style={Object.assign({}, mno, { fontSize: 15, fontWeight: 700, color: C.ash, letterSpacing: 1.2, minWidth: 0, overflowWrap: "anywhere" })}>{t.title}</span>
+        <Btn on={() => T.setOpen(false)} c={C.ash} small s={{ minWidth: 44, minHeight: 44, borderRadius: 999, background: C.card, boxShadow: C.shadow }}>MINIMISE</Btn>
       </div>
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
-        <div data-testid="timer-part" style={Object.assign({}, dsp, { fontSize: 22, fontWeight: 700, letterSpacing: 1.6, color: col, marginBottom: 8, animation: t.run && cur.t === "w" ? "pulse 1.4s infinite" : "none", padding: "0 10px" })}>{t.done ? "COMPLETE" : cur.l}</div>
-        <div data-testid="timer-count" style={Object.assign({}, mno, { fontSize: t.kind === "rest" ? 120 : 96, fontWeight: 700, color: t.done ? C.moss : C.chalk, lineHeight: 1, letterSpacing: -3 })}>{t.done ? "✓" : mmss(t.left)}</div>
-        {!t.done && cur.c ? <div style={Object.assign({}, bdy, { fontSize: 18, color: C.chalk, marginTop: 12, lineHeight: 1.45, maxWidth: 380, padding: "0 6px" })}>{cur.c}</div> : null}
-        <div style={Object.assign({}, mno, { fontSize: 18, color: C.ash, marginTop: 14, letterSpacing: 1.2 })}>{t.done ? mmss(total) + " TOTAL" : "STEP " + (t.i + 1) + " / " + t.steps.length + " · " + mmss(total - elapsed) + " LEFT"}</div>
-        <div style={{ display: "flex", gap: 2, width: "100%", maxWidth: 360, marginTop: 18 }}>
-          {t.steps.map((s, k) => <div key={k} style={{ flex: Math.max(1, s.s), height: 6, borderRadius: 2, background: k < t.i || t.done ? (s.t === "w" ? C.oxide : C.cobalt) : k === t.i ? col : C.card, opacity: k < t.i || t.done ? .55 : 1 }} />)}
+      <div style={{ position: "relative", flex: 1, minHeight: 0, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
+        <div data-testid="timer-part" style={Object.assign({}, dsp, { fontSize: 21, fontWeight: 800, letterSpacing: 1, lineHeight: 1.2, color: col, marginBottom: 14, padding: "0 10px" })}>{t.done ? "COMPLETE" : cur.l}</div>
+        <div style={{ position: "relative", width: side, aspectRatio: "1 / 1", flexShrink: 0 }}>
+          <svg viewBox="0 0 300 300" width="100%" height="100%" aria-hidden="true" style={{ display: "block", transform: "rotate(-90deg)" }}>
+            <circle cx="150" cy="150" r={R} fill="none" style={{ stroke: C.card, strokeWidth: 16 }} />
+            <circle cx="150" cy="150" r={R} fill="none" style={{ stroke: col, strokeWidth: 16, strokeLinecap: "round", strokeDasharray: LEN, strokeDashoffset: LEN * (1 - (t.done ? 1 : left)), transition: "stroke-dashoffset .25s linear, stroke .3s ease" }} />
+          </svg>
+          <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div data-testid="timer-count" className={t.done ? "pop" : undefined} style={Object.assign({}, mno, { fontSize: clock.length > 4 ? 76 : 96, fontWeight: 800, color: t.done ? C.moss : C.chalk, lineHeight: 1, letterSpacing: -2 })}>{clock}</div>
+          </div>
         </div>
-        {!t.done && nxt ? <div style={Object.assign({}, mno, { fontSize: 18, color: C.ash, marginTop: 14 })}>NEXT · {nxt.l} · {mmss(nxt.s)}</div> : null}
+        {!t.done && cur.c ? <div style={Object.assign({}, bdy, { fontSize: 18, fontWeight: 500, color: C.chalk, marginTop: 14, lineHeight: 1.4, maxWidth: 380, padding: "0 6px" })}>{cur.c}</div> : null}
+        <div style={Object.assign({}, mno, { fontSize: 15, fontWeight: 600, color: C.ash, marginTop: 12, letterSpacing: .8 })}>{t.done ? mmss(total) + " TOTAL" : "STEP " + (t.i + 1) + " / " + t.steps.length + " · " + mmss(total - elapsed) + " LEFT"}</div>
+        <div style={{ display: "flex", gap: 2, width: "100%", maxWidth: 340, marginTop: 10 }}>
+          {t.steps.map((s, k) => <div key={k} style={{ flex: Math.max(1, s.s), height: 5, borderRadius: 3, background: k < t.i || t.done ? (s.t === "w" ? C.oxide : C.cobalt) : k === t.i ? col : C.card, opacity: k < t.i || t.done ? .5 : 1 }} />)}
+        </div>
+        {!t.done && nxt ? <div style={Object.assign({}, mno, { fontSize: 15, fontWeight: 600, color: C.ash, marginTop: 12, lineHeight: 1.35, padding: "0 8px" })}>NEXT · <span style={{ color: C.chalk }}>{nxt.l}</span> · {mmss(nxt.s)}</div> : null}
       </div>
-      <div style={{ display: "flex", gap: 8 }}>
-        <Btn on={T.reset} c={C.ash} s={{ flex: 1, padding: "18px 0" }}>RESET</Btn>
-        <Btn on={T.toggle} c={col} fill={!t.run && !t.done} dis={t.done} s={{ flex: 2, padding: "18px 0", fontSize: 17 }}>{t.done ? "DONE" : t.run ? "PAUSE" : "START"}</Btn>
-        <Btn on={T.skip} c={C.ash} dis={t.done} s={{ flex: 1, padding: "18px 0" }}>SKIP</Btn>
+      <div style={{ position: "relative", display: "flex", gap: 8 }}>
+        <Btn on={T.reset} c={C.ash} s={{ flex: 1, padding: "16px 0", background: C.card, boxShadow: C.shadow }}>RESET</Btn>
+        <Btn on={T.toggle} c={col} fill dis={t.done} s={{ flex: 2, padding: "16px 0", fontSize: 19, letterSpacing: 1 }}>{t.done ? "DONE" : t.run ? "PAUSE" : "START"}</Btn>
+        <Btn on={T.skip} c={C.ash} dis={t.done} s={{ flex: 1, padding: "16px 0", background: C.card, boxShadow: C.shadow }}>SKIP</Btn>
       </div>
-      <Btn on={T.close} c={C.line} s={{ marginTop: 8, color: C.ash, padding: "10px 0" }}>CLOSE TIMER</Btn>
+      <Btn on={T.close} c={C.ash} s={{ position: "relative", marginTop: 8, background: "transparent", color: C.ash, padding: "10px 0", fontSize: 15 }}>CLOSE TIMER</Btn>
     </div>);
 }
 
@@ -1326,7 +1367,7 @@ function Plates({ kg, bar, onClose }) {
   const perSide = (kg - b) / 2; const out = []; let rem = perSide;
   if (perSide > 0) P.forEach((p) => { const n = Math.floor(rem / p + 1e-9); if (n > 0) { out.push([p, n]); rem = +(rem - n * p).toFixed(3); } });
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(19,36,61,.55)", zIndex: 110, display: "flex", alignItems: "center", justifyContent: "center", padding: 20, paddingTop: "calc(20px + env(safe-area-inset-top))", paddingBottom: "calc(20px + env(safe-area-inset-bottom))" }} onClick={onClose}>
+    <div style={{ position: "fixed", inset: 0, background: C.scrim, zIndex: 110, display: "flex", alignItems: "center", justifyContent: "center", padding: 20, paddingTop: "calc(20px + env(safe-area-inset-top))", paddingBottom: "calc(20px + env(safe-area-inset-bottom))" }} onClick={onClose}>
       <div style={{ background: C.card, border: "1px solid " + C.brass, borderRadius: 8, padding: 20, maxWidth: 340, width: "100%" }} onClick={(e) => e.stopPropagation()}>
         <Eye c={C.brass}>Plates per side</Eye>
         <div style={Object.assign({}, mno, { fontSize: 42, fontWeight: 700, color: C.chalk, margin: "2px 0 10px" })}>{kg}<span style={{ fontSize: 17, color: C.ash }}> kg</span></div>
@@ -1447,7 +1488,7 @@ const jointFlagFor = (log, macro, week) => { if (week < 2) return false;
 function ProtoSheet({ id, close }) {
   const p = PROTO[id]; if (!p) return null;
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(19,36,61,.55)", zIndex: 90, display: "flex", alignItems: "flex-end" }} onClick={close}>
+    <div style={{ position: "fixed", inset: 0, background: C.scrim, zIndex: 90, display: "flex", alignItems: "flex-end" }} onClick={close}>
       <div className="rise" onClick={(e) => e.stopPropagation()} style={{ background: C.card, borderTop: "3px solid " + p.c, borderRadius: "12px 12px 0 0", width: "100%", maxWidth: 640, margin: "0 auto", maxHeight: "86vh", overflowY: "auto", padding: 16, paddingBottom: "calc(16px + env(safe-area-inset-bottom))" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
           <div><Eye c={p.c} s={{ marginBottom: 2 }}>Protocol</Eye><div style={Object.assign({}, dsp, { fontSize: 24, fontWeight: 800, letterSpacing: 1, color: C.chalk })}>{p.n}</div><div style={Object.assign({}, mno, { fontSize: 10, color: C.ash, marginTop: 3 })}>{p.s.toUpperCase()}</div></div>
@@ -2480,8 +2521,8 @@ function Today(props) {
 
   const progress = (
     <div data-testid="day-progress" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label="The day"
-      style={{ height: 10, background: C.ink, border: "1px solid " + C.line, borderRadius: 5, overflow: "hidden", marginBottom: 14 }}>
-      <div style={{ width: pct + "%", height: "100%", background: C.moss, transition: "width .3s" }} />
+      style={{ height: 6, background: soft(C.chalk), borderRadius: 999, overflow: "hidden", marginBottom: 14 }}>
+      <div style={{ width: pct + "%", height: "100%", background: C.moss, borderRadius: 999, transition: "width .4s cubic-bezier(.2,.8,.2,1)" }} />
     </div>);
 
   if (whole) {
@@ -2513,16 +2554,16 @@ function Today(props) {
     <div data-testid="today-now">
       {progress}
       {cur ? (
-        <div data-testid="now-card" data-flow-id={cur.id} style={{ background: C.card, border: "2px solid " + (cur.colour || C.brass), borderRadius: 12, padding: 18, marginBottom: 12 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, marginBottom: 10 }}>
-            <span data-testid="now-label" style={Object.assign({}, mno, { fontSize: T3, color: cur.colour || C.brass, letterSpacing: 1.2 })}>{isToday ? "NOW" : DSH[day]} · {cur.clock}{gymAt >= 0 ? " · " + (gymAt + 1) + " OF " + gymAll.length : ""}</span>
-            {gymAt >= 0 ? <button onClick={() => setList(!list)} style={Object.assign({}, mno, { background: "transparent", border: "1px solid " + C.line, color: C.ash, fontSize: T3, borderRadius: 6, minHeight: 48, padding: "6px 12px", cursor: "pointer" })}>{list ? "CLOSE" : "SESSION LIST"}</button> : null}
+        <div data-testid="now-card" data-flow-id={cur.id} key={cur.id} className="rise" style={{ background: C.card, border: "1px solid " + C.line, borderRadius: RAD.l + 2, padding: 18, marginBottom: 12, boxShadow: C.shadow }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, marginBottom: 12 }}>
+            <span data-testid="now-label" style={Object.assign({}, mno, { fontSize: 15, fontWeight: 800, color: cur.colour || C.brass, letterSpacing: .8, background: soft(cur.colour || C.brass) === (cur.colour || C.brass) ? "transparent" : soft(cur.colour || C.brass), borderRadius: 999, padding: "6px 12px" })}>{isToday ? "NOW" : DSH[day]} · {cur.clock}{gymAt >= 0 ? " · " + (gymAt + 1) + " OF " + gymAll.length : ""}</span>
+            {gymAt >= 0 ? <button onClick={() => setList(!list)} style={Object.assign({}, mno, { background: soft(C.ash), border: "none", color: C.chalk, fontSize: 14, fontWeight: 700, letterSpacing: .5, borderRadius: 999, minHeight: 44, padding: "6px 14px", cursor: "pointer" })}>{list ? "CLOSE" : "SESSION LIST"}</button> : null}
           </div>
           {list && gymAt >= 0 ? (
             <div data-testid="session-list" style={{ marginBottom: 14 }}>
               {gymAll.map((g) => (
                 <button key={g.id} onClick={() => { go(g.id); setList(false); }} style={{ display: "flex", width: "100%", gap: 12, alignItems: "center", textAlign: "left", background: "transparent", border: "none", borderTop: "1px solid " + C.line, padding: "10px 0", minHeight: 56, cursor: "pointer" }}>
-                  <span style={Object.assign({}, mno, { width: 32, fontSize: T3, color: g.done ? C.moss : C.ash })}>{g.done ? "✓" : "○"}</span>
+                  <span style={{ width: 32, display: "flex", justifyContent: "center" }}><CheckDot ok={!!g.done} size={24} /></span>
                   <span style={Object.assign({}, bdy, { flex: 1, fontSize: T3, fontWeight: 700, color: g === cur ? C.brass : g.done ? C.ash : C.chalk })}>{g.n}</span>
                 </button>))}
             </div>) : null}
@@ -2539,16 +2580,16 @@ function Today(props) {
           {cur.input ? cur.input() : null}
           {cur.tool ? <BigBtn on={cur.tool.run} c={cur.colour || C.brass} s={{ marginTop: 16 }}>{cur.tool.label}</BigBtn> : null}
           <div style={{ display: "flex", gap: 8, marginTop: 18 }}>
-            <BigBtn on={back} c={C.ash} dis={curIdx <= 0} label="Back to the item before" s={{ flex: 1, minHeight: 80, fontSize: 22 }}>◀ BACK</BigBtn>
-            <BigBtn on={finish} c={C.moss} fill s={{ flex: 2, minHeight: 80, fontSize: 28 }}>{cur.gym ? "NEXT" : "DONE"}</BigBtn>
+            <BigBtn on={back} c={C.ash} dis={curIdx <= 0} label="Back to the item before" s={{ flex: 1, minHeight: 66, fontSize: 17 }}>◀ BACK</BigBtn>
+            <BigBtn on={finish} c={C.moss} fill s={{ flex: 2.2, minHeight: 66, fontSize: 23, letterSpacing: 1.2 }}>{cur.gym ? "NEXT" : "DONE"}</BigBtn>
           </div>
         </div>) : (
-        <div data-testid="now-card" style={{ background: C.card, border: "2px solid " + C.moss, borderRadius: 12, padding: 18, marginBottom: 12 }}>
+        <div data-testid="now-card" className="rise" style={{ background: C.card, border: "1px solid " + C.line, borderRadius: RAD.l + 2, padding: 18, marginBottom: 12, boxShadow: "inset 0 4px 0 " + C.moss + ", " + C.shadow }}>
           <div style={Object.assign({}, dsp, { fontSize: T1, fontWeight: 800, letterSpacing: 2, color: C.moss })}>DONE</div>
           <div style={Object.assign({}, mno, { fontSize: T3, color: C.ash, marginTop: 8 })}>STREAK · {imStreak == null ? "—" : imStreak}</div>
         </div>)}
       {nxt ? (
-        <div data-testid="next-line" style={Object.assign({}, mno, { fontSize: T3, color: C.ash, padding: "6px 2px 14px", lineHeight: 1.4 })}>
+        <div data-testid="next-line" style={Object.assign({}, mno, { fontSize: 16, color: C.ash, padding: "4px 4px 14px", lineHeight: 1.4 })}>
           NEXT · <span style={{ color: C.chalk }}>{nxt.clock}</span> · <span style={{ color: C.chalk }}>{nxt.n}</span>
         </div>) : null}
       <BigBtn on={() => setWhole(true)} c={C.ash} s={{ marginBottom: 10 }}>WHOLE DAY</BigBtn>
@@ -2569,6 +2610,7 @@ const segKey = (r) => r.mac + "|" + (r.campStart || (r.program === "pre" ? "" : 
 const segmentOf = (row) => (SEASON.s && row ? SEASON.s.rows.filter((r) => segKey(r) === segKey(row)) : []);
 /* a week's place in its stretch: week 1–16 of a cycle, not every Prep week since the start */
 const weekIn = (row) => SEASON.s.rows.filter((r) => r.seq < row.seq && segKey(r) === segKey(row)).length + 1;
+const WEEK_ARROW = { flexShrink: 0, width: 48, height: 48, borderRadius: 999, cursor: "pointer", padding: 0, background: soft(C.ash), color: C.chalk, border: "none", display: "flex", alignItems: "center", justifyContent: "center" };
 function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDoneMap }) {
   const { macro, week } = view; const rx = rxFor(week), P = PH[rx.ph] || PH.c1;
   const row = MODE.mac ? seasonRow(MODE.mac, week) : null;
@@ -2585,33 +2627,33 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
     <div>
       <Card ac={P.ac}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <Btn on={() => move(-1)} c={C.ash} small s={{ minWidth: 48 }}>◀</Btn>
-          <span style={{ textAlign: "center" }}>
+          <button onClick={() => move(-1)} aria-label="The week before" style={WEEK_ARROW}><Icon n="left" size={22} w={2.6} /></button>
+          <span style={{ textAlign: "center", flex: 1, minWidth: 0, padding: "0 6px" }}>
             <div style={Object.assign({}, mno, { fontSize: 9, color: C.ash, letterSpacing: 1.4 })}>{row ? weekEyebrow(week) : PROGRAM_NAME.fighter + " · MACROCYCLE " + macro}</div>
             <div style={Object.assign({}, dsp, { fontSize: 34, fontWeight: 800, letterSpacing: 1, color: C.chalk, lineHeight: 1.05 })}>{row && row.program === "pre" ? "BEFORE WEEK 1" : "WEEK " + (row ? row.idx || (seg.indexOf(row) + 1) : week) + (row && row.program === "camp" ? " / " + row.camp.n : "")}</div>
             <div style={Object.assign({}, dsp, { fontSize: 16, fontWeight: 700, color: P.ac, marginTop: 3, letterSpacing: 1.4 })}>{P.long}</div>
           </span>
-          <Btn on={() => move(1)} c={C.brass} small s={{ minWidth: 48 }}>▶</Btn>
+          <button onClick={() => move(1)} aria-label="The week after" style={WEEK_ARROW}><Icon n="right" size={22} w={2.6} /></button>
         </div>
         <div style={{ display: "flex", gap: 2, marginTop: 14 }}>
           {wks.map((n) => { const r = rxFor(n), ph = PH[r.ph] || PH.c1; const sel = n === week; const dn = weekDoneMap && weekDoneMap[n];
             /* Strength, Power and Physique marks its lighter weeks and its test week */
-            const tint = MODE.spp ? (r.light ? "#DDF3E4" : r.testWeek ? "#D6EFF2" : "#EDF2F8")
-              : (r.hell ? "#FADFD8" : r.dl || r.reload ? "#DDF3E4" : r.test || r.tp ? "#D6EFF2" : (r.topSq ? "#DCE9FA" : "#EDF2F8"));
-            return <div key={n} onClick={() => setView({ macro, week: n })} style={{ flex: 1, height: 30, borderRadius: 3, cursor: "pointer", background: sel ? soft(ph.ac) : tint, border: "1px solid " + (sel ? ph.ac : C.line), display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2 }}>
+            const tint = MODE.spp ? (r.light ? soft(C.moss) : r.testWeek ? soft(C.cobalt) : soft(C.ash))
+              : (r.hell ? soft(C.oxide) : r.dl || r.reload ? soft(C.moss) : r.test || r.tp ? soft(C.cobalt) : (r.topSq ? soft(C.brass) : soft(C.ash)));
+            return <div key={n} onClick={() => setView({ macro, week: n })} style={{ flex: 1, height: 34, borderRadius: 6, cursor: "pointer", background: sel ? soft(ph.ac) : tint, border: "1.5px solid " + (sel ? ph.ac : "transparent"), display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2 }}>
               <span style={Object.assign({}, mno, { fontSize: 7, color: sel ? C.chalk : C.ash })}>{row ? (seasonRow(MODE.mac, n) || {}).id || n : n}</span>
               {dn != null ? <span style={{ width: 4, height: 4, borderRadius: 2, background: dn >= 1 ? C.moss : dn > 0 ? C.brass : "transparent" }} /> : null}
             </div>; })}
         </div>
         <div style={{ display: "flex", gap: 9, marginTop: 7, flexWrap: "wrap" }}>
-          {(MODE.camp ? [["EASY + TESTS", "#B9E6C8"], ["SHARPEN / FIGHT WEEK", "#B3E0E6"]]
-            : MODE.spp ? [["LIGHTER", "#B9E6C8"], ["TEST", "#B3E0E6"]]
-            : [["TOP TRIPLE", "#BCD5F4"], ["DELOAD", "#B9E6C8"], ["TEST", "#B3E0E6"]].concat(L > 16 ? [["HELL WEEK", "#F3C1B5"]] : [])).map((x) =>
-            <span key={x[0]} style={Object.assign({}, mno, { fontSize: 8, color: C.ash, display: "flex", alignItems: "center", gap: 4 })}><span style={{ width: 9, height: 9, borderRadius: 2, background: x[1], display: "inline-block" }} />{x[0]}</span>)}
+          {(MODE.camp ? [["EASY + TESTS", C.moss], ["SHARPEN / FIGHT WEEK", C.cobalt]]
+            : MODE.spp ? [["LIGHTER", C.moss], ["TEST", C.cobalt]]
+            : [["TOP TRIPLE", C.brass], ["DELOAD", C.moss], ["TEST", C.cobalt]].concat(L > 16 ? [["HELL WEEK", C.oxide]] : [])).map((x) =>
+            <span key={x[0]} style={Object.assign({}, mno, { fontSize: 8, color: C.ash, display: "flex", alignItems: "center", gap: 4 })}><span style={{ width: 9, height: 9, borderRadius: 3, background: soft(x[1]), border: "1px solid " + x[1], display: "inline-block" }} />{x[0]}</span>)}
         </div>
         {isCur ? <Chip c={C.moss} s={{ marginTop: 12, display: "inline-block" }}>This is the current week</Chip>
           : !setCurrent ? null : <Btn on={() => setCurrent(macro, week)} c={C.brass} small s={{ marginTop: 12 }}>MAKE THIS THE CURRENT WEEK</Btn>}
-        <Note>{P.note}</Note>
+        <Note>{phNote(P, rx)}</Note>
       </Card>
 
       {MODE.camp && !MODE.pre && seg ? <CampWeekTable rows={seg.map((r) => ({ row: r, rx: rxFor(r.kw) }))} week={week} setWeek={(w) => setView({ macro, week: w })} /> : null}
@@ -2797,6 +2839,10 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
   const setSub = (x) => { setSubOwn(x); if (setSubIn) setSubIn(x); };
   const [edit, setEdit] = useState({});
   const [tp, setTp] = useState({});
+  /* the row of pages scrolls sideways: bring the chosen one into the middle of it */
+  const pagesRef = useRef(null);
+  useEffect(() => { const row = pagesRef.current, el = row && row.querySelector("[data-on]");
+    if (row && el) row.scrollLeft = el.offsetLeft - (row.clientWidth - el.offsetWidth) / 2; }, [sub]);
   const macro = current.macro;
   /* whose weeks the charts read: the camp's, Prep's or the classic's */
   const view = viewIn !== undefined ? viewIn : camp;
@@ -2806,10 +2852,10 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
   return (
     <div>
       {title ? <Eye c={C.ash} s={{ marginBottom: 8 }}>{title}</Eye> : null}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 12 }}>
+      <div ref={pagesRef} data-testid="track-pages" className="o8-row" style={{ display: "flex", gap: 6, margin: "0 -16px 12px", padding: "2px 16px" }}>
         {(camp ? [["dash", "DASH"], ["ref", "REFEREE"], ["camp", "CAMP"], ["numbers", "MAXES"], ["measure", "MEASURE"], ["photos", "PHOTOS"], ["body", "BODY"], ["calis", "CALIS"], ["range", "RANGE"], ["iron", "IRON MIND"]]
-          : [["dash", "DASH"], ["ref", "REFEREE"], ["numbers", "NUMBERS"], ["progress", "PROGRESS"], ["measure", "MEASURE"], ["photos", "PHOTOS"], ["body", "BODY"], ["calis", "CALIS"], ["range", "RANGE"], ["iron", "IRON MIND"]]).map((x) => <button key={x[0]} onClick={() => setSub(x[0])}
-          style={Object.assign({}, dsp, { flex: "1 1 20%", fontSize: 9.5, fontWeight: 700, letterSpacing: .3, padding: "11px 1px", borderRadius: 4, cursor: "pointer", minHeight: 44, background: sub === x[0] ? soft(C.brass) : "transparent", color: sub === x[0] ? C.chalk : C.ash, border: "1px solid " + (sub === x[0] ? C.brass : C.line) })}>{x[1]}</button>)}
+          : [["dash", "DASH"], ["ref", "REFEREE"], ["numbers", "NUMBERS"], ["progress", "PROGRESS"], ["measure", "MEASURE"], ["photos", "PHOTOS"], ["body", "BODY"], ["calis", "CALIS"], ["range", "RANGE"], ["iron", "IRON MIND"]]).map((x) => <button key={x[0]} onClick={() => setSub(x[0])} data-on={sub === x[0] ? "1" : undefined}
+          style={Object.assign({}, dsp, { flex: "0 0 auto", fontSize: 13, fontWeight: 700, letterSpacing: .5, padding: "10px 15px", borderRadius: 999, cursor: "pointer", minHeight: 44, whiteSpace: "nowrap", background: sub === x[0] ? C.brass : soft(C.ash), color: sub === x[0] ? C.on : C.chalk, border: "none" })}>{x[1]}</button>)}
       </div>
 
       {sub === "dash" ? <Dashboard log={log} morning={morning || {}} st={st || {}} camp={view} body={body} fuel={fuel} addBody={addBody} dateOf={dateOf} iron={IM}
@@ -2907,7 +2953,7 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
                     <span style={Object.assign({}, mno, { fontSize: 7.5, color: C.ash, width: 20 })}>{w}</span>
                     {DAYS.map((d) => { const dk = dayKey(macro, w, d); const n = (done[dk] || []).length; const tot = rx.hell ? 0 : (!MODE.camp && d === "sat" && rx.test ? 1 : countedBlocks(d, rx).length);
                       const f = tot ? n / tot : 0;
-                      return <div key={d} style={{ flex: 1, height: 12, borderRadius: 2, background: tot === 0 ? "transparent" : f >= 1 ? C.moss : f > 0 ? "#B7D0F2" : C.card, border: "1px solid " + C.line }} />; })}
+                      return <div key={d} style={{ flex: 1, height: 12, borderRadius: 2, background: tot === 0 ? "transparent" : f >= 1 ? C.moss : f > 0 ? soft(C.brass) : C.card, border: "1px solid " + C.line }} />; })}
                   </div>);
               })}
             </div>
@@ -3008,10 +3054,14 @@ function PlanView({ program, title }) {
 /* ================================================================
    SETTINGS
    ================================================================ */
+/* the settings page is long: a row of jumps at its top, and the line each lands on */
+const SET_JUMPS = [["day", "THE DAY"], ["look", "LOOK"], ["sound", "SOUND"], ["cycle", "CYCLE"], ["range", "RANGE AND MOVE"], ["calis", "CALISTHENICS"], ["iron", "IRON MIND"], ["backup", "BACKUP"]];
+const jumpTo = (k) => { const e = document.getElementById("set-" + k); if (e && e.scrollIntoView) e.scrollIntoView({ block: "start" }); };
+const SetLine = ({ id }) => <div id={"set-" + id} style={{ height: 1, background: C.line, margin: "14px 0", scrollMarginTop: "calc(58px + env(safe-area-inset-top))" }} />;
 const Toggle = ({ on, set, n, s, c }) => (
   <div onClick={set} style={{ display: "flex", gap: 10, alignItems: "center", padding: "10px 0", borderBottom: "1px solid " + C.line, cursor: "pointer", minHeight: 44 }}>
-    <span style={{ width: 40, height: 24, borderRadius: 12, background: on ? soft(c || C.moss) : C.ink, border: "1px solid " + (on ? (c || C.moss) : C.line), position: "relative", flexShrink: 0 }}>
-      <span style={{ position: "absolute", top: 2, left: on ? 18 : 2, width: 18, height: 18, borderRadius: 9, background: C.chalk, transition: "left .15s" }} /></span>
+    <span style={{ width: 50, height: 30, borderRadius: 999, background: on ? (c || C.moss) : C.ring, position: "relative", flexShrink: 0, transition: "background-color .2s ease" }}>
+      <span style={{ position: "absolute", top: 3, left: on ? 23 : 3, width: 24, height: 24, borderRadius: 999, background: "#FFFFFF", boxShadow: "0 1px 3px rgba(0,0,0,.25)", transition: "left .2s cubic-bezier(.2,.8,.2,1)" }} /></span>
     <span style={{ flex: 1 }}>
       <div style={Object.assign({}, bdy, { fontSize: 13.5, fontWeight: 600, color: C.chalk })}>{n}</div>
       <div style={Object.assign({}, bdy, { fontSize: 11.5, color: C.ash, marginTop: 2, lineHeight: 1.45 })}>{s}</div>
@@ -3118,8 +3168,10 @@ function BoxingSwitch({ on, set }) {
   return (
     <div style={{ marginBottom: 12 }}>
       <button data-testid="boxing-tonight" onClick={() => { set(!on); buzz(20); }}
-        style={Object.assign({}, mno, { width: "100%", fontSize: 17, fontWeight: 700, letterSpacing: 1, padding: "12px 8px", borderRadius: 4, cursor: "pointer", minHeight: 48,
-          background: on ? soft(C.oxide) : "transparent", color: on ? C.chalk : C.ash, border: "1px solid " + (on ? C.oxide : C.line) })}>{on ? "✓ BOXING TONIGHT" : "BOXING TONIGHT"}</button>
+        aria-pressed={on} style={Object.assign({}, mno, { width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, textAlign: "left", fontSize: 16, fontWeight: 700, letterSpacing: .6, padding: "10px 14px", borderRadius: RAD.m, cursor: "pointer", minHeight: 54,
+          background: on ? soft(C.oxide) : C.card, color: C.chalk, border: "1px solid " + (on ? C.oxide : C.line), boxShadow: C.shadow })}><span>{on ? "✓ BOXING TONIGHT" : "BOXING TONIGHT"}</span>
+        <span aria-hidden="true" style={{ width: 50, height: 30, borderRadius: 999, background: on ? C.oxide : C.ring, position: "relative", flexShrink: 0, transition: "background-color .2s ease" }}>
+          <span style={{ position: "absolute", top: 3, left: on ? 23 : 3, width: 24, height: 24, borderRadius: 999, background: "#FFFFFF", boxShadow: "0 1px 3px rgba(0,0,0,.25)", transition: "left .2s cubic-bezier(.2,.8,.2,1)" }} /></span></button>
       {on ? <Note c={C.chalk}>{BOXING_SAY}</Note> : null}
     </div>);
 }
@@ -3162,11 +3214,15 @@ function Settings({ st, setSt, current, L, exportData, importData, IM, calis, se
         <div style={{ marginBottom: 12 }}>
           <span style={Object.assign({}, dsp, { fontSize: 22, fontWeight: 800, letterSpacing: 1.4, color: C.chalk })}>SETTINGS</span>
         </div>
+        <div data-testid="settings-jumps" className="o8-row" style={{ display: "flex", gap: 6, margin: "0 -16px 14px", padding: "2px 16px" }}>
+          {SET_JUMPS.map((x) => <button key={x[0]} onClick={() => jumpTo(x[0])}
+            style={Object.assign({}, dsp, { flex: "0 0 auto", fontSize: 13, fontWeight: 700, letterSpacing: .5, padding: "10px 15px", borderRadius: 999, cursor: "pointer", minHeight: 44, whiteSpace: "nowrap", background: soft(C.ash), color: C.chalk, border: "none" })}>{x[1]}</button>)}
+        </div>
         <FightSettings st={st} replan={replan} season={season} dayIso={dayIso} />
         {wt ? <WeightSettings wt={wt} dayIso={dayIso} /> : null}
         <Note c={fuelPhase ? C.brass : C.ash}>{fuelPhase ? <span>The food reads today as <span style={{ color: FUEL_PHASES[fuelPhase].c }}>{FUEL_PHASES[fuelPhase].n}</span> — {FUEL_PHASES[fuelPhase].chg || "the day as printed"}.</span> : "The food runs the day as printed."}</Note>
 
-        <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
+        <SetLine id="day" />
         <Eye c={C.brass}>The day's clock</Eye>
         <Note c={C.chalk} s={{ marginTop: 0 }}>What TODAY works from, with the session start you type at the top of it.</Note>
         <div style={{ marginTop: 10 }}>
@@ -3205,12 +3261,26 @@ function Settings({ st, setSt, current, L, exportData, importData, IM, calis, se
         <Note c={C.chalk} s={{ marginTop: 0 }}>Five loads and their mean speeds draw a line per lift, and the line gives every phase target.</Note>
         <Btn c={C.brass} fill s={{ width: "100%", marginTop: 10 }} on={openProfile}>▶ THE PROFILE</Btn>
 
-        <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
+        <SetLine id="look" />
         <Eye>Text size</Eye>
         <Seg opts={TEXT_STEPS.map((x) => [x[0], x[1]])} val={st.textSize || "n"} on={(v) => upd({ textSize: v })} c={C.cobalt} />
         <Note>The phone's own text-size setting is read as well, and the two multiply.</Note>
 
         <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
+        <Eye>Light or dark</Eye>
+        <div data-testid="theme-pick"><Seg opts={THEME_STEPS} val={st.theme === "light" || st.theme === "dark" ? st.theme : "auto"} on={(v) => upd({ theme: v })} c={C.brass} /></div>
+        <Note>AUTO follows the phone: light when the phone is light, dark when it goes dark.</Note>
+
+        <SetLine id="sound" />
+        <Eye>Sound</Eye>
+        <Toggle on={!!st.sound} set={() => upd({ sound: !st.sound })} n="Bell sounds and the feed chime"
+          s="Round bells and 3-2-1 pips on the timers, and a chime when a feed or a drink is due while the app is open. Off, the full-screen timer still flashes at every change." />
+        <div style={{ marginTop: 12 }}><Lab>When the phone is on silent</Lab></div>
+        <div data-testid="sound-mode"><Seg opts={SOUND_MODES} val={st.soundMode === "loud" ? "loud" : "mix"} on={(v) => upd({ soundMode: v })} c={C.brass} /></div>
+        <Note>STAY SILENT: the bells and pips play alongside your music, and go quiet when the phone's ring switch is on silent. PLAY ANYWAY: they sound even on silent, and the phone stops other apps' music while they do.</Note>
+        <Btn c={C.brass} s={{ width: "100%", marginTop: 10 }} on={() => { play("bell1"); }}>▶ TEST THE BELL</Btn>
+
+        <SetLine id="cycle" />
         <Eye>Schedule — Optimal 8 Fighter</Eye>
         <Lab>Monday of week 1, macrocycle {st.macroBase}</Lab>
         <Fld type="date" v={st.start} on={(val) => { if (val) upd({ start: iso(mondayOf(parseISO(val))) }); }} a="left" />
@@ -3218,11 +3288,10 @@ function Settings({ st, setSt, current, L, exportData, importData, IM, calis, se
         <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
         <Eye>Cycle</Eye>
         {[["iron", "Iron Mind weeks 17–18 (Hell Week + Reload)", "On = 18-week cycle. Off = 16 weeks, straight from test day into week 1 of the next cycle."],
-          ["sound", "Bell sounds and the feed chime", "Round bells and 3-2-1 pips on the timers, and a chime when a feed or a drink is due while the app is open. Vibration stays on either way."],
           ["autoRest", "Auto rest clock", "Confirming a set starts that exercise's rest countdown by itself."]].map((x) => (
           <div key={x[0]} onClick={() => upd({ [x[0]]: !st[x[0]] })} style={{ display: "flex", gap: 10, alignItems: "center", padding: "10px 0", borderBottom: "1px solid " + C.line, cursor: "pointer" }}>
-            <span style={{ width: 40, height: 24, borderRadius: 12, background: st[x[0]] ? soft(C.moss) : C.ink, border: "1px solid " + (st[x[0]] ? C.moss : C.line), position: "relative", flexShrink: 0 }}>
-              <span style={{ position: "absolute", top: 2, left: st[x[0]] ? 18 : 2, width: 18, height: 18, borderRadius: 9, background: C.chalk, transition: "left .15s" }} /></span>
+            <span style={{ width: 50, height: 30, borderRadius: 999, background: st[x[0]] ? C.moss : C.ring, position: "relative", flexShrink: 0, transition: "background-color .2s ease" }}>
+              <span style={{ position: "absolute", top: 3, left: st[x[0]] ? 23 : 3, width: 24, height: 24, borderRadius: 999, background: "#FFFFFF", boxShadow: "0 1px 3px rgba(0,0,0,.25)", transition: "left .2s cubic-bezier(.2,.8,.2,1)" }} /></span>
             <span style={{ flex: 1 }}>
               <div style={Object.assign({}, bdy, { fontSize: 13.5, fontWeight: 600, color: C.chalk })}>{x[1]}</div>
               <div style={Object.assign({}, bdy, { fontSize: 11.5, color: C.ash, marginTop: 2 })}>{x[2]}</div>
@@ -3248,7 +3317,7 @@ function Settings({ st, setSt, current, L, exportData, importData, IM, calis, se
         <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
         <MeasureSettings st={st} upd={upd} morning={morning || {}} dayIso={dayIso} fuel={fuel} setFuel={setFuel} importFuelText={importFuelText} />
 
-        <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
+        <SetLine id="range" />
         <Eye c={C.violet}>RANGE — the home block</Eye>
         <Note c={C.chalk} s={{ marginTop: 0 }}>{RANGE_INTRO}</Note>
         <div style={{ padding: "12px 0", borderBottom: "1px solid " + C.line }}>
@@ -3266,7 +3335,7 @@ function Settings({ st, setSt, current, L, exportData, importData, IM, calis, se
           <Note>It runs in every program: the movement block every gym morning, Session A on Wednesday evening, Session B on Sunday's, RANGE the other five, and the fifteen standards in weeks 1, 5, 9 and 13. Its tendon work starts on Monday 23 November.</Note>
         </div>
 
-        <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
+        <SetLine id="calis" />
         <Eye c={C.brass}>Calisthenics — the lines and the levels</Eye>
         <Note c={C.chalk} s={{ marginTop: 0 }}>{CALIS_INTRO}</Note>
         {isCamp ? <Note c={C.brass} bold>CAMP MODE — the five lines run at your current levels in the same slots. Half the sets in week 5, holds only from week 9. The handstand and the planche leans are not on the camp's clock; they stay in your home block as your own call.</Note> : null}
@@ -3300,7 +3369,7 @@ function Settings({ st, setSt, current, L, exportData, importData, IM, calis, se
           <Note s={{ fontStyle: "italic" }}>{PLANCHE_LINE}</Note>
         </div>
 
-        <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
+        <SetLine id="iron" />
         <Eye c={C.violet}>Iron Mind — the three curricula</Eye>
         <Note c={C.chalk} s={{ marginTop: 0 }}>Nothing here advances by itself. You move it, and only when the gate is cleared honestly. The program only fails if you lie to yourself about where you are.</Note>
         {[["medStage", "Meditation stage", [1, 2, 3, 4], C.violet, "med"],
@@ -3332,7 +3401,7 @@ function Settings({ st, setSt, current, L, exportData, importData, IM, calis, se
         <Toggle on={!!st.taper} set={() => upd({ taper: !st.taper })} c={C.oxide}
           n="Training taper weeks" s="Weeks 15–16 of the training cycle: no maximal hardship sessions. Breath, sits and the daily core continue; the tests pause, and every calisthenics line goes to holds only — handstand and ring support, nothing to failure, nothing new. Weeks 15 and 16 turn this on by themselves — use the switch for a taper that lands anywhere else." />
 
-        <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
+        <SetLine id="backup" />
         <Eye>Backup</Eye>
         <div style={{ display: "flex", gap: 6 }}>
           <Btn small c={C.cobalt} s={{ flex: 1 }} on={async () => { setMsg(""); setIo(await exportData()); setShowIo(true); }}>EXPORT</Btn>
@@ -3391,7 +3460,7 @@ const HWD = [
   { d: 3, n: "BREATH CONTROL UNDER FATIGUE", col: C.cobalt,
     pre: "The direct measure of whether your breath work has transferred into your body under stress.",
     m: "On the threshold test, mouth-breathing is usually a mental cave before it's a physical necessity. Be honest about which it was — that honesty is worth more than the score.",
-    t: [{ k: "nasal", n: "Nasal-Only Threshold", u: "minutes", ln: "rower/ski/bike · +1 notch every 2 min until forced to open your mouth", rows: [[6, 2], [10, 4], [14, 6], [18, 8]], top: 10, tbl: "<6=2 · 6–9=4 · 10–13=6 · 14–17=8 · 18+=10" },
+    t: [{ k: "nasal", n: "Nasal-Only Threshold", u: "minutes", ln: "rower/bike · +1 notch every 2 min until forced to open your mouth", rows: [[6, 2], [10, 4], [14, 6], [18, 8]], top: 10, tbl: "<6=2 · 6–9=4 · 10–13=6 · 14–17=8 · 18+=10" },
       { k: "hold2", n: "Seated Max Breath Hold", u: "seconds", ln: "min 15 min after · seated, dry, still. NEVER standing, never in water.", rows: [[45, 1], [60, 2], [90, 3], [120, 4]], top: 5, tbl: "<45=1 · 45–59=2 · 60–89=3 · 90–119=4 · 120+=5" }] },
   { d: 4, n: "ENGINE", col: C.moss,
     pre: "20 minutes, maximum distance, ONE modality. Same one every attempt forever. No pacing plan. Go and find out.",
@@ -3612,7 +3681,7 @@ const DEF_ST = () => ({ start: defaultStart(), macroBase: 1, iron: false, sound:
   /* the measurement layer */
   ergUnit: "w", base: null,
   /* the season */
-  program: "fighter", fightDate: null, profiles: null, textSize: "n",
+  program: "fighter", fightDate: null, profiles: null, textSize: "n", theme: "auto", soundMode: "mix",
   /* the season builder: the answers, and every plan they have made */
   season: null, plans: null, planNote: "", planNoteAt: null, fadeDone: {},
   /* the day's clock, from the fuel app */
@@ -3792,6 +3861,8 @@ export default function App() {
     if (!st1.v12) { done0 = migrateDone(done0); st1 = Object.assign({}, st1, { v12: true }); save(KEYS.done, done0); }
     if (!st1.v16) { done0 = boxJumpsDone(done0); st1 = Object.assign({}, st1, { v16: true }); save(KEYS.done, done0); }
     if (!st1.plans) st1 = Object.assign({}, st1, migratePlans(st1, !s0 && !mig.settings));
+    /* a phone with nothing saved gets the welcome, once */
+    if (!s0 && !mig.settings) st1 = Object.assign({}, st1, { welcome: true });
     setStRaw(st1); save(KEYS.st, st1);
     const mx = await load(KEYS.maxes, null); setMaxesRaw(mx || mig.maxes || {}); if (!mx && mig.maxes) save(KEYS.maxes, mig.maxes);
     const bd = await load(KEYS.body, null); setBodyRaw(bd || mig.body || []); if (!bd && mig.body) save(KEYS.body, mig.body);
@@ -3836,7 +3907,7 @@ export default function App() {
   const fighterL = st.iron ? 18 : 16;
   const current = useMemo(() => {
     if (curRow) return { macro: curRow.mac, week: curRow.kw, pre: curRow.mon > dayIso, row: curRow };
-    const wk = Math.floor((mondayOf(new Date()) - mondayOf(parseISO(st.start))) / 604800000);
+    const wk = weeksApart(parseISO(st.start), new Date());
     if (wk < 0) return { macro: st.macroBase, week: 1, pre: true };
     return { macro: st.macroBase + Math.floor(wk / fighterL), week: (wk % fighterL) + 1 }; },
     [st.start, st.macroBase, fighterL, curRow, dayIso]);
@@ -3858,7 +3929,7 @@ export default function App() {
   const canSetCurrent = !MODE.mac;
   const setCurrent = (m, w) => {
     let base = st.macroBase, off; if (m < base) { base = m; off = w - 1; } else off = (m - base) * L + (w - 1);
-    const start = new Date(mondayOf(new Date()).getTime() - off * 604800000);
+    const start = addWeeks(mondayOf(new Date()), -off);
     setSt(Object.assign({}, st, { start: iso(start), macroBase: base })); setViewRaw({ macro: m, week: w }); setSelDay(null); };
 
   /* The Monday a week falls on, whichever program is running. */
@@ -3867,7 +3938,7 @@ export default function App() {
       const r = rowByKey(season, mac, wk);
       return r ? r.mon : mondayIso(dayIso);
     }
-    return iso(new Date(mondayOf(parseISO(st.start)).getTime() + (((mac - st.macroBase) * fighterL) + (wk - 1)) * 604800000));
+    return iso(addWeeks(mondayOf(parseISO(st.start)), ((mac - st.macroBase) * fighterL) + (wk - 1)));
   }, [season, st.start, st.macroBase, fighterL, dayIso]);
 
   const bw = num(body[0] && body[0].bw) || 80;
@@ -3902,7 +3973,7 @@ export default function App() {
   const rangeStart = st.rangeStart || st.start;
   const rangeWeekOf = useCallback((macro, week) => {
     const mon = parseISO(monOf(macro, week));
-    return Math.max(1, Math.floor((mondayOf(mon) - mondayOf(parseISO(rangeStart))) / 604800000) + 1);
+    return Math.max(1, weeksApart(parseISO(rangeStart), mon) + 1);
   }, [monOf, rangeStart]);
   const rangeWeek = rangeWeekOf(current.macro, current.week);
   const shownRangeWeek = rangeWeekOf(shown.macro, shown.week);
@@ -3956,7 +4027,7 @@ export default function App() {
     const wkGap = (imHard.find((h) => h.wk === imWeek) || {}).gap;
     const bestThisWeek = imSit.filter((x) => x.d >= weekMonday).reduce((a, x) => Math.max(a, x.best || 0), 0);
     const levelFrom = st.levelStart || imStart;
-    const weeksAtLevel = Math.max(0, Math.floor((mondayOf(new Date()) - mondayOf(parseISO(levelFrom))) / 604800000));
+    const weeksAtLevel = Math.max(0, weeksApart(parseISO(levelFrom), new Date()));
 
     /* the last twelve weeks, newest last */
     const rows = []; for (let i = 11; i >= 0; i--) {
@@ -4215,7 +4286,7 @@ export default function App() {
     return r ? { n: r.blk.n, t: hhmm(r.t) } : null;
   })();
   /* four tabs: TODAY · PROGRESS · FOOD · MORE */
-  const TABS = [["today", "TODAY"], ["track", "PROGRESS"], ["food", "FOOD"], ["more", "MORE"]];
+  const TABS = [["today", "TODAY", "today"], ["track", "PROGRESS", "progress"], ["food", "FOOD", "food"], ["more", "MORE", "more"]];
   const openMore = (sub) => { setMoreSub(sub); setTab("more"); };
   /* today's food and water, for the FOOD tab */
   const setTodayFday = (patch) => setFdays(Object.assign({}, fdays, { [dayIso]: Object.assign({}, fdays[dayIso], patch) }));
@@ -4240,6 +4311,14 @@ export default function App() {
     return { plan, phase, checks, sauna, boxing, progSauna, weekProgSauna, weekendDay, total: sum(feeds), eaten: sum(feeds.filter((r) => ticks[r.id])), drunk };
   };
   const zoom = Math.round(devScale * stepScale(st.textSize) * 1000) / 1000;
+  /* light or dark: the setting's own choice, or the phone's when it is on auto */
+  useEffect(() => { applyTheme(st.theme);
+    if (st.theme === "light" || st.theme === "dark" || typeof window === "undefined" || !window.matchMedia) return undefined;
+    const mq = window.matchMedia("(prefers-color-scheme: dark)"), on = () => applyTheme(st.theme);
+    if (mq.addEventListener) mq.addEventListener("change", on); else if (mq.addListener) mq.addListener(on);
+    return () => { if (mq.removeEventListener) mq.removeEventListener("change", on); else if (mq.removeListener) mq.removeListener(on); }; }, [st.theme]);
+  /* the timers' sound when the phone is on silent */
+  useEffect(() => { setSoundMode(st.soundMode); }, [st.soundMode]);
   /* The two easy weeks are offered the moment the fight is behind you, and
      the baselines ask to be redrawn on the weeks the document names. */
   /* Prep asks for the baselines to be recalibrated at the start of
@@ -4251,15 +4330,15 @@ export default function App() {
   /* What the GUIDE's live panel says, and what the season screen reports
      when the fight date moves. */
   const thisBlock = useMemo(() => {
-    if (!curRow) { const ph = PH[baseRxFor(current.week).ph] || PH.b1; return { name: ph.n, emphasis: ph.note, tests: [] }; }
+    if (!curRow) { const ph = PH[baseRxFor(current.week).ph] || PH.b1; return { name: ph.n, emphasis: phNote(ph, rxFor(current.week)), tests: [] }; }
     const rx = rowRx(curRow, true);
     if (curRow.program === "prep") return { name: (PH[prepPhaseOf(curRow.doc)] || {}).n + " · " + curRow.id, emphasis: rx.em, tests: prepTests(curRow.doc) };
     if (curRow.program === "spp") return { name: (PH[rx.ph] || {}).n + " · WEEK " + curRow.doc + " OF 12", emphasis: rx.em, tests: sppTests(curRow.doc, !!curRow.mon && curRow.mon >= AUDIT_SINCE) };
     if (curRow.program === "transition") return { name: "TRANSITION", emphasis: TRANSITION_INTRO, tests: [] };
     if (curRow.program === "pre") return { name: "THE WEEK BEFORE THE CAMP", emphasis: "The pre-camp check" + (rx.checks ? "; Saturday the broad jump, the throw and the working-weight checks; Sunday the 20-minute test." : "."), tests: rx.checks ? ["broad jump", "rotational throw", "working-weight checks", "the 20-minute test"] : [] };
     const ph = CPH[rx.ph] || {};
-    return { name: String(rx.block || ph.n).toUpperCase() + " · " + curRow.id, emphasis: ph.note, tests: [] };
-  }, [curRow, season]);
+    return { name: String(rx.block || ph.n).toUpperCase() + " · " + curRow.id, emphasis: phNote(ph, { au: auditOn(curRow.mon) }), tests: [] };
+  }, [curRow, season, current.macro, current.week]);
   /* the camp today belongs to, or the last one, or the next one */
   const campRowsNow = useMemo(() => {
     const camps = season.rows.filter((r) => r.program === "camp");
@@ -4336,13 +4415,17 @@ export default function App() {
   const atFirst = shownRow ? shownRow.seq <= 0 : shown.week <= 1;
   const atLast = shownRow ? shownRow.seq >= season.rows.length - 1 : shown.week >= L;
   const goDay = (k) => { const x = dayRow(shownRow, k); setSelDay(x ? atDay(x.kw, k, x.mac) : atDay(shown.week, k)); setWeekPick(false); };
-  const navBtn = (dis) => Object.assign({}, dsp, { flexShrink: 0, width: 48, height: 48, fontSize: 20, fontWeight: 800, borderRadius: 6, cursor: dis ? "default" : "pointer",
-    background: "transparent", color: dis ? C.line : C.chalk, border: "2px solid " + (dis ? C.line : C.ash) });
+  const navBtn = (dis) => ({ flexShrink: 0, width: 48, height: 48, borderRadius: 999, cursor: dis ? "default" : "pointer", padding: 0,
+    display: "flex", alignItems: "center", justifyContent: "center", background: dis ? "transparent" : soft(C.ash), color: dis ? C.ring : C.chalk, border: "none" });
 
   return (
     <div className="o8-root" style={Object.assign({}, bdy, { background: C.ink, minHeight: "100vh", color: C.chalk, "--o8-zoom": zoom })}>
       <style>{FONTS}</style>
       <span ref={probeRef} className="o8-probe" aria-hidden="true">A</span>
+      {loaded && st.welcome ? <Welcome st={st} upd={(p) => setSt(Object.assign({}, st, p))} maxes={maxes} onMaxes={setMaxes} onRestore={importData}
+          onRun={(k) => { const from = defaultStart(), inputs = Object.assign({ booked: false }, FIGHT_DEFAULTS, { classic: k === "classic", spp: k === "spp" });
+            setSt(Object.assign({}, st, k === "classic" ? { season: inputs, plans: [], start: from } : { season: inputs, plans: [{ from, made: from, inputs }] })); }}
+          onDone={() => setSt(Object.assign({}, st, { welcome: false }))} /> : null}
       {T.t ? <TimerFull T={T} /> : null}
       {plates !== null && plates !== undefined ? <Plates kg={plates} onClose={() => setPlates(null)} /> : null}
       {proto ? <ProtoSheet id={proto} close={() => setProto(null)} /> : null}
@@ -4371,42 +4454,41 @@ export default function App() {
               gymGet={(id) => moveVal(log, k, id)} prevGet={pk ? (id) => moveVal(log, pk, id) : null} ends={ends} onEnd={onEnd} onClose={() => setTool(null)} />; })()
         : null) : null}
 
-      <div style={{ borderBottom: "1px solid " + C.line, background: C.slab, position: "sticky", top: 0, zIndex: 30, paddingTop: "env(safe-area-inset-top)" }}>
-        <div style={{ borderTop: "3px solid " + P.ac }} />
+      <div className="o8-glass" style={{ borderBottom: "1px solid " + C.line, background: C.slab, position: "sticky", top: 0, zIndex: 30, paddingTop: "env(safe-area-inset-top)" }}>
         {tab === "today" ? (
           <div style={{ maxWidth: 640, margin: "0 auto", padding: "8px 16px 10px", paddingLeft: "max(16px, env(safe-area-inset-left))", paddingRight: "max(16px, env(safe-area-inset-right))" }}>
             {/* the week: back a week, the week (tap it for any week), on a week */}
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <button onClick={() => stepWeek(-1)} disabled={atFirst} aria-label="Previous week" style={navBtn(atFirst)}>◀</button>
+              <button onClick={() => stepWeek(-1)} disabled={atFirst} aria-label="Previous week" style={navBtn(atFirst)}><Icon n="left" size={22} w={2.6} /></button>
               <h1 style={{ margin: 0, flex: 1, minWidth: 0 }}>
                 <button onClick={() => setWeekPick(!weekPick)} aria-expanded={weekPick} aria-label="Pick a week"
-                  style={Object.assign({}, dsp, { width: "100%", minHeight: 48, background: "transparent", border: "none", cursor: "pointer", padding: "4px 0", fontSize: 22, fontWeight: 800, letterSpacing: 1, lineHeight: 1.2, color: C.chalk, overflowWrap: "anywhere" })}>
-                  <span data-testid="app-title">{shortTitle(shown.week)}</span><span aria-hidden="true" style={{ color: C.ash }}> ▾</span>
+                  style={Object.assign({}, dsp, { width: "100%", minHeight: 48, background: "transparent", border: "none", cursor: "pointer", padding: "4px 0", fontSize: 19, fontWeight: 700, letterSpacing: -.2, lineHeight: 1.22, color: C.chalk, overflowWrap: "anywhere", textWrap: "balance" })}>
+                  <span data-testid="app-title"><TitleLines text={shortTitle(shown.week)} /></span><span aria-hidden="true" style={{ color: C.ash, display: "inline-block", verticalAlign: "-3px", marginLeft: 4 }}><Icon n={weekPick ? "up" : "down"} size={18} w={2.6} /></span>
                 </button>
               </h1>
-              <button onClick={() => stepWeek(1)} disabled={atLast} aria-label="Next week" style={navBtn(atLast)}>▶</button>
+              <button onClick={() => stepWeek(1)} disabled={atLast} aria-label="Next week" style={navBtn(atLast)}><Icon n="right" size={22} w={2.6} /></button>
             </div>
             {weekPick ? (
               <div data-testid="week-picker" style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 6, marginTop: 8 }}>
                 {(shownSeg ? shownSeg.map((r) => r.kw) : Array.from({ length: L }, (_, i) => i + 1)).map((w, i) => { const on = w === shown.week, now = w === current.week && shown.macro === current.macro;
                   const r = shownSeg ? shownSeg[i] : null;
                   return <button key={w} onClick={() => goWeek(w)} aria-label={"Week " + (r ? r.idx || i + 1 : w)}
-                    style={Object.assign({}, dsp, { minHeight: 48, fontSize: 20, fontWeight: 800, borderRadius: 6, cursor: "pointer",
-                      background: on ? soft(C.brass) : "transparent", color: on ? C.chalk : now ? C.moss : C.chalk, border: "2px solid " + (on ? C.brass : now ? C.moss : C.line) })}>{r ? (r.hold ? "H" : r.program === "transition" ? "T" + r.idx : r.id) : w}</button>; })}
+                    style={Object.assign({}, dsp, { minHeight: 48, fontSize: 18, fontWeight: 800, borderRadius: RAD.s, cursor: "pointer",
+                      background: on ? C.brass : soft(C.ash), color: on ? C.on : now ? C.brass : C.chalk, border: "1.5px solid " + (on ? C.brass : now ? C.brass : "transparent") })}>{r ? (r.hold ? "H" : r.program === "transition" ? "T" + r.idx : r.id) : w}</button>; })}
               </div>) : null}
             {/* the days of that week */}
-            <div style={{ display: "flex", gap: 4, marginTop: 8 }}>
+            <div style={{ display: "flex", gap: 3, marginTop: 8, background: soft(C.ash), borderRadius: RAD.m, padding: 3 }}>
               {DAYS.map((k) => { const active = shown.day === k, isNow = k === today && shown.week === current.week && shown.macro === current.macro;
                 return <button key={k} onClick={() => goDay(k)} aria-pressed={active}
-                  style={Object.assign({}, dsp, { flex: 1, minWidth: 0, fontSize: 18, fontWeight: 800, padding: "8px 0", borderRadius: 6, cursor: "pointer", minHeight: 48,
-                    background: active ? soft(dayAc(k)) : "transparent", color: active ? C.chalk : isNow ? C.moss : C.chalk, border: "2px solid " + (active ? dayAc(k) : isNow ? C.moss : C.line) })}>{DSH[k]}</button>; })}
+                  style={Object.assign({}, dsp, { flex: 1, minWidth: 0, fontSize: 14.5, fontWeight: 800, letterSpacing: .3, padding: "8px 0", borderRadius: RAD.s + 1, cursor: "pointer", minHeight: 44,
+                    background: active ? dayAc(k) : "transparent", color: active ? C.on : isNow ? C.brass : C.ash, border: "1.5px solid " + (active ? dayAc(k) : isNow ? C.brass : "transparent"), boxShadow: active ? C.shadow : "none" })}>{DSH[k]}</button>; })}
             </div>
             {isToday ? null : (
-              <button onClick={() => { setSelDay(null); setWeekPick(false); }} style={Object.assign({}, dsp, { width: "100%", marginTop: 8, minHeight: 48, fontSize: 20, fontWeight: 800, letterSpacing: 1, borderRadius: 6, cursor: "pointer", background: soft(C.moss), color: C.chalk, border: "2px solid " + C.moss })}>◀ BACK TO TODAY</button>)}
+              <button onClick={() => { setSelDay(null); setWeekPick(false); }} style={Object.assign({}, dsp, { width: "100%", marginTop: 8, minHeight: 46, fontSize: 16, fontWeight: 800, letterSpacing: .6, borderRadius: RAD.m, cursor: "pointer", background: soft(C.brass), color: C.brass, border: "none" })}>◀ BACK TO TODAY</button>)}
           </div>
         ) : (
           <div style={{ padding: "12px 16px", paddingLeft: "max(16px, env(safe-area-inset-left))", paddingRight: "max(16px, env(safe-area-inset-right))", maxWidth: 640, margin: "0 auto" }}>
-            <h1 style={Object.assign({}, dsp, { margin: 0, fontSize: 22, fontWeight: 800, letterSpacing: 1, lineHeight: 1.2, color: C.chalk, overflowWrap: "anywhere" })}><span data-testid="app-title">{headerTitle}</span></h1>
+            <h1 style={Object.assign({}, dsp, { margin: 0, fontSize: 19, fontWeight: 700, letterSpacing: -.2, lineHeight: 1.22, color: C.chalk, overflowWrap: "anywhere" })}><span data-testid="app-title">{headerTitle}</span></h1>
           </div>)}
       </div>
 
@@ -4472,7 +4554,7 @@ export default function App() {
             {tab === "more" ? (
               <div>
                 <div style={{ marginBottom: 14 }}>
-                  <Seg opts={[["plan", "PLAN"], ["guide", "GUIDE"], ["iron", "IRON"], ["settings", "SETTINGS"]]} val={moreSub} on={setMoreSub} c={C.brass} />
+                  <Seg fit opts={[["plan", "PLAN"], ["guide", "GUIDE"], ["iron", "IRON"], ["settings", "SETTINGS"]]} val={moreSub} on={setMoreSub} c={C.brass} />
                 </div>
                 {moreSub === "plan" ? (
                   <div>
@@ -4493,7 +4575,7 @@ export default function App() {
                   <div>
                     <div style={{ display: "flex", gap: 6, marginBottom: 12, flexWrap: "wrap" }}>
                       {[["breathe", "BREATHE", C.cobalt], ["sit", "SIT", C.violet], ["hardship", "HARDSHIP", C.oxide], ["life", "LIFE", C.brass], ["season", "SEASON", C.brass], ["hell", "HELL WEEK", C.oxide]].map((x) => <button key={x[0]} onClick={() => setIsub(x[0])}
-                        style={Object.assign({}, dsp, { flex: "1 1 30%", fontSize: 18, fontWeight: 700, letterSpacing: .8, padding: "11px 2px", borderRadius: 6, cursor: "pointer", minHeight: 52, background: isub === x[0] ? soft(x[2]) : "transparent", color: isub === x[0] ? C.chalk : C.ash, border: "1px solid " + (isub === x[0] ? x[2] : C.line) })}>{x[1]}</button>)}
+                        aria-pressed={isub === x[0]} style={Object.assign({}, dsp, { flex: "1 1 30%", fontSize: 15.5, fontWeight: 700, letterSpacing: .4, padding: "10px 2px", borderRadius: 999, cursor: "pointer", minHeight: 48, background: isub === x[0] ? x[2] : soft(C.ash), color: isub === x[0] ? C.on : C.chalk, border: "none" })}>{x[1]}</button>)}
                     </div>
                     {isub === "breathe" ? <BreatheView IM={IM} />
                       : isub === "sit" ? <SitView IM={IM} />
@@ -4510,10 +4592,10 @@ export default function App() {
       </div>
 
       <TimerDock T={T} />
-      <nav aria-label="Tabs" style={{ position: "fixed", left: 0, right: 0, bottom: 0, zIndex: 50, background: C.slab, borderTop: "1px solid " + C.line, paddingBottom: "env(safe-area-inset-bottom)" }}>
+      <nav aria-label="Tabs" className="o8-glass" style={{ position: "fixed", left: 0, right: 0, bottom: 0, zIndex: 50, background: C.slab, borderTop: "1px solid " + C.line, paddingBottom: "env(safe-area-inset-bottom)" }}>
         <div style={{ display: "flex", maxWidth: 640, margin: "0 auto" }}>
           {TABS.map((x) => <button key={x[0]} onClick={() => { if (x[0] === "today" && tab === "today") { setSelDay(null); setWeekPick(false); } setTab(x[0]); setProto(null); }} aria-current={tab === x[0] ? "page" : undefined}
-            style={Object.assign({}, dsp, { flex: 1, fontSize: 20, fontWeight: 800, letterSpacing: 1, background: "transparent", border: "none", borderTop: "4px solid " + (tab === x[0] ? P.ac : "transparent"), color: tab === x[0] ? C.chalk : C.ash, padding: "14px 2px 16px", cursor: "pointer", minHeight: 64 })}>{x[1]}</button>)}
+            style={Object.assign({}, dsp, { flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 3, fontSize: 11.5, fontWeight: 700, letterSpacing: .7, background: "transparent", border: "none", color: tab === x[0] ? C.brass : C.ash, padding: "8px 2px 9px", cursor: "pointer", minHeight: 64 })}><Icon n={x[2]} size={26} w={tab === x[0] ? 2.4 : 2} />{x[1]}</button>)}
         </div>
       </nav>
     </div>);

@@ -20,15 +20,30 @@ added it to your home screen.
 3. Scroll down the list and tap **Add to Home Screen**.
 4. Tap **Add** in the top right.
 
-You'll get Fighter's bull icon on your home screen. Open it from there and it
-runs full screen with no browser bars, like any other app.
+You'll get Fighter's icon on your home screen: a white bull's head on blue.
+Open it from there and it runs full screen with no browser bars, like any other
+app.
 
-**Already on your home screen under the old name and icon?** The phone only
-picks up a new name and icon when the app is added again, and deleting it from
-the home screen deletes everything in it. So: back it up first (MORE →
-SETTINGS → Backup → **EXPORT TO FILE**, and save the file), delete the old icon,
-add the app again from Safari as above, then restore the backup (**IMPORT FROM
-FILE**). Check your history is all there before you delete the backup file.
+**The first time it opens** it asks four things, one screen each: what it is,
+which program you want to run, your working maxes for the squat, the bench and
+the trap bar, and how you want it to look and sound. Then it opens TODAY. Every
+one of them can be changed afterwards in MORE → SETTINGS and PROGRESS → NUMBERS,
+and a phone that already has your training in it never sees these screens.
+
+**Already on your home screen with an old icon?** An iPhone keeps the icon it
+was given on the day the app was added, and only picks up a new one when the
+app is added again. Deleting it from the home screen deletes everything in it,
+so do it in this order:
+
+1. Back it up: MORE → SETTINGS → BACKUP → **EXPORT TO FILE**, and save the file
+   where you can find it (Files, or send it to yourself).
+2. Press and hold the old icon and delete the app.
+3. Add it again from Safari, as above.
+4. Open it. On the first screen tap **I HAVE A BACKUP** and pick the file.
+   Everything comes back and it opens on TODAY.
+
+Check your history is all there before you delete the backup file. If you'd
+rather keep the old icon, do nothing: the app itself updates either way.
 
 Once it's installed you can use it on a plane, in a basement gym, anywhere with
 no signal. When you next open it with a connection it quietly picks up any new
@@ -262,9 +277,45 @@ which tests fall in it.
 
 Body text is 18px or more, the prescription on a session row is 24px, every tap
 target is at least 48px, and every colour used as text clears 4.5:1 against the
-background behind it. **Settings → Text size** has three steps that scale the
-whole app, and the phone's own text-size setting is read as well — the two
-multiply.
+background behind it, in light and in dark. **Settings → Text size** has three
+steps that scale the whole app, and the phone's own text-size setting is read as
+well — the two multiply.
+
+## THE LOOK AND THE SOUND
+
+**Light or dark.** The app has both. Out of the box it follows the phone: light
+when the phone is light, dark when the phone goes dark. **Settings → Light or
+dark** holds it on one if you'd rather.
+
+**One typeface, the phone's own.** Nothing is downloaded to draw the text, so it
+opens at once with no signal, and it looks like the rest of the phone.
+
+**The timers.** A timer opens full screen in the colour of what you're doing:
+a ring that empties, the time inside it, what to do now, what comes next, and
+how much of the whole session is left. MINIMISE drops it to a strip above the
+tabs so you can read the card while it runs. The screen stays awake while a
+timer is running, on a phone that allows it (an iPhone on iOS 18.4 or later).
+
+**The sounds.** Every timer plays through one set of sounds:
+
+- three short ticks on the last three seconds of anything;
+- on a timer of boxing rounds, a ring bell: one for a round starting, two for
+  it ending, three when the whole thing is done, and a short warning ten seconds
+  before a round ends;
+- on every other timer, one sound for work starting, a lower one for rest, and
+  a short tune at the end.
+
+The full-screen timer also flashes at every change, so it can be followed with
+the sound off.
+
+**The phone's silent switch.** An app like this one plays its sound alongside
+your music, and goes quiet when the phone's ring switch is on silent. That is
+the phone's rule, not the app's. **Settings → Sound → When the phone is on
+silent** has the choice: **STAY SILENT** leaves it like that; **PLAY ANYWAY**
+makes the bells sound even on silent, and the price is that the phone stops any
+music another app is playing while they do. **TEST THE BELL** under it plays
+one, so you can hear which you've got. An iPhone doesn't let an app like this
+one vibrate, so there is no vibration to rely on.
 
 ## THE EXERCISE LIBRARY
 
@@ -445,7 +496,13 @@ first if there's anything in there you want to keep.
   you the standard **16-week** cycle: test day at the end of week 16, then
   straight into week 1 again. Turn it on if you want Hell Week and the Reload
   bolted on the end, making it an 18-week cycle.
-- **Bell sounds** and **Auto rest clock** — timer behaviour, on by default.
+- **Bell sounds and the feed chime** — under **Sound**, on by default, with the
+  choice for the phone's silent switch next to it (see THE LOOK AND THE SOUND).
+- **Auto rest clock** — confirming a set starts its rest countdown by itself. On
+  by default.
+- **Light or dark** — AUTO follows the phone; LIGHT and DARK hold one.
+- The page is long, so it has a row of jumps at the top: THE DAY, LOOK, SOUND,
+  CYCLE, RANGE AND MOVE, CALISTHENICS, IRON MIND, BACKUP.
 - **CAMP MODE** — ON, Optimal 8 · Camp runs *in place of* Optimal 8 Fighter:
   the ten-week camp from `optimal-8-camp.md`, with its own dated week table,
   its own session pages, its own timers and its own tests, counting from its own
@@ -658,6 +715,9 @@ npm run build   # the library check, then the production build into dist/
 npm run icons   # regenerate the app icons from scripts/generate-icons.mjs
 ```
 
+After changing the icon, raise the `?v=` number on the two icon links in
+`index.html`, so a phone that kept a copy of the old picture fetches the new one.
+
 - `src/App.jsx` — the training app: the macrocycle table, the session cards,
   protocols, timers, camp mode and Hell Week.
 - `src/metrics.js` — the measurement layer's arithmetic, with no React in it:
@@ -673,7 +733,13 @@ npm run icons   # regenerate the app icons from scripts/generate-icons.mjs
 - `src/calis.js` — the calisthenics lines as data: every level and every
   "own it when" from the document's Calisthenics page, plus the rules that
   govern easy weeks, taper weeks and camp mode.
-- `src/ui.jsx` — the palette, the type and the atoms both halves are built from.
+- `src/ui.jsx` — the two themes (light and dark) as lists of colours, the type,
+  the icons and the atoms every screen is built from. Screens name a colour
+  (`C.brass`); the style sheet here gives the name its value in each theme.
+- `src/sound.js` — the one sound engine: every bell, tick and tone, made from
+  tones in the browser with no sound files, and the rule for which sound a
+  timer's next part gets.
+- `src/welcome.jsx` — the four screens a phone with nothing saved sees first.
 - `src/im-data.js` — Iron Mind as data: the breath presets, the sit stages, the
   guided timers, the hardship ladder and the gates. Every instruction string in
   there is the document's own wording.

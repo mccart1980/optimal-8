@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { C, soft, dsp, bdy, mno, num, mmss, buzz, fmtDate, Card, Eye, Lab, Fld, Btn, Chip, Note, Seg } from "./ui.jsx";
+import { beep } from "./sound.js";
 import {
   SAFETY, CARDINAL, FLOOR_TEXT, REVIEW_Q, WALKING, BREATH_STAGE, PRESETS, presetById,
   MED_STAGE, HOW_TO_SIT, THE_CATCH, GOODWILL_LINE, DEATH_LINE, ELEVEN, GUIDED, guidedById,
@@ -10,14 +11,7 @@ import {
    BELLS — Web Audio only, no audio files. Vibration where available.
    ================================================================ */
 export function useBells(sound) {
-  const ctxRef = useRef(null);
-  const tone = useCallback((f, ms, vol) => { if (!sound) return; try {
-    if (!ctxRef.current) ctxRef.current = new (window.AudioContext || window.webkitAudioContext)();
-    const ctx = ctxRef.current; if (ctx.state === "suspended") ctx.resume();
-    const o = ctx.createOscillator(), g = ctx.createGain(); o.type = "sine"; o.frequency.value = f; o.connect(g); g.connect(ctx.destination);
-    const now = ctx.currentTime; g.gain.setValueAtTime(vol == null ? 0.28 : vol, now); g.gain.exponentialRampToValueAtTime(0.0001, now + ms / 1000);
-    o.start(now); o.stop(now + ms / 1000 + 0.03);
-  } catch (e) {} }, [sound]);
+  const tone = useCallback((f, ms, vol) => { if (sound) beep(f, ms, vol == null ? 0.28 : vol); }, [sound]);
   const bell = useCallback((kind) => {
     if (kind === "in") { tone(660, 160); buzz(60); }
     else if (kind === "out") { tone(440, 220); buzz(40); }

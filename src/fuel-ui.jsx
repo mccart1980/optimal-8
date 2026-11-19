@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { C as M, soft, dsp, bdy, mno, buzz, num, iso, parseISO } from "./ui.jsx";
+import { beep as tone } from "./sound.js";
 import { B, SHOP, AS_YOU_USE, YIELDS, PHASES, MEASURES, UPPER, WEEKLY, tapeSeries, verdicts, SLOTS, blockOf, stepBlockOf, lowFibreOpts, hhmm, SACHET, CREATINE } from "./fuel.js";
 
 /* ================================================================
@@ -21,23 +22,17 @@ const mmss = (s) => { const a = Math.max(0, Math.round(s)), m = Math.floor(a / 6
 const r5 = (n) => Math.round(n / 5) * 5;
 const sundayOf = (d) => { const x = new Date(d); x.setHours(0, 0, 0, 0); x.setDate(x.getDate() - (x.getDay() === 0 ? 0 : x.getDay())); return x; };
 
-const Card = ({ children, s, ac, tid }) => <div data-testid={tid} style={Object.assign({ background: C.card, border: "1px solid " + C.line, borderLeft: ac ? "3px solid " + ac : "1px solid " + C.line, borderRadius: 6, marginBottom: 10, padding: 14 }, s)}>{children}</div>;
-const Eye = ({ children, c, s }) => <div style={Object.assign({}, mno, { fontSize: FS(9.5), letterSpacing: 1.6, color: c || C.ash, marginBottom: 8, textTransform: "uppercase" }, s)}>{children}</div>;
+const Card = ({ children, s, ac, tid }) => <div data-testid={tid} style={Object.assign({ background: C.card, border: "1px solid " + C.line, borderRadius: 18, marginBottom: 12, padding: 16, boxShadow: (ac ? "inset 3px 0 0 " + ac + ", " : "") + M.shadow }, s)}>{children}</div>;
+const Eye = ({ children, c, s }) => <div style={Object.assign({}, mno, { fontSize: FS(9.5), fontWeight: 700, letterSpacing: 1.1, color: c || C.ash, marginBottom: 8, textTransform: "uppercase" }, s)}>{children}</div>;
 const Lab = ({ children }) => <div style={Object.assign({}, mno, { fontSize: FS(8), color: C.ash, marginBottom: 3, letterSpacing: 1, textTransform: "uppercase" })}>{children}</div>;
 const Fld = ({ v, on, ph, type, s }) => <input value={v == null ? "" : v} onChange={(e) => on(e.target.value)} placeholder={ph} inputMode={type === "date" ? undefined : "decimal"} type={type || "text"}
-  style={Object.assign({}, mno, { width: "100%", background: C.ink, border: "1px solid " + C.line, borderRadius: 4, color: C.bone, fontSize: FS(16), padding: "10px 8px", textAlign: "center", minHeight: TAP }, s)} />;
-const Btn = ({ children, on, c, fill, s, dis, small }) => <button onClick={on} disabled={dis} style={Object.assign({}, dsp, { fontSize: small ? FS(12) : FS(14), fontWeight: 700, letterSpacing: 1.2, background: fill ? soft(c || C.ember) : "transparent", color: fill ? C.bone : (c || C.ember), border: "1px solid " + (c || C.ember), borderRadius: 5, padding: small ? "8px 10px" : "12px 14px", cursor: dis ? "default" : "pointer", opacity: dis ? .4 : 1, minHeight: TAP }, s)}>{children}</button>;
-const Chip = ({ children, c, s }) => <span style={Object.assign({}, mno, { fontSize: FS(8.5), letterSpacing: 1.2, color: c || C.ash, border: "1px solid " + (c || C.line), borderRadius: 3, padding: "2px 6px", textTransform: "uppercase", maxWidth: "100%" }, s)}>{children}</span>;
+  style={Object.assign({}, mno, { width: "100%", background: C.ink, border: "1px solid " + C.line, borderRadius: 10, color: C.bone, fontSize: FS(16), fontWeight: 600, padding: "10px 8px", textAlign: "center", minHeight: TAP }, s)} />;
+const Btn = ({ children, on, c, fill, s, dis, small }) => <button onClick={on} disabled={dis} style={Object.assign({}, dsp, { fontSize: small ? FS(12) : FS(14), fontWeight: 700, letterSpacing: .6, background: fill ? (c || C.ember) : soft(c || C.ember), color: fill ? M.on : (c || C.ember) === C.ash ? C.bone : (c || C.ember), border: "1px solid " + (fill ? (c || C.ember) : "transparent"), borderRadius: 14, padding: small ? "8px 12px" : "12px 16px", cursor: dis ? "default" : "pointer", opacity: dis ? .4 : 1, minHeight: TAP }, s)}>{children}</button>;
+const Chip = ({ children, c, s }) => <span style={Object.assign({}, mno, { fontSize: FS(8.5), fontWeight: 700, letterSpacing: .6, color: c || C.ash, background: soft(c || C.ash) === (c || C.ash) ? "transparent" : soft(c || C.ash), border: "1px solid " + (soft(c || C.ash) === (c || C.ash) ? (c || C.line) : "transparent"), borderRadius: 999, padding: "3px 9px", textTransform: "uppercase", maxWidth: "100%" }, s)}>{children}</span>;
 const Note = ({ children, c, bold, s }) => <div style={Object.assign({}, bdy, { fontSize: FS(12.5), color: c || C.ash, lineHeight: 1.5, marginTop: 8, fontWeight: bold ? 600 : 400 }, s)}>{children}</div>;
 
 export function useBeep(sound) {
-  const ctxRef = useRef(null);
-  return useCallback((f, ms, vol) => { if (!sound) return; try {
-    if (!ctxRef.current) ctxRef.current = new (window.AudioContext || window.webkitAudioContext)();
-    const ctx = ctxRef.current; if (ctx.state === "suspended") ctx.resume();
-    const o = ctx.createOscillator(), g = ctx.createGain(); o.type = "sine"; o.frequency.value = f; o.connect(g); g.connect(ctx.destination);
-    const now = ctx.currentTime; g.gain.setValueAtTime(vol || .3, now); g.gain.exponentialRampToValueAtTime(.0001, now + ms / 1000); o.start(now); o.stop(now + ms / 1000 + .03);
-  } catch (e) {} }, [sound]);
+  return useCallback((f, ms, vol) => { if (sound) tone(f, ms, vol); }, [sound]);
 }
 
 export function useKTimer(beep) {
@@ -63,7 +58,7 @@ export function KDock({ K }) {
   const t = K.t; if (!t) return null;
   const frac = t.done ? 1 : 1 - t.left / (t.total || 1);
   return (
-    <div style={{ zIndex: 70, background: C.slab, borderTop: "1px solid " + C.line }}>
+    <div className="o8-glass" style={{ zIndex: 70, background: C.slab, borderTop: "1px solid " + C.line }}>
       <div style={{ height: 4, background: C.ink }}><div style={{ width: frac * 100 + "%", height: "100%", background: t.done ? C.sage : C.ember, transition: "width .2s linear" }} /></div>
       <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 10px", maxWidth: 640, margin: "0 auto" }}>
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -303,13 +298,13 @@ function Trend({ lines, unit }) {
   const Y = (v) => P.t + (1 - (v - lo) / (hi - lo)) * (H - P.t - P.b);
   return (
     <svg viewBox={"0 0 " + W + " " + H} width="100%" height={H} role="img" style={{ display: "block", overflow: "visible" }}>
-      {[0, 0.5, 1].map((f) => <line key={f} x1={P.l} x2={W - P.r} y1={P.t + f * (H - P.t - P.b)} y2={P.t + f * (H - P.t - P.b)} stroke={C.line} strokeWidth="1" />)}
-      {lines.map((l) => <polyline key={l.k} fill="none" stroke={l.c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+      {[0, 0.5, 1].map((f) => <line key={f} x1={P.l} x2={W - P.r} y1={P.t + f * (H - P.t - P.b)} y2={P.t + f * (H - P.t - P.b)} style={{ stroke: C.line }} strokeWidth="1" />)}
+      {lines.map((l) => <polyline key={l.k} fill="none" style={{ stroke: l.c }} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
         points={l.pts.map((p) => X(p.d) + "," + Y(p.v)).join(" ")} />)}
-      {lines.map((l) => l.pts.map((p, i) => <circle key={l.k + i} cx={X(p.d)} cy={Y(p.v)} r="4" fill={l.c} stroke={C.card} strokeWidth="2" />))}
+      {lines.map((l) => l.pts.map((p, i) => <circle key={l.k + i} cx={X(p.d)} cy={Y(p.v)} r="4" style={{ fill: l.c, stroke: C.card }} strokeWidth="2" />))}
       {lines.map((l) => { const p = l.pts[l.pts.length - 1];
         return <text key={l.k + "lab"} x={Math.min(X(p.d) + 7, W - 2)} y={Y(p.v) - 7} textAnchor={X(p.d) > W - 60 ? "end" : "start"}
-          style={Object.assign({}, mno, { fontSize: FS(10), fontWeight: 700 })} fill={C.bone}>{p.v}{unit}</text>; })}
+          style={Object.assign({}, mno, { fontSize: FS(10), fontWeight: 700, fill: C.bone })}>{p.v}{unit}</text>; })}
     </svg>);
 }
 

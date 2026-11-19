@@ -1,5 +1,5 @@
 import { C } from "./ui.jsx";
-import { mondayOf, parseISO } from "./ui.jsx";
+import { mondayOf, parseISO, weeksApart } from "./ui.jsx";
 import { clusterTimer } from "./edge.js";
 import { jumpOf, JUMPS, jumpGate, STOP_RULE, HEAD_DOCTOR, HEAD_AE } from "./safety.js";
 import { MON_WU, dipsAndRows, armsCircuit, theBrace, carryBlock } from "./circuits.js";
@@ -85,7 +85,8 @@ export const CPH = {
   c3: { n: "EASY + TESTS", long: "WEEK 5 · EASY + TESTS", ac: C.brass, vl: "—",
     note: "Adaptation lands in the easy week, not the hard ones. The tests are how you know it landed, and they reset the working weights and the paces for the peak block. Skipping it is how the peak block starts from a hole." },
   c4: { n: "PEAK", long: "WEEKS 6–8 · PEAK", ac: C.oxide, vl: "—",
-    note: "Contrast, depth jumps, top speed twice a week, repeat bursts, eight rounds, the sauna. Week 8 is the last hard week — everything you'll have on the night, you'll have by its Sunday." },
+    note: "Contrast, depth jumps, top speed twice a week, repeat bursts, eight rounds, the sauna. Week 8 is the last hard week — everything you'll have on the night, you'll have by its Sunday.",
+    au: ["top speed twice a week", "speed twice a week (three starts from your stance on Tuesday, flat-out running on Saturday)"] },
   c5: { n: "SHARPEN", long: "WEEK 9 · SHARPEN", ac: C.violet, vl: "—",
     note: "The camp's work is done; week 9 converts it. Volume drops by about 40%; intensity stays; everything is short and fast and finished fresh. Sunday is the fight-day rehearsal." },
   c6: { n: "FIGHT WEEK", long: "WEEK 10 · FIGHT WEEK", ac: C.brass, vl: "—",
@@ -102,8 +103,7 @@ export const campDayDate = (start, w, dayIdx) => {
   d.setDate(d.getDate() + (w - 1) * 7 + dayIdx);
   return d;
 };
-export const campWeekOf = (start, today) =>
-  Math.floor((mondayOf(today || new Date()) - campMonday(start)) / 604800000) + 1;
+export const campWeekOf = (start, today) => weeksApart(campMonday(start), today || new Date()) + 1;
 const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const dm = (d) => d.getDate() + " " + MON[d.getMonth()];
 /* "4–10 Jan", then "25–31 Jan", "1–7 Feb" */
@@ -611,7 +611,7 @@ export const CS = {
       why: "Light horizontal pulling on the easy day, keeping the shoulder honest without touching the elbow load Wednesday carries." }] },
 
   /* ---------------- TUESDAY · POWER + ENGINE 1 ---------------- */
-  tue: { n: "TUESDAY", t: "POWER + ENGINE 1 — the jump check, jumps, shuttles, speed from week 6, pistol line, Spanish hold, the interval session, the settle, THE BRACE, the Achilles hold", m: (rx) => (isTest(rx, "tue") ? 78 : 70) + (CAMP_BRACE.hide(rx) ? 0 : minsIf(CAMP_BRACE, rx) - 9), ac: C.cobalt,
+  tue: { n: "TUESDAY", t: "POWER + ENGINE 1 — the jump check, jumps, shuttles, speed from week 6, pistol line, Spanish hold, the interval session, the settle, THE BRACE, the Achilles hold", m: (rx) => (isTest(rx, "tue") ? 78 : 70) + (CAMP_BRACE.hide(rx) ? 0 : minsIf(CAMP_BRACE, rx) - 9) - (rx.au && rx.speed ? 4 : 0), ac: C.cobalt,
     intro: "Fresh legs, so the power dose goes first. Then the week's first hard conditioning session. Then THE BRACE, because the trunk is what turns leg drive into hand speed and takes the shots to the body.",
     b: [
     { L: "A", n: "Warm-up", m: 7, p: "C_WU", rxLine: () => "7 min · bike, bands, squats, push-ups, hips, pogos" },

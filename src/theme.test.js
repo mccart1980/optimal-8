@@ -2,12 +2,14 @@ import { describe, it, expect } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
 import zlib from "node:zlib";
-import { C, soft } from "./ui.jsx";
+import { C, soft, THEMES, THEME_STEPS, themeNow, FONTS, RAD } from "./ui.jsx";
+import { draw, GROUND, MARK } from "../scripts/generate-icons.mjs";
 
 /* ================================================================
-   FIGHTER'S LOOK — white, blue and pastel, the name and the bull.
-   Every colour that is text reads at 4.5:1 or better on the page, the
-   bars and the cards; every pastel fill reads with navy on it.
+   FIGHTER'S LOOK — two themes, light and dark, the name and the bull.
+   In both themes every colour that is text reads at 4.5:1 or better on
+   whatever it sits on: the page, the bars, the cards, its own tint, a
+   solid fill.
    ================================================================ */
 const root = path.resolve(__dirname, "..");
 const read = (f) => fs.readFileSync(path.join(root, f), "utf8");
@@ -16,48 +18,90 @@ const lum = (h) => {
   return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2];
 };
 const ratio = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+const cap = (s) => s[0].toUpperCase() + s.slice(1);
+const kebab = (s) => s.replace(/[A-Z]/g, (m) => "-" + m.toLowerCase());
+const NAMES = ["light", "dark"];
 const TEXT = ["chalk", "ash", "moss", "oxide", "brass", "cobalt", "violet"];
-const ACCENTS = ["moss", "oxide", "brass", "cobalt", "violet", "ash", "chalk"];
+const COLOURS = ["moss", "oxide", "brass", "cobalt", "violet"];
+const each = (fn) => NAMES.forEach((n) => fn(THEMES[n], n));
 
-/* a PNG's size and one pixel, read back from the file */
-function pixel(file, x, y) {
+/* a PNG's size and its pixels, read back from the file */
+function pixels(file) {
   const b = fs.readFileSync(path.join(root, file));
   const w = b.readUInt32BE(16), h = b.readUInt32BE(20);
   const parts = []; let i = 8;
   while (i < b.length) { const n = b.readUInt32BE(i), t = b.toString("ascii", i + 4, i + 8); if (t === "IDAT") parts.push(b.subarray(i + 8, i + 8 + n)); i += 12 + n; }
-  const raw = zlib.inflateSync(Buffer.concat(parts)), row = w * 4 + 1, o = y * row + 1 + x * 4;
-  return { w, h, rgb: [raw[o], raw[o + 1], raw[o + 2]] };
+  const raw = zlib.inflateSync(Buffer.concat(parts)), row = w * 4 + 1;
+  return { w, h, at: (x, y) => { const o = y * row + 1 + x * 4; return [raw[o], raw[o + 1], raw[o + 2]]; } };
 }
 
-describe("white, blue and pastel", () => {
-  it("the page is the palest blue, the cards white, the text navy", () => {
-    expect([C.ink, C.card, C.chalk]).toEqual(["#F3F7FC", "#FFFFFF", "#13243D"]);
-    expect(lum(C.ink)).toBeGreaterThan(0.9);
-    expect(lum(C.slab)).toBeGreaterThan(0.8);
+describe("two themes: light and dark", () => {
+  it("light is a pale page with white cards, dark a near-black page with raised cards", () => {
+    expect(Object.keys(THEMES)).toEqual(NAMES);
+    expect(lum(THEMES.light.ink)).toBeGreaterThan(0.85);
+    expect(THEMES.light.card).toBe("#FFFFFF");
+    expect(lum(THEMES.dark.ink)).toBeLessThan(0.02);
+    expect(lum(THEMES.dark.card)).toBeGreaterThan(lum(THEMES.dark.ink));
+    /* the same names in both, so nothing is missing from one of them */
+    expect(Object.keys(THEMES.dark)).toEqual(Object.keys(THEMES.light));
+  });
+  it("the setting: AUTO follows the phone, LIGHT and DARK hold one", () => {
+    expect(THEME_STEPS.map((x) => x[0])).toEqual(["auto", "light", "dark"]);
+    expect([themeNow("light"), themeNow("dark")]).toEqual(["light", "dark"]);
+    expect(NAMES).toContain(themeNow("auto"));
+    expect(NAMES).toContain(themeNow(undefined));
   });
   it("every text colour clears 4.5:1 on the page, the bars and the cards", () => {
-    TEXT.forEach((t) => ["ink", "slab", "card"].forEach((b) => expect([t, b, ratio(C[t], C[b]) >= 4.5]).toEqual([t, b, true])));
+    each((T, n) => TEXT.forEach((t) => ["ink", "bar", "card"].forEach((b) => expect([n, t, b, ratio(T[t], T[b]) >= 4.5]).toEqual([n, t, b, true]))));
   });
-  it("every colour has a pastel for fills, and navy on it clears 4.5:1", () => {
-    ACCENTS.forEach((a) => {
-      expect(soft(C[a])).not.toBe(C[a]);
-      expect(lum(soft(C[a]))).toBeGreaterThan(0.6);
-      expect([a, ratio(C.chalk, soft(C[a])) >= 4.5]).toEqual([a, true]);
+  it("every colour has a tint for fills: the text reads on it, and so does the colour itself", () => {
+    each((T, n) => {
+      COLOURS.concat(["ash", "chalk"]).forEach((a) => expect([n, a, ratio(T.chalk, T["soft" + cap(a)]) >= 4.5]).toEqual([n, a, true]));
+      COLOURS.concat(["ash"]).forEach((a) => expect([n, a, ratio(T[a], T["soft" + cap(a)]) >= 4.5]).toEqual([n, a, true]));
     });
+  });
+  it("text on a solid colour, and the picked option of a switch, clear 4.5:1", () => {
+    each((T, n) => {
+      COLOURS.forEach((a) => expect([n, a, ratio(T.on, T[a]) >= 4.5]).toEqual([n, a, true]));
+      COLOURS.concat(["chalk"]).forEach((a) => expect([n, a, ratio(T[a], T.thumb) >= 4.5]).toEqual([n, a, true]));
+    });
+  });
+  it("the empty tick ring shows on a card at 3:1", () => {
+    each((T, n) => expect([n, ratio(T.ring, T.card) >= 3]).toEqual([n, true]));
+  });
+  it("the colours the screens use are names, and the page's style sheet gives them their values in both themes", () => {
+    expect([C.ink, C.card, C.chalk, C.brass, C.on]).toEqual(["var(--o8-ink)", "var(--o8-card)", "var(--o8-chalk)", "var(--o8-brass)", "var(--o8-on)"]);
+    expect(soft(C.brass)).toBe("var(--o8-soft-brass)");
+    COLOURS.concat(["ash", "chalk"]).forEach((a) => expect(soft(C[a])).toBe("var(--o8-soft-" + a + ")"));
     expect(soft("#123456")).toBe("#123456");
+    const vars = (n) => Object.keys(THEMES[n]).map((k) => "--o8-" + kebab(k) + ": " + THEMES[n][k] + ";");
+    vars("light").forEach((v) => expect(FONTS).toContain(v));
+    vars("dark").forEach((v) => expect(FONTS.split(v).length).toBe(3));        // once for the phone going dark, once for DARK held
+    expect(FONTS).toMatch(/@media \(prefers-color-scheme: dark\) \{ :root:not\(\[data-theme="light"\]\) \{/);
+    expect(FONTS).toMatch(/:root\[data-theme="dark"\] \{/);
   });
-  it("no colour sits behind text at full strength: text on a fill is navy, never the page colour", () => {
-    ["src/ui.jsx", "src/App.jsx", "src/now.jsx", "src/im-ui.jsx", "src/fuel-ui.jsx", "src/camp-ui.jsx", "src/metrics-ui.jsx", "src/life-ui.jsx", "src/today.jsx", "src/weight-ui.jsx", "src/season-ui.jsx", "src/range-ui.jsx"]
+  it("text on a fill is never the page colour, and nothing is downloaded to draw the type", () => {
+    ["src/ui.jsx", "src/App.jsx", "src/now.jsx", "src/im-ui.jsx", "src/fuel-ui.jsx", "src/camp-ui.jsx", "src/metrics-ui.jsx", "src/life-ui.jsx", "src/today.jsx", "src/weight-ui.jsx", "src/season-ui.jsx", "src/range-ui.jsx", "src/welcome.jsx"]
       .forEach((f) => expect([f, /color: [^,}]*C\.ink/.test(read(f))]).toEqual([f, false]));
-    expect(read("src/App.jsx")).not.toMatch(/rgba\(16,20,22/);
+    ["src/ui.jsx", "index.html", "vite.config.js"].forEach((f) => expect([f, /googleapis|gstatic/.test(read(f))]).toEqual([f, false]));
+    expect(FONTS).toMatch(/-apple-system/);
   });
-  it("the page and the manifest: light, the palest blue, a dark status bar text", () => {
+  it("one set of corners, and motion that stops for anyone who asks the phone for less", () => {
+    expect([RAD.s, RAD.m, RAD.l]).toEqual([10, 14, 18]);
+    expect(FONTS).toMatch(/@media \(prefers-reduced-motion: reduce\)/);
+  });
+  it("the page and the manifest: the light page's colour, both schemes allowed, the dark one set before the first paint", () => {
     const html = read("index.html"), vite = read("vite.config.js");
-    expect(html).toMatch(/<meta name="theme-color" content="#F3F7FC" \/>/);
-    expect(html).toMatch(/<meta name="color-scheme" content="light" \/>/);
-    expect(html).toMatch(/<meta name="apple-mobile-web-app-status-bar-style" content="default" \/>/);
-    expect(html).toMatch(/html, body \{ margin: 0; padding: 0; background: #F3F7FC; \}/);
-    expect(vite).toMatch(/theme_color: "#F3F7FC",\s*background_color: "#F3F7FC",/);
+    expect(html).toMatch(/<meta name="theme-color" content="#F1F4F9" \/>/);
+    expect(html).toMatch(/<meta name="color-scheme" content="light dark" \/>/);
+    expect(html).toMatch(/html, body \{ margin: 0; padding: 0; background: #F1F4F9; \}/);
+    expect(html).toMatch(/html\[data-theme="dark"\], html\[data-theme="dark"\] body \{ background: #0A0D12; \}/);
+    expect(html).toMatch(/localStorage\.getItem\("o8s-settings"\)/);
+    expect(html).toMatch(/class="o8-splash"/);
+    /* the icon's address carries a version, so a phone can't keep showing a copy of the old one */
+    expect(html).toMatch(/<link rel="apple-touch-icon" href="\/optimal-8\/icons\/apple-touch-icon\.png\?v=\d+" \/>/);
+    expect([THEMES.light.ink, THEMES.dark.ink]).toEqual(["#F1F4F9", "#0A0D12"]);
+    expect(vite).toMatch(/theme_color: "#F1F4F9",\s*background_color: "#F1F4F9",/);
   });
 });
 
@@ -78,16 +122,36 @@ describe("the name: Fighter", () => {
   });
 });
 
-describe("the icon: the low-poly bull", () => {
-  it("five icons at their sizes: a white ground, the white muzzle and the deep blue nostrils", () => {
-    [["public/icons/apple-touch-icon.png", 180], ["public/icons/icon-192.png", 192], ["public/icons/icon-512.png", 512], ["public/icons/icon-maskable-512.png", 512], ["public/icons/favicon-32.png", 32]]
-      .forEach(([f, n]) => { const p = pixel(f, 0, 0); expect([f, p.w, p.h]).toEqual([f, n, n]); p.rgb.forEach((c) => expect(c).toBeGreaterThan(245)); });
-    pixel("public/icons/apple-touch-icon.png", 90, 100).rgb.forEach((c) => expect(c).toBeGreaterThan(240));
-    [[80, 112], [100, 112]].forEach(([x, y]) => { const [r, g, b] = pixel("public/icons/apple-touch-icon.png", x, y).rgb; expect(r).toBeLessThan(40); expect(b - r).toBeGreaterThan(80); });
+describe("the icon: the bull, white on blue", () => {
+  const FILES = [["public/icons/apple-touch-icon.png", 180, 1], ["public/icons/favicon-32.png", 32, 1.12], ["public/icons/icon-192.png", 192, 1], ["public/icons/icon-512.png", 512, 1], ["public/icons/icon-maskable-512.png", 512, 0.8]];
+  const blue = ([r, g, b]) => b > 150 && b - r > 100;
+  const white = ([r, g, b]) => r > 225 && g > 225 && b > 240;
+  it("five icons at their sizes, each a full square of blue with nothing see-through", () => {
+    FILES.forEach(([f, n]) => { const p = pixels(f); expect([f, p.w, p.h]).toEqual([f, n, n]);
+      [[0, 0], [n - 1, 0], [0, n - 1], [n - 1, n - 1]].forEach(([x, y]) => expect([f, x, y, blue(p.at(x, y))]).toEqual([f, x, y, true])); });
+    /* lighter blue at the top than at the bottom */
+    const p = pixels("public/icons/icon-512.png");
+    expect(p.at(4, 4)[1]).toBeGreaterThan(p.at(4, 507)[1] + 40);
+    expect(GROUND).toEqual([[59, 123, 255], [20, 56, 166]]);
   });
-  it("drawn by the script, from paths, with no image files read", () => {
+  it("the bull: a white forehead, the blue showing through at the eyes, horns either side", () => {
+    const p = pixels("public/icons/icon-512.png"), at = (gx, gy) => p.at(Math.round(gx / 2), Math.round(gy / 2));
+    expect(white(at(470, 420))).toBe(true);                       // the forehead
+    expect(blue(at(434, 532))).toBe(true);                        // the left eye
+    expect(blue(at(590, 532))).toBe(true);                        // the right eye
+    expect(white(at(215, 250))).toBe(true);                       // the left horn
+    expect(blue(at(512, 200))).toBe(true);                        // between the horns
+    /* the same bull, smaller, inside the middle four-fifths of the maskable icon */
+    const m = pixels("public/icons/icon-maskable-512.png");
+    expect(white(m.at(Math.round((512 + (470 - 512) * 0.8) / 2), Math.round((512 + (420 - 512) * 0.8) / 2)))).toBe(true);
+    for (let x = 0; x < 512; x += 8) [0, 50, 461, 511].forEach((y) => { expect(blue(m.at(x, y))).toBe(true); expect(blue(m.at(y, x))).toBe(true); });
+  });
+  it("drawn by the script from a list of shapes, with no image file read, and the files are what it draws", () => {
     const s = read("scripts/generate-icons.mjs");
-    expect(s).toMatch(/low-poly bull/);
     expect(s).not.toMatch(/readFileSync/);
+    expect(MARK.length).toBe(12);
+    FILES.filter((x) => x[1] <= 192).forEach(([f, n, scale]) => { const p = pixels(f), px = draw(n, scale); let same = true;
+      for (let y = 0; y < n && same; y++) for (let x = 0; x < n; x++) { const o = (y * n + x) * 4, q = p.at(x, y); if (q[0] !== px[o] || q[1] !== px[o + 1] || q[2] !== px[o + 2]) { same = false; break; } }
+      expect([f, same]).toEqual([f, true]); });
   });
 });
