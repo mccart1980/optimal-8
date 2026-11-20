@@ -207,3 +207,52 @@ describe("the pages of PROGRESS", () => {
     expect(on()).toEqual(["NUMBERS"]);
   });
 });
+
+/* THE LAST TEN SECONDS — marked on the timer, so they show with the sound
+   off: to the end of a round on a timer of rounds, to the end of a rest,
+   and never earlier. The clock is moved by hand; the timer reads it. */
+describe("the timer's last ten seconds", () => {
+  const wholeDay = () => { if (!screen.queryByTestId("whole-day")) fireEvent.click(screen.getByRole("button", { name: "WHOLE DAY" }));
+    for (let k = 0; k < 8; k++) { const b = document.querySelector("[data-chapter] [aria-expanded=false]"); if (!b) break; fireEvent.click(b); } };
+  const pick = (name) => { wholeDay(); const row = [...document.querySelectorAll("[data-flow-name]")].find((e) => e.getAttribute("data-flow-name") === name);
+    if (!row) throw new Error("no row " + name); fireEvent.click(row.querySelectorAll("button")[1]); return screen.getByTestId("now-card"); };
+  const skip = (n) => { for (let k = 0; k < (n || 1); k++) fireEvent.click(screen.getAllByRole("button", { name: "SKIP" }).pop()); };
+  const later = (s) => vi.setSystemTime(new Date(Date.now() + s * 1000));
+  const part = () => [screen.getByTestId("timer-part").textContent, screen.getByTestId("timer-count").textContent];
+
+  it("the pressure rounds: not with 2:40 of the round to go; at ten seconds from its end; and at ten seconds from the end of the minute's rest", async () => {
+    vi.setSystemTime(new Date(2026, 10, 17, 6, 0, 0));     // Tuesday of week 3
+    used();
+    await up();
+    fireEvent.click(within(pick("Pressure Rounds")).getAllByRole("button", { name: /START/ })[0]);
+    expect(part()).toEqual(["EASY — 1 MINUTE", "1:00"]);
+    skip(2);
+    expect(part()).toEqual(["ROUND 1 OF 3 · STEADY — NEVER STOP", "0:15"]);
+    later(5);
+    await waitFor(() => expect(screen.getByTestId("timer-count").textContent).toBe("0:10"));
+    expect(screen.queryByTestId("timer-ten")).not.toBeInTheDocument();
+    skip(16);
+    expect(part()).toEqual(["ROUND 1 OF 3 · STEADY — NEVER STOP", "0:15"]);
+    expect(screen.queryByTestId("timer-ten")).not.toBeInTheDocument();
+    later(5);
+    await waitFor(() => expect(screen.getByTestId("timer-ten").textContent).toBe("LAST 10 SECONDS"));
+    expect(screen.getByTestId("timer-count").textContent).toBe("0:10");
+    skip();
+    expect(part()).toEqual(["REST — 1 MINUTE", "1:00"]);
+    expect(screen.queryByTestId("timer-ten")).not.toBeInTheDocument();
+    later(50);
+    await waitFor(() => expect(screen.getByTestId("timer-ten")).toBeInTheDocument());
+    /* minimised, the strip marks them too */
+    fireEvent.click(screen.getByRole("button", { name: "MINIMISE" }));
+    expect(screen.getByTestId("dock-ten").textContent).toBe("LAST 10");
+  });
+
+  it("the sound test says when the bells are off", async () => {
+    used({ sound: false });
+    await up();
+    openSettings();
+    expect(screen.getByText("The bells are OFF, so the timers make no sound. Switch Bell sounds on, above.")).toBeInTheDocument();
+    fireEvent.click(screen.getByText("Bell sounds and the feed chime"));
+    expect(screen.getByText(/^Plays every sound a timer makes, in order/)).toBeInTheDocument();
+  });
+});

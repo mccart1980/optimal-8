@@ -296,17 +296,26 @@ how much of the whole session is left. MINIMISE drops it to a strip above the
 tabs so you can read the card while it runs. The screen stays awake while a
 timer is running, on a phone that allows it (an iPhone on iOS 18.4 or later).
 
-**The sounds.** Every timer plays through one set of sounds:
+**The sounds.** Every timer plays through one set of sounds, made loud and
+long enough to hear across a gym:
 
-- three short ticks on the last three seconds of anything;
-- on a timer of boxing rounds, a ring bell: one for a round starting, two for
-  it ending, three when the whole thing is done, and a short warning ten seconds
-  before a round ends;
-- on every other timer, one sound for work starting, a lower one for rest, and
-  a short tune at the end.
+- three short beeps, the 3-2-1, at the end of any part of 10 seconds or more;
+- ten seconds before the end of anything of 30 seconds or more, three quick high
+  beeps: before a round ends, before a rest clock or a rest between rounds runs
+  out, before an interval ends;
+- on a timer of boxing rounds (the pressure rounds, the simulations, the rounds
+  on the erg), a ring bell: one as a round starts, two as it ends, three when
+  the whole thing is done. Inside a round, a burst starts on the work sound and
+  the steady pace after it on the rest sound, and a round's next minute on a
+  double beep. The ten seconds count to the end of the round, not of a burst;
+- on every other timer, a rising pair of notes when work starts, a falling pair
+  when rest starts, and a short tune at the end. A rest clock ends on the work
+  sound: your next set.
 
-The full-screen timer also flashes at every change, so it can be followed with
-the sound off.
+The full-screen timer also flashes at every change, and for the last ten seconds
+its clock turns red with LAST 10 SECONDS in the ring (the strip shows LAST 10),
+so it can be followed with the sound off. **▶ TEST THE BELL** in Settings → Sound
+plays every sound in the order a round meets them.
 
 **The phone's silent switch.** An app like this one plays its sound alongside
 your music, and goes quiet when the phone's ring switch is on silent. That is
@@ -314,8 +323,10 @@ the phone's rule, not the app's. **Settings → Sound → When the phone is on
 silent** has the choice: **STAY SILENT** leaves it like that; **PLAY ANYWAY**
 makes the bells sound even on silent, and the price is that the phone stops any
 music another app is playing while they do. **TEST THE BELL** under it plays
-one, so you can hear which you've got. An iPhone doesn't let an app like this
-one vibrate, so there is no vibration to rely on.
+them, so you can hear which you've got; heard nothing, the phone is on silent or
+its volume is down. If the phone locks or you open another app while a timer
+runs, the sound starts again the next time you touch the app. An iPhone doesn't
+let an app like this one vibrate, so there is no vibration to rely on.
 
 ## THE EXERCISE LIBRARY
 

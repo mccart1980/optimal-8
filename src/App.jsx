@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { play, cueFor, setMode as setSoundMode, MODES as SOUND_MODES } from "./sound.js";
+import { play, cueFor, beatAt, rehearse, setMode as setSoundMode, MODES as SOUND_MODES } from "./sound.js";
 import { Welcome } from "./welcome.jsx";
 import "./storage.js"; // installs window.storage (localStorage-backed)
 import fighterDoc from "../optimal8fighter.md?raw";
@@ -412,6 +412,8 @@ const titleFor = (week) => { const row = MODE.mac ? seasonRow(MODE.mac, week) : 
 const STOP_STEP = "Past the fight: log this round on the card. Under " + STOP_PCT + "% of round one, or your posture gone, and it was the last.";
 function steps(kind, o) {
   const S = [], W = (l, s, c) => S.push({ l, s, t: "w", c }), Rs = (l, s, c) => S.push({ l, s, t: "r", c });
+  /* the steady pace between a round's bursts: shown as a rest, timed and sounded as part of the round */
+  const Rin = (l, s, c) => S.push({ l, s, t: "r", c, inR: true });
   o = o || {};
   if (kind === "sim") { const r = o.rounds || 6, rest = o.rest == null ? 60 : o.rest;
     for (let i = 1; i <= r; i++) { if (o.arms) { W("RD " + i + " · MIN 1 — ASSAULT BIKE, ARMS ONLY", 60, "Feet on the pegs."); W("RD " + i + " · MIN 2 — ASSAULT BIKE, ARMS AND LEGS", 60, "Feet back on the pedals."); }
@@ -470,7 +472,7 @@ function steps(kind, o) {
       for (let j = 1; j <= n; j++) {
         const arms = j > arm0;
         W("BURST " + j + " OF " + n + (arms ? " — ARMS ONLY, ALL OUT" : " — ALL OUT"), secs, secs + " seconds, everything you have.");
-        Rs("ROUND " + i + " OF " + r + (arms ? " · ARMS ONLY, STEADY — NEVER STOP" : " · STEADY — NEVER STOP"), every - secs,
+        Rin("ROUND " + i + " OF " + r + (arms ? " · ARMS ONLY, STEADY — NEVER STOP" : " · STEADY — NEVER STOP"), every - secs,
           o.arms && j === arm0 ? "Next burst: feet on the pegs, arms only, to the end of the round." : arms ? "Feet on the pegs. The arms keep working." : "A pace you could hold for the round.");
       }
       if (i < r) Rs("REST — " + (rest === 60 ? "1 MINUTE" : rest + " SECONDS"), rest, "Round " + i + " done. Next, round " + (i + 1) + ".");
@@ -1239,13 +1241,15 @@ const TitleLines = ({ text }) => { const i = String(text).indexOf(" · "); if (i
   </React.Fragment>); };
 
 /* the timers that are boxing rounds: the ring bell starts and ends each round */
-const BELL_KINDS = ["sim", "csim", "ergrounds", "pressure"];
+export const BELL_KINDS = ["sim", "csim", "ergrounds", "pressure"];
+/* a timer's parts, for the tests that walk every second of one */
+export const timerSteps = (kind, o) => steps(kind, o);
 function useTimer(sound) {
   const [t, setT] = useState(null);
   const [open, setOpen] = useState(false);
-  const tRef = useRef(null), endRef = useRef(0), beepRef = useRef(""), ctxRef = useRef(null), lockRef = useRef(null);
+  const tRef = useRef(null), endRef = useRef(0), beepRef = useRef(""), warnRef = useRef(""), runRef = useRef(0), lockRef = useRef(null);
   useEffect(() => { tRef.current = t; }, [t]);
-  /* every part of a round timer is said out loud as it starts */
+  /* the parts of a timer are said out loud as they start: on a timer of rounds, as each round starts and ends and at its minutes; on any other, each part of 10 seconds or more */
   const say = useCallback((text) => { if (!sound) return; try {
     const sy = window.speechSynthesis; if (!sy || typeof SpeechSynthesisUtterance === "undefined") return;
     sy.cancel(); const u = new SpeechSynthesisUtterance(String(text || "").replace(/\bRD\b/g, "ROUND").replace(/\bMIN\b/g, "MINUTE").replace(/·/g, ",").replace(/ — /g, ", ").toLowerCase()); u.rate = 1.05; sy.speak(u);
@@ -1266,25 +1270,31 @@ function useTimer(sound) {
     const id = setInterval(() => {
       const cur = tRef.current; if (!cur || !cur.run) return;
       const rem = Math.ceil((endRef.current - Date.now()) / 1000);
-      const rounds = BELL_KINDS.indexOf(cur.kind) >= 0, here = cur.steps[cur.i], after = cur.steps[cur.i + 1];
-      if (rem > 0 && rem <= 3 && beepRef.current !== cur.i + ":" + rem) { beepRef.current = cur.i + ":" + rem; cueNow("tick"); buzz(35); }
-      /* ten seconds of a round left: the clapper */
-      if (rem === 10 && rounds && here.t === "w" && here.s >= 30 && (!after || after.t !== "w") && beepRef.current !== cur.i + ":warn") { beepRef.current = cur.i + ":warn"; cueNow("warn"); }
+      const rounds = BELL_KINDS.indexOf(cur.kind) >= 0, here = cur.steps[cur.i];
+      /* the 3-2-1, and ten seconds left: of the round, the rest, or the part (sound.js says which) */
+      const b = beatAt(cur.steps, cur.i, rem, rounds);
+      if (b.tick && beepRef.current !== cur.i + ":" + rem) { beepRef.current = cur.i + ":" + rem; cueNow("tick"); buzz(35); }
+      if (b.warn && warnRef.current !== runRef.current + ":" + cur.i) { warnRef.current = runRef.current + ":" + cur.i; cueNow("warn"); buzz([60, 60, 60]); }
       if (rem <= 0) {
         const n = cur.i + 1;
-        if (n < cur.steps.length) { endRef.current = Date.now() + cur.steps[n].s * 1000; cueNow(cueFor(here, cur.steps[n], rounds)); buzz(cur.steps[n].t === "w" ? [120, 60, 120] : 200); if (cur.steps.length > 1) say(cur.steps[n].l); setT(Object.assign({}, cur, { i: n, left: cur.steps[n].s })); }
+        if (n < cur.steps.length) { const nx = cur.steps[n], name = cueFor(here, nx, rounds), now = Date.now();
+          /* the next part is timed from the end of this one, so a long timer never runs slow; after the phone has slept, from now */
+          endRef.current = (now - endRef.current < 1500 ? endRef.current : now) + nx.s * 1000;
+          cueNow(name); buzz(nx.t === "w" ? [120, 60, 120] : 200);
+          if (cur.steps.length > 1 && (rounds ? /^bell|^change/.test(name) : nx.s >= 10)) say(nx.l);
+          setT(Object.assign({}, cur, { i: n, left: Math.max(1, Math.ceil((endRef.current - now) / 1000)) })); }
         else { cueNow(cur.kind === "rest" ? "go" : cueFor(here, null, rounds)); buzz([150, 80, 150, 80, 320]); if (cur.steps.length > 1) say("done"); setT(Object.assign({}, cur, { i: n, left: 0, run: false, done: true }));
           if (cur.kind === "rest") setTimeout(() => { const c2 = tRef.current; if (c2 && c2.done && c2.kind === "rest") { setT(null); setOpen(false); } }, 1500); }
       } else if (rem !== cur.left) setT(Object.assign({}, cur, { left: rem }));
     }, 200);
     return () => clearInterval(id);
   }, [t && t.run, t && t.i, t && t.steps]);
-  const start = useCallback((preset) => { const st = steps(preset.kind, preset.opt); if (!st.length) return; endRef.current = Date.now() + st[0].s * 1000; beepRef.current = "";
+  const start = useCallback((preset) => { const st = steps(preset.kind, preset.opt); if (!st.length) return; endRef.current = Date.now() + st[0].s * 1000; beepRef.current = ""; runRef.current += 1;
     setT({ steps: st, i: 0, left: st[0].s, run: true, title: preset.title || "TIMER", kind: preset.kind, done: false }); setOpen(true); cueNow(st.length > 1 ? cueFor(null, st[0], BELL_KINDS.indexOf(preset.kind) >= 0) : "tick");
     if (st.length > 1) say(st[0].l); }, [cueNow, say]);
   const toggle = useCallback(() => { const cur = tRef.current; if (!cur || cur.done) return; if (cur.run) setT(Object.assign({}, cur, { run: false })); else { endRef.current = Date.now() + cur.left * 1000; setT(Object.assign({}, cur, { run: true })); } }, []);
   const skip = useCallback(() => { const cur = tRef.current; if (!cur) return; const n = cur.i + 1; if (n < cur.steps.length) { endRef.current = Date.now() + cur.steps[n].s * 1000; setT(Object.assign({}, cur, { i: n, left: cur.steps[n].s })); } else setT(Object.assign({}, cur, { i: n, left: 0, run: false, done: true })); }, []);
-  const reset = useCallback(() => { const cur = tRef.current; if (!cur) return; endRef.current = Date.now() + cur.steps[0].s * 1000; setT(Object.assign({}, cur, { i: 0, left: cur.steps[0].s, run: false, done: false })); }, []);
+  const reset = useCallback(() => { const cur = tRef.current; if (!cur) return; endRef.current = Date.now() + cur.steps[0].s * 1000; runRef.current += 1; beepRef.current = ""; setT(Object.assign({}, cur, { i: 0, left: cur.steps[0].s, run: false, done: false })); }, []);
   const close = useCallback(() => { setT(null); setOpen(false); }, []);
   return { t, open, setOpen, start, toggle, skip, reset, close };
 }
@@ -1294,6 +1304,7 @@ function TimerDock({ T }) {
   const cur = t.steps[t.i] || { l: "COMPLETE", s: 1, t: "r" };
   const col = t.done ? C.moss : cur.t === "w" ? C.oxide : C.cobalt;
   const frac = t.done ? 1 : 1 - t.left / (cur.s || 1);
+  const ten = !t.done && beatAt(t.steps, t.i, t.left, BELL_KINDS.indexOf(t.kind) >= 0).ten;
   const round = { width: 44, height: 44, flexShrink: 0, borderRadius: 999, border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center", justifyContent: "center" };
   return (
     <div className="o8-glass sheet" style={{ position: "fixed", left: 0, right: 0, bottom: "calc(" + TAB_H + "px + env(safe-area-inset-bottom))", zIndex: 70, background: C.slab, borderTop: "1px solid " + C.line }}>
@@ -1301,7 +1312,7 @@ function TimerDock({ T }) {
       <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 12px", maxWidth: 640, margin: "0 auto" }}>
         <div onClick={() => T.setOpen(true)} style={{ flex: 1, minWidth: 0, cursor: "pointer" }}>
           <div style={Object.assign({}, mno, { fontSize: 11, fontWeight: 700, letterSpacing: .8, color: col, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" })}>{t.done ? t.title + " · COMPLETE" : t.title === cur.l ? cur.l : t.title + " · " + cur.l}</div>
-          <div style={Object.assign({}, mno, { fontSize: 24, fontWeight: 800, color: C.chalk, lineHeight: 1.1 })}>{t.done ? "✓" : mmss(t.left)}<span style={{ fontSize: 10.5, fontWeight: 600, color: C.ash, marginLeft: 8, whiteSpace: "nowrap", letterSpacing: .6 }}>{t.done ? "" : (t.steps.length > 1 ? "STEP " + (t.i + 1) + "/" + t.steps.length : "TAP TO EXPAND")}</span></div>
+          <div style={Object.assign({}, mno, { fontSize: 24, fontWeight: 800, color: ten ? C.oxide : C.chalk, lineHeight: 1.1 })}>{t.done ? "✓" : mmss(t.left)}{ten ? <span data-testid="dock-ten" className="o8-pulse" style={{ fontSize: 11, fontWeight: 800, color: C.oxide, marginLeft: 8, letterSpacing: .6 }}>LAST 10</span> : null}<span style={{ fontSize: 10.5, fontWeight: 600, color: C.ash, marginLeft: 8, whiteSpace: "nowrap", letterSpacing: .6 }}>{t.done ? "" : (t.steps.length > 1 ? "STEP " + (t.i + 1) + "/" + t.steps.length : "TAP TO EXPAND")}</span></div>
         </div>
         <button onClick={T.toggle} disabled={t.done} aria-label={t.run ? "PAUSE" : "START"} style={Object.assign({}, round, { background: col, color: C.on, opacity: t.done ? .4 : 1 })}><Icon n={t.run ? "pause" : "play"} size={22} /></button>
         <button onClick={T.skip} disabled={t.done} aria-label="SKIP" style={Object.assign({}, round, { background: soft(C.ash), color: C.chalk, opacity: t.done ? .4 : 1 })}><Icon n="skip" size={22} /></button>
@@ -1321,12 +1332,14 @@ function TimerFull({ T }) {
   const total = t.steps.reduce((a, x) => a + x.s, 0), elapsed = t.steps.slice(0, t.i).reduce((a, x) => a + x.s, 0) + (t.done ? 0 : (cur.s - t.left));
   const nxt = t.steps[t.i + 1];
   const left = t.done ? 0 : Math.max(0, Math.min(1, t.left / (cur.s || 1)));
+  /* the last ten seconds of the round, the rest or the part: the clock in the work colour, a label in the ring, and a flash as they start */
+  const ten = !t.done && beatAt(t.steps, t.i, t.left, BELL_KINDS.indexOf(t.kind) >= 0).ten;
   const R = 134, LEN = 2 * Math.PI * R, clock = t.done ? "✓" : mmss(t.left);
   const side = "min(300px, calc(100vw / var(--o8-zoom, 1) - 56px), calc(100vh / var(--o8-zoom, 1) - 430px))";
   return (
     <div className="fade" style={{ position: "fixed", inset: 0, background: C.ink, zIndex: 100, display: "flex", flexDirection: "column", padding: 16, paddingTop: "calc(16px + env(safe-area-inset-top))", paddingBottom: "calc(16px + env(safe-area-inset-bottom))" }}>
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: soft(col), opacity: t.run ? .7 : .35, transition: "opacity .4s ease, background-color .4s ease", pointerEvents: "none" }} />
-      <div key={t.i + (t.done ? "d" : "")} aria-hidden="true" className="o8-flash" style={{ position: "absolute", inset: 0, background: col, pointerEvents: "none" }} />
+      <div key={t.i + (ten ? "t" : "") + (t.done ? "d" : "")} aria-hidden="true" className="o8-flash" style={{ position: "absolute", inset: 0, background: ten ? C.oxide : col, pointerEvents: "none" }} />
       <div style={{ position: "relative", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
         <span data-testid="timer-title" style={Object.assign({}, mno, { fontSize: 15, fontWeight: 700, color: C.ash, letterSpacing: 1.2, minWidth: 0, overflowWrap: "anywhere" })}>{t.title}</span>
         <Btn on={() => T.setOpen(false)} c={C.ash} small s={{ minWidth: 44, minHeight: 44, borderRadius: 999, background: C.card, boxShadow: C.shadow }}>MINIMISE</Btn>
@@ -1339,8 +1352,11 @@ function TimerFull({ T }) {
             <circle cx="150" cy="150" r={R} fill="none" style={{ stroke: col, strokeWidth: 16, strokeLinecap: "round", strokeDasharray: LEN, strokeDashoffset: LEN * (1 - (t.done ? 1 : left)), transition: "stroke-dashoffset .25s linear, stroke .3s ease" }} />
           </svg>
           <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <div data-testid="timer-count" className={t.done ? "pop" : undefined} style={Object.assign({}, mno, { fontSize: clock.length > 4 ? 76 : 96, fontWeight: 800, color: t.done ? C.moss : C.chalk, lineHeight: 1, letterSpacing: -2 })}>{clock}</div>
+            <div data-testid="timer-count" className={t.done ? "pop" : undefined} style={Object.assign({}, mno, { fontSize: clock.length > 4 ? 76 : 96, fontWeight: 800, color: t.done ? C.moss : ten ? C.oxide : C.chalk, lineHeight: 1, letterSpacing: -2 })}>{clock}</div>
           </div>
+          {ten ? <div style={{ position: "absolute", left: 0, right: 0, top: "19%", display: "flex", justifyContent: "center", pointerEvents: "none" }}>
+            <span data-testid="timer-ten" className="o8-pulse" style={Object.assign({}, mno, { fontSize: 13, fontWeight: 800, letterSpacing: 1, padding: "5px 12px", borderRadius: 999, background: C.oxide, color: C.on })}>LAST 10 SECONDS</span>
+          </div> : null}
         </div>
         {!t.done && cur.c ? <div style={Object.assign({}, bdy, { fontSize: 18, fontWeight: 500, color: C.chalk, marginTop: 14, lineHeight: 1.4, maxWidth: 380, padding: "0 6px" })}>{cur.c}</div> : null}
         <div style={Object.assign({}, mno, { fontSize: 15, fontWeight: 600, color: C.ash, marginTop: 12, letterSpacing: .8 })}>{t.done ? mmss(total) + " TOTAL" : "STEP " + (t.i + 1) + " / " + t.steps.length + " · " + mmss(total - elapsed) + " LEFT"}</div>
@@ -3274,11 +3290,12 @@ function Settings({ st, setSt, current, L, exportData, importData, IM, calis, se
         <SetLine id="sound" />
         <Eye>Sound</Eye>
         <Toggle on={!!st.sound} set={() => upd({ sound: !st.sound })} n="Bell sounds and the feed chime"
-          s="Round bells and 3-2-1 pips on the timers, and a chime when a feed or a drink is due while the app is open. Off, the full-screen timer still flashes at every change." />
+          s="Round bells, the 10-second warning and the 3-2-1 on the timers, and a chime when a feed or a drink is due while the app is open. Off, the full-screen timer still flashes at every change and marks the last 10 seconds." />
         <div style={{ marginTop: 12 }}><Lab>When the phone is on silent</Lab></div>
         <div data-testid="sound-mode"><Seg opts={SOUND_MODES} val={st.soundMode === "loud" ? "loud" : "mix"} on={(v) => upd({ soundMode: v })} c={C.brass} /></div>
         <Note>STAY SILENT: the bells and pips play alongside your music, and go quiet when the phone's ring switch is on silent. PLAY ANYWAY: they sound even on silent, and the phone stops other apps' music while they do.</Note>
-        <Btn c={C.brass} s={{ width: "100%", marginTop: 10 }} on={() => { play("bell1"); }}>▶ TEST THE BELL</Btn>
+        <Btn c={C.brass} s={{ width: "100%", marginTop: 10 }} on={() => { rehearse(); }}>▶ TEST THE BELL</Btn>
+        <Note c={st.sound ? C.ash : C.oxide}>{st.sound ? "Plays every sound a timer makes, in order: the bell, the 10-second warning, the 3-2-1, the go. Nothing? The phone is on silent, or its volume is down." : "The bells are OFF, so the timers make no sound. Switch Bell sounds on, above."}</Note>
 
         <SetLine id="cycle" />
         <Eye>Schedule — Optimal 8 Fighter</Eye>

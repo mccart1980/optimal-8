@@ -113,7 +113,8 @@ button:focus-visible { outline: 2px solid var(--o8-brass); outline-offset: 2px; 
 .fade { animation: fade .2s ease-out; }
 .sheet { animation: sheet .26s cubic-bezier(.2,.8,.2,1); }
 .o8-flash { opacity: 0; animation: flash .7s ease-out; }
-@media (prefers-reduced-motion: reduce) { .rise, .pop, .fade, .sheet, .o8-flash { animation: none } * { transition: none !important } }
+.o8-pulse { animation: pulse 1s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .rise, .pop, .fade, .sheet, .o8-flash, .o8-pulse { animation: none } * { transition: none !important } }
 ::-webkit-scrollbar { width: 0; height: 0; }
 `;
 
