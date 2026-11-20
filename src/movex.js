@@ -5,8 +5,8 @@ import { isMoveTestWeek } from "./move.js";
 /* ================================================================
    OPTIMAL 8 · MOVE IN EVERY PROGRAM
 
-   Prep, the camp, the transition and Optimal 8 Fighter, the classic, as
-   Strength, Power and Physique runs it: from MOVE's week 1 the movement
+   Prep, the camp and the transition, as Strength, Power and Physique
+   runs it: from MOVE's week 1 the movement
    block in the warm-up's place, and from the tendon work's week 1 the
    lower pushes, the hip pair and the towel calf raise. A program's own
    pages are untouched; withMove lays MOVE over a day's page, block by
@@ -29,17 +29,13 @@ const mv = (s, area, i, note) => Object.assign({ n: "The movement block", s, c: 
 export const OPROTO = {
   O_MV_MON: mv("9 min · Mon", "Hips, ankles and overhead", moves("S_MV_WED").concat([["Ring support hold", "2 × 20 s"], ["Bodyweight dips", "×5"]]),
     "The dips at bodyweight last, before any weight goes on the belt."),
-  O_MV_MON_F: mv("11 min · Mon", "Hips, ankles and overhead", moves("S_MV_WED").concat([["BENCH RAMP", ""], ["Bar", "×10"], ["40%", "×5"], ["60%", "×3"], ["75%", "×2"]]),
-    "The bench ramp last — about a minute between those sets, so the first working set is already warm."),
   O_MV_TUE: mv("12 min · Tue", "Hips, balance and sprint prep", SPPROTO.S_MV_THU.i, "Never sprint cold. The build-ups are the sprint warm-up."),
   O_MV_WED: mv("10 min · Wed", "Hips, knees and lower back", moves("S_MV_MON_T").concat(TB_SETS)),
-  O_MV_WED_F: mv("11 min · Wed", "Hips, knees and lower back", moves("S_MV_MON_T").concat([["TRAP BAR WARM-UP SETS", ""], ["Bar", "×5"], ["50% of working", "×3"], ["65% of working", "×2"],
-    ["SQUAT WARM-UP SETS", ""], ["40% of working", "×3"], ["60% of working", "×2"]])),
   O_MV_THU: mv("8 min · Thu", "Lower back and shoulders", SPPROTO.S_MV_TUE.i),
   O_MV_SAT: mv("12 min · Sat", "Hips, balance and sprint prep", SPPROTO.S_MV_THU.i, "Never sprint cold. The build-ups are the sprint warm-up; the squat's warm-up sets are on its own card."),
   O_MV_SUN: mv("14 min · Sun", "The whole body, then the power prep", moves("S_MV_SUN").concat(PRIMERS)),
 };
-const MINS = { O_MV_MON: 9, O_MV_MON_F: 11, O_MV_TUE: 12, O_MV_WED: 10, O_MV_WED_F: 11, O_MV_THU: 8, O_MV_SAT: 12, O_MV_SUN: 14 };
+const MINS = { O_MV_MON: 9, O_MV_TUE: 12, O_MV_WED: 10, O_MV_THU: 8, O_MV_SAT: 12, O_MV_SUN: 14 };
 const lower = (s) => s.charAt(0).toLowerCase() + s.slice(1);
 const moveBlock = (L, key) => ({ L, n: "Warm-up", m: MINS[key], p: key, since: "2026-11-16", hide: (rx) => !rx.mw,
   rxLine: () => MINS[key] + " min · " + lower(OPROTO[key].area) });
@@ -48,13 +44,10 @@ const moveBlock = (L, key) => ({ L, n: "Warm-up", m: MINS[key], p: key, since: "
    the block in its place; out — the holds the lower pushes replace;
    after — the block the lower pushes follow; calf — the calf block whose
    Achilles hold becomes the towel calf raise; hip — the hip pair at the
-   end; back — the back extension after the core block; copen — the trunk
-   block that loses its Copenhagen plank */
+   end; back — the back extension after the core block */
 const P = {
   prep: { mon: { warm: ["W", "O_MV_MON"] }, tue: { warm: ["A", "O_MV_TUE"], out: ["K"], after: "C", calf: "G", tn: 1 }, wed: { warm: ["A", "O_MV_WED"], hip: 1 },
     thu: { warm: ["A", "O_MV_THU"], out: ["D", "J"], after: "C" }, sat: { warm: ["A", "O_MV_SAT"], after: "D", hip: 1 }, sun: { warm: ["A", "O_MV_SUN"], back: "E" } },
-  fighter: { mon: { warm: ["A", "O_MV_MON_F"] }, tue: { warm: ["A", "O_MV_TUE"], after: "C", calf: "H", copen: "G", tn: 1 }, wed: { warm: ["A", "O_MV_WED_F"], hip: 1 },
-    thu: { warm: ["A", "O_MV_THU"], out: ["D", "X"], after: "C" }, sat: { warm: ["A", "O_MV_SAT"], after: "D", hip: 1 }, sun: { warm: ["A", "O_MV_SUN"], back: "G" } },
   trans: { mon: { end: { hide: (rx) => rx.w === 1 } }, thu: { end: {} } },
 };
 P.camp = P.prep;
@@ -83,8 +76,6 @@ export function withMove(prog, day, S) {
     if (plan.warm && x.L === plan.warm[0]) { b.push(or(x, (rx) => !!rx.mw)); b.push(moveBlock(x.L, plan.warm[1])); return; }
     if (plan.out && plan.out.indexOf(x.L) >= 0) { b.push(or(x, (rx) => !!rx.tw)); return; }
     if (plan.calf && x.L === plan.calf) { b.push(or(x, (rx) => !!rx.tw)); b.push(towelBlock(x, pfx)); return; }
-    if (plan.copen && x.L === plan.copen) {
-      b.push(Object.assign({}, x, { m: (rx) => (rx.tw ? 7 : v(x.m, rx)), items: (rx) => (v(x.items, rx) || []).filter((i) => !(rx.tw && i.id === "copen")) })); return; }
     b.push(x);
     if (plan.after && x.L === plan.after) b.push(lowerPushes("LP", { mon: plan.tn }));
     if (plan.back && x.L === plan.back) b.push({ L: "BX", n: "Back Extension", since: "2026-11-16", m: 3, hide: (rx) => !rx.mw || (x.hide ? !!x.hide(rx) : false), rest: "Rest 60 s", rt: 60,

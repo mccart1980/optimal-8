@@ -708,7 +708,9 @@ describe("picking it in Settings", () => {
     fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "MORE" }));
     fireEvent.click(screen.getByRole("button", { name: "SETTINGS" }));
     await screen.findByText("Fight booked?");
-    ["PREP · 16-WEEK CYCLE", "STRENGTH, POWER, PHYSIQUE · 12 WEEKS", "OPTIMAL 8 FIGHTER"].forEach((n) => expect(screen.getByRole("button", { name: n })).toBeInTheDocument());
+    ["PREP · 16-WEEK CYCLE", "STRENGTH, POWER, PHYSIQUE · 12 WEEKS"].forEach((n) => expect(screen.getByRole("button", { name: n })).toBeInTheDocument());
+    /* Optimal 8 Fighter was retired on 23 November 2026 */
+    expect(screen.queryByRole("button", { name: "OPTIMAL 8 FIGHTER" })).toBe(null);
     fireEvent.click(screen.getByRole("button", { name: "STRENGTH, POWER, PHYSIQUE · 12 WEEKS" }));
     expect(screen.queryByText("How fit you are right now")).toBe(null);
     const run = screen.getByTestId("prep-running");
@@ -1045,13 +1047,12 @@ describe("Optimal 8 · Move · the tendon work, from Monday 23 November", () => 
   });
 });
 
-describe("Optimal 8 · Move in every program — Prep, the camp, the transition and Fighter", () => {
+describe("Optimal 8 · Move in every program — Prep, the camp and the transition", () => {
   const CI = { booked: true, fight: "2027-03-13", rounds: 6, mins: 3, rest: 60, weighIn: "before", fitness: "moderate", emphasis: "none" };
   const prepNow = () => base({ plans: [{ from: "2026-11-30", made: "2026-11-29", inputs: PREP }], season: PREP });
   const campNow = (x) => base(Object.assign({ plans: [{ from: "2027-01-04", made: "2027-01-01", inputs: CI }], season: CI, fightDate: "2027-03-13" }, x || {}));
   const cycle = (extra) => Object.assign({ start: "2026-01-05", macroBase: 1, iron: false, sound: false, autoRest: true, medStage: 1, breathStage: 1, hardLevel: 1, sitLen: 30,
     imStart: "2026-01-05", rangeStart: "2026-01-05", camp: false, lastTen: false, taper: false, levelStart: "2026-01-05", program: "prep", v12: true }, extra || {});
-  const fighterNow = () => cycle({ program: "fighter", start: "2026-11-30", rangeStart: "2026-11-30", imStart: "2026-11-30", levelStart: "2026-11-30" });
   const again = () => { cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true"); };
   const pres = (card) => within(card).getAllByTestId("card-pres").map((e) => e.textContent);
   const lvl = (card) => within(card).queryAllByTestId("routine-level").map((e) => e.textContent);
@@ -1144,44 +1145,25 @@ describe("Optimal 8 · Move in every program — Prep, the camp, the transition 
       expect(lvl(pick("The upper pushes"))).toEqual(["7 OUT OF 10, THE TRANSITION"]);
     }
   });
-  it("Fighter, Tuesday 1 December: the movement block, the lower pushes after the pistol line, its trunk without the Copenhagen plank, the towel calf raise; Sunday 6 December the back extension after the core", async () => {
-    await at(2026, 12, 1, fighterNow());
+  it("THE CORE, from 23 November: Prep's Monday ends with the crunch, the dead bug and the woodchop; its Tuesday's box jumps are the kneeling jump into box jump; Wednesday's sit-up and landmine rotation follow the hip pair", async () => {
+    await at(2026, 11, 30, prepNow());
     let rows = wholeDay();
-    expect(rows.find((r) => r === "The movement block" || /^Warm-up/.test(r))).toBe("The movement block");
-    expect(sl(rows, "The Pistol Line", 3)).toEqual(["The Pistol Line", "Achilles pushes", "Knee pushes"]);
-    expect(sl(rows, "Hands", 3)).toEqual(["Hands", "Pallof press", "Ab wheel rollout"]);
-    expect(rows.filter((r) => /Copenhagen|morning five/i.test(r))).toEqual([]);
-    expect(sl(rows, "Seated calf raise", 2)).toEqual(["Seated calf raise", "Towel calf raise"]);
-    again();
-    await at(2026, 12, 6, fighterNow());
-    rows = wholeDay();
-    expect(sl(rows, "Hands", 3)).toEqual(["Hands", "Back Extension", "The Slow Lane — one lever hold"]);
-  });
-  it("THE CORE, from 23 November: Fighter's Monday has the kneeling jump in its power dose and the crunch, dead bug and woodchop at the end; Tuesday's drops after the ab wheel; Wednesday's sit-up and landmine rotation after the hip pair; Prep's Tuesday kneeling jump", async () => {
-    await at(2026, 11, 30, fighterNow());
-    let rows = wholeDay();
-    expect(rows).toContain("Kneeling jump into box jump");
-    expect(rows.filter((r) => /^Box jumps?$/i.test(r))).toEqual([]);
     expect(sl(rows, "Cable Crunch + Dead Bug", 2)).toEqual(["Cable Crunch + Dead Bug", "Cable Woodchop"]);
     let card = pick("Cable Woodchop");
     expect(pres(card)[0]).toBe("2 × 10 each side · high to low · Rest 45 s");
     expect(card.textContent).toMatch(/a cable at the top of the stack with a single handle/i);
-    card = pick("Kneeling jump into box jump");
-    expect(card.textContent).toMatch(/Kneel tall on a mat, toes tucked under/);
-    again();
-    await at(2026, 12, 1, fighterNow());
-    rows = wholeDay();
-    expect(sl(rows, "Ab wheel rollout", 3)).toEqual(["Ab wheel rollout", "Medicine-Ball Drops", "Seated calf raise"]);
-    again();
-    await at(2026, 12, 2, fighterNow());
-    rows = wholeDay();
-    expect(sl(rows, "Star side plank", 2)).toEqual(["Star side plank", "Weighted Decline Sit-Up + Landmine Rotation"]);
-    expect(pick("Weighted Decline Sit-Up + Landmine Rotation").textContent).toMatch(/On a decline bench, feet hooked under the pads/);
     again();
     await at(2026, 12, 1, prepNow());
     rows = wholeDay();
     expect(rows).toContain("Kneeling jump into box jump");
     expect(rows).not.toContain("Box jump");
+    card = pick("Kneeling jump into box jump");
+    expect(card.textContent).toMatch(/Kneel tall on a mat, toes tucked under/);
+    again();
+    await at(2026, 12, 2, prepNow());
+    rows = wholeDay();
+    expect(sl(rows, "Star side plank", 2)).toEqual(["Star side plank", "Weighted Decline Sit-Up + Landmine Rotation"]);
+    expect(pick("Weighted Decline Sit-Up + Landmine Rotation").textContent).toMatch(/On a decline bench, feet hooked under the pads/);
   });
   it("before MOVE, Prep's own cycle reads as it did: the warm-up, the morning five, the holds, THE BRACE's Copenhagen plank", async () => {
     await at(2026, 1, 6, cycle());

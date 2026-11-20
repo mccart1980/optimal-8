@@ -40,7 +40,6 @@ export function Mark({ size, lit, shade, ground }) {
 export const RUNS = [
   ["spp", "Strength, Power and Physique", "12 weeks, then round again", "Size, then strength, then power, with the engine held."],
   ["prep", "Prep", "A 16-week cycle, then round again", "Everything built together, tilting from volume to speed, with three hard engine sessions a week."],
-  ["classic", "Optimal 8 Fighter", "16 weeks", "The classic week: strength, power, the engine and calisthenics."],
 ];
 const POINTS = [
   ["today", "Your day, in order", "Open it and it shows the next thing to do. Nothing to plan."],

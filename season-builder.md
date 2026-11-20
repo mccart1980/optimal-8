@@ -7,7 +7,7 @@
 ## WHAT YOU ENTER
 
 1. **Fight booked?** No or Yes.
-2. **If no:** **what runs** — Prep's 16-week cycle, Strength, Power and Physique's 12 weeks, or Optimal 8 Fighter, the classic. With Prep the app asks **how fit you are right now** — low, moderate or good. Coming back from time off is low, and a new cycle eases you back in.
+2. **If no:** **what runs** — Prep's 16-week cycle or Strength, Power and Physique's 12 weeks. Optimal 8 Fighter, the classic, was retired on 23 November 2026; settings saved on it run Prep's cycle from the Monday its clock ran from. With Prep the app asks **how fit you are right now** — low, moderate or good. Coming back from time off is low, and a new cycle eases you back in.
 3. **If yes:**
    - **The date.** The app counts the weeks.
    - **The format:** rounds × minutes, e.g. 3 × 2 or 6 × 3.

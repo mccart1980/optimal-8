@@ -535,3 +535,19 @@ describe("proof 6 — the weight plan", () => {
     expect(p.line.firstStep).toBe(2);
   });
 });
+
+/* OPTIMAL 8 FIGHTER, RETIRED on 23 November 2026 — a plan saved on it
+   builds Prep's cycle from its Monday, and nothing says "the classic" */
+describe("Optimal 8 Fighter is retired", () => {
+  it("a plan saved on the classic builds Prep's cycle from its Monday, after the plan before it", () => {
+    const s = buildSeason({ plans: [{ from: "2026-11-30", made: "2026-11-29", inputs: { booked: false, classic: true } }], today: "2026-12-02" });
+    expect("classic" in s).toBe(false);
+    expect([s.rows[0].program, s.rows[0].mon, s.rows[0].id]).toEqual(["prep", "2026-11-30", "P1"]);
+    expect(describeSeason(s, "2026-11-30")).toMatch(/^Prep's 16-week cycle from /);
+    const two = buildSeason({ plans: [{ from: "2026-11-02", made: "2026-10-29", inputs: { booked: false, spp: true } }, { from: "2026-11-30", made: "2026-11-29", inputs: { booked: false, classic: true } }], today: "2026-12-02" });
+    expect(two.rows.filter((r) => r.mon < "2026-11-30").every((r) => r.program === "spp")).toBe(true);
+    expect(two.rows.filter((r) => r.mon >= "2026-11-30").length).toBeGreaterThan(0);
+    expect(builderMd).toMatch(/Optimal 8 Fighter, the classic, was retired on 23 November 2026; settings saved on it run Prep's cycle from the Monday its clock ran from\./);
+    expect(builderMd).not.toMatch(/or Optimal 8 Fighter, the classic\./);
+  });
+});

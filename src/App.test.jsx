@@ -121,13 +121,15 @@ describe("Optimal 8", () => {
   const SEASON = { fightDate: "2027-03-13", start: "2026-09-28" };
   const ready = (m) => localStorage.setItem("o8s-ready", JSON.stringify(m));
 
-  it("defaults to a 16-week cycle with the Iron Mind weeks off", async () => {
+  it("opens a phone saved on the retired Fighter on Prep's 16-week cycle, from the Monday its clock ran from, with no Hell Week", async () => {
     await mount();
-
+    expect(title()).toBe("PREP · WEEK 1 · P1 · BUILD");
+    expect(JSON.parse(localStorage.getItem("o8s-settings")).plans).toEqual([{ from: MONDAY_OF_WED, made: MONDAY_OF_WED, inputs: { booked: false, classic: false } }]);
     nav("WEEK");
-    expect(await screen.findByText("16")).toBeInTheDocument();
+    expect(await screen.findByText("P14")).toBeInTheDocument();
+    expect(screen.getByText("P12b")).toBeInTheDocument();
+    expect(screen.queryByText("HELL WEEK")).not.toBeInTheDocument();
     expect(screen.queryByText("17")).not.toBeInTheDocument();
-    expect(screen.queryByText("18")).not.toBeInTheDocument();
   });
 
   it("renders the hardship, track and plan pages without falling over", async () => {
@@ -162,7 +164,7 @@ describe("Optimal 8", () => {
     nav("PLAN");
     expect(await screen.findByText("CONTENTS")).toBeInTheDocument();
     // both documents are readable offline: once in the contents, once as the heading
-    expect(screen.getAllByText("WHEN BOXING RETURNS — CAMP MODE").length).toBe(2);
+    expect(screen.getAllByText("LOADING — THE BAR SPEED IS THE LAW").length).toBe(2);
     fireEvent.click(screen.getByRole("button", { name: "IRON MIND v5" }));
     await waitFor(() => expect(screen.getAllByText("THE DAY — ONE PAGE, EVERY DAY").length).toBe(2));
   });
@@ -186,7 +188,7 @@ describe("Optimal 8", () => {
 
   it("puts the dashboard at the top of TRACK, with the photos beside it", async () => {
     seedMornings(50, 80);
-    localStorage.setItem("o8s-log", JSON.stringify({ "m1w1-sun-bike20": { w: "5200" }, "m1w1-sun-bike20hr": { w: "180" } }));
+    localStorage.setItem("o8s-log", JSON.stringify({ "mPw1-sun-bike20": { w: "5200" }, "mPw1-sun-bike20hr": { w: "180" } }));
     await mount();
     nav("TRACK");
 
@@ -353,7 +355,7 @@ describe("Optimal 8", () => {
     ["ACCUMULATE", "INTENSIFY", "CONVERT", "TEST WEEK"].forEach((n) => expect(screen.getAllByText(new RegExp(n)).length).toBeGreaterThan(0));
   });
 
-  it("reads the program off the season, and the classic Fighter off its own clock", async () => {
+  it("reads the program off the season, and settings saved on the retired Fighter as Prep from its clock's Monday", async () => {
     vi.setSystemTime(new Date(2026, 8, 30, 9, 0, 0));
     await mount({ program: "camp", camp: true, campStart: "2026-09-28" });
     await waitFor(() => expect(title()).toBe("CAMP · WEEK 1 · F · FOUNDATION"));
@@ -363,7 +365,7 @@ describe("Optimal 8", () => {
     await waitFor(() => expect(title()).toBe("CAMP · WEEK 4 · B3 · BUILD"));
     cleanup();
     await mount({ start: "2026-09-14" });
-    await waitFor(() => expect(title()).toBe("FIGHTER · WEEK 3 · BUILD"));
+    await waitFor(() => expect(title()).toBe("PREP · WEEK 3 · P3 · BUILD"));
   }, 60000);
 
   /* ================================================================
@@ -419,8 +421,10 @@ describe("Optimal 8", () => {
   it("holds every document on PLAN, and one live panel on GUIDE with the phase and the next feed", async () => {
     await mount();
     nav("PLAN");
-    ["PREP", "CAMP", "FIGHTER v1.5", "STRENGTH & POWER", "IRON MIND v5", "FUEL · FIGHTER", "THE MENU", "MENU B + WATER", "FUEL · SEASON"].forEach((n) =>
+    ["PREP", "CAMP", "STRENGTH & POWER", "IRON MIND v5", "FUEL · FIGHTER", "THE MENU", "MENU B + WATER", "FUEL · SEASON"].forEach((n) =>
       expect(screen.getByRole("button", { name: n })).toBeInTheDocument());
+    /* Fighter was retired on 23 November 2026: its document is off the shelf */
+    expect(screen.queryByRole("button", { name: "FIGHTER v1.5" })).toBe(null);
     fireEvent.click(screen.getByRole("button", { name: "THE MENU" }));
     expect((await screen.findAllByText(/THE FIVE RULES/)).length).toBeGreaterThan(0);
     nav("GUIDE");

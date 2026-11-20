@@ -667,7 +667,7 @@ export function HardshipView({ IM }) {
       </Card>
 
       <div style={Object.assign({}, mno, { fontSize: 9.5, letterSpacing: 1.8, color: C.brass, padding: "12px 2px 8px" })}>THE FIVE TESTS — ONE A WEEK, ROTATING</div>
-      {paused ? <Card ac={C.oxide}><div style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1.3, color: C.oxide })}>TESTS PAUSE</div><Note c={C.chalk}>{IM.fightWeek ? "The fight-week mind, week " + IM.fightWeek + ": hardship, none. Cold and heat stop. The tests pause." : "Taper weeks 15–16 of the training cycle: no maximal hardship sessions. Breath, sits and the daily core continue; the tests pause."}</Note></Card> : null}
+      {paused ? <Card ac={C.oxide}><div style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1.3, color: C.oxide })}>TESTS PAUSE</div><Note c={C.chalk}>{IM.fightWeek ? "The fight-week mind, week " + IM.fightWeek + ": hardship, none. Cold and heat stop. The tests pause." : "A taper week: no maximal hardship sessions. Breath, sits and the daily core continue; the tests pause."}</Note></Card> : null}
       {TESTS5.map((t) => { const isNow = t.id === thisTest.id, g = gapOf(t);
         const last = IM.hards.find((h) => h.test === t.id);
         return (
@@ -708,8 +708,7 @@ export function HardshipView({ IM }) {
           {COLLISION.map((r, i) => <div key={i} style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, padding: "8px 0", borderBottom: i < COLLISION.length - 1 ? "1px solid " + C.line : "none", lineHeight: 1.5 })}><span style={Object.assign({}, mno, { fontSize: 10, color: C.oxide })}>{i + 1}. </span>{r}</div>)}
         </div> : null}
       </Card>
-      <Card ac={C.brass}><Eye c={C.brass}>The ceiling</Eye><Note c={C.chalk} s={{ marginTop: 0 }}>{CEILING}</Note>
-        <Btn on={IM.goHell} c={C.oxide} fill s={{ width: "100%", marginTop: 12 }}>GO TO HELL WEEK</Btn></Card>
+      <Card ac={C.brass}><Eye c={C.brass}>The ceiling</Eye><Note c={C.chalk} s={{ marginTop: 0 }}>{CEILING}</Note></Card>
     </div>);
 }
 

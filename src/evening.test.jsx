@@ -7,8 +7,7 @@ import App from "./App.jsx";
 
 /* THURSDAY. In PREP and CAMP the easy session and the sauna sit on
    Thursday evening: the run first, the sauna straight after it, then the
-   rest of the evening. Sunday's easy hour comes before its sauna too. The
-   classic Fighter is untouched. */
+   rest of the evening. Sunday's easy hour comes before its sauna too. */
 
 /* Worked Example 1: the camp from Monday 12 October, the Edge on */
 const plans = [{ from: "2026-10-12", made: "2026-10-08", inputs: { booked: true, fight: "2026-11-28", rounds: 3, mins: 2, rest: 60, weighIn: "before", fitness: "low", emphasis: "durability" } }];
@@ -18,7 +17,6 @@ const camp = (extra) => Object.assign({ start: "2026-09-28", macroBase: 1, iron:
 const prep = (extra) => Object.assign({ start: "2026-01-05", macroBase: 1, iron: false, sound: false, autoRest: true,
   medStage: 1, breathStage: 1, hardLevel: 1, sitLen: 30, imStart: "2026-01-05", rangeStart: "2026-01-05",
   camp: false, lastTen: false, taper: false, levelStart: "2026-01-05", program: "prep", v12: true }, extra || {});
-const fighter = () => prep({ program: "fighter" });
 
 async function at(y, m, d, st) {
   vi.setSystemTime(new Date(y, m - 1, d, 6, 0, 0));
@@ -108,20 +106,6 @@ describe("PREP", () => {
     }
     await at(2026, 2, 4, prep());
     expect(evening()).toContain("The movement session");
-  });
-});
-
-describe("the classic Fighter is untouched", () => {
-  it("no easy thirty on any weekday evening, and its own weekend sauna's water still opens the evening", async () => {
-    for (const d of [5, 6, 7, 8, 9]) {
-      await at(2026, 1, d, fighter());
-      expect(easyOf(evening())).toEqual([]);
-      cleanup();
-    }
-    localStorage.setItem("o8s-fday", JSON.stringify({ "2026-01-10": { sauna: true } }));
-    await at(2026, 1, 10, fighter());
-    const rows = evening();
-    expect(rows.slice(0, 3)).toEqual([BEFORE, AFTER, "The easy hour"]);
   });
 });
 

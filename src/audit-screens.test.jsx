@@ -14,7 +14,7 @@ const MAXES = { squat: 140, bench: 100, tbdl: 180, pp: 70, cw_squat: 120, cw_tbd
 const prep = (extra) => Object.assign({ start: "2026-01-05", macroBase: 1, iron: false, sound: false, autoRest: true,
   medStage: 1, breathStage: 1, hardLevel: 1, sitLen: 30, imStart: "2026-01-05", rangeStart: "2026-01-05",
   camp: false, lastTen: false, taper: false, levelStart: "2026-01-05", program: "prep", v12: true }, extra || {});
-/* the classic, from Monday 5 January 2026: its fourth cycle's week 1 is from 7 December 2026 */
+/* settings saved on the classic, from Monday 5 January 2026: Fighter was retired on 23 November 2026, so they run Prep */
 const fighter = () => prep({ program: "fighter" });
 /* the ten-week camp from Monday 4 January 2027: week 6 from 8 February, week 8 from 22 February, the rehearsal Sunday 7 March */
 const camp10 = { booked: true, fight: "2027-03-13", rounds: 6, mins: 3, rest: 60, weighIn: "before", fitness: "good", emphasis: "none" };
@@ -239,75 +239,10 @@ describe("the audit's changes in Prep, from Monday 23 November", () => {
   });
 });
 
-describe("the audit's changes in Fighter, from Monday 23 November", () => {
-  it("Saturday 19 December 2026: the one-arm landmine push press after the jump circuit, 4 × 3 each side, on the card and on the week's; week 1's, with no number to find, is 4 × 3 too. Saturday 21 November has the barbell push press", async () => {
-    await at(2026, 12, 19, fighter());
-    const rows = wholeDay(), i = rows.indexOf("The Jump Circuit");
-    expect([rows[i + 1], rows.indexOf("Push Press")]).toEqual(["One-Arm Landmine Push Press", -1]);
-    pick("One-Arm Landmine Push Press");
-    expect(pres()).toEqual(["4 × 3 each side · every rep fast · Rest 2:00"]);
-    expect(tid("speed-rule")).toBe(ARM);
-    expect(week()).toMatch(/Landmine push press4 × 3 each side, every rep fast/);
-    again();
-    await at(2026, 12, 12, fighter());
-    pick("One-Arm Landmine Push Press");
-    expect(pres()).toEqual(["4 × 3 each side · every rep fast · Rest 2:00"]);
-    again();
-    await at(2026, 11, 21, fighter());
-    const was = wholeDay();
-    expect([was.indexOf("Push Press") >= 0, was.indexOf("One-Arm Landmine Push Press")]).toEqual([true, -1]);
-  });
-
-  it("Sunday 20 December 2026: the fight rounds log one box a round, the bike's calories, and minute 1 is the assault bike with the arms only", async () => {
-    await at(2026, 12, 20, fighter());
-    pick("Fight Simulation");
-    expect(boxes()).toEqual(["ROUND 1 OUTPUT (BIKE CAL)", "ROUND 6 OUTPUT (BIKE CAL)"]);
-    fireEvent.click(screen.getByRole("button", { name: "▶ START THE ROUNDS" }));
-    expect(part()).toBe("RD 1 · MIN 1 — ASSAULT BIKE, ARMS ONLY");
-    skip();
-    expect(part()).toBe("RD 1 · MIN 2 — ASSAULT BIKE, ARMS AND LEGS");
-  });
-
-  it("Monday's bench throw has Spleeft's rule; the 20-minute test names the bike; NUMBERS asks for working maxes, never a best single", async () => {
-    await at(2026, 12, 14, fighter());
-    pick("Bench Throw (Smith)");
-    expect(tid("speed-rule")).toBe(FAST);
-    again();
-    await at(2026, 12, 13, fighter());
-    pick("20-Minute Bike Test");
-    expect(lib()).toEqual([T20]);
-    again();
-    await at(2026, 12, 19, fighter());
-    fireEvent.click(bar().getByRole("button", { name: "PROGRESS" }));
-    fireEvent.click(screen.getByRole("button", { name: "NUMBERS" }));
-    expect(document.body.textContent).toMatch(/Squat and bench: working maxes — your heaviest clean set of 3, with one or two reps left in you, × 1\.08\. Never a best single\./);
-    expect(document.body.textContent).not.toMatch(/your best single/);
-  });
-});
-
 /* THE NOTES UNDER A WEEK — a block's note names what its weeks hold, so
    from the switch it names what they hold now. A week before reads as it did. */
 describe("the block notes follow the switch, on THIS WEEK and in the GUIDE", () => {
   const guide = () => { fireEvent.click(bar().getByRole("button", { name: "MORE" })); fireEvent.click(screen.getByRole("button", { name: "GUIDE" })); return document.body.textContent; };
-
-  it("Fighter's build block: week 1 finds the trap bar number; before the switch, the push press's as well", async () => {
-    await at(2026, 12, 7, fighter());
-    expect(week()).toContain("Nordics ramping up. Week 1 finds your trap bar number.");
-    expect(document.body.textContent).not.toContain("push press numbers");
-    expect(guide()).toContain("Week 1 finds your trap bar number.");
-    again();
-    await at(2026, 1, 5, fighter());
-    expect(week()).toContain("Week 1 finds your trap bar and push press numbers.");
-    expect(guide()).toContain("Week 1 finds your trap bar and push press numbers.");
-  });
-
-  it("Fighter's velocity block: the landmine push press's fast threes each side, where the push press's were", async () => {
-    await at(2027, 2, 15, fighter());
-    expect(week()).toContain("punch throws to 4 rounds, the trap bar to fast 3×3s at 80%, the landmine push press to fast 3×3s each side, and Wednesday's pause squat becomes a speed squat.");
-    again();
-    await at(2026, 3, 16, fighter());
-    expect(week()).toContain("punch throws to 4 rounds, trap bar and push press to fast 3×3s at 80%, and Wednesday's pause squat becomes a speed squat.");
-  });
 
   it("the camp's peak block: speed twice a week — the stance starts on Tuesday, the flat-out running on Saturday", async () => {
     await at(2027, 2, 8, ten());
@@ -328,13 +263,12 @@ describe("the block notes follow the switch, on THIS WEEK and in the GUIDE", () 
     expect(week()).toContain("TUESDAY · Tue 7 Apr74 MIN");
   });
 
-  it("Hell Week's breathing test names the machines the gym has", async () => {
+  it("Hell Week is gone: the IRON tab has no page for it, and a phone saved on Fighter opens on Prep", async () => {
     await at(2026, 12, 7, fighter());
+    expect(screen.getByTestId("app-title").textContent).toMatch(/^Prep · Week /);
     fireEvent.click(bar().getByRole("button", { name: "MORE" }));
     fireEvent.click(screen.getByRole("button", { name: "IRON" }));
-    fireEvent.click(screen.getByRole("button", { name: "HELL WEEK" }));
-    fireEvent.click(screen.getByText("DAY 3 — BREATH CONTROL UNDER FATIGUE"));
-    expect(document.body.textContent).toContain("rower/bike · +1 notch every 2 min until forced to open your mouth");
-    expect(document.body.textContent).not.toMatch(/rower\/ski/);
+    expect(screen.queryByRole("button", { name: "HELL WEEK" })).toBe(null);
+    expect(document.body.textContent).not.toMatch(/Hell Week/i);
   });
 });

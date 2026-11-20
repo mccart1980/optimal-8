@@ -20,7 +20,7 @@ const rowBlock = (r) => (r.program === "spp" ? SPP_BLOCK(r.doc) : r.program === 
   : r.program === "camp" ? ({ F1: "FOUNDATION", F: "FOUNDATION", B1: "BUILD", B2: "BUILD", B3: "BUILD", E: "EASY + TESTS", P1: "PEAK", P2: "PEAK", P3: "PEAK", E1: "ENGINE", E2: "ENGINE", S: "SHARPEN", FW: "FIGHT WEEK" })[r.id]
   : r.program === "pre" ? "BEFORE WEEK 1" : r.hold ? "THE HEAD CHECK" : "TRANSITION");
 
-export function SeasonView({ season, st, current, classic, dayIso, openWeek }) {
+export function SeasonView({ season, st, current, dayIso, openWeek }) {
   const s = st.season || {};
   const rows = season.rows.filter((r) => r.mon >= addDays(dayIso, -7 * 20)).slice(0, 60);
   /* the first Monday of Strength, Power and Physique, when a Prep finishes first */
@@ -30,16 +30,13 @@ export function SeasonView({ season, st, current, classic, dayIso, openWeek }) {
     <div>
       <Card ac={C.brass}>
         <Eye c={C.brass}>The season</Eye>
-        {classic ? (
-          <div style={Object.assign({}, dsp, { fontSize: 28, fontWeight: 800, letterSpacing: 1.3, color: C.chalk })}>OPTIMAL 8 FIGHTER</div>
-        ) : s.booked && s.fight ? (
+        {s.booked && s.fight ? (
           <div style={Object.assign({}, dsp, { fontSize: 30, fontWeight: 800, letterSpacing: 1.3, color: C.chalk, lineHeight: 1.05 })}>FIGHT · {fmtDate(s.fight).toUpperCase()}</div>
         ) : (
           <div style={Object.assign({}, dsp, { fontSize: 28, fontWeight: 800, letterSpacing: 1.3, color: C.chalk })}>NO FIGHT BOOKED</div>)}
         <div style={Object.assign({}, bdy, { fontSize: 18, color: C.chalk, marginTop: 10, lineHeight: 1.5 })}>
-          {classic ? "The classic program, on its own clock. Settings → Fight booked? builds a season."
-            : s.booked ? s.rounds + " × " + s.mins + " · " + s.rest + " s rest · weigh-in " + (s.weighIn === "day" ? "on the day" : s.weighIn === "am" ? "the day before, morning" : "the day before, afternoon or evening") + (Number(s.limit) > 0 ? " · limit " + s.limit + " kg" : "") + " · " + s.fitness + " fitness · emphasis " + s.emphasis
-            : s.spp && !s.classic ? "Strength, Power and Physique's 12-week cycle, on repeat" + (sppFrom && sppFrom > dayIso ? ", from " + fmtDate(sppFrom) + ", after the Prep you're on" : "") + ". Settings → Fight booked? builds a camp."
+          {s.booked ? s.rounds + " × " + s.mins + " · " + s.rest + " s rest · weigh-in " + (s.weighIn === "day" ? "on the day" : s.weighIn === "am" ? "the day before, morning" : "the day before, afternoon or evening") + (Number(s.limit) > 0 ? " · limit " + s.limit + " kg" : "") + " · " + s.fitness + " fitness · emphasis " + s.emphasis
+            : s.spp ? "Strength, Power and Physique's 12-week cycle, on repeat" + (sppFrom && sppFrom > dayIso ? ", from " + fmtDate(sppFrom) + ", after the Prep you're on" : "") + ". Settings → Fight booked? builds a camp."
             : "Prep's 16-week cycle, on repeat. Settings → Fight booked? builds a camp."}
         </div>
         {st.planNote ? <Note c={C.brass}>{st.planNote}</Note> : null}

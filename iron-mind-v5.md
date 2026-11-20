@@ -35,7 +35,7 @@ Your stage (Progression page) decides what goes in the three slots marked ★. E
 1. **Three physiological sighs.** Full breath in through the nose, a second short sip on top, one long slow exhale through the mouth, longer than the inhale. Three times. The fastest reliable way to bring the body down, and you're rehearsing the rescue tool while calm so it's automatic under stress.
 2. **The one thing.** Sixty seconds, in your head, four questions in order: *What is the one thing that, done today, makes the day a win?* → *See it done.* → *What's most likely to stop me?* → *When that happens, I will…* Marcus Aurelius did a version of this at dawn every day; the modern research on if-then planning shows it roughly doubles the odds a hard intention gets acted on.
 
-**IN THE SESSION · free — written on the Optimal 8 Fighter session pages, run from that app**
+**IN THE SESSION · free — written on the training app's session pages, run from that app**
 
 Nose breathing and Ujjayi on everything easy; round-recovery breathing in every fight-sim rest; the 60-second settle after the last interval on Tuesday and Thursday; the post-max sit after Sunday's rounds; and this week's hardship test, wherever it rides. None of it is looked up here. It's on the page of the session it belongs to, and the app puts it in front of you at the moment it happens.
 
@@ -256,9 +256,9 @@ These are the tools you were drawn to at the start. They're here, with the brake
 - Heat: sauna 15–20 minutes, once or twice a week if available, breath slow and nasal, sitting still — the same practice at the other end of the thermometer. Never straight into cold from heat before a training day.
 - No-music training as the default, not the exception. Sixty to ninety minutes of silence a week.
 - Combined stressors: cold with the four-station drill running; the wall sit with Breathe Light.
-**Gate: twelve weeks, plus a completed Hell Week.**
+**Gate: twelve weeks.**
 
-**THE CEILING** — Hell Week two or three times a year (the training app's IRON switch runs it, in a week without a max or a test day), one deliberate comfort-deprivation day a quarter — no phone, no music, plain food, cold water, the floor slept on — and the solo half-day sit. **Visit the ceiling. Don't live there.**
+**THE CEILING** — one deliberate comfort-deprivation day a quarter — no phone, no music, plain food, cold water, the floor slept on — and the solo half-day sit. **Visit the ceiling. Don't live there.**
 
 ### THE FIVE TESTS — one a week, rotating, mind and body scored together
 
@@ -272,11 +272,11 @@ Each **replaces** a finisher or rides an existing session — never added on top
 
 ### THE COLLISION RULES — precedence, fixed
 
-1. **Optimal 8 Fighter owns your body's budget.** Iron Mind attaches to what remains; its only standalone claims are seated minutes and the shower.
-2. **Cold:** weekdays in the after-work shower. Never within the hour before training. Weekends, not within four hours after the session — cold straight after lifting blunts the adaptation you just paid for — so Saturday and Sunday cold is evening cold. Hell Week's cold finishes are fine; there's no lifting adaptation that week to blunt.
+1. **The training program owns your body's budget.** Iron Mind attaches to what remains; its only standalone claims are seated minutes and the shower.
+2. **Cold:** weekdays in the after-work shower. Never within the hour before training. Weekends, not within four hours after the session — cold straight after lifting blunts the adaptation you just paid for — so Saturday and Sunday cold is evening cold.
 3. **Holds and cold never together.**
-4. **Fasts:** none in a training week beyond the hungry hour. Extended fasts happen on Hell Week day six only — never in a training week; they fight the 5pm feeds that run your weekend.
-5. **Taper weeks 15–16 of the training cycle: no maximal hardship sessions.** Breath, sits and the daily core continue; the tests pause.
+4. **Fasts:** none beyond the hungry hour. Extended fasts fight the 5pm feeds that run your weekend.
+5. **A taper week (the switch in Settings → Iron Mind): no maximal hardship sessions.** Breath, sits and the daily core continue; the tests pause.
 6. **One hardship test per week. Never two.**
 
 ---
@@ -390,9 +390,9 @@ The strap tells you if it's working: resting heart rate down over months, HRV up
 | 1–4 | Stage 1 · counting, body scan, walking · 12 min | Stage 1 · calm · box, coherent, nasal, diaphragm | Level 1 · cold 30–60s, a hold, silence, one test | 28 days done · 3 clean cycles · BOLT 20s |
 | 5–8 | Stage 2 · count then follow, noting, goodwill, candle, rehearsal · 15 min | Stage 2 · tolerate · Breathe Light, CO2 table, walking holds, alternate-nostril | Level 1 continues | Level 1 gate at week 8 |
 | 9–12 | Stage 2 · 20 min · focus under load | Stage 2 continues | Level 2 · cold 2–3 min, countback hold, the hungry hour | 5 clean cycles · BOLT 25s · no panic response to mild air hunger |
-| 13–16 | Stage 3 · open awareness, switch drill, moving focus · 20 min, Sunday 30 | Stage 3 · control · kumbhaka ratio, humming, O2 table, altitude walks, sensation exposure | Level 2 continues; **taper weeks 15–16: tests pause** | Level 2 gate: no gasp |
-| 17–24 | Stage 3 continues · access concentration may appear | Stage 3 continues | Level 3 · plunge, heat, combined stressors, silence 60–90 | 10 clean cycles · BOLT 35s · sensation exposure = boredom · a completed Hell Week |
-| 25+ | Stage 4 · shikantaza, 30–60 min sits, the half-day | Stage 4 · power · Wim Hof, FRC holds, effort holds, Kapalabhati, extended kumbhaka | The ceiling · Hell Week 2–3×/year, the deprivation day | 20 clean cycles · a 60-minute sit · a full day |
+| 13–16 | Stage 3 · open awareness, switch drill, moving focus · 20 min, Sunday 30 | Stage 3 · control · kumbhaka ratio, humming, O2 table, altitude walks, sensation exposure | Level 2 continues; **a taper week: tests pause** | Level 2 gate: no gasp |
+| 17–24 | Stage 3 continues · access concentration may appear | Stage 3 continues | Level 3 · plunge, heat, combined stressors, silence 60–90 | 10 clean cycles · BOLT 35s · sensation exposure = boredom |
+| 25+ | Stage 4 · shikantaza, 30–60 min sits, the half-day | Stage 4 · power · Wim Hof, FRC holds, effort holds, Kapalabhati, extended kumbhaka | The ceiling · the deprivation day, the half-day sit | 20 clean cycles · a 60-minute sit · a full day |
 
 The training cycle and this program don't have to line up; when the training program restarts at week 1, this one keeps counting. Clear the gates honestly. The program only fails if you lie to yourself about where you are.
 

@@ -1,16 +1,15 @@
 import { describe, it, expect } from "vitest";
 import prepMd from "../optimal-8-prep.md?raw";
 import campMd from "../optimal-8-camp.md?raw";
-import fighterMd from "../optimal8fighter.md?raw";
 import { CORE_SINCE, CORE_CUE, withCore, coreMins } from "./core.js";
 import { AUDIT_SINCE } from "./audit.js";
 import { prepSess, prepRx } from "./prep.js";
 import { campSess, campMaster } from "./camp.js";
-import { sessionCatalog, fighterSess } from "./App.jsx";
+import { sessionCatalog } from "./App.jsx";
 import { libFor } from "./library.js";
 
 /* ================================================================
-   THE CORE IN PREP, THE CAMP AND FIGHTER — from Monday 23 November
+   THE CORE IN PREP AND THE CAMP — from Monday 23 November
    2026: at least three exercises for the abs and the core every
    training day, more rotation, and the kneeling jump into a box jump
    in the box jumps' place. Before that Monday every page reads as it
@@ -117,36 +116,11 @@ describe("the core in the camp", () => {
   });
 });
 
-describe("the core in Fighter", () => {
-  const F = (d) => withCore("fighter", d, fighterSess(d));
-  const names = (d, rx) => on(F(d), rx).map((b) => v(b.n, rx));
-  it("the new three on Monday, Wednesday, Thursday and Saturday, at the end; Tuesday's drops straight after the trunk block", () => {
-    const rx = { au: true, acc: 3 };
-    expect(names("mon", rx).slice(-2)).toEqual(["Cable Crunch + Dead Bug", "Cable Woodchop"]);
-    expect(names("tue", rx).slice(-3)).toEqual(["Trunk", "Medicine-Ball Drops", "Seated Calf Raise + Achilles Hold"]);
-    expect(names("wed", rx).slice(-1)).toEqual(["Weighted Decline Sit-Up + Landmine Rotation"]);
-    expect(names("thu", rx).slice(-2)).toEqual(["Reverse Crunch + Dumbbell Side Bend", "Cable Woodchop"]);
-    expect(names("sat", rx).slice(-1)).toEqual(["Hanging Leg Raise + Landmine Rotation"]);
-    const drops = named(F("tue"), rx, "Medicine-Ball Drops");
-    expect(items(drops, rx).map((i) => [i.n, i.s])).toEqual([["Medicine-ball drops", "2 × 8 · a 3 kg ball, up to 6"]]);
-  });
-  it("three rounds, two in the lighter weeks, none in test week or Hell Week, and none in the last ten days", () => {
-    const sets = (rx) => { const p = named(F("sat"), rx, "Hanging Leg Raise + Landmine Rotation"); return p ? items(p, rx).map((i) => i.sets) : null; };
-    expect(sets({ au: true, acc: 3 })).toEqual([3, 3]);
-    expect(sets({ au: true, acc: 2 })).toEqual([2, 2]);
-    expect(sets({ au: true, acc: 3, test: 1 })).toBe(null);
-    expect(sets({ au: true, acc: 3, hell: 1 })).toBe(null);
-    F("mon").b.filter((b) => /^C[RWD]$/.test(b.L)).forEach((b) => expect(b.noTaper).toBe(1));
-  });
-  it("Monday's power dose: the minute of legs, then the kneeling jump into box jump, 3 × 2", () => {
-    const rx = { au: true, acc: 3 }, C = F("mon").b.find((b) => b.L === "C");
-    expect(v(C.rxLine, rx)).toBe("one minute of legs, then kneeling jumps into box jumps 3 × 2");
-    expect(items(C, rx).map((i) => i.n)).toEqual([items(C, rx)[0].n, "Kneeling jump into box jump"]);
-    expect(items(C, rx)[1].id).toBe("boxjump_kneel");
-  });
-  it("adds about 40 minutes a week at three rounds", () => {
-    const rx = { au: true, acc: 3, sim: {} };
-    expect(["mon", "tue", "wed", "thu", "sat"].map((d) => v(F(d).m, rx) - v(fighterSess(d).m, rx))).toEqual([11, 2, 8, 11, 8]);
+describe("the core · Fighter is retired", () => {
+  it("lays nothing over the classic's old pages: Fighter was taken out on 23 November 2026", () => {
+    const page = { b: [{ L: "C", n: "Power dose — box jumps" }], m: 65 };
+    expect(withCore("fighter", "mon", page)).toBe(page);
+    expect(withCore("fighter", "tue", page)).toBe(page);
   });
 });
 
@@ -160,7 +134,7 @@ describe("the core · before 23 November, nothing changes", () => {
     });
     const B = withCore("prep", "tue", prepSess("tue")).b.find((b) => b.L === "B");
     expect(items(B, rx).some((i) => /Kneeling/.test(i.n))).toBe(false);
-    expect(coreMins(withCore("fighter", "mon", fighterSess("mon")).b.filter((b) => /^C[RW]$/.test(b.L)), { au: false, acc: 3 })).toBe(0);
+    expect(coreMins(withCore("prep", "mon", prepSess("mon")).b.filter((b) => /^C[RW]$/.test(b.L)), Object.assign({}, prepRx(2), { au: false }))).toBe(0);
   });
   it("the early-2026 cycle has no core cards and keeps its box jumps", () => {
     const cyc = CAT.filter((c) => c.set === "cycle");
@@ -173,8 +147,8 @@ describe("the core · before 23 November, nothing changes", () => {
 });
 
 describe("the core · the documents", () => {
-  it("Prep, the camp and Fighter each write it, and name every exercise", () => {
-    [prepMd, campMd, fighterMd].forEach((md) => {
+  it("Prep and the camp each write it, and name every exercise", () => {
+    [prepMd, campMd].forEach((md) => {
       expect(md).toMatch(/^## THE CORE — FROM MONDAY 23 NOVEMBER$/m);
       const sec = md.slice(md.indexOf("## THE CORE — FROM MONDAY 23 NOVEMBER"), md.indexOf("\n---\n", md.indexOf("## THE CORE — FROM MONDAY 23 NOVEMBER")));
       ["Cable crunch", "Dead bug", "Cable woodchop, high to low", "Weighted decline sit-up", "Landmine rotation", "Reverse crunch", "Dumbbell side bend", "Cable woodchop, low to high", "Hanging leg raise", "Kneeling jump into box jump"]
@@ -183,7 +157,5 @@ describe("the core · the documents", () => {
     });
     expect(prepMd).toMatch(/About 38 minutes a week at three rounds/);
     expect(campMd).toMatch(/About 26 minutes a week at two rounds/);
-    expect(fighterMd).toMatch(/About 40 minutes a week at three rounds/);
-    expect(fighterMd).toContain("**Medicine-ball drops** — Tuesday, 2 × 8");
   });
 });

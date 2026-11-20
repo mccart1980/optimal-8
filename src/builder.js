@@ -254,7 +254,6 @@ function genPlan(plan, ctx, horizon) {
     } else if (tp.end === cur) afterFight = true;
   }
 
-  if (plan.inputs && plan.inputs.classic && !plan.inputs.booked) return { rows, classic: true };
   const booked = !!(inp.booked && inp.fight && monOf(inp.fight) >= cur);
   /* a Prep already running when this plan starts — its weeks back to its
      first, or to the week after its last test week — carries on, unless
@@ -379,7 +378,7 @@ export function buildSeason(o) {
   const strapBack = o.strapBack || (() => true);
   const head = o.head || null;
   const horizon = addDays(todayMon, 7 * 26);
-  let rows = [], classic = false;
+  let rows = [];
   plans.forEach((plan, i) => {
     const next = plans[i + 1];
     /* what came before this plan */
@@ -411,7 +410,6 @@ export function buildSeason(o) {
     };
     const g = genPlan(plan, ctx, horizon);
     let mine = g.rows;
-    classic = !!g.classic && !mine.length;
     const pre = mine.length && mine[0].program === "pre" ? mine[0] : null;
     if (pre) {
       /* the week before the camp lands on a week already under way: the
@@ -437,7 +435,7 @@ export function buildSeason(o) {
      transition's weeks keep their keys whenever the answer comes */
   const tag = (r, i) => { const m = r.hold ? "H" : mac[r.program]; cnt[m] = (cnt[m] || 0) + 1; r.mac = m; r.kw = cnt[m]; r.seq = i; };
   rows.forEach((r, i) => { if (r.under) { tag(r.under, i); r.under.overlaid = 1; } tag(r, i); });
-  return { rows, classic, today, todayMon };
+  return { rows, today, todayMon };
 }
 
 /* "4–10 Jan", "26 Oct–1 Nov"; fight week ends on the fight */
@@ -726,7 +724,7 @@ export function describeSeason(season, from) {
       return "Prep carries on: " + on.map((r) => r.id).join(" · ") + ", test day " + fmtD(addDays(t.mon, 5)) + "; then Prep's 16-week cycle from " + fmtD(addDays(t.mon, 7)) + "."; }
     return "Prep's 16-week cycle from " + fmtD(prep[0].mon) + (prep[0].comeback ? ", easing you back in" : "") + ".";
   }
-  return "Optimal 8 Fighter, the classic.";
+  return "";
 }
 
 /* the fade decides the fitness: under 75% low, 75–84% moderate, 85% or more good */

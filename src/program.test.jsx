@@ -142,27 +142,6 @@ describe("the programs, as the gym runs them", () => {
     expect(c.pres).toMatch(/^4 × 4/);
   });
 
-  it("the Fighter's Sunday has the Nordics ahead of the fight simulation, and Friday is empty", () => {
-    const n = names("fighter", 8, "sun");
-    const nord = n.findIndex((x) => /Nordic/.test(x)), sim = n.findIndex((x) => /Simulation/.test(x));
-    expect(nord).toBeGreaterThanOrEqual(0);
-    expect(nord).toBeLessThan(sim);
-    expect(names("fighter", 2, "fri")).toEqual([]);
-  });
-
-  it("the Fighter's week 8 pause squat is at 75%", () => {
-    expect(day("fighter", 8, "wed").find((c) => /Pause Squat|Speed Squat/.test(c.n)).pres).toMatch(/75%/);
-  });
-
-  it("the Fighter's Wednesday is as it was: the pause squat and the Romanian deadlift, its own numbers", () => {
-    const n = names("fighter", 2, "wed");
-    expect(before(n, "Trap Bar Deadlift", "Pause Squat")).toBe(true);
-    expect(before(n, "Pause Squat", "Romanian Deadlift")).toBe(true);
-    expect(day("fighter", 2, "wed").find((c) => c.n === "Pause Squat").pres).toMatch(/^3 × 3 · 68%/);
-    expect(day("fighter", 2, "wed").find((c) => c.n === "Romanian Deadlift").pres).toMatch(/^3 × 6/);
-    expect(names("fighter", 2, "sat")).not.toContain("Romanian Deadlift");
-  });
-
   it("PROGRESS reads each program's own weeks: Prep's keys parse, and the classic and the camp read what they always read", () => {
     expect(parseKey("mPw12-thu-p_e2_erg")).toEqual({ macro: "P", week: 12, day: "thu", id: "p_e2_erg" });
     expect(parseKey("mCw3-sun-c_fs_rd1").macro).toBe("C");

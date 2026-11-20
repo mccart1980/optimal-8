@@ -1,9 +1,9 @@
 # Fighter
 
-Fighter is the companion app for the Optimal 8 fighter build (v1.5) with Iron Mind v5
-running inside it — a 16-week strength and conditioning cycle, the twenty
-minutes of RANGE that runs at home every evening, and the mental training that
-attaches to it. One app, one day, one streak. It runs in your phone's browser,
+Fighter is the companion app for the Optimal 8 programs — Strength, Power and
+Physique, Prep and the camp — with Iron Mind v5 running inside it: the training,
+the twenty minutes of RANGE that runs at home every evening, and the mental
+training that attaches to it. One app, one day, one streak. It runs in your phone's browser,
 keeps everything on the phone itself, and works with no signal once you've
 added it to your home screen.
 
@@ -60,14 +60,14 @@ are four tabs: **TODAY · PROGRESS · FOOD · MORE**.
 - **FOOD** holds the menu (each feed's options and swaps), COOK, SHOP and
   the water for the day.
 - **MORE** holds PLAN (every document, this week's map and the season
-  strip), the GUIDE, the Iron library (breathe, sit, hardship, life, season,
-  Hell Week) and SETTINGS.
+  strip), the GUIDE, the Iron library (breathe, sit, hardship, life, season)
+  and SETTINGS.
 
 - **COOK** and **SHOP** are the fuel app's, unchanged, under FOOD.
 - **PROGRESS → REFEREE** is the fuel app's referee — weight, waist, arm and
   shoulder, the charts, and the feedback-loop rules read off your numbers — next
   to the dashboard, which now reads bodyweight and waist from it.
-- **MORE → PLAN** holds every document: PREP, CAMP, FIGHTER, IRON MIND v5 and v4.2,
+- **MORE → PLAN** holds every document: PREP, CAMP, STRENGTH & POWER, MOVE, IRON MIND v5 and v4.2,
   and the four fuel documents.
 - **MORE → GUIDE** is one plain-English guide with one live panel: this week's block,
   the food phase, the tests this week, and the next feed.
@@ -110,14 +110,14 @@ are four tabs: **TODAY · PROGRESS · FOOD · MORE**.
   Monday 16 November: the movement block every gym morning, RANGE re-aimed,
   Sessions A and B, levels and fifteen standards (src/move.js), and from
   Monday 23 November its tendon work — the lower pushes, the hip pair, the
-  towel calf raise and the upper pushes. Prep, the camp, the transition and
-  the classic get it laid over their own pages (src/movex.js). From the same
+  towel calf raise and the upper pushes. Prep, the camp and the transition
+  get it laid over their own pages (src/movex.js). From the same
   Monday, Strength, Power and Physique runs the changes of the audit of 19
   November (AUDIT_SINCE, src/spp.js): the 4 × 4 written for the treadmill,
   the pressure rounds' third minute arms only, the knuckle hold, a second
   dose of the medicine-ball drops, a bar speed on the trap bar jumps, bench
   throws and landmine push press, and the power tests in weeks 4, 8 and 12.
-  Prep, the camp and the classic run its changes from the same Monday, each
+  Prep and the camp run its changes from the same Monday, each
   behind the week's `au` (src/audit.js): the SkiErg out — the rounds' first
   third is the assault bike with the arms only, and a round logs the bike's
   calories — the one-arm landmine push press in the barbell push press's
@@ -127,9 +127,12 @@ are four tabs: **TODAY · PROGRESS · FOOD · MORE**.
   (src/core.js): at least three exercises for the abs and the core every
   training day, more rotation, and the kneeling jump into a box jump in the
   box jumps' place. Strength, Power and Physique has its own cards
-  (src/spp.js); Prep, the camp and the classic get the same days laid over
-  their pages, at rounds that follow each program's lighter weeks.
-  Optimal 8 Fighter is still there as the classic.
+  (src/spp.js); Prep and the camp get the same days laid over their pages,
+  at rounds that follow each program's lighter weeks.
+  Optimal 8 Fighter, the classic, and its Hell Week were retired on 23
+  November 2026: settings saved on it run Prep's cycle from the Monday its
+  clock ran from, and the weeks logged on it stay in the app's data and its
+  backups.
 - **Yes:** the date, the rounds and minutes, the rest between rounds (1 minute
   unless you change it), the weigh-in (the day before or on the day), how fit
   you are right now (low, moderate, good) and one emphasis (none, power,
@@ -175,7 +178,7 @@ low, durability, from Monday 12 October) reproduces Worked Example 1 week by
 week; Prep with 14 weeks is Optimal 8 · Prep and with 4 weeks P4, P7, P8, P14;
 a scan of every generated week finds no exercise, load or session type outside
 the three documents; and a scan of every generated week — every fitness level,
-format and emphasis, at every camp length, and the Fighter's pages too — finds
+format and emphasis, at every camp length — finds
 no released-weight jump, no true max, and no full depth jumps before the tendon
 ramp allows them.
 
@@ -267,7 +270,7 @@ Every conditioning card logs its output; PROGRESS charts it against the last
 session of the same type.
 
 PROGRESS reads the program you're on: Prep's own weeks in Prep, the camp's in
-the camp, the classic's in the classic — the dashboard's fade, 20-minute test,
+the camp, Strength, Power and Physique's in it — the dashboard's fade, 20-minute test,
 burst decrement and recovery heart rate, MEASURE's sessions by type, the bar
 speeds and the recovery chart. In Prep and the camp the bar speed charted is
 the first work set's, at that set's own load.
@@ -345,12 +348,7 @@ that are two or three entries at once ("Hands", "Neck").
 
 `npm run build` runs `src/library.test.jsx` first: it walks every card of
 every season the builder makes — Prep, every camp shape, the week before a
-camp, the transition — and the Fighter, and stops the build if any of them has
-no entry. The October library dropped seven entries only the classic Fighter
-still named; the Romanian deadlift came back when Prep took it up. The other
-six (bear crawls, breathe down, the chest-supported row, the clap push-up,
-the side plank reach-through, the mid-thigh pull) show the Fighter's own
-words.
+camp, the transition — and stops the build if any of them has no entry.
 
 ## TODAY — one thing at a time
 
@@ -394,7 +392,7 @@ tab, comes straight back.
 
 ## Where your data lives
 
-Everything — your maxes, ticked sessions, notes, body weight, Hell Week scores,
+Everything — your maxes, ticked sessions, notes, body weight, any Hell Week scores from before it was retired,
 your calisthenics levels and the dates you owned them, your four range tests,
 the morning numbers, the erg outputs, the bar speeds, your photos,
 and the whole Iron Mind side: the day's ticks, your sits, your BOLT and your
@@ -505,28 +503,13 @@ first if there's anything in there you want to keep.
 
 ## Settings worth knowing
 
-- **Monday of week 1** — tells the app where you are in the cycle. If the
-  header shows the wrong week, fix it here, or open the **WEEK** tab, find the
-  right week and tap "make this the current week".
-- **Iron Mind weeks 17–18 (Hell Week + Reload)** — off by default, which gives
-  you the standard **16-week** cycle: test day at the end of week 16, then
-  straight into week 1 again. Turn it on if you want Hell Week and the Reload
-  bolted on the end, making it an 18-week cycle.
 - **Bell sounds and the feed chime** — under **Sound**, on by default, with the
   choice for the phone's silent switch next to it (see THE LOOK AND THE SOUND).
 - **Auto rest clock** — confirming a set starts its rest countdown by itself. On
   by default.
 - **Light or dark** — AUTO follows the phone; LIGHT and DARK hold one.
 - The page is long, so it has a row of jumps at the top: THE DAY, LOOK, SOUND,
-  CYCLE, RANGE AND MOVE, CALISTHENICS, IRON MIND, BACKUP.
-- **CAMP MODE** — ON, Optimal 8 · Camp runs *in place of* Optimal 8 Fighter:
-  the ten-week camp from `optimal-8-camp.md`, with its own dated week table,
-  its own session pages, its own timers and its own tests, counting from its own
-  start date. OFF, Optimal 8 Fighter is exactly as it was, counting from its own
-  start date underneath. See **Camp mode** below.
-- **The last ten days before a fight** (Fighter only) — strips the Fighter's
-  loading right down: every lift to 2 sets at 70%, fast, no sprints, no depth
-  jumps, no Nordics, and the jump circuit becomes box jumps only.
+  REST CLOCK, RANGE AND MOVE, CALISTHENICS, IRON MIND, BACKUP.
 - **RANGE week 1 began** — RANGE has its own twelve-week clock, so it keeps
   counting when the training cycle restarts at week 1. Twelve weeks of the
   twenty-minute block, then THE KEEP at ten minutes for good; the four tests on
@@ -577,7 +560,7 @@ TODAY.
 
 Turn **CAMP MODE** on in settings and the whole app switches over to
 `optimal-8-camp.md`: ten weeks ending on the fight, running in place of
-Optimal 8 Fighter. With a fight date of **Saturday 13 March 2027** it runs
+Prep or Strength, Power and Physique. With a fight date of **Saturday 13 March 2027** it runs
 **4 January to 13 March**, and PREP ends on its test day, **2 January**.
 
 - **The blocks** — foundation (week 1), build (2–4), easy + tests (5), peak
@@ -628,14 +611,13 @@ off by hand.
   low-box through week 5 and depth jumps in the peak; from low fitness drop
   landings for the camp's first two weeks, low-box from week 3, full depth jumps
   not before week 4; engine weeks and the durability emphasis never full depth
-  jumps. Optimal 8 Fighter climbs the same stages (1–5, 6–10, 11–16).
+  jumps.
 - **The bench throw** runs off the Smith machine's safety stops: every row with
   a bench throw carries its library entry with the set-up.
 - **No true maxes.** Week 9 and test week are top triples: the card shows the
   ramp off your working max, you log the heaviest clean triple, and the app sets
   the working max to triple × 1.08 and loads the 2 × 2 back-off at 85% of it.
-  Test week's triples are the camp's working weights too. The Fighter's weeks 4
-  and 9, and its test day, are top triples as well.
+  Test week's triples are the camp's working weights too.
 - **The tendon gate.** Achilles or knee at 3 or more on Sunday: no reactive
   jumps next week, the holds carry on; back under 3, the jumps restart one stage
   down for a week. Hamstring at 3 or more: no flying sprints next week, and the
@@ -735,7 +717,7 @@ After changing the icon, raise the `?v=` number on the two icon links in
 `index.html`, so a phone that kept a copy of the old picture fetches the new one.
 
 - `src/App.jsx` — the training app: the macrocycle table, the session cards,
-  protocols, timers, camp mode and Hell Week.
+  protocols and timers.
 - `src/metrics.js` — the measurement layer's arithmetic, with no React in it:
   the rolling averages and the baseline, the yellow/red flag, the recovery drop,
   the easy zone, the output slots for each session shape, the fade, the sleep
@@ -789,7 +771,7 @@ After changing the icon, raise the `?v=` number on the two icon links in
 - `src/velocity.js` — the load-velocity line, the phase targets it draws, the
   first-work-set verdict and the stop thresholds.
 - `src/season-ui.jsx` — the SEASON strip, the GUIDE tab and the profile screen.
-- `src/mdview.jsx` — renders `optimal8fighter.md` and `iron-mind-v5.md` in the
+- `src/mdview.jsx` — renders the program documents and `iron-mind-v5.md` in the
   PLAN tab, offline, with a table of contents. Those two files are the source of
   truth; the app imports them directly.
 - `src/fuel.js` — the fuel app as data: the blocks, the slots and their

@@ -8,8 +8,7 @@ import { pairEntries } from "./metrics.js";
 
 /* THE BOXES. In PREP and CAMP every value a result asks for has its own
    labelled box: the number pad for a number, the keyboard for a word, the
-   time picker for a time, big buttons for a choice. The classic Fighter's
-   boxes are exactly as they were. */
+   time picker for a time, big buttons for a choice. */
 
 const plans = [{ from: "2026-10-12", made: "2026-10-08", inputs: { booked: true, fight: "2026-11-28", rounds: 3, mins: 2, rest: 60, weighIn: "before", fitness: "low", emphasis: "durability" } }];
 const camp = (extra) => Object.assign({ start: "2026-09-28", macroBase: 1, iron: false, sound: false, autoRest: true, medStage: 1, breathStage: 1, hardLevel: 1, sitLen: 30,
@@ -18,7 +17,6 @@ const camp = (extra) => Object.assign({ start: "2026-09-28", macroBase: 1, iron:
 const prep = (extra) => Object.assign({ start: "2026-01-05", macroBase: 1, iron: false, sound: false, autoRest: true,
   medStage: 1, breathStage: 1, hardLevel: 1, sitLen: 30, imStart: "2026-01-05", rangeStart: "2026-01-05",
   camp: false, lastTen: false, taper: false, levelStart: "2026-01-05", program: "prep", v12: true }, extra || {});
-const fighter = (extra) => prep(Object.assign({ program: "fighter" }, extra || {}));
 /* the ten-round camp from the stop rule's own test */
 const camp10 = { booked: true, fight: "2027-03-13", rounds: 6, mins: 3, rest: 60, weighIn: "before", fitness: "good", emphasis: "none" };
 const ten = () => prep({ program: "prep", plans: [{ from: "2027-01-04", made: "2026-12-31", inputs: camp10 }], season: camp10, fightDate: "2027-03-13" });
@@ -244,7 +242,7 @@ describe("the conditioning sessions", () => {
 });
 
 describe("the bar speed", () => {
-  it("PREP and the camp: hold the lockout until Spleeft beeps, above the box; the classic as it was", async () => {
+  it("PREP and the camp: hold the lockout until Spleeft beeps, above the box", async () => {
     await at("2026-01-07", prep());
     pick("Trap Bar Deadlift");
     expect(within(card()).getByTestId("lockout-line").textContent).toBe("SPLEEFT: HOLD THE LOCKOUT UNTIL IT BEEPS, THEN THE NEXT REP. NO NEED TO RACK THE BAR BETWEEN REPS.");
@@ -254,10 +252,6 @@ describe("the bar speed", () => {
     await at("2026-10-14", camp());
     pick("Trap Bar Deadlift");
     expect(within(card()).getByTestId("lockout-line")).toBeInTheDocument();
-    cleanup();
-    await at("2026-01-14", fighter());
-    pick("Trap Bar Deadlift");
-    expect(within(card()).queryByTestId("lockout-line")).toBe(null);
   });
 });
 
@@ -357,33 +351,6 @@ describe("one number, words, choices and times", () => {
     pick("Weekly Check");
     expect(box("LIGHTS-OUT TIME, AVERAGED").type).toBe("time");
   });
-});
-
-describe("the classic Fighter", () => {
-  it("its sled, settle, settle2, wr_lights, cond, cond2, jump, fs_rd1 and fs_rd6 are exactly as before", async () => {
-    const want = [
-      ["2026-01-06", "4-MINUTE INTERVALS", [["OUTPUT / PEAK HR", "decimal", "text"]]],
-      ["2026-01-06", "The 60-Second Settle", [["SECONDS", "decimal", "text"]]],
-      ["2026-01-07", "Heavy Sled Sprints", [["LOAD (KG) · TIME (S)", "decimal", "text"]]],
-      ["2026-01-08", "40-SECOND REPEATS", [["OUTPUT / PEAK HR", "decimal", "text"]]],
-      ["2026-01-08", "The 60-Second Settle", [["SECONDS", "decimal", "text"]]],
-      ["2026-01-10", "Drop Landings", [["HEIGHT / QUALITY", "decimal", "text"]]],
-      ["2026-01-18", "Fight Simulation", [["ROUND 1 OUTPUT (SKIERG M / BIKE CAL)", "decimal", "text"], ["ROUND 6 OUTPUT (SKIERG M / BIKE CAL)", "decimal", "text"]]],
-    ];
-    for (const [d, n, b] of want) {
-      await at(d, fighter());
-      pick(n);
-      expect([d, n, boxes()]).toEqual([d, n, b]);
-      expect(card().querySelector("[data-out-id], [data-testid=erg-panel], [data-testid=recovery-hr], [data-testid=round-fade], [aria-pressed]")).toBe(null);
-      cleanup();
-      localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
-    }
-    await at("2026-01-11", fighter());
-    pick("Weekly Check");
-    expect(box("LIGHTS-OUT TIME, AVERAGED (E.G. 21:30)").type).toBe("text");
-    expect(box("LIGHTS-OUT TIME, AVERAGED (E.G. 21:30)").inputMode).toBe("decimal");
-    expect(card().querySelector("[data-out-id]")).toBe(null);
-  }, 60000);
 });
 
 describe("the guide", () => {

@@ -1,6 +1,6 @@
 # OPTIMAL 8 · STRENGTH, POWER AND PHYSIQUE
 
-**Twelve weeks to make you as strong, as explosive and as muscular as you can be, six days a week, with the base of your engine built underneath. It runs in three blocks — size, then strength, then power — and every block keeps all three going. It's its own programme, beside Prep and Optimal 8 Fighter: Settings → Fight booked? No → What runs → STRENGTH, POWER, PHYSIQUE. Neither of them changes.**
+**Twelve weeks to make you as strong, as explosive and as muscular as you can be, six days a week, with the base of your engine built underneath. It runs in three blocks — size, then strength, then power — and every block keeps all three going. It's its own programme, beside Prep: Settings → Fight booked? No → What runs → STRENGTH, POWER, PHYSIQUE. Prep doesn't change.**
 
 Picked while a Prep is running, the Prep carries on to its test day and the twelve weeks start the Monday after. The weeks are S1 to S12 in the app; after S12 the cycle starts again from the new working maxes. Book a fight and the fight's plan takes over from the next Monday. The food is yours: the app runs the day as printed.
 

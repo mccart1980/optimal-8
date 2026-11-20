@@ -384,7 +384,7 @@ In each test week, on Monday, two numbers are logged: the heaviest towel calf ra
 
 ## MOVE IN EVERY PROGRAM
 
-MOVE and its tendon work run in Prep, the camp, the transition and Optimal 8 Fighter as they do in Strength, Power and Physique. Its week count carries on from program to program; it never starts again. Each program's document has its own table.
+MOVE and its tendon work run in Prep, the camp and the transition as they do in Strength, Power and Physique. Its week count carries on from program to program; it never starts again. Each program's document has its own table.
 
 - **The movement blocks**, in the warm-up's place: Monday hips, ankles and overhead · Tuesday hips, balance and sprint prep · Wednesday hips, knees and lower back · Thursday lower back and shoulders · Saturday hips, balance and sprint prep · Sunday the whole body, then the power prep. A warm-up's own lift sets and primers are the block's last rows.
 - **The lower pushes** on Tuesday, Thursday and Saturday: Tuesday after the pistol line, Thursday in the Spanish squat hold's and the Achilles hold's place, Saturday straight after the side bounds. **The hip pair** at the end of Wednesday and Saturday. **The towel calf raise** in Tuesday's Achilles hold's place, on the standing machine, 2 × 6–10. **The back extension** after Sunday's core block. THE BRACE's Copenhagen becomes the side plank, and Fighter's Tuesday trunk block loses its Copenhagen, so the groin rests the day before the hip pair.

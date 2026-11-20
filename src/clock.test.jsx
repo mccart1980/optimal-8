@@ -58,9 +58,10 @@ describe("how many weeks", () => {
   });
 });
 
-describe("Optimal 8 Fighter's week, on the screen", () => {
-  /* the classic from Monday 5 January 2026, sixteen weeks a cycle: the
-     third cycle's week 1 is Monday 17 August, the fourth's Monday 7 December */
+describe("a phone saved on Optimal 8 Fighter, on the screen", () => {
+  /* the classic's settings from Monday 5 January 2026. Fighter was retired
+     on 23 November 2026, so they run Prep's 16-week cycle from that Monday:
+     the third cycle's week 1 is Monday 17 August, the fourth's Monday 7 December */
   const classic = { start: "2026-01-05", macroBase: 1, iron: false, sound: false, autoRest: true, medStage: 1, breathStage: 1, hardLevel: 1, sitLen: 30,
     imStart: "2026-01-05", rangeStart: "2026-01-05", camp: false, lastTen: false, taper: false, levelStart: "2026-01-05", program: "fighter", v12: true };
   const title = () => screen.getByTestId("app-title").textContent;
@@ -75,13 +76,13 @@ describe("Optimal 8 Fighter's week, on the screen", () => {
   beforeEach(() => { vi.useFakeTimers({ toFake: ["Date"] }); });
   afterEach(() => { cleanup(); vi.useRealTimers(); });
 
-  it("week 1 of a cycle starts on its Monday in summer as it does in winter", async () => {
-    expect(await on(2026, 1, 5)).toMatch(/^Fighter · Week 1 · /);
-    expect(await on(2026, 8, 16)).toMatch(/^Fighter · Week 16 · /);
-    expect(await on(2026, 8, 17)).toMatch(/^Fighter · Week 1 · /);
-    expect(await on(2026, 8, 23)).toMatch(/^Fighter · Week 1 · /);
-    expect(await on(2026, 8, 24)).toMatch(/^Fighter · Week 2 · /);
-    expect(await on(2026, 12, 6)).toMatch(/^Fighter · Week 16 · /);
-    expect(await on(2026, 12, 7)).toMatch(/^Fighter · Week 1 · /);
+  it("Prep's cycle, week 1 of a cycle on its Monday in summer as it does in winter", async () => {
+    expect(await on(2026, 1, 5)).toMatch(/^Prep · Week 1 · /);
+    expect(await on(2026, 8, 16)).toMatch(/^Prep · Week 16 · /);
+    expect(await on(2026, 8, 17)).toMatch(/^Prep · Week 1 · /);
+    expect(await on(2026, 8, 23)).toMatch(/^Prep · Week 1 · /);
+    expect(await on(2026, 8, 24)).toMatch(/^Prep · Week 2 · /);
+    expect(await on(2026, 12, 6)).toMatch(/^Prep · Week 16 · /);
+    expect(await on(2026, 12, 7)).toMatch(/^Prep · Week 1 · /);
   });
 });

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import { play, cueFor, beatAt, rehearse, setMode as setSoundMode, MODES as SOUND_MODES } from "./sound.js";
 import { Welcome } from "./welcome.jsx";
 import "./storage.js"; // installs window.storage (localStorage-backed)
-import fighterDoc from "../optimal8fighter.md?raw";
 import ironMindDoc from "../iron-mind-v5.md?raw";
 import campDoc from "../optimal-8-camp.md?raw";
 import prepDocMd from "../optimal-8-prep.md?raw";
@@ -623,6 +622,10 @@ const engTimer = (key) => (rx) => { const e = rx[key]; const sh = key === "eng2"
     : e === "rz3" ? { kind: "rz", opt: { sets: 1 }, title: "REPEAT BURSTS · ONE SET" } : e === "easy" ? { kind: "z2", opt: { min: 20, label: "EASY ZONE 2" }, title: "EASY" } : { kind: "z2", opt: { min: 15, label: "EASY FLUSH" }, title: "EASY" }; };
 const engMin = (key) => (rx) => (rx[key] === "easy" || rx[key] === "easy15" ? 20 : 24);
 
+/* OPTIMAL 8 FIGHTER's own pages. Fighter was retired as a program on 23
+   November 2026 and nothing runs these weeks any more; the table stays
+   because the light session after head contact and a blank day's start
+   time still read it. */
 const S = {
   /* ---------------- MONDAY ---------------- */
   mon: { n: "MONDAY", t: "Upper Strength + Power Dose + Rings", m: 65, ac: C.oxide, box: 1,
@@ -1152,22 +1155,16 @@ const sayOf = (c, rx) => {
 /* Every card of every day of every program, for the library check:
    { program, week, day, n, lib, rows, say }. `rows` are the moves inside
    a warm-up or a round card, each with its own entry. `seasons` walks
-   other seasons in place of the catalog's own (and no Fighter). */
-/* the classic Fighter's own page for a day, as written */
-export const fighterSess = (day) => S[day] || null;
+   other seasons in place of the catalog's own. */
 export function sessionCatalog(only, seasons) {
-  const keepM = Object.assign({}, MODE), keepS = SEASON.s, keepC = SEASON.classic, keepE = Object.assign({}, EDGE);
+  const keepM = Object.assign({}, MODE), keepS = SEASON.s, keepE = Object.assign({}, EDGE);
   const out = [];
   const push = (program, w, day, rx, extra) => {
-    if (program === "fighter" && day === "sat" && rx.test) {
-      TESTS.filter((t) => !t.sun).forEach((t) => out.push(Object.assign({ program, week: w, day, n: t.n, lib: /top triple/i.test(t.n) ? topLib(t.n) : libFor(t.n), rows: [], say: t.n + " | " + t.d }, extra)));
-      return;
-    }
     gymCards(realBlocks(day, rx), rx).forEach((c, i) => out.push(Object.assign({ program, week: w, day, edge: program === "prep" || program === "camp" ? EDGE.manual : null, lastTen: !!MODE.lastTen, i, n: c.n, kind: c.kind, lib: c.lib, desc: c.desc || null, pres: c.pres,
       rows: (c.list || []).filter((r) => r.move).concat(c.parts || []), say: sayOf(c, rx) }, extra)));
   };
   try {
-    EDGE.ready = {}; SEASON.classic = false;
+    EDGE.ready = {};
     (seasons || CATALOG_SEASONS.filter((x) => !only || only.indexOf(x.set) >= 0)).forEach((cs) => [true, false].forEach((edge) => {
       EDGE.manual = edge;
       SEASON.s = buildSeason({ plans: cs.plans, today: cs.today });
@@ -1182,12 +1179,8 @@ export function sessionCatalog(only, seasons) {
       });
     }));
     setModeFor(null);
-    {
-      const runF = (weeks, lastTen) => { MODE.lastTen = !!lastTen; weeks.forEach((w) => DAYS.forEach((day) => { const rx = rxFor(w, day); if (rx.hell) return; push("fighter", w, day, rx, { main: true, set: "fighter" }); })); };
-      if (!only && !seasons) { runF(Array.from({ length: 18 }, (_, i) => i + 1)); runF(Array.from({ length: 16 }, (_, i) => i + 1), true); }
-    }
   } finally {
-    Object.assign(MODE, keepM); SEASON.s = keepS; SEASON.classic = keepC; Object.assign(EDGE, keepE);
+    Object.assign(MODE, keepM); SEASON.s = keepS; Object.assign(EDGE, keepE);
   }
   return out;
 }
@@ -1626,7 +1619,7 @@ const parseHHMM = (s, fallback) => { const m = String(s || "").match(/^\s*(\d{1,
 function dayClock(week, day, log, dk) {
   const rx = rxFor(week, day);
   const own = sessFor(day, rx) || S[day] || S.mon;
-  const noSess = !rx.hell && (!!rx.hold || (MODE.camp && !sessFor(day, rx)) || sleepDay(day, rx));
+  const noSess = !!rx.hold || (MODE.camp && !sessFor(day, rx)) || sleepDay(day, rx);
   const def = noSess ? 5 * 60 : START_MIN(own);
   const startStr = (log[dk + "-start"] || {}).w || hhmm(def);
   const lt = lightsTarget(day);
@@ -1640,7 +1633,7 @@ function dayClock(week, day, log, dk) {
    of it (weight-making.md). */
 function fuelPhaseOf(st, week, isoDay) {
   /* the season's own week on that day */
-  const row = SEASON.s && !SEASON.classic ? rowOn(SEASON.s, isoDay) : null;
+  const row = SEASON.s ? rowOn(SEASON.s, isoDay) : null;
   if (row) {
     if (row.program === "transition") return "trans";
     /* Strength, Power and Physique: the food is yours — the day as printed */
@@ -2030,7 +2023,7 @@ function Today(props) {
     startTimer, onSetMax, autoRest, addBody,
     calis, taper, rangeWeek, campLabel, peakHR, setEasyPeak,
     morning, setMorning, weekDates, st, imRec, setTick, imStreak, imWeek,
-    checkA, setCheckA, readNow, openTool, sound, flowAt, setFlowAt, goIron, photoPrompt,
+    checkA, setCheckA, readNow, openTool, sound, flowAt, setFlowAt, photoPrompt,
     imWks, setWkOn, oneThingOf,
     fday, setFday, menu, cook, fuelPhase, stopTimer, setHead, wt,
   } = props;
@@ -2153,7 +2146,7 @@ function Today(props) {
      morning until it's answered; YES holds the transition until a doctor
      has cleared you, NO starts it. */
   const headItem = (() => {
-    if (!SEASON.s || SEASON.classic || !setHead) return null;
+    if (!SEASON.s || !setHead) return null;
     const fights = SEASON.s.rows.filter((r) => r.program === "camp" && r.id === "FW").map((r) => r.camp.fight)
       .filter((f, i, a) => a.indexOf(f) === i && addDays(f, 1) <= shownIso).sort();
     const f = fights[fights.length - 1]; if (!f) return null;
@@ -2185,17 +2178,14 @@ function Today(props) {
      a block is done when its cards are. */
   /* a red morning: the hard steps come off, and the pushes run at half
      effort, on their card's red twin */
-  const real = rx.hell || sleepDay(day, rx) ? [] : realBlocks(srcDay, rx).filter((x) => !(effReady === "R" && x.hard)).map((x) => (effReady === "R" && x.red) || x);
+  const real = sleepDay(day, rx) ? [] : realBlocks(srcDay, rx).filter((x) => !(effReady === "R" && x.hard)).map((x) => (effReady === "R" && x.red) || x);
   const cardsKey = dk + "-cards";
   const cardMap = (log[cardsKey] || {}).m || {};
   const sessItems = [];
   const weekly = [];
   let cards = [];
 
-  if (rx.hell) {
-    sessItems.push({ id: "S:hell", colour: C.oxide, n: "Hell Week", s: "No Optimal 8 volume", mins: 0,
-      done: dl.indexOf("HELL") >= 0, mark: (val) => markL("HELL", val), tool: { label: "GO TO HELL WEEK", run: goIron } });
-  } else if (MODE.camp && !sessFor(day, rx)) {
+  if (MODE.camp && !sessFor(day, rx)) {
     const bl = campBlank(day, rx);
     sessItems.push({ id: "S:blank", colour: bl.c, n: bl.h, s: DSH[day] + (campLabel ? " " + campLabel(day) : ""), mins: 0,
       done: dl.indexOf("BLANK") >= 0, mark: (val) => markL("BLANK", val), desc: bl.l.map((x) => (typeof x === "string" ? x : x.n + (x.s ? " — " + x.s : ""))) });
@@ -2256,7 +2246,7 @@ function Today(props) {
   }
 
   /* Sunday's week: the BOLT score, the tests, the life review, the audit */
-  if (day === "sun" && !rx.hell) {
+  if (day === "sun") {
     weekly.push(im("S:bolt", C.cobalt, "BOLT score", "one hold", 2, "bolt",
       Object.assign(fromLib("bolt"), { tool: { label: "▶ THE BOLT STOPWATCH", run: () => openTool({ kind: "breath", id: "bolt" }) } })));
     /* OPTIMAL 8 · MOVE: its fifteen standards take the range tests' place */
@@ -2658,7 +2648,7 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
           {wks.map((n) => { const r = rxFor(n), ph = PH[r.ph] || PH.c1; const sel = n === week; const dn = weekDoneMap && weekDoneMap[n];
             /* Strength, Power and Physique marks its lighter weeks and its test week */
             const tint = MODE.spp ? (r.light ? soft(C.moss) : r.testWeek ? soft(C.cobalt) : soft(C.ash))
-              : (r.hell ? soft(C.oxide) : r.dl || r.reload ? soft(C.moss) : r.test || r.tp ? soft(C.cobalt) : (r.topSq ? soft(C.brass) : soft(C.ash)));
+              : (r.dl || r.reload ? soft(C.moss) : r.test || r.tp ? soft(C.cobalt) : (r.topSq ? soft(C.brass) : soft(C.ash)));
             return <div key={n} onClick={() => setView({ macro, week: n })} style={{ flex: 1, height: 34, borderRadius: 6, cursor: "pointer", background: sel ? soft(ph.ac) : tint, border: "1.5px solid " + (sel ? ph.ac : "transparent"), display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2 }}>
               <span style={Object.assign({}, mno, { fontSize: 7, color: sel ? C.chalk : C.ash })}>{row ? (seasonRow(MODE.mac, n) || {}).id || n : n}</span>
               {dn != null ? <span style={{ width: 4, height: 4, borderRadius: 2, background: dn >= 1 ? C.moss : dn > 0 ? C.brass : "transparent" }} /> : null}
@@ -2667,7 +2657,7 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
         <div style={{ display: "flex", gap: 9, marginTop: 7, flexWrap: "wrap" }}>
           {(MODE.camp ? [["EASY + TESTS", C.moss], ["SHARPEN / FIGHT WEEK", C.cobalt]]
             : MODE.spp ? [["LIGHTER", C.moss], ["TEST", C.cobalt]]
-            : [["TOP TRIPLE", C.brass], ["DELOAD", C.moss], ["TEST", C.cobalt]].concat(L > 16 ? [["HELL WEEK", C.oxide]] : [])).map((x) =>
+            : [["TOP TRIPLE", C.brass], ["DELOAD", C.moss], ["TEST", C.cobalt]]).map((x) =>
             <span key={x[0]} style={Object.assign({}, mno, { fontSize: 8, color: C.ash, display: "flex", alignItems: "center", gap: 4 })}><span style={{ width: 9, height: 9, borderRadius: 3, background: soft(x[1]), border: "1px solid " + x[1], display: "inline-block" }} />{x[0]}</span>)}
         </div>
         {isCur ? <Chip c={C.moss} s={{ marginTop: 12, display: "inline-block" }}>This is the current week</Chip>
@@ -2678,12 +2668,6 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
       {MODE.camp && !MODE.pre && seg ? <CampWeekTable rows={seg.map((r) => ({ row: r, rx: rxFor(r.kw) }))} week={week} setWeek={(w) => setView({ macro, week: w })} /> : null}
       {MODE.camp && !MODE.pre ? <CampWeekCard rx={rx} dates={rowDates(row)} /> : null}
       {MODE.camp && (rx.tp || rx.fightWeek) ? <FightWeekTable rx={rx} /> : null}
-      {MODE.lastTen ? (
-        <Card ac={C.oxide}>
-          <Eye c={C.oxide}>The last ten days before a fight</Eye>
-          <Note c={C.chalk} s={{ marginTop: 0 }}>{LASTTEN_INTRO}</Note>
-        </Card>) : null}
-
       {MODE.prep ? (
         <Card ac={C.brass}>
           <Eye c={C.brass}>What this week actually is</Eye>
@@ -2725,49 +2709,19 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
           {TRANSITION_RULES.map((r, i) => <Row key={i} k={"Rule " + (i + 1)} val={r} />)}
         </Card>) : null}
 
-      {MODE.camp || MODE.prep || MODE.trans || MODE.spp ? null : (
-      <Card ac={C.brass}>
-        <Eye c={C.brass}>What this week actually is</Eye>
-        {rx.hell ? <Note c={C.chalk}>Hell Week. Six flagship tests, one a day. No Optimal 8 volume — the IRON tab runs this week.</Note> : (
-          <div>
-            <Row k="Squat (Sat)" val={rx.sc} />
-            <Row k="Bench (Mon)" val={rx.upperC ? "Upper circuit · 4 × 2 @ 85%" : rx.topBe ? rx.sets + " × " + rx.reps + " @ " + rx.pct + "% · top triple is Sunday" : (rx.bsc || rx.sc)} />
-            <Row k="Jump circuit" val={rx.cr + " round" + (rx.cr > 1 ? "s" : "") + " · 2 @ " + rx.cpct + "%" + (rx.ph === "b3" ? " · +assisted jump" : "")} />
-            <Row k="Sprints" val={rx.spr + " × 20m" + (rx.sprPct < 100 ? " @ 90%" : "")} />
-            <Row k="Jumps (Sat)" val={rx.noJumps ? "none — the tendon gate" : jumpOf(rx.jump).n + " " + rx.js[0] + " × " + rx.js[1] + (rx.restart ? " · one stage down" : "")} />
-            <Row k="Trap bar" val={rx.tb.sc} />
-            <Row k={rx.au ? "Landmine push press" : "Push press"} val={rx.pp && rx.pp.sc ? (rx.au ? fLm(rx).sets + " × " + fLm(rx).reps + " each side, every rep fast" : rx.pp.sc) : rx.topBe ? "skipped — squat top-triple day" : "—"} />
-            <Row k="Nordics" val={rx.nor ? rx.nor[0] + " × " + rx.nor[1] : "—"} />
-            <Row k="Punch throws" val={rx.vec + " rounds"} />
-            <Row k="Rows / split squat" val={(rx.acc <= 2 ? 2 : 3) + "–" + (rx.acc <= 2 ? 3 : 4) + " sets"} />
-            <Row k="Tuesday bike" val={ENG[rx.eng] ? ENG[rx.eng].n : "—"} />
-            <Row k="Thursday bike" val={ENG[rx.eng2] ? ENG[rx.eng2].n : "—"} />
-            <Row k={rx.pq && rx.pq.fast ? "Speed squat (Wed)" : "Pause squat (Wed)"} val={rx.pq ? rx.pq.sc : "—"} />
-            <Row k="Fight sim" val={rx.sim.skip ? "skip" : (rx.sim.rounds || 6) + " rds · " + rx.sim.rest + "s" + (rx.sim.tested ? " · TESTED" : "")} />
-            <Row k="Friday" val="Sleep — no alarm" />
-            <Row k="The easy hour" val="30–40 min easy, nose only · Sat or Sun" />
-            
-            <Row k="Top triples" val={rx.topSq ? "Squat Sat · Bench Sun" : rx.test ? "TEST DAY" : "none"} />
-            {rx.pq && !rx.pq.fast ? <Note>The pause squat is a percentage of your back-squat max — and a paused triple at 75% is a hard triple, because a two-second pause takes 10–15% off what you can lift. That column never goes above 75%.</Note> : null}
-            {rx.cal ? <Note c={C.brass} bold>{rx.au ? "Calibration week: ramp to a 3RM on the trap bar (Wed). The app turns it into the max." : "Calibration week: ramp to a 3RM on the trap bar (Wed) and the push press (Sat). The app turns them into maxes."}</Note> : null}
-            {rx.mid ? <Note c={C.oxide} bold>Mid-check. Not your real numbers — you are fatigued. A direction check.</Note> : null}
-            {rx.dl ? <Note c={C.moss} bold>Deload. Sprints and jumps stay in at reduced volume — the 5-day residual doesn't pause.</Note> : null}
-          </div>)}
-      </Card>)}
-
       {DAYS.map((d, di) => { const dk = dayKey(macro, week, d); const n = (done[dk] || []).length;
         const sess = sessFor(d, rx);
-        const tot = rx.hell ? 0 : (!MODE.camp && d === "sat" && rx.test ? 1 : countedBlocks(d, rx).length); const full = tot > 0 && n >= tot;
+        const tot = !MODE.camp && d === "sat" && rx.test ? 1 : countedBlocks(d, rx).length; const full = tot > 0 && n >= tot;
         const sl = sleepDay(d, rx);
         const blank = (MODE.camp || MODE.trans) && !sess;
         const ac = sess ? sess.ac : C.ash;
         return (
-          <Card key={d} ac={full ? C.moss : sl ? C.moss : ac} s={{ padding: 0, opacity: rx.hell ? .4 : blank ? .65 : 1 }}>
+          <Card key={d} ac={full ? C.moss : sl ? C.moss : ac} s={{ padding: 0, opacity: blank ? .65 : 1 }}>
             <button onClick={() => openDay(d)} style={{ display: "flex", width: "100%", alignItems: "center", gap: 12, textAlign: "left", background: "transparent", border: "none", padding: "11px 13px", cursor: "pointer", minHeight: 44 }}>
               <span style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
                   <span style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 700, letterSpacing: 1.2, color: C.chalk })}>{(sess ? sess.n : DSH[d])}{row ? " · " + fmtDate(addDays(row.mon, di)) : ""}{sess && sess.pm ? " · PM" : ""}</span>
-                  <span style={Object.assign({}, mno, { fontSize: 9.5, color: sl ? C.moss : ac })}>{rx.hell || sl || blank ? "—" : !MODE.camp && d === "sat" && rx.test ? "TEST DAY" : v(sess.m, rx) + " MIN"}</span>
+                  <span style={Object.assign({}, mno, { fontSize: 9.5, color: sl ? C.moss : ac })}>{sl || blank ? "—" : !MODE.camp && d === "sat" && rx.test ? "TEST DAY" : v(sess.m, rx) + " MIN"}</span>
                 </div>
                 <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.ash, marginTop: 3 })}>{sl ? "SLEEP. No alarm." + (d === "fri" ? " RANGE at home in the evening." : "") : blank ? (MODE.camp ? campBlank(d, rx).h : "The head check holds the transition — nothing until a doctor has cleared you") : !MODE.camp && d === "sat" && rx.test ? "Sprint · jump · throws · squat · bench · pull · tape" : (rx.au && sess.ta) || (rx.tw && sess.tt) || sess.t}</div>
               </span>
@@ -2970,7 +2924,7 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
                 return (
                   <div key={w} style={{ display: "flex", alignItems: "center", gap: 4 }}>
                     <span style={Object.assign({}, mno, { fontSize: 7.5, color: C.ash, width: 20 })}>{w}</span>
-                    {DAYS.map((d) => { const dk = dayKey(macro, w, d); const n = (done[dk] || []).length; const tot = rx.hell ? 0 : (!MODE.camp && d === "sat" && rx.test ? 1 : countedBlocks(d, rx).length);
+                    {DAYS.map((d) => { const dk = dayKey(macro, w, d); const n = (done[dk] || []).length; const tot = !MODE.camp && d === "sat" && rx.test ? 1 : countedBlocks(d, rx).length;
                       const f = tot ? n / tot : 0;
                       return <div key={d} style={{ flex: 1, height: 12, borderRadius: 2, background: tot === 0 ? "transparent" : f >= 1 ? C.moss : f > 0 ? soft(C.brass) : C.card, border: "1px solid " + C.line }} />; })}
                   </div>);
@@ -3050,12 +3004,12 @@ function Track({ current, maxes, onSetMax, maxHist, log, body, addBody, done, L,
    PLAN — both documents, read offline, with a table of contents
    ================================================================ */
 const PLAN_DOCS = [
-  ["prep", "PREP", C.moss, prepDocMd], ["camp", "CAMP", C.brass, campDoc], ["fighter", "FIGHTER v1.5", C.oxide, fighterDoc], ["spp", "STRENGTH & POWER", C.oxide, sppDocMd], ["move", "MOVE", C.violet, moveDocMd],
+  ["prep", "PREP", C.moss, prepDocMd], ["camp", "CAMP", C.brass, campDoc], ["spp", "STRENGTH & POWER", C.oxide, sppDocMd], ["move", "MOVE", C.violet, moveDocMd],
   ["iron", "IRON MIND v5", C.violet, ironMindDoc], ["fuel", "FUEL · FIGHTER", C.brass, fuelDocMd], ["menu", "THE MENU", C.brass, fuelMenuMd],
   ["menub", "MENU B + WATER", C.cobalt, fuelMenuBMd], ["fseason", "FUEL · SEASON", C.moss, fuelSeasonMd], ["iron4", "IRON MIND v4.2", C.violet, ironMindV4Md],
 ];
 function PlanView({ program, title }) {
-  const [doc, setDoc] = useState(program === "camp" ? "camp" : program === "fighter" ? "fighter" : program === "spp" ? "spp" : "prep");
+  const [doc, setDoc] = useState(program === "camp" ? "camp" : program === "spp" ? "spp" : "prep");
   const D0 = PLAN_DOCS.find((x) => x[0] === doc) || PLAN_DOCS[0];
   return (
     <div>
@@ -3074,7 +3028,7 @@ function PlanView({ program, title }) {
    SETTINGS
    ================================================================ */
 /* the settings page is long: a row of jumps at its top, and the line each lands on */
-const SET_JUMPS = [["day", "THE DAY"], ["look", "LOOK"], ["sound", "SOUND"], ["cycle", "CYCLE"], ["range", "RANGE AND MOVE"], ["calis", "CALISTHENICS"], ["iron", "IRON MIND"], ["backup", "BACKUP"]];
+const SET_JUMPS = [["day", "THE DAY"], ["look", "LOOK"], ["sound", "SOUND"], ["cycle", "REST CLOCK"], ["range", "RANGE AND MOVE"], ["calis", "CALISTHENICS"], ["iron", "IRON MIND"], ["backup", "BACKUP"]];
 const jumpTo = (k) => { const e = document.getElementById("set-" + k); if (e && e.scrollIntoView) e.scrollIntoView({ block: "start" }); };
 const SetLine = ({ id }) => <div id={"set-" + id} style={{ height: 1, background: C.line, margin: "14px 0", scrollMarginTop: "calc(58px + env(safe-area-inset-top))" }} />;
 const Toggle = ({ on, set, n, s, c }) => (
@@ -3111,10 +3065,10 @@ function FightSettings({ st, replan, season, dayIso }) {
   const running = !!prevRow && prevRow.program === "prep" && prevRow.doc !== 14;
   /* a Strength, Power and Physique cycle running into this Monday carries on too */
   const sppRunning = !!prevRow && prevRow.program === "spp" && prevRow.doc !== 12;
-  const isSpp = !d.booked && !d.classic && !!d.spp;
+  const isSpp = !d.booked && !!d.spp;
   /* carrying on: the Monday the other program takes over */
   const handOver = (() => {
-    if (d.booked || d.classic || d.restart || !(running ? isSpp : sppRunning && !isSpp)) return null;
+    if (d.booked || d.restart || !(running ? isSpp : sppRunning && !isSpp)) return null;
     const s2 = buildSeason({ plans: (st.plans || []).filter((p) => p.from < from).concat([{ from, made: dayIso, inputs: Object.assign({}, d, { fight: null }) }]), today: dayIso });
     const r = s2.rows.find((x) => x.mon >= from && x.program === (isSpp ? "spp" : "prep") && !x.carried);
     return r ? r.mon : null; })();
@@ -3128,10 +3082,10 @@ function FightSettings({ st, replan, season, dayIso }) {
       {!d.booked ? (
         <div style={{ marginTop: 12 }}>
           <Lab>What runs</Lab>
-          <Seg col opts={[["prep", "PREP · 16-WEEK CYCLE"], ["spp", "STRENGTH, POWER, PHYSIQUE · 12 WEEKS"], ["classic", "OPTIMAL 8 FIGHTER"]]} val={d.classic ? "classic" : d.spp ? "spp" : "prep"} on={(v) => set({ classic: v === "classic", spp: v === "spp" })} c={C.brass} />
-          <Note>{isSpp ? "Strength, Power and Physique's twelve weeks, on repeat: size, then strength, then power, with the engine held. Prep and Optimal 8 Fighter don't change."
-            : "Prep's 16-week cycle, on repeat. Optimal 8 Fighter stays here as the classic, if you ever want it."}</Note>
-          {!d.classic && !d.spp ? (<div style={{ marginTop: 10 }}><Lab>How fit you are right now</Lab>
+          <Seg col opts={[["prep", "PREP · 16-WEEK CYCLE"], ["spp", "STRENGTH, POWER, PHYSIQUE · 12 WEEKS"]]} val={d.spp ? "spp" : "prep"} on={(v) => set({ classic: false, spp: v === "spp" })} c={C.brass} />
+          <Note>{isSpp ? "Strength, Power and Physique's twelve weeks, on repeat: size, then strength, then power, with the engine held. Prep doesn't change."
+            : "Prep's 16-week cycle, on repeat: the training aimed at fighting, ready to go straight into a camp."}</Note>
+          {!d.spp ? (<div style={{ marginTop: 10 }}><Lab>How fit you are right now</Lab>
             <Seg opts={opt(FITNESS)} val={d.fitness} on={(v) => set({ fitness: v })} c={C.brass} />
             <Note>Coming back from time off is low: a new cycle eases you back in.</Note></div>) : null}
         </div>) : (
@@ -3161,14 +3115,14 @@ function FightSettings({ st, replan, season, dayIso }) {
           {d.emphasis === "strength" && M > 0 && M < 8 ? <Note c={C.oxide} bold>Strength takes longer than this camp has — power is the better pick.</Note> : null}
           {d.fight && d.fight < dayIso ? <Note c={C.oxide}>That date has passed.</Note> : null}
         </div>)}
-      {running && (d.booked ? M >= 11 : !d.classic) ? (
+      {running && (!d.booked || M >= 11) ? (
         <div data-testid="prep-running" style={{ marginTop: 10 }}><Lab>The Prep you're on</Lab>
           <Seg opts={[["on", "CARRY ON"], ["again", isSpp ? "START NOW" : "START AGAIN"]]} val={d.restart ? "again" : "on"} on={(v) => set({ restart: v === "again" || undefined })} c={C.brass} />
           <Note>{isSpp ? (d.restart ? "Strength, Power and Physique from " + fmtDate(from) + ". The Prep stops here."
               : "The Prep carries on to its test day" + (handOver ? ", then Strength, Power and Physique from " + fmtDate(handOver) : "") + ".")
             : d.restart ? "Week 1 again from " + fmtDate(from) + (d.fitness === "low" ? ", eased in" : "") + ". For coming back from time off."
             : "The weeks you've done stay done, and it carries on from the week you're on."}</Note></div>) : null}
-      {sppRunning && !d.booked && !d.classic ? (
+      {sppRunning && !d.booked ? (
         <div data-testid="spp-running" style={{ marginTop: 10 }}><Lab>The cycle you're on</Lab>
           <Seg opts={isSpp ? [["on", "CARRY ON"], ["repeat", "REPEAT WEEK " + prevRow.doc], ["again", "START AGAIN"]] : [["on", "CARRY ON"], ["again", "START NOW"]]}
             val={d.restart ? "again" : d.repeat ? "repeat" : "on"} on={(v) => set({ restart: v === "again" || undefined, repeat: v === "repeat" || undefined })} c={C.brass} />
@@ -3226,7 +3180,7 @@ function Settings({ st, setSt, current, L, exportData, importData, IM, calis, se
   const [io, setIo] = useState(""); const [showIo, setShowIo] = useState(false); const [confirm, setConfirm] = useState(false);
   const [msg, setMsg] = useState(""); const fileRef = useRef(null);
   const upd = (patch) => setSt(Object.assign({}, st, patch));
-  const classicOn = !!(st.season && st.season.classic && !st.season.booked) || !(st.plans || []).length, isCamp = MODE.camp;
+  const isCamp = MODE.camp;
   return (
     <div>
       <div style={{ background: C.card, borderRadius: 8, border: "1px solid " + C.line, padding: 16 }}>
@@ -3301,14 +3255,8 @@ function Settings({ st, setSt, current, L, exportData, importData, IM, calis, se
         <Note c={st.sound ? C.ash : C.oxide}>{st.sound ? "Plays every sound a timer makes, in order: the bell, the 10-second warning, the 3-2-1, the go. Nothing? The phone is on silent, or its volume is down." : "The bells are OFF, so the timers make no sound. Switch Bell sounds on, above."}</Note>
 
         <SetLine id="cycle" />
-        <Eye>Schedule — Optimal 8 Fighter</Eye>
-        <Lab>Monday of week 1, macrocycle {st.macroBase}</Lab>
-        <Fld type="date" v={st.start} on={(val) => { if (val) upd({ start: iso(mondayOf(parseISO(val))) }); }} a="left" />
-        <Note>{!classicOn ? "The season is running, so this is the clock Optimal 8 Fighter comes back to if you pick it — it keeps counting underneath." : <span>Today reads as <span style={{ color: C.brass }}>macro {current.macro} · week {current.week}</span>. If that's wrong, open the WEEK tab, find the right week and tap "make this the current week".</span>}</Note>
-        <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
-        <Eye>Cycle</Eye>
-        {[["iron", "Iron Mind weeks 17–18 (Hell Week + Reload)", "On = 18-week cycle. Off = 16 weeks, straight from test day into week 1 of the next cycle."],
-          ["autoRest", "Auto rest clock", "Confirming a set starts that exercise's rest countdown by itself."]].map((x) => (
+        <Eye>Rest clock</Eye>
+        {[["autoRest", "Auto rest clock", "Confirming a set starts that exercise's rest countdown by itself."]].map((x) => (
           <div key={x[0]} onClick={() => upd({ [x[0]]: !st[x[0]] })} style={{ display: "flex", gap: 10, alignItems: "center", padding: "10px 0", borderBottom: "1px solid " + C.line, cursor: "pointer" }}>
             <span style={{ width: 50, height: 30, borderRadius: 999, background: st[x[0]] ? C.moss : C.ring, position: "relative", flexShrink: 0, transition: "background-color .2s ease" }}>
               <span style={{ position: "absolute", top: 3, left: st[x[0]] ? 23 : 3, width: 24, height: 24, borderRadius: 999, background: "#FFFFFF", boxShadow: "0 1px 3px rgba(0,0,0,.25)", transition: "left .2s cubic-bezier(.2,.8,.2,1)" }} /></span>
@@ -3319,7 +3267,7 @@ function Settings({ st, setSt, current, L, exportData, importData, IM, calis, se
           </div>))}
         <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
         {/* THE EDGE rides on Prep and the camp; Strength, Power and Physique has none */}
-        {!classicOn && !(current && current.row && current.row.program === "spp") ? (
+        {!(current && current.row && current.row.program === "spp") ? (
           <div>
             <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
             <Eye c={C.oxide}>The edge</Eye>
@@ -3330,9 +3278,6 @@ function Settings({ st, setSt, current, L, exportData, importData, IM, calis, se
             <Note c={C.oxide}>{EDGE_GUARDRAIL} It comes back on the Monday.</Note>
             <Note>{TENDON_GATE}</Note>
           </div>) : null}
-        {classicOn ? (
-          <Toggle on={!!st.lastTen} set={() => upd({ lastTen: !st.lastTen })} c={C.oxide}
-            n="THE LAST TEN DAYS BEFORE A FIGHT" s="Optimal 8 Fighter only. Week table numbers stop; every lift goes to 2 sets at 70%, fast; no sprints, no depth jumps, no Nordics; the jump circuit becomes box jumps only. The two power doses stay. The last heavy thing you do is nine days out." />) : null}
 
         <div style={{ height: 1, background: C.line, margin: "14px 0" }} />
         <MeasureSettings st={st} upd={upd} morning={morning || {}} dayIso={dayIso} fuel={fuel} setFuel={setFuel} importFuelText={importFuelText} />
@@ -3419,7 +3364,7 @@ function Settings({ st, setSt, current, L, exportData, importData, IM, calis, se
           <Note>This one keeps counting when the training program restarts at week 1. Today reads as <span style={{ color: C.violet }}>Iron Mind week {IM.imWeek}</span> — it sets the sit's length at Stage 2, which of the five tests and the seven life tests is this week's, and the season's dates.</Note>
         </div>
         <Toggle on={!!st.taper} set={() => upd({ taper: !st.taper })} c={C.oxide}
-          n="Training taper weeks" s="Weeks 15–16 of the training cycle: no maximal hardship sessions. Breath, sits and the daily core continue; the tests pause, and every calisthenics line goes to holds only — handstand and ring support, nothing to failure, nothing new. Weeks 15 and 16 turn this on by themselves — use the switch for a taper that lands anywhere else." />
+          n="Taper week" s="No maximal hardship sessions. Breath, sits and the daily core continue; the tests pause, and every calisthenics line goes to holds only — handstand and ring support, nothing to failure, nothing new. On for a taper week, off after it." />
 
         <SetLine id="backup" />
         <Eye>Backup</Eye>
@@ -3454,239 +3399,6 @@ function Settings({ st, setSt, current, L, exportData, importData, IM, calis, se
 }
 
 /* ================================================================
-   IRON — Hell Week. The Forge is gone: the IRON tab now runs Iron Mind,
-   and Hell Week stays here as its ceiling.
-   ================================================================ */
-/* ---------- Hell Week ---------- */
-const HWT = {
-  1: { n: "PROVING GROUND", col: C.moss, freq: "Every 8–12 weeks", tax: 50, gate: "None — this is your baseline. Run it first, always.",
-    mods: ["Full recovery between the tests within a day. 10 min between Day 1's three tests.", "★ DAILY TAX — 50 burpees every morning, before anything else. Unscored. Not optional."] },
-  2: { n: "THE CRUCIBLE", col: C.brass, freq: "Every 12–16 weeks", tax: 100, gate: "60+ of 120 on Proving Ground, run at least twice.",
-    mods: ["Day 1 — rest drops to 3 min. Hang and carry performed pre-fatigued.", "Day 2 — load rises to 50% bodyweight.", "Day 3 — only 5 min between the threshold and the max hold. The hold will be worse. That's the point: fatigued capacity is real capacity.", "Day 4 — unchanged. A 20-min max effort is already at the ceiling of what's safe to intensify.", "Day 5 — 20 minutes instead of 15. Distance standards +25% for the same points.", "Day 6 — rest drops to 5 min. Full 24hr fast. Tests moved deep into the fasted window.", "★ DAILY TAX DOUBLES — 100 burpees every morning."] },
-  3: { n: "KOKORO", col: C.oxide, freq: "1–2× per year MAXIMUM", tax: 200, gate: "84+ of 120 on Crucible · no injuries or missed sessions across two consecutive Crucible weeks.",
-    mods: ["★ DOUBLE SESSIONS — each day gets a second session 8+ hours later, repeating that day's flagship test. 60% of the morning result is the minimum, or the day scores zero.", "Daily Tax: 100 burpees morning, 100 evening.", "No caffeine all week.", "Cold finish — every session ends with 3 min in the coldest shower available, nasal breathing throughout.", "Silence 60 min every evening, all seven days.", "Day 7 is NOT rest — a 90-minute unbroken effort at conversational pace. No music, no clock-watching.", "A Kokoro week scoring 90+ of 120 is a serious result."] },
-};
-const HWD = [
-  { d: 1, n: "GRIP & ISOMETRIC FORTITUDE", col: C.oxide,
-    m: "Grip failure announces itself early and lies about how close it is. When your hands start screaming, the drill is FIVE MORE SECONDS — not 'finish the test', just five. Then five again. That stacking of small refusals is the actual rep.",
-    t: [{ k: "hold", n: "Farmer's Hold", u: "seconds", load: 0.5, ln: "50% BW per hand", rows: [[30, 1], [45, 2], [60, 3], [90, 4]], top: 5, tbl: "<30=1 · 30–44=2 · 45–59=3 · 60–89=4 · 90+=5" },
-      { k: "hang", n: "Dead Hang ★ logs your Decay baseline", u: "seconds", ln: "bodyweight, no straps", rows: [[45, 1], [75, 2], [105, 3], [135, 4]], top: 5, tbl: "<45=1 · 45–74=2 · 75–104=3 · 105–134=4 · 135+=5" },
-      { k: "carry", n: "Farmer's Carry", u: "metres", load: 0.35, ln: "35% BW per hand", rows: [[100, 1], [200, 2], [300, 3], [400, 4]], top: 5, tbl: "<100=1 · 100–199=2 · 200–299=3 · 300–399=4 · 400+=5" }] },
-  { d: 2, n: "BARBELL ENDURANCE", col: C.brass, sub: "THE BAR DOESN'T TOUCH THE FLOOR",
-    pre: "One round: 3 deadlifts → 3 bent-over rows → 3 hang cleans → 3 front squats → 3 push presses → 3 back squats. 18 reps unbroken, bar never grounded. Rest holding the bar in any position — the moment it touches the floor the test is over. 20-minute cap.",
-    m: "This is where overthinking shows up as 'how many rounds left'. Don't count forward. One round exists at a time; nothing after it is real yet.",
-    t: [{ k: "rounds", n: "Rounds completed", u: "rounds", load: 0.4, ln: "40% BW on the bar", rows: [[4, 3], [6, 6], [8, 9], [10, 12]], top: 15, tbl: "<4=3 · 4–5=6 · 6–7=9 · 8–9=12 · 10+=15" }],
-    ret: { k: "r3", n: "★ RETENTION R3 — heavy single immediately after", maxk: "squat", pct: 85 } },
-  { d: 3, n: "BREATH CONTROL UNDER FATIGUE", col: C.cobalt,
-    pre: "The direct measure of whether your breath work has transferred into your body under stress.",
-    m: "On the threshold test, mouth-breathing is usually a mental cave before it's a physical necessity. Be honest about which it was — that honesty is worth more than the score.",
-    t: [{ k: "nasal", n: "Nasal-Only Threshold", u: "minutes", ln: "rower/bike · +1 notch every 2 min until forced to open your mouth", rows: [[6, 2], [10, 4], [14, 6], [18, 8]], top: 10, tbl: "<6=2 · 6–9=4 · 10–13=6 · 14–17=8 · 18+=10" },
-      { k: "hold2", n: "Seated Max Breath Hold", u: "seconds", ln: "min 15 min after · seated, dry, still. NEVER standing, never in water.", rows: [[45, 1], [60, 2], [90, 3], [120, 4]], top: 5, tbl: "<45=1 · 45–59=2 · 60–89=3 · 90–119=4 · 120+=5" }] },
-  { d: 4, n: "ENGINE", col: C.moss,
-    pre: "20 minutes, maximum distance, ONE modality. Same one every attempt forever. No pacing plan. Go and find out.",
-    m: "Minutes 12–16 is where the mind starts negotiating — 'ease off, you've made your point'. Note honestly whether you held pace through that window. THAT'S the real result; the distance is secondary.",
-    t: [{ k: "dist", n: "20 min distance", u: "metres (rower standard)", rows: [[4500, 3], [5000, 6], [5500, 9], [6000, 12]], top: 15, tbl: "<4500=3 · 4500–4999=6 · 5000–5499=9 · 5500–5999=12 · 6000+=15" }],
-    extra: { k: "pace", n: "Held pace through minutes 12–16?" },
-    ret: { k: "r1", n: "★ RETENTION R1 — med-ball diagonal throw", pre: 1, unit: "distance" } },
-  { d: 5, n: "LOAD-BEARING GUT-CHECK", col: C.oxide,
-    pre: "Sled push/drag, 15 minutes, maximum total distance. Push 20m, turn, drag 20m back. Rest as needed but the clock never stops.",
-    m: "THE RULE THAT MATTERS MORE THAN THE SCORE: the first time your mind says stop, you do ONE MORE LENGTH before you're allowed to reassess. Every time.",
-    t: [{ k: "dist", n: "Total distance", u: "metres", load: 1.0, ln: "sled at 100% BW · adjust for surface", rows: [[200, 3], [300, 6], [400, 9], [500, 12]], top: 15, tbl: "<200=3 · 200–299=6 · 300–399=9 · 400–499=12 · 500+=15" }],
-    extra2: [{ k: "quit", n: "First quit signal at (m)" }, { k: "stop", n: "Actually stopped at (m)" }],
-    ret: { k: "r2", n: "★ RETENTION R2 — broad jump", pre: 1, unit: "distance" } },
-  { d: 6, n: "STATIC HOLDS UNDER DEPRIVATION", col: C.violet,
-    pre: "No output test. Nothing to push against, nowhere for the discomfort to go. Fast from the previous evening (16–24hr, water only — scale to what you've actually done before). Tests LATE in the fasted window. Silence block in the evening: 60 min. 10 min rest between holds.",
-    m: "Static holds have no rhythm to hide inside. Anchor on the breath, count exhales, and let the timer be someone else's problem.",
-    warn: "HYPOGLYCAEMIA: shakiness, cold sweat, confusion or vision changes mean you EAT IMMEDIATELY. Day 6 scores whatever it scores.",
-    t: [{ k: "plank", n: "Plank", u: "seconds", ln: "forearms, neutral spine", rows: [[120, 1], [240, 2]], top: 3, tbl: "4+min=3 · 2–4min=2 · <2min=1" },
-      { k: "wall", n: "Wall Sit", u: "seconds", ln: "thighs parallel", rows: [[90, 1], [180, 2]], top: 3, tbl: "3+min=3 · 90s–3min=2 · <90s=1" },
-      { k: "hollow", n: "Hollow Hold", u: "seconds", rows: [[45, 1], [90, 2]], top: 3, tbl: "90+s=3 · 45–90=2 · <45=1" },
-      { k: "hang2", n: "Dead Hang ★ second of the week — scores your Decay", u: "seconds", ln: "against Day 1's number", rows: [[75, 1], [105, 2]], top: 3, tbl: "105+s=3 · 75–104=2 · <75=1" }],
-    extra: { k: "fastsil", n: "Full fast + full silence completed?", pts: 3 } },
-];
-const HWCOMP = [["Completed all six days, none skipped or shortened", 4], ["No music / headphones all week", 2], ["Held controlled breathing — no panic breathing — in every test", 2], ["Went past the first quit signal every time", 2]];
-const HWRANK = [[48, "RECRUIT", C.ash, "You have your baseline. That's the entire point of attempt one."], [72, "SOLDIER", C.moss, "Solid general capacity, clear weak links to attack."], [90, "WARRIOR", C.cobalt, "Genuinely strong across the board."], [108, "PRAETORIAN", C.brass, "Elite for a non-professional athlete."], [121, "KOKORO", C.oxide, "You didn't need this document."]];
-const RETBAND = [[80, 1], [85, 2], [90, 3], [95, 4]];
-const HWRULES = [
-  "One flagship test per day. No extra training. This replaces the program — no Optimal 8 volume in week 17.",
-  "Full sleep every night. You're testing load tolerance, not sleep debt.",
-  "No music, no headphones, all week. No distraction to hide behind.",
-  "★ Draw the day's test each morning. Six cards, shuffled, Day 6 always last. Better if someone else holds them.",
-  "Same time of day, every test, every attempt — or the numbers don't compare.",
-  "Log the number immediately. Not after your shower.",
-  "'To failure' means form breaks or a genuine wall. Not joint pain, not numbness, not dizziness that doesn't clear. Grit and injury are different things.",
-];
-const HWABORT = [
-  ["Dark cola-coloured urine, severe swelling, or muscle pain wildly out of proportion", "RHABDOMYOLYSIS. A&E, not a decision."],
-  ["Shakiness, cold sweat, confusion or vision changes on Day 6", "HYPOGLYCAEMIA. Eat immediately."],
-  ["Chest pain, or dizziness that doesn't clear on rest", "Stop."],
-  ["Any joint pain that changes how you move", "Stop."],
-  ["A panic response that doesn't settle with your panic protocol", "Stop."],
-  ["You are lying in your log", "A falsified week scores nothing and teaches nothing."],
-];
-const WEAKFIX = { 1: "Loaded holds and dead hangs 3×/week to failure", 2: "One unbroken complex added to a conditioning day", 3: "Breath work daily and non-negotiable · nasal threshold tested fortnightly", 4: "One extra easy-cardio session per week for the block", 5: "Loaded carries and sled 2×/week", 6: "Isometric holds into every session finisher", ret: "Rear-leg drive endurance to 3×/week · punch throws to 4 rounds", dec: "Not a training problem — food and recovery between days." };
-function hsc(vv, rows, top) { const n = num(vv); if (n == null) return null; for (let i = 0; i < rows.length; i++) if (n < rows[i][0]) return rows[i][1]; return top; }
-function retPts(pre, post) { if (!num(pre) || !num(post)) return null; const p = num(post) / num(pre) * 100; for (let i = 0; i < RETBAND.length; i++) if (p < RETBAND[i][0]) return RETBAND[i][1]; return 5; }
-
-function HellWeek({ current, maxes, bw, hwLog, setHwLog, L }) {
-  const best = (t) => hwLog.filter((e) => e.tier === t).reduce((a, e) => Math.max(a, e.total || 0), 0);
-  const autoTier = current.macro <= 1 ? 1 : best(2) >= 84 && current.macro >= 3 ? 3 : best(1) >= 60 ? 2 : 1;
-  const [tier, setTier] = useState(autoTier);
-  const [raw, setRaw] = useState({}); const [comp, setComp] = useState([]); const [open, setOpen] = useState(1);
-  const T = HWT[tier]; const week = current.week;
-  const dayScore = (d) => { let s = 0; d.t.forEach((t) => { const p = hsc(raw[d.d + t.k], t.rows, t.top); if (p) s += p; }); if (d.extra && d.extra.pts && raw[d.d + d.extra.k] === "y") s += d.extra.pts; return Math.min(15, s); };
-  const days = HWD.reduce((a, d) => a + dayScore(d), 0);
-  const r1 = retPts(raw["4r1pre"], raw["4r1post"]), r2 = retPts(raw["5r2pre"], raw["5r2post"]);
-  const r3 = raw["2r3"] === "clean" ? 5 : raw["2r3"] === "grind" ? 3 : raw["2r3"] === "miss" ? 1 : null;
-  const ret = (r1 || 0) + (r2 || 0) + (r3 || 0);
-  const h1 = num(raw["1hang"]), h6 = num(raw["6hang2"]);
-  const decayPct = h1 && h6 ? (h1 - h6) / h1 * 100 : null;
-  const dec = decayPct === null ? 0 : decayPct < 10 ? 5 : decayPct < 20 ? 4 : decayPct < 30 ? 3 : decayPct < 40 ? 2 : 1;
-  const compPts = comp.reduce((a, i) => a + HWCOMP[i][1], 0);
-  const grand = days + ret + dec + compPts;
-  const rank = HWRANK.find((r) => grand < r[0]) || HWRANK[4];
-  const weak = useMemo(() => { let lo = null; HWD.forEach((d) => { const s = dayScore(d); if (s > 0 && (lo === null || s < lo.s)) lo = { s, k: d.d, n: "DAY " + d.d + " — " + d.n }; });
-    if (ret > 0 && ret < 9) lo = lo && lo.s <= 5 ? lo : { s: ret, k: "ret", n: "RETENTION — force production when empty" };
-    if (dec > 0 && dec <= 2) lo = { s: dec, k: "dec", n: "DECAY — you degraded badly across the week" };
-    return lo; }, [raw, comp]);
-  const commit = () => { const e = { date: new Date().toISOString().slice(0, 10), macro: current.macro, week, tier, bw, days, ret, dec, decayPct: decayPct === null ? null : Number(decayPct.toFixed(1)), comp: compPts, total: grand, rank: rank[1], weak: weak ? weak.n : "", fix: weak ? (WEAKFIX[weak.k] || "") : "" };
-    setHwLog([e].concat(hwLog)); setRaw({}); setComp([]); buzz([80, 50, 80]); };
-  return (
-    <div>
-      <Card ac={C.oxide}>
-        <Eye c={C.oxide}>When — fixed. No decision to make.</Eye>
-        {L > 16 ? (
-          <div>
-            <div style={{ display: "flex", gap: 6, marginBottom: 10 }}>
-              {[[17, "HELL WEEK", C.oxide], [18, "RELOAD", C.moss]].map((x) => (
-                <div key={x[0]} style={{ flex: 1, background: week === x[0] ? soft(x[2]) : C.ink, border: "1px solid " + x[2], borderRadius: 5, padding: "12px 8px", textAlign: "center" }}>
-                  <div style={Object.assign({}, mno, { fontSize: 8.5, color: week === x[0] ? C.chalk : C.ash, letterSpacing: 1.2 })}>WEEK {x[0]}</div>
-                  <div style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1, color: week === x[0] ? C.chalk : x[2], marginTop: 2 })}>{x[1]}</div>
-                </div>))}
-            </div>
-            <Note c={C.chalk} s={{ marginTop: 0 }}>Weeks 15–16 taper and test, week 17 is Hell Week, week 18 is the reload, then straight into week 1 of the next macrocycle. You've just tapered — the freshest you'll be all cycle, and Saturday's test gives the Retention single a current max.</Note>
-            {week === 17 ? <Note c={C.oxide} bold>THIS IS THE WEEK. Draw a card each morning. 50–200 burpees first, depending on tier.</Note> : week === 18 ? <Note c={C.moss} bold>Reload — light movement, full food. The adaptation happens now.</Note> : <Note>{17 - week > 0 ? (17 - week) + " week" + (17 - week === 1 ? "" : "s") + " out." : ""}</Note>}
-          </div>) : <Note c={C.chalk} s={{ marginTop: 0 }}>The 18-week cycle is switched off. Turn on Iron Mind weeks in settings to schedule Hell Week after each test day.</Note>}
-      </Card>
-      <Card ac={T.col}>
-        <div style={{ display: "flex", gap: 5, marginBottom: 12 }}>
-          {[1, 2, 3].map((n) => <button key={n} onClick={() => setTier(n)} style={{ flex: 1, background: n === tier ? soft(HWT[n].col) : "transparent", border: "1px solid " + (n === tier ? HWT[n].col : C.line), borderRadius: 4, padding: "9px 3px", cursor: "pointer" }}>
-            <div style={Object.assign({}, dsp, { fontSize: 11.5, fontWeight: 700, color: n === tier ? C.chalk : C.ash, letterSpacing: .6 })}>{HWT[n].n}</div></button>)}
-        </div>
-        <div style={Object.assign({}, mno, { fontSize: 10, color: C.ash })}>{T.freq.toUpperCase()} · BODYWEIGHT {bw} KG</div>
-        <div style={{ background: C.ink, border: "1px solid " + C.line, borderRadius: 5, padding: "10px 12px", marginTop: 9 }}><Eye c={T.col} s={{ marginBottom: 4 }}>Gate</Eye><div style={Object.assign({}, bdy, { fontSize: 13, fontWeight: 600, color: C.chalk })}>{T.gate}</div></div>
-        <div style={{ background: C.ink, border: "1px solid " + C.oxide, borderRadius: 5, padding: "10px 12px", marginTop: 9 }}><Eye c={C.oxide} s={{ marginBottom: 4 }}>Daily tax</Eye><div style={Object.assign({}, bdy, { fontSize: 15, fontWeight: 700, color: C.chalk })}>{T.tax} burpees {tier === 3 ? "(100 AM + 100 PM)" : "every morning"}</div><Note s={{ marginTop: 2 }}>Before anything else. Unscored. Not optional.</Note></div>
-        {T.mods.map((m, i) => <div key={i} style={Object.assign({}, bdy, { fontSize: 12.5, color: m.indexOf("★") === 0 ? C.chalk : C.ash, padding: "7px 0", borderBottom: i < T.mods.length - 1 ? "1px solid " + C.line : "none", lineHeight: 1.5, fontWeight: m.indexOf("★") === 0 ? 600 : 400 })}>{m}</div>)}
-      </Card>
-      <Card ac={rank[2]}>
-        <Eye c={rank[2]}>Running total</Eye>
-        <div style={{ textAlign: "center" }}>
-          <div style={Object.assign({}, mno, { fontSize: 44, fontWeight: 700, color: rank[2], lineHeight: 1 })}>{grand}<span style={{ fontSize: 17, color: C.ash }}>/120</span></div>
-          <div style={Object.assign({}, dsp, { fontSize: 21, fontWeight: 800, letterSpacing: 2, color: rank[2], marginTop: 6 })}>{rank[1]}</div>
-          <Note>{rank[3]}</Note>
-        </div>
-        <div style={{ display: "flex", gap: 3, marginTop: 14, flexWrap: "wrap" }}>
-          {HWD.map((d) => { const sc = dayScore(d); return <div key={d.d} style={{ flex: "1 1 10%", background: C.ink, border: "1px solid " + (sc ? d.col : C.line), borderRadius: 3, padding: "6px 2px", textAlign: "center" }}><div style={Object.assign({}, mno, { fontSize: 7.5, color: C.ash })}>D{d.d}</div><div style={Object.assign({}, mno, { fontSize: 12, fontWeight: 700, color: sc ? C.chalk : C.ash })}>{sc}</div></div>; })}
-          {[["RET", ret, C.brass], ["DEC", dec, C.violet], ["COMP", compPts, C.cobalt]].map((x) => <div key={x[0]} style={{ flex: "1 1 10%", background: C.ink, border: "1px solid " + (x[1] ? x[2] : C.line), borderRadius: 3, padding: "6px 2px", textAlign: "center" }}><div style={Object.assign({}, mno, { fontSize: 7.5, color: C.ash })}>{x[0]}</div><div style={Object.assign({}, mno, { fontSize: 12, fontWeight: 700, color: x[1] ? C.chalk : C.ash })}>{x[1]}</div></div>)}
-        </div>
-        {decayPct !== null ? <div style={{ background: C.ink, border: "1px solid " + C.violet, borderRadius: 5, padding: "10px 12px", marginTop: 12, textAlign: "center" }}><Eye c={C.violet} s={{ marginBottom: 2 }}>Decay — Day 1 hang {h1}s → Day 6 {h6}s</Eye><div style={Object.assign({}, mno, { fontSize: 24, fontWeight: 700, color: decayPct < 20 ? C.moss : decayPct < 40 ? C.brass : C.oxide })}>{decayPct.toFixed(1)}%</div><Note s={{ marginTop: 2 }}>Whether it was a Hell Week or six separate test days.</Note></div> : null}
-        {weak ? <div style={{ background: C.ink, border: "1px solid " + C.oxide, borderRadius: 5, padding: "11px 12px", marginTop: 11 }}><Eye c={C.oxide} s={{ marginBottom: 4 }}>Weakest — next block attacks this</Eye><div style={Object.assign({}, bdy, { fontSize: 13.5, fontWeight: 600, color: C.chalk })}>{weak.n}</div><Note c={C.brass}>{WEAKFIX[weak.k]}</Note></div> : null}
-        {grand > 0 ? <Btn on={commit} c={rank[2]} fill s={{ width: "100%", marginTop: 12 }}>SAVE ATTEMPT</Btn> : null}
-      </Card>
-      {HWD.map((d) => { const isOpen = open === d.d, sc = dayScore(d);
-        return (
-          <Card key={d.d} ac={d.col} s={{ padding: 0 }}>
-            <div onClick={() => setOpen(isOpen ? null : d.d)} style={{ padding: "12px 13px", cursor: "pointer" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-                <span style={Object.assign({}, dsp, { fontSize: 15.5, fontWeight: 700, letterSpacing: .9, color: C.chalk })}>DAY {d.d} — {d.n}</span>
-                <span style={Object.assign({}, mno, { fontSize: 12, color: sc ? d.col : C.ash })}>{sc}/15</span>
-              </div>
-              {d.sub ? <div style={Object.assign({}, mno, { fontSize: 9, color: d.col, marginTop: 3 })}>{d.sub}</div> : null}
-            </div>
-            {isOpen ? (
-              <div className="rise" style={{ padding: "0 13px 13px" }}>
-                <div style={{ height: 1, background: C.line, marginBottom: 11 }} />
-                {d.pre ? <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, lineHeight: 1.55, marginBottom: 12 })}>{d.pre}</div> : null}
-                {d.warn ? <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.oxide, lineHeight: 1.5, marginBottom: 12, paddingLeft: 10, borderLeft: "2px solid " + C.oxide, fontWeight: 600 })}>⚠ {d.warn}</div> : null}
-                {d.ret && d.ret.pre ? (
-                  <div style={{ background: C.ink, border: "1px solid " + C.brass, borderRadius: 5, padding: "11px 12px", marginBottom: 12 }}>
-                    <Eye c={C.brass} s={{ marginBottom: 6 }}>{d.ret.n}</Eye>
-                    <div style={{ display: "flex", gap: 7 }}>
-                      <div style={{ flex: 1 }}><Lab>Before</Lab><Fld v={raw[d.d + d.ret.k + "pre"]} on={(vv) => setRaw(Object.assign({}, raw, { [d.d + d.ret.k + "pre"]: vv }))} ph="—" /></div>
-                      <div style={{ flex: 1 }}><Lab>After</Lab><Fld v={raw[d.d + d.ret.k + "post"]} on={(vv) => setRaw(Object.assign({}, raw, { [d.d + d.ret.k + "post"]: vv }))} ph="—" /></div>
-                    </div>
-                    {num(raw[d.d + d.ret.k + "pre"]) && num(raw[d.d + d.ret.k + "post"]) ? <div style={{ textAlign: "center", marginTop: 9 }}><span style={Object.assign({}, mno, { fontSize: 20, fontWeight: 700, color: C.brass })}>{(num(raw[d.d + d.ret.k + "post"]) / num(raw[d.d + d.ret.k + "pre"]) * 100).toFixed(1)}%</span><span style={Object.assign({}, mno, { fontSize: 11, color: C.ash })}> · {retPts(raw[d.d + d.ret.k + "pre"], raw[d.d + d.ret.k + "post"])} pts</span></div> : null}
-                    <div style={Object.assign({}, mno, { fontSize: 8.5, color: C.ash, marginTop: 6 })}>95%+=5 · 90–94=4 · 85–89=3 · 80–84=2 · under 80=1 · three attempts each, same ball, same spot.</div>
-                  </div>) : null}
-                {d.t.map((t) => { const p = hsc(raw[d.d + t.k], t.rows, t.top); const kg = t.load && bw ? Math.round(bw * (tier >= 2 && t.k === "rounds" ? 0.5 : t.load)) : null;
-                  return (
-                    <div key={t.k} style={{ marginBottom: 13 }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
-                        <span style={Object.assign({}, bdy, { fontSize: 13.5, fontWeight: 600, color: C.chalk })}>{t.n}</span>
-                        <span style={Object.assign({}, mno, { fontSize: 12, fontWeight: 700, color: C.brass, flexShrink: 0 })}>{p !== null ? p + " pts" : ""}</span>
-                      </div>
-                      {t.ln ? <div style={Object.assign({}, bdy, { fontSize: 12, color: C.ash, marginTop: 2 })}>{t.ln}{kg ? " — " + kg + " kg" : ""}</div> : null}
-                      <div style={{ marginTop: 6 }}><Lab>{t.u}</Lab><Fld v={raw[d.d + t.k]} on={(vv) => setRaw(Object.assign({}, raw, { [d.d + t.k]: vv }))} ph="—" /></div>
-                      <div style={Object.assign({}, mno, { fontSize: 8.5, color: C.ash, marginTop: 4 })}>{t.tbl}</div>
-                    </div>); })}
-                {d.ret && !d.ret.pre ? (
-                  <div style={{ background: C.ink, border: "1px solid " + C.brass, borderRadius: 5, padding: "11px 12px", marginBottom: 12 }}>
-                    <Eye c={C.brass} s={{ marginBottom: 5 }}>{d.ret.n}</Eye>
-                    <div style={Object.assign({}, bdy, { fontSize: 13, color: C.chalk, marginBottom: 8 })}>
-                      {num(maxes[d.ret.maxk]) ? <span>Single at <strong style={{ color: C.brass }}>{r25(num(maxes[d.ret.maxk]) * d.ret.pct / 100)} kg</strong> — {d.ret.pct}% of your squat max</span> : <span style={{ color: C.ash, fontStyle: "italic" }}>Set your squat max in TRACK to auto-load this.</span>}
-                    </div>
-                    <div style={{ display: "flex", gap: 5 }}>
-                      {[["clean", "MADE CLEAN", 5, C.moss], ["grind", "MADE GRINDING", 3, C.brass], ["miss", "MISSED", 1, C.oxide]].map((o) =>
-                        <button key={o[0]} onClick={() => setRaw(Object.assign({}, raw, { "2r3": raw["2r3"] === o[0] ? "" : o[0] }))}
-                          style={Object.assign({}, dsp, { flex: 1, fontSize: 10, fontWeight: 700, padding: "8px 2px", borderRadius: 4, cursor: "pointer", background: raw["2r3"] === o[0] ? soft(o[3]) : "transparent", color: raw["2r3"] === o[0] ? C.chalk : C.ash, border: "1px solid " + (raw["2r3"] === o[0] ? "transparent" : C.line) })}>{o[1]}<br />{o[2]} pts</button>)}
-                    </div>
-                  </div>) : null}
-                {d.extra ? (
-                  <div style={{ marginBottom: 12 }}>
-                    <div style={Object.assign({}, bdy, { fontSize: 13, fontWeight: 600, color: C.chalk, marginBottom: 6 })}>{d.extra.n}{d.extra.pts ? " (+" + d.extra.pts + ")" : ""}</div>
-                    <div style={{ display: "flex", gap: 6 }}>
-                      {["y", "n"].map((vv) => <button key={vv} onClick={() => setRaw(Object.assign({}, raw, { [d.d + d.extra.k]: raw[d.d + d.extra.k] === vv ? "" : vv }))}
-                        style={Object.assign({}, dsp, { flex: 1, fontSize: 12, fontWeight: 700, padding: "8px 0", borderRadius: 4, cursor: "pointer", background: raw[d.d + d.extra.k] === vv ? soft(vv === "y" ? C.moss : C.oxide) : "transparent", color: raw[d.d + d.extra.k] === vv ? C.chalk : C.ash, border: "1px solid " + (raw[d.d + d.extra.k] === vv ? "transparent" : C.line) })}>{vv === "y" ? "YES" : "NO"}</button>)}
-                    </div>
-                  </div>) : null}
-                {d.extra2 ? d.extra2.map((e) => <div key={e.k} style={{ marginBottom: 10 }}><Lab>{e.n}</Lab><Fld v={raw[d.d + e.k]} on={(vv) => setRaw(Object.assign({}, raw, { [d.d + e.k]: vv }))} ph="—" /></div>) : null}
-                {d.extra2 && num(raw[d.d + "quit"]) != null && num(raw[d.d + "stop"]) != null ? <div style={{ background: C.ink, border: "1px solid " + C.oxide, borderRadius: 5, padding: "10px 12px", marginBottom: 11, textAlign: "center" }}><Eye c={C.oxide} s={{ marginBottom: 2 }}>The gap</Eye><div style={Object.assign({}, mno, { fontSize: 24, fontWeight: 700, color: C.chalk })}>{num(raw[d.d + "stop"]) - num(raw[d.d + "quit"])} m</div><Note s={{ marginTop: 2 }}>The most honest measurement of mental fortitude in the entire week.</Note></div> : null}
-                <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.ash, lineHeight: 1.55, paddingLeft: 10, borderLeft: "2px solid " + d.col, fontStyle: "italic" })}>{d.m}</div>
-              </div>) : null}
-          </Card>); })}
-      <Card ac={C.cobalt}>
-        <Eye c={C.cobalt}>Composure — judged per test, immediately</Eye>
-        {HWCOMP.map((c, i) => { const on = comp.indexOf(i) >= 0;
-          return <div key={i} onClick={() => { const n = comp.slice(); const x = n.indexOf(i); if (x >= 0) n.splice(x, 1); else n.push(i); setComp(n); }} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 0", borderBottom: i < HWCOMP.length - 1 ? "1px solid " + C.line : "none", cursor: "pointer" }}>
-            <span style={Object.assign({}, mno, { width: 24, height: 24, borderRadius: 4, flexShrink: 0, background: on ? soft(C.moss) : C.ink, border: "1px solid " + (on ? C.moss : C.line), color: C.chalk, fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" })}>{on ? "✓" : ""}</span>
-            <span style={Object.assign({}, bdy, { fontSize: 12.5, color: on ? C.chalk : C.ash, flex: 1, lineHeight: 1.4 })}>{c[0]}</span>
-            <span style={Object.assign({}, mno, { fontSize: 11, color: on ? C.moss : C.ash })}>{c[1]}</span></div>; })}
-      </Card>
-      <Card ac={C.oxide}>
-        <Eye c={C.oxide}>⚠ Abort — and it is not failure</Eye>
-        {HWABORT.map((r, i) => <div key={i} style={{ padding: "9px 0", borderBottom: i < HWABORT.length - 1 ? "1px solid " + C.line : "none" }}><div style={Object.assign({}, bdy, { fontSize: 13, fontWeight: 600, color: C.oxide })}>{r[0]}</div><div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, marginTop: 2, lineHeight: 1.45 })}>{r[1]}</div></div>)}
-      </Card>
-      <Card ac={C.brass}>
-        <Eye c={C.brass}>Rules of engagement</Eye>
-        {HWRULES.map((r, i) => <div key={i} style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, padding: "7px 0", borderBottom: i < HWRULES.length - 1 ? "1px solid " + C.line : "none", lineHeight: 1.45, fontWeight: 600 })}>{r}</div>)}
-      </Card>
-      {hwLog.length ? (
-        <Card>
-          <Eye c={C.moss}>Previous attempts</Eye>
-          {hwLog.slice(0, 6).map((e, i) => (
-            <div key={i} style={{ padding: "9px 0", borderBottom: i < Math.min(6, hwLog.length) - 1 ? "1px solid " + C.line : "none" }}>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span style={Object.assign({}, bdy, { fontSize: 13, fontWeight: 600, color: C.chalk })}>{HWT[e.tier] ? HWT[e.tier].n : "TIER " + e.tier}</span>
-                <span style={Object.assign({}, mno, { fontSize: 12, fontWeight: 700, color: C.brass })}>{e.total}/120 · {e.rank}</span></div>
-              <div style={Object.assign({}, mno, { fontSize: 9.5, color: C.ash, marginTop: 3 })}>{e.date} · M{e.macro} wk{e.week} · ret {e.ret}/15 · decay {e.decayPct != null ? e.decayPct + "%" : "—"}</div>
-              {e.weak ? <div style={Object.assign({}, bdy, { fontSize: 11.5, color: C.oxide, marginTop: 3 })}>Weakest: {e.weak}</div> : null}
-            </div>))}
-        </Card>) : null}
-      <Card ac={C.oxide}><div style={Object.assign({}, bdy, { fontSize: 13, color: C.chalk, lineHeight: 1.55, fontWeight: 600 })}>The score isn't the point. The score is what stops you lying to yourself about the point.</div></Card>
-    </div>);
-}
-
-/* ================================================================
    APP SHELL
    ================================================================ */
 const KEYS = { st: "o8s-settings", done: "o8s-done", log: "o8s-log", maxes: "o8s-maxes", maxHist: "o8s-maxhist", body: "o8s-body", ready: "o8s-ready", spar: "o8s-spar", swap: "o8s-swap", box: "o8s-box", notes: "o8s-notes", forge: "o8s-forge", fweek: "o8s-fweek", hw: "o8s-hw", calis: "o8s-calis", morning: "o8s-morning", photos: "o8s-photos", fuel: "o8s-fuel", flow: "o8s-flow",
@@ -3712,14 +3424,17 @@ const DEF_ST = () => ({ start: defaultStart(), macroBase: 1, iron: false, sound:
 /* Settings saved before the season builder: the program switch and the
    fight date become the first plan, from the Monday the old clock ran
    from, so every week already logged keeps its place. A fresh install
-   starts Prep's cycle; the Fighter stays the Fighter. */
+   starts Prep's cycle. Optimal 8 Fighter, the classic, was retired on 23
+   November 2026: settings saved on it start Prep's cycle from the Monday
+   its clock ran from, and so do settings saved with no plans at all. */
 function migratePlans(st, fresh) {
   const d = FIGHT_DEFAULTS;
   if (fresh) { const from = defaultStart(); const season = { booked: false, classic: false };
     return { season, plans: [{ from, made: from, inputs: season }] }; }
   const camp = st.program === "camp" || (!!st.camp && st.program !== "prep" && st.program !== "transition");
   const prep = st.program === "prep" || st.program === "transition";
-  if (!camp && !prep) return { season: { booked: false, classic: true }, plans: [] };
+  if (!camp && !prep) { const from = mondayIso(st.start || defaultStart()); const season = { booked: false, classic: false };
+    return { season, plans: [{ from, made: from, inputs: season }] }; }
   if (camp) {
     const from = mondayIso(st.fightDate ? addDays(mondayIso(st.fightDate), -63) : (st.campStart || CAMP_START_DEFAULT));
     const fight = st.fightDate || addDays(from, 63 + 5);
@@ -3880,7 +3595,7 @@ export default function App() {
     let done0 = await load(KEYS.done, {});
     if (!st1.v12) { done0 = migrateDone(done0); st1 = Object.assign({}, st1, { v12: true }); save(KEYS.done, done0); }
     if (!st1.v16) { done0 = boxJumpsDone(done0); st1 = Object.assign({}, st1, { v16: true }); save(KEYS.done, done0); }
-    if (!st1.plans) st1 = Object.assign({}, st1, migratePlans(st1, !s0 && !mig.settings));
+    if (!st1.plans || !st1.plans.length) st1 = Object.assign({}, st1, migratePlans(st1, !s0 && !mig.settings));
     /* a phone with nothing saved gets the welcome, once */
     if (!s0 && !mig.settings) st1 = Object.assign({}, st1, { welcome: true });
     setStRaw(st1); save(KEYS.st, st1);
@@ -3914,23 +3629,17 @@ export default function App() {
   const season = useMemo(() => buildSeason({ plans, today: dayIso, strapBack: (d) => strapBackBy(morning, st, d), head: (f) => heads[f] || null }),
     [JSON.stringify(plans), dayIso, morning, st.base, JSON.stringify(heads)]);
   SEASON.s = season;
-  const classic = !plans.length || (!!season.classic && !rowOn(season, dayIso));
-  SEASON.classic = classic;
-  SEASON.cstart = classic ? { start: st.start, base: st.macroBase, L: st.iron ? 18 : 16 } : null;
   /* THE EDGE: the switch, and the mornings the check has recorded */
   EDGE.manual = st.edge !== false;
   EDGE.ready = readyMap;
   GATE.log = log; GATE.profiles = st.profiles || null;
   MOVE.start = st.moveStart || MOVE_SINCE;
 
-  const curRow = classic ? null : (rowOn(season, dayIso) || (season.rows.length && season.rows[0].mon > dayIso ? season.rows[0] : season.rows[season.rows.length - 1]) || null);
-  const fighterL = st.iron ? 18 : 16;
+  const curRow = rowOn(season, dayIso) || (season.rows.length && season.rows[0].mon > dayIso ? season.rows[0] : season.rows[season.rows.length - 1]) || null;
   const current = useMemo(() => {
     if (curRow) return { macro: curRow.mac, week: curRow.kw, pre: curRow.mon > dayIso, row: curRow };
-    const wk = weeksApart(parseISO(st.start), new Date());
-    if (wk < 0) return { macro: st.macroBase, week: 1, pre: true };
-    return { macro: st.macroBase + Math.floor(wk / fighterL), week: (wk % fighterL) + 1 }; },
-    [st.start, st.macroBase, fighterL, curRow, dayIso]);
+    return { macro: "P", week: 1, pre: true }; },
+    [curRow, dayIso]);
   const today = todayKey();
   const shown = selDay || { macro: current.macro, week: current.week, day: today };
   const isToday = shown.macro === current.macro && shown.week === current.week && shown.day === today;
@@ -3939,18 +3648,11 @@ export default function App() {
   /* the week on screen points MODE at its program */
   const focus = tab === "more" && moreSub === "plan" && weekSub === "week" ? vw : shown;
   setModeFor(focus.macro);
-  MODE.lastTen = MODE.program === "fighter" && !!st.lastTen;
   const program = MODE.program;
   const shownRow = MODE.mac ? seasonRow(shown.macro, shown.week) : null;
-  const L = MODE.mac ? Math.max(1, segmentOf(seasonRow(focus.macro, focus.week)).length) : fighterL;
+  const L = MODE.mac ? Math.max(1, segmentOf(seasonRow(focus.macro, focus.week)).length) : 16;
   /* the date a season day falls on, for the header, the pages and the tables */
   const campLabel = shownRow ? (day) => fmtDate(addDays(shownRow.mon, DAYS.indexOf(day))) : null;
-  /* the season is dated by the plan; only the classic Fighter's clock can be moved */
-  const canSetCurrent = !MODE.mac;
-  const setCurrent = (m, w) => {
-    let base = st.macroBase, off; if (m < base) { base = m; off = w - 1; } else off = (m - base) * L + (w - 1);
-    const start = addWeeks(mondayOf(new Date()), -off);
-    setSt(Object.assign({}, st, { start: iso(start), macroBase: base })); setViewRaw({ macro: m, week: w }); setSelDay(null); };
 
   /* The Monday a week falls on, whichever program is running. */
   const monOf = useCallback((mac, wk) => {
@@ -3958,8 +3660,9 @@ export default function App() {
       const r = rowByKey(season, mac, wk);
       return r ? r.mon : mondayIso(dayIso);
     }
-    return iso(addWeeks(mondayOf(parseISO(st.start)), ((mac - st.macroBase) * fighterL) + (wk - 1)));
-  }, [season, st.start, st.macroBase, fighterL, dayIso]);
+    /* a week logged on Optimal 8 Fighter, before it was retired: dated off its old clock */
+    return iso(addWeeks(mondayOf(parseISO(st.start)), ((mac - st.macroBase) * (st.iron ? 18 : 16)) + (wk - 1)));
+  }, [season, st.start, st.macroBase, st.iron, dayIso]);
 
   const bw = num(body[0] && body[0].bw) || 80;
   /* `also`: the other lifts the same number sets — test week's top
@@ -3973,12 +3676,12 @@ export default function App() {
   const weekStats = useMemo(() => { let g = 0, y = 0, r = 0, slow = 0, spr = 0, dn = 0, planned = 0; const rx = rxFor(shown.week);
     DAYS.forEach((d) => { const k = dayKey(shown.macro, shown.week, d); const rv = readyMap[k]; if (rv === "G") g++; if (rv === "Y") y++; if (rv === "R") r++;
       if (boxMap[k] === "slow") slow++; if (sparMap[k]) spr++;
-      const tot = rx.hell ? 0 : (!MODE.camp && d === "sat" && rx.test ? 1 : countedBlocks(d, rx).length); if (tot) { planned++; if ((done[k] || []).length >= tot) dn++; } });
+      const tot = !MODE.camp && d === "sat" && rx.test ? 1 : countedBlocks(d, rx).length; if (tot) { planned++; if ((done[k] || []).length >= tot) dn++; } });
     return { g, y, r, slow, spar: spr, done: dn, planned }; }, [readyMap, boxMap, sparMap, done, shown.macro, shown.week, program, season, st.edge, st.lastTen]);
   const weekDoneMap = useMemo(() => { const out = {};
     const wks = MODE.mac ? segmentOf(seasonRow(vw.macro, vw.week)).map((r) => r.kw) : Array.from({ length: L }, (_, i) => i + 1);
     for (const w of wks) { const rx = rxFor(w); let dn = 0, tot = 0;
-    DAYS.forEach((d) => { const t = rx.hell ? 0 : (!MODE.camp && d === "sat" && rx.test ? 1 : countedBlocks(d, rx).length); if (t) { tot++; if ((done[dayKey(vw.macro, w, d)] || []).length >= t) dn++; } });
+    DAYS.forEach((d) => { const t = !MODE.camp && d === "sat" && rx.test ? 1 : countedBlocks(d, rx).length; if (t) { tot++; if ((done[dayKey(vw.macro, w, d)] || []).length >= t) dn++; } });
     out[w] = tot ? dn / tot : null; } return out; }, [done, vw.macro, vw.week, L, program, season, st.edge, st.lastTen]);
 
   /* ---------------- IRON MIND ----------------
@@ -3999,21 +3702,16 @@ export default function App() {
   const shownRangeWeek = rangeWeekOf(shown.macro, shown.week);
   /* the test weeks so far, oldest first — what TRACK charts */
   const rangeTestWeeks = useMemo(() => { const out = [];
-    if (!classic) { season.rows.filter((r) => r.mon <= dayIso).forEach((r) => { const rw = rangeWeekOf(r.mac, r.kw); if (!isTestWeek(rw)) return;
-      out.push({ key: "m" + r.mac + "w" + r.kw, label: "rw" + rw, rangeWeek: rw }); }); return out.slice(-8); }
-    for (let m = st.macroBase; m <= current.macro; m++) for (let w = 1; w <= L; w++) {
-      const rw = rangeWeekOf(m, w); if (!isTestWeek(rw)) continue;
-      if (m === current.macro && w > current.week) continue;
-      out.push({ key: "m" + m + "w" + w, label: "rw" + rw, rangeWeek: rw });
-    }
-    return out.slice(-8); }, [st.macroBase, current.macro, current.week, L, rangeWeekOf, program, season, classic]);
+    season.rows.filter((r) => r.mon <= dayIso).forEach((r) => { const rw = rangeWeekOf(r.mac, r.kw); if (!isTestWeek(rw)) return;
+      out.push({ key: "m" + r.mac + "w" + r.kw, label: "rw" + rw, rangeWeek: rw }); });
+    return out.slice(-8); }, [rangeWeekOf, season, dayIso]);
   /* OPTIMAL 8 · MOVE's test weeks, for TRACK */
-  const moveTestWeeks = useMemo(() => (classic ? [] : season.rows.filter((r) => r.mon <= dayIso).map((r) => ({ r, mw: moveWeekOf(r.mon, st.moveStart || MOVE_SINCE) }))
-    .filter((x) => isMoveTestWeek(x.mw)).map((x) => ({ key: "m" + x.r.mac + "w" + x.r.kw, label: "Week " + x.mw })).slice(-8)), [season, classic, dayIso, st.moveStart]);
+  const moveTestWeeks = useMemo(() => season.rows.filter((r) => r.mon <= dayIso).map((r) => ({ r, mw: moveWeekOf(r.mon, st.moveStart || MOVE_SINCE) }))
+    .filter((x) => isMoveTestWeek(x.mw)).map((x) => ({ key: "m" + x.r.mac + "w" + x.r.kw, label: "Week " + x.mw })).slice(-8), [season, dayIso, st.moveStart]);
   const imWeek = useMemo(() => imWeekOn(st, dayIso), [imStart, dayIso]);
   const fightWeekNow = fightWeekOn(st, dayIso);
   const imRec = imDay[dayIso] || {};
-  const taperNow = !!st.taper || current.week === 15 || current.week === 16;
+  const taperNow = !!st.taper;
 
   /* The four range tests live on the existing log key, one entry per field,
      so export/import and the "o8s-…" keys are untouched. */
@@ -4087,7 +3785,6 @@ export default function App() {
       if (kind === "sit") return longestSit >= val;
       if (kind === "bolt") return bestBolt != null && bestBolt >= val;
       if (kind === "weeks") return weeksAtLevel >= val;
-      if (kind === "hell") return hwLog.length > 0;
       return null; /* the app can't measure this one — you judge it */
     };
     const gateShown = (kind, val) => {
@@ -4096,7 +3793,6 @@ export default function App() {
       if (kind === "sit") return longestSit + " / " + val + " min";
       if (kind === "bolt") return (bestBolt == null ? "—" : bestBolt) + " / " + val + "s";
       if (kind === "weeks") return weeksAtLevel + " / " + val + " wk";
-      if (kind === "hell") return hwLog.length ? "done" : "not yet";
       return "your call";
     };
 
@@ -4107,7 +3803,6 @@ export default function App() {
       sits: imSit, hards: imHard, wks: imWk,
       streak: dayDone(imDay[dayIso]) ? streakTo(imDay, dayIso) : streakTo(imDay, addDays(dayIso, -1)),
       weekDone, totalDays, bestCycles, longestSit, bestBolt, weeksAtLevel,
-      hellDone: hwLog.length > 0,
       hasHistory: Object.keys(imDay).length > 0,
       missedYesterday: !dayDone(imDay[addDays(dayIso, -1)]),
       four: [["DAYS DONE", weekDone + "/7"], ["BEST CLEAN CYCLES", bestThisWeek || null], ["BOLT", wkBolt == null ? null : wkBolt + "s"], ["CROSSOVER GAP", wkGap == null ? null : wkGap]],
@@ -4120,9 +3815,8 @@ export default function App() {
       addHard: (e) => { setImHard([e].concat(imHard)); buzz([60, 40, 60]); },
       open: (t) => setTool(t.kind === "rangetests" || t.kind === "movetests" ? { kind: t.kind, macro: current.macro, week: current.week } : t),
       floorOpen: () => setTool({ kind: "floor" }),
-      goHell: () => { setMoreSub("iron"); setTab("more"); setIsub("hell"); },
     };
-  }, [st, imStart, imDay, imSit, imHard, imWk, imWeek, dayIso, weekMonday, hwLog, taperNow, calis, rangeWeek, oneThingOf, fightWeekNow]);
+  }, [st, imStart, imDay, imSit, imHard, imWk, imWeek, dayIso, weekMonday, taperNow, calis, rangeWeek, oneThingOf, fightWeekNow]);
 
   /* ---------------- THE MEASUREMENT LAYER ----------------
      The peak heart rate — the highest 20-minute test on file, or the
@@ -4265,7 +3959,7 @@ export default function App() {
     note: notes[dk] || "", setNote: (val) => setNotes(Object.assign({}, notes, { [dk]: val })),
     openProto: setProto, startTimer: T.start, stopTimer: T.close, openPlates: setPlates, onSetMax, autoRest: st.autoRest,
     setHead: (f, rec) => setSt(Object.assign({}, st, { head: Object.assign({}, st.head, { [f]: rec }) })),
-    goIron: () => { setMoreSub("iron"); setTab("more"); setIsub("hell"); }, weekStats, addBody,
+    weekStats, addBody,
     calis, setCalis, taper: taperNow, checkA, setCheckA, readNow,
     openTool: (t) => setTool(t.kind === "rangetests" || t.kind === "movetests" ? { kind: t.kind, macro: shown.macro, week: shown.week } : t),
     sound: st.sound, flowAt, setFlowAt,
@@ -4388,7 +4082,7 @@ export default function App() {
     const was = season.rows.find((r) => r.mon === addDays(from, -7));
     const runningNow = was && was.program === "spp" && was.doc !== 12 ? "spp" : was && was.program === "prep" && was.doc !== 14 ? "prep" : null;
     const what = why || changeLine(st.season, inputs, runningNow, was && was.doc) || "Re-planned";
-    const line = what + ". From " + fmtDate(from) + ": " + (inputs.classic && !inputs.booked ? "Optimal 8 Fighter, the classic." : describeSeason(s2, from));
+    const line = what + ". From " + fmtDate(from) + ": " + describeSeason(s2, from);
     /* START AGAIN goes in the plan, never in the answers */
     const kept = Object.assign({}, inputs); delete kept.restart; delete kept.repeat;
     setSt(Object.assign({}, st, { season: kept, plans: plans2, fightDate: inputs.booked ? inputs.fight : null, planNote: line, planNoteAt: dayIso, wdraws }));
@@ -4443,8 +4137,8 @@ export default function App() {
       <style>{FONTS}</style>
       <span ref={probeRef} className="o8-probe" aria-hidden="true">A</span>
       {loaded && st.welcome ? <Welcome st={st} upd={(p) => setSt(Object.assign({}, st, p))} maxes={maxes} onMaxes={setMaxes} onRestore={importData}
-          onRun={(k) => { const from = defaultStart(), inputs = Object.assign({ booked: false }, FIGHT_DEFAULTS, { classic: k === "classic", spp: k === "spp" });
-            setSt(Object.assign({}, st, k === "classic" ? { season: inputs, plans: [], start: from } : { season: inputs, plans: [{ from, made: from, inputs }] })); }}
+          onRun={(k) => { const from = defaultStart(), inputs = Object.assign({ booked: false }, FIGHT_DEFAULTS, { classic: false, spp: k === "spp" });
+            setSt(Object.assign({}, st, { season: inputs, plans: [{ from, made: from, inputs }] })); }}
           onDone={() => setSt(Object.assign({}, st, { welcome: false }))} /> : null}
       {T.t ? <TimerFull T={T} /> : null}
       {plates !== null && plates !== undefined ? <Plates kg={plates} onClose={() => setPlates(null)} /> : null}
@@ -4582,10 +4276,10 @@ export default function App() {
                       <Seg opts={[["docs", "DOCUMENTS"], ["week", "THIS WEEK"], ["season", "THE SEASON"]]} val={weekSub} on={setWeekSub} c={P.ac} />
                     </div>
                     {weekSub === "season"
-                      ? <SeasonView season={season} st={st} current={current} classic={classic} dayIso={dayIso}
+                      ? <SeasonView season={season} st={st} current={current} dayIso={dayIso}
                           openWeek={(r) => { setViewRaw({ macro: r.mac, week: r.kw }); setWeekSub("week"); }} />
                       : weekSub === "week"
-                      ? <WeekView view={vw} setView={setView} current={current} setCurrent={canSetCurrent ? setCurrent : null} done={done} L={L} weekDoneMap={weekDoneMap}
+                      ? <WeekView view={vw} setView={setView} current={current} setCurrent={null} done={done} L={L} weekDoneMap={weekDoneMap}
                           openDay={(d) => { setSelDay({ macro: vw.macro, week: vw.week, day: d }); setTab("today"); }} />
                       : <PlanView program={program} title={headerTitle} />}
                   </div>) : null}
@@ -4594,15 +4288,14 @@ export default function App() {
                 {moreSub === "iron" ? (
                   <div>
                     <div style={{ display: "flex", gap: 6, marginBottom: 12, flexWrap: "wrap" }}>
-                      {[["breathe", "BREATHE", C.cobalt], ["sit", "SIT", C.violet], ["hardship", "HARDSHIP", C.oxide], ["life", "LIFE", C.brass], ["season", "SEASON", C.brass], ["hell", "HELL WEEK", C.oxide]].map((x) => <button key={x[0]} onClick={() => setIsub(x[0])}
+                      {[["breathe", "BREATHE", C.cobalt], ["sit", "SIT", C.violet], ["hardship", "HARDSHIP", C.oxide], ["life", "LIFE", C.brass], ["season", "SEASON", C.brass]].map((x) => <button key={x[0]} onClick={() => setIsub(x[0])}
                         aria-pressed={isub === x[0]} style={Object.assign({}, dsp, { flex: "1 1 30%", fontSize: 15.5, fontWeight: 700, letterSpacing: .4, padding: "10px 2px", borderRadius: 999, cursor: "pointer", minHeight: 48, background: isub === x[0] ? x[2] : soft(C.ash), color: isub === x[0] ? C.on : C.chalk, border: "none" })}>{x[1]}</button>)}
                     </div>
                     {isub === "breathe" ? <BreatheView IM={IM} />
                       : isub === "sit" ? <SitView IM={IM} />
                       : isub === "hardship" ? <HardshipView IM={IM} />
                       : isub === "life" ? <LifeView IM={IM} />
-                      : isub === "season" ? <SeasonMindView IM={IM} />
-                      : <HellWeek current={current} maxes={maxes} bw={bw} hwLog={hwLog} setHwLog={setHwLog} L={L} />}
+                      : <SeasonMindView IM={IM} />}
                   </div>) : null}
                 {moreSub === "settings" ? <Settings st={st} setSt={setSt} current={current} L={L} exportData={exportData} importData={importData} IM={IM} calis={calis} setCalis={setCalis} replan={replan}
                     morning={morning} dayIso={dayIso} fuel={fuel} setFuel={setFuel} importFuelText={importFuelText}

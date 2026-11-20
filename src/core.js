@@ -11,12 +11,10 @@ import { AUDIT_SINCE } from "./audit.js";
    throws on three in Strength, Power and Physique.
 
    Strength, Power and Physique gets its own cards (spp.js), where its
-   days were short of one or two. Prep, the camp and Optimal 8 Fighter
-   share the days below, laid over their pages by withCore:
+   days were short of one or two. Prep and the camp share the days
+   below, laid over their pages by withCore:
      Monday     cable crunch + dead bug · cable woodchop, high to low
-     Tuesday    THE BRACE (Prep and the camp): already three · in Fighter,
-                the medicine-ball drops after the trunk block, whose
-                Copenhagen plank went to Wednesday's hip pair
+     Tuesday    THE BRACE: already three
      Wednesday  weighted decline sit-up + landmine rotation · the star
                 side plank in the hip pair is the third
      Thursday   reverse crunch + dumbbell side bend · cable woodchop,
@@ -26,12 +24,10 @@ import { AUDIT_SINCE } from "./audit.js";
      Sunday     the leg raise, the L-sit and the lever: already three
    Prep runs them at its circuits' rounds (3, 2 or 1, none in test week);
    the camp at two rounds through week 8, one in its easy week, none in
-   its last two weeks; Fighter at three, two in its lighter weeks, none
-   in the last ten days before a fight.
+   its last two weeks.
 
    And the kneeling jump into a box jump, in the box jumps' place:
-   Monday in Strength, Power and Physique and in Fighter, Tuesday in
-   Prep and the camp. Each rep is two jumps, so the reps go to 2.
+   Monday in Strength, Power and Physique, Tuesday in Prep and the camp. Each rep is two jumps, so the reps go to 2.
    Every block here hides itself before 23 November: a week before then
    reads exactly as it did.
    ================================================================ */
@@ -47,7 +43,6 @@ export const CORE_CUE = {
   sidebend: "Stand tall with one heavy dumbbell in one hand, the other hand on your head. Bend straight sideways towards the dumbbell as far as you can, then pull back up past upright with the side of your waist. No twisting, no leaning forward. All the reps one side, then the other. Add weight when 15 is easy.",
   lmrot: "One end of a barbell in a landmine or a corner, the other end held at arm's length in front of your chest, feet wide. Swing it down to one hip by turning your hips and pivoting your back foot, arms straight, then across to the other side, trunk braced. Controlled, never swung loose. Start with the bar plus 5–10 kg.",
   hlr: "Hang from the bar, curl your pelvis up and lift your knees to your chest without swinging, then lower slowly. Straight legs once that gets easy.",
-  drops: "Lie on your back, knees bent, the ball held at arm's length over your stomach. Breathe out hard through your teeth and brace as you let it go; it lands just above your belly button, and you catch it on the bounce. Never on the ribs. Go up a kilo when all eight land on a brace that doesn't give, from 3 kg up to 6.",
   kneel: "Kneel tall on a mat, toes tucked under, a knee-high box about a metre in front of you. Swing your arms back, then throw them forward and snap your hips through to jump onto your feet, landing in a half squat. Straight away, jump onto the box as high as you can, land soft and step down. Kneel again and start each rep still.",
 };
 
@@ -58,7 +53,7 @@ export const KNEEL_WHY = "From your knees the legs can't use a dip and a bounce,
 /* a box jump item becomes the kneeling jump into a box jump: the same sets, two reps */
 export const kneelItem = (it, sets, id) => ({ n: "Kneeling jump into box jump", s: sets + " × 2", cue: CORE_CUE.kneel, id, k: it && it.k ? it.k : "chk" });
 
-/* ---------------- Prep, the camp and Fighter ---------------- */
+/* ---------------- Prep and the camp ---------------- */
 const v = (x, rx) => (typeof x === "function" ? x(rx) : x);
 const pair = (L, n, m, rounds, a, b, why) => ({ L, n, since: CORE_SINCE, m, pair: 1, rxLine: () => "back to back · 45 s after each pair",
   items: (rx) => { const r = rounds(rx); return [coreItem(a[0], a[1], r, a[2], a[3], "straight into the " + b[1].toLowerCase(), 0), coreItem(b[0], b[1], r, b[2], b[3], "Rest 45 s", 45)]; },
@@ -70,14 +65,12 @@ const single = (L, n, m, sets, a, why) => ({ L, n, since: CORE_SINCE, m, rest: "
 const ROUNDS = {
   prep: (rx) => Math.max(0, Math.min(3, rx.circ == null ? 3 : rx.circ)),
   camp: (rx) => (rx.tp || rx.fightWeek || (rx.w || 0) > 8 ? 0 : rx.dl ? 1 : 2),
-  fighter: (rx) => (rx.hell || rx.test ? 0 : (rx.acc || 3) < 3 ? 2 : 3),
 };
-const PFX = { prep: "p_", camp: "c_", fighter: "" };
+const PFX = { prep: "p_", camp: "c_" };
 const WHY = {
   mon: "The abs grow on load and hard sets, like any muscle: the crunch takes weight. The dead bug keeps the trunk still while the arms and legs move, and the woodchop turns the hips and shoulders together, the way a hook does.",
   wed: "A sit-up you add weight to, for the abs, and a turn under load for the sides; the star side plank in the hip pair is the day's third.",
   thu: "The reverse crunch works the lower abs from the hips up, the side bend the sides of the waist, and the woodchop turns from low to high, the way an uppercut does.",
-  tue: "The body-shot brace, Prep's and the camp's: with the Pallof press and the ab wheel, the day's three now the Copenhagen plank is in Wednesday's hip pair.",
   sat: "The leg raise for the lower abs and the landmine rotation for the turn; the star side plank in the hip pair is the day's third.",
 };
 function coreBlocks(prog, day) {
@@ -89,8 +82,6 @@ function coreBlocks(prog, day) {
     wed: [pair("CR", "Weighted Decline Sit-Up + Landmine Rotation", m(2.5, 0), R, ["situp", "Weighted decline sit-up", "10", p + "core_situp"], ["lmrot", "Landmine rotation", "6–8 each side", p + "core_lmrot"], WHY.wed)],
     thu: [pair("CR", "Reverse Crunch + Dumbbell Side Bend", m(2.5, 0), R, ["revcrunch", "Reverse crunch", "10–12", p + "core_rev"], ["sidebend", "Dumbbell side bend", "12 each side", p + "core_sidebend"], WHY.thu),
       single("CW", "Cable Woodchop", (rx) => (R(rx) ? 1.5 * two(rx) : 0), two, ["chopLo", "Cable woodchop", "10 each side · low to high", p + "core_chop_lo"], WHY.thu)],
-    tue: prog === "fighter" ? [{ L: "CD", n: "Medicine-Ball Drops", after: "G", since: CORE_SINCE, m: (rx) => (R(rx) ? 2 : 0), rest: "Rest 45 s", rt: 45, rxLine: (rx) => two(rx) + " × 8",
-      items: (rx) => [{ n: "Medicine-ball drops", s: two(rx) + " × 8 · a 3 kg ball, up to 6", cue: CORE_CUE.drops, id: "core_drops", k: "chk", rest: "Rest 45 s", rt: 45 }], why: WHY.tue }] : [],
     sat: [pair("CR", "Hanging Leg Raise + Landmine Rotation", m(2.5, 0), R, ["hlr", "Hanging leg raise", "8–12", p + "core_hlr"], ["lmrot", "Landmine rotation", "6–8 each side", p + "core_lmrot"], WHY.sat)],
   }[day] || [];
   return out.map((x) => Object.assign(x, { hide, noTaper: 1, m: ((mm) => (rx) => Math.round(v(mm, rx)))(x.m) }));
@@ -100,9 +91,9 @@ export const coreMins = (blocks, rx) => blocks.reduce((a, x) => a + (x.hide(rx) 
 
 /* the box jumps that become the kneeling jump into a box jump, by program
    and day: the block's letter, and the box jump's log id */
-const KNEEL = { prep: { tue: ["B", "boxjump"] }, camp: { tue: ["B", "c_boxjump"] }, fighter: { mon: ["C", "boxjump"] } };
+const KNEEL = { prep: { tue: ["B", "boxjump"] }, camp: { tue: ["B", "c_boxjump"] } };
 const kneelBlock = (x, id) => Object.assign({}, x, {
-  rxLine: (rx) => { const s = String(v(x.rxLine, rx) || ""); return !rx.au ? s : s.replace(/box jumps (\d+) × \d+/, "kneeling jumps into box jumps $1 × 2").replace(/^one minute of legs, then (\d+) × \d+$/, "one minute of legs, then kneeling jumps into box jumps $1 × 2"); },
+  rxLine: (rx) => { const s = String(v(x.rxLine, rx) || ""); return !rx.au ? s : s.replace(/box jumps (\d+) × \d+/, "kneeling jumps into box jumps $1 × 2"); },
   items: (rx) => (v(x.items, rx) || []).map((it) => (rx.au && it.id === id ? kneelItem(it, String(it.s).split(" × ")[0], id + "_kneel") : it)),
   why: (rx) => (rx.au ? String(v(x.why, rx) || "") + " " + KNEEL_WHY : v(x.why, rx)) });
 
@@ -114,12 +105,7 @@ export function withCore(prog, day, S) {
   if (!blocks.length && !kn) return S;
   let per = CACHE.get(S); if (per) return per;
   let b = S.b.map((x) => (kn && x.L === kn[0] ? kneelBlock(x, kn[1]) : x));
-  /* each block straight after the one it names, or at the end, before the weekly check */
-  blocks.forEach((x) => {
-    const a = x.after ? b.findIndex((y) => y.L === x.after) : -1, r = b.findIndex((y) => y.review);
-    const at = a >= 0 ? a + 1 : r >= 0 ? r : b.length;
-    b = b.slice(0, at).concat([x], b.slice(at));
-  });
+  if (blocks.length) { const r = b.findIndex((x) => x.review); b = b.slice(0, r >= 0 ? r : b.length).concat(blocks, r >= 0 ? b.slice(r) : []); }
   per = Object.assign({}, S, { b, m: blocks.length ? (rx) => v(S.m, rx) + coreMins(blocks, rx) : S.m });
   CACHE.set(S, per);
   return per;

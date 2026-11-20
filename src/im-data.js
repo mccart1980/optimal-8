@@ -254,10 +254,10 @@ export const LADDER = {
     heat: "Heat: sauna 15–20 minutes, once or twice a week if available, breath slow and nasal, sitting still — the same practice at the other end of the thermometer. Never straight into cold from heat before a training day.",
     heatSecs: [900, 1200],
     items: ["Combined stressors: cold with the four-station drill running; the wall sit with Breathe Light."],
-    gate: "Gate: twelve weeks, plus a completed Hell Week." },
+    gate: "Gate: twelve weeks." },
 };
 
-export const CEILING = "THE CEILING — Hell Week two or three times a year (the training app's IRON switch runs it, in a week without a max or a test day), one deliberate comfort-deprivation day a quarter — no phone, no music, plain food, cold water, the floor slept on — and the solo half-day sit. Visit the ceiling. Don't live there.";
+export const CEILING = "THE CEILING — one deliberate comfort-deprivation day a quarter — no phone, no music, plain food, cold water, the floor slept on — and the solo half-day sit. Visit the ceiling. Don't live there.";
 
 export const ARROWS = "THE FIRST ARROW AND THE SECOND — the operating teaching. When something hard hits — cold on skin, air hunger, burning quads, round five with heavy hands — two arrows land. The first is the event. The second is the reaction: get me out, I can't, how long left. The second arrow hurts more than the first, and the second one is optional. The tell: the second arrow is always a sentence. The first never is. Pure sensation has no words. The moment you find words, you've found the second arrow, and you can put it down. Run this separation silently for sixty seconds inside every hardship session. Noting on a cushion is rehearsal; noting in the cold is the performance.";
 
@@ -282,11 +282,11 @@ export const TESTS5 = [
 ];
 
 export const COLLISION = [
-  "Optimal 8 Fighter owns your body's budget. Iron Mind attaches to what remains; its only standalone claims are seated minutes and the shower.",
-  "Cold: weekdays in the after-work shower. Never within the hour before training. Weekends, not within four hours after the session — cold straight after lifting blunts the adaptation you just paid for — so Saturday and Sunday cold is evening cold. Hell Week's cold finishes are fine; there's no lifting adaptation that week to blunt.",
+  "The training program owns your body's budget. Iron Mind attaches to what remains; its only standalone claims are seated minutes and the shower.",
+  "Cold: weekdays in the after-work shower. Never within the hour before training. Weekends, not within four hours after the session — cold straight after lifting blunts the adaptation you just paid for — so Saturday and Sunday cold is evening cold.",
   "Holds and cold never together.",
-  "Fasts: none in a training week beyond the hungry hour. Extended fasts happen on Hell Week day six only — never in a training week; they fight the 5pm feeds that run your weekend.",
-  "Taper weeks 15–16 of the training cycle: no maximal hardship sessions. Breath, sits and the daily core continue; the tests pause.",
+  "Fasts: none beyond the hungry hour. Extended fasts fight the 5pm feeds that run your weekend.",
+  "A taper week (the switch in Settings → Iron Mind): no maximal hardship sessions. Breath, sits and the daily core continue; the tests pause.",
   "One hardship test per week. Never two.",
 ];
 
@@ -309,7 +309,7 @@ export const GATES = {
   hard: {
     1: { to: 2, lines: [["weeks", "Eight consecutive weeks, none missed", 8]] },
     2: { to: 3, lines: [["weeks", "Eight weeks", 8], ["self", "The cold no longer produces a gasp", 0]] },
-    3: { to: null, lines: [["weeks", "Twelve weeks", 12], ["hell", "A completed Hell Week", 1]] },
+    3: { to: null, lines: [["weeks", "Twelve weeks", 12]] },
   },
 };
 
@@ -318,9 +318,9 @@ export const PROGRESSION = [
   ["1–4", "Stage 1 · counting, body scan, walking · 12 min", "Stage 1 · calm · box, coherent, nasal, diaphragm", "Level 1 · cold 30–60s, a hold, silence, one test", "28 days done · 3 clean cycles · BOLT 20s"],
   ["5–8", "Stage 2 · count then follow, noting, goodwill, candle, rehearsal · 15 min", "Stage 2 · tolerate · Breathe Light, CO2 table, walking holds, alternate-nostril", "Level 1 continues", "Level 1 gate at week 8"],
   ["9–12", "Stage 2 · 20 min · focus under load", "Stage 2 continues", "Level 2 · cold 2–3 min, countback hold, the hungry hour", "5 clean cycles · BOLT 25s · no panic response to mild air hunger"],
-  ["13–16", "Stage 3 · open awareness, switch drill, moving focus · 20 min, Sunday 30", "Stage 3 · control · kumbhaka ratio, humming, O2 table, altitude walks, sensation exposure", "Level 2 continues; taper weeks 15–16: tests pause", "Level 2 gate: no gasp"],
-  ["17–24", "Stage 3 continues · access concentration may appear", "Stage 3 continues", "Level 3 · plunge, heat, combined stressors, silence 60–90", "10 clean cycles · BOLT 35s · sensation exposure = boredom · a completed Hell Week"],
-  ["25+", "Stage 4 · shikantaza, 30–60 min sits, the half-day", "Stage 4 · power · Wim Hof, FRC holds, effort holds, Kapalabhati, extended kumbhaka", "The ceiling · Hell Week 2–3×/year, the deprivation day", "20 clean cycles · a 60-minute sit · a full day"],
+  ["13–16", "Stage 3 · open awareness, switch drill, moving focus · 20 min, Sunday 30", "Stage 3 · control · kumbhaka ratio, humming, O2 table, altitude walks, sensation exposure", "Level 2 continues; a taper week: tests pause", "Level 2 gate: no gasp"],
+  ["17–24", "Stage 3 continues · access concentration may appear", "Stage 3 continues", "Level 3 · plunge, heat, combined stressors, silence 60–90", "10 clean cycles · BOLT 35s · sensation exposure = boredom"],
+  ["25+", "Stage 4 · shikantaza, 30–60 min sits, the half-day", "Stage 4 · power · Wim Hof, FRC holds, effort holds, Kapalabhati, extended kumbhaka", "The ceiling · the deprivation day, the half-day sit", "20 clean cycles · a 60-minute sit · a full day"],
 ];
 
 /* ================================================================

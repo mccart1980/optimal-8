@@ -1,13 +1,12 @@
 import { describe, it, expect } from "vitest";
 import prepMd from "../optimal-8-prep.md?raw";
 import campMd from "../optimal-8-camp.md?raw";
-import fighterMd from "../optimal8fighter.md?raw";
 import builderMd from "../season-builder.md?raw";
 import { AUDIT_SINCE, auditOn, SPLEEFT_FAST, SPLEEFT_ARM, ARMS_THIRD, BIKE_THIRD, ROUNDS_LIB, ERG_ROUNDS_LIB, T20_LIB, bikeFields } from "./audit.js";
 import { AUDIT_SINCE as SPP_SINCE } from "./spp.js";
 import { prepSess, prepRx, pengLine } from "./prep.js";
 import { campSess, campMaster, CS, CSFW, roundFields, cengLine, cengLib } from "./camp.js";
-import { sessionCatalog, fighterSess, FIGHTER_MAXES_RULE } from "./App.jsx";
+import { sessionCatalog } from "./App.jsx";
 import { BAR_SPEED_ITEMS, BAR_SPEED_FAST } from "./metrics.js";
 import { LIBRARY, libFor } from "./library.js";
 
@@ -32,7 +31,7 @@ const card = (set, row, pick, day, n) => page(set, row, pick, day).find((c) => c
 const names = (set, row, pick, day) => page(set, row, pick, day).map((c) => c.n);
 const wk = (w) => (c) => c.week === w, id = (i) => (c) => c.id === i;
 
-describe("the audit in Prep, the camp and Fighter · the switch", () => {
+describe("the audit in Prep and the camp · the switch", () => {
   it("is the week of Monday 23 November 2026, the same Monday as Strength, Power and Physique's", () => {
     expect(AUDIT_SINCE).toBe("2026-11-23");
     expect(SPP_SINCE).toBe(AUDIT_SINCE);
@@ -44,7 +43,6 @@ describe("the audit in Prep, the camp and Fighter · the switch", () => {
     const cases = [
       [prepSess("sat"), "F", "LM", { pp }],
       [campSess("sat", {}), "F", "LM", { pp }],
-      [fighterSess("sat"), "G", "LM", { pp: { sc: "4 × 3 @ 82%", sets: 4, reps: 3, pct: 82 } }],
       [campSess("tue", {}), "Q", "ST", { speed: true }],
     ];
     cases.forEach(([S, old, neu, rx]) => {
@@ -72,7 +70,7 @@ describe("the audit in Prep, the camp and Fighter · the switch", () => {
   });
 });
 
-describe("the audit in Prep, the camp and Fighter · the SkiErg out", () => {
+describe("the audit in Prep and the camp · the SkiErg out", () => {
   it("the rounds: the first third is the assault bike with the arms only, the second the bike with arms and legs; the card's words say so", () => {
     const sim = card("master", "camp", wk(1), "sun", "The 6 × 3 Simulation");
     expect(sim.lib.map((e) => e.n)).toEqual([ROUNDS_LIB]);
@@ -133,28 +131,16 @@ describe("the audit in Prep, the camp and Fighter · the SkiErg out", () => {
     expect(card("master", "prep", wk(1), "sun", "The 20-Minute Test").lib.map((e) => e.n)).toEqual([T20_LIB]);
     expect(entry(T20_LIB).text).toBe("Five easy minutes, then as much distance as you can in 20 minutes on your usual bike. Log the distance and the highest heart rate you saw.");
     expect(entry("THE 20-MINUTE TEST").text).toMatch(/on your usual bike or SkiErg/);
-    [blk(CS.mon, "X"), blk(campSess("sun", { pre: 1, checks: 1 }), "X"), blk(prepSess("sun"), "X"), named(fighterSess("sun"), "20-Minute Bike Test")]
+    [blk(CS.mon, "X"), blk(campSess("sun", { pre: 1, checks: 1 }), "X"), blk(prepSess("sun"), "X")]
       .forEach((b) => expect([b.libAs({ au: true }), b.libAs({})]).toEqual([T20_LIB, null]));
     expect(libFor(T20_LIB)[0].n).toBe(T20_LIB);
     /* the lookups an older page makes still find the older entries */
     expect([libFor("The 20-Minute Test")[0].n, libFor("20-Minute Bike Test")[0].n, libFor("ROUNDS ON THE ERG · 7 × 3")[0].n, libFor("THE ROUNDS")[0].n, libFor("Fight Simulation")[0].n])
       .toEqual(["THE 20-MINUTE TEST", "THE 20-MINUTE TEST", "ROUNDS ON THE ERG", "THE ROUNDS (FIGHT SIMULATION)", "THE ROUNDS (FIGHT SIMULATION)"]);
   });
-
-  it("Fighter's rounds: minute 1 on the assault bike with the arms only, one box a round in the bike's calories", () => {
-    const D = named(fighterSess("sun"), "Fight Simulation");
-    const rx = { sim: { rest: 90, max3: 1 } };
-    expect(v(D.items, rx).map((i) => [i.n, i.k === "txt" ? i.s : i.u])).toEqual([["Minute 1", "SkiErg"], ["Minute 2", "Assault bike"], ["Minute 3", "Landmine punches (odd rounds) or med-ball slams (even)"],
-      ["Round 1 output", "SkiErg m / bike cal"], ["Round 6 output", "SkiErg m / bike cal"]]);
-    expect(v(D.items, Object.assign({ au: true }, rx)).map((i) => [i.n, i.k === "txt" ? i.s : i.u])).toEqual([["Minute 1", ARMS_THIRD], ["Minute 2", BIKE_THIRD], ["Minute 3", "Landmine punches (odd rounds) or med-ball slams (even)"],
-      ["Round 1 output", "bike cal"], ["Round 6 output", "bike cal"]]);
-    expect(D.timer(Object.assign({ au: true }, rx)).opt).toEqual({ rounds: 6, rest: 90, max3: 1, arms: 1 });
-    expect(D.timer(rx).opt).toEqual({ rounds: 6, rest: 90, max3: 1 });
-    expect([D.libAs({ au: true }), D.libAs({})]).toEqual([ROUNDS_LIB, null]);
-  });
 });
 
-describe("the audit in Prep, the camp and Fighter · the one-arm landmine push press", () => {
+describe("the audit in Prep and the camp · the one-arm landmine push press", () => {
   it("in the barbell push press's place: the week's own sets and reps, each side, every rep fast; no working max, no percentage", () => {
     const lm = card("master", "prep", wk(2), "sat", "One-Arm Landmine Push Press");
     expect(lm.pres).toBe("3 × 3 each side · every rep fast · Rest 2:00");
@@ -165,7 +151,7 @@ describe("the audit in Prep, the camp and Fighter · the one-arm landmine push p
     /* where the week has no push press it has no landmine push press: Prep's top-triple and test weeks, the camp's last two */
     ["P9", "P14"].forEach((i) => expect(names("master", "prep", id(i), "sat")).not.toContain("One-Arm Landmine Push Press"));
     [9, 10].forEach((w) => expect(names("master", "camp", wk(w), "sat")).not.toContain("One-Arm Landmine Push Press"));
-    [[prepSess("sat"), "p_lmpush", 8], [campSess("sat", {}), "c_lmpush", 8], [fighterSess("sat"), "lmpush", 10]].forEach(([S, lid, mins]) => {
+    [[prepSess("sat"), "p_lmpush", 8], [campSess("sat", {}), "c_lmpush", 8]].forEach(([S, lid, mins]) => {
       const b = blk(S, "LM"), rx = { au: true, pp: { sc: "3 × 3 @ 75%", sets: 3, reps: 3, pct: 75 } }, it = v(b.items, rx)[0];
       expect([it.id, it.k, it.sets, it.reps, it.mk, it.pct]).toEqual([lid, "wr", 3, "3/side", undefined, undefined]);
       expect([b.m, b.rest, b.rt, b.hard, b.mainLift, b.vel]).toEqual([mins, "Rest 2:00", 120, 1, undefined, undefined]);
@@ -187,24 +173,11 @@ describe("the audit in Prep, the camp and Fighter · the one-arm landmine push p
     expect(names("master", "prep", id("P5"), "sat")).toContain("Working-Weight Check — Squat");
     expect(names("master", "prep", id("P5"), "sat")).not.toContain("Working-Weight Check — Push Press");
   });
-
-  it("Fighter: the week's push press sets and reps, each side; week 1, with no number to find, runs 4 × 3; none in the top-triple weeks", () => {
-    const b = blk(fighterSess("sat"), "LM");
-    const line = (pp) => (shows(b, { au: true, pp }) ? v(b.items, { au: true, pp })[0].s : null);
-    expect(line({ sc: "CALIBRATE — ramp to a 3RM @ RPE 8", cal: 1 })).toBe("4 × 3 each side · every rep fast");
-    expect(line({ sc: "4 × 3 @ 82%", sets: 4, reps: 3, pct: 82 })).toBe("4 × 3 each side · every rep fast");
-    expect(line({ sc: "2 × 3 @ 65%", sets: 2, reps: 3, pct: 65 })).toBe("2 × 3 each side · every rep fast");
-    expect(line({ sc: "2 × 2 @ 85%", sets: 2, reps: 2, pct: 85 })).toBe("2 × 2 each side · every rep fast");
-    expect([line({ bench: 1 }), line(null)]).toEqual([null, null]);
-    /* the barbell's card, as it was, in a week before the switch */
-    const G = blk(fighterSess("sat"), "G");
-    expect([shows(G, { pp: { sc: "4 × 3 @ 82%" } }), shows(G, { pp: { bench: 1 } }), G.calib]).toEqual([true, false, "pp"]);
-  });
 });
 
-describe("the audit in Prep, the camp and Fighter · a speed on every fast rep", () => {
+describe("the audit in Prep and the camp · a speed on every fast rep", () => {
   it("the bench throw's own card shows the bar-speed box and Spleeft's rule, from the switch", () => {
-    [[named(prepSess("wed"), "Bench Throw (Smith)"), "throw"], [named(campSess("wed", {}), "Bench Throw"), "c_benchthrow"], [named(fighterSess("mon"), "Bench Throw (Smith)"), "throw"]].forEach(([b, tid]) => {
+    [[named(prepSess("wed"), "Bench Throw (Smith)"), "throw"], [named(campSess("wed", {}), "Bench Throw"), "c_benchthrow"]].forEach(([b, tid]) => {
       expect([!!v(b.spd, { au: true }), !!v(b.spd, {}), b.spdLine]).toEqual([true, false, SPLEEFT_FAST]);
       expect(BAR_SPEED_ITEMS[tid]).toBe("bthrow");
     });
@@ -213,7 +186,7 @@ describe("the audit in Prep, the camp and Fighter · a speed on every fast rep",
   });
 });
 
-describe("the audit in Prep, the camp and Fighter · the camp's Tuesday speed and its last morning", () => {
+describe("the audit in Prep and the camp · the camp's Tuesday speed and its last morning", () => {
   it("Tuesday's speed, weeks 6 to 8 with the Edge on: three 10-metre starts from the stance; the flying sprints stay on Saturday; Prep's Tuesday is as it was", () => {
     [6, 7, 8].forEach((w) => {
       const st = card("master", "camp", wk(w), "tue", "Speed — stance starts");
@@ -246,9 +219,9 @@ describe("the audit in Prep, the camp and Fighter · the camp's Tuesday speed an
   });
 });
 
-describe("the audit in Prep, the camp and Fighter · the documents", () => {
+describe("the audit in Prep and the camp · the documents", () => {
   it("each program's document says what changed and why, and no page of them names the SkiErg as a station", () => {
-    [prepMd, campMd, fighterMd].forEach((md) => {
+    [prepMd, campMd].forEach((md) => {
       expect(md).toMatch(/^\*\*What the November audit changed, and why\.\*\* The audit of 19 November 2026 read every program against the brief/m);
       expect((md.match(/SkiErg/g) || []).length).toBe(1);
       expect(md).toMatch(/\*\*The SkiErg is out:\*\* you can't pace on it, so its numbers said nothing\./);
@@ -270,18 +243,5 @@ describe("the audit in Prep, the camp and Fighter · the documents", () => {
     expect(prepMd).toMatch(/On Saturday, the squat the same way, then the bench at four loads\./);
     expect(prepMd).toMatch(/the trap bar and the bench on Wednesday, the squat on Saturday: a set of 3/);
     expect(prepMd).toMatch(/Tuesday's three flying twenties in weeks 11–13 stay/);
-  });
-
-  it("Fighter: no maximum singles — weeks 4 and 9 and test day are top triples, as the app runs them", () => {
-    expect(fighterMd).not.toMatch(/MAX SINGLE|max singles?\b|100–102%|attempt at 100/i);
-    expect(fighterMd).toMatch(/^\| 4 \| TOP TRIPLE, then 2 × 3 @ 85% \| — \| 4 × 3 @ 80% \| — \(squat top-triple day; the bench's is Sunday\) \|$/m);
-    expect(fighterMd).toMatch(/^\| 9 \| TOP TRIPLE, then 2 × 2 @ 88% \| — \| 3 × 2 @ 88% \| — \(squat top-triple day; the bench's is Sunday\) \|$/m);
-    expect(fighterMd).toMatch(/^\| Week \| Squat \(Sat\) & bench \(Mon\) \| Pause squat \(Wed\) \| Trap bar \(Wed\) \| Landmine push press \(Sat\), each side \|$/m);
-    expect(fighterMd).toMatch(/^\| 1 \| 4 × 6 @ 75% \| 3 × 3 @ 65% \| find your 3RM \| 4 × 3 \|$/m);
-    expect(fighterMd).toMatch(/TOP TRIPLE — weeks 4 and 9 only \(about 20 min\)\..*sets of three going up 2\.5–5% at a time until one is hard but leaves one or two in you\. Stop there\./);
-    expect(fighterMd).toMatch(/^5\. \*\*Back squat\*\* — top triple, pins set: the heaviest clean set of three, one or two left in you\./m);
-    expect(fighterMd).toMatch(/\*\*No maximum singles\.\*\* Weeks 4 and 9 and test day are top triples/);
-    expect(FIGHTER_MAXES_RULE).toMatch(/^Squat and bench: working maxes — your heaviest clean set of 3, with one or two reps left in you, × 1\.08\. Never a best single\./);
-    expect(FIGHTER_MAXES_RULE).not.toMatch(/your best single/);
   });
 });

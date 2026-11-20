@@ -36,7 +36,8 @@ describe("the welcome: a phone with nothing saved", () => {
 
     expect(step()).toBe("Step 2 of 4");
     expect(welcome().getByText("What do you want to run?")).toBeInTheDocument();
-    expect(runs()).toEqual([["spp", "true"], ["prep", "false"], ["classic", "false"]]);
+    /* Optimal 8 Fighter was retired on 23 November 2026: two to choose from */
+    expect(runs()).toEqual([["spp", "true"], ["prep", "false"]]);
     fireEvent.click(welcome().getByRole("button", { name: "CONTINUE" }));
 
     expect(step()).toBe("Step 3 of 4");
@@ -61,8 +62,8 @@ describe("the welcome: a phone with nothing saved", () => {
     expect(maxes().tbdl).toBeUndefined();
   });
 
-  it("the other two programmes start the same way, from this Monday", async () => {
-    for (const [key, want] of [["prep", /^Prep · Week 1/], ["classic", /^Fighter · Week 1/]]) {
+  it("the other programme starts the same way, from this Monday", async () => {
+    for (const [key, want] of [["prep", /^Prep · Week 1/]]) {
       localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
       await up();
       fireEvent.click(within(screen.getByTestId("welcome")).getByRole("button", { name: "GET STARTED" }));
@@ -73,8 +74,8 @@ describe("the welcome: a phone with nothing saved", () => {
       fireEvent.click(welcome().getByRole("button", { name: "OPEN TODAY" }));
       expect(title()).toMatch(want);
       await waitFor(() => expect(saved().welcome).toBe(false));
-      expect([!!saved().season.classic, !!saved().season.spp, saved().season.booked]).toEqual([key === "classic", false, false]);
-      expect(saved().plans.length).toBe(key === "classic" ? 0 : 1);
+      expect([!!saved().season.classic, !!saved().season.spp, saved().season.booked]).toEqual([false, false, false]);
+      expect(saved().plans.length).toBe(1);
       expect(maxes()).toEqual({});
       cleanup();
     }
@@ -187,7 +188,7 @@ describe("the settings page", () => {
     await up();
     openSettings();
     const jumps = within(screen.getByTestId("settings-jumps")).getAllByRole("button");
-    expect(jumps.map((b) => b.textContent)).toEqual(["THE DAY", "LOOK", "SOUND", "CYCLE", "RANGE AND MOVE", "CALISTHENICS", "IRON MIND", "BACKUP"]);
+    expect(jumps.map((b) => b.textContent)).toEqual(["THE DAY", "LOOK", "SOUND", "REST CLOCK", "RANGE AND MOVE", "CALISTHENICS", "IRON MIND", "BACKUP"]);
     ["day", "look", "sound", "cycle", "range", "calis", "iron", "backup"].forEach((k) => expect([k, !!document.getElementById("set-" + k)]).toEqual([k, true]));
     /* a jump is safe to press where the page can't scroll */
     jumps.forEach((b) => fireEvent.click(b));

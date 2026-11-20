@@ -4,13 +4,12 @@ import homeMd from "../home-routines.md?raw";
 import sppMd from "../optimal-8-strength-power-physique.md?raw";
 import prepMd from "../optimal-8-prep.md?raw";
 import campMd from "../optimal-8-camp.md?raw";
-import fighterMd from "../optimal8fighter.md?raw";
 import { MOVE_SINCE, moveWeekOf, movePhase, isMoveTestWeek, LEVELS, LEVEL_KEY, levelOf, levelLine, stepLevel,
   MOVE_TESTS, MOVE_TEST_IDS, rangeStandardsMet, testSummary, jeffersonGate, canMarkEnd, END_KEY, TENDON_SINCE, tendonWeekOf, pushEffort } from "./move.js";
 import { MOVE_RANGE_CARDS, SESSION_A_CARDS, SESSION_B_CARDS, RANGE_CARDS, sessionCards, moveRangeCards, levelIdOf, ROUTINE_MINS, UPPER_PUSH_CARDS, upperPushCards } from "./routines.js";
 import { sppRx, sppSess, SPPROTO, SPP_READY_LINE } from "./spp.js";
 import { libFor } from "./library.js";
-import { sessionCatalog, fighterSess } from "./App.jsx";
+import { sessionCatalog } from "./App.jsx";
 import { prepSess, prepRx, transitionSess } from "./prep.js";
 import { campSess, CSFW } from "./camp.js";
 import { withMove, withFinalWeek, OPROTO } from "./movex.js";
@@ -455,8 +454,8 @@ describe("Optimal 8 · Move · the tendon work, from Monday 23 November", () => 
   });
 });
 
-describe("Optimal 8 · Move · in every program — Prep, the camp, the transition and Fighter", () => {
-  const PAGE = { prep: (d) => prepSess(d), camp: (d) => campSess(d, {}), fighter: (d) => fighterSess(d) };
+describe("Optimal 8 · Move · in every program — Prep, the camp and the transition", () => {
+  const PAGE = { prep: (d) => prepSess(d), camp: (d) => campSess(d, {}) };
   const page = (prog, d) => withMove(prog, d, PAGE[prog](d));
   const rxOf = (mw, tw, extra) => Object.assign({}, prepRx(3), { mw, tw }, extra || {});
   const on = (S, rx) => S.b.filter((b) => !(b.hide && b.hide(rx)));
@@ -466,39 +465,39 @@ describe("Optimal 8 · Move · in every program — Prep, the camp, the transiti
   const KEY = { mon: "O_MV_MON", tue: "O_MV_TUE", wed: "O_MV_WED", thu: "O_MV_THU", sat: "O_MV_SAT", sun: "O_MV_SUN" };
 
   it("before MOVE every page reads exactly as it did, and a day's page is the same object every time", () => {
-    for (const prog of ["prep", "camp", "fighter"]) for (const d of DAYS) {
+    for (const prog of ["prep", "camp"]) for (const d of DAYS) {
       expect([prog, d, names(page(prog, d), rxOf(0, 0))]).toEqual([prog, d, names(PAGE[prog](d), rxOf(0, 0))]);
       expect(page(prog, d)).toBe(page(prog, d));
     }
   });
-  it("from MOVE's week 1 the movement block opens every gym day in the warm-up's place; Fighter's Monday and Wednesday carry its own lift sets", () => {
-    for (const prog of ["prep", "camp", "fighter"]) for (const d of DAYS) {
-      const want = prog === "fighter" && (d === "mon" || d === "wed") ? KEY[d] + "_F" : KEY[d];
+  it("from MOVE's week 1 the movement block opens every gym day in the warm-up's place", () => {
+    for (const prog of ["prep", "camp"]) for (const d of DAYS) {
+      const want = KEY[d];
       const first = on(page(prog, d), rxOf(1, 0))[0];
       expect([prog, d, first.p, first.n]).toEqual([prog, d, want, "Warm-up"]);
       expect(page(prog, d).b.filter((b) => b.L === first.L && !(b.hide && b.hide(rxOf(1, 0)))).length).toBe(1);
     }
     /* week 1 of MOVE, before the tendon work: no pushes, no hip pair, no towel; the back extension already on Sunday */
-    for (const prog of ["prep", "camp", "fighter"]) for (const d of DAYS) {
+    for (const prog of ["prep", "camp"]) for (const d of DAYS) {
       const L = on(page(prog, d), rxOf(1, 0)).map((b) => b.L);
       expect([prog, d, L.filter((x) => x === "LP" || x === "HP" || x === "TC")]).toEqual([prog, d, []]);
       expect([prog, d, L.indexOf("BX") >= 0]).toEqual([prog, d, d === "sun"]);
     }
   });
   it("the movement blocks: their minutes, MOVE's moves, then the day's own lift sets or primers", () => {
-    const mins = { O_MV_MON: 9, O_MV_MON_F: 11, O_MV_TUE: 12, O_MV_WED: 10, O_MV_WED_F: 11, O_MV_THU: 8, O_MV_SAT: 12, O_MV_SUN: 14 };
+    const mins = { O_MV_MON: 9, O_MV_TUE: 12, O_MV_WED: 10, O_MV_THU: 8, O_MV_SAT: 12, O_MV_SUN: 14 };
+    /* Fighter's own two blocks went with it on 23 November 2026 */
+    expect([OPROTO.O_MV_MON_F, OPROTO.O_MV_WED_F]).toEqual([undefined, undefined]);
     Object.keys(mins).forEach((k) => {
       expect([k, OPROTO[k].n, parseInt(OPROTO[k].s, 10)]).toEqual([k, "The movement block", mins[k]]);
       expect([k, OPROTO[k].i.every((r) => r.length >= 2 && typeof r[0] === "string" && typeof r[1] === "string")]).toEqual([k, true]);
     });
     const tail = (k, n) => OPROTO[k].i.slice(-n).map((r) => r[0]);
     expect(tail("O_MV_MON", 2)).toEqual(["Ring support hold", "Bodyweight dips"]);
-    expect(tail("O_MV_MON_F", 5)).toEqual(["BENCH RAMP", "Bar", "40%", "60%", "75%"]);
     expect(tail("O_MV_WED", 4)).toEqual(["TRAP BAR WARM-UP SETS", "Bar", "50% of working", "70% of working"]);
-    expect(tail("O_MV_WED_F", 3)).toEqual(["SQUAT WARM-UP SETS", "40% of working", "60% of working"]);
     expect(tail("O_MV_SUN", 5)).toEqual(["PLUS", "Broad jumps", "Med-ball chest passes", "Bike sprints", "Practice throws"]);
     /* Wednesday's knees are the pushes' job from 23 November: no Spanish squat in the block */
-    ["O_MV_WED", "O_MV_WED_F"].forEach((k) => expect(OPROTO[k].i.some((r) => /Spanish/.test(r[0]))).toBe(false));
+    expect(OPROTO.O_MV_WED.i.some((r) => /Spanish/.test(r[0]))).toBe(false);
     expect(OPROTO.O_MV_TUE.i).toEqual(SPPROTO.S_MV_THU.i);
     expect(OPROTO.O_MV_THU.i).toEqual(SPPROTO.S_MV_TUE.i);
   });
@@ -522,23 +521,8 @@ describe("Optimal 8 · Move · in every program — Prep, the camp, the transiti
       expect(at(tue, rxOf(1, 0), "K")).toBeGreaterThan(0);
     }
   });
-  it("Fighter: the lower pushes Tuesday and Thursday after the split squat and pistols, Saturday after the side bounds; its trunk loses the Copenhagen plank; the hip pair Wednesday and Saturday", () => {
-    const rx = rxOf(3, 2);
-    const tue = page("fighter", "tue"), thu = page("fighter", "thu"), sat = page("fighter", "sat");
-    expect(at(tue, rx, "LP")).toBe(at(tue, rx, "C") + 1);
-    expect(at(thu, rx, "LP")).toBe(at(thu, rx, "C") + 1);
-    expect([at(thu, rx, "D"), at(thu, rx, "X")]).toEqual([-1, -1]);
-    expect(at(sat, rx, "LP")).toBe(at(sat, rx, "D") + 1);
-    const trunk = tue.b.find((b) => b.L === "G");
-    expect(v(trunk.items, rx).some((i) => i.id === "copen")).toBe(false);
-    expect(v(trunk.items, rxOf(1, 0)).some((i) => i.id === "copen")).toBe(true);
-    expect(v(trunk.m, rx)).toBe(7);
-    expect(on(page("fighter", "wed"), rx).slice(-1)[0].L).toBe("HP");
-    expect(on(sat, rx).slice(-1)[0].L).toBe("HP");
-    expect(on(page("fighter", "sun"), rx).findIndex((b) => b.L === "BX")).toBe(on(page("fighter", "sun"), rx).findIndex((b) => b.L === "G") + 1);
-  });
   it("the towel calf raise: the seated calf raise as it was, straight into the towel raise on the machine, 2 × 6–10; in MOVE's test weeks its heaviest five — the camp's logged under its own ids", () => {
-    for (const [prog, pfx] of [["prep", ""], ["camp", "c_"], ["fighter", ""]]) {
+    for (const [prog, pfx] of [["prep", ""], ["camp", "c_"]]) {
       const tc = page(prog, "tue").b.find((b) => b.L === "TC");
       const [seat, towel] = tc.items(rxOf(3, 2));
       expect(seat.rest).toBe("straight into the towel calf raise");
@@ -599,11 +583,9 @@ describe("Optimal 8 · Move · in every program — Prep, the camp, the transiti
   it("the documents: each program's page says how MOVE lays over it, and MOVE's own says it runs in every program", () => {
     expect(prepMd).toMatch(/^## OPTIMAL 8 · MOVE AND ITS TENDON WORK — IN PREP TOO$/m);
     expect(campMd).toMatch(/^## OPTIMAL 8 · MOVE AND ITS TENDON WORK — IN THE CAMP TOO$/m);
-    expect(fighterMd).toMatch(/^## OPTIMAL 8 · MOVE AND ITS TENDON WORK — IN FIGHTER TOO$/m);
     expect(campMd).toMatch(/\*\*The camp's final week\*\* runs as the camp has it, with one dose of each/);
     expect(moveMd).toMatch(/^## MOVE IN EVERY PROGRAM/m);
     expect(homeMd).toMatch(/in the transition, Monday and Thursday at 7 out of 10, and in the camp's final week one evening, its Tuesday, at half effort/);
-    [prepMd, campMd, fighterMd].forEach((md) => expect(md).toMatch(/The morning five goes/));
-    expect(fighterMd).not.toMatch(/RANGE and the morning five stay in camp/);
+    [prepMd, campMd].forEach((md) => expect(md).toMatch(/The morning five goes/));
   });
 });

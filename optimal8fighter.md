@@ -1,5 +1,7 @@
 # OPTIMAL 8 — FIGHTER · v1.5
 
+**RETIRED on 23 November 2026.** Optimal 8 Fighter and its Hell Week are no longer in the app: with no fight booked, Strength, Power and Physique or Prep runs, and a booked fight runs the camp. This document stays in the repository as the record of what it was.
+
 **The fighter's build. Four weekday mornings of about an hour, Friday asleep, Saturday 90 minutes, Sunday 75. Calisthenics threaded through the week where each piece belongs. RANGE — twenty minutes of real mobility work — at home every evening, the joint circles every morning. The mind trained inside the sessions, where it's tested. Nothing in the gym that doesn't make you a better fighter.**
 
 Your strength and conditioning for 16 weeks. Your coach owns boxing. This owns everything else: maximal strength, punching power, speed, the engine, and the tissue that keeps you training. Power is dosed three mornings a week, the engine is built twice, the squat gets a second exposure, the trunk is braced, the landmine appears twice. Boxing runs separately.
