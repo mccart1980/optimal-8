@@ -1,5 +1,7 @@
 # IRON MIND v5 — THE SEASON
 
+**RETIRED on 20 November 2026.** Iron Mind is no longer in the app. The 60-second settle after the intervals stays on the training pages. This document stays in the repository as the record of what it was.
+
 **A mind that does what you tell it, in the ring and out of it. Twenty-four dated weeks from Monday 28 September to the fight on Saturday 13 March, then the rest of your life. One page runs the day. Three curricula — meditation, breath, hardship — run the stages. A fourth, new, runs the man: the rules he lives by, the tests he sets himself, and the numbers that say whether he's more in control this month than last.**
 
 Iron Mind was never only for fighting. The corner minute and the post-max sit are where it's tested at heart rate 170; the rest of it is tested at 6pm on a Tuesday when someone's let you down, at 4am when the alarm goes, in the decision you've been circling for a week, and in what you do with the hard thing you've been avoiding. This version is built by the standard the best in each field would hold it to: the meditation path as the Zen halls and the Theravada teachers run it, the breath work as the clinicians who treat panic and the physiologists who measure carbon-dioxide tolerance would prescribe it, the hardship as the Stoics practised it and the sport scientists now explain it, and the whole thing measured — because a mind you can't measure is a mind you're guessing about.

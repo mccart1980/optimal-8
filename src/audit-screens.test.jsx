@@ -263,12 +263,11 @@ describe("the block notes follow the switch, on THIS WEEK and in the GUIDE", () 
     expect(week()).toContain("TUESDAY · Tue 7 Apr74 MIN");
   });
 
-  it("Hell Week is gone: the IRON tab has no page for it, and a phone saved on Fighter opens on Prep", async () => {
+  it("Hell Week is gone, and the IRON tab with it, and a phone saved on Fighter opens on Prep", async () => {
     await at(2026, 12, 7, fighter());
     expect(screen.getByTestId("app-title").textContent).toMatch(/^Prep · Week /);
     fireEvent.click(bar().getByRole("button", { name: "MORE" }));
-    fireEvent.click(screen.getByRole("button", { name: "IRON" }));
-    expect(screen.queryByRole("button", { name: "HELL WEEK" })).toBe(null);
+    expect(screen.queryByRole("button", { name: "IRON" })).toBe(null);
     expect(document.body.textContent).not.toMatch(/Hell Week/i);
   });
 });

@@ -393,7 +393,7 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **THE MOVEMENT SESSION** — Thirty minutes at home, slow and controlled: breathe down, loaded joint circles, a slow Turkish get-up, the squat flow, the hip flow and the shoulder flow. The app times each move.
 
-**TRANSITION WEEK** — The week or two after a fight. Three days of only RANGE, the sit and walking; then easy base rides, the movement session and calisthenics at half sets. Nothing heavier than 70%, no sprints, no rounds. First, if you were stopped or dropped, or have any headache, fogginess, dizziness or sensitivity to light: a doctor clears you before any training.
+**TRANSITION WEEK** — The week or two after a fight. Three days of only RANGE and walking; then easy base rides, the movement session and calisthenics at half sets. Nothing heavier than 70%, no sprints, no rounds. First, if you were stopped or dropped, or have any headache, fogginess, dizziness or sensitivity to light: a doctor clears you before any training.
 ## OPTIMAL 8 · MOVE
 
 **EASY BIKE, TWO MINUTES** — Pedal easy for two minutes, easy enough to talk. Just to get warm.

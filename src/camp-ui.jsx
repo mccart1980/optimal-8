@@ -104,7 +104,7 @@ export function CampWeekCard({ rx, dates }) {
 const FW_LINES = {
   5: "20 minutes easy, nose only. Neck holds, 2 × 10 seconds each direction. RANGE at half dose. Bed by half past eight.",
   4: "SPEED MICRODOSE · 25 min: warm-up, 3 × 20 m flying sprints at 90%, box jumps 2 × 3, rotational throws 2 × 3 per side, bench throws 3 × 3. Fast, nothing tired, done.",
-  3: "Nothing. RANGE at half dose, the sit.",
+  3: "Nothing. RANGE at half dose.",
   2: "ACTIVATION · 20 min: Tuesday's warm-up, band pull-aparts and external rotations, three easy throws per side, two minutes of shadow boxing at pace, three physiological sighs, done.",
 };
 const DNAME = { mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday", fri: "Friday", sat: "Saturday", sun: "Sunday" };

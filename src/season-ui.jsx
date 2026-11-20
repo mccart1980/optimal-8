@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { C, dsp, bdy, mno, num, fmtDate, addDays, Card, Eye, Lab, Fld, Btn, Chip, Note, Seg } from "./ui.jsx";
-import { Sheet } from "./im-ui.jsx";
+import { Sheet } from "./sheet.jsx";
 import { DocView } from "./mdview.jsx";
 import { rowDates } from "./builder.js";
 import { VEL_LIFTS, PROFILE_LOADS, VEL_PHASES, fitLine, targetFor, TYPICAL, BALLISTIC, ballisticOf, BALLISTIC_DEFAULT, powerRows, peakPower } from "./velocity.js";

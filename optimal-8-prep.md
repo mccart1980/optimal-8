@@ -22,7 +22,7 @@ Optimal 8 Fighter's sessions, your calisthenics, RANGE, the tendon block, Iron M
 | Thursday | Move's lower back and shoulders block in the warm-up's place · the lower pushes in the Spanish squat hold's and the Achilles hold's place | The upper pushes, then the rest of the evening as written, and RANGE |
 | Saturday | Move's hips, balance and sprint prep block in the warm-up's place · the lower pushes straight after the side bounds, before the squat · the hip pair at the end | RANGE |
 | Sunday | Move's whole-body block, then the power prep · the back extension after the core block | Session B, the upper pushes in it |
-| Every day | The morning five goes, and so does the movement session: Sessions A and B do its job | The skill block and the sit stay |
+| Every day | The morning five goes, and so does the movement session: Sessions A and B do its job | The skill block stays |
 
 Every push is eased in over a second, held 3 seconds, breathing out, with 3 seconds off: the first two weeks of the tendon work at 8 out of 10, then as hard as you can; a red morning at half effort; Achilles or knee at 3 or more on Sunday's check, the lower pushes at 7 out of 10 in the holds' place, and no reactive jumps. Move's fifteen standards take the range and flexibility tests' place, in Move's test weeks, and its week count carries on from whatever ran before. Every exercise, level and rule is in Optimal 8 · Move.
 
@@ -180,7 +180,7 @@ PROGRESS charts every one of them, week against week, and the camp inherits them
 | Friday | SLEEP. No alarm. | — |
 | Saturday | 8:30 · THE LONG SESSION — get-ups, build-ups, stance starts, close and plant, sprints, reactive jumps, side bounds, the squat in its phase, the one-arm landmine push press, Romanian deadlifts, the bear-hug carry · evening: THE MOVEMENT SESSION | ~83 min |
 | Sunday | 8:30 · THE ROUNDS — throws, the 6 × 3, the post-max sit, core with suitcase carries, the L-sit, the lever and face pulls, hands, weekly check · then the easy hour, then the sauna from week 6 | ~73 min |
-| Every day | On waking: the strap, the sighs, the one thing, the morning five, the check · evening: RANGE 20 min, the skill block Mon–Thu, the sit, the review | ~50 min |
+| Every day | On waking: the strap, the morning five, the check · evening: RANGE 20 min, the skill block Mon–Thu | ~30 min |
 
 Just over seven and a half hours in the gym a week in the build and heavy weeks, and three and a half at home in the build, three after. Weeks 5, 10 and 14 are lighter.
 
@@ -239,7 +239,7 @@ A light band anchored behind you at shoulder height, the end in your hand, in yo
 
 **An elbow or a shoulder at 4 or more on Sunday's check:** next week the dips become push-ups, 12–15 with two seconds down, the rows are held at the top for 20 seconds, and the circuits drop their curls and triceps work. The neck has moved to Wednesday and Thursday.
 
-**Done · ~1:17.** Tonight: RANGE, the skill block, the sit.
+**Done · ~1:17.** Tonight: RANGE, the skill block.
 
 ---
 
@@ -298,7 +298,7 @@ Body-shot toughness comes down to three things: the brace firing on time, the mu
 
 Seated calf raise, up on the balls of the feet, pause, down slow, twelve times — the knee-bent position trains the muscle that keeps you on your toes in round six. Then the hold, STANDING: on the edge of a step, a dumbbell in each hand or a bar on your back, as heavy as you can hold dead still, rise to the top and hold 45 seconds, knees straight. The Achilles takes every sprint and landing in this camp on a straight knee; this is its insurance.
 
-**Done · ~1:08.** Tonight: RANGE, the skill block, the sit.
+**Done · ~1:08.** Tonight: RANGE, the skill block.
 
 ---
 
@@ -352,7 +352,7 @@ Kneel with the heels anchored under something solid. Body straight from knees to
 
 A heavy dumbbell in each hand. Stand tall, shoulders down, and take short, quick steps for 30 metres without putting them down. Start around 30 kg a hand; add 2.5 kg a hand when all three runs are clean, with no stop and no lean. Two runs in weeks 5 and 10, none in week 14. Grip, forearms and traps for the look, and a trunk that stays stiff under load. Last, so the grip is fresh for the chins.
 
-**Done · ~1:18.** Tonight: RANGE, the skill block, the sit. Weeks 1–5: THE MOVEMENT SESSION first.
+**Done · ~1:18.** Tonight: RANGE, the skill block. Weeks 1–5: THE MOVEMENT SESSION first.
 
 ---
 
@@ -411,13 +411,13 @@ Back to back, 20 seconds between exercises, 90 seconds after each round. Leave t
 - **Hammer curl × 10–12** — dumbbells with your thumbs up and your elbows still; curl to the shoulder and lower slowly.
 - **Rope pushdown × 12–15** — a rope on a high cable, elbows pinned to your sides; push down and split the rope at the bottom, then let it back up slowly.
 
-**Done · ~1:21 (~1:25 when the session is 28 minutes).** Tonight: the easy thirty, then the sauna in weeks 6–13, RANGE, the skill block, the sit.
+**Done · ~1:21 (~1:25 when the session is 28 minutes).** Tonight: the easy thirty, then the sauna in weeks 6–13, RANGE, the skill block.
 
 ---
 
 ## FRIDAY · SLEEP
 
-No alarm. Tomorrow is the long session and Sunday is the rounds, and the best thing you can do for both is not get up at half three. The base a Friday morning would have built is worth less than the hour of sleep it costs the night before the two biggest days of the week. Work, RANGE and the sit in the evening, nothing hard, nothing fast, nothing heavy. Friday's 5pm carb feed loads Saturday; it doesn't move.
+No alarm. Tomorrow is the long session and Sunday is the rounds, and the best thing you can do for both is not get up at half three. The base a Friday morning would have built is worth less than the hour of sleep it costs the night before the two biggest days of the week. Work and RANGE in the evening, nothing hard, nothing fast, nothing heavy. Friday's 5pm carb feed loads Saturday; it doesn't move.
 
 ---
 
@@ -580,7 +580,7 @@ The lines you're already running, at the levels you've reached, and the dips, we
 
 ---
 
-## THE HOME BLOCK · THE MORNING FIVE · RANGE · THE SKILL BLOCK · THE SIT
+## THE HOME BLOCK · THE MORNING FIVE · RANGE · THE SKILL BLOCK
 
 Two joints you named as your limiting factor: hips and shoulders. Both are limited first by the mid-back, so it goes first. Eight minutes a night was maintenance; this is change. Twenty minutes every evening for all fourteen weeks, five on waking, and the tests in weeks 1, 5, 10 and 14. You named this as the thing holding you back; this is the daily dose, and the Movement Session on its own page is the second. Kit: a foam roller, a light band, a kettlebell or dumbbell (8–16 kg), a doorframe pull-up bar if you can fit one, a sofa and a chair.
 
@@ -590,7 +590,7 @@ Two joints you named as your limiting factor: hips and shoulders. Both are limit
 
 ---
 
-### THE MORNING FIVE · on waking, after the sighs and the one thing · 5 min
+### THE MORNING FIVE · on waking, after the strap · 5 min
 
 Controlled joint circles — the slowest, biggest circle each joint can make under its own power, three each way. Slow enough that it takes ten seconds a circle; if something wants to cheat — a shrug, a lean, a bent knee — that's the range you don't own yet, so slow down there.
 
@@ -655,11 +655,9 @@ Write the numbers down. If nothing has moved by week 5, the holds aren't long en
 
 Thirty minutes easy, nose only, walk or run, conversational. The second base session of the week — the hard sessions get their recovery from the easy ones, and you had one; elite endurance has three. Thursday, because Friday has no alarm and no session: it costs no sleep and takes nothing from a hard day. The morning's session leaves your legs heavier, so go by the strap and your nose, not the speed, and walk if you need to. The sauna comes after it, never before.
 
-### THE SKILL BLOCK · Monday to Thursday · 5 min · after RANGE, before the sit
+### THE SKILL BLOCK · Monday to Thursday · 5 min · after RANGE
 
 Wrist circles × 10 each way. Hollow hold, 2 × 20 seconds — on your back, lower back pressed into the floor, arms overhead, legs straight and lifted, one shallow banana. Arch hold, 2 × 20 seconds — face down, arms and legs lifted. Handstand at your current level, 3 minutes, on parallettes — hands round the bars, wrists straight, the way your wrist is when a punch lands — the Calisthenics page.
-
-**THE SIT · after the skill block · 12–20 min, then THE REVIEW · 2 min** — exactly as Iron Mind runs them: the stage sit, the clean-cycle count, the three spoken questions, then bed.
 
 **Friday evening:** RANGE only. No skill block.
 

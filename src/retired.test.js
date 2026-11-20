@@ -5,11 +5,14 @@ import moveMd from "../optimal-8-move.md?raw";
 import campMd from "../optimal-8-camp.md?raw";
 import sppMd from "../optimal-8-strength-power-physique.md?raw";
 import fighterMd from "../optimal8fighter.md?raw";
-import { LADDER, CEILING, COLLISION, GATES, PROGRESSION } from "./im-data.js";
+import { existsSync } from "fs";
+import ironV4Md from "../iron-mind-v4-2.md?raw";
 import { CALIS_RULES } from "./calis.js";
 import { RUNS } from "./welcome.jsx";
 import { withMove, OPROTO } from "./movex.js";
 import { withCore } from "./core.js";
+import { prepSess } from "./prep.js";
+import { campSess } from "./camp.js";
 
 /* ================================================================
    OPTIMAL 8 FIGHTER AND HELL WEEK, RETIRED on 23 November 2026. With
@@ -41,23 +44,26 @@ describe("Optimal 8 Fighter, retired", () => {
   });
 });
 
-describe("Hell Week, retired with it", () => {
-  it("Iron Mind's hardship level 3 gate is twelve weeks, and no gate, rule or table names Hell Week", () => {
-    expect(LADDER[3].gate).toBe("Gate: twelve weeks.");
-    expect(GATES.hard[3].lines).toEqual([["weeks", "Twelve weeks", 12]]);
-    const all = JSON.stringify([LADDER, CEILING, COLLISION, GATES, PROGRESSION, CALIS_RULES]);
-    expect(all).not.toMatch(/Hell Week/i);
-    expect(CEILING).toMatch(/^THE CEILING — one deliberate comfort-deprivation day a quarter/);
-    expect(COLLISION[0]).toMatch(/^The training program owns your body's budget\./);
+describe("Hell Week, retired with it, and then Iron Mind on 20 November 2026", () => {
+  it("Iron Mind's modules are out of the app: nothing is left to run it", () => {
+    ["src/im-data.js", "src/im-ui.jsx", "src/life.js", "src/life-ui.jsx"].forEach((f) => expect([f, existsSync(f)]).toEqual([f, false]));
+    expect(existsSync("src/sheet.jsx")).toBe(true);
   });
-  it("the taper is a switch, not Fighter's weeks 15–16", () => {
-    expect(JSON.stringify([COLLISION, CALIS_RULES, PROGRESSION])).not.toMatch(/15–16/);
-    expect(COLLISION.some((x) => /^A taper week \(the switch in Settings → Iron Mind\): no maximal hardship sessions\./.test(x))).toBe(true);
+  it("the taper is a switch in Settings → Calisthenics, not Fighter's weeks 15–16", () => {
+    expect(JSON.stringify(CALIS_RULES)).not.toMatch(/15–16|Iron Mind/);
+    expect(CALIS_RULES).toContain("A taper week (the switch in Settings → Calisthenics): holds only — handstand and ring support — nothing to failure, nothing new.");
   });
-  it("Iron Mind's document says the same", () => {
+  it("the 60-second settle stays: Prep's and the camp's interval days end with it, on its own timer, with its seconds to land", () => {
+    [[prepSess("tue"), "settle"], [prepSess("thu"), "settle2"], [campSess("tue", {}), null], [campSess("thu", {}), null]].forEach(([S, id]) => {
+      const b = S.b.find((x) => x.settle);
+      expect(b.n).toBe("The 60-Second Settle");
+      expect(b.timer()).toEqual({ kind: "settle", title: "THE SETTLE" });
+      expect(b.rxLine()).toBe("60 seconds — log the seconds to land");
+      if (id) expect((typeof b.items === "function" ? b.items({}) : b.items).map((i) => i.id)).toEqual([id]);
+    });
+  });
+  it("Iron Mind's documents say they're retired, and stay only as the record", () => {
+    [ironMd, ironV4Md].forEach((md) => expect(md).toMatch(/^\*\*RETIRED on 20 November 2026\.\*\* Iron Mind is no longer in the app/m));
     expect(ironMd).not.toMatch(/Hell Week/i);
-    expect(ironMd).not.toMatch(/Optimal 8 Fighter/);
-    expect(ironMd).toMatch(/\*\*Gate: twelve weeks\.\*\*/);
-    expect(ironMd).not.toMatch(/15–16/);
   });
 });

@@ -1,6 +1,6 @@
 import React from "react";
 import { C, dsp, bdy, mno, Card, Eye, Lab, Fld, Btn, Chip, Note, Seg } from "./ui.jsx";
-import { Sheet } from "./im-ui.jsx";
+import { Sheet } from "./sheet.jsx";
 import { LEVELS, levelOf, MOVE_TESTS, rangeStandardsMet, testSummary, canMarkEnd } from "./move.js";
 
 /* ================================================================

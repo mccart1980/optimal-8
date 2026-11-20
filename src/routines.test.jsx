@@ -202,15 +202,10 @@ describe("the routines and BACK, in TODAY", () => {
   });
   afterEach(() => vi.useRealTimers());
 
-  it("the sighs card shows THREE BIG SIGHS' words; the morning five is one card of five rows to tick, no clocks; the evening has the skill block", async () => {
+  it("the morning five is one card of five rows to tick, no clocks; the evening has the skill block; Iron Mind's rows are gone", async () => {
     await mount(WED);
-    pickRow("m-sighs");
-    let card = screen.getByTestId("now-card");
-    expect(within(card).getByTestId("card-name").textContent).toBe("Three physiological sighs");
-    expect(within(card).getByTestId("card-desc").textContent).toBe(SIGHS.words);
-    expect(within(card).queryByTestId("card-lib")).not.toBeInTheDocument();
     pickRow("m-five");
-    card = screen.getByTestId("now-card");
+    let card = screen.getByTestId("now-card");
     expect(within(card).getByTestId("card-desc").textContent).toBe(MORNING_FIVE.words);
     expect(within(card).queryByTestId("card-lib")).not.toBeInTheDocument();
     expect(within(card).queryByTestId("routine-clock")).not.toBeInTheDocument();
@@ -221,6 +216,9 @@ describe("the routines and BACK, in TODAY", () => {
     openWhole();
     expect(within(screen.getByText("EVENING").closest("[data-chapter]")).getByText("The skill block")).toBeInTheDocument();
     expect(screen.queryByText("The hollow block")).not.toBeInTheDocument();
+    /* Iron Mind was taken out on 20 November 2026: none of its rows */
+    ["m-sighs", "m-onething", "site", "lunch", "ev-sit", "ev-review"].forEach((id) => expect([id, document.querySelector('[data-flow-id="' + id + '"]')]).toEqual([id, null]));
+    expect(document.querySelector('[data-flow-id="m-five"]')).not.toBe(null);
   });
 
   it("every routine card in the evening is the document's, with no library text", async () => {
@@ -241,7 +239,7 @@ describe("the routines and BACK, in TODAY", () => {
     fireEvent.click(within(r).getByRole("button", { name: "Next card" }));
     expect(within(r).getByTestId("routine-name").textContent).toBe(RANGE_CARDS[2].n);
     expect(hasLibText(screen.getByTestId("now-card"))).toBe(false);
-    pickRow("m-sighs");
+    pickRow("m-five");
     pickRow("ev-range");
     expect(screen.getByTestId("routine-name").textContent).toBe(RANGE_CARDS[2].n);
   });

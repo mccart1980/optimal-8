@@ -308,13 +308,12 @@ export const CARB_TOPUP = "Carb top-up at 17:00 — the fuel app has the number.
 export const SAUNA_PREP = "Fifteen to twenty minutes, twice a week — Sunday straight after the easy hour, and Thursday evening straight after the easy thirty — never more, and never without the hydration schedule's sauna line. Never straight from the sauna into cold.";
 
 /* ---------- the transition after a fight ---------- */
-export const TRANSITION_INTRO = "First, the head check. Then one week after a fight of 9 minutes or less, two after a longer one. The first three days: RANGE, the sit and walking. Then easy: base rides, the movement session, calisthenics at half sets, nothing above 70%, no sprints, no rounds. It runs on until the strap says you're back.";
+export const TRANSITION_INTRO = "First, the head check. Then one week after a fight of 9 minutes or less, two after a longer one. The first three days: RANGE and walking. Then easy: base rides, the movement session, calisthenics at half sets, nothing above 70%, no sprints, no rounds. It runs on until the strap says you're back.";
 export const TRANSITION_RULES = [
   "First, the head check. If you were stopped or dropped, or have any symptoms after the fight — headache, fogginess, feeling slowed down, dizziness, sensitivity to light or noise — see a doctor before any training, and nothing hard until you're cleared and symptom-free. A medical suspension overrides everything here. A severe or worsening headache, repeated vomiting, confusion or drowsiness is A&E, straight away. The app asks the morning after the fight, and the transition doesn't start until you've answered.",
-  "The first three days: RANGE, the sit and walking. Nothing else.",
+  "The first three days: RANGE and walking. Nothing else.",
   "Then easy: base rides, the movement session, calisthenics at half sets.",
   "Nothing above 70%, no sprints, no rounds.",
-  "The morning after the fight, the one question from Iron Mind.",
   "It runs on until the strap says you're back: resting heart rate within 3 beats of baseline and HRV within 10% of its average, three mornings running. Then the next fight's plan, or Prep.",
 ];
 
@@ -743,12 +742,12 @@ const vv = (x, rx) => (typeof x === "function" ? x(rx) : x);
   S.m = (rx) => S.b.filter((b) => b.L && !(b.hide && b.hide(rx))).reduce((a, b) => a + (Number(vv(b.m, rx)) || 0) + (Number(b.tr) || 0), 0); });
 
 /* ---------------- THE TRANSITION ---------------- */
-const WALK = { n: "THE FIRST THREE DAYS", t: "RANGE, the sit and walking", m: 30, ac: C.moss, b: [
+const WALK = { n: "THE FIRST THREE DAYS", t: "RANGE and walking", m: 30, ac: C.moss, b: [
     { L: "Y", n: "The Pre-Camp Check", m: 0, hide: (rx) => !rx.preCamp, rxLine: () => "this week — bloods and blood pressure",
       items: [{ n: "Pre-camp check", s: "full blood count, lipids, liver and kidneys · blood pressure", cue: "A blood test — full blood count, lipids, liver and kidneys — and a blood-pressure reading. Book it with your GP or a private clinic and tick it off when it's done. A resting ECG once a year.", id: "t_precamp", k: "chk" }],
       why: "Standing rule 5: before every camp, in the week before the camp's first Monday." },
-  { L: "A", n: "Transition week", m: 30, rxLine: () => "a walk — then RANGE and the sit tonight",
-    items: [{ n: "Walking", s: "as long as it's easy", cue: "Three days of only RANGE, the sit and walking. Nothing heavier, nothing faster.", id: "t_walk", k: "chk" }] }] };
+  { L: "A", n: "Transition week", m: 30, rxLine: () => "a walk — then RANGE tonight",
+    items: [{ n: "Walking", s: "as long as it's easy", cue: "Three days of only RANGE and walking. Nothing heavier, nothing faster.", id: "t_walk", k: "chk" }] }] };
 const BASE_T = (n) => ({ n, t: "Base, easy", m: 45, ac: C.moss, b: [
     { L: "Y", n: "The Pre-Camp Check", m: 0, hide: (rx) => !rx.preCamp, rxLine: () => "this week — bloods and blood pressure",
       items: [{ n: "Pre-camp check", s: "full blood count, lipids, liver and kidneys · blood pressure", cue: "A blood test — full blood count, lipids, liver and kidneys — and a blood-pressure reading. Book it with your GP or a private clinic and tick it off when it's done. A resting ECG once a year.", id: "t_precamp", k: "chk" }],

@@ -1,5 +1,7 @@
 # IRON MIND v4.2 — MASTERY
 
+**RETIRED on 20 November 2026.** Iron Mind is no longer in the app. The 60-second settle after the intervals stays on the training pages. This document stays in the repository as the record of what it was.
+
 *Runs inside Optimal 8 Fighter. One app, one day, one streak.*
 
 **One page runs the day. Three curricula run the years: meditation, breath, hardship. Each has stages, gates and a ceiling, and each week you know exactly what's yours.**

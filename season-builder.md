@@ -326,10 +326,9 @@ Its twelve weeks are **S1 · S2 · S3 · S4 · S5 · S6 · S7 · S8 · S9 · S10
 
 **What it is:**
 
-- The first three days: RANGE, the sit and walking.
+- The first three days: RANGE and walking.
 - Then easy: base rides, the movement session, calisthenics at half sets, nothing above 70%, no sprints, no rounds.
 - With Optimal 8 · Move: its RANGE from the first day; from the fourth day Session A on Wednesday and Session B on Sunday in the movement session's place, and the lower pushes in Monday's and Thursday's sessions with the upper pushes those evenings, at 7 out of 10. That keeps the longest stretch without pushes under two weeks. Nothing on a day the head check holds.
-- The morning after the fight, the one question from Iron Mind.
 
 **First, the head check.** If you were stopped or dropped, or have any symptoms after the fight — headache, fogginess, feeling slowed down, dizziness, sensitivity to light or noise — see a doctor before any training, and nothing hard until you're cleared and symptom-free. A medical suspension overrides everything here. A severe or worsening headache, repeated vomiting, confusion or drowsiness is A&E, straight away. The app asks the morning after the fight, and the transition doesn't start until you've answered.
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { C, dsp, bdy, mno, num, Card, Eye, Lab, Fld, Btn, Chip, Note, Seg } from "./ui.jsx";
-import { Sheet } from "./im-ui.jsx";
+import { Sheet } from "./sheet.jsx";
 import { TEST_INTRO, RANGE_TESTS, RANGE_CM } from "./range.js";
 import { FLEX_TESTS } from "./prep.js";
 

@@ -81,7 +81,7 @@ describe("two themes: light and dark", () => {
     expect(FONTS).toMatch(/:root\[data-theme="dark"\] \{/);
   });
   it("text on a fill is never the page colour, and nothing is downloaded to draw the type", () => {
-    ["src/ui.jsx", "src/App.jsx", "src/now.jsx", "src/im-ui.jsx", "src/fuel-ui.jsx", "src/camp-ui.jsx", "src/metrics-ui.jsx", "src/life-ui.jsx", "src/today.jsx", "src/weight-ui.jsx", "src/season-ui.jsx", "src/range-ui.jsx", "src/welcome.jsx"]
+    ["src/ui.jsx", "src/App.jsx", "src/now.jsx", "src/sheet.jsx", "src/fuel-ui.jsx", "src/camp-ui.jsx", "src/metrics-ui.jsx", "src/today.jsx", "src/weight-ui.jsx", "src/season-ui.jsx", "src/range-ui.jsx", "src/welcome.jsx"]
       .forEach((f) => expect([f, /color: [^,}]*C\.ink/.test(read(f))]).toEqual([f, false]));
     ["src/ui.jsx", "index.html", "vite.config.js"].forEach((f) => expect([f, /googleapis|gstatic/.test(read(f))]).toEqual([f, false]));
     expect(FONTS).toMatch(/-apple-system/);

@@ -443,14 +443,14 @@ export const FIGHT_WEEK_INTRO =
 export const FIGHT_WEEK_ROWS = [
   [10, 0, "20 minutes easy, nose only. Neck holds, 2 × 10 seconds each direction. RANGE at half dose. Bed by half past eight."],
   [10, 1, "SPEED MICRODOSE · 25 min: warm-up, 3 × 20 m flying sprints at 90%, box jumps 2 × 3, rotational throws 2 × 3 per side, bench throws 3 × 3. Fast, nothing tired, done."],
-  [10, 2, "Nothing. RANGE at half dose, the sit."],
+  [10, 2, "Nothing. RANGE at half dose."],
   [10, 3, "ACTIVATION · 20 min: Tuesday's warm-up, band pull-aparts and external rotations, three easy throws per side, two minutes of shadow boxing at pace, three physiological sighs, done."],
   [10, 4, "Weigh-in if there is one. Nothing else. Feet up. The rehearsal's meals. Bed early."],
   [10, 5, "FIGHT. The warm-up you rehearsed. The corner minute in every rest. Round six is a place you've already been."],
 ];
 export const FIGHT_WEEK_FOOD =
   "Food this week holds — the fuel plan's fight-week phase, and the making-weight phase only if you decided on it in week 1. The commonest way to lose a fight in the last week is to eat less because you're training less and arrive at the ring empty.";
-export const FIGHT_WEEK_AFTER = "After the fight: first, the head check. If you were stopped or dropped, or have any symptoms afterwards — headache, fogginess, feeling slowed down, dizziness, sensitivity to light or noise — see a doctor before any training, and don't train until you're cleared; a medical suspension overrides everything here. A severe or worsening headache, repeated vomiting, confusion or drowsiness is A&E, straight away. Then the transition — one week after a fight of 9 minutes or less, two after a longer one. The first three days RANGE, the sit and walking; then easy. It runs on until the strap says you're back, then the next fight's plan, or Prep.";
+export const FIGHT_WEEK_AFTER = "After the fight: first, the head check. If you were stopped or dropped, or have any symptoms afterwards — headache, fogginess, feeling slowed down, dizziness, sensitivity to light or noise — see a doctor before any training, and don't train until you're cleared; a medical suspension overrides everything here. A severe or worsening headache, repeated vomiting, confusion or drowsiness is A&E, straight away. Then the transition — one week after a fight of 9 minutes or less, two after a longer one. The first three days RANGE and walking; then easy. It runs on until the strap says you're back, then the next fight's plan, or Prep.";
 
 /* ================================================================
    THE TESTS
@@ -512,9 +512,9 @@ export const CPROTO = {
 };
 
 export const CAMP_HOMELINE =
-  "HOME · tonight: RANGE, 20 min · Mon–Thu then the skill block, 5 min · then the sit and the review · and the morning five on waking. All ten weeks, fight week at half dose.";
+  "HOME · tonight: RANGE, 20 min · Mon–Thu then the skill block, 5 min · and the morning five on waking. All ten weeks, fight week at half dose.";
 export const CAMP_HOMELINE_TAPER =
-  "HOME · tonight: RANGE at half dose, 10 min — the roller, the open book, the 90/90 with the lift, the couch stretch, the deep squat hold, the hang · then the sit. It doesn't stop.";
+  "HOME · tonight: RANGE at half dose, 10 min — the roller, the open book, the 90/90 with the lift, the couch stretch, the deep squat hold, the hang. It doesn't stop.";
 
 export const CAMP_EASY_HOUR = {
   n: "THE EASY HOUR",
@@ -811,7 +811,7 @@ export const CS = {
   /* ---------------- FRIDAY · SLEEP ---------------- */
   fri: { n: "FRIDAY", t: "SLEEP. No alarm. RANGE at home in the evening.", m: 0, ac: C.moss, sleep: 1,
     intro: "No alarm. Tomorrow is the long session and Sunday is the rounds, and the best thing you can do for both is not get up at half three.",
-    sleepWhy: "The base a Friday morning would have built is worth less than the hour of sleep it costs the night before the two biggest days of the week. Work, RANGE and the sit in the evening, nothing hard, nothing fast, nothing heavy.",
+    sleepWhy: "The base a Friday morning would have built is worth less than the hour of sleep it costs the night before the two biggest days of the week. Work and RANGE in the evening, nothing hard, nothing fast, nothing heavy.",
     safeguard: "Sleep is the first session of every day. In bed by half past eight, Sunday to Wednesday, and Friday off the alarm.",
     sleepFood: "Friday's 5pm carb feed loads Saturday; it doesn't move.",
     b: [] },
@@ -953,7 +953,7 @@ export const CS = {
     { L: "D", n: "The Post-Max Sit", m: 3, hide: (rx) => !rx.sim,
       timer: () => ({ kind: "postmax", title: "POST-MAX SIT" }), rxLine: () => "3 min — straight off the last round",
       items: [{ n: "Seconds to settle onto the breath", s: "write it down", cue: "Straight off the last round: sit, eyes closed, heart at 170-plus, find the breath at the nostrils. Write down the seconds it took.", id: "c_postmax", k: "out", u: "seconds" }],
-      why: "The corner, trained. The settle after intervals and this sit after the rounds are where the sit is tested." },
+      why: "The corner, trained: like the settle after the intervals, it measures how fast you come down after the rounds." },
     { L: "E", n: "Core, Carries, L-Sit, Lever, Face Pulls, Hands", m: 15, cal: "lsit", rest: "Rest 60 s", rt: 60, hide: (rx) => !!(rx.sim && rx.sim.rehearsal),
       items: (rx) => [{ n: "Hanging leg raise", s: setsOf(rx, 3) + " × 8–12", cue: "Hang from a bar, lift the legs to hip height or above, no swinging.", id: "c_hlr", k: "wr", sets: setsOf(rx, 3), reps: "8–12" },
         { n: "The L-sit line — at your level", s: setsOf(rx, 3) + " sets", cue: "The tuck L-sit between two boxes to start; the line climbs one leg at a time to the full L-sit.", id: "lsit", k: "wr", sets: setsOf(rx, 3), reps: "at your level" },
@@ -1122,20 +1122,20 @@ export const campSess = (day, rx) => {
 
 /* what the card says on the days that have no session page */
 export const campBlank = (day, rx) => {
-  if (rx.pre) return { h: "BEFORE WEEK 1", c: C.moss, l: ["Nothing written today beyond the pre-camp check.", "Tonight: RANGE, the skill block, the sit — they don't stop."] };
+  if (rx.pre) return { h: "BEFORE WEEK 1", c: C.moss, l: ["Nothing written today beyond the pre-camp check.", "Tonight: RANGE and the skill block — they don't stop."] };
   if (rx.fightWeek) {
     const o = daysOut(day, rx);
     if (o === 1) return rx.weighIn === "day" ? { h: "THE DAY BEFORE", c: C.brass, l: ["Nothing. Feet up. The rehearsal's meals. Bed early.", "You weigh in tomorrow, on the day."] }
       : { h: "THE WEIGH-IN", c: C.brass, l: ["Weigh-in. Nothing else.", "Feet up. The rehearsal's meals. Bed early."] };
-    if (o === 3) return { h: "NOTHING TODAY", c: C.moss, l: ["Nothing. RANGE at half dose, the sit.", "You cannot get fitter this week. You can only get fresher or more tired."] };
+    if (o === 3) return { h: "NOTHING TODAY", c: C.moss, l: ["Nothing. RANGE at half dose.", "You cannot get fitter this week. You can only get fresher or more tired."] };
     if (o < 0) return { h: "AFTER THE FIGHT", c: C.moss,
       l: ["First, the head check — the morning after the fight. " + HEAD_DOCTOR + " " + HEAD_AE,
-        "Then the transition: the first three days RANGE, the sit and walking; then easy — base rides, the movement session, calisthenics at half sets.",
+        "Then the transition: the first three days RANGE and walking; then easy — base rides, the movement session, calisthenics at half sets.",
         "It runs on until the strap says you're back: resting heart rate within 3 beats of baseline and HRV within 10% of its average, three mornings running."] };
-    return { h: "NOTHING TODAY", c: C.moss, l: ["Nothing written today in fight week.", "RANGE at half dose, the sit."] };
+    return { h: "NOTHING TODAY", c: C.moss, l: ["Nothing written today in fight week.", "RANGE at half dose."] };
   }
-  if (rx.tp && day === "sun") return { h: "NO ROUNDS TODAY", c: C.moss, l: ["The rehearsal is six days before the fight: " + rx.rehearsal + ".", "Tonight: RANGE, the sit."] };
+  if (rx.tp && day === "sun") return { h: "NO ROUNDS TODAY", c: C.moss, l: ["The rehearsal is six days before the fight: " + rx.rehearsal + ".", "Tonight: RANGE."] };
   return { h: "NOTHING WRITTEN TODAY", c: C.moss,
     l: ["No session on this page.",
-      "Tonight: RANGE, the skill block, the sit — they don't stop."] };
+      "Tonight: RANGE and the skill block — they don't stop."] };
 };

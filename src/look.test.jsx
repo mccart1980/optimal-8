@@ -188,8 +188,8 @@ describe("the settings page", () => {
     await up();
     openSettings();
     const jumps = within(screen.getByTestId("settings-jumps")).getAllByRole("button");
-    expect(jumps.map((b) => b.textContent)).toEqual(["THE DAY", "LOOK", "SOUND", "REST CLOCK", "RANGE AND MOVE", "CALISTHENICS", "IRON MIND", "BACKUP"]);
-    ["day", "look", "sound", "cycle", "range", "calis", "iron", "backup"].forEach((k) => expect([k, !!document.getElementById("set-" + k)]).toEqual([k, true]));
+    expect(jumps.map((b) => b.textContent)).toEqual(["THE DAY", "LOOK", "SOUND", "REST CLOCK", "RANGE AND MOVE", "CALISTHENICS", "BACKUP"]);
+    ["day", "look", "sound", "cycle", "range", "calis", "backup"].forEach((k) => expect([k, !!document.getElementById("set-" + k)]).toEqual([k, true]));
     /* a jump is safe to press where the page can't scroll */
     jumps.forEach((b) => fireEvent.click(b));
     expect(screen.getByTestId("settings-jumps")).toBeInTheDocument();

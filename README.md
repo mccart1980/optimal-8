@@ -1,9 +1,8 @@
 # Fighter
 
 Fighter is the companion app for the Optimal 8 programs — Strength, Power and
-Physique, Prep and the camp — with Iron Mind v5 running inside it: the training,
-the twenty minutes of RANGE that runs at home every evening, and the mental
-training that attaches to it. One app, one day, one streak. It runs in your phone's browser,
+Physique, Prep and the camp: the training and the twenty minutes of RANGE
+that runs at home every evening. One app, one day, one streak. It runs in your phone's browser,
 keeps everything on the phone itself, and works with no signal once you've
 added it to your home screen.
 
@@ -60,14 +59,13 @@ are four tabs: **TODAY · PROGRESS · FOOD · MORE**.
 - **FOOD** holds the menu (each feed's options and swaps), COOK, SHOP and
   the water for the day.
 - **MORE** holds PLAN (every document, this week's map and the season
-  strip), the GUIDE, the Iron library (breathe, sit, hardship, life, season)
-  and SETTINGS.
+  strip), the GUIDE and SETTINGS.
 
 - **COOK** and **SHOP** are the fuel app's, unchanged, under FOOD.
 - **PROGRESS → REFEREE** is the fuel app's referee — weight, waist, arm and
   shoulder, the charts, and the feedback-loop rules read off your numbers — next
   to the dashboard, which now reads bodyweight and waist from it.
-- **MORE → PLAN** holds every document: PREP, CAMP, STRENGTH & POWER, MOVE, IRON MIND v5 and v4.2,
+- **MORE → PLAN** holds every document: PREP, CAMP, STRENGTH & POWER, MOVE,
   and the four fuel documents.
 - **MORE → GUIDE** is one plain-English guide with one live panel: this week's block,
   the food phase, the tests this week, and the next feed.
@@ -385,8 +383,7 @@ tab, comes straight back.
   with a guided round timer that shows each part and says it out loud.
 - **THE EVENING** — RANGE, the skill block, the movement session and the
   morning five run one move per card, the move's library entry on it, a
-  timer for each hold, and the next move starting by itself. The sit opens
-  its own timer.
+  timer for each hold, and the next move starting by itself.
 - Tests appear only on the day they fall, as ordinary cards with their own
   entry.
 
@@ -394,9 +391,8 @@ tab, comes straight back.
 
 Everything — your maxes, ticked sessions, notes, body weight, any Hell Week scores from before it was retired,
 your calisthenics levels and the dates you owned them, your four range tests,
-the morning numbers, the erg outputs, the bar speeds, your photos,
-and the whole Iron Mind side: the day's ticks, your sits, your BOLT and your
-hardship tests — is stored
+the morning numbers, the erg outputs, the bar speeds, your photos, the day's
+ticks, and anything Iron Mind kept before it was retired — is stored
 **on your phone**, inside the app. There is no account,
 no sign-in and no server. Nobody else can see it, and it doesn't sync to
 other devices.
@@ -509,7 +505,7 @@ first if there's anything in there you want to keep.
   by default.
 - **Light or dark** — AUTO follows the phone; LIGHT and DARK hold one.
 - The page is long, so it has a row of jumps at the top: THE DAY, LOOK, SOUND,
-  REST CLOCK, RANGE AND MOVE, CALISTHENICS, IRON MIND, BACKUP.
+  REST CLOCK, RANGE AND MOVE, CALISTHENICS, BACKUP.
 - **RANGE week 1 began** — RANGE has its own twelve-week clock, so it keeps
   counting when the training cycle restarts at week 1. Twelve weeks of the
   twenty-minute block, then THE KEEP at ten minutes for good; the four tests on
@@ -519,42 +515,17 @@ first if there's anything in there you want to keep.
   session card for that line then shows the level, its prescription and a
   "level owned" tick that records the date. TRACK → CALIS shows where every
   line stands.
-- **Meditation stage, breath stage, hardship level** — the three Iron Mind
-  curricula. Each one shows its gate, with a tick against everything the app can
-  actually measure for you. Nothing advances by itself; you move it, and only
-  when the gate is cleared honestly.
-- **Training taper weeks** — while it's on, the hardship tests pause and every
-  calisthenics line goes to holds only.
+- **Taper week** — under Calisthenics: while it's on, every calisthenics line
+  goes to holds only.
 
-## IRON MIND v5 — THE SEASON
+## IRON MIND — RETIRED
 
-`iron-mind-v5.md` is the source for the IRON tab and the Iron Mind items on
-TODAY.
-
-- **The season is dated.** With a fight date, Iron Mind week 24 is the fight's
-  own week and week 1 is twenty-three weeks before it — Monday 28 September
-  for a fight on Saturday 13 March — so the weeks line up with PREP and CAMP.
-  IRON → SEASON shows the dated table, where the season expects each stage
-  against where you have set it (the stages are still gated, never advanced
-  for you), the fight-week mind, and the after-the-fight page, which opens
-  Stage 4 of meditation and breath. Without a fight date the season counts
-  from the Iron Mind start in settings, as before.
-- **Weeks 23 and 24** replace the normal Iron Mind evening: the sit at 20
-  minutes counting and following (12 minutes counting only in fight week), a
-  five-minute rehearsal every evening, the calm breath tools only at lunch, no
-  hardship tests, no life test.
-- **The life pillar.** The seven rules on GUIDE and IRON → LIFE. A life test
-  row every day of the week, rotating through the seven in order, ticked and
-  scored 1–10 for what it cost. On Sunday, after the weekly check, the life
-  review (four questions, the control score, the reactivity count and the
-  one-thing rate, which is counted from the morning's one-thing tick). On the
-  Sundays the season names, the twenty-minute monthly audit. The half-day sit
-  on the Sunday of week 13 — 27 December.
-- **The review** has its fourth question, the life question.
-- **THE NIGHT** follows the review: the casein, tonight's lights-out target,
-  the seven rules of the sleep protocol on tap, and the lights-out time logged.
-- **TRACK → IRON MIND** shows the seven numbers, charts the three new ones, and
-  sets week 1 against this week; the dashboard carries the reactivity count.
+Iron Mind was taken out of the app on 20 November 2026: no IRON tab, no
+Iron Mind rows on TODAY, no Iron Mind page in TRACK or Settings, and its two
+documents off the PLAN shelf (they stay in the repository, marked retired).
+The 60-second settle after the intervals stays on the training pages. The
+day's ticks still live in its old day record, and its other records stay in
+the backup file.
 
 ## Camp mode — the ten weeks
 
@@ -687,7 +658,7 @@ something changed, open a Claude Code session on
 language. Useful things to say:
 
 - What you see now, and what you want to see instead.
-- Which screen it's on — TODAY, WEEK, TRACK, IRON, PLAN, or Settings.
+- Which screen it's on — TODAY, WEEK, TRACK, PLAN, or Settings.
 - Whether it's a wording change, a number change, or new behaviour.
 
 For example: *"On the Thursday session, the neck protocol says 10 minutes —
@@ -738,16 +709,8 @@ After changing the icon, raise the `?v=` number on the two icon links in
   tones in the browser with no sound files, and the rule for which sound a
   timer's next part gets.
 - `src/welcome.jsx` — the four screens a phone with nothing saved sees first.
-- `src/im-data.js` — Iron Mind as data: the breath presets, the sit stages, the
-  guided timers, the hardship ladder and the gates. Every instruction string in
-  there is the document's own wording.
-- `src/im-ui.jsx` — the IRON library: the pacer, the sit timer, the cold and
-  heat timers, the floor and the five tests.
-- `src/life.js` — Iron Mind v5's season, life pillar and night as data: the
-  twenty-four weeks dated back from the fight, the seven rules, the seven life
-  tests, the life review and the audit, the sleep protocol, the fight-week mind.
-- `src/life-ui.jsx` — IRON → SEASON and IRON → LIFE, and the bodies of TODAY's
-  life, Sunday and night rows.
+- `src/sheet.jsx` — the full-screen sheet the tools, the tests and the
+  profile open in.
 - `src/now.jsx` — TODAY's pieces: the card head (name, library entry,
   prescription), the set buttons, the checklist, the move runner for the
   evening, and the whole day's chapters. `src/today.jsx` — the numbered lines
@@ -771,9 +734,9 @@ After changing the icon, raise the `?v=` number on the two icon links in
 - `src/velocity.js` — the load-velocity line, the phase targets it draws, the
   first-work-set verdict and the stop thresholds.
 - `src/season-ui.jsx` — the SEASON strip, the GUIDE tab and the profile screen.
-- `src/mdview.jsx` — renders the program documents and `iron-mind-v5.md` in the
-  PLAN tab, offline, with a table of contents. Those two files are the source of
-  truth; the app imports them directly.
+- `src/mdview.jsx` — renders the program documents in the PLAN tab, offline,
+  with a table of contents. Those files are the source of truth; the app imports
+  them directly.
 - `src/fuel.js` — the fuel app as data: the blocks, the slots and their
   options, the seven day plans, the phase table, the water schedule, the shop,
   the referee's rules, and `fuelPlan()`, which puts a day's feeds and drinks on

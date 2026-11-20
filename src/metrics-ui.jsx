@@ -1,6 +1,5 @@
 import React, { useState, useRef, useMemo } from "react";
 import { C, dsp, bdy, mno, num, buzz, fmtDate, addDays, Card, Eye, Lab, Fld, Btn, Note, Seg } from "./ui.jsx";
-import { WeekOneCard } from "./im-ui.jsx";
 import { Input, T3 } from "./now.jsx";
 import { fadePct } from "./safety.js";
 import {
@@ -393,7 +392,7 @@ function DashRow({ n, t, u, fmt, date, target, note }) {
 
 /* `camp` is the view: true for the camp, "prep" for Prep, false for the
    classic — each reads its own weeks and its own ids */
-export function Dashboard({ log, morning, st, camp: view, body, fuel, addBody, dateOf, openPhotos, iron }) {
+export function Dashboard({ log, morning, st, camp: view, body, fuel, addBody, dateOf, openPhotos }) {
   const [tape, setTape] = useState({});
   const camp = scopeOf(view) === "camp", spp = scopeOf(view) === "spp", ids = DASH_IDS[scopeOf(view)];
   const D = useMemo(() => {
@@ -405,14 +404,12 @@ export function Dashboard({ log, morning, st, camp: view, body, fuel, addBody, d
       .sort((a, b) => a.week - b.week);
     const mDates = (f) => Object.keys(morning || {}).filter((d) => num((morning[d] || {})[f]) != null).sort();
     const mRows = (f) => mDates(f).map((d) => ({ d, v: num(morning[d][f]) }));
-    /* the reactivity count, Sunday by Sunday, oldest first */
-    const reactRows = iron ? iron.weekRows.filter((r) => r.react != null).map((r) => ({ d: addDays(r.mon, 6), v: r.react })) : [];
     /* Strength, Power and Physique: the 4 × 4's total, the broad jump, the tape */
     const sp = spp ? { e44Rows: ergSeries(log, ids.e44, view, "vo2"), bjRows: series(log, ids.bj, view), armRows: series(log, ids.arm, view, "sun"), shRows: series(log, ids.sh, view, "sun"),
       /* the audit's numbers: the 4 × 4's distance on the treadmill, the throw, the push press speed, the arms-only test */
       t44Rows: series(log, ids.e44, view, "sat"), rtRows: series(log, ids.rt, view), ppsRows: seriesMean(log, ids.pps, view, ["w", "l"]), arm3Rows: ergSeries(log, ids.arm3, view, "arm3") } : {};
-    return Object.assign({ fadeRows, t20Rows, burstRows, recRows, rhrRows: mRows("rhr"), hrvRows: mRows("hrv"), reactRows }, sp);
-  }, [log, morning, view, iron]);
+    return Object.assign({ fadeRows, t20Rows, burstRows, recRows, rhrRows: mRows("rhr"), hrvRows: mRows("hrv") }, sp);
+  }, [log, morning, view]);
 
   const bn = bodyNow(fuel, body);
   const dat = (rows) => { const r = rows[rows.length - 1]; return r ? (r.d ? fmtDate(r.d) : dateOf(r.macro, r.week, r.day)) : null; };
@@ -450,9 +447,6 @@ export function Dashboard({ log, morning, st, camp: view, body, fuel, addBody, d
           note={bn.fromFuel ? "From the referee's weigh-ins." : "Nothing on the referee yet — weigh in on TRACK → REFEREE, or type it here."} />
         <DashRow n="Waist" t={{ v: bn.waist ? bn.waist.v : null, arrow: bn.waist && bn.waist.prev != null ? (bn.waist.v > bn.waist.prev ? "↑" : bn.waist.v < bn.waist.prev ? "↓" : "→") : "", good: bn.waist && bn.waist.prev != null ? bn.waist.v <= bn.waist.prev : null }}
           u="cm" date={bn.waist ? fmtDate(bn.waist.d) : null} />
-        {iron ? <DashRow n="Reactivity count — times moved before you noticed" t={trend(D.reactRows, "down")} u="" date={dat(D.reactRows)}
-          fmt={(v) => String(v)}
-          note={"Week 1: " + (iron.weekOne.react == null ? "—" : iron.weekOne.react) + " · this week: " + (iron.weekNow.react == null ? "—" : iron.weekNow.react) + ". The number should fall over months."} /> : null}
         {!bn.fromFuel ? (
           <div style={{ marginTop: 10 }}>
             <Lab>Bodyweight and waist — entered here</Lab>
@@ -464,7 +458,6 @@ export function Dashboard({ log, morning, st, camp: view, body, fuel, addBody, d
           </div>) : null}
         {openPhotos ? <Btn small c={C.violet} s={{ width: "100%", marginTop: 12 }} on={openPhotos}>THE PHOTOS →</Btn> : null}
       </Card>
-      {iron ? <WeekOneCard IM={iron} /> : null}
       {camp ? <Note c={C.brass} bold>The camp's targets over twelve honest weeks, beside each number. They are targets, not promises — the point of the dashboard is that you can see which of them you are actually on for.</Note> : null}
     </div>);
 }

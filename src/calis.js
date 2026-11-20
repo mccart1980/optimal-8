@@ -12,7 +12,7 @@ export const CALIS_INTRO = "Seven lines, each with levels. You own a level when 
 export const CALIS_RULES = [
   "One to two reps in the tank on every set — the grinding lives on Saturday.",
   "Easy weeks (5 and 10): every line at half its sets, no slow lane.",
-  "A taper week (the switch in Settings → Iron Mind): holds only — handstand and ring support — nothing to failure, nothing new.",
+  "A taper week (the switch in Settings → Calisthenics): holds only — handstand and ring support — nothing to failure, nothing new.",
   "Camp Mode: the handstand at home stays; everything else on this page stops.",
   "Weekly check: shoulders, elbows or wrists at 4 or above out of 10 on Sunday, and next week every line is holds only.",
   "The slow lane's three laws are absolute.",

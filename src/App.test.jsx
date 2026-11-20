@@ -72,23 +72,6 @@ describe("Optimal 8", () => {
     fireEvent.click(await screen.findByRole("button", { name: "THE SEASON" }));
   };
 
-  it("locks a Stage 4 breath preset at breath stage 1 and writes the gate on the lock", async () => {
-    await mount();
-    nav("IRON");
-    fireEvent.click(await screen.findByRole("button", { name: "BREATHE" }));
-
-    // stage 1 is open
-    expect(await screen.findByText("Box breathing")).toBeInTheDocument();
-    // stage 4 is locked, and the lock carries the gate that opens it
-    const locked = screen.getByText("🔒 Wim Hof rounds");
-    expect(locked).toBeInTheDocument();
-    const card = locked.closest("button");
-    expect(within(card).getByText("TO UNLOCK")).toBeInTheDocument();
-    expect(within(card).getByText(/BOLT 35s\+\. Sensation exposure at 60 seconds producing boredom\./)).toBeInTheDocument();
-    // and it cannot be started
-    expect(card).toBeDisabled();
-  });
-
   it("gives the camp a dated week table, and a fight-week table for Saturday 13 March", async () => {
     vi.setSystemTime(new Date(2027, 2, 3, 9, 0, 0));    // camp week 9, sharpen
     await camp();
@@ -132,24 +115,14 @@ describe("Optimal 8", () => {
     expect(screen.queryByText("17")).not.toBeInTheDocument();
   });
 
-  it("renders the hardship, track and plan pages without falling over", async () => {
+  it("renders the track and plan pages without falling over, with no Iron Mind anywhere", async () => {
     await mount();
 
-    nav("IRON");
-    fireEvent.click(await screen.findByRole("button", { name: "HARDSHIP" }));
-    expect(await screen.findByText("THE SILENT SLED")).toBeInTheDocument();
-    expect(screen.getByText("THE COLLISION RULES — PRECEDENCE, FIXED")).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("button", { name: "SIT" }));
-    expect(await screen.findByText("THE GUIDED TIMERS")).toBeInTheDocument();
-    // the guided timers and the eleven types both name the body scan
-    expect(screen.getAllByText("Body scan").length).toBe(2);
-    // stage 4's shikantaza is locked at meditation stage 1
-    expect(screen.getByText("🔒 Just sitting — shikantaza")).toBeInTheDocument();
-
+    /* Iron Mind was taken out on 20 November 2026: no IRON page under MORE, no page in TRACK */
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "MORE" }));
+    expect(screen.queryByRole("button", { name: "IRON" })).toBe(null);
     nav("TRACK");
-    fireEvent.click(await screen.findByRole("button", { name: "IRON MIND" }));
-    expect(await screen.findByText("Week by week")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "IRON MIND" })).toBe(null);
 
     fireEvent.click(screen.getByRole("button", { name: "CALIS" }));
     expect(await screen.findByText("Calisthenics — where each line stands")).toBeInTheDocument();
@@ -165,8 +138,7 @@ describe("Optimal 8", () => {
     expect(await screen.findByText("CONTENTS")).toBeInTheDocument();
     // both documents are readable offline: once in the contents, once as the heading
     expect(screen.getAllByText("LOADING — THE BAR SPEED IS THE LAW").length).toBe(2);
-    fireEvent.click(screen.getByRole("button", { name: "IRON MIND v5" }));
-    await waitFor(() => expect(screen.getAllByText("THE DAY — ONE PAGE, EVERY DAY").length).toBe(2));
+    expect(screen.queryByRole("button", { name: "IRON MIND v5" })).toBe(null);
   });
 
   /* ================================================================
@@ -421,8 +393,10 @@ describe("Optimal 8", () => {
   it("holds every document on PLAN, and one live panel on GUIDE with the phase and the next feed", async () => {
     await mount();
     nav("PLAN");
-    ["PREP", "CAMP", "STRENGTH & POWER", "IRON MIND v5", "FUEL · FIGHTER", "THE MENU", "MENU B + WATER", "FUEL · SEASON"].forEach((n) =>
+    ["PREP", "CAMP", "STRENGTH & POWER", "FUEL · FIGHTER", "THE MENU", "MENU B + WATER", "FUEL · SEASON"].forEach((n) =>
       expect(screen.getByRole("button", { name: n })).toBeInTheDocument());
+    /* Iron Mind was taken out on 20 November 2026: both its documents are off the shelf */
+    ["IRON MIND v5", "IRON MIND v4.2"].forEach((n) => expect(screen.queryByRole("button", { name: n })).toBe(null));
     /* Fighter was retired on 23 November 2026: its document is off the shelf */
     expect(screen.queryByRole("button", { name: "FIGHTER v1.5" })).toBe(null);
     fireEvent.click(screen.getByRole("button", { name: "THE MENU" }));

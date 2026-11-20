@@ -10,7 +10,7 @@ Prep and Strength, Power and Physique are untouched. This runs in their place fo
 
 ## START HERE — HOW TO RUN THIS
 
-**The week at its peak (weeks 2–4 and 6–8).** Four early mornings, Friday asleep, the long session Saturday, the rounds Sunday, RANGE and the sit every evening, the movement session on Wednesday and Saturday evenings through week 5 and Saturdays after.
+**The week at its peak (weeks 2–4 and 6–8).** Four early mornings, Friday asleep, the long session Saturday, the rounds Sunday, RANGE every evening, the movement session on Wednesday and Saturday evenings through week 5 and Saturdays after.
 
 | Day | Session | Time |
 |---|---|---|
@@ -21,7 +21,7 @@ Prep and Strength, Power and Physique are untouched. This runs in their place fo
 | Friday | SLEEP. No alarm. | — |
 | Saturday | 8:30 · THE LONG SESSION — get-ups, build-ups, stance starts, close and plant, sprints, reactive jumps, side bounds, the squat in its phase, the one-arm landmine push press, the bear-hug carry (weeks 1–8) · evening: the movement session | ~88 min |
 | Sunday | 8:30 · THE ROUNDS — throws, the simulation, the post-max sit, core with suitcase carries, the L-sit, the lever and face pulls, hands, weekly check · then the easy hour, then the sauna | ~80 min |
-| Every day | On waking: the strap, the sighs, the one thing, the morning five, the check · evening: RANGE 20 min, the skill block Mon–Thu, the sit, the review | ~50 min |
+| Every day | On waking: the strap, the morning five, the check · evening: RANGE 20 min, the skill block Mon–Thu | ~30 min |
 
 About seven and three-quarter hours in the gym a week at peak and three at home. Week 5 is easy; weeks 9–10 are much lighter.
 
@@ -57,7 +57,7 @@ About seven and three-quarter hours in the gym a week at peak and three at home.
 | Thursday | Move's lower back and shoulders block in the warm-up's place · the lower pushes in the Spanish squat hold's and the Achilles hold's place | The upper pushes, then the rest of the evening as written, and RANGE |
 | Saturday | Move's hips, balance and sprint prep block in the warm-up's place · the lower pushes straight after the side bounds, before the squat · the hip pair at the end | RANGE |
 | Sunday | Move's whole-body block, then the power prep · the back extension after the core block | Session B, the upper pushes in it |
-| Every day | The morning five goes, and so does the movement session: Sessions A and B do its job | The skill block and the sit stay |
+| Every day | The morning five goes, and so does the movement session: Sessions A and B do its job | The skill block stays |
 
 **The camp's final week** runs as the camp has it, with one dose of each: the lower pushes in its Tuesday session and the upper pushes that evening, both at half effort. None after that until the transition. **The week before a camp** keeps its own sessions as written, and its evenings are MOVE's: RANGE, Session A on Wednesday, Session B on Sunday, the upper pushes on Tuesday and Thursday. In both weeks the morning five stays gone: no end-range back bending in the first hour up.
 
@@ -156,7 +156,7 @@ Knuckle hold, 3 × 20 seconds — push-up position on your fists, wrist dead str
 
 A light band anchored behind you at shoulder height, the end in your hand, in your stance. Punch the arm out fast; the band snatches it back — brake it hard and stop it dead in the last third of the return. Fast out, hard stop. Every punch you throw has to be braked and brought home by these muscles, and this is the only exercise that trains them to do it.
 
-**Done · ~1:15.** Tonight: RANGE, the skill block, the sit.
+**Done · ~1:15.** Tonight: RANGE, the skill block.
 
 ---
 
@@ -206,7 +206,7 @@ The body-shot block, kept from Prep: ab wheel rollouts × 8–12, the Pallof pre
 
 Seated calf raise, up on the balls of the feet, pause, down slow, twelve times — the knee-bent position trains the muscle that keeps you on your toes in round six. Then the hold, STANDING: on the edge of a step, a dumbbell in each hand or a bar on your back, as heavy as you can hold dead still, rise to the top and hold 45 seconds, knees straight. The Achilles takes every sprint and landing in this camp on a straight knee; this is its insurance.
 
-**Done · ~1:04.** Tonight: RANGE, the skill block, the sit.
+**Done · ~1:04.** Tonight: RANGE, the skill block.
 
 ---
 
@@ -250,7 +250,7 @@ Kneel with the heels anchored under something solid. Body straight from knees to
 
 **9 · 1:02 — FARMER'S CARRY · 2 × 30 m · rest 60 s · 3 min · weeks 1–8** — a heavy dumbbell in each hand; stand tall, shoulders down, short quick steps for 30 metres without putting them down, as in Prep.
 
-**Done · ~1:07.** Tonight: the movement session in weeks 1–5, RANGE, the skill block, the sit.
+**Done · ~1:07.** Tonight: the movement session in weeks 1–5, RANGE, the skill block.
 
 ---
 
@@ -298,13 +298,13 @@ Every session ends with the 60-second settle.
 
 **8 · 1:06 — BAND DECELERATION CATCH · 2 × 8 per arm · 2 min** — as Monday. Twice a week, because the muscles that brake your arm have to keep up with your punching.
 
-**Done · ~1:08.** Tonight: the easy thirty, then the sauna in weeks 2–8, RANGE, the skill block, the sit.
+**Done · ~1:08.** Tonight: the easy thirty, then the sauna in weeks 2–8, RANGE, the skill block.
 
 ---
 
 ## FRIDAY · SLEEP
 
-No alarm. Tomorrow is the long session and Sunday is the rounds, and the best thing you can do for both is not get up at half three. The base a Friday morning would have built is worth less than the hour of sleep it costs the night before the two biggest days of the week. Work, RANGE and the sit in the evening, nothing hard, nothing fast, nothing heavy. Friday's 5pm carb feed loads Saturday; it doesn't move.
+No alarm. Tomorrow is the long session and Sunday is the rounds, and the best thing you can do for both is not get up at half three. The base a Friday morning would have built is worth less than the hour of sleep it costs the night before the two biggest days of the week. Work and RANGE in the evening, nothing hard, nothing fast, nothing heavy. Friday's 5pm carb feed loads Saturday; it doesn't move.
 
 ---
 
@@ -404,7 +404,7 @@ The lines you're already running, at the levels you've reached, and the dips, we
 
 ---
 
-## THE HOME BLOCK · THE MORNING FIVE · RANGE · THE SKILL BLOCK · THE SIT
+## THE HOME BLOCK · THE MORNING FIVE · RANGE · THE SKILL BLOCK
 
 Two joints you named as your limiting factor: hips and shoulders. Both are limited first by the mid-back, so it goes first. Eight minutes a night was maintenance; this is change. Twenty minutes every evening for the whole camp — it doesn't stop for a fight — five on waking, the tests in weeks 5 and 9, and the movement session on Wednesday and Saturday evenings in weeks 1–5, Saturdays after — the Movement Session page is in Prep. Kit: a foam roller, a light band, a kettlebell or dumbbell (8–16 kg), a doorframe pull-up bar if you can fit one, a sofa and a chair.
 
@@ -414,7 +414,7 @@ Two joints you named as your limiting factor: hips and shoulders. Both are limit
 
 ---
 
-### THE MORNING FIVE · on waking, after the sighs and the one thing · 5 min
+### THE MORNING FIVE · on waking, after the strap · 5 min
 
 Controlled joint circles — the slowest, biggest circle each joint can make under its own power, three each way. Slow enough that it takes ten seconds a circle; if something wants to cheat — a shrug, a lean, a bent knee — that's the range you don't own yet, so slow down there.
 
@@ -479,11 +479,9 @@ Write the numbers down. They should hold where Prep left them; a range that clos
 
 Thirty minutes easy, nose only, walk or run, conversational. The second base session of the week — the hard sessions get their recovery from the easy ones, and you had one; elite endurance has three. Thursday, because Friday has no alarm and no session: it costs no sleep and takes nothing from a hard day. The morning's session leaves your legs heavier, so go by the strap and your nose, not the speed, and walk if you need to. The sauna comes after it, never before.
 
-### THE SKILL BLOCK · Monday to Thursday · 5 min · after RANGE, before the sit
+### THE SKILL BLOCK · Monday to Thursday · 5 min · after RANGE
 
 Wrist circles × 10 each way. Hollow hold, 2 × 20 seconds — on your back, lower back pressed into the floor, arms overhead, legs straight and lifted, one shallow banana. Arch hold, 2 × 20 seconds — face down, arms and legs lifted. Handstand at your current level, 3 minutes, on parallettes — hands round the bars, wrists straight, the way your wrist is when a punch lands — the Calisthenics page.
-
-**THE SIT · after the skill block · 12–20 min, then THE REVIEW · 2 min** — exactly as Iron Mind runs them: the stage sit, the clean-cycle count, the three spoken questions, then bed.
 
 **Friday evening:** RANGE only. No skill block.
 
@@ -507,14 +505,14 @@ You cannot get fitter this week. You can only get fresher or more tired. Every d
 |---|---|
 | Monday 8 Mar | 20 minutes easy, nose only. Neck holds, 2 × 10 seconds each direction. RANGE at half dose. Bed by half past eight. |
 | Tuesday 9 Mar | SPEED MICRODOSE · 25 min: warm-up, 3 × 20 m flying sprints at 90%, box jumps 2 × 3, rotational throws 2 × 3 per side, bench throws 3 × 3. Fast, nothing tired, done. |
-| Wednesday 10 Mar | Nothing. RANGE at half dose, the sit. |
+| Wednesday 10 Mar | Nothing. RANGE at half dose. |
 | Thursday 11 Mar | ACTIVATION · 20 min: Tuesday's warm-up, band pull-aparts and external rotations, three easy throws per side, two minutes of shadow boxing at pace, three physiological sighs, done. |
 | Friday 12 Mar | Weigh-in if there is one — Making Weight's weigh-in day if you're making weight, the rehearsal's meals if not. Nothing else. Feet up. Bed early. |
 | Saturday 13 Mar | THE MORNING PRIMER, hours before, ten minutes: three easy minutes on the bike, box jumps 2 × 3, rotational throws 2 × 3 per side, every one fast, a minute between sets. Then the FIGHT. The warm-up you rehearsed. The corner minute in every rest. Round six is a place you've already been. |
 
 Food this week holds — the day as printed, or, if you're making weight, your last step and then Making Weight's light days. The commonest way to lose a fight in the last week is to eat less because you're training less and arrive at the ring empty.
 
-**After the fight:** first, the head check. If you were stopped or dropped, or have any symptoms afterwards — headache, fogginess, feeling slowed down, dizziness, sensitivity to light or noise — see a doctor before any training, and don't train until you're cleared; a medical suspension overrides everything here. A severe or worsening headache, repeated vomiting, confusion or drowsiness is A&E, straight away. Then the two-week transition — three or four days of nothing but RANGE, the sit and walking, then two easy weeks — and Prep restarts when the strap says the numbers are back to baseline.
+**After the fight:** first, the head check. If you were stopped or dropped, or have any symptoms afterwards — headache, fogginess, feeling slowed down, dizziness, sensitivity to light or noise — see a doctor before any training, and don't train until you're cleared; a medical suspension overrides everything here. A severe or worsening headache, repeated vomiting, confusion or drowsiness is A&E, straight away. Then the two-week transition — three or four days of nothing but RANGE and walking, then two easy weeks — and Prep restarts when the strap says the numbers are back to baseline.
 
 ---
 

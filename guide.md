@@ -6,10 +6,8 @@ Open the app. It shows one thing at a time. Do it, press NEXT. That's the whole 
 ## THE MORNING, IN ORDER
 1. **A weight limit in?** Toilet, then the scales — before you eat or drink, nothing on. Type the number. No limit, the app doesn't show it.
 2. Strap on, lie still one minute. Type the two numbers from the strap app: resting heart rate and HRV.
-3. Three big sighs — breathe in through the nose, sip in a bit more, long breath out through the mouth.
-4. The one thing: what's the one job that makes today a win?
-5. The five joint circles — the app times them. From Monday 16 November they go: the movement block at the gym does their job.
-6. Four yes/no taps. The app says GREEN, YELLOW or RED.
+3. The five joint circles — the app times them. From Monday 16 November they go: the movement block at the gym does their job.
+4. Four yes/no taps. The app says GREEN, YELLOW or RED.
 
 **GREEN** — do the session as written. **YELLOW** — the app has already taken 7% off your weights and told you to go easier on the bike; skip the last block. **RED** — warm-up, neck, hands, stretch at home. No lifting, no sprinting, no jumping today.
 
@@ -64,7 +62,7 @@ The app marks them. Everything is lighter on purpose. Do not add anything. This 
 They fall in the lighter weeks and on test day, and the app puts each one on the right day: bursts on the bike, the 20-minute ride, jump, throw, push-ups, chins, the breath hold, the seven bend-and-reach tests, the tape, the photos. Do them exactly as the row says. They're how the app decides your next weights and paces.
 
 ## AT HOME
-Every evening: RANGE (the app times each stretch), the hollow and arch holds and the handstand on parallettes Monday to Thursday, the sit, the three questions, casein, bed by half past eight. Wednesday and Saturday evenings in the build weeks, and Saturdays after: the movement session — the app times it. From Monday 16 November Optimal 8 · Move changes the evenings: RANGE five nights, Session A on Wednesday, Session B on Sunday, and from 23 November the upper pushes on Tuesday and Thursday; the movement session goes.
+Every evening: RANGE (the app times each stretch), the hollow and arch holds and the handstand on parallettes Monday to Thursday, casein, bed by half past eight. Wednesday and Saturday evenings in the build weeks, and Saturdays after: the movement session — the app times it. From Monday 16 November Optimal 8 · Move changes the evenings: RANGE five nights, Session A on Wednesday, Session B on Sunday, and from 23 November the upper pushes on Tuesday and Thursday; the movement session goes.
 
 ## FOOD AND DRINK
 The food guide has the detail. Half the bottle and a banana twenty minutes before you train, the other half after. The 5pm feeds on Tuesday, Friday and Saturday are the ones that never move. Boxing tonight? Tap BOXING TONIGHT on FOOD, or tick your boxing evenings in Settings: the app adds the 5pm feed and moves dinner after the boxing. Drink when the alarm says.
