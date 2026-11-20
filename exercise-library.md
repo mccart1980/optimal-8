@@ -46,6 +46,8 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **BOX JUMPS** — Stand in front of a box about knee-to-hip height. Quick dip, jump onto it, land softly in a quarter squat, stand up, step down. Never jump down.
 
+**KNEELING JUMP INTO BOX JUMP** — Kneel tall on a mat, toes tucked under, a knee-high box about a metre in front of you. Swing your arms back, then throw them forward and snap your hips through to jump onto your feet, landing in a half squat. Straight away, jump onto the box as high as you can, land soft and step down. Kneel again and start each rep still. Each rep is two jumps: the first all hips, from a dead stop, the second straight onto the box.
+
 **SHUTTLE BURSTS** — Sprint five metres, plant your foot, turn and sprint back. That's one. Six of them with twenty seconds between. The hard turn is the exercise.
 
 **STANCE STARTS** — Sprints from your boxing stance. Stand in your stance, then explode forward off your back foot and sprint ten metres flat out. Walk back and rest 90 seconds.
@@ -153,6 +155,14 @@ Every exercise, session, test and move in the program, in two or three plain lin
 **DEAD BUG** — Lie on your back, arms pointing at the ceiling, knees bent above your hips. Press your lower back into the floor and keep it there while you slowly lower one arm and the opposite leg to just above the floor. Bring them back, then the other pair.
 
 **LANDMINE ROTATION** — One end of a barbell in a landmine or a corner, the other end held at arm's length in front of your chest, feet wide. Swing it down to one hip by turning your hips and pivoting your back foot, arms straight, then across to the other side, trunk braced. Controlled, never swung loose. Start with the bar plus 5–10 kg.
+
+**CABLE WOODCHOP** — High to low: a cable at the top of the stack with a single handle. Stand side-on to it, feet wide, both hands on the handle above your near shoulder, arms long. Pull it down and across your body to the outside of your far knee by turning your hips and shoulders together, your back foot pivoting, then let it back up under control. All the reps one side, then the other. Add weight when 10 is easy. Low to high: the cable at the bottom of the stack, the handle outside your near knee, pulled up and across to above your far shoulder the same way. Both directions turn the hips and shoulders together, the way a hook and an uppercut do.
+
+**DUMBBELL SIDE BEND** — Stand tall with one heavy dumbbell in one hand, the other hand on your head. Bend straight sideways towards the dumbbell as far as you can, then pull back up past upright with the side of your waist. No twisting, no leaning forward. All the reps one side, then the other. Add weight when 15 is easy.
+
+**WEIGHTED DECLINE SIT-UP** — On a decline bench, feet hooked under the pads, a plate held on your chest. Curl up one bit of your spine at a time until your chest faces your knees, then lower slowly all the way back. Add weight when 12 is easy.
+
+**REVERSE CRUNCH** — Lie on a flat bench holding its end behind your head, knees bent to a right angle above your hips. Curl your hips up off the bench, bringing your knees towards your chest, then lower slowly until your feet nearly touch the floor. No swinging. Straighten your legs a little to make it harder.
 
 **SUITCASE CARRY** — A heavy dumbbell or kettlebell in one hand. Walk 30 metres standing tall without leaning to either side, then switch hands.
 

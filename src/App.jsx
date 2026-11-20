@@ -33,6 +33,7 @@ import { Lines, CheckTaps } from "./today.jsx";
 import { CardHead, BigBtn, SetButtons, Input, Checklist, RoutineRunner, Chapter, T1, T2, T3 } from "./now.jsx";
 import { Sheet } from "./im-ui.jsx";
 import { withMove, withFinalWeek, OPROTO } from "./movex.js";
+import { withCore } from "./core.js";
 import { auditOn, SPLEEFT_FAST, ARMS_THIRD, BIKE_THIRD, ROUNDS_LIB, T20_LIB, lmPush } from "./audit.js";
 import { SIGHS, MORNING_FIVE, RANGE_CARDS, FIGHT_WEEK_CARDS, KEEP_CARDS, MOVE_CARDS, moveRangeCards, sessionCards, upperPushCards, skillCards, ROUTINE_MINS } from "./routines.js";
 import { MOVE_SINCE, MOVE_PROGRAM_INTRO, MOVE_PH, moveWeekOf, movePhase, isMoveTestWeek, LEVEL_KEY, levelLine, stepLevel, MOVE_TEST_IDS, rangeStandardsMet, jeffersonGate, END_KEY, tendonWeekOf } from "./move.js";
@@ -911,7 +912,9 @@ const sessFor = (day, rx) => {
      its Tuesday's lower pushes, and the week before a camp has none */
   if (MODE.camp && rx && rx.pre) return S0;
   if (MODE.camp && rx && rx.fightWeek) return S0 && S0 === CSFW.tue ? withFinalWeek(S0) : S0;
-  return withMove(MODE.trans ? "trans" : MODE.prep ? "prep" : MODE.camp ? "camp" : "fighter", day, S0);
+  const prog = MODE.trans ? "trans" : MODE.prep ? "prep" : MODE.camp ? "camp" : "fighter";
+  /* then THE CORE from 23 November: three for the abs and the core every training day, and the kneeling jump into a box jump (core.js) */
+  return withCore(prog, day, withMove(prog, day, S0));
 };
 
 /* Is this day a sleep day? Friday, in both programs. */

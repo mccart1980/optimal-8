@@ -123,7 +123,12 @@ are four tabs: **TODAY · PROGRESS · FOOD · MORE**.
   calories — the one-arm landmine push press in the barbell push press's
   place, a bar speed on the bench throws and the landmine push press, three
   stance starts as the camp's Tuesday speed, and a ten-minute primer on the
-  camp's last morning and its rehearsal's.
+  camp's last morning and its rehearsal's. And from that Monday THE CORE
+  (src/core.js): at least three exercises for the abs and the core every
+  training day, more rotation, and the kneeling jump into a box jump in the
+  box jumps' place. Strength, Power and Physique has its own cards
+  (src/spp.js); Prep, the camp and the classic get the same days laid over
+  their pages, at rounds that follow each program's lighter weeks.
   Optimal 8 Fighter is still there as the classic.
 - **Yes:** the date, the rounds and minutes, the rest between rounds (1 minute
   unless you change it), the weigh-in (the day before or on the day), how fit

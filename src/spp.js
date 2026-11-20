@@ -4,6 +4,7 @@ import { SLED_FIELDS, LIGHTS_FIELDS, sessionBoxes, engHR } from "./camp.js";
 import { BENCH_THROW_NOTE, topItem } from "./prep.js";
 import { movePhase, isMoveTestWeek, TENDON_SINCE, pushEffort } from "./move.js";
 import { AUDIT_SINCE, SPLEEFT_FAST, SPLEEFT_ARM } from "./audit.js";
+import { CORE_SINCE, coreItem, kneelItem, KNEEL_WHY } from "./core.js";
 
 /* ================================================================
    OPTIMAL 8 · STRENGTH, POWER AND PHYSIQUE — as data
@@ -366,11 +367,13 @@ export const SS = {
     tt: "Lower strength — box jumps, the lower pushes, the squat, then Romanian deadlifts, Bulgarian split squats, leg curls, calves and leg raises, then the neck and rear delts",
     intro: "Box jumps while you're fresh, the squat heavy, then size for the legs, then the neck and rear delts.", b: [
     moveA("mon", "S_WU_MON", 5, "5 min · bike, the Spanish squat hold"),
-    { L: "K", n: "Box Jumps", since: "2026-11-13", m: (rx) => (rx.half ? 3 : 5), star: 1, hard: 1, rest: "Rest 60 s", rt: 60,
-      rxLine: (rx) => hs(rx, 4) + " × 3",
-      items: (rx) => [{ n: "Box jump", s: hs(rx, 4) + " × 3 · onto a knee-high box", cue: "Onto a box about knee height, landing soft, stepping down.", id: "boxjump", k: "chk" }],
-      w: "Every jump as high as you can make it. A jump clearly lower than the first ends the set.",
-      why: "The week's second jump day, before the squat: box jumps land the softest of all the jumps, and they sharpen the heavy sets that follow." },
+    /* from 23 November the kneeling jump into a box jump (core.js): the same sets, two reps, each one two jumps */
+    { L: "K", n: (rx) => (rx.au ? "Kneeling Jump into Box Jump" : "Box Jumps"), since: "2026-11-13", m: (rx) => (rx.half ? 3 : 5), star: 1, hard: 1, rest: "Rest 60 s", rt: 60,
+      rxLine: (rx) => hs(rx, 4) + (rx.au ? " × 2" : " × 3"),
+      items: (rx) => [rx.au ? Object.assign(kneelItem(null, hs(rx, 4), "s_kneelbox"), { s: hs(rx, 4) + " × 2 · onto a knee-high box" })
+        : { n: "Box jump", s: hs(rx, 4) + " × 3 · onto a knee-high box", cue: "Onto a box about knee height, landing soft, stepping down.", id: "boxjump", k: "chk" }],
+      w: (rx) => (rx.au ? "Both jumps of every rep as high as you can make them. A box jump clearly lower than the first ends the set." : "Every jump as high as you can make it. A jump clearly lower than the first ends the set."),
+      why: (rx) => "The week's second jump day, before the squat: box jumps land the softest of all the jumps, and they sharpen the heavy sets that follow." + (rx.au ? " " + KNEEL_WHY : "") },
     { L: "B", n: "Load-Velocity Profile — Squat", m: 12, star: 1, profile: "squat", hide: (rx) => !rx.profile,
       rxLine: () => "five loads × 2 reps, fast, the watch recording",
       items: [{ n: "Squat at five loads", s: FIVE, cue: "Two reps at each load, as fast as the bar will move, the watch recording the mean speed.", id: "s_prof_sq", k: "chk" }],
@@ -411,6 +414,11 @@ export const SS = {
         : { n: "Standing calf raise", s: hs(rx, 3) + (rx.mw ? " × 6–10 · 3 s up, 3 s down, 2 s at the bottom" : " × 10–15 · 2 s at the bottom"), cue: "All the way down to a full stretch, hold two seconds, then all the way up.", id: "s_calf", k: "wr", sets: hs(rx, 3), reps: rx.mw ? "6–10" : "10–15", rest: "straight into the leg raise", rt: 0 },
         { n: "Hanging leg raise", s: hs(rx, 3) + " × 8–12", cue: "Hang from the bar, curl your pelvis up and lift your knees to your chest without swinging, then lower slowly. Straight legs once that gets easy.", id: "hlr", k: "wr", sets: hs(rx, 3), reps: "8–12", rest: "Rest 60 s", rt: 60 }],
       why: "Back to back, a minute after each pair." },
+    /* THE CORE (core.js), from 23 November: with the leg raises, the day's three */
+    { L: "AB", n: "Dead Bug + Cable Woodchop", since: CORE_SINCE, m: (rx) => (rx.half ? 3 : 5), pair: 1, hide: (rx) => !rx.au, rxLine: () => "back to back · 45 s after each pair",
+      items: (rx) => [coreItem("deadbug", "Dead bug", hs(rx, 2), "8 each side, slow", "s_deadbug", "straight into the woodchop", 0),
+        coreItem("chopHi", "Cable woodchop", hs(rx, 2), "10 each side · high to low", "s_chop_hi", "Rest 45 s", 45)],
+      why: "With the hanging leg raise, the day's three for the core: the dead bug keeps the trunk still while the arms and legs move, and the woodchop turns the hips and shoulders together, the way a hook does." },
     /* THE NECK: front and back, light and slow, once a week */
     { L: "N", n: "Lying Neck Curl + Lying Neck Extension", since: "2026-11-08", m: 6, pair: 1, rxLine: () => "back to back · 45 s after each pair",
       items: (rx) => [{ n: "Lying neck curl", s: hs(rx, 3) + " × 15–20 · slow, never jerked", cue: "Lie face up on a bench with your head off the end, a folded towel and a light plate on your forehead, held with both hands. Let your head go back slowly, then curl your chin to your chest. Start with 2.5–5 kg and add a little only when 20 is easy.", id: "s_neckc", k: "wr", sets: hs(rx, 3), reps: "15–20", rest: "straight into the neck extension", rt: 0 },
@@ -479,6 +487,10 @@ export const SS = {
       items: (rx) => [{ n: "Cable lateral raise", s: hs(rx, 3) + " × 12–15 · one or two left", cue: "Cable at hand height, stand side-on, the handle in your far hand with the cable running behind your back. Raise your arm out to the side to shoulder height, leading with the elbow, then lower slowly.", id: "s_clat_tue", k: "wr", sets: hs(rx, 3), reps: "12–15" }] },
     { L: "G", n: "Ab Wheel Rollout", m: 4, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 3) + " × 8–10",
       items: (rx) => [{ n: "Ab wheel rollout", s: hs(rx, 3) + " × 8–10", cue: "Kneeling, roll forward as far as you can without your lower back sagging, then pull back with your abs.", id: "abwheel", k: "wr", sets: hs(rx, 3), reps: "8–10" }] },
+    /* THE CORE (core.js), from 23 November: with the ab wheel and the landmine rotation, the day's three */
+    { L: "SB", n: "Dumbbell Side Bend", since: CORE_SINCE, m: (rx) => (rx.half ? 2 : 3), hide: (rx) => !rx.au, rest: "Rest 45 s", rt: 45, rxLine: (rx) => hs(rx, 2) + " × 12 each side",
+      items: (rx) => [coreItem("sidebend", "Dumbbell side bend", hs(rx, 2), "12 each side", "s_sidebend", "Rest 45 s", 45)],
+      why: "The sides of the waist, bent and loaded: with the ab wheel and the landmine rotation, the day's three." },
     /* THE KNUCKLE HOLD: the hand is the part of a boxer injured most, and
        a wrist that stays straight under load is the gym's share of it */
     { L: "Y", n: "Knuckle Hold", since: AUDIT_SINCE, m: 2, hide: (rx) => !rx.au, rest: "Rest 30 s", rt: 30, rxLine: (rx) => hs(rx, 3) + " × 20 s",
@@ -536,6 +548,10 @@ export const SS = {
       items: (rx) => [{ n: "Side neck raise", s: hs(rx, 3) + " × 12–15 each side · no weight to start", cue: "Lie on your side on a bench with your head off the end. Lower your ear slowly towards the floor, then lift it towards the ceiling. No weight to start; when 15 is easy, hold a light plate against the side of your head. Never jerk it.", id: "s_neckside", k: "wr", sets: hs(rx, 3), reps: "12–15/side", rest: "straight into the drops", rt: 0 },
         { n: "Medicine-ball drops", s: hs(rx, 3) + " × 8 · a 3 kg ball, up to 6", cue: "Lie on your back, knees bent, the ball held at arm's length over your stomach. Breathe out hard through your teeth and brace as you let it go; it lands just above your belly button, and you catch it on the bounce. Never on the ribs.", id: "s_drops", k: "chk", rest: "Rest 45 s", rt: 45 }],
       why: "Back to back, 45 seconds after each pair. The neck is trained forward and back on Monday and side to side here; the drops train the brace to fire on time." },
+    /* THE CORE (core.js), from 23 November: with the cable crunch and the drops, the day's three */
+    { L: "WC", n: "Cable Woodchop", since: CORE_SINCE, m: (rx) => (rx.half ? 2 : 4), hide: (rx) => !rx.au, rest: "Rest 45 s", rt: 45, rxLine: (rx) => hs(rx, 3) + " × 10 each side · low to high",
+      items: (rx) => [coreItem("chopLo", "Cable woodchop", hs(rx, 3), "10 each side · low to high", "s_chop_lo", "Rest 45 s", 45)],
+      why: "A turn from low to high under load, the way an uppercut turns: with the cable crunch and the drops, the day's three." },
     nasalRun("R")] },
 
   /* ---------------- THURSDAY ---------------- */
@@ -574,6 +590,11 @@ export const SS = {
       rxLine: (rx) => (rx.testWeek ? 3 : 4) + " × 3 @ your peak-power load",
       items: (rx) => [{ n: "Trap bar jump", s: (rx.testWeek ? 3 : 4) + " × 3 @ your peak-power load", cue: "Stand inside the bar, dip and jump as high as you can, land soft with bent knees, reset, go again.", id: "s_tbjump", k: "wr", mk: "tbdl", pct: rx.tjPct, sets: rx.testWeek ? 3 : 4, reps: 3 }],
       w: (rx) => (rx.au ? "Every jump as high as you can make it. " + SPLEEFT_FAST : "Every jump as high as you can make it. A jump clearly lower than the first ends the set.") },
+    /* MORE ROTATION (core.js), from 23 November: the throws on a third day */
+    { L: "SC", n: "Rotational Scoop Throw", since: CORE_SINCE, m: (rx) => (rx.half ? 2 : 4), star: 1, hard: 1, hide: (rx) => !rx.au, rest: "Rest 45 s", rt: 45, rxLine: (rx) => hs(rx, 3) + " × 3 each side",
+      items: (rx) => [{ n: "Rotational scoop throw", s: hs(rx, 3) + " × 3 each side · " + ball(rx) + ", into a wall", cue: "Side-on to a solid wall, the ball held low at your back hip. Drive off your back foot, turn your hips through and throw it into the wall as hard as you can, arms long. Catch it and reset. All the throws one side, then the other.", id: "s_scoop_thu", k: "chk", rest: "Rest 45 s", rt: 45 }],
+      w: "Every throw as hard as you can make it. A throw clearly weaker than the first ends the set.",
+      why: "The turn trained fast on a third day, while the legs are fresh from the jumps: Tuesday's and Saturday's throws were the only two." },
     lowerPushes("T"),
     { L: "G", n: "Trap Bar Deadlift", m: mainM, star: 1, hard: 1, mainLift: "tbdl", vel: "tbdl", hide: (rx) => !!rx.profile,
       rest: (rx) => (rx.contrast ? "Rest 90 s · 3 broad jumps · rest 2:00" : "Rest 3:00"), rt: (rx) => (rx.contrast ? 225 : 180),
@@ -608,7 +629,11 @@ export const SS = {
       rxLine: (rx) => hs(rx, 2) + " × 20–30 s each side",
       items: (rx) => [{ n: "Copenhagen plank, knee or ankle", s: hs(rx, 2) + " × 20–30 s each side", cue: "Lie on your side, propped on your forearm, your top leg's knee (or ankle) on a bench and the bottom leg underneath. Lift your hips until your body is a straight line, and hold.", id: "s_copen", k: "chk", lv: "mv_copen" }],
       why: "Twice a week, here and on Saturday: in footballers, a Copenhagen programme three times a week in pre-season and once a week after cut the risk of groin problems by 41%. It trains the side of the trunk the side plank did." },
-    hipPair("K")] },
+    hipPair("K"),
+    /* THE CORE (core.js), from 23 November: with the scoop throw and the star side plank, the day's three */
+    { L: "DS", n: "Weighted Decline Sit-Up", since: CORE_SINCE, m: (rx) => (rx.half ? 2 : 3), hide: (rx) => !rx.au, rest: "Rest 45 s", rt: 45, rxLine: (rx) => hs(rx, 3) + " × 10",
+      items: (rx) => [coreItem("situp", "Weighted decline sit-up", hs(rx, 3), "10", "s_situp", "Rest 45 s", 45)],
+      why: "A sit-up you add weight to: the abs grow on load and hard sets, like any muscle." }] },
 
   /* ---------------- FRIDAY ---------------- */
   fri: { n: "FRIDAY", t: "Off — sleep", m: 0, ac: C.moss, sleep: 1, free: 1,
@@ -664,6 +689,10 @@ export const SS = {
       why: "The groin's second dose of the week, with Thursday's, and the side of the trunk the side plank trained." },
     hipPair("J"),
     LAND_ROT("K", "2026-11-09"),
+    /* THE CORE (core.js), from 23 November: with the landmine rotation and the star side plank, the day's three */
+    { L: "HL", n: "Hanging Leg Raise", since: CORE_SINCE, m: (rx) => (rx.half ? 2 : 4), hide: (rx) => !rx.au, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 3) + " × 8–12",
+      items: (rx) => [coreItem("hlr", "Hanging leg raise", hs(rx, 3), "8–12", "hlr", "Rest 60 s", 60)],
+      why: "Monday's leg raise again: the abs' second heavy dose of the week, before the intervals." },
     { L: "H", n: (rx) => (spp44Short(rx) ? "The 3 × 4 Intervals" : "The 4 × 4 Intervals"), m: 30, star: 1, hard: 1, eng: 1, engKey: "e",
       timer: (rx) => ({ kind: "vo2", opt: { n: 4, short: spp44Short(rx) ? 1 : 0, wu: 5, cd: 3 }, title: spp44Short(rx) ? "THE 3 × 4" : "THE 4 × 4" }),
       rxLine: (rx) => (SPPENG[rx.e] || SPPENG.vo2).d,

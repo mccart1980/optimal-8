@@ -86,6 +86,37 @@ Every push is eased in over a second, held 3 seconds, breathing out, with 3 seco
 
 ---
 
+## THE CORE — FROM MONDAY 23 NOVEMBER
+
+**From Monday 23 November every training day has at least three exercises for the abs and the core, and there's more rotation.** One for the abs themselves, with weight on it and taken close to failure, because the abs grow the way any muscle does. One that braces the trunk or works the sides of the waist. One that turns, under load. They go at the end of the morning, after the heavy work and the engine, so a tired trunk never has to hold a heavy lift. The pages below are Fighter as written; THE CORE lays over them like this:
+
+| Day | The three | New | Added at full rounds |
+| --- | --- | --- | --- |
+| Monday | Cable crunch · dead bug · cable woodchop, high to low | All three, at the end: the crunch and the dead bug back to back, then the woodchop. The power dose's box jumps become the kneeling jump into box jump | ~11 min |
+| Tuesday | Pallof press · ab wheel rollout · medicine-ball drops | Medicine-ball drops, 2 × 8, straight after the trunk block: its Copenhagen plank went to Wednesday's hip pair | ~2 min |
+| Wednesday | Weighted decline sit-up · landmine rotation · the star side plank in the hip pair | The sit-up and the landmine rotation back to back, after the hip pair | ~8 min |
+| Thursday | Reverse crunch · dumbbell side bend · cable woodchop, low to high | All three, at the end: the reverse crunch and the side bend back to back, then the woodchop | ~11 min |
+| Saturday | Hanging leg raise · landmine rotation · the star side plank in the hip pair | The leg raise and the landmine rotation back to back, after the hip pair | ~8 min |
+| Sunday | Hanging leg raise · the L-sit line · side plank reach-through · the lever hold | Nothing: already three | — |
+
+Fighter runs them at three rounds, two in its lighter weeks, and none in the test week, Hell Week or the last ten days. The woodchop and the drops are two sets. About 40 minutes a week at three rounds: Monday and Thursday about 11, Wednesday and Saturday about 8, Tuesday 2. About 28 in the lighter weeks. Nothing changes before Monday 23 November.
+
+**The exercises.** The pairs are back to back, a set of each making a round, 45 seconds after each round; the woodchop rests 45 seconds between sets. Every set is logged on its own exercise, with a weight box where it takes weight.
+
+1. **Cable crunch** — Monday, 10–15 a round. Kneel facing a high cable, the rope held either side of your head. Curl your ribs down towards your hips, so your back rounds and your hips stay still, then uncurl slowly. Add weight when 15 is easy.
+2. **Dead bug** — Monday, 6 each side a round, slow. Lie on your back, arms pointing at the ceiling, knees bent above your hips. Press your lower back into the floor and keep it there while you slowly lower one arm and the opposite leg to just above the floor, breathing out. Bring them back, then the other pair. When it's easy, hold a light plate in your hands.
+3. **Cable woodchop, high to low** — Monday, 2 × 10 each side. A cable at the top of the stack with a single handle. Stand side-on to it, feet wide, both hands on the handle above your near shoulder, arms long. Pull it down and across your body to the outside of your far knee by turning your hips and shoulders together, your back foot pivoting, then let it back up under control. All the reps one side, then the other. Add weight when 10 is easy.
+4. **Weighted decline sit-up** — Wednesday, 10 a round. On a decline bench, feet hooked under the pads, a plate held on your chest. Curl up one bit of your spine at a time until your chest faces your knees, then lower slowly all the way back. Add weight when 12 is easy.
+5. **Landmine rotation** — Wednesday and Saturday, 6–8 each side a round. One end of a barbell in a landmine or a corner, the other end held at arm's length in front of your chest, feet wide. Swing it down to one hip by turning your hips and pivoting your back foot, arms straight, then across to the other side, trunk braced. Controlled, never swung loose. Start with the bar plus 5–10 kg.
+6. **Reverse crunch** — Thursday, 10–12 a round. Lie on a flat bench holding its end behind your head, knees bent to a right angle above your hips. Curl your hips up off the bench, bringing your knees towards your chest, then lower slowly until your feet nearly touch the floor. No swinging. Straighten your legs a little to make it harder.
+7. **Dumbbell side bend** — Thursday, 12 each side a round. Stand tall with one heavy dumbbell in one hand, the other hand on your head. Bend straight sideways towards the dumbbell as far as you can, then pull back up past upright with the side of your waist. No twisting, no leaning forward. All the reps one side, then the other. Add weight when 15 is easy.
+8. **Cable woodchop, low to high** — Thursday, 2 × 10 each side. A cable at the bottom of the stack with a single handle. Stand side-on to it, feet wide, both hands on the handle outside your near knee, arms long. Pull it up and across your body to above your far shoulder by turning your hips and shoulders together, your back foot pivoting, then let it back down under control. All the reps one side, then the other. Add weight when 10 is easy.
+9. **Hanging leg raise** — Saturday, 8–12 a round. Hang from the bar, curl your pelvis up and lift your knees to your chest without swinging, then lower slowly. Straight legs once that gets easy.
+10. **Medicine-ball drops** — Tuesday, 2 × 8, a 3 kg ball, up to 6. Rest 45 seconds. Lie on your back, knees bent, the ball held at arm's length over your stomach. Breathe out hard through your teeth and brace as you let it go; it lands just above your belly button, and you catch it on the bounce. Never on the ribs. Go up a kilo when all eight land on a brace that doesn't give, from 3 kg up to 6.
+11. **Kneeling jump into box jump** — Monday, in the power dose's box jumps' place, after the minute of legs: 3 × 2. Rest 60–90 seconds. Kneel tall on a mat, toes tucked under, a knee-high box about a metre in front of you. Swing your arms back, then throw them forward and snap your hips through to jump onto your feet, landing in a half squat. Straight away, jump onto the box as high as you can, land soft and step down. Kneel again and start each rep still. Each rep is two jumps, so the reps go from 3 to 2. From your knees the legs can't use a dip and a bounce, so all of the jump comes from snapping your hips through: the same drive that turns a punch from the back foot.
+
+---
+
 ## YOUR NUMBERS, WEEK BY WEEK
 
 Squat and bench use the same sets and reps each week. "Top triple" means work up to one top set of three, hard but with one or two reps left in you (there's a step-by-step ramp on the Saturday and Sunday pages); that weight × 1.08 is your new working max. Never a true max. The pause squat is a percentage of your back-squat max — and a paused triple at 75% is a hard triple, because a two-second pause takes 10–15% off what you can lift. That column never goes above 75%.
@@ -172,7 +203,7 @@ This is your punch-speed lift. In weeks 11–14 it merges into the circuit below
 
 First, one minute of legs — the warm-up so far was all shoulders: pogo hops × 20 (bounce on the balls of the feet, legs almost straight), bodyweight squats × 6, two easy jumps onto a low step.
 
-How: choose the box by the landing, not the height — you should land on it in a quarter squat, knees soft, not folded to your chest. The training is the take-off; a higher box only makes you lift your knees faster. Quick dip, jump as high as you can, land soft on top, step down. Three perfect jumps, never three tired ones.
+How: choose the box by the landing, not the height — you should land on it in a quarter squat, knees soft, not folded to your chest. The training is the take-off; a higher box only makes you lift your knees faster. Quick dip, jump as high as you can, land soft on top, step down. Three perfect jumps, never three tired ones. From Monday 23 November they're the kneeling jump into box jump, 3 × 2: THE CORE, near the top.
 
 Explosiveness responds to how often the nervous system is asked, not how much. Five minutes, three mornings a week.
 

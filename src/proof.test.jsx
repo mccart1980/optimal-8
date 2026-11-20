@@ -42,10 +42,12 @@ describe("proof 1 — the master camp's session pages", () => {
       }
     });
   });
-  it("Tuesday: broad jumps 3 × 2, box jumps 3 × 3 (4 × 3 in weeks 6–8), shuttles from week 3, speed from week 6, the pistol line, the lower pushes, the trunk with the side plank, the towel calf raise", () => {
+  it("Tuesday: broad jumps 3 × 2, the kneeling jump into box jump 3 × 2 (4 × 2 in weeks 6–8), shuttles from week 3, speed from week 6, the pistol line, the lower pushes, the trunk with the side plank, the towel calf raise", () => {
     W.filter((w) => w !== 9).forEach((w) => {
       expect(pres("master", w, "tue", "Broad jump")).toMatch(/^3 × 2/);
-      expect(pres("master", w, "tue", "Box jump")).toMatch(new RegExp("^" + (w >= 6 ? 4 : 3) + " × 3"));
+      /* from 23 November the box jumps are the kneeling jump into box jump: the same sets, two reps (core.js) */
+      expect(pres("master", w, "tue", "Kneeling jump into box jump")).toMatch(new RegExp("^" + (w >= 6 ? 4 : 3) + " × 2"));
+      expect(has("master", w, "tue", "Box jump")).toBe(false);
       expect(has("master", w, "tue", "Shuttle bursts")).toBe(w >= 3);
       /* from the audit's week Tuesday's speed is three starts from the stance; the flat-out running is Saturday's */
       expect(has("master", w, "tue", "Speed — stance starts")).toBe(w >= 6);
