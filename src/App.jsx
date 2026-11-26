@@ -20,6 +20,7 @@ import { WeekCard, Hero, NowRow, Section, Focus, LogSet, ACT_H, ACT_CSS } from "
 import { Trend, ChartCard, Stat } from "./charts.jsx";
 import { shortDate, weightSeries, WeightCard, LiftsCharts, SprintsPage, boxSeries, StatRow } from "./progress.jsx";
 import { DocView } from "./mdview.jsx";
+import { whileBusy, checkNow, CHECK_SAID, BUILD, buildSay } from "./update.js";
 import { libFor, LIBRARY } from "./library.js";
 import {
   LINES, lineById, curLevel, ownedDate, levelText, levelPres, calMode, DEF_CALIS,
@@ -3138,6 +3139,7 @@ function WeightSettings({ wt, dayIso }) {
 function Settings({ st, setSt, current, L, exportData, importData, rangeWeek, calis, setCalis, replan, morning, dayIso, fuel, setFuel, importFuelText, season, openProfile, fuelPhase, wt }) {
   const [io, setIo] = useState(""); const [showIo, setShowIo] = useState(false); const [confirm, setConfirm] = useState(false);
   const [msg, setMsg] = useState(""); const fileRef = useRef(null);
+  const [newer, setNewer] = useState("");
   const upd = (patch) => setSt(Object.assign({}, st, patch));
   const isCamp = MODE.camp;
   return (
@@ -3315,6 +3317,13 @@ function Settings({ st, setSt, current, L, exportData, importData, rangeWeek, ca
             style={Object.assign({}, mno, { width: "100%", minHeight: 120, background: C.ink, border: "1px solid " + C.line, borderRadius: 14, color: C.chalk, fontSize: 18, lineHeight: 1.3, padding: 12 })} />
           <Btn c={C.cobalt} fill s={{ width: "100%", marginTop: 8 }} on={() => importData(io)}>LOAD THIS BACKUP</Btn>
         </div> : null}
+        </SetCard>
+
+        <SetCard id="app" title="This copy of the app">
+        <div data-testid="app-version" style={Object.assign({}, mno, { fontSize: FS.body, fontWeight: 700, color: C.chalk, lineHeight: 1.4 })}>{buildSay(BUILD)}</div>
+        <Note>The app keeps a copy of itself on the phone, so it opens with no signal. It looks for a newer one every time it comes onto the screen, and refreshes itself once it has it — never while a clock is running.</Note>
+        <Btn small s={{ width: "100%", marginTop: 12 }} on={async () => { setNewer("Looking…"); setNewer(CHECK_SAID[await checkNow()]); }}>CHECK FOR AN UPDATE NOW</Btn>
+        {newer ? <Note c={C.chalk} s={{ fontSize: FS.meta }}><span data-testid="update-said">{newer}</span></Note> : null}
         </SetCard>
 
         <SetCard id="reset" title="Reset">
@@ -3509,6 +3518,10 @@ export default function App() {
   const setFoods = mk(setFoodsRaw, KEYS.foods), setShop = mk(setShopRaw, KEYS.shop), setTape = mk(setTapeRaw, KEYS.tape), setEat = mk(setEatRaw, KEYS.eat);
   const kbeep = useBeep(st.sound);
   const K = useKTimer(kbeep);
+  /* a newer copy of the app waits while a clock is running: a reload would lose it */
+  const busyRef = useRef(false);
+  busyRef.current = !!((T.t && !T.t.done) || (K.t && !K.t.done));
+  useEffect(() => { whileBusy(() => busyRef.current); return () => whileBusy(null); }, []);
   const setImDay = mk(setImDayRaw, IM_KEYS.day), setImSit = mk(setImSitRaw, IM_KEYS.sit);
   const setImHard = mk(setImHardRaw, IM_KEYS.hard), setImWk = mk(setImWkRaw, IM_KEYS.wk);
 

@@ -395,6 +395,19 @@ each. A food it can't read gets the closest names in the list; a food with no
 amount gets amounts to pick; a word it didn't use is said. It asks rather than
 guesses. LOOK UP A FOOD searches the whole list.
 
+## KEEPING THE APP UP TO DATE
+
+The app keeps a copy of itself on the phone, so it opens with no signal. A
+home-screen app on an iPhone looks for a newer copy only when the phone
+chooses to, which can be hours after a change is published. So the app asks
+(`src/update.js`): every time it comes onto the screen, and every half hour
+while it's open. A newer copy downloads in the background; once it has taken
+over, the app reloads into it and opens on the screen the day was left on.
+It never reloads while a rest clock or the kitchen timer is running, or while
+a box is being typed in: then it waits for the next time the app comes onto
+the screen. Settings → This copy of the app shows the version (the commit it
+was built from, and when) and has a button to look for an update now.
+
 ## THE LOOK AND THE SOUND
 
 **Light or dark.** The app has both. Out of the box it follows the phone: light
