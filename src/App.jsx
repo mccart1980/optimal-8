@@ -1249,8 +1249,9 @@ function useTimer(sound) {
     const sy = window.speechSynthesis; if (!sy || typeof SpeechSynthesisUtterance === "undefined") return;
     sy.cancel(); const u = new SpeechSynthesisUtterance(String(text || "").replace(/\bRD\b/g, "ROUND").replace(/\bMIN\b/g, "MINUTE").replace(/·/g, ",").replace(/ — /g, ", ").toLowerCase()); u.rate = 1.05; sy.speak(u);
   } catch (e) {} }, [sound]);
-  /* the sounds: one engine for every timer (sound.js). A timer of boxing
-     rounds gets the ring bell; every other timer gets the tones. */
+  /* the sounds: one engine for every timer (sound.js). Every timer gets the
+     timekeeper's clapper at ten seconds and the ring bell when it runs out;
+     a timer of boxing rounds rings the bell at each round's edges too. */
   const cueNow = useCallback((name) => { if (sound) play(name); }, [sound]);
   const lock = useCallback(async (on) => { try {
     if (on) { if (!lockRef.current && navigator.wakeLock) { const l = await navigator.wakeLock.request("screen"); lockRef.current = l; l.addEventListener("release", () => { if (lockRef.current === l) lockRef.current = null; }); } }
@@ -1278,7 +1279,8 @@ function useTimer(sound) {
           cueNow(name); buzz(nx.t === "w" ? [120, 60, 120] : 200);
           if (cur.steps.length > 1 && (rounds ? /^bell|^change/.test(name) : nx.s >= 10)) say(nx.l);
           setT(Object.assign({}, cur, { i: n, left: Math.max(1, Math.ceil((endRef.current - now) / 1000)) })); }
-        else { cueNow(cur.kind === "rest" ? "go" : cueFor(here, null, rounds)); buzz([150, 80, 150, 80, 320]); if (cur.steps.length > 1) say("done"); setT(Object.assign({}, cur, { i: n, left: 0, run: false, done: true }));
+        /* the end: a rest clock running out rings the bell once (back to work, the way a round starts); any other timer, sound.js says */
+        else { cueNow(cur.kind === "rest" ? "bell1" : cueFor(here, null, rounds)); buzz([150, 80, 150, 80, 320]); if (cur.steps.length > 1) say("done"); setT(Object.assign({}, cur, { i: n, left: 0, run: false, done: true }));
           if (cur.kind === "rest") setTimeout(() => { const c2 = tRef.current; if (c2 && c2.done && c2.kind === "rest") { setT(null); setOpen(false); } }, 1500); }
       } else if (rem !== cur.left) setT(Object.assign({}, cur, { left: rem }));
     }, 200);
@@ -3208,12 +3210,12 @@ function Settings({ st, setSt, current, L, exportData, importData, rangeWeek, ca
 
         <SetCard id="sound" title="Sound">
         <Toggle on={!!st.sound} set={() => upd({ sound: !st.sound })} n="Bell sounds and the feed chime"
-          s="Round bells, the 10-second warning and the 3-2-1 on the timers, and a chime when a feed or a drink is due while the app is open. Off, the full-screen timer still flashes at every change and marks the last 10 seconds." />
+          s="Round bells, the clapper at 10 seconds and the 3-2-1 on the timers, and a chime when a feed or a drink is due while the app is open. Off, the full-screen timer still flashes at every change and marks the last 10 seconds." />
         <div style={{ marginTop: 12 }}><Lab>When the phone is on silent</Lab></div>
         <div data-testid="sound-mode"><Seg opts={SOUND_MODES} val={st.soundMode === "loud" ? "loud" : "mix"} on={(v) => upd({ soundMode: v })} c={C.brass} /></div>
         <Note>STAY SILENT: the bells and pips play alongside your music, and go quiet when the phone's ring switch is on silent. PLAY ANYWAY: they sound even on silent, and the phone stops other apps' music while they do.</Note>
         <Btn s={{ width: "100%", marginTop: 12 }} on={() => { rehearse(); }}>TEST THE BELL</Btn>
-        <Note c={st.sound ? C.ash : C.oxide}>{st.sound ? "Plays every sound a timer makes, in order: the bell, the 10-second warning, the 3-2-1, the go. Nothing? The phone is on silent, or its volume is down." : "The bells are OFF, so the timers make no sound. Switch Bell sounds on, above."}</Note>
+        <Note c={st.sound ? C.ash : C.oxide}>{st.sound ? "Plays every sound a timer makes, in order: the bell to start, the clapper at 10 seconds, the 3-2-1, the bell to end. Nothing? The phone is on silent, or its volume is down." : "The bells are OFF, so the timers make no sound. Switch Bell sounds on, above."}</Note>
 
         </SetCard>
 

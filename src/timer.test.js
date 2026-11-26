@@ -19,7 +19,7 @@ function walk(kind, opt) {
       if (b.warn) out.push({ at, i, cue: "warn", rem });
       at += 1;
     }
-    out.push({ at, i: i + 1, cue: kind === "rest" && i === S.length - 1 ? "go" : cueFor(p, S[i + 1], rounds) });
+    out.push({ at, i: i + 1, cue: kind === "rest" && i === S.length - 1 ? "bell1" : cueFor(p, S[i + 1], rounds) });
   });
   return { S, out, only: (c) => out.filter((x) => x.cue === c) };
 }
@@ -90,11 +90,11 @@ describe("the rounds in the other programmes", () => {
 });
 
 describe("a rest clock", () => {
-  it("ten seconds left: the warning; then the 3-2-1; then the go", () => {
+  it("ten seconds left: the clapper; then the 3-2-1; then one ring of the bell", () => {
     const { out } = walk("rest", { secs: 90 });
-    expect(out.map((x) => x.cue + "@" + x.at)).toEqual(["tick@0", "warn@80", "tick@87", "tick@88", "tick@89", "go@90"]);
+    expect(out.map((x) => x.cue + "@" + x.at)).toEqual(["tick@0", "warn@80", "tick@87", "tick@88", "tick@89", "bell1@90"]);
   });
-  it("a rest under 30 seconds gets the 3-2-1 and the go, no warning", () => {
+  it("a rest under 30 seconds gets the 3-2-1 and the bell, no clapper", () => {
     const { only } = walk("rest", { secs: 20 });
     expect([only("warn").length, only("tick").length]).toEqual([0, 4]);
   });
