@@ -8,7 +8,7 @@ Picked while a Prep is running, the Prep carries on to its test day and the twel
 
 ## THE WEEK
 
-Six sessions: four heavy or fast, two for size with an easy run after, and an easy hour on the bike on Saturday evening. Friday is off. About ten and a quarter hours a week.
+Six sessions: four heavy or fast, two for size with an easy run after, and an easy hour on the bike on Saturday evening. Friday is off. About ten and a quarter hours a week. That's the size block from Monday 30 November; the strength and power blocks run about a quarter of an hour longer.
 
 **Optimal 8 · Move runs beside it from Monday 16 November.** Every session opens with its movement block in the warm-up's place; Thursday's side plank and dead bug, and Saturday's side plank, become the Copenhagen plank; Sunday adds the back extension after the hammer curls; Monday's calf raise goes heavier and slower. Its evenings, its standards and every move's levels are in its own document, Optimal 8 · Move.
 
@@ -20,17 +20,21 @@ Six sessions: four heavy or fast, two for size with an easy run after, and an ea
 
 **The core from Monday 23 November.** Every training day has at least three exercises for the abs and the core, and there's more rotation: Monday's box jumps become the kneeling jump into box jump, and Thursday gets a third day of throws. About 23 minutes a week more, 12 in the lighter weeks and test week. Every exercise and where it goes is in THE CORE, below.
 
+**The trim from Monday 30 November.** The week is cut and re-ordered to fit the mornings before work. Out: Monday's seated leg curl and the split squat's third set; Tuesday's cable lateral raise, dumbbell side bend and knuckle hold; Saturday's one-arm dumbbell row. Moved: Monday's neck pair to Sunday; Thursday's flying sprints to Saturday, outside, first; Tuesday's bursts and pressure rounds to straight after the landmine rotation, ahead of the rows and dips; Saturday's 4 × 4 to straight after the landmine push press, ahead of the size work. Wednesday doesn't change. About 15 minutes a week less: the four work mornings are 33 minutes shorter between them, and the weekend 18 longer. Every change and each morning's running order is in THE TRIM, below.
+
 | Day | Session | Time |
 | --- | --- | --- |
-| Monday | **Lower strength** — the movement block, box jumps, the lower pushes, then the squat heavy, then Romanian deadlifts, split squats and leg curls for size, then the neck and rear delts | ~86 min |
-| Tuesday | **Upper strength** — rotational throws, then bench, weighted chins and the landmine press heavy, then landmine rotations, rows and dips, the knuckle hold, then 6-second bursts and the pressure rounds on the assault bike | ~100 min |
-| Wednesday | **Physique A** — chest and back for size, rear delts and cable crunches, the neck and medicine-ball drops, then a 30-minute nasal run | ~79 min |
-| Thursday | **Lower power** — sled, sprints and jumps, the lower pushes, then the trap bar heavy, trap bar shrugs and a second squat, then the hip pair | ~103 min |
+| Monday | **Lower strength** — the movement block, box jumps, the lower pushes, then the squat heavy, then Romanian deadlifts and split squats for size, calves, leg raises, the dead bug and woodchop, then the rear delts | ~75 min |
+| Tuesday | **Upper strength** — rotational throws, then bench, weighted chins and the landmine press heavy, landmine rotations, then 6-second bursts and the pressure rounds on the assault bike, then rows and dips and the ab wheel | ~90 min |
+| Wednesday | **Physique A** — chest and back for size, rear delts and cable crunches, the neck and medicine-ball drops, the cable woodchop, then a 30-minute nasal run | ~83 min |
+| Thursday | **Lower power** — sled and jumps, the scoop throw, the lower pushes, then the trap bar heavy, trap bar shrugs and a second squat, Nordics, then the hip pair and the decline sit-up | ~98 min |
 | Friday | Off — sleep | — |
-| Saturday | **Upper power** — the lower pushes, then throws, bench throws and the landmine push press, then bench and back for size, the hip pair and landmine rotations, then the 4 × 4 intervals; in the evening, the easy hour on the bike | ~107 min + 45 |
-| Sunday | **Physique B** — shoulders, traps, abs and the medicine-ball drops, arms and calves, the back extension and the Pallof press, then a 40-minute nasal run | ~97 min |
+| Saturday | **Upper power** — flying sprints outside, the lower pushes, then throws, bench throws and the landmine push press, then the 4 × 4 intervals, then bench and pull-ups for size, the hip pair, landmine rotations and leg raises; in the evening, the easy hour on the bike | ~122 min + 45 |
+| Sunday | **Physique B** — shoulders, traps, abs and the medicine-ball drops, the neck, arms and calves, the back extension and the Pallof press, then a 40-minute nasal run | ~103 min |
 
-Heavy and fast days alternate with size days, and the easy runs sit on the size days. That keeps the runs and the fatigue away from the sessions where speed and heavy weights matter most. The easy hour goes on Saturday evening, at least six hours after the session: Saturday's power work is upper body, and Monday's squat is two days away.
+The table is the week from Monday 30 November, at the size block's times. In the strength and power blocks Monday and Thursday run about 4 minutes longer, Tuesday 6 or 7 and Saturday 2; the lighter weeks and test week are shorter. The week before the trim is in THE TRIM, below.
+
+Heavy and fast days alternate with size days, and the easy runs sit on the size days. That keeps the runs and the fatigue away from the sessions where speed and heavy weights matter most. The easy hour goes on Saturday evening, at least six hours after the session: Saturday's fast work is finished hours before it, and Monday's squat is two days away.
 
 ---
 
@@ -91,7 +95,7 @@ Every heavy weight comes off your working max, and bar speed decides the load. E
 
 ## THE CORE — FROM MONDAY 23 NOVEMBER
 
-**Every training day has at least three exercises for the abs and the core.** One for the abs themselves, with weight on it and taken close to failure, because the abs grow the way every other muscle does. One that braces the trunk or works the sides of the waist. One that turns, under load or fast. They come after the heavy lifting, never before it, so a tired trunk never has to hold a heavy squat or trap bar. Rotation goes up too: turning under load on four days, and the throws on three.
+**Every training day has at least three exercises for the abs and the core.** One for the abs themselves, with weight on it and taken close to failure, because the abs grow the way every other muscle does. One that braces the trunk or works the sides of the waist. One that turns, under load or fast. They come after the heavy lifting, never before it, so a tired trunk never has to hold a heavy squat or trap bar. Rotation goes up too: turning under load on four days, and the throws on three. From Monday 30 November Tuesday has two, the ab wheel and the landmine rotation: its side bend came out in THE TRIM, below.
 
 | Day | The three | New, and where it goes | Added |
 | --- | --- | --- | --- |
@@ -102,14 +106,14 @@ Every heavy weight comes off your working max, and bar speed decides the load. E
 | Saturday | The star side plank in the hip pair · landmine rotation · hanging leg raise | Hanging leg raise, after the landmine rotation | ~4 min |
 | Sunday | Cable crunch · medicine-ball drops · Pallof press | Nothing: it already has three | — |
 
-About 23 minutes a week. The lighter weeks and test week run every one of them at half the sets, rounded up: about 12 minutes. Nothing changes before Monday 23 November.
+About 23 minutes a week. The lighter weeks and test week run every one of them at half the sets, rounded up: about 12 minutes. Nothing changes before Monday 23 November. From Monday 30 November it's about 20 minutes, without the side bend, and Saturday's hanging leg raise ends the session, because the 4 × 4 has moved ahead of the size work.
 
 **The new exercises**
 
 1. **Kneeling jump into box jump** — Monday, in the box jumps' place: 4 × 2, all twelve weeks. Rest 60 seconds. Kneel tall on a mat, toes tucked under, a knee-high box about a metre in front of you. Swing your arms back, then throw them forward and snap your hips through to jump onto your feet, landing in a half squat. Straight away, jump onto the box as high as you can, land soft and step down. Kneel again and start each rep still. Each rep is two jumps, so the reps go from 3 to 2. From your knees the legs can't use a dip and a bounce, so all of the jump comes from snapping your hips through: the same drive that turns a punch from the back foot.
 2. **Dead bug** — Monday, 2 × 8 each side, slow, back to back with the woodchop. Lie on your back, arms pointing at the ceiling, knees bent above your hips. Press your lower back into the floor and keep it there while you slowly lower one arm and the opposite leg to just above the floor, breathing out. Bring them back, then the other pair. When it's easy, hold a light plate in your hands.
 3. **Cable woodchop, high to low** — Monday, 2 × 10 each side. Rest 45 seconds after each pair. A cable at the top of the stack with a single handle. Stand side-on to it, feet wide, both hands on the handle above your near shoulder, arms long. Pull it down and across your body to the outside of your far knee by turning your hips and shoulders together, your back foot pivoting, then let it back up under control. All the reps one side, then the other. Add weight when 10 is easy.
-4. **Dumbbell side bend** — Tuesday, 2 × 12 each side. Rest 45 seconds. Stand tall with one heavy dumbbell in one hand, the other hand on your head. Bend straight sideways towards the dumbbell as far as you can, then pull back up past upright with the side of your waist. No twisting, no leaning forward. All the reps one side, then the other. Add weight when 15 is easy.
+4. **Dumbbell side bend** — Tuesday, 2 × 12 each side. Rest 45 seconds. Stand tall with one heavy dumbbell in one hand, the other hand on your head. Bend straight sideways towards the dumbbell as far as you can, then pull back up past upright with the side of your waist. No twisting, no leaning forward. All the reps one side, then the other. Add weight when 15 is easy. Out from Monday 30 November.
 5. **Cable woodchop, low to high** — Wednesday, 3 × 10 each side. Rest 45 seconds. A cable at the bottom of the stack with a single handle. Stand side-on to it, feet wide, both hands on the handle outside your near knee, arms long. Pull it up and across your body to above your far shoulder by turning your hips and shoulders together, your back foot pivoting, then let it back down under control. All the reps one side, then the other. Add weight when 10 is easy.
 6. **Rotational scoop throw** — Thursday, 3 × 3 each side, the 4–6 kg ball (the 3 kg ball in the power block), into a wall. Rest 45 seconds. Side-on to a solid wall, the ball held low at your back hip. Drive off your back foot, turn your hips through and throw it into the wall as hard as you can, arms long. Catch it and reset. All the throws one side, then the other. A throw clearly weaker than the first ends the set.
 7. **Weighted decline sit-up** — Thursday, 3 × 10, at the end. Rest 45 seconds. On a decline bench, feet hooked under the pads, a plate held on your chest. Curl up one bit of your spine at a time until your chest faces your knees, then lower slowly all the way back. Add weight when 12 is easy.
@@ -119,9 +123,115 @@ Every set is logged on its own exercise, with a weight box where it takes weight
 
 ---
 
+## THE TRIM — FROM MONDAY 30 NOVEMBER
+
+**The week had grown to about ten and a half hours, and the work mornings no longer fitted before the shift.** This is the list set on 26 November: what comes out, what moves, and each morning as it now runs. Wednesday doesn't change. No run, sled run, jump, throw or heavy lift comes out.
+
+**What comes out**
+
+- **Monday: the seated leg curl**, sitting in the machine and curling your heels back under the seat, and **the third set of Bulgarian split squats**, the one-leg squat with your back foot up on a bench: 2 sets in every block.
+- **Tuesday: the cable lateral raise**, one arm lifted out to the side against a cable; **the dumbbell side bend**, bending sideways with a dumbbell in one hand; and **the knuckle hold**, a push-up position held on your fists.
+- **Saturday: the one-arm dumbbell row**, one knee and one hand on a bench, rowing a dumbbell to your hip.
+
+**What moves**
+
+- **The neck pair, from Monday to Sunday**, after the medicine-ball drops. It's the lying neck curl and the lying neck extension: lying on a bench with your head off the end, a light plate held on your forehead, then on the back of your head. The same sets and reps, and Sunday's weights start from Monday's.
+- **The flying sprints, from Thursday to Saturday, outside, first.** A flying sprint is a 15-metre rolling build-up, then 20 metres flat out. It needs about 50 metres of clear ground to build up, sprint and slow down, and Saturday comes after Friday's rest. Thursday keeps its sled sprints and everything else.
+- **Tuesday's bike work, up to straight after the landmine rotation.** That's the 6-second bursts, the pressure rounds and, in weeks 4, 8 and 12, the arms-only test. The rows and dips and the ab wheel follow it.
+- **Saturday's 4 × 4, up to straight after the landmine push press.** The bench and pull-ups, the cable lateral raise, the hip pair, the landmine rotation and the hanging leg raise follow it.
+
+**Why the order changes.** On a morning that runs out of time, the cards at the end are the ones that get cut. The bike work and the 4 × 4 are the week's only hard engine sessions, so they now come before the size work. The heavy and fast work still comes first on both days. The cost: Tuesday's rows and dips and Saturday's bench and pull-ups are done after hard conditioning, so expect to lift a little less on them.
+
+**The times**, in the size block:
+
+| Day | Before the trim | From Monday 30 November |
+| --- | --- | --- |
+| Monday | ~89 min | ~75 min |
+| Tuesday | ~99 min | ~90 min |
+| Wednesday | ~83 min | ~83 min |
+| Thursday | ~108 min | ~98 min |
+| Saturday | ~110 min + 45 | ~122 min + 45 |
+| Sunday | ~97 min | ~103 min |
+| The week | about 10 hours 30 | about 10 hours 15 |
+
+**Each morning from Monday 30 November.** How to do each exercise is on its own day's page, below, and on its card in the app. The lighter weeks and test week run half the sets, as before.
+
+**Monday · about 75 minutes**
+
+1. The movement block, 8 minutes: the bike, the hip and back moves and three easy box jumps.
+2. Kneeling jump into box jump, 4 × 2.
+3. The lower pushes, about 10 minutes: the Achilles pushes and the knee pushes, one leg at a time, against a bar and a pad that can't move.
+4. Back squat, the table's sets.
+5. Romanian deadlift, 3 sets.
+6. Bulgarian split squat, 2 sets each leg.
+7. Towel calf raise and hanging leg raise, back to back, 3 sets.
+8. Dead bug and cable woodchop, back to back, 2 sets.
+9. Chest-supported rear-delt raise, 3 sets.
+
+**Tuesday · about 90 minutes**
+
+1. The movement block, 8 minutes: the back and shoulder moves and two easy throws of each kind.
+2. Rotational shot-put throw and hook throw, alternated, 3 × 3 each side.
+3. Bench press and weighted chin-up, alternated, the table's sets.
+4. One-arm landmine press, 3 or 4 sets each side.
+5. Landmine rotation, 3 sets.
+6. Assault bike bursts, 8 of 6 seconds.
+7. Pressure rounds, 3 of 3 minutes, the third minute of each on your arms only.
+8. Chest-supported dumbbell row and weighted dip, alternated, 3 sets.
+9. Ab wheel rollout, 3 sets.
+
+**Thursday · about 98 minutes**
+
+1. The movement block, 12 minutes, ending with the three sprint build-ups.
+2. Heavy sled sprint, 5 × 20 metres.
+3. Jumps, 4 × 3.
+4. Trap bar jump, 4 × 3.
+5. Rotational scoop throw, 3 × 3 each side.
+6. The lower pushes, as on Monday.
+7. Trap bar deadlift, the table's sets.
+8. Trap bar shrug, 3 sets.
+9. Pause squat, 3 sets.
+10. Nordic curl, 3 sets.
+11. The hip pair, about 5 minutes: the Copenhagen lifts and the star side plank, two side planks with a leg lift, for the groin and the outer hip.
+12. Weighted decline sit-up, 3 × 10.
+
+**Saturday · about 122 minutes, and the easy hour in the evening**
+
+1. The sprint warm-up, 8 minutes: the bike inside, then leg swings, skips and three build-up runs outside.
+2. Flying sprints, outside: 3 in the size block, 4 in the strength and power blocks.
+3. The movement block, 7 minutes: the mid-back and shoulder moves and two easy throws of each kind.
+4. The lower pushes, as on Monday.
+5. Medicine-ball chest pass and rotational scoop throw, alternated, 3 sets.
+6. Bench throw, 4 × 3.
+7. One-arm landmine push press, 4 or 5 sets each side.
+8. The 4 × 4 intervals on the treadmill, about 30 minutes.
+9. Bench press, touch and go, and pull-up, alternated, 3 sets.
+10. Cable lateral raise, 3 sets.
+11. The hip pair, as on Thursday.
+12. Landmine rotation, 3 sets.
+13. Hanging leg raise, 3 sets.
+
+**Sunday · about 103 minutes**
+
+1. The movement block, 10 minutes: the Turkish get-up, the suitcase carry and a light set of the first lifts.
+2. Cable lateral raise, 4 sets.
+3. Face pull, 3 sets.
+4. Dumbbell shrug and cable crunch, back to back, 3 sets.
+5. Medicine-ball drops, 2 × 8.
+6. Lying neck curl and lying neck extension, back to back, 3 × 15–20.
+7. EZ-bar curl and overhead triceps extension, alternated, 3 sets.
+8. Incline dumbbell curl and dumbbell skull crusher, alternated, 3 sets.
+9. Hammer curl, 2 sets.
+10. Back extension.
+11. Seated calf raise and Pallof press, back to back, 3 sets.
+12. The nasal run, 40 minutes.
+13. The weekly check.
+
+---
+
 ## MONDAY · LOWER STRENGTH
 
-Box jumps while you're fresh, then the lower pushes, then the squat heavy, then Romanian deadlifts, split squats and leg curls for size, then the neck and rear delts.
+Box jumps while you're fresh, then the lower pushes, then the squat heavy, then Romanian deadlifts, split squats and leg curls for size, then the neck and rear delts. From Monday 30 November the leg curl is out and the neck pair is Sunday's: THE TRIM, above.
 
 **The movement block · 8 minutes** — hips, knees and lower back
 
@@ -140,11 +250,11 @@ Every move, its levels and the reasons are in Optimal 8 · Move. Before its week
    - In Optimal 8 · Move's test weeks the knee pushes become the single-leg leg extension, the heaviest you can lift for 5 clean reps each leg: one of the two tendon numbers.
 3. **Back squat** — the table's sets and percentages, after the ramp. Rest 3 minutes. In the power block, do three box jumps 90 seconds after each double, then rest 2 minutes. Bar on your upper back, feet about shoulder width, toes slightly out. Brace, sit down between your heels until the crease of your hip is below the top of your knee, then drive up. Pins set just below your lowest point.
 4. **Romanian deadlift** — size 3 × 8, strength 3 × 6, power 3 × 5. Rest 2 minutes. Barbell at arm's length, knees soft. Push your hips back and slide the bar down your thighs, back flat, until your hamstrings are at a deep stretch, then drive your hips forward to stand.
-5. **Bulgarian split squat** — size 3 × 8 each leg, strength 3 × 6, power 2 × 6. Rest 90 seconds. Back foot on a bench behind you, a dumbbell in each hand, front foot far enough forward that its shin stays fairly upright. Lower until the back knee nearly touches the floor, then drive up through the front heel.
-6. **Seated leg curl** — 3 × 10–12, all twelve weeks, the last set to failure. Rest 75 seconds. Knees lined up with the machine's pivot, the pad behind your legs just above your heels, the top pad down on your thighs, chest leaning slightly forward. Curl all the way, then lower slowly to a full stretch.
+5. **Bulgarian split squat** — size 3 × 8 each leg, strength 3 × 6, power 2 × 6; from Monday 30 November, 2 sets in every block. Rest 90 seconds. Back foot on a bench behind you, a dumbbell in each hand, front foot far enough forward that its shin stays fairly upright. Lower until the back knee nearly touches the floor, then drive up through the front heel.
+6. **Seated leg curl** — 3 × 10–12, all twelve weeks, the last set to failure. Rest 75 seconds. Knees lined up with the machine's pivot, the pad behind your legs just above your heels, the top pad down on your thighs, chest leaning slightly forward. Curl all the way, then lower slowly to a full stretch. Out from Monday 30 November.
 7. **Towel calf raise**, 3 × 6–10, back to back with 8. A rolled towel under your toes, so they're bent up as far as they go at the top: 3 seconds up, 2 at the top, 3 down, 2 at the bottom stretch, all the way down and all the way up. Heavy and slow for the Achilles, and the towel loads the sole of the foot too. Before Monday 23 November it was the standing calf raise without the towel or the pause at the top; before Optimal 8 · Move, 3 × 10–15. In Optimal 8 · Move's test weeks: the heaviest 5 clean reps, the other tendon number.
 8. **Hanging leg raise**, 3 × 8–12. Rest 60 seconds after each pair. Hang from the bar, curl your pelvis up and lift your knees to your chest without swinging, then lower slowly. Straight legs once that gets easy.
-9. **Lying neck curl**, 3 × 15–20, back to back with 10. Slow, never jerked. Lie face up on a bench with your head off the end, a folded towel and a light plate on your forehead, held with both hands. Let your head go back slowly, then curl your chin to your chest. Start with 2.5–5 kg and add a little only when 20 is easy.
+9. **Lying neck curl**, 3 × 15–20, back to back with 10. Slow, never jerked. Lie face up on a bench with your head off the end, a folded towel and a light plate on your forehead, held with both hands. Let your head go back slowly, then curl your chin to your chest. Start with 2.5–5 kg and add a little only when 20 is easy. From Monday 30 November the neck pair is Sunday's.
 10. **Lying neck extension**, 3 × 15–20. Rest 45 seconds after each pair. Lie face down on a bench with your head off the end, a folded towel and a light plate on the back of your head, held with both hands. Lower your chin towards your chest, then lift your head until you're looking straight ahead. Start light, as for the curl.
 11. **Chest-supported rear-delt raise** — 3 × 15–20. Rest 60 seconds. Lie face down on an incline bench with light dumbbells hanging straight down. Raise your arms out to the sides to shoulder height, little fingers leading, squeeze the backs of your shoulders, then lower slowly.
 
@@ -152,7 +262,7 @@ Every move, its levels and the reasons are in Optimal 8 · Move. Before its week
 
 ## TUESDAY · UPPER STRENGTH
 
-Rotational throws while you're fresh, then bench, weighted chins and the landmine press heavy, then landmine rotations, then rows and dips for size, the knuckle hold, then 6-second bursts and the pressure rounds on the assault bike.
+Rotational throws while you're fresh, then bench, weighted chins and the landmine press heavy, then landmine rotations, then rows and dips for size, the knuckle hold, then 6-second bursts and the pressure rounds on the assault bike. From Monday 30 November the bursts and the pressure rounds come straight after the landmine rotation, before the rows and dips, and the cable lateral raise and the knuckle hold are out: THE TRIM, above.
 
 **The movement block · 8 minutes** — lower back and shoulders
 
@@ -173,10 +283,10 @@ Rotational throws while you're fresh, then bench, weighted chins and the landmin
 6. **Landmine rotation** — 3 × 6–8 each side, controlled. Rest 60 seconds. Straight after the landmine press, with the bar still in the landmine. The other end of the bar at arm's length in front of your chest, feet wide. Swing it down to one hip by turning your hips and pivoting your back foot, arms straight, then across to the other side, trunk braced. Start with the bar plus 5–10 kg; Saturday's is the same, so each day's weight starts from the other's.
 7. **Chest-supported dumbbell row**, alternated with 8 — 3 × 8–10. Chest on a bench set at about 30 degrees, a dumbbell in each hand. Row your elbows back to your hips, squeeze, then lower to a full stretch.
 8. **Weighted dip** — size 3 × 8–10, strength 3 × 6–8, power 3 × 5–6. Rest 90 seconds between each exercise. Parallel bars, weight on a belt once 10 bodyweight reps are easy. Lower until your shoulders are level with your elbows, chest slightly forward, then press to locked arms.
-9. **Cable lateral raise** — 3 × 12–15. Rest 60 seconds. Cable at hand height, stand side-on, the handle in your far hand with the cable running behind your back. Raise your arm out to the side to shoulder height, leading with the elbow, then lower slowly. The cable keeps the shoulder working at the bottom, where a dumbbell goes slack.
+9. **Cable lateral raise** — 3 × 12–15. Rest 60 seconds. Cable at hand height, stand side-on, the handle in your far hand with the cable running behind your back. Raise your arm out to the side to shoulder height, leading with the elbow, then lower slowly. The cable keeps the shoulder working at the bottom, where a dumbbell goes slack. Out from Monday 30 November.
 10. **Ab wheel rollout** — 3 × 8–10. Rest 60 seconds. Kneeling, roll forward as far as you can without your lower back sagging, then pull back with your abs.
-11. **Knuckle hold** — 3 × 20 seconds, from Monday 23 November; 2 × 20 in weeks 4, 8 and 12. Rest 30 seconds. A push-up position on your fists on a mat, wrists dead straight, forearm and knuckles in one line. Hold.
-12. **Assault bike bursts** — 8 bursts, 4 in weeks 4, 8 and 12. On the assault bike, arms and legs together: 2 minutes easy, then each burst 6 seconds absolutely flat out with 40 seconds of easy spinning after it, then 2 minutes easy to finish. About 10 minutes. If a burst is clearly weaker than the one before, take an extra 20 seconds; if two in a row are, stop there.
+11. **Knuckle hold** — 3 × 20 seconds, from Monday 23 November; 2 × 20 in weeks 4, 8 and 12. Rest 30 seconds. A push-up position on your fists on a mat, wrists dead straight, forearm and knuckles in one line. Hold. Out from Monday 30 November.
+12. **Assault bike bursts** — 8 bursts, 4 in weeks 4, 8 and 12. On the assault bike, arms and legs together: 2 minutes easy, then each burst 6 seconds absolutely flat out with 40 seconds of easy spinning after it, then 2 minutes easy to finish. About 10 minutes. If a burst is clearly weaker than the one before, take an extra 20 seconds; if two in a row are, stop there. From Monday 30 November the bursts come straight after the landmine rotation, item 6, with the pressure rounds after them, and the rows, dips and ab wheel follow.
 13. **Pressure rounds** — 3 rounds, 2 in weeks 4, 8 and 12. Straight after the bursts, on the same bike: clear its screen, 1 minute easy, then 3-minute rounds with 1 minute's rest between. In each round, a 5-second burst all out every 20 seconds, and a steady pace between them, one you could hold for the round. Never stop pedalling. Then 2 minutes easy. About 15 minutes; the timer runs all of it. Off on a red morning.
     - From Monday 23 November, **the third minute of every round is arms only**: feet on the pegs on the bike's fork, legs still, your arms driving the handles through the same bursts and the same steady pace. The timer says when to change. Log the minutes at 90% or above too: the time in the Polar's top heart-rate zone for the whole session.
     - From the same Monday, weeks 4, 8 and 12 run one round, then **the arms-only test** in the second round's place: a minute easy, clear the screen, feet on the pegs, then 3 minutes on your arms alone for the biggest total you can make, and 2 minutes easy. Log the total and your peak heart rate.
@@ -212,7 +322,7 @@ Easy, on the road or a treadmill, breathing in and out through your nose the who
 
 ## THURSDAY · LOWER POWER
 
-Sled, sprints and jumps while you're fresh, then the lower pushes, then the trap bar heavy, heavy shrugs on the same bar and a second, lighter squat, then the hip pair. Friday's rest after it.
+Sled, sprints and jumps while you're fresh, then the lower pushes, then the trap bar heavy, heavy shrugs on the same bar and a second, lighter squat, then the hip pair. Friday's rest after it. From Monday 30 November the flying sprints are Saturday's, and nothing else changes.
 
 **The movement block · 12 minutes** — hips, balance and sprint prep
 
@@ -223,7 +333,7 @@ Sled, sprints and jumps while you're fresh, then the lower pushes, then the trap
 **The session**
 
 1. **Heavy sled sprint** — 5 × 20 metres. Rest 2 minutes. Load 40–60% of your bodyweight on the sled. Lean in at about 45 degrees and drive the ground backward through the whole foot, 5–7 seconds a run. Faster than that, add weight; slower, take some off.
-2. **Flying sprint** — 3 runs in the size block, 4 in the strength and power blocks. Weeks 1 and 2 at 90%, flat out from week 3. Rest 2½ minutes. Jog-build for 15 metres, then run 20 metres absolutely flat out, and walk back. A hamstring twinge on the build-ups ends the sprints for the day.
+2. **Flying sprint** — 3 runs in the size block, 4 in the strength and power blocks. Weeks 1 and 2 at 90%, flat out from week 3. Rest 2½ minutes. Jog-build for 15 metres, then run 20 metres absolutely flat out, and walk back. A hamstring twinge on the build-ups ends the sprints for the day. From Monday 30 November they're Saturday's, outside: Saturday's page, below.
 3. **Jumps** — 4 × 3. Rest 90 seconds. Size block: box jumps, onto a box about knee height, landing soft, stepping down. Strength block: low-box depth jumps — step off a 20 cm box and, the instant your feet touch, jump straight up as high as you can. Power block: depth jumps, the same off a 30–40 cm box.
 4. **Trap bar jump** — 4 × 3 at your peak-power load. Rest 90 seconds. Stand inside the bar, dip and jump as high as you can, land soft with bent knees, reset, go again. From Monday 23 November, Spleeft on your wrist: read the speed after every rep, and a rep 10% slower than the set's fastest ends the set.
 5. **The lower pushes** — the Achilles pushes and the knee pushes, 5 × 4 each leg, as on Monday.
@@ -242,7 +352,21 @@ Before Optimal 8 · Move the finish was the side plank, 2 × 30–45 seconds eac
 
 ## SATURDAY · UPPER POWER
 
-The lower pushes, then throws, bench throws and the landmine push press while you're fresh from Friday's rest, then bench and back for size, the hip pair, then the 4 × 4. About 107 minutes, and the easy hour in the evening.
+From Monday 30 November: the flying sprints first, outside, then the lower pushes, throws, bench throws and the landmine push press while you're fresh from Friday's rest, then the 4 × 4, then bench and pull-ups for size, the hip pair, landmine rotations and leg raises. About 122 minutes, and the easy hour in the evening. Before that Monday the session had no sprints, the one-arm dumbbell row was in it and the 4 × 4 came last: about 110 minutes.
+
+**The flying sprints · first, outside · from Monday 30 November**
+
+Thursday's flying sprints, moved. About 18 minutes with their warm-up.
+
+1. **Easy bike**, 3 minutes, inside.
+2. Then outside, on the straight you'll sprint on. **Leg swings**, 10 each way on each leg. **A-skips**, 2 × 15 metres: skip forward, driving one knee up to hip height while the other foot paws the ground.
+3. **Sprint build-ups**: three runs of 20 metres, at 60%, 75% and 90%.
+4. **Flying sprint** — 3 runs in the size block, 4 in the strength and power blocks. Weeks 1 and 2 at 90%, flat out from week 3. Rest 2½ minutes. On a flat, clear straight of about 50 metres: jog-build for 15 metres, run 20 metres absolutely flat out, ease down over the next 15, and walk back.
+   - Wet ground, colder than 5°C, or hamstrings still sore from Thursday: every run at 90%.
+   - Ice or frost underfoot, or a hamstring twinge on the build-ups: no sprints that day.
+   - None in test week, and none the week after a hamstring at 3 or more on Sunday's check. Off on a red morning, the warm-up with them.
+
+Then inside, for the rest of the session.
 
 **The movement block · 7 minutes** — mid-back and shoulders
 
@@ -262,14 +386,14 @@ Until Monday 23 November the block was 11 minutes, with the Achilles pushes in i
    - In weeks 4, 8 and 12, from the same Monday, the **push press speed test** comes first: 20 kg on the bar, the same every time. Three reps as fast as you can with the watch on the pressing wrist, swap the watch to the other wrist, three on that side. Log each side's fastest rep.
 6. **Bench press, touch and go**, alternated with 7 — size 3 × 8 @ 70%, strength 3 × 6 @ 75%, power 3 × 5 @ 75%, fast. Rest 90 seconds between each exercise. Tuesday's bench without the pause: lower under control, touch your chest and press.
 7. **Pull-up** — 3 × 8–10, with weight on a belt once 10 is easy. Palms facing away, hands just outside shoulder width. From a dead hang, pull until your chin is over the bar.
-8. **One-arm dumbbell row** — 3 × 8–12 each side. Rest 60 seconds. One knee and one hand on a bench, the dumbbell hanging at full stretch. Row it to your hip, then lower slowly.
+8. **One-arm dumbbell row** — 3 × 8–12 each side. Rest 60 seconds. One knee and one hand on a bench, the dumbbell hanging at full stretch. Row it to your hip, then lower slowly. Out from Monday 30 November.
 9. **Cable lateral raise** — 3 × 15–20. Rest 60 seconds. Cable at hand height, the handle in your far hand with the cable behind your back. Raise your arm out to shoulder height and lower slowly. On the last set, at failure, drop the weight by about 30% and go again.
 10. **The hip pair** — the Copenhagen lifts and the star side plank, 2 × 4 each side of each, at your levels, as on Thursday: the groin's and the outer hip's second dose of the week. Before Optimal 8 · Move it was the side plank, 2 × 30–45 seconds each side; then, until Monday 23 November, the Copenhagen plank, 2 × 20–30 seconds each side.
 11. **Landmine rotation** — 3 × 6–8 each side, controlled. Rest 60 seconds. One end of a barbell in a landmine or a corner, the other end at arm's length in front of your chest, feet wide. Swing it down to one hip by turning your hips and pivoting your back foot, arms straight, then across to the other side, trunk braced. Start with the bar plus 5–10 kg.
 
 **Then · the 4 × 4 intervals, about 30 minutes**
 
-On the treadmill, set to 5%, from Monday 23 November; before that the card was written for the bike. 5 minutes easy, then four hard efforts of 4 minutes with 3 minutes easy between, then 3 minutes easy. The timer runs all of it. The heart rates and what to log are in The engine, below.
+On the treadmill, set to 5%, from Monday 23 November; before that the card was written for the bike. 5 minutes easy, then four hard efforts of 4 minutes with 3 minutes easy between, then 3 minutes easy. The timer runs all of it. The heart rates and what to log are in The engine, below. From Monday 30 November it comes straight after the landmine push press, item 5, and items 6 to 11 follow it.
 
 **Then, in the evening · the easy hour, 45 minutes**
 
@@ -279,7 +403,7 @@ At least six hours after the session: 45 minutes on a bike, breathing in and out
 
 ## SUNDAY · PHYSIQUE B
 
-Shoulders, traps, abs, arms and calves for size, and the Pallof press, then a 40-minute nasal run and the weekly check.
+Shoulders, traps, abs, arms and calves for size, and the Pallof press, then a 40-minute nasal run and the weekly check. From Monday 30 November, Monday's neck pair too, after the medicine-ball drops.
 
 **The movement block · 10 minutes** — the whole body
 
@@ -293,6 +417,7 @@ Shoulders, traps, abs, arms and calves for size, and the Pallof press, then a 40
 3. **Dumbbell shrug**, 3 × 10–15, back to back with 4. Heavy dumbbells at your sides. Lift your shoulders straight up towards your ears, hold for a second, then lower to a full stretch.
 4. **Cable crunch**, 3 × 10–15. Rest 60 seconds after each pair. Kneel facing a high cable, the rope held either side of your head. Curl your ribs down towards your hips, so your back rounds and your hips stay still, then uncurl slowly. Add weight when 15 is easy.
    - From Monday 23 November, then the **medicine-ball drops**, 2 × 8, 45 seconds between sets; 1 × 8 in weeks 4, 8 and 12. Wednesday's drops again, with Wednesday's ball: the brace's second dose of the week.
+   - From Monday 30 November, then the **lying neck curl**, 3 × 15–20, back to back with the **lying neck extension**, 3 × 15–20, 45 seconds after each pair; 2 sets in weeks 4, 8 and 12. Slow, never jerked. The curl: lie face up on a bench with your head off the end, a folded towel and a light plate on your forehead, held with both hands; let your head go back slowly, then curl your chin to your chest. The extension: lie face down, the plate on the back of your head; lower your chin towards your chest, then lift your head until you're looking straight ahead. Start with 2.5–5 kg and add a little only when 20 is easy.
 5. **EZ-bar curl**, alternated with 6 — 3 × 8–12. Elbows pinned at your sides. Curl up, then take two seconds to lower to straight arms.
 6. **Overhead cable triceps extension** — 3 × 10–15. Rest 60 seconds between each exercise. A rope on a high cable with your back to it, or one dumbbell held in both hands. Elbows pointing at the ceiling, lower your hands behind your head to a deep stretch, then straighten your arms.
 7. **Incline dumbbell curl**, alternated with 8 — 3 × 10–12. Bench at 45 degrees, arms hanging straight down behind your body: the stretch is the point. Curl without letting your elbows move forward.
@@ -332,18 +457,18 @@ There's no third hard session, and no hard engine work in the 24 hours before Mo
 - Log your average heart rate. The same ride at a lower heart rate is the base growing.
 - The sauna, if you use one: switch it on in FOOD on the day and it comes straight after, 15–20 minutes, with its water. Never straight into cold.
 
-**The 4 × 4 · Saturday, after the session**
+**The 4 × 4 · Saturday, after the fast work**
 
 1. 5 minutes easy on the treadmill, set to 5%.
 2. Four efforts of 4 minutes at 90–95% of your peak heart rate. The first minute climbs into that band; the last three sit in it.
 3. 3 minutes easy between efforts, walking or jogging on the same slope, at about 70%.
 4. 3 minutes easy to finish.
 
-Use the same treadmill and the same slope every week. Log the distance on its screen at the end and your peak heart rate from the Polar. Progress is more distance at the same peak heart rate, or the same at a lower one. In the lighter weeks it's 3 × 4, read only against other 3 × 4s, and in test week the 4 × 4 is the engine test. Before Monday 23 November the card was written for the bike, and logged the total on its screen.
+Use the same treadmill and the same slope every week. Log the distance on its screen at the end and your peak heart rate from the Polar. Progress is more distance at the same peak heart rate, or the same at a lower one. In the lighter weeks it's 3 × 4, read only against other 3 × 4s, and in test week the 4 × 4 is the engine test. Before Monday 23 November the card was written for the bike, and logged the total on its screen. From Monday 30 November it's run straight after the landmine push press, before the size work; until then it came last.
 
-**The bursts · Tuesday, after the session**
+**The bursts · Tuesday, after the heavy lifts**
 
-Eight 6-second bursts on the assault bike, 40 seconds easy spinning between, 2 minutes easy before and after: about 10 minutes, and the timer runs all of it. Log the total on the screen at the end and your peak heart rate. Four in the lighter weeks and test week, read only against other fours.
+Eight 6-second bursts on the assault bike, 40 seconds easy spinning between, 2 minutes easy before and after: about 10 minutes, and the timer runs all of it. Log the total on the screen at the end and your peak heart rate. Four in the lighter weeks and test week, read only against other fours. From Monday 30 November they come straight after the landmine rotation, before the rows and dips; until then they came at the end of the session.
 
 **The pressure rounds · Tuesday, straight after the bursts**
 
@@ -422,16 +547,18 @@ Every choice below rests on trials where trials exist. Where it rests on coachin
 - **The sled, five runs.** Heavy sled sprints improve the first metres of a sprint and the forward push (Alcaraz, 2018; Morin, 2017). A sled run has no landing, so it's the power work that costs the joints least, and five runs is still well under the ten, twice a week, that Morin's trial used.
 - **Two jump days.** Thursday carries the main jumps; Monday's box jumps, before the squat, make a second day. Box jumps land the softest of all the jumps, and a few fast jumps sharpen the heavy sets that follow. Two short jump days is coaching practice, and the Sunday tendon check still governs the rebound jumps.
 - **Rotation on most days, and a trunk that holds.** The legs make a punch's force; the trunk turns it and carries it to the fist. Tuesday's shot-put and hook throws and Saturday's scoop throw train that turn fast, the straight and the hook, and from Monday 23 November Thursday's scoop throw makes it three days; the landmine rotation, Tuesday and Saturday, trains it under load; from the same Monday so do the cable woodchops, Monday and Wednesday; and the Pallof press trains the trunk to hold against a twist. That rests on how the punch works and on coaching practice, not a trial.
-- **Abs, traps, rear delts and the neck.** Abs grow like any other muscle, on load and hard sets: 12 a week from the leg raises, the ab wheel and the cable crunches, which take weight, and from Monday 23 November 18, with Thursday's decline sit-ups and Saturday's leg raises, plus the dead bug, the side bend and the woodchops: three exercises for the core every training day. On top, Thursday and Saturday finish the lifting with trunk work that's never taken to failure: the hip pair on Thursday, and the hip pair then landmine rotations on Saturday. The traps get heavy shrugs twice a week, the rear delts direct work three times and the neck its own work twice. That's a coaching call for the build you're after, not a trial.
-- **Pressing up and forward, not straight overhead.** A bar can only finish straight overhead if the shoulders reach all the way up. When they're stiff, the lower back arches to make up the difference, with the bar's weight on it. The landmine's bar travels up and forward, so both presses finish in front of you. The barbell push press produced as much power as a jump squat (Lake, 2014), and one arm moves less weight, so some leg power is given up; Thursday's jumps, sled and sprints cover it. The swap is a coaching call from how the lifts work, not a trial.
-- **A neck trained in every direction, and a brace that fires on time.** Monday trains the neck forward and back, Wednesday side to side. In pooled trials, neck training with a load made the neck stronger bending forward and to the side (Ivanic, 2024). No trial yet shows that a stronger neck prevents concussion, but a 2025 expert consensus sets out how to train it for the knocks the head takes in sport (Fownes-Walpole, 2025). Wednesday's medicine-ball drops train the trunk to brace the instant something lands on it. No study backs the drops; they're long-standing coaching practice.
-- **Exercises chosen for the stretch.** Overhead triceps extensions grew the triceps 1.4 times as much as pushdowns (Maeo, 2023). Seated leg curls grew the hamstrings more than lying ones, 14% against 9% (Maeo, 2021). The incline curls, deep presses and full-stretch raises follow the same idea.
+- **Abs, traps, rear delts and the neck.** Abs grow like any other muscle, on load and hard sets: 12 a week from the leg raises, the ab wheel and the cable crunches, which take weight, and from Monday 23 November 18, with Thursday's decline sit-ups and Saturday's leg raises, plus the dead bug, the side bend and the woodchops: three exercises for the core every training day. The side bend came out on Monday 30 November, so Tuesday has two. On top, Thursday and Saturday finish the lifting with trunk work that's never taken to failure: the hip pair on Thursday, and the hip pair then landmine rotations on Saturday. The traps get heavy shrugs twice a week, the rear delts direct work three times and the neck its own work twice. That's a coaching call for the build you're after, not a trial.
+- **Pressing up and forward, not straight overhead.** A bar can only finish straight overhead if the shoulders reach all the way up. When they're stiff, the lower back arches to make up the difference, with the bar's weight on it. The landmine's bar travels up and forward, so both presses finish in front of you. The barbell push press produced as much power as a jump squat (Lake, 2014), and one arm moves less weight, so some leg power is given up; Thursday's jumps and sled and the flying sprints cover it. The swap is a coaching call from how the lifts work, not a trial.
+- **A neck trained in every direction, and a brace that fires on time.** Sunday trains the neck forward and back, as Monday did until 30 November, and Wednesday side to side. In pooled trials, neck training with a load made the neck stronger bending forward and to the side (Ivanic, 2024). No trial yet shows that a stronger neck prevents concussion, but a 2025 expert consensus sets out how to train it for the knocks the head takes in sport (Fownes-Walpole, 2025). Wednesday's medicine-ball drops train the trunk to brace the instant something lands on it. No study backs the drops; they're long-standing coaching practice.
+- **Exercises chosen for the stretch.** Overhead triceps extensions grew the triceps 1.4 times as much as pushdowns (Maeo, 2023). Seated leg curls grew the hamstrings more than lying ones, 14% against 9% (Maeo, 2021); the leg curl came out on Monday 30 November to fit the mornings, and the Romanian deadlift and the Nordic curl keep the hamstrings' own work. The incline curls, deep presses and full-stretch raises follow the same idea.
 - **The base built, the hard work held.** Aerobic endurance and maximum strength both build slowly and both last about a month once built, so block periodisation builds them together, early; the fight-specific engine fades within two or three weeks, so it's built in the camp (Issurin, 2008). Cardio barely holds back strength or muscle size, but it does blunt explosive power, mostly in the same session; three or more hours apart, the cost wasn't significant (Schumann, 2022). In trained lifters the cost showed when the two were within 20 minutes of each other, not when they were more than two hours apart (Petré, 2021). Men lose more lower-body strength and power to it than women (Huiberts, 2024), and 24 hours between them suited strength and power best (Robineau, 2016). So the easy work is easy and hours from the lifting, and the hard work is two sessions on the upper-body days, two days clear of Thursday's sprints and jumps. An older review found running cost more than cycling (Wilson, 2012); newer ones don't confirm it (Schumann, 2022; Sabag, 2018), so the bike is for the joints, not the interference. Endurance can be held for up to 15 weeks on as little as two hard sessions a week, as long as the intensity stays (Spiering, 2021). The 4 × 4 at 90–95% of peak heart rate raised fitness more than steady or threshold work (Helgerud, 2007), and people in their 40s gained as much from it as people in their 20s, about 11% in eight weeks at three a week (Støren, 2017). A bigger base also speeds recovery between hard efforts (Tomlin and Wenger, 2001): between bursts, and between rounds.
 - **The sauna after the easy hour.** In six runners, three weeks of it after training raised the time they could run to exhaustion by 32% and their blood plasma by 7% (Scoon, 2007); in 20 runners, fitness rose 8% against 2% without it (Kirby, 2021). The studies are small and the proof is weak, but it takes nothing from the lifting.
 - **The pressure rounds: three, not six.** Even a 3 × 2 fight is mostly aerobic, about 77% of its energy (Davis, 2014), but it's fought in short bursts with seconds between them: elite boxers work at about 18 to 1 activity to rest, novices at 9 to 1 (Slimani, 2017). The pressure rounds copy that on the bike. What conditioning costs power and size grows with how often and how long it is (Wilson, 2012), so it's three rounds, on one day. The full fight sim comes in the camp.
 - **The arms-only minute.** Every other hard minute of the week is driven by the legs, and fitness built in one set of muscles only partly carries over to another: after 12 weeks of arm or leg training, gains were about 19–22% in the limbs that trained and 8–9% in the others (Pogliaghi, 2006). In boxers, four weeks of short all-out punching intervals raised the arms' peak oxygen uptake and punch force (Kamandulis, 2018). The evidence is thin, and the minute costs no time.
 - **The 4 × 4 uphill on a treadmill.** It's how the trial behind it was run, at about 5% (Helgerud, 2007), and it's the machine you use.
-- **The knuckle hold and the second dose of drops.** In Great Britain's boxing squad the hand was injured more than any other part of the body, in training and in competition (Loosemore, 2015). Both are coaching calls: no trial has tested either.
+- **The knuckle hold and the second dose of drops.** In Great Britain's boxing squad the hand was injured more than any other part of the body, in training and in competition (Loosemore, 2015). Both are coaching calls: no trial has tested either. The knuckle hold came out on Monday 30 November.
+- **The hard engine work ahead of the size work, from Monday 30 November.** A morning that runs out of time loses whatever comes last, and the bursts, the pressure rounds and the 4 × 4 are the week's only hard engine work, so they now come before the size work. Across ten trials, lifting before the cardio in the same session built more leg strength than the other way round, and the order made no difference to muscle growth or to fitness (Eddens, 2018). So the heavy and fast work still comes first, and only the size work goes behind the conditioning.
+- **Flying sprints outside, on Saturday, from Monday 30 November.** Top speed needs room: about 50 metres to build up, sprint and slow down. Saturday is after Friday's rest, and the sprints come first, before anything has tired the legs. Thursday's Nordic curls are two days before them, which is why sore hamstrings mean 90%. Where they go in the week is a coaching call.
 - **Hard days and easy days.** Heavy and fast sessions alternate with size work and easy running, and upper and lower body each get a heavy day and a fast day, as the conjugate method splits them. That shape comes from coaching practice — Charlie Francis's sprinters, Westside's lifters — more than from trials.
 
 ---
@@ -470,3 +597,4 @@ Every choice below rests on trials where trials exist. Where it rests on coachin
 - Power and impulse applied during push press exercise — Lake, Mundy and Comfort, 2014
 - Efficacy of exercise interventions on prevention of sport-related concussion and related outcomes — Ivanic et al., British Journal of Sports Medicine, 2024
 - Combining evidence and practice to optimise neck training aimed at reducing head acceleration events in sport — Fownes-Walpole et al., British Journal of Sports Medicine, 2025
+- The Role of Intra-Session Exercise Sequence in the Interference Effect: A Systematic Review with Meta-Analysis — Eddens, van Someren and Howatson, Sports Medicine, 2018

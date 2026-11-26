@@ -176,8 +176,10 @@ describe("Optimal 8 · Move · the movement block, every gym morning", () => {
   const DAYS = { mon: ["S_MV_MON", 11, "hips, knees and lower back", "S_WU_MON", 5], tue: ["S_MV_TUE", 8, "lower back and shoulders"], wed: ["S_MV_WED", 9, "hips, ankles and overhead"],
     thu: ["S_MV_THU", 12, "hips, balance and sprint prep"], sat: ["S_MV_SAT", 11, "mid-back, shoulders and Achilles"], sun: ["S_MV_SUN", 10, "the whole body"] };
   it("from MOVE week 1 the first block is the day's movement block, its minutes the document's; before it, the old warm-up", () => {
+    /* a page's first card: Saturday's sprint cards, from Strength, Power and Physique's trim of 30 November, come before the block and are off until then */
+    const first = (d, rx) => sppSess(d).b.filter((b) => !(b.hide && b.hide(rx)))[0];
     Object.entries(DAYS).forEach(([d, [p, m, area]]) => {
-      const a = sppSess(d).b[0];
+      const a = first(d, mv(1, 1));
       expect([a.L, v(a.p, mv(1, 1)), v(a.m, mv(1, 1)), v(a.rxLine, mv(1, 1))]).toEqual(["A", p, m, m + " min · " + area]);
       expect(v(a.p, sppRx(1))).not.toBe(p);
       expect(SPPROTO[p].mv).toBe(1);
@@ -186,7 +188,7 @@ describe("Optimal 8 · Move · the movement block, every gym morning", () => {
     expect([v(block("mon", "Warm-up").p, sppRx(1)), v(block("mon", "Warm-up").m, sppRx(1))]).toEqual(["S_WU_MON", 5]);
     /* from the tendon work's week 1, Monday's without the Spanish squat and Saturday's without the Achilles pushes */
     const tw = mv(1, 2, { tw: 1 });
-    expect(["mon", "tue", "sat"].map((d) => [v(sppSess(d).b[0].p, tw), v(sppSess(d).b[0].m, tw), v(sppSess(d).b[0].rxLine, tw)]))
+    expect(["mon", "tue", "sat"].map((d) => [v(first(d, tw).p, tw), v(first(d, tw).m, tw), v(first(d, tw).rxLine, tw)]))
       .toEqual([["S_MV_MON_T", 8, "8 min · hips, knees and lower back"], ["S_MV_TUE", 8, "8 min · lower back and shoulders"], ["S_MV_SAT_T", 7, "7 min · mid-back and shoulders"]]);
     expect(moveMd).toMatch(/### MONDAY · HIPS, KNEES AND LOWER BACK · 8 min · before the box jumps \(11 until 23 November; the warm-up was 5\)/);
     expect(moveMd).toMatch(/### TUESDAY · LOWER BACK AND SHOULDERS · 8 min/);

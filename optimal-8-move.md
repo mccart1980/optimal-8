@@ -35,7 +35,7 @@ What each area needs, and where it's trained. **Block** is the gym morning, **A*
 
 | When | What | Minutes |
 | --- | --- | --- |
-| Every gym morning | **THE MOVEMENT BLOCK**, the first thing in every session. It replaces the warm-up, and it's training, not a warm-up. | 7–12 |
+| Every gym morning | **THE MOVEMENT BLOCK**, the first thing in every session; from 30 November, in Strength, Power and Physique, Saturday's follows the flying sprints. It replaces the warm-up, and it's training, not a warm-up. | 7–12 |
 | In the sessions | Thursday's side plank and dead bug, and Saturday's side plank, become the Copenhagen plank · Sunday gains the back extension, and the hammer curls stay · Monday's calf raise goes heavier and slower | about 0 |
 | In the sessions, from 23 November | **THE TENDON WORK**: the lower pushes on Monday, Thursday and Saturday · the hip pair in the Copenhagen plank's place · Monday's calf raise on a towel | about 27 a week |
 | Wednesday evening | **MOVEMENT SESSION A** · hips, lower back, balance, getting up and down · in place of that night's RANGE | 30 |
@@ -165,7 +165,7 @@ The band pull-aparts and band dislocates go.
 3. **Push-up plus** — 10.
 4. **Two easy throws of each kind**, as now.
 
-Until 23 November the block also had the **Achilles pushes**, which replaced the calf hold; on 21 November, 5 × 4 each leg at 8 out of 10, the Smith machine's stops set just above the bar so it can't rise. From 23 November they're on their own card, with the knee pushes: **the lower pushes** come straight after the block. **The hip pair** takes the Copenhagen plank's place (THE TENDON WORK, below).
+Until 23 November the block also had the **Achilles pushes**, which replaced the calf hold; on 21 November, 5 × 4 each leg at 8 out of 10, the Smith machine's stops set just above the bar so it can't rise. From 23 November they're on their own card, with the knee pushes: **the lower pushes** come straight after the block. **The hip pair** takes the Copenhagen plank's place (THE TENDON WORK, below). From 30 November, in Strength, Power and Physique, the flying sprints and their own warm-up come before the block, outside: that programme's document, THE TRIM.
 
 **In Saturday's session: the side plank becomes the Copenhagen plank**, 2 × 20–30 s each side at your level, as on Thursday. The groin's second dose of the week.
 

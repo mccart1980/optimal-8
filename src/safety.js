@@ -119,7 +119,7 @@ export function stopStateShares(first, past, form, rounds) {
    after two weeks, a physio looks at it." */
 export const PAIN_LINE = "Hurts more than 3 out of 10 while you do it, or worse the next morning: it stops for today. Still there after two weeks, a physio looks at it.";
 export const PAIN_ENTRIES = {
-  "BROAD JUMPS": 1, "BOX JUMPS": 1, "SHUTTLE BURSTS": 1, "STANCE STARTS": 1, "CLOSE AND PLANT": 1, "FLYING SPRINTS": 1,
+  "BROAD JUMPS": 1, "BOX JUMPS": 1, "SHUTTLE BURSTS": 1, "STANCE STARTS": 1, "CLOSE AND PLANT": 1, "FLYING SPRINTS": 1, "FLYING SPRINTS, OUTSIDE": 1,
   "DROP LANDINGS": 1, "LOW-BOX DEPTH JUMPS": 1, "DEPTH JUMPS": 1, "SIDE BOUNDS": 1, "TRAP BAR JUMPS": 1, "BAND-ASSISTED JUMPS": 1,
   "SQUAT CONTRAST CIRCUIT": 1, "HEAVY SLED PUSH": 1, "REPEAT SLED STARTS": 1, "DRIVE HOLDS": 1, "PUNCH-POSITION HOLD": 1,
   "SPANISH SQUAT HOLD": 1, "ACHILLES HOLD": 1, "COPENHAGEN PLANK": 1, "SPEED MICRODOSE": 1, "JUMP CHECK": 1,

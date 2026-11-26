@@ -75,6 +75,18 @@ export const SPPENG_MENU = ["vo2"];
    as it did. */
 export { AUDIT_SINCE };
 export const sppAudit = (rx) => (rx && rx.au ? Object.assign({}, rx, { e: rx.e === "vo2s" ? "vts" : "vt", pr: rx.half ? "pa1" : "pa", at: "arm3" }) : rx);
+/* THE TRIM · from Monday 30 November 2026: the week cut and re-ordered to
+   fit the mornings, to the list set on 26 November. rx.fit is that week
+   or a later one; before it every page reads as it did.
+   Out: Monday's seated leg curl and the split squat's third set; Tuesday's
+   cable lateral raise, side bend and knuckle hold; Saturday's one-arm row.
+   Moved: Monday's neck pair to Sunday; Thursday's flying sprints to
+   Saturday, outside, first; Tuesday's bike work to straight after the
+   landmine rotation, ahead of the rows and dips; Saturday's 4 × 4 to
+   straight after the landmine push press, ahead of the size work.
+   Wednesday doesn't change. A card that moves inside its day keeps its
+   letter and says the card it now goes before (goesBefore). */
+export const FIT_SINCE = "2026-11-30";
 /* the lighter week's 3 × 4, on either machine · the 4 × 4 on the treadmill */
 export const spp44Short = (rx) => rx.e === "vo2s" || rx.e === "vts";
 export const sppTread = (rx) => rx.e === "vt" || rx.e === "vts";
@@ -184,6 +196,8 @@ const CHIN = { size: [4, 6], strength: [5, 4], power: [4, 3] };
 /* Tuesday's one-arm landmine press, each side */
 const LMP = { size: [3, 8], strength: [4, 5], power: [3, 4] };
 const BSS = { size: [3, 8], strength: [3, 6], power: [2, 6] };
+/* Monday's Bulgarian split squat: two sets in every block from the trim */
+export const sppBss = (rx) => (rx.fit ? Math.min(2, by(rx, BSS)[0]) : by(rx, BSS)[0]);
 export const sppPsq = (rx) => (rx.testWeek ? null : Object.assign({}, by(rx, PSQ), { sets: hs(rx, by(rx, PSQ).sets) }));
 export const sppPp = (rx) => Object.assign({}, by(rx, PP), { sets: hs(rx, by(rx, PP).sets) });
 /* Thursday's flying sprints: three in the size block, four after */
@@ -224,6 +238,12 @@ export const SPPROTO = {
     i: [["Band pull-apart", "2 × 15"], ["Band dislocate", "2 × 10"], ["Push-up", "×10"], ["Then two easy throws of each", "at half effort"]] },
   S_WU_SUN: { n: "Warm-up", s: "4 min · Sun", c: C.cobalt,
     i: [["Band pull-apart", "2 × 15"], ["Band dislocate", "2 × 10"], ["Then a light set", "of the cable lateral raise and the curl"]] },
+  /* THE TRIM: Saturday's flying sprints have a warm-up of their own, the
+     bike inside and the rest outside, on the straight they're run on */
+  S_WU_SPRINT: { n: "Warm-up · the sprints", s: "8 min · Sat", c: C.cobalt,
+    note: "Never sprint cold. The bike inside, then everything else outside, on the straight you'll sprint on. The build-ups are the sprint warm-up.",
+    i: [["Easy bike", "3 min"], ["OUTSIDE, ON THE STRAIGHT YOU'LL SPRINT ON", ""], ["Leg swings", "×10 each way, each leg"], ["A-skips", "2 × 15 m"],
+      ["SPRINT BUILD-UPS", ""], ["20 m @ 60%", "×1"], ["20 m @ 75%", "×1"], ["20 m @ 90%", "×1"]] },
 };
 
 /* ---------- THE MOVEMENT BLOCK ----------
@@ -354,6 +374,17 @@ const nasalRun = (L, sun) => { const min = (rx) => (sun ? sppSunRun(rx) : 30); r
   items: [{ n: "The nasal run", s: "distance and average heart rate", cue: "Easy, on the road or a treadmill, breathing in and out through your nose the whole way. If you need your mouth, slow down.", id: "s_run", k: "out", u: "km · bpm", fields: RUN_FIELDS }],
   why: "Easy, and on the size days, so they take nothing from the heavy and fast sessions." }; };
 
+/* THE NECK PAIR: front and back, light and slow, once a week — Monday's
+   until the trim, Sunday's from it, after the drops. One pair of ids, so
+   Sunday's weights start from Monday's */
+const neckPair = (L, since, hide) => ({ L, n: "Lying Neck Curl + Lying Neck Extension", since, m: 6, pair: 1, hide, rxLine: () => "back to back · 45 s after each pair",
+  items: (rx) => [{ n: "Lying neck curl", s: hs(rx, 3) + " × 15–20 · slow, never jerked", cue: "Lie face up on a bench with your head off the end, a folded towel and a light plate on your forehead, held with both hands. Let your head go back slowly, then curl your chin to your chest. Start with 2.5–5 kg and add a little only when 20 is easy.", id: "s_neckc", k: "wr", sets: hs(rx, 3), reps: "15–20", rest: "straight into the neck extension", rt: 0 },
+    { n: "Lying neck extension", s: hs(rx, 3) + " × 15–20 · slow, never jerked", cue: "Lie face down on a bench with your head off the end, a folded towel and a light plate on the back of your head, held with both hands. Lower your chin towards your chest, then lift your head until you're looking straight ahead. Start light, as for the curl.", id: "s_necke", k: "wr", sets: hs(rx, 3), reps: "15–20", rest: "Rest 45 s", rt: 45 }],
+  why: "Back to back, 45 seconds after each pair. Light and slow: the neck grows on reps, not heavy plates." });
+/* THE FLYING SPRINTS: Thursday's until the trim; from it Saturday's,
+   outside, first, after a warm-up of their own */
+const SPRINT_OFF = (rx) => !!rx.testWeek || !!rx.noFlying;
+
 /* ================================================================
    THE SEVEN PAGES, in running order
    ================================================================ */
@@ -365,6 +396,7 @@ export const SS = {
   /* ---------------- MONDAY ---------------- */
   mon: { n: "MONDAY", t: "Lower strength — box jumps, the squat, then Romanian deadlifts, Bulgarian split squats, leg curls, calves and leg raises, then the neck and rear delts", ac: C.oxide, box: 1,
     tt: "Lower strength — box jumps, the lower pushes, the squat, then Romanian deadlifts, Bulgarian split squats, leg curls, calves and leg raises, then the neck and rear delts",
+    tf: "Lower strength — box jumps, the lower pushes, the squat, then Romanian deadlifts, Bulgarian split squats, calves and leg raises, the dead bug and woodchop, then the rear delts",
     intro: "Box jumps while you're fresh, the squat heavy, then size for the legs, then the neck and rear delts.", b: [
     moveA("mon", "S_WU_MON", 5, "5 min · bike, the Spanish squat hold"),
     /* from 23 November the kneeling jump into a box jump (core.js): the same sets, two reps, each one two jumps */
@@ -395,11 +427,13 @@ export const SS = {
       rxLine: (rx) => hs(rx, 3) + " × " + by(rx, { size: 8, strength: 6, power: 5 }),
       items: (rx) => [{ n: "Romanian deadlift", s: hs(rx, 3) + " × " + by(rx, { size: 8, strength: 6, power: 5 }) + " · one or two left", cue: "Barbell at arm's length, knees soft. Push your hips back and slide the bar down your thighs, back flat, until your hamstrings are at a deep stretch, then drive your hips forward to stand.", id: "rdl", k: "wr", sets: hs(rx, 3), reps: by(rx, { size: 8, strength: 6, power: 5 }) }],
       why: "The hamstrings and hips at full stretch." },
-    { L: "E", n: "Bulgarian Split Squat", m: 9, rest: "Rest 90 s", rt: 90,
-      rxLine: (rx) => hs(rx, by(rx, BSS)[0]) + " × " + by(rx, BSS)[1] + " each leg",
-      items: (rx) => [{ n: "Bulgarian split squat", s: hs(rx, by(rx, BSS)[0]) + " × " + by(rx, BSS)[1] + " each leg · one or two left", cue: "Back foot on a bench behind you, a dumbbell in each hand, front foot far enough forward that its shin stays fairly upright. Lower until the back knee nearly touches the floor, then drive up through the front heel.", id: "rfess", k: "wr", sets: hs(rx, by(rx, BSS)[0]), reps: by(rx, BSS)[1] + "/leg" }],
+    /* from the trim, two sets in every block */
+    { L: "E", n: "Bulgarian Split Squat", m: (rx) => (rx.fit ? 6 : 9), rest: "Rest 90 s", rt: 90,
+      rxLine: (rx) => hs(rx, sppBss(rx)) + " × " + by(rx, BSS)[1] + " each leg",
+      items: (rx) => [{ n: "Bulgarian split squat", s: hs(rx, sppBss(rx)) + " × " + by(rx, BSS)[1] + " each leg · one or two left", cue: "Back foot on a bench behind you, a dumbbell in each hand, front foot far enough forward that its shin stays fairly upright. Lower until the back knee nearly touches the floor, then drive up through the front heel.", id: "rfess", k: "wr", sets: hs(rx, sppBss(rx)), reps: by(rx, BSS)[1] + "/leg" }],
       why: "One leg at a time: size for the quads and glutes, and the weak side found." },
-    { L: "F", n: "Seated Leg Curl", m: 5, rest: "Rest 75 s", rt: 75,
+    /* out from the trim */
+    { L: "F", n: "Seated Leg Curl", m: 5, hide: (rx) => !!rx.fit, rest: "Rest 75 s", rt: 75,
       rxLine: (rx) => hs(rx, 3) + " × 10–12",
       items: (rx) => [{ n: "Seated leg curl", s: hs(rx, 3) + " × 10–12 · " + DROP.split(",")[0], cue: "Knees lined up with the machine's pivot, the pad behind your legs just above your heels, the top pad down on your thighs, chest leaning slightly forward. Curl all the way, then lower slowly to a full stretch.", id: "s_legcurl", k: "wr", sets: hs(rx, 3), reps: "10–12" }],
       why: "Seated leg curls grew the hamstrings more than lying ones, 14% against 9% (Maeo, 2021)." },
@@ -419,17 +453,15 @@ export const SS = {
       items: (rx) => [coreItem("deadbug", "Dead bug", hs(rx, 2), "8 each side, slow", "s_deadbug", "straight into the woodchop", 0),
         coreItem("chopHi", "Cable woodchop", hs(rx, 2), "10 each side · high to low", "s_chop_hi", "Rest 45 s", 45)],
       why: "With the hanging leg raise, the day's three for the core: the dead bug keeps the trunk still while the arms and legs move, and the woodchop turns the hips and shoulders together, the way a hook does." },
-    /* THE NECK: front and back, light and slow, once a week */
-    { L: "N", n: "Lying Neck Curl + Lying Neck Extension", since: "2026-11-08", m: 6, pair: 1, rxLine: () => "back to back · 45 s after each pair",
-      items: (rx) => [{ n: "Lying neck curl", s: hs(rx, 3) + " × 15–20 · slow, never jerked", cue: "Lie face up on a bench with your head off the end, a folded towel and a light plate on your forehead, held with both hands. Let your head go back slowly, then curl your chin to your chest. Start with 2.5–5 kg and add a little only when 20 is easy.", id: "s_neckc", k: "wr", sets: hs(rx, 3), reps: "15–20", rest: "straight into the neck extension", rt: 0 },
-        { n: "Lying neck extension", s: hs(rx, 3) + " × 15–20 · slow, never jerked", cue: "Lie face down on a bench with your head off the end, a folded towel and a light plate on the back of your head, held with both hands. Lower your chin towards your chest, then lift your head until you're looking straight ahead. Start light, as for the curl.", id: "s_necke", k: "wr", sets: hs(rx, 3), reps: "15–20", rest: "Rest 45 s", rt: 45 }],
-      why: "Back to back, 45 seconds after each pair. Light and slow: the neck grows on reps, not heavy plates." },
+    /* THE NECK: front and back, light and slow, once a week — Sunday's from the trim */
+    neckPair("N", "2026-11-08", (rx) => !!rx.fit),
     /* THE REAR DELTS' third dose: fresh, on the week's shortest session */
     { L: "Q", n: "Chest-Supported Rear-Delt Raise", since: "2026-11-08", m: 4, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 3) + " × 15–20",
       items: (rx) => [{ n: "Chest-supported rear-delt raise", s: hs(rx, 3) + " × 15–20 · one or two left", cue: "Lie face down on an incline bench with light dumbbells hanging straight down. Raise your arms out to the sides to shoulder height, little fingers leading, squeeze the backs of your shoulders, then lower slowly.", id: "s_rdraise", k: "wr", sets: hs(rx, 3), reps: "15–20" }] }] },
 
   /* ---------------- TUESDAY ---------------- */
   tue: { n: "TUESDAY", t: "Upper strength — rotational throws, then bench and weighted chin-ups, the landmine press and landmine rotations, rows, dips, lateral raises and the ab wheel, then the bursts and the pressure rounds", ac: C.cobalt, box: 1,
+    tf: "Upper strength — rotational throws, then bench and weighted chin-ups, the landmine press and landmine rotations, then the bursts and the pressure rounds, then rows, dips and the ab wheel",
     intro: "Rotational throws while you're fresh, then bench, weighted chin-ups and the landmine press heavy, then landmine rotations, then rows and dips for size, then 6-second bursts and the pressure rounds on the assault bike.", b: [
     moveA("tue", "S_WU_TUE", 6, "6 min · bands, push-ups, two easy throws of each"),
     /* ROTATION: the second throws of the week, three and four days from
@@ -483,23 +515,29 @@ export const SS = {
           ? { n: "Push-ups", s: hs(rx, 3) + " × 12–15 · two seconds down", cue: "An elbow or a shoulder at 4 or more on Sunday's check: push-ups for the dips, this week only.", id: "s_pushup", k: "wr", sets: hs(rx, 3), reps: "12–15", rest: "Rest 90 s · then the row", rt: 90 }
           : { n: "Weighted dip", s: hs(rx, 3) + " × " + by(rx, { size: "8–10", strength: "6–8", power: "5–6" }) + " · one or two left", cue: "Parallel bars, weight on a belt once 10 bodyweight reps are easy. Lower until your shoulders are level with your elbows, chest slightly forward, then press to locked arms.", id: "s_dip", k: "wr", sets: hs(rx, 3), reps: by(rx, { size: "8–10", strength: "6–8", power: "5–6" }), rest: "Rest 90 s · then the row", rt: 90 }],
       why: "Back and chest for size, a minute and a half after each." },
-    { L: "F", n: "Cable Lateral Raise", m: 4, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 3) + " × 12–15",
+    /* out from the trim */
+    { L: "F", n: "Cable Lateral Raise", m: 4, hide: (rx) => !!rx.fit, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 3) + " × 12–15",
       items: (rx) => [{ n: "Cable lateral raise", s: hs(rx, 3) + " × 12–15 · one or two left", cue: "Cable at hand height, stand side-on, the handle in your far hand with the cable running behind your back. Raise your arm out to the side to shoulder height, leading with the elbow, then lower slowly.", id: "s_clat_tue", k: "wr", sets: hs(rx, 3), reps: "12–15" }] },
     { L: "G", n: "Ab Wheel Rollout", m: 4, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 3) + " × 8–10",
       items: (rx) => [{ n: "Ab wheel rollout", s: hs(rx, 3) + " × 8–10", cue: "Kneeling, roll forward as far as you can without your lower back sagging, then pull back with your abs.", id: "abwheel", k: "wr", sets: hs(rx, 3), reps: "8–10" }] },
-    /* THE CORE (core.js), from 23 November: with the ab wheel and the landmine rotation, the day's three */
-    { L: "SB", n: "Dumbbell Side Bend", since: CORE_SINCE, m: (rx) => (rx.half ? 2 : 3), hide: (rx) => !rx.au, rest: "Rest 45 s", rt: 45, rxLine: (rx) => hs(rx, 2) + " × 12 each side",
+    /* THE CORE (core.js), from 23 November: with the ab wheel and the landmine rotation, the day's three; out from the trim */
+    { L: "SB", n: "Dumbbell Side Bend", since: CORE_SINCE, m: (rx) => (rx.half ? 2 : 3), hide: (rx) => !rx.au || !!rx.fit, rest: "Rest 45 s", rt: 45, rxLine: (rx) => hs(rx, 2) + " × 12 each side",
       items: (rx) => [coreItem("sidebend", "Dumbbell side bend", hs(rx, 2), "12 each side", "s_sidebend", "Rest 45 s", 45)],
       why: "The sides of the waist, bent and loaded: with the ab wheel and the landmine rotation, the day's three." },
     /* THE KNUCKLE HOLD: the hand is the part of a boxer injured most, and
-       a wrist that stays straight under load is the gym's share of it */
-    { L: "Y", n: "Knuckle Hold", since: AUDIT_SINCE, m: 2, hide: (rx) => !rx.au, rest: "Rest 30 s", rt: 30, rxLine: (rx) => hs(rx, 3) + " × 20 s",
+       a wrist that stays straight under load is the gym's share of it;
+       out from the trim */
+    { L: "Y", n: "Knuckle Hold", since: AUDIT_SINCE, m: 2, hide: (rx) => !rx.au || !!rx.fit, rest: "Rest 30 s", rt: 30, rxLine: (rx) => hs(rx, 3) + " × 20 s",
       items: (rx) => [{ n: "Knuckle hold", s: hs(rx, 3) + " × 20 s · on your fists, wrists dead straight", cue: "Push-up position on your fists on a mat, wrists dead straight, forearm and knuckles in one line. Hold.", id: "s_knuckle", k: "chk" }],
       why: "The hand is the part of a boxer injured most. This is the gym's share of protecting it: a wrist that stays straight under load." },
     /* THE BURSTS: six seconds flat out, forty easy, on the assault bike —
        a little power and repeat-effort fitness for ten minutes on a day
-       the legs are fresh, halfway between Saturday's 4 × 4 and Thursday */
-    { L: "H", n: "Assault Bike Bursts", m: 10, hard: 1, eng: 1, engKey: "bk",
+       the legs are fresh, halfway between Saturday's 4 × 4 and Thursday.
+       From the trim the bike work, this card and the two after it, comes
+       straight after the landmine rotation, before the rows and dips: the
+       heavy and fast work first, then the engine, then the size work, so a
+       morning that runs short loses the size work and nothing else */
+    { L: "H", n: "Assault Bike Bursts", m: 10, hard: 1, eng: 1, engKey: "bk", goesBefore: (rx) => (rx.fit ? "E" : null),
       timer: (rx) => ({ kind: "rz", opt: { sets: 1, n: rx.bk === "sb4" ? 4 : 8, secs: 6, wu: 2, cd: 2 }, title: rx.bk === "sb4" ? "4 BURSTS" : "8 BURSTS" }),
       rxLine: (rx) => (SPPENG[rx.bk] || SPPENG.sb).d,
       items: (rx) => [{ n: "Output", s: "the total on the bike's screen · the peak heart rate", id: "s_burst", k: "out", u: "output / peak HR", erg: sessionBoxes(rx.bk), fields: engHR(rx.bk) }],
@@ -507,7 +545,7 @@ export const SS = {
     /* THE PRESSURE ROUNDS: the fight sim — 3-minute rounds, a 5-second
        burst all out every 20 seconds and a steady pace between, straight
        after the bursts on the same bike. Three, two in the half weeks */
-    { L: "I", n: (rx) => (sppArms(rx) ? "Pressure Rounds, Arms-Only Third Minute" : "Pressure Rounds"), since: "2026-11-09", m: (rx) => (rx.pr === "pa1" ? 5 : rx.pr === "pr2" ? 10 : 14), hard: 1, eng: 1, engKey: "pr",
+    { L: "I", n: (rx) => (sppArms(rx) ? "Pressure Rounds, Arms-Only Third Minute" : "Pressure Rounds"), since: "2026-11-09", m: (rx) => (rx.pr === "pa1" ? 5 : rx.pr === "pr2" ? 10 : 14), hard: 1, eng: 1, engKey: "pr", goesBefore: (rx) => (rx.fit ? "E" : null),
       timer: (rx) => ({ kind: "pressure", opt: Object.assign({ rounds: sppPrRounds(rx), mins: 3, every: 20, secs: 5, rest: 60, wu: 1, cd: rx.pr === "pa1" ? 1 : 2 }, sppArms(rx) ? { arms: 1 } : {}),
         title: sppPrRounds(rx) === 1 ? "1 PRESSURE ROUND" : sppPrRounds(rx) + " PRESSURE ROUNDS" }),
       rxLine: (rx) => (SPPENG[rx.pr] || SPPENG.pr).d,
@@ -519,7 +557,7 @@ export const SS = {
     /* THE ARMS-ONLY TEST, weeks 4, 8 and 12, in the second round's place:
        three minutes on the arms alone for the biggest total — the arms'
        own engine number */
-    { L: "Z", n: "The Arms-Only Test", since: AUDIT_SINCE, m: 5, hard: 1, eng: 1, engKey: "at", hide: (rx) => rx.pr !== "pa1",
+    { L: "Z", n: "The Arms-Only Test", since: AUDIT_SINCE, m: 5, hard: 1, eng: 1, engKey: "at", hide: (rx) => rx.pr !== "pa1", goesBefore: (rx) => (rx.fit ? "E" : null),
       timer: () => ({ kind: "armtest", opt: { mins: 3, cd: 2 }, title: "THE ARMS-ONLY TEST" }),
       rxLine: () => SPPENG.arm3.d,
       items: () => [{ n: "Output", s: "the total on the bike's screen · the peak heart rate", id: "s_arm3", k: "out", u: "output / peak HR", erg: sessionBoxes("arm3"), fields: engHR("arm3") }],
@@ -547,7 +585,7 @@ export const SS = {
     { L: "F", n: "Side Neck Raise + Medicine-Ball Drops", since: "2026-11-13", m: 7, pair: 1, rxLine: () => "back to back · 45 s after each pair",
       items: (rx) => [{ n: "Side neck raise", s: hs(rx, 3) + " × 12–15 each side · no weight to start", cue: "Lie on your side on a bench with your head off the end. Lower your ear slowly towards the floor, then lift it towards the ceiling. No weight to start; when 15 is easy, hold a light plate against the side of your head. Never jerk it.", id: "s_neckside", k: "wr", sets: hs(rx, 3), reps: "12–15/side", rest: "straight into the drops", rt: 0 },
         { n: "Medicine-ball drops", s: hs(rx, 3) + " × 8 · a 3 kg ball, up to 6", cue: "Lie on your back, knees bent, the ball held at arm's length over your stomach. Breathe out hard through your teeth and brace as you let it go; it lands just above your belly button, and you catch it on the bounce. Never on the ribs.", id: "s_drops", k: "chk", rest: "Rest 45 s", rt: 45 }],
-      why: "Back to back, 45 seconds after each pair. The neck is trained forward and back on Monday and side to side here; the drops train the brace to fire on time." },
+      why: (rx) => "Back to back, 45 seconds after each pair. The neck is trained forward and back on " + (rx.fit ? "Sunday" : "Monday") + " and side to side here; the drops train the brace to fire on time." },
     /* THE CORE (core.js), from 23 November: with the cable crunch and the drops, the day's three */
     { L: "WC", n: "Cable Woodchop", since: CORE_SINCE, m: (rx) => (rx.half ? 2 : 4), hide: (rx) => !rx.au, rest: "Rest 45 s", rt: 45, rxLine: (rx) => hs(rx, 3) + " × 10 each side · low to high",
       items: (rx) => [coreItem("chopLo", "Cable woodchop", hs(rx, 3), "10 each side · low to high", "s_chop_lo", "Rest 45 s", 45)],
@@ -557,13 +595,15 @@ export const SS = {
   /* ---------------- THURSDAY ---------------- */
   thu: { n: "THURSDAY", t: "Lower power — the sled, flying sprints and jumps, trap bar jumps, the trap bar deadlift and shrugs, the pause squat, Nordics, then the Copenhagen plank", ac: C.brass, box: 1,
     tt: "Lower power — the sled, flying sprints and jumps, trap bar jumps, the lower pushes, the trap bar deadlift and shrugs, the pause squat, Nordics, then the hip pair",
+    tf: "Lower power — the sled and jumps, trap bar jumps and the scoop throw, the lower pushes, the trap bar deadlift and shrugs, the pause squat, Nordics, then the hip pair and the decline sit-up",
     intro: "Sled, sprints and jumps while you're fresh, then the trap bar heavy, heavy shrugs on the same bar and a second, lighter squat, then an ab finish. Friday's rest after it.", b: [
     moveA("thu", "S_WU_THU", 10, "10 min · bike, swings, skips, lunges, then the three build-ups"),
     { L: "B", n: "Heavy Sled Sprint", m: (rx) => (rx.half ? 8 : 12), star: 1, hard: 1, rest: "Rest 2:00", rt: 120,
       rxLine: (rx) => sppSled(rx) + " × 20 m",
       items: (rx) => [{ n: "Heavy sled sprint 20 m", s: sppSled(rx) + " × 20 m @ 40–60% of bodyweight", cue: "Lean in at about 45 degrees and drive the ground backward through the whole foot, 5–7 seconds a run. Faster than that, add weight; slower, take some off.", id: "sled", k: "out", u: "load (kg) · time (s)", fields: SLED_FIELDS, bwp: [40, 60], bwl: "on the sled", runs: 1 }],
       why: "Heavy sled sprints improve the first metres of a sprint and the forward push (Alcaraz, 2018; Morin, 2017)." },
-    { L: "C", n: "Flying Sprints", m: 10, star: 1, hard: 1, hide: (rx) => !!rx.testWeek || !!rx.noFlying, rest: "Rest 2:30", rt: 150,
+    /* Saturday's from the trim */
+    { L: "C", n: "Flying Sprints", m: 10, star: 1, hard: 1, hide: (rx) => !!rx.fit || SPRINT_OFF(rx), rest: "Rest 2:30", rt: 150,
       rxLine: (rx) => sppSprints(rx) + " × 20 m " + (rx.spr90 ? "at 90%" : "flat out"),
       items: (rx) => [{ n: "Flying sprint 20 m", s: sppSprints(rx) + " × 20 m · " + (rx.spr90 ? "at 90%" : "flat out"), cue: "Jog-build for 15 metres, then run 20 metres absolutely flat out, and walk back.", id: "s_sprint", k: "chk" }],
       w: (rx) => (rx.spr90 ? "Weeks 1 and 2 at 90%, flat out from week 3. " : "") + "A hamstring twinge on the build-ups ends the sprints for the day." },
@@ -642,7 +682,21 @@ export const SS = {
   /* ---------------- SATURDAY ---------------- */
   sat: { n: "SATURDAY", t: "Upper power — throws, bench throws and the landmine push press, then bench and back for size, Copenhagen planks and landmine rotations, then the 4 × 4", ac: C.oxide, free: 1,
     tt: "Upper power — the lower pushes, then throws, bench throws and the landmine push press, then bench and back for size, the hip pair and landmine rotations, then the 4 × 4",
+    tf: "Upper power — flying sprints outside, the lower pushes, then throws, bench throws and the landmine push press, then the 4 × 4, then bench and pull-ups for size, the hip pair, landmine rotations and leg raises",
     intro: "Throws, bench throws and the landmine push press while you're fresh from Friday's rest, then bench and back for size, an ab finish, then the 4 × 4.", b: [
+    /* THE TRIM: the flying sprints, Thursday's until it — first, outside,
+       after Friday's rest, with a warm-up of their own; the movement block
+       and the rest of the session follow inside. Off with the sprints: in
+       test week, at the tendon gate, and on a red morning */
+    { L: "SW", n: "Warm-up", since: FIT_SINCE, m: 8, hard: 1, p: "S_WU_SPRINT", hide: (rx) => !rx.fit || SPRINT_OFF(rx),
+      rxLine: () => "8 min · the bike, then outside: leg swings, skips and the three build-ups" },
+    /* the card shows its library entry, FLYING SPRINTS, OUTSIDE: the ground
+       it needs, and the wet, cold, sore and ice rules */
+    { L: "FS", n: "Flying Sprints, Outside", since: FIT_SINCE, m: 10, star: 1, hard: 1, hide: (rx) => !rx.fit || SPRINT_OFF(rx), rest: "Rest 2:30", rt: 150,
+      rxLine: (rx) => sppSprints(rx) + " × 20 m " + (rx.spr90 ? "at 90%" : "flat out"),
+      items: (rx) => [{ n: "Flying sprints, outside", s: sppSprints(rx) + " × 20 m · " + (rx.spr90 ? "at 90%" : "flat out"), cue: "On a flat, clear straight of about 50 metres. Jog and build up speed over 15 metres, sprint the next 20 metres absolutely flat out, ease down over the next 15, then walk back.", id: "s_sprint", k: "chk" }],
+      w: (rx) => (rx.spr90 ? "Weeks 1 and 2 at 90%, flat out from week 3. " : "") + "Wet ground, colder than 5°C, or hamstrings still sore from Thursday: every run at 90%. Ice or frost underfoot, or a hamstring twinge on the build-ups: no sprints that day.",
+      why: "Outside, because a flying sprint needs about 50 metres of clear ground to build up, sprint and slow down. First, after Friday's rest, because top speed is only trained fresh." },
     moveA("sat", "S_WU_SAT", 6, "6 min · bands, push-ups, two easy throws of each"),
     lowerPushes("T"),
     { L: "B", n: "Medicine-Ball Chest Pass + Rotational Scoop Throw", m: 7, star: 1, hard: 1, pair: 1, rxLine: () => "alternate · 60 s after each",
@@ -673,12 +727,14 @@ export const SS = {
     { L: "E", n: "Bench Press, Touch and Go + Pull-Up", m: 11, pair: 1, rxLine: () => "alternate · 90 s after each",
       items: (rx) => [{ n: "Bench press, touch and go", s: hs(rx, 3) + " × " + by(rx, BTG).reps + " @ " + by(rx, BTG).pct + "%", cue: "Tuesday's bench without the pause: lower under control, touch your chest and press." + (rx.acc === "power" ? " Fast." : ""), id: "s_bench_tg", k: "wr", mk: "bench", pct: by(rx, BTG).pct, sets: hs(rx, 3), reps: by(rx, BTG).reps, rest: "Rest 90 s · then the pull-up", rt: 90 },
         { n: "Pull-up", s: hs(rx, 3) + " × 8–10 · one or two left", cue: "Palms facing away, hands just outside shoulder width. From a dead hang, pull until your chin is over the bar. Weight on a belt once 10 is easy.", id: "s_pullup", k: "wr", sets: hs(rx, 3), reps: "8–10", rest: "Rest 90 s · then the bench", rt: 90 }] },
-    { L: "F", n: "One-Arm Dumbbell Row", m: 6, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 3) + " × 8–12 each side",
+    /* out from the trim */
+    { L: "F", n: "One-Arm Dumbbell Row", m: 6, hide: (rx) => !!rx.fit, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 3) + " × 8–12 each side",
       items: (rx) => [{ n: "One-arm dumbbell row", s: hs(rx, 3) + " × 8–12 each side · one or two left", cue: "One knee and one hand on a bench, the dumbbell hanging at full stretch. Row it to your hip, then lower slowly.", id: "s_1arow", k: "wr", sets: hs(rx, 3), reps: "8–12/side" }] },
     { L: "G", n: "Cable Lateral Raise", m: 4, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 3) + " × 15–20",
       items: (rx) => [{ n: "Cable lateral raise", s: hs(rx, 3) + " × 15–20 · " + DROP, cue: "Cable at hand height, the handle in your far hand with the cable behind your back. Raise your arm out to shoulder height and lower slowly.", id: "s_clat_sat", k: "wr", sets: hs(rx, 3), reps: "15–20" }] },
     /* THE ABS: the side plank, then rotation under load, turned from the
-       hips — before the 4 × 4, with nothing heavy after it */
+       hips — before the 4 × 4, with nothing heavy after it; from the trim
+       the 4 × 4 has already been run, and they end the session */
     { L: "J", n: "Side Plank", since: "2026-11-09", m: 3, hide: (rx) => !!rx.mw, rest: "Rest 30 s", rt: 30, rxLine: (rx) => hs(rx, 2) + " × 30–45 s each side",
       items: (rx) => [SIDE_PLANK(rx)] },
     /* THE COPENHAGEN PLANK, from MOVE week 1, in the side plank's place:
@@ -692,8 +748,11 @@ export const SS = {
     /* THE CORE (core.js), from 23 November: with the landmine rotation and the star side plank, the day's three */
     { L: "HL", n: "Hanging Leg Raise", since: CORE_SINCE, m: (rx) => (rx.half ? 2 : 4), hide: (rx) => !rx.au, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 3) + " × 8–12",
       items: (rx) => [coreItem("hlr", "Hanging leg raise", hs(rx, 3), "8–12", "hlr", "Rest 60 s", 60)],
-      why: "Monday's leg raise again: the abs' second heavy dose of the week, before the intervals." },
-    { L: "H", n: (rx) => (spp44Short(rx) ? "The 3 × 4 Intervals" : "The 4 × 4 Intervals"), m: 30, star: 1, hard: 1, eng: 1, engKey: "e",
+      why: (rx) => "Monday's leg raise again: the abs' second heavy dose of the week, " + (rx.fit ? "and the session's last card." : "before the intervals.") },
+    /* from the trim, straight after the landmine push press, before the
+       size work: on a morning that runs out of time, it's the size work
+       that gets cut, not the 4 × 4 */
+    { L: "H", n: (rx) => (spp44Short(rx) ? "The 3 × 4 Intervals" : "The 4 × 4 Intervals"), m: 30, star: 1, hard: 1, eng: 1, engKey: "e", goesBefore: (rx) => (rx.fit ? "E" : null),
       timer: (rx) => ({ kind: "vo2", opt: { n: 4, short: spp44Short(rx) ? 1 : 0, wu: 5, cd: 3 }, title: spp44Short(rx) ? "THE 3 × 4" : "THE 4 × 4" }),
       rxLine: (rx) => (SPPENG[rx.e] || SPPENG.vo2).d,
       items: (rx) => [sppTread(rx) ? { n: "Output", s: "the distance on the treadmill's screen · the peak heart rate", id: "s_44", k: "out", u: "distance / peak HR", fields: TREAD_FIELDS, lastKm: 1 }
@@ -703,6 +762,7 @@ export const SS = {
 
   /* ---------------- SUNDAY ---------------- */
   sun: { n: "SUNDAY", t: "Physique B — shoulders, traps and cable crunches, arms and calves, and the Pallof press, then the nasal run and the weekly check", ac: C.brass, free: 1,
+    tf: "Physique B — shoulders, traps and cable crunches, the neck, arms and calves, and the Pallof press, then the nasal run and the weekly check",
     intro: "Shoulders, traps, abs, arms and calves for size, and the Pallof press, then the nasal run.", b: [
     moveA("sun", "S_WU_SUN", 4, "4 min · bands, a light set of the first two"),
     { L: "B", n: "Cable Lateral Raise", m: 6, rest: "Rest 60 s", rt: 60, rxLine: (rx) => hs(rx, 4) + " × 12–20",
@@ -717,6 +777,8 @@ export const SS = {
     { L: "M", n: "Medicine-Ball Drops", since: AUDIT_SINCE, m: 2, hide: (rx) => !rx.au, rest: "Rest 45 s", rt: 45, rxLine: (rx) => hs(rx, 2) + " × 8",
       items: (rx) => [{ n: "Medicine-ball drops", s: hs(rx, 2) + " × 8 · Wednesday's ball", cue: "Lie on your back, knees bent, the ball held at arm's length over your stomach. Breathe out hard through your teeth and brace as you let it go; it lands just above your belly button, and you catch it on the bounce. Never on the ribs.", id: "s_drops_sun", k: "chk" }],
       why: "The brace's second dose of the week, with Wednesday's: a trunk that fires on time when something lands on it." },
+    /* THE NECK, from the trim: Monday's pair, after the drops */
+    neckPair("N", FIT_SINCE, (rx) => !rx.fit),
     { L: "E", n: "EZ-Bar Curl + Overhead Triceps Extension", m: 7, pair: 1, hide: (rx) => !!rx.upper4, rxLine: () => "alternate · 60 s after each",
       items: (rx) => [{ n: "EZ-bar curl", s: hs(rx, 3) + " × 8–12 · one or two left", cue: "Elbows pinned at your sides. Curl up, then take two seconds to lower to straight arms.", id: "s_ezcurl", k: "wr", sets: hs(rx, 3), reps: "8–12", rest: "Rest 60 s · then the triceps", rt: 60 },
         { n: "Overhead cable triceps extension", s: hs(rx, 3) + " × 10–15 · one or two left", cue: "Elbows pointing at the ceiling, lower your hands behind your head to a deep stretch, then straighten your arms.", id: "s_ohtri", k: "wr", sets: hs(rx, 3), reps: "10–15", rest: "Rest 60 s · then the curl", rt: 60 }],
@@ -748,3 +810,14 @@ const vv = (x, rx) => (typeof x === "function" ? x(rx) : x);
   S.m = (rx) => S.b.filter((b) => b.L && !(b.hide && b.hide(rx)) && !b.review).reduce((a, b) => a + (Number(vv(b.m, rx)) || 0) + (Number(b.tr) || 0), 0); });
 
 export const sppSess = (day) => SS[day] || null;
+/* a day's cards in the order they're run. A card the trim moved goes
+   straight before the card it names (goesBefore), if that card is on the
+   page; it keeps its letter, so its ticks and its logs stay with it */
+export const sppOrder = (blocks, rx) => {
+  const mv = blocks.filter((x) => x.goesBefore && x.goesBefore(rx) && blocks.some((y) => y.L === x.goesBefore(rx)));
+  if (!mv.length) return blocks;
+  const out = blocks.filter((x) => mv.indexOf(x) < 0);
+  mv.forEach((x) => { out.splice(out.findIndex((y) => y.L === x.goesBefore(rx)), 0, x); });
+  return out; };
+/* the cards a week shows on a day, in that order */
+export const sppCards = (day, rx) => sppOrder(((SS[day] || {}).b || []).filter((b) => b.L && !(b.hide && b.hide(rx))), rx);

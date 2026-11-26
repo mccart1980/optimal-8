@@ -56,6 +56,8 @@ Every exercise, session, test and move in the program, in two or three plain lin
 
 **FLYING SPRINTS** — Jog and build up speed over 10–15 metres, then sprint the next 20 metres absolutely flat out. Walk back and rest fully, 2½–3 minutes. Also called flying 20s.
 
+**FLYING SPRINTS, OUTSIDE** — On a flat, clear straight of about 50 metres. Jog and build up speed over 15 metres, sprint the next 20 metres absolutely flat out, ease down over the next 15, then walk back and rest 2½ minutes. Wet ground, colder than 5°C, or hamstrings still sore from Thursday: every run at 90%. Ice or frost underfoot, or a hamstring twinge on the build-ups: no sprints that day.
+
 **DROP LANDINGS** — Step off a 20–30 cm box — step, don't jump — and land on both feet, soft and silent: hips back, knees in line with your toes. Hold the landing dead still for two seconds. No jump: this teaches your knees and tendons to absorb.
 
 **LOW-BOX DEPTH JUMPS** — Step off a 20 cm box. The instant your feet touch the floor, jump straight up as high as you can, spending as little time on the floor as possible. Land soft. The step between drop landings and full depth jumps.

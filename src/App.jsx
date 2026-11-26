@@ -53,7 +53,7 @@ import {
 } from "./prep.js";
 import {
   SPP_PH, SPPENG, SPPENG_MENU, SPPROTO, SPP_READY_LINE, sppSess, sppRx, sppTests, sppVelPhase, sppPhotoDay, sppMainLine, sppPsq, sppPp, sppSprints,
-  ENGINE_SINCE, sppEasyHour, sppSunRun, AUDIT_SINCE, sppAudit, spp44Short, sppTread, sppPrRounds, sppArms,
+  ENGINE_SINCE, sppEasyHour, sppSunRun, AUDIT_SINCE, sppAudit, spp44Short, sppTread, sppPrRounds, sppArms, FIT_SINCE, sppOrder,
 } from "./spp.js";
 import {
   buildSeason, rowOn, rowForDay, rowByKey, rowRx, rowDates, monOf as mondayIso, planStartFor, describeSeason, fitnessFromFade,
@@ -330,7 +330,9 @@ const seasonRxFor = (mac, w, edge) => {
   if (row.program === "prep") return gated(Object.assign({}, rx, { w, kw: w, lift: rx.ph, ph: prepPhaseOf(rx.doc), bw: null, prep: 1 }, moveOf(row)), "P", w);
   if (row.program === "spp") { const mw = moveWeekOf(row.mon, MOVE.start);
     return gated(sppAudit(Object.assign({}, rx, { w, kw: w, bw: null, spp: 1, mon: row.mon, mw, jeff: mw && movePhase(mw) === "own" ? jeffOn(row) : false,
-      eb: !!row.mon && row.mon >= ENGINE_SINCE, tw: mw ? tendonWeekOf(row.mon) : 0, au: !!row.mon && row.mon >= AUDIT_SINCE })), "S", w); }
+      eb: !!row.mon && row.mon >= ENGINE_SINCE, tw: mw ? tendonWeekOf(row.mon) : 0, au: !!row.mon && row.mon >= AUDIT_SINCE,
+      /* the trim, from Monday 30 November (spp.js) */
+      fit: !!row.mon && row.mon >= FIT_SINCE })), "S", w); }
   if (row.program === "camp" || row.program === "pre") return gated(Object.assign({}, rx, { kw: w }, moveOf(row)), "C", w);
   return Object.assign({}, rx, { kw: w }, moveOf(row));
 };
@@ -929,6 +931,9 @@ function blocksFor(day, rx) {
     if (MODE.lastTen) b = b.filter((x) => !x.noTaper);
     if (day === "sat" && rx.lowerLead) { const e = b.findIndex((x) => x.L === "E"), f = b.findIndex((x) => x.L === "F"); if (e >= 0 && f >= 0 && e < f) { const arr = b.slice(); const tmp = arr[e]; arr[e] = arr[f]; arr[f] = tmp; b = arr; } }
   }
+  /* Strength, Power and Physique's trim: a card it moved inside its day
+     goes before the card it names */
+  if (MODE.spp) b = sppOrder(b, rx);
   return b;
 }
 const realBlocks = (day, rx) => blocksFor(day, rx).filter((x) => x.L);
@@ -2606,7 +2611,7 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
           <Row k="Squat · bench · trap bar" val={rx.profile ? "the profiles — five loads, two fast reps each" : rx.testWeek ? "the top triples — × 1.08 is the new working max" : sppMainLine(rx) + (rx.contrast ? " · three jumps or throws after each double" : "")} />
           <Row k="Landmine push press (Sat)" val={sppPp(rx).sets + " × " + sppPp(rx).reps + " each side, every rep fast"} />
           <Row k="Pause squat (Thu)" val={sppPsq(rx) ? sppPsq(rx).sets + " × " + sppPsq(rx).reps + " @ " + sppPsq(rx).pct + "%" : "none this week"} />
-          <Row k="Flying sprints (Thu)" val={rx.testWeek ? "none this week" : rx.noFlying ? "none — the tendon gate" : sppSprints(rx) + " × 20 m " + (rx.spr90 ? "at 90%" : "flat out")} />
+          <Row k={rx.fit ? "Flying sprints (Sat, outside)" : "Flying sprints (Thu)"} val={rx.testWeek ? "none this week" : rx.noFlying ? "none — the tendon gate" : sppSprints(rx) + " × 20 m " + (rx.spr90 ? "at 90%" : "flat out")} />
           <Row k="Jumps (Thu)" val={rx.testWeek ? "none this week" : !rx.jump ? "box jumps" : rx.noJumps ? "none — the tendon gate" : jumpOf(rx.jump).n + (rx.restart ? " · one stage down" : "")} />
           <Row k="The intervals (Sat)" val={(spp44Short(rx) ? "3 × 4" : "4 × 4") + (sppTread(rx) ? " on the treadmill at 5%" : "") + (rx.testWeek ? " — the engine test" : "")} />
           <Row k="Bursts (Tue)" val={(rx.bk === "sb4" ? "4" : "8") + " × 6 seconds on the assault bike"} />
@@ -2637,7 +2642,7 @@ function WeekView({ view, setView, current, setCurrent, done, L, openDay, weekDo
                   <span style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 700, letterSpacing: 1.2, color: C.chalk })}>{(sess ? sess.n : DSH[d])}{row ? " · " + fmtDate(addDays(row.mon, di)) : ""}{sess && sess.pm ? " · PM" : ""}</span>
                   <span style={Object.assign({}, mno, { fontSize: 9.5, color: sl ? C.moss : ac })}>{sl || blank ? "—" : !MODE.camp && d === "sat" && rx.test ? "TEST DAY" : v(sess.m, rx) + " MIN"}</span>
                 </div>
-                <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.ash, marginTop: 3 })}>{sl ? "SLEEP. No alarm." + (d === "fri" ? " RANGE at home in the evening." : "") : blank ? (MODE.camp ? campBlank(d, rx).h : "The head check holds the transition — nothing until a doctor has cleared you") : !MODE.camp && d === "sat" && rx.test ? "Sprint · jump · throws · squat · bench · pull · tape" : (rx.au && sess.ta) || (rx.tw && sess.tt) || sess.t}</div>
+                <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.ash, marginTop: 3 })}>{sl ? "SLEEP. No alarm." + (d === "fri" ? " RANGE at home in the evening." : "") : blank ? (MODE.camp ? campBlank(d, rx).h : "The head check holds the transition — nothing until a doctor has cleared you") : !MODE.camp && d === "sat" && rx.test ? "Sprint · jump · throws · squat · bench · pull · tape" : (rx.fit && sess.tf) || (rx.au && sess.ta) || (rx.tw && sess.tt) || sess.t}</div>
               </span>
               <span data-day-count={d} style={Object.assign({}, mno, { fontSize: 10, color: full ? C.moss : n ? C.brass : C.ash, flexShrink: 0 })}>{tot ? (MODE.spp ? Math.min(n, tot) : n) + "/" + tot : ""}</span>
             </button>

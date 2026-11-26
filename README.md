@@ -127,6 +127,14 @@ are four tabs: **TODAY · PROGRESS · FOOD · MORE**.
   box jumps' place. Strength, Power and Physique has its own cards
   (src/spp.js); Prep and the camp get the same days laid over their pages,
   at rounds that follow each program's lighter weeks.
+  From Monday 30 November, Strength, Power and Physique alone runs THE TRIM
+  (FIT_SINCE and the week's `fit`, src/spp.js), the week cut and re-ordered
+  to fit the mornings: Monday's leg curl and a set of split squats, Tuesday's
+  cable lateral raise, side bend and knuckle hold and Saturday's one-arm row
+  out; the neck pair on Sunday; the flying sprints on Saturday, outside,
+  first, with a warm-up of their own; and the hard engine work ahead of the
+  size work on Tuesday and Saturday. A card moved inside its day keeps its
+  letter and names the card it now goes before (`goesBefore`, `sppOrder`).
   Optimal 8 Fighter, the classic, and its Hell Week were retired on 23
   November 2026: settings saved on it run Prep's cycle from the Monday its
   clock ran from, and the weeks logged on it stay in the app's data and its
