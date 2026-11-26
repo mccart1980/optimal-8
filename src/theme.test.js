@@ -2,14 +2,17 @@ import { describe, it, expect } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
 import zlib from "node:zlib";
-import { C, soft, THEMES, THEME_STEPS, themeNow, FONTS, RAD } from "./ui.jsx";
+import { C, soft, tone, THEMES, THEME_STEPS, themeNow, FONTS, RAD, FS, SP } from "./ui.jsx";
 import { draw, GROUND, MARK } from "../scripts/generate-icons.mjs";
 
 /* ================================================================
-   FIGHTER'S LOOK — two themes, light and dark, the name and the bull.
-   In both themes every colour that is text reads at 4.5:1 or better on
-   whatever it sits on: the page, the bars, the cards, its own tint, a
-   solid fill.
+   FIGHTER'S LOOK — one design system.
+   Dark is the main look, light is a setting. Three colours carry
+   meaning: the accent (go, yours, done), amber (wait) and red (hard or
+   stop). In both themes every colour that is text reads at 4.5:1 or
+   better on whatever it sits on. Every size, corner and colour on a
+   screen comes from the system: the tests read the screens' own code
+   to hold them to it.
    ================================================================ */
 const root = path.resolve(__dirname, "..");
 const read = (f) => fs.readFileSync(path.join(root, f), "utf8");
@@ -19,11 +22,13 @@ const lum = (h) => {
 };
 const ratio = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
 const cap = (s) => s[0].toUpperCase() + s.slice(1);
-const kebab = (s) => s.replace(/[A-Z]/g, (m) => "-" + m.toLowerCase());
-const NAMES = ["light", "dark"];
-const TEXT = ["chalk", "ash", "moss", "oxide", "brass", "cobalt", "violet"];
-const COLOURS = ["moss", "oxide", "brass", "cobalt", "violet"];
+const kebab = (s) => s.replace(/[A-Z0-9]/g, (m) => "-" + m.toLowerCase());
+const NAMES = ["dark", "light"];
+const TEXT = ["chalk", "ash", "accent", "warn", "bad"];
+const COLOURS = ["accent", "warn", "bad"];
 const each = (fn) => NAMES.forEach((n) => fn(THEMES[n], n));
+/* every screen's own code: the files that draw something */
+const SCREENS = fs.readdirSync(path.join(root, "src")).filter((f) => /\.jsx$/.test(f) && !/\.test\.jsx$/.test(f)).map((f) => "src/" + f);
 
 /* a PNG's size and its pixels, read back from the file */
 function pixels(file) {
@@ -35,24 +40,33 @@ function pixels(file) {
   return { w, h, at: (x, y) => { const o = y * row + 1 + x * 4; return [raw[o], raw[o + 1], raw[o + 2]]; } };
 }
 
-describe("two themes: light and dark", () => {
-  it("light is a pale page with white cards, dark a near-black page with raised cards", () => {
+describe("two themes: dark is the main look, light is a setting", () => {
+  it("dark is a black page with cards one step up; light a pale page with white cards", () => {
     expect(Object.keys(THEMES)).toEqual(NAMES);
+    expect(THEMES.dark.ink).toBe("#000000");
+    expect(lum(THEMES.dark.card)).toBeGreaterThan(lum(THEMES.dark.ink));
+    expect(lum(THEMES.dark.card2)).toBeGreaterThan(lum(THEMES.dark.card));
     expect(lum(THEMES.light.ink)).toBeGreaterThan(0.85);
     expect(THEMES.light.card).toBe("#FFFFFF");
-    expect(lum(THEMES.dark.ink)).toBeLessThan(0.02);
-    expect(lum(THEMES.dark.card)).toBeGreaterThan(lum(THEMES.dark.ink));
     /* the same names in both, so nothing is missing from one of them */
-    expect(Object.keys(THEMES.dark)).toEqual(Object.keys(THEMES.light));
+    expect(Object.keys(THEMES.light)).toEqual(Object.keys(THEMES.dark));
   });
-  it("the setting: AUTO follows the phone, LIGHT and DARK hold one", () => {
-    expect(THEME_STEPS.map((x) => x[0])).toEqual(["auto", "light", "dark"]);
+  it("the setting: DARK unless LIGHT is picked, and AUTO follows the phone", () => {
+    expect(THEME_STEPS.map((x) => x[0])).toEqual(["dark", "light", "auto"]);
     expect([themeNow("light"), themeNow("dark")]).toEqual(["light", "dark"]);
+    /* nothing chosen yet is dark, whatever the phone is set to */
+    expect([themeNow(undefined), themeNow(null), themeNow("")]).toEqual(["dark", "dark", "dark"]);
     expect(NAMES).toContain(themeNow("auto"));
-    expect(NAMES).toContain(themeNow(undefined));
   });
-  it("every text colour clears 4.5:1 on the page, the bars and the cards", () => {
-    each((T, n) => TEXT.forEach((t) => ["ink", "bar", "card"].forEach((b) => expect([n, t, b, ratio(T[t], T[b]) >= 4.5]).toEqual([n, t, b, true]))));
+  it("three colours carry meaning, and the older names are other names for them", () => {
+    expect([C.accent, C.warn, C.bad]).toEqual(["var(--o8-accent)", "var(--o8-warn)", "var(--o8-bad)"]);
+    ["brass", "moss", "cobalt", "violet"].forEach((k) => expect([k, C[k]]).toEqual([k, C.accent]));
+    expect(C.oxide).toBe(C.bad);
+    /* a colour handed to a shared piece: red and amber keep their meaning, anything else is the accent */
+    expect([tone(C.oxide), tone(C.warn), tone(C.cobalt), tone("#123456"), tone(C.ash)]).toEqual([C.bad, C.warn, C.accent, C.accent, C.ash]);
+  });
+  it("every text colour clears 4.5:1 on the page, the bars and both steps of card", () => {
+    each((T, n) => TEXT.forEach((t) => ["ink", "bar", "card", "card2"].forEach((b) => expect([n, t, b, ratio(T[t], T[b]) >= 4.5]).toEqual([n, t, b, true]))));
   });
   it("every colour has a tint for fills: the text reads on it, and so does the colour itself", () => {
     each((T, n) => {
@@ -63,45 +77,86 @@ describe("two themes: light and dark", () => {
   it("text on a solid colour, and the picked option of a switch, clear 4.5:1", () => {
     each((T, n) => {
       COLOURS.forEach((a) => expect([n, a, ratio(T.on, T[a]) >= 4.5]).toEqual([n, a, true]));
-      COLOURS.concat(["chalk"]).forEach((a) => expect([n, a, ratio(T[a], T.thumb) >= 4.5]).toEqual([n, a, true]));
+      expect([n, ratio(T.chalk, T.thumb) >= 4.5]).toEqual([n, true]);
     });
   });
-  it("the empty tick ring shows on a card at 3:1", () => {
-    each((T, n) => expect([n, ratio(T.ring, T.card) >= 3]).toEqual([n, true]));
+  it("the empty tick ring shows on a card and on the page at 3:1", () => {
+    each((T, n) => ["card", "ink"].forEach((b) => expect([n, b, ratio(T.ring, T[b]) >= 3]).toEqual([n, b, true])));
   });
   it("the colours the screens use are names, and the page's style sheet gives them their values in both themes", () => {
-    expect([C.ink, C.card, C.chalk, C.brass, C.on]).toEqual(["var(--o8-ink)", "var(--o8-card)", "var(--o8-chalk)", "var(--o8-brass)", "var(--o8-on)"]);
-    expect(soft(C.brass)).toBe("var(--o8-soft-brass)");
+    expect([C.ink, C.card, C.chalk, C.on]).toEqual(["var(--o8-ink)", "var(--o8-card)", "var(--o8-chalk)", "var(--o8-on)"]);
     COLOURS.concat(["ash", "chalk"]).forEach((a) => expect(soft(C[a])).toBe("var(--o8-soft-" + a + ")"));
+    expect(soft(C.brass)).toBe("var(--o8-soft-accent)");
     expect(soft("#123456")).toBe("#123456");
     const vars = (n) => Object.keys(THEMES[n]).map((k) => "--o8-" + kebab(k) + ": " + THEMES[n][k] + ";");
-    vars("light").forEach((v) => expect(FONTS).toContain(v));
-    vars("dark").forEach((v) => expect(FONTS.split(v).length).toBe(3));        // once for the phone going dark, once for DARK held
-    expect(FONTS).toMatch(/@media \(prefers-color-scheme: dark\) \{ :root:not\(\[data-theme="light"\]\) \{/);
-    expect(FONTS).toMatch(/:root\[data-theme="dark"\] \{/);
+    vars("dark").forEach((v) => expect(FONTS).toContain(v));
+    vars("light").forEach((v) => expect([v, FONTS.split(v).length]).toEqual([v, 3]));        // once for LIGHT held, once for AUTO on a light phone
+    expect(FONTS).toMatch(/:root \{ color-scheme: dark;/);
+    expect(FONTS).toMatch(/:root\[data-theme="light"\] \{ color-scheme: light;/);
+    expect(FONTS).toMatch(/@media \(prefers-color-scheme: light\) \{ :root\[data-theme="auto"\] \{/);
   });
   it("text on a fill is never the page colour, and nothing is downloaded to draw the type", () => {
-    ["src/ui.jsx", "src/App.jsx", "src/now.jsx", "src/sheet.jsx", "src/fuel-ui.jsx", "src/camp-ui.jsx", "src/metrics-ui.jsx", "src/today.jsx", "src/weight-ui.jsx", "src/season-ui.jsx", "src/range-ui.jsx", "src/welcome.jsx"]
-      .forEach((f) => expect([f, /color: [^,}]*C\.ink/.test(read(f))]).toEqual([f, false]));
-    ["src/ui.jsx", "index.html", "vite.config.js"].forEach((f) => expect([f, /googleapis|gstatic/.test(read(f))]).toEqual([f, false]));
+    SCREENS.forEach((f) => expect([f, /color: [^,}]*C\.ink/.test(read(f))]).toEqual([f, false]));
+    ["src/ui.jsx", "index.html", "vite.config.js"].forEach((f) => expect([f, /googleapis|gstatic|@font-face/.test(read(f))]).toEqual([f, false]));
     expect(FONTS).toMatch(/-apple-system/);
+    expect(read("src/ui.jsx")).toMatch(/ui-rounded/);
   });
-  it("one set of corners, and motion that stops for anyone who asks the phone for less", () => {
-    expect([RAD.s, RAD.m, RAD.l]).toEqual([10, 14, 18]);
-    expect(FONTS).toMatch(/@media \(prefers-reduced-motion: reduce\)/);
-  });
-  it("the page and the manifest: the light page's colour, both schemes allowed, the dark one set before the first paint", () => {
+  it("the page and the manifest: black before the first paint, light only when the setting asks", () => {
     const html = read("index.html"), vite = read("vite.config.js");
-    expect(html).toMatch(/<meta name="theme-color" content="#F1F4F9" \/>/);
-    expect(html).toMatch(/<meta name="color-scheme" content="light dark" \/>/);
-    expect(html).toMatch(/html, body \{ margin: 0; padding: 0; background: #F1F4F9; \}/);
-    expect(html).toMatch(/html\[data-theme="dark"\], html\[data-theme="dark"\] body \{ background: #0A0D12; \}/);
+    expect(html).toMatch(/<meta name="theme-color" content="#000000" \/>/);
+    expect(html).toMatch(/<meta name="color-scheme" content="dark light" \/>/);
+    expect(html).toMatch(/html, body \{ margin: 0; padding: 0; background: #000000; \}/);
+    expect(html).toMatch(/html\[data-theme="light"\], html\[data-theme="light"\] body \{ background: #F3F4F6; \}/);
+    expect(html).toMatch(/@media \(prefers-color-scheme: light\) \{\s*html\[data-theme="auto"\], html\[data-theme="auto"\] body \{ background: #F3F4F6; \}/);
     expect(html).toMatch(/localStorage\.getItem\("o8s-settings"\)/);
+    expect(html).toMatch(/root\.setAttribute\("data-theme", t === "light" \|\| t === "auto" \? t : "dark"\)/);
     expect(html).toMatch(/class="o8-splash"/);
     /* the icon's address carries a version, so a phone can't keep showing a copy of the old one */
     expect(html).toMatch(/<link rel="apple-touch-icon" href="\/optimal-8\/icons\/apple-touch-icon\.png\?v=\d+" \/>/);
-    expect([THEMES.light.ink, THEMES.dark.ink]).toEqual(["#F1F4F9", "#0A0D12"]);
-    expect(vite).toMatch(/theme_color: "#F1F4F9",\s*background_color: "#F1F4F9",/);
+    expect([THEMES.dark.ink, THEMES.light.ink]).toEqual(["#000000", "#F3F4F6"]);
+    expect(vite).toMatch(/theme_color: "#000000",\s*background_color: "#000000",/);
+  });
+});
+
+describe("one system: every size, corner and colour on a screen comes from it", () => {
+  const SIZES = [FS.micro, FS.cap, FS.meta, FS.body, FS.lead, FS.title, FS.name];
+  it("the type scale is seven sizes, and a card's three are three of them", () => {
+    expect(SIZES).toEqual([12, 13, 15, 18, 22, 28, 32]);
+    const now = read("src/now.jsx");
+    expect(now).toMatch(/export const T1 = FS\.name, T2 = FS\.lead, T3 = FS\.body;/);
+  });
+  it("no screen sets a text size of its own: each is on the scale, or a big number (40 and up)", () => {
+    SCREENS.forEach((f) => { const off = (read(f).match(/\bfontSize: \d+(?:\.\d+)?(?=[,\s})])/g) || []).map((m) => Number(m.slice(10))).filter((n) => SIZES.indexOf(n) < 0 && n < 40);
+      expect([f, off]).toEqual([f, []]); });
+  });
+  it("one set of corners, and no screen rounds one its own way", () => {
+    expect([RAD.s, RAD.m, RAD.l]).toEqual([10, 14, 20]);
+    SCREENS.forEach((f) => { const off = (read(f).match(/\bborderRadius: \d+(?=[,\s})])/g) || []).map((m) => Number(m.slice(14))).filter((n) => [0, 1, 2, 3, 10, 14, 20, 999].indexOf(n) < 0);
+      expect([f, off]).toEqual([f, []]); });
+  });
+  it("space is on a 4-point grid", () => {
+    Object.keys(SP).forEach((k) => expect([k, SP[k] % 4]).toEqual([k, 0]));
+  });
+  it("no screen sets a colour of its own: every one is a name from the system", () => {
+    SCREENS.filter((f) => f !== "src/ui.jsx").forEach((f) => { const src = read(f);
+      expect([f, (src.match(/#[0-9A-Fa-f]{6}\b|#[0-9A-Fa-f]{3}\b/g) || [])]).toEqual([f, []]);
+      expect([f, (src.match(/rgba?\(/g) || [])]).toEqual([f, []]); });
+  });
+  it("a card has no colour of its own, and a small label over a block is always quiet", () => {
+    const ui = read("src/ui.jsx");
+    expect(ui).toMatch(/export const Card = \(\{ children, s, mark \}\)/);
+    expect(ui).toMatch(/export const Eye = \(\{ children, s \}\)/);
+  });
+  it("motion: one curve, and it stops for anyone who asks the phone for less", () => {
+    expect(FONTS).toMatch(/@media \(prefers-reduced-motion: reduce\)/);
+    expect(FONTS).toMatch(/cubic-bezier\(\.2,\.8,\.2,1\)/);
+    expect(FONTS).toMatch(/\.o8-root button:not\(:disabled\):active \{ transform: scale\(\.97\)/);
+  });
+  it("every button on the bar under the thumb, and every tab, is at least 48 high", () => {
+    const home = read("src/home.jsx"), app = read("src/App.jsx");
+    expect(home).toMatch(/aria-label="Back to the item before"\s*\n?\s*style=\{\{ width: 60, minHeight: 64,/);
+    expect(home).toMatch(/className="o8-next" style=\{Object\.assign\(\{\}, dsp, \{ minWidth: 0, minHeight: 64,/);
+    expect(app).toMatch(/const TAB_H = 66;/);
   });
 });
 
