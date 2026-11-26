@@ -494,7 +494,7 @@ export function WaterBody({ row, checks, setCheck }) {
 /* The day's numbers at the top of TODAY: the phase and what it changes,
    food eaten against the day, water drunk against the target, and the
    day's one coaching line. */
-export function DayFuel({ phase, plan, eaten, total, drunk, target, notes, sauna, setSauna, showSauna, rules, midBanana }) {
+export function DayFuel({ phase, plan, eaten, total, drunk, target, notes, sauna, setSauna, showSauna, rules, midBanana, waterOnly }) {
   const [info, setInfo] = useState(false);
   const P = phase ? PHASES[phase] : null;
   const L = (ml) => (ml / 1000).toFixed(ml % 1000 === 0 ? 1 : 2).replace(/\.00$/, "");
@@ -502,6 +502,7 @@ export function DayFuel({ phase, plan, eaten, total, drunk, target, notes, sauna
   return (
     <Card s={{ padding: 0, overflow: "hidden" }}>
       <div style={{ padding: 16 }}>
+        {waterOnly ? null : <React.Fragment>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: "4px 10px" }}>
           <span>
             <span data-testid="fuel-phase" style={Object.assign({}, dsp, { fontSize: 22, fontWeight: 800, letterSpacing: .4, color: C.bone })}>{P ? P.n : plan.dayName}</span>
@@ -518,7 +519,8 @@ export function DayFuel({ phase, plan, eaten, total, drunk, target, notes, sauna
           <MacroBar label="C" val={eaten.c} max={total.c || 1} c={C.ember} />
           <MacroBar label="F" val={eaten.f} max={total.f || 1} c={C.frost} />
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8, marginTop: 12 }}>
+        </React.Fragment>}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8, marginTop: waterOnly ? 0 : 12 }}>
           <span style={cap()}>WATER</span>
           <span data-testid="water-total" style={Object.assign({}, mno, { fontSize: 18, fontWeight: 700, color: drunk >= target ? C.sage : C.bone })}>{L(drunk)}<span style={{ fontSize: 15, fontWeight: 600, color: C.ash }}> / {L(target)} L</span></span>
         </div>
@@ -538,7 +540,7 @@ export function DayFuel({ phase, plan, eaten, total, drunk, target, notes, sauna
           </div>) : null}
         {(notes || []).map((x, i) => <Note key={i} c={C.bone}>{x}</Note>)}
       </div>
-      {plan.call ? (
+      {plan.call && !waterOnly ? (
         <div style={{ background: M.card2, borderTop: "1px solid " + C.line, padding: "14px 16px" }}>
           <div style={cap()}>{plan.call[0]}</div>
           <div style={Object.assign({}, bdy, { fontSize: 18, color: C.bone, marginTop: 4, lineHeight: 1.45 })}>{plan.call[1]}</div>

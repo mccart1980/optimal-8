@@ -14,6 +14,8 @@ import {
   FS, big, cap, longDate, toast, Toasts, Guard, Skeleton, Banner, NavRow, Meter, Knob,
 } from "./ui.jsx";
 import { TimerDock, TimerFull } from "./timers.jsx";
+import { dayType, targets as foodTargets, sundayChecks, bodyKg } from "./food.js";
+import { FoodToday, FoodRow, mealsFrom } from "./food-ui.jsx";
 import { WeekCard, Hero, NowRow, Section, Focus, LogSet, ACT_H, ACT_CSS } from "./home.jsx";
 import { Trend, ChartCard, Stat } from "./charts.jsx";
 import { shortDate, weightSeries, WeightCard, LiftsCharts, SprintsPage, boxSeries, StatRow } from "./progress.jsx";
@@ -79,7 +81,7 @@ import {
   BarSpeedTrack, PhotosView, PhotoPrompt, Dashboard, MeasureSettings, SleepFields,
 } from "./metrics-ui.jsx";
 import {
-  fuelPlan, DEFAULT_BREAKS, LEN_DAYS, tMin, hhmm, HYDRA_RULES, MIDBANANA, SACHET, EASY_WATER, mlOf, PHASES as FUEL_PHASES, WEIGH_DEFAULT,
+  fuelPlan, DEFAULT_BREAKS, LEN_DAYS, tMin, hhmm, HYDRA_RULES, MIDBANANA, SACHET, EASY_WATER, mlOf, PHASES as FUEL_PHASES, WEIGH_DEFAULT, B as MEAL_BLOCKS, slotOf as mealSlot0, SLOTS as MEAL_SLOTS, BASE_OF as MEAL_BASE,
 } from "./fuel.js";
 import {
   weightCfg, sameCfg, runPlan, weightDay, averageOn, fightWeekAverage, topUpLitres, WEIGH_INS, WEIGHT_FIELDS, SCALES_TEXT, AFTER_FIGHT_TEXT, REWEIGH_TEXT,
@@ -2227,10 +2229,23 @@ function Today(props) {
     fight: fightDayOf(rx, day), weighIn: rx.weighIn || "before", march: parseISO(shownIso).getMonth() === 2, w: wt ? wt.fuel(shownIso) : null });
   const wake = plan.wake;
   mNumbers.t = wake; mFive.t = wake + 4; mCheck.t = wake + 9;
+  /* brief 34: the food is a budget on FOOD · TODAY, not rows at set times.
+     The set plan's rows stay only on making weight's light days, the
+     weigh-in day and fight day, where the timing is the point. On every
+     other day a meal row's drink keeps its own row at the same time. */
+  const wfd = wt ? wt.fuel(shownIso) : null;
+  const setPlanDay = !!fightDayOf(rx, day) || !!(wfd && wfd.kind !== "step");
   const fuelItems = [];
   const sayMl = (ml) => (ml >= 1000 ? (ml / 1000).toFixed(ml % 1000 ? 2 : 0).replace(/0$/, "") + " litre" : ml + " ml");
   plan.rows.forEach((r) => {
     const on = !!fticks[r.id];
+    if (r.kind === "feed" && !setPlanDay) {
+      if (!r.ml && !r.cre) return;
+      fuelItems.push({ id: r.id, colour: C.cobalt, n: r.ml ? sayMl(r.ml) + " water" + (r.cre ? ", the creatine in it" : "") : "Creatine 5 g, in water", t: r.t, fuel: r,
+        s: r.cre ? "creatine 5 g" : "", desc: r.cre ? ["The day's creatine goes in this one."] : undefined,
+        done: on, mark: (val) => ftick(r.id, val) });
+      return;
+    }
     if (r.kind === "feed") {
       const b = r.blk;
       const lead = r.slot === "lunch" ? (r.id === "f-lunch" ? (plan.work ? "Mid-morning — " : "First feed — ") : (plan.work ? "Lunch — " : "Second feed — ")) : "";
@@ -2448,6 +2463,7 @@ function Today(props) {
         <Hero hero={hero} />
         {cur && sessList.indexOf(cur) < 0 ? <NowRow over={(isToday ? "Now" : "First") + " · " + cur.clock} name={cur.n} sub={cur.s} on={() => openAt(cur)} />
           : !cur && all.length ? <NowRow over={isToday ? "Today" : fmtDate(shownIso)} name="Everything is ticked" done on={() => setWhole(false)} /> : null}
+        {props.foodRow || null}
         <Section right={doneN + " of " + all.length + " done"}>{isToday ? "The day" : "The day's list"}</Section>
         <div style={{ margin: "0 4px 14px" }}><Meter v={pct / 100} label="The day" testid="day-progress" /></div>
         {chapters.map((ch) => (
@@ -3318,7 +3334,14 @@ function Settings({ st, setSt, current, L, exportData, importData, rangeWeek, ca
    ================================================================ */
 const KEYS = { st: "o8s-settings", done: "o8s-done", log: "o8s-log", maxes: "o8s-maxes", maxHist: "o8s-maxhist", body: "o8s-body", ready: "o8s-ready", spar: "o8s-spar", swap: "o8s-swap", box: "o8s-box", notes: "o8s-notes", forge: "o8s-forge", fweek: "o8s-fweek", hw: "o8s-hw", calis: "o8s-calis", morning: "o8s-morning", photos: "o8s-photos", fuel: "o8s-fuel", flow: "o8s-flow",
   /* the fuel app, merged in */
-  fday: "o8s-fday", menu: "o8s-menu", cook: "o8s-cook", foods: "o8s-foods", shop: "o8s-shop", tape: "o8s-tape" };
+  fday: "o8s-fday", menu: "o8s-menu", cook: "o8s-cook", foods: "o8s-foods", shop: "o8s-shop", tape: "o8s-tape",
+  /* the day's budget (brief 34): { from, days: { iso: [entries] }, foods: [from packets], surplus: [{ at, on }] } */
+  eat: "o8s-eat" };
+/* the old menu's meals, offered one tap each on FOOD · TODAY */
+/* a meal's slot in the old plan: which ones are breakfasts and dinners */
+const mealSlot = (k) => { const b = MEAL_BASE[k] || k; const s = Object.keys(MEAL_SLOTS).find((x) => (MEAL_SLOTS[x].opts || []).indexOf(b) >= 0); return s || mealSlot0(b); };
+const MEAL_KEYS = ["half", "halfban", "porridge", "porridgeb", "appleraisin", "eggbagelbf", "tunabagelbf", "batch", "batchbig", "jacketbt", "jacketbe", "prawnrice", "wraps", "tunabagel",
+  "chickpouch", "rctuna", "twoban", "onebagel", "appleraisins", "rchoney", "topup", "bageltop", "pastatop", "rcload", "potatotop", "steak", "steakbig", "chicken"];
 /* the tab bar */
 const TAB_H = 66;
 /* MORE's list: the page, its name, what's on it, its icon */
@@ -3449,13 +3472,14 @@ export default function App() {
   const [foods, setFoodsRaw] = useState([]);
   const [shop, setShopRaw] = useState({});
   const [tape, setTapeRaw] = useState([]);
+  const [eat, setEatRaw] = useState({});
   const [imDay, setImDayRaw] = useState({});
   const [imSit, setImSitRaw] = useState([]);
   const [imHard, setImHardRaw] = useState([]);
   const [imWk, setImWkRaw] = useState({});
   const [tool, setTool] = useState(null);
   const [weekSub, setWeekSub] = useState("docs");
-  const [foodSub, setFoodSub] = useState("menu");
+  const [foodSub, setFoodSub] = useState(null);
   /* MORE opens on its list; each row is a page of its own */
   const [moreSub, setMoreSub] = useState("menu");
   const [devScale, setDevScale] = useState(1);
@@ -3482,7 +3506,7 @@ export default function App() {
   const setMorning = mk(setMorningRaw, KEYS.morning), setPhotos = mk(setPhotosRaw, KEYS.photos), setFuel = mk(setFuelRaw, KEYS.fuel);
   const setFlowAt = mk(setFlowAtRaw, KEYS.flow);
   const setFdays = mk(setFdaysRaw, KEYS.fday), setMenuAll = mk(setMenuAllRaw, KEYS.menu), setCook = mk(setCookRaw, KEYS.cook);
-  const setFoods = mk(setFoodsRaw, KEYS.foods), setShop = mk(setShopRaw, KEYS.shop), setTape = mk(setTapeRaw, KEYS.tape);
+  const setFoods = mk(setFoodsRaw, KEYS.foods), setShop = mk(setShopRaw, KEYS.shop), setTape = mk(setTapeRaw, KEYS.tape), setEat = mk(setEatRaw, KEYS.eat);
   const kbeep = useBeep(st.sound);
   const K = useKTimer(kbeep);
   const setImDay = mk(setImDayRaw, IM_KEYS.day), setImSit = mk(setImSitRaw, IM_KEYS.sit);
@@ -3536,7 +3560,7 @@ export default function App() {
     /* left on the session screen today: it opens there again */
     const seen = await load(VIEW_KEY, null); if (seen && seen.focus && seen.d === iso(new Date())) setFocusRaw(true);
     setFdaysRaw(await load(KEYS.fday, {})); setMenuAllRaw(await load(KEYS.menu, {})); setCookRaw(await load(KEYS.cook, null));
-    setFoodsRaw(await load(KEYS.foods, [])); setShopRaw(await load(KEYS.shop, {})); setTapeRaw(await load(KEYS.tape, []));
+    setFoodsRaw(await load(KEYS.foods, [])); setShopRaw(await load(KEYS.shop, {})); setTapeRaw(await load(KEYS.tape, [])); setEatRaw(await load(KEYS.eat, {}));
     setImDayRaw(await load(IM_KEYS.day, {})); setImSitRaw(await load(IM_KEYS.sit, []));
     setImHardRaw(await load(IM_KEYS.hard, [])); setImWkRaw(await load(IM_KEYS.wk, {}));
     setLoaded(true);
@@ -3770,7 +3794,41 @@ export default function App() {
     const used = Object.assign({}, menuAll.used, chosen ? { [chosen]: dayIso } : {});
     setMenuAll(Object.assign({}, menuAll, { picks: sel, used }));
   };
+  /* THE DAY'S BUDGET (brief 34): what today holds, the weight plan's step
+     when a cut is running, the Sunday checks with no fight, and the days
+     that keep the set plan. */
+  const nowM = (() => { const d = new Date(); return d.getHours() * 60 + d.getMinutes(); })();
+  const budgetOf = () => {
+    const dk0 = dayKey(current.macro, current.week, today);
+    const ck = dayClock(current.week, today, log, dk0);
+    const fd = fdays[dayIso] || {};
+    const type = dayType({ session: !ck.noSess, boxing: boxingTonight(fd, st, today), day: today });
+    const wd = wDay(dayIso);
+    const planDay = fightDayOf(ck.rx, today) ? "Fight day runs on the set plan in MEALS: the timing is the point today."
+      : wd && wd.kind === "light" ? "Making weight's light days run on the set plan in MEALS: low fibre and fewer carbs, at set times."
+      : wd && wd.kind === "lowfibre" ? "A low-fibre day: eat from the set plan in MEALS."
+      : wd && wd.kind === "weighin" ? "Weigh-in day runs on the set plan in MEALS."
+      : null;
+    const step = wd && wd.kind === "step" && wd.step != null ? wd.step : null;
+    const sur = eat.surplus || [];
+    const surplusOn = (s) => { let on = false; sur.forEach((x) => { if (x.at <= s) on = !!x.on; }); return on; };
+    const sc = sundayChecks({ weights, from: eat.from || dayIso, today: dayIso, surplusOn, cutOn: (s) => !!wDay(s) });
+    const surplus = surplusOn(dayIso);
+    const t = foodTargets({ type, adj: sc.adj, surplus, step, kg: bodyKg(weights, dayIso) });
+    return { type, t, step, adj: sc.adj, mode: step != null ? "cut" : surplus ? "surplus" : "keep", planDay, check: sc.checks.length ? sc.checks[sc.checks.length - 1] : null, surplus };
+  };
+  const bud = budgetOf();
+  const eatToday = ((eat.days || {})[dayIso]) || [];
+  const setEatToday = (list) => setEat(Object.assign({}, eat, { from: eat.from || dayIso, days: Object.assign({}, eat.days || {}, { [dayIso]: list }) }));
+  const mealList = useMemo(() => mealsFrom(MEAL_BLOCKS, MEAL_KEYS, mealSlot), []);
+  const recentEats = (() => { const seen = {}, out = []; const ds = Object.keys(eat.days || {}).filter((d) => d <= dayIso && d >= addDays(dayIso, -14)).sort().reverse();
+    ds.forEach((d) => (eat.days[d] || []).slice().reverse().forEach((x) => { const k = String(x.text || "").toLowerCase(); if (k && !seen[k] && !mealList.some((m) => m.n === x.text)) { seen[k] = 1; out.push(x.text); } }));
+    return out; })();
+  const openFood = () => { setTab("food"); setFoodSub("today"); };
+  /* FOOD opens on TODAY, or on MEALS on a day that keeps the set plan */
+  const foodPage = foodSub || (bud.planDay ? "menu" : "today");
   const todayProps = { macro: shown.macro, week: shown.week, day: shown.day, isToday, shownIso, shownFuture,
+    foodRow: isToday ? <FoodRow bud={bud} entries={eatToday} now={nowM} on={openFood} /> : null,
     done, setDone, log, setLog, maxes, bw,
     ergUnit: st.ergUnit || "w", peakHR, setEasyPeak: (val) => setSt(Object.assign({}, st, { easyPeak: val })), morning, setMorning, weekDates, st,
     imRec: imDay[shownIso] || {},
@@ -3793,7 +3851,7 @@ export default function App() {
     menu: menuAll.picks || {}, setMenu, cook, fuelPhase: fuelPhaseOf(st, shown.week, shownIso), wt };
 
   const exportData = async () => JSON.stringify({ st, done, log, maxes, maxHist, body, readyMap, sparMap, swapMap, boxMap, notes, forge, fweek, hwLog, imDay, imSit, imHard, imWk, calis, morning, photos, fuel, flowAt,
-    fdays, menuAll, cook, foods, shop, tape });
+    fdays, menuAll, cook, foods, shop, tape, eat });
   const importData = (s) => { try { const d = JSON.parse(s || "{}");
     setSt(Object.assign(DEF_ST(), d.st || {}, { v12: true, v16: true }));
     const done12 = d.st && d.st.v12 ? (d.done || {}) : migrateDone(d.done || {});
@@ -3804,7 +3862,7 @@ export default function App() {
     setCalis(Object.assign(DEF_CALIS(), d.calis || {}));
     setMorning(d.morning || {}); setPhotos(d.photos || {}); setFuel(d.fuel || null);
     setFlowAt(d.flowAt || {});
-    setFdays(d.fdays || {}); setMenuAll(d.menuAll || {}); setCook(d.cook || null); setFoods(d.foods || []); setShop(d.shop || {}); setTape(d.tape || []);
+    setFdays(d.fdays || {}); setMenuAll(d.menuAll || {}); setCook(d.cook || null); setFoods(d.foods || []); setShop(d.shop || {}); setTape(d.tape || []); setEat(d.eat || {});
     toast(Object.keys(d).length ? "Backup loaded" : "Everything wiped. The app starts from new.");
   } catch (e) { toast("That isn't a Fighter backup. Nothing was changed.", "bad"); } };
 
@@ -4044,19 +4102,24 @@ export default function App() {
               weekStats={weekStats} todayIso={dayIso} onWeigh={(kg) => { putMorning(dayIso, { kg }); toast("Weight saved · " + kg + " kg"); }} /> : null}
             {tab === "food" ? (
               <div>
+
                 {wt ? (() => { const wdx = wDay(dayIso); return wdx ? (
                   <div>
                     <WeightBanner wd={wdx} waiting={wt.plan.waiting} />
                     {wdx.kind === "light" ? <Card ac={C.oxide}>{lightDaysNotes().map((x, i) => <Note key={i} c={C.chalk} s={{ marginTop: i ? 6 : 0 }}>{x}</Note>)}</Card> : null}
                   </div>) : null; })() : null}
                 <div style={{ marginBottom: 14 }}>
-                  <Seg opts={[["menu", "MENU"], ["cook", "COOK"], ["shop", "SHOP"], ["water", "WATER"]]} val={foodSub} on={setFoodSub} c={C.brass} />
+                  <Seg opts={[["today", "TODAY"], ["menu", "MEALS"], ["cook", "COOK"], ["shop", "SHOP"], ["water", "WATER"]]} val={foodPage} on={setFoodSub} />
                 </div>
-                {foodSub === "menu" || foodSub === "water" ? (() => { const F = todayFuel();
+                {foodPage === "today" ? <FoodToday boxSw={(() => { const F = todayFuel(); return F.plan.boxable ? <BoxingSwitch on={F.boxing} set={(val) => setTodayFday({ box: !!val })} /> : null; })()} bud={bud} entries={eatToday} setEntries={setEatToday} mine={eat.foods || []} setMine={(xs) => setEat(Object.assign({}, eat, { foods: xs }))}
+                    cook={cook} meals={mealList} now={nowM} recent={recentEats} surplus={bud.surplus}
+                    setSurplus={(on) => setEat(Object.assign({}, eat, { from: eat.from || dayIso, surplus: (eat.surplus || []).filter((x) => x.at !== dayIso).concat([{ at: dayIso, on: !!on }]) }))} /> : null}
+                {foodPage === "menu" || foodPage === "water" ? (() => { const F = todayFuel();
                   const boxSw = F.plan.boxable ? <BoxingSwitch on={F.boxing} set={(val) => setTodayFday({ box: !!val })} /> : null;
-                  return foodSub === "menu" ? (
+                  return foodPage === "menu" ? (
                     <div data-testid="food-menu">
                       {boxSw}
+                      {bud.planDay ? null : <Note s={{ marginTop: 0, marginBottom: 12 }}>The old plan's meals, as ideas. Eat them whenever suits you and log them on TODAY: every one is there, one tap each.</Note>}
                       {F.plan.rows.filter((r) => r.kind === "feed").map((r) => (
                         <Card key={r.id} mark={r.crit ? "warn" : undefined}>
                           <div style={Object.assign({}, mno, { fontSize: 15, fontWeight: 600, color: C.ash })}>{hhmm(r.t)}</div>
@@ -4064,15 +4127,15 @@ export default function App() {
                           <FeedBody row={r} cook={cook} checks={F.checks} onPick={setMenu} />
                         </Card>))}
                     </div>)
-                    : <div>{boxSw}<DayFuel phase={F.phase} plan={F.plan} eaten={F.eaten} total={F.total} drunk={F.drunk} target={F.plan.target} notes={[]}
+                    : <div>{boxSw}<DayFuel waterOnly={!bud.planDay} phase={F.phase} plan={F.plan} eaten={F.eaten} total={F.total} drunk={F.drunk} target={F.plan.target} notes={[]}
                         sauna={F.sauna} setSauna={(val) => setTodayFday({ sauna: !!val })} showSauna={F.weekendDay && !F.weekProgSauna}
                         rules={HYDRA_RULES} midBanana={!!MIDBANANA[F.phase] && today === "sun"} /></div>; })() : null}
-                {foodSub === "cook" ? (
+                {foodPage === "cook" ? (
                   <div>
                     <Cook cook={cook} setCook={setCook} foods={foods} setFoods={setFoods} K={K} prep={menuAll.prep || {}} setPrep={(v) => setMenuAll(Object.assign({}, menuAll, { prep: v }))} />
                     {K.t ? <div style={{ position: "sticky", bottom: "calc(" + TAB_H + "px + env(safe-area-inset-bottom))", zIndex: 25 }}><KDock K={K} /></div> : null}
                   </div>) : null}
-                {foodSub === "shop" ? <Shop shop={shop} setShop={setShop} used={menuAll.used || {}} today={dayIso} /> : null}
+                {foodPage === "shop" ? <Shop shop={shop} setShop={setShop} used={menuAll.used || {}} today={dayIso} /> : null}
               </div>) : null}
             {tab === "more" ? (
               <div>

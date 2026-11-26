@@ -38,6 +38,8 @@ async function mount(at, season, extra) {
 const withLimit = () => Object.assign({}, FIGHT, LIMIT);
 const drawn = () => ({ wdraws: [{ at: "2026-10-11", cfg: weightCfg(withLimit()) }] });
 const tab = (n) => fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: n[0] + n.slice(1).toLowerCase() }));
+/* FOOD opens on TODAY (brief 34); the set plan's menu is MEALS */
+const meals = () => fireEvent.click(screen.getByRole("button", { name: "MEALS" }));
 function pickIn(chapterName, name) {
   { const wd = screen.queryByRole("button", { name: "WHOLE DAY" }); if (wd) fireEvent.click(wd); }
   const chapter = screen.getByText(chapterName).closest("[data-chapter]");
@@ -68,7 +70,7 @@ describe("making weight, in the app", () => {
 
   it("runs the food at the step: the banner, no three o'clock, lunch at half the carb", async () => {
     await mount(new Date(2026, 9, 19, 2, 0, 0), withLimit(), drawn());
-    tab("FOOD");
+    tab("FOOD"); meals();
     expect(screen.getByTestId("weight-banner").textContent).toMatch(/^MAKING WEIGHT · STEP 2 · SUNDAY'S AIM 79\.6/);
     expect(screen.getByTestId("weight-banner-line").textContent).toBe("No three o'clock this week.");
     const menu = screen.getByTestId("food-menu");
@@ -137,7 +139,7 @@ describe("making weight — fight week, in the app", () => {
 
   it("the light days replace the day's food", async () => {
     await mount(new Date(2026, 10, 25, 9, 0, 0), withLimit(), drawn());
-    tab("FOOD");
+    tab("FOOD"); meals();
     expect(screen.getByTestId("weight-banner").textContent).toMatch(/^MAKING WEIGHT · THE LIGHT DAYS/);
     const menu = screen.getByTestId("food-menu");
     expect(within(menu).getByText("3 EGGS ON A WHITE BAGEL")).toBeInTheDocument();
@@ -155,7 +157,7 @@ describe("making weight — fight week, in the app", () => {
     expect(screen.getByTestId("weighin-morning").textContent).toBe("0.4 over the weigh-in morning aim of 76.0. Halve the small feeds and keep sipping.");
     { const wd = screen.queryByRole("button", { name: "WHOLE DAY" }); if (wd) fireEvent.click(wd); }
     expect(document.body.textContent).toMatch(/The weigh-in/);
-    tab("FOOD");
+    tab("FOOD"); meals();
     expect(screen.getByTestId("weight-banner").textContent).toMatch(/^MAKING WEIGHT · WEIGH-IN DAY · MORNING AIM 76\.0/);
     expect(within(screen.getByTestId("food-menu")).getAllByText("2 EGGS AND A RICE CAKE — HALF").length).toBeGreaterThan(0);
   });
@@ -190,7 +192,7 @@ describe("proof 8 — no limit", () => {
   });
   it("no weight banner and no step anywhere", async () => {
     await mount(new Date(2026, 9, 19, 2, 0, 0), FIGHT);
-    tab("FOOD");
+    tab("FOOD"); meals();
     expect(screen.queryByTestId("weight-banner")).not.toBeInTheDocument();
     expect(document.body.textContent).not.toMatch(/STEP \d|HALF THE CARB|NO HONEY|MAKING WEIGHT/);
     expect(within(screen.getByTestId("food-menu")).getAllByText("TWO BANANAS").length).toBeGreaterThan(0);
@@ -276,7 +278,7 @@ describe("the start, boxing tonight and the working maxes, in the app", () => {
     await mountMarch(new Date(2026, 10, 4, 2, 0, 0));
     expect(screen.getByTestId("card-name").textContent).toBe("Every morning — the scales");
     expect(screen.getByTestId("scales-line").textContent).toMatch(/^SEVEN-MORNING AVERAGE 83\.2 · THE PLAN STARTS MON,? 4 JAN$/);
-    tab("FOOD");
+    tab("FOOD"); meals();
     expect(screen.queryByTestId("weight-banner")).not.toBeInTheDocument();
     expect(within(screen.getByTestId("food-menu")).getAllByText("TWO BANANAS").length).toBeGreaterThan(0);
     tab("MORE");
@@ -287,7 +289,7 @@ describe("the start, boxing tonight and the working maxes, in the app", () => {
 
   it("BOXING TONIGHT on FOOD: the 5pm load, dinner at 20:15, no casein — for that day only", async () => {
     await mountMarch(new Date(2026, 10, 4, 10, 0, 0));
-    tab("FOOD");
+    tab("FOOD"); meals();
     const menu = () => screen.getByTestId("food-menu");
     expect(screen.getByTestId("boxing-tonight").textContent).toBe("BOXING TONIGHT");
     expect(within(menu()).queryAllByText("POUCH LOAD")).toHaveLength(0);
@@ -307,7 +309,7 @@ describe("the start, boxing tonight and the working maxes, in the app", () => {
     fireEvent.click(screen.getByRole("button", { name: "Settings" }));
     fireEvent.click(within(screen.getByTestId("boxing-days")).getByRole("button", { name: "WED" }));
     expect(JSON.parse(localStorage.getItem("o8s-settings")).boxDays).toEqual({ wed: 1 });
-    tab("FOOD");
+    tab("FOOD"); meals();
     expect(screen.getByTestId("boxing-tonight").textContent).toBe("✓ BOXING TONIGHT");
     expect(within(screen.getByTestId("food-menu")).getAllByText("POUCH LOAD").length).toBeGreaterThan(0);
   });

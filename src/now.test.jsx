@@ -207,7 +207,7 @@ describe("TODAY — one thing at a time", () => {
     const nav = screen.getByRole("navigation", { name: "Tabs" });
     expect(within(nav).getAllByRole("button").map((b) => b.textContent)).toEqual(["Today", "Progress", "Food", "More"]);
     fireEvent.click(within(nav).getByText("Food"));
-    expect(screen.getByTestId("food-menu")).toBeInTheDocument();
+    expect(screen.getByTestId("food-today")).toBeInTheDocument();
     fireEvent.click(within(nav).getByText("More"));
     expect(screen.getByRole("button", { name: "Settings" })).toBeInTheDocument();
   });

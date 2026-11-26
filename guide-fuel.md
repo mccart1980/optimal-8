@@ -1,9 +1,24 @@
 # THE FOOD GUIDE — PLAIN ENGLISH
 
 ## WHAT TO DO TODAY
-Open the app. It shows today's feeds in order with a time on each. Eat what the row says at the time it says. Tap it. That's the whole system.
+Open FOOD. TODAY shows what's left of the day: calories, protein, carbs and fat. Eat what you like, when it suits you, and type it in: "200g cooked mince, 250g pasta", "2 eggs and a bagel", "half a bottle". The app works out the numbers and takes them off what's left. That's the whole system.
 
-## THE DAY, IN ORDER
+- **Protein is the one to hit:** 200 g, every day. Five meals of about 40 g; a UFIT bottle is one of them.
+- **Calories follow the day:** 3,600 on a hard day (the gym and boxing, or the long session), 3,200 on a gym day, 2,700 on a day off. Carbs take the difference; fat sits at 75 g.
+- **The clock starts at your first bite.** The next meal is about three hours after the last one began, with its share of what's left, and a few of your meals that fit it.
+- **Cooked or raw:** weighed foods are read as cooked unless you type raw or dry. Raw weights and packet labels are exact; cooked weights are within about a tenth.
+- **The batch** is read from the two pans you weighed in COOK: "300g batch mince", "250g batch sweet potato", or "a batch" for one standard portion of each.
+- **It knows about 470 foods:** meat, fish, dairy, bread, cereals, rice and pasta, potatoes, veg, fruit, nuts, sauces, snacks, drinks and the usual takeaways. "20g raisins", "2 slices of toast", "a pint", "fish and chips". The numbers are typical ones, per 100 g as a packet prints them; a brand can sit a tenth either side.
+- **It works as a calculator:** the numbers show as you type, before you add anything, with what the day would have left. Clear the box and nothing is logged.
+- **Check which food it picked.** Tap a food in the list under the box to see it per 100 g, to switch between cooked and raw, or to pick the food you meant ("chicken" is read as breast; thigh is one tap).
+- **It asks rather than guesses:** type "chicken" with no weight and it offers some; a word it didn't use is said; a food it can't find gets the closest names.
+- **Anything it doesn't know,** or any food whose packet you'd rather trust, type in once from the packet's panel (per 100 g, or per item). Yours is read before the list's from then on.
+- **Every Sunday** your 7-morning average weight sets the next week. With no fight, it holds your weight: down more than 0.3 kg in a week is 150 kcal a day more, up more than 0.3 is 150 less. The slight surplus switch adds 250 and lets the weight creep up. With a fight and a weight limit, the weight plan runs the cut and its step comes off every day.
+- **Making weight's light days, the weigh-in day and fight day** keep the set plan on MEALS, at its times: on those days the timing is the point.
+
+MEALS keeps the plan below as ideas: every meal in it is one tap on TODAY.
+
+## THE OLD PLAN, IN ORDER — IDEAS NOW
 1. **Twenty minutes before you train:** half the bottle and a banana. Tuesday, Thursday and Saturday: stir 15 g of collagen into the bottle and have a small orange juice with it.
 2. **Straight after:** the other half of the bottle, then the porridge from the thermos on the way to work.
 3. **First break:** batch, or a wrap or bagel if you can't sit down.

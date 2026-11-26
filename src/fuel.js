@@ -17,7 +17,9 @@ import { C, parseISO } from "./ui.jsx";
    brass, sage (done, protein) to moss, frost (water) to cobalt. */
 export const FC = { ember: C.oxide, honey: C.brass, sage: C.moss, copper: C.oxide, frost: C.cobalt };
 
-export const tMin = (t) => { const p = String(t).split(":").map(Number); return p[0] * 60 + (p[1] || 0); };
+/* "09:00", "9:00", and a time typed without its colon, "0900" or "1100" */
+export const tMin = (t) => { const s = String(t).trim(); if (/^\d{3,4}$/.test(s)) { const n = Number(s); return Math.floor(n / 100) * 60 + (n % 100); }
+  const p = s.split(/[:.]/).map(Number); return p[0] * 60 + (p[1] || 0); };
 export const hhmm = (m) => { const x = ((Math.round(m) % 1440) + 1440) % 1440; return String(Math.floor(x / 60)).padStart(2, "0") + ":" + String(x % 60).padStart(2, "0"); };
 
 export const B = {

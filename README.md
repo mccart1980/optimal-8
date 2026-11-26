@@ -357,6 +357,44 @@ sizes and corners onto the scale; it was run once and deleted. `src/theme.test.j
 holds the system to its rules, and `src/rebuild.test.jsx` holds the new screens
 and proves that stored data is untouched.
 
+## FOOD · TODAY — THE DAY'S BUDGET
+
+Brief 34 turned the food from a menu at set times into a budget for the day
+(`src/food.js` for the numbers, `src/food-ui.jsx` for the screen). FOOD opens
+on TODAY: what's left of the day's calories, protein, carbs and fat; the next
+meal, about three hours after the last; and a box to type what was eaten
+("200g cooked mince, 250g pasta"), read against the food list and any food
+added from a packet. Protein is 200 g a day; calories follow the
+day (3,600 hard, 3,200 gym, 2,700 off); the Sunday check holds the weight with
+no fight, and the weight plan's step runs a cut. The old plan is MEALS, as
+ideas, and is still the day's plan on making weight's light days, the
+weigh-in day and fight day, where its rows come back on TODAY's list. On
+every other day the list keeps the drinks at their times and no meal rows.
+The log is `o8s-eat`, in the backup. A break time typed without its colon
+("1100") is now read as one.
+
+**The food list** (`src/food-list.js`) is what makes "20g raisins" work: about
+470 everyday UK foods, one to a line, with calories, protein, carbohydrate and
+fat per 100 g (per 100 ml for a drink), the way a packet prints them. The
+numbers are typical values for the ordinary version of each food, from the
+UK's food composition tables (McCance and Widdowson's) and the panels on UK
+packets; a brand can sit 10% either side, and a takeaway more. To add a food,
+add a line: `Name | names it's typed as | kcal protein carbs fat | portions`.
+The top of the file sets out the rest (raw, cooked and dry; `1 egg = 58`;
+`1 kebab ~ 400`; `per breast ~ 150`; `tbsp 15`; `ml`). `src/food-list.test.js`
+reads every line, checks its calories against its protein, carbs and fat, and
+checks that no two foods share a name.
+
+**The box is a calculator.** The numbers show as the food is typed, before
+anything is added, with what the day would have left. The reader takes the
+name that fits best (the most words, then the thing said last: "strawberry
+milkshake" is a milkshake), reads a weighed food as cooked unless it says raw
+or dry, and says so. Tapping a food in the preview opens it: its numbers per
+100 g, cooked or raw, and the other foods the same words could mean, one tap
+each. A food it can't read gets the closest names in the list; a food with no
+amount gets amounts to pick; a word it didn't use is said. It asks rather than
+guesses. LOOK UP A FOOD searches the whole list.
+
 ## THE LOOK AND THE SOUND
 
 **Light or dark.** The app has both. Out of the box it follows the phone: light
