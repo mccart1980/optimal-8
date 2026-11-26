@@ -21,9 +21,8 @@ async function at(y, m, d, extra) {
 }
 function weekMap() {
   const bar = within(screen.getByRole("navigation", { name: "Tabs" }));
-  fireEvent.click(bar.getByRole("button", { name: "MORE" }));
-  fireEvent.click(screen.getByRole("button", { name: "PLAN" }));
-  fireEvent.click(screen.getByRole("button", { name: "THIS WEEK" }));
+  fireEvent.click(bar.getByRole("button", { name: "More" }));
+  fireEvent.click(screen.getByRole("button", { name: "This week" }));
 }
 
 describe("the season, in the app", () => {
@@ -72,7 +71,8 @@ describe("the season, in the app", () => {
   });
   it("the head check: the first row the morning after; YES shows the doctor and A&E and holds the transition until cleared", async () => {
     await at(2026, 11, 29);
-    const card = screen.getByTestId("now-card");
+    /* the day opens on the head check's card a moment after the loading screen goes: wait for it */
+    const card = await screen.findByTestId("now-card");
     expect(within(card).getByTestId("card-name").textContent).toBe("The head check");
     expect(within(card).getByTestId("card-pres").textContent).toBe("Stopped, dropped, or any symptoms?");
     expect(within(card).getByText(/Headache, fogginess, feeling slowed down, dizziness, sensitivity to light or noise/)).toBeInTheDocument();
@@ -88,7 +88,7 @@ describe("the season, in the app", () => {
     /* YES and not cleared: held */
     await at(2026, 12, 9, YES);
     expect(title()).toBe("TRANSITION · ON HOLD · THE HEAD CHECK");
-    expect(within(screen.getByTestId("now-card")).getByTestId("card-name").textContent).toBe("The head check");
+    expect(within(await screen.findByTestId("now-card")).getByTestId("card-name").textContent).toBe("The head check");
     fireEvent.click(screen.getByRole("button", { name: "A DOCTOR HAS CLEARED ME, AND I'M SYMPTOM-FREE" }));
     expect(JSON.parse(localStorage.getItem("o8s-settings")).head["2026-11-28"].cleared).toBe("2026-12-09");
     cleanup();
@@ -116,8 +116,8 @@ describe("the comeback, re-planned inside Prep", () => {
   it("moving the date on Thursday 12 November carries Prep on: P4 this week, P4b the next", async () => {
     await mount(2026, 11, 12, settings({ plans: we3, season: WE3, fightDate: "2027-03-13" }));
     expect(raw()).toMatch(/· P4 ·/);
-    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "MORE" }));
-    fireEvent.click(screen.getByRole("button", { name: "SETTINGS" }));
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "More" }));
+    fireEvent.click(screen.getByRole("button", { name: "Settings" }));
     fireEvent.change((await screen.findByText("The date")).parentElement.querySelector("input"), { target: { value: "2027-04-10" } });
     fireEvent.click(screen.getByRole("button", { name: /^RE-PLAN FROM MON,? 16 NOV/ }));
     await waitFor(() => expect(JSON.parse(localStorage.getItem("o8s-settings")).plans.length).toBe(2));
@@ -144,8 +144,8 @@ describe("no fight booked", () => {
   }
   const raw = () => screen.getByTestId("app-title").textContent;
   const openSettings = async () => {
-    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "MORE" }));
-    fireEvent.click(screen.getByRole("button", { name: "SETTINGS" }));
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "More" }));
+    fireEvent.click(screen.getByRole("button", { name: "Settings" }));
     return (await screen.findByText("Fight booked?")).parentElement;
   };
   const saved = () => JSON.parse(localStorage.getItem("o8s-settings"));

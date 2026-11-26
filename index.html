@@ -6,14 +6,14 @@
     <title>Fighter</title>
     <meta name="description" content="Fighter — the strength and conditioning companion." />
 
-    <!-- colours: light and dark, following the phone unless the app's own setting holds one -->
-    <meta name="theme-color" content="#F1F4F9" />
-    <meta name="color-scheme" content="light dark" />
+    <!-- colours: dark is the app's own look; LIGHT, or AUTO to follow the phone, is a setting -->
+    <meta name="theme-color" content="#000000" />
+    <meta name="color-scheme" content="dark light" />
 
     <!-- iOS home-screen app -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="apple-mobile-web-app-title" content="Fighter" />
     <meta name="format-detection" content="telephone=no" />
     <!-- ?v= is the icon's version: a phone that kept a copy of the old picture has to fetch this one. Raise it whenever the icon changes. -->
@@ -21,30 +21,30 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/optimal-8/icons/favicon-32.png?v=27" />
 
     <style>
-      html, body { margin: 0; padding: 0; background: #F1F4F9; }
+      html, body { margin: 0; padding: 0; background: #000000; }
       body { overscroll-behavior-y: none; -webkit-text-size-adjust: 100%; }
       #root { min-height: 100vh; }
       /* the first thing on the screen, until the app is up: the bull, on the page's own colour */
       .o8-splash { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
-      .o8-splash .a, .o8-splash .a2 { fill: #1D5FDB; } .o8-splash .b, .o8-splash .b2 { fill: #86A9EE; } .o8-splash .k { fill: #F1F4F9; }
-      @media (prefers-color-scheme: dark) {
-        html:not([data-theme="light"]), html:not([data-theme="light"]) body { background: #0A0D12; }
-        html:not([data-theme="light"]) .o8-splash .a, html:not([data-theme="light"]) .o8-splash .a2 { fill: #F2F5F9; }
-        html:not([data-theme="light"]) .o8-splash .b, html:not([data-theme="light"]) .o8-splash .b2 { fill: #7DB0FF; }
-        html:not([data-theme="light"]) .o8-splash .k { fill: #0A0D12; }
+      .o8-splash .a, .o8-splash .a2 { fill: #F5F6F8; } .o8-splash .b, .o8-splash .b2 { fill: #A0A5B0; } .o8-splash .k { fill: #000000; }
+      html[data-theme="light"], html[data-theme="light"] body { background: #F3F4F6; }
+      html[data-theme="light"] .o8-splash .a, html[data-theme="light"] .o8-splash .a2 { fill: #0B0C0E; }
+      html[data-theme="light"] .o8-splash .b, html[data-theme="light"] .o8-splash .b2 { fill: #565D69; }
+      html[data-theme="light"] .o8-splash .k { fill: #F3F4F6; }
+      @media (prefers-color-scheme: light) {
+        html[data-theme="auto"], html[data-theme="auto"] body { background: #F3F4F6; }
+        html[data-theme="auto"] .o8-splash .a, html[data-theme="auto"] .o8-splash .a2 { fill: #0B0C0E; }
+        html[data-theme="auto"] .o8-splash .b, html[data-theme="auto"] .o8-splash .b2 { fill: #565D69; }
+        html[data-theme="auto"] .o8-splash .k { fill: #F3F4F6; }
       }
-      html[data-theme="dark"], html[data-theme="dark"] body { background: #0A0D12; }
-      html[data-theme="dark"] .o8-splash .a, html[data-theme="dark"] .o8-splash .a2 { fill: #F2F5F9; }
-      html[data-theme="dark"] .o8-splash .b, html[data-theme="dark"] .o8-splash .b2 { fill: #7DB0FF; }
-      html[data-theme="dark"] .o8-splash .k { fill: #0A0D12; }
     </style>
-    <!-- the app's own light-or-dark setting, read before anything is drawn so the screen never flashes the wrong one -->
+    <!-- the app's own setting, read before anything is drawn so the screen never flashes the wrong look: dark unless LIGHT is picked, or AUTO and the phone is light -->
     <script>
       (function () { try {
         var t = (JSON.parse(localStorage.getItem("o8s-settings") || "{}") || {}).theme, root = document.documentElement;
-        if (t === "light" || t === "dark") root.setAttribute("data-theme", t);
-        var dark = t === "dark" || (t !== "light" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
-        document.querySelector('meta[name="theme-color"]').setAttribute("content", dark ? "#0A0D12" : "#F1F4F9");
+        root.setAttribute("data-theme", t === "light" || t === "auto" ? t : "dark");
+        var light = t === "light" || (t === "auto" && window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches);
+        document.querySelector('meta[name="theme-color"]').setAttribute("content", light ? "#F3F4F6" : "#000000");
       } catch (e) {} })();
     </script>
   </head>

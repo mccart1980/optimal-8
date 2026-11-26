@@ -26,8 +26,8 @@ const tenOld = () => prep({ program: "prep", plans: [{ from: "2026-03-02", made:
 const cyc = { booked: false, classic: false, fitness: "good", rounds: 6, mins: 3, rest: 60, weighIn: "before", emphasis: "none" };
 const prepLate = () => prep({ program: "prep", plans: [{ from: "2026-11-30", made: "2026-11-29", inputs: cyc }], season: cyc });
 
-const FAST = "SPLEEFT ON YOUR WRIST: READ THE SPEED AFTER EVERY REP. A REP 10% SLOWER THAN THE SET'S FASTEST ENDS THE SET.";
-const ARM = "SPLEEFT READS THE ARM THE WATCH IS ON: THAT SIDE FIRST, THE SPEED READ AFTER EVERY REP. A REP 10% SLOWER THAN THE SET'S FASTEST ENDS THE SET, AND THE OTHER SIDE DOES THE SAME REPS.";
+const FAST = "Spleeft on your wrist: read the speed after every rep. A rep 10% slower than the set's fastest ends the set.";
+const ARM = "Spleeft reads the arm the watch is on: that side first, the speed read after every rep. A rep 10% slower than the set's fastest ends the set, and the other side does the same reps.";
 const T20 = "Five easy minutes, then as much distance as you can in 20 minutes on your usual bike. Log the distance and the highest heart rate you saw.";
 
 async function at(y, m, d, st) {
@@ -41,7 +41,7 @@ async function at(y, m, d, st) {
 const again = () => { cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true"); };
 /* the whole day, every chapter open: the rows' names in order */
 function wholeDay() {
-  if (!screen.queryByTestId("whole-day")) fireEvent.click(screen.getByRole("button", { name: "WHOLE DAY" }));
+  if (!screen.queryByTestId("whole-day")) { const wd = screen.queryByRole("button", { name: "WHOLE DAY" }); if (wd) fireEvent.click(wd); }
   for (let k = 0; k < 8; k++) { const b = document.querySelector("[data-chapter] [aria-expanded=false]"); if (!b) break; fireEvent.click(b); }
   return [...document.querySelectorAll("[data-flow-name]")].map((e) => e.getAttribute("data-flow-name"));
 }
@@ -67,7 +67,7 @@ const clock = (name) => { const e = [...document.querySelectorAll("[data-flow-na
 const part = () => screen.getByTestId("timer-part").textContent;
 const skip = () => fireEvent.click(screen.getAllByRole("button", { name: "SKIP" }).pop());
 const bar = () => within(screen.getByRole("navigation", { name: "Tabs" }));
-const week = () => { fireEvent.click(bar().getByRole("button", { name: "MORE" })); fireEvent.click(screen.getByRole("button", { name: "PLAN" })); fireEvent.click(screen.getByRole("button", { name: "THIS WEEK" })); return document.body.textContent; };
+const week = () => { fireEvent.click(bar().getByRole("button", { name: "More" })); fireEvent.click(screen.getByRole("button", { name: "This week" })); return document.body.textContent; };
 
 beforeEach(() => { vi.useFakeTimers({ toFake: ["Date"] }); localStorage.clear(); localStorage.setItem("o8s-migrated", "true"); });
 afterEach(() => { cleanup(); vi.useRealTimers(); });
@@ -96,7 +96,7 @@ describe("the audit's changes in the camp, from Monday 23 November", () => {
     pick("One-Arm Landmine Push Press");
     expect(pres()).toEqual(["3 × 3 each side · every rep fast · Rest 2:00"]);
     expect(tid("speed-rule")).toBe(ARM);
-    expect(tid("bar-speed")).toMatch(/SET 1 · MEAN OF ITS TWO FASTEST REPS \(M\/S\)$/);
+    expect(tid("bar-speed")).toMatch(/Set 1 · mean of its two fastest reps \(m\/s\)$/);
     fireEvent.change(within(card()).getByTestId("bar-speed").querySelector("input"), { target: { value: "1.3" } });
     expect(entry(/^mCw6-sat-c_lmpush$/).bs).toBe("1.3");
     expect(lib().length).toBe(1);
@@ -111,7 +111,7 @@ describe("the audit's changes in the camp, from Monday 23 November", () => {
     await at(2027, 1, 6, ten());
     pick("Bench Throw");
     expect(tid("speed-rule")).toBe(FAST);
-    expect(tid("bar-speed")).toMatch(/SET 1 · MEAN OF ITS TWO FASTEST REPS \(M\/S\)$/);
+    expect(tid("bar-speed")).toMatch(/Set 1 · mean of its two fastest reps \(m\/s\)$/);
     again();
     await at(2026, 3, 4, tenOld());
     pick("Bench Throw");
@@ -140,7 +140,7 @@ describe("the audit's changes in the camp, from Monday 23 November", () => {
   it("the rounds' timer: the first third on the assault bike with the arms only, feet on the pegs, then the bike with arms and legs, then the slams or the bag", async () => {
     await at(2027, 2, 28, ten());
     pick("The 10 × 3 Simulation");
-    fireEvent.click(screen.getByRole("button", { name: "▶ START THE ROUNDS" }));
+    fireEvent.click(screen.getByRole("button", { name: "START THE ROUNDS" }));
     expect(part()).toBe("RD 1 · FIRST THIRD — ASSAULT BIKE, ARMS ONLY");
     expect(document.body.textContent).toContain("Feet on the pegs.");
     skip();
@@ -242,7 +242,7 @@ describe("the audit's changes in Prep, from Monday 23 November", () => {
 /* THE NOTES UNDER A WEEK — a block's note names what its weeks hold, so
    from the switch it names what they hold now. A week before reads as it did. */
 describe("the block notes follow the switch, on THIS WEEK and in the GUIDE", () => {
-  const guide = () => { fireEvent.click(bar().getByRole("button", { name: "MORE" })); fireEvent.click(screen.getByRole("button", { name: "GUIDE" })); return document.body.textContent; };
+  const guide = () => { fireEvent.click(bar().getByRole("button", { name: "More" })); fireEvent.click(screen.getByRole("button", { name: "Guide" })); return document.body.textContent; };
 
   it("the camp's peak block: speed twice a week — the stance starts on Tuesday, the flat-out running on Saturday", async () => {
     await at(2027, 2, 8, ten());
@@ -257,16 +257,16 @@ describe("the block notes follow the switch, on THIS WEEK and in the GUIDE", () 
 
   it("the camp's Tuesday in weeks 6 to 8 reads four minutes shorter: the stance starts take four where the flying sprints took eight", async () => {
     await at(2027, 2, 8, ten());
-    expect(week()).toContain("TUESDAY · Tue 9 Feb70 MIN");
+    expect(week()).toContain("TUESDAY · 9 Feb70 MIN");
     again();
     await at(2026, 4, 6, tenOld());
-    expect(week()).toContain("TUESDAY · Tue 7 Apr74 MIN");
+    expect(week()).toContain("TUESDAY · 7 Apr74 MIN");
   });
 
   it("Hell Week is gone, and the IRON tab with it, and a phone saved on Fighter opens on Prep", async () => {
     await at(2026, 12, 7, fighter());
     expect(screen.getByTestId("app-title").textContent).toMatch(/^Prep · Week /);
-    fireEvent.click(bar().getByRole("button", { name: "MORE" }));
+    fireEvent.click(bar().getByRole("button", { name: "More" }));
     expect(screen.queryByRole("button", { name: "IRON" })).toBe(null);
     expect(document.body.textContent).not.toMatch(/Hell Week/i);
   });

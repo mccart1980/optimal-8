@@ -19,8 +19,8 @@ export default defineConfig({
         scope: "/optimal-8/",
         display: "standalone",
         orientation: "portrait",
-        theme_color: "#F1F4F9",
-        background_color: "#F1F4F9",
+        theme_color: "#000000",
+        background_color: "#000000",
         lang: "en",
         icons: [
           { src: "icons/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },

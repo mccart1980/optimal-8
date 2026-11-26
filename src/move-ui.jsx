@@ -15,13 +15,13 @@ export function MoveLevels({ ids, lv, onStep }) {
   const list = (ids || []).filter((id, i, a) => LEVELS[id] && a.indexOf(id) === i);
   if (!list.length) return null;
   return (
-    <div data-testid="move-levels" style={{ marginTop: 16, border: "1px solid " + C.line, borderRadius: 8, padding: "4px 12px" }}>
-      <div style={Object.assign({}, mno, { fontSize: T3, color: C.violet, letterSpacing: 1, margin: "10px 0 2px" })}>YOUR LEVELS · UP WHEN IT'S CLEAN TWICE RUNNING</div>
+    <div data-testid="move-levels" style={{ marginTop: 16, background: C.raise, borderRadius: 14, padding: "4px 14px" }}>
+      <div style={Object.assign({}, mno, { fontSize: T3, fontWeight: 700, color: C.ash, letterSpacing: .4, margin: "10px 0 6px" })}>YOUR LEVELS · UP WHEN IT'S CLEAN TWICE RUNNING</div>
       {list.map((id) => { const L = LEVELS[id], n = levelOf(lv, id);
         return (
           <div key={id} data-level-id={id} style={{ borderTop: "1px solid " + C.line, padding: "10px 0" }}>
             <div style={Object.assign({}, bdy, { fontSize: T3, fontWeight: 700, color: C.chalk })}>{L.n}</div>
-            <div data-testid="move-level-line" style={Object.assign({}, mno, { fontSize: T3, color: C.violet, lineHeight: 1.4, marginTop: 4 })}>{"LEVEL " + n + " OF " + L.l.length + " — " + L.l[n - 1]}</div>
+            <div data-testid="move-level-line" style={Object.assign({}, mno, { fontSize: T3, color: C.ash, lineHeight: 1.4, marginTop: 4 })}>{"LEVEL " + n + " OF " + L.l.length + " — " + L.l[n - 1]}</div>
             <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
               <Btn on={() => onStep(id, -1)} c={C.ash} dis={n <= 1} s={{ flex: 1, minHeight: 52, fontSize: T3 }}>▼ DOWN</Btn>
               <Btn on={() => onStep(id, 1)} c={C.violet} dis={n >= L.l.length} s={{ flex: 1, minHeight: 52, fontSize: T3 }}>▲ UP</Btn>
@@ -40,7 +40,7 @@ export function MoveTests({ mw, get, put, gymGet, prevGet, ends, onEnd, onClose 
       {MOVE_TESTS.map((t, i) => (
         <Card key={t.id} ac={t.met(g) || E[t.id] ? C.moss : C.violet}>
           <div data-move-test={t.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10, flexWrap: "wrap" }}>
-            <span style={Object.assign({}, dsp, { fontSize: 20, fontWeight: 800, letterSpacing: 1, color: C.chalk })}>{i + 1}. {t.n}</span>
+            <span style={Object.assign({}, dsp, { fontSize: 22, fontWeight: 800, letterSpacing: .4, color: C.chalk })}>{i + 1}. {t.n}</span>
             <Chip c={t.met(g) || E[t.id] ? C.moss : C.violet}>{t.met(g) ? "MET" : E[t.id] ? "YOUR END" : "TARGET " + t.tgt.toUpperCase()}</Chip>
           </div>
           <Note c={C.chalk}>{t.how}</Note>
@@ -86,7 +86,7 @@ export function MoveTrack({ weeks, get, ends }) {
             <div style={Object.assign({}, bdy, { fontSize: T3, fontWeight: 700, color: C.chalk, lineHeight: 1.35 })}>{(i + 1) + ". " + t.n}<span style={{ fontWeight: 400, color: C.ash }}>{" · " + t.tgt}</span>{E[t.id] ? <span data-testid="track-end" style={{ color: C.moss }}>{" · YOUR END"}</span> : null}</div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "4px 16px", marginTop: 4 }}>
               {weeks.map((w) => { const g = (id) => get(w.key, id), met = t.met(g);
-                return <span key={w.key} data-track-week={w.key} style={Object.assign({}, mno, { fontSize: 16, color: met ? C.moss : C.chalk })}>{w.label.toUpperCase() + " · " + testSummary(t, g) + (met ? " ✓" : "")}</span>; })}
+                return <span key={w.key} data-track-week={w.key} style={Object.assign({}, mno, { fontSize: 18, color: met ? C.moss : C.chalk })}>{w.label.toUpperCase() + " · " + testSummary(t, g) + (met ? " ✓" : "")}</span>; })}
             </div>
           </div>))}
       </div>

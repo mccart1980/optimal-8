@@ -33,7 +33,7 @@ async function at(isoDay, st, log) {
   await waitFor(() => expect(screen.queryByText("LOADING…")).not.toBeInTheDocument());
 }
 function wholeDay() {
-  if (!screen.queryByTestId("whole-day")) fireEvent.click(screen.getByRole("button", { name: "WHOLE DAY" }));
+  if (!screen.queryByTestId("whole-day")) { const wd = screen.queryByRole("button", { name: "WHOLE DAY" }); if (wd) fireEvent.click(wd); }
   for (let k = 0; k < 8; k++) { const b = document.querySelector("[data-chapter] [aria-expanded=false]"); if (!b) break; fireEvent.click(b); }
   return [...document.querySelectorAll("[data-flow-name]")];
 }
@@ -181,10 +181,11 @@ describe("the conditioning sessions", () => {
     expect(entry(/-tue-c_eng1_erg$/).v).toEqual(["226"]);
     type("PEAK HEART RATE (BPM)", "182");
     expect(entry(/-tue-c_eng1$/)).toMatchObject({ hr: "182" });
-    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByText("PROGRESS"));
-    fireEvent.click(screen.getByRole("button", { name: "MEASURE" }));
-    expect(screen.getByText("4-minute intervals")).toBeInTheDocument();
-    expect(screen.getByText("226")).toBeInTheDocument();
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByText("Progress"));
+    fireEvent.click(screen.getByRole("button", { name: "Fitness" }));
+    const chart = screen.getByText("4-minute intervals · the session's total").closest("[data-chart-points]");
+    expect(chart.getAttribute("data-chart-points")).toBe("1");
+    expect(chart.textContent).toMatch(/226 W/);
   });
   it("week 1's 2 × 4 has the same one box", async () => {
     await at("2026-10-13", camp());
@@ -222,7 +223,7 @@ describe("the conditioning sessions", () => {
       "mPw1-wed-tbdl": { v1: "0.66", vt: 0.65, vl: "tbdl", sets: [{ ok: true, w: "125", r: "5" }, { ok: true, w: "125", r: "5" }] } });
     pick("40-SECOND REPEATS");
     type("SESSION TOTAL (m)", "2417");
-    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByText("PROGRESS"));
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByText("Progress"));
     /* the dashboard: Prep's fade, its 20-minute test (not the classic's), the burst decrement, the recovery */
     const page = () => document.body.textContent;
     expect(page()).toMatch(/Fade — round six against round one.{0,40}80 % held/);
@@ -230,13 +231,20 @@ describe("the conditioning sessions", () => {
     expect(page()).not.toMatch(/5000 m/);
     expect(page()).toMatch(/Burst decrement — first against last.{0,40}20 %/);
     expect(page()).toMatch(/Recovery heart rate — the 60-second drop.{0,40}31 bpm/);
-    fireEvent.click(screen.getByRole("button", { name: "MEASURE" }));
-    expect(screen.getByText("40-second repeats")).toBeInTheDocument();
-    expect(page()).toMatch(/40-second repeats2380w12417w2/);
-    expect(page()).toMatch(/Moderate intervals410w1/);
-    expect(page()).toMatch(/Trap Bar DeadliftAT 125 KG0\.66w1/);
-    expect(page()).toMatch(/session by session28w131w1/i);
-    fireEvent.click(screen.getByRole("button", { name: "NUMBERS" }));
+    fireEvent.click(screen.getByRole("button", { name: "Fitness" }));
+    /* each session type is its own chart: two readings draw a line, one stands as a number */
+    const chart = (t) => screen.getByText(t).closest("[data-chart-points]");
+    expect(chart("40-second repeats · the session's total").getAttribute("data-chart-points")).toBe("2");
+    expect(chart("40-second repeats · the session's total").textContent).toMatch(/2417/);
+    fireEvent.click(within(chart("40-second repeats · the session's total")).getByRole("button", { name: /Show the numbers/ }));
+    expect(within(chart("40-second repeats · the session's total")).getByTestId("chart-list").textContent).toMatch(/2417.*2380/);
+    expect(chart("Moderate intervals · the session's total").getAttribute("data-chart-points")).toBe("1");
+    expect(chart("Moderate intervals · the session's total").textContent).toMatch(/410/);
+    expect(chart("Recovery heart rate · the drop over a minute").getAttribute("data-chart-points")).toBe("2");
+    expect(chart("Recovery heart rate · the drop over a minute").textContent).toMatch(/31 bpm/);
+    /* the bar speed is with the lifts */
+    fireEvent.click(screen.getByRole("button", { name: "Lifts" }));
+    expect(page()).toMatch(/Trap Bar DeadliftAT 125 KG.{0,12}0\.66/);
     expect(page()).not.toMatch(/Fight-sim fade — scored weeks 4, 9 and 14/i);
   });
 });
@@ -245,7 +253,7 @@ describe("the bar speed", () => {
   it("PREP and the camp: hold the lockout until Spleeft beeps, above the box", async () => {
     await at("2026-01-07", prep());
     pick("Trap Bar Deadlift");
-    expect(within(card()).getByTestId("lockout-line").textContent).toBe("SPLEEFT: HOLD THE LOCKOUT UNTIL IT BEEPS, THEN THE NEXT REP. NO NEED TO RACK THE BAR BETWEEN REPS.");
+    expect(within(card()).getByTestId("lockout-line").textContent).toBe("Spleeft: hold the lockout until it beeps, then the next rep. No need to rack the bar between reps.");
     pick("Pause Squat");
     expect(within(card()).queryByTestId("bar-speed")).toBe(null);
     cleanup();

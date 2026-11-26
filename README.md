@@ -295,6 +295,68 @@ background behind it, in light and in dark. **Settings → Text size** has three
 steps that scale the whole app, and the phone's own text-size setting is read as
 well — the two multiply.
 
+## THE REBUILD — ONE DESIGN SYSTEM
+
+Brief 33 rebuilt how the app looks and moves. It changed no exercise, set, rep,
+rest, weight or note: the programme's own files (`src/spp.js`, `src/camp.js`,
+`src/prep.js`, `src/core.js`, the Move files, `exercise-library.md`, the
+programme documents) are byte for byte what they were, and nothing stored on the
+phone is renamed, moved or rewritten.
+
+**The system** is `src/ui.jsx`, and every screen draws from it.
+
+- **Colour.** Dark is the look; LIGHT and AUTO are in Settings → Look. A phone
+  that never chose opens dark; a phone that chose keeps its choice. Three
+  colours carry meaning and nothing else is coloured: the **accent** (lime in
+  dark, green in light) is go, yours and done; **amber** is rest, wait and
+  heads-up; **red** is hard work, stop and danger. The older colour names
+  (brass, moss, cobalt, violet, oxide) still exist as other names for these, so
+  the programme's files never had to change.
+- **Type.** The phone's own font, with its rounded cut for big numbers. One
+  scale: 12 · 13 · 15 · 18 · 22 · 28 · 32, and bigger only for numerals. On a
+  card the three sizes are still the name (32), the prescription and the clock
+  (22) and everything else (18).
+- **Shape and space.** Corners 10 · 14 · 20, a 4-point grid, 16 at the screen's
+  edge, every target at least 48 tall and the main ones 60 or more.
+- **Motion.** 160–240 ms, ease-out, a press scales to 97%. Reduced motion in the
+  phone's settings turns it off.
+- **Icons** are drawn in `ui.jsx`, one weight. An arrow typed into a button's
+  label (▶ ◀ ▲ ▼) is drawn as an icon, and the button is named by its words.
+
+**The screens.**
+
+- **Today is a home screen** (`src/home.jsx`): the date, the week of the
+  programme with a bar for where it sits, the seven days, today's session with
+  one button, then the day's list. Tap a day to look at it.
+- **The session screen** takes the whole phone. A set is a row, with last
+  time's numbers under it. **LOG SET** and **NEXT** sit in a bar under the
+  thumb; LOG SET logs the next set that isn't done, exactly as a tap on its row
+  does. The top-left arrow goes home, the top-right button lists the session.
+  On a gym card the sets sit above the how-to text.
+- **The rest clock** docks above that bar, in amber, when a set is logged, and
+  never covers the card. Rounds and intervals still take the whole screen
+  (`src/timers.jsx`): work in red, rest in amber.
+- **Progress** (`src/charts.jsx`, `src/progress.jsx`) draws lines: body weight
+  against the limit (76 kg when no limit is set), each lift, the sled, the
+  bursts, the nasal run, the fitness tests. A chart needs two readings; one
+  stands alone, none says what will fill it.
+- **More** is a list: This week, The season, The programmes, Guide, Settings.
+- **States.** Saved and failed are a short line at the top that goes by itself
+  (`toast`). Loading is the shape of the page. A screen that breaks says so and
+  that nothing is lost (`Guard`). An empty page says what will fill it (`Empty`).
+
+**Names that changed**, for reading the rest of this file: TRACK and PROGRESS →
+NUMBERS is **Progress → Lifts**; DASH is **Overview**; MEASURE is **Fitness**;
+REFEREE is **Weigh-in**; CALIS is **Calisthenics**; RANGE (the page) is
+**Movement**; MORE → PLAN is **More → The programmes**; THE SEASON, THIS WEEK,
+GUIDE and SETTINGS are rows on **More**; WHOLE DAY is the arrow at the top left
+of the session screen; the tabs are Today, Progress, Food, More.
+
+`scripts/restyle33.mjs` was the one-off sweep that moved the older screens'
+sizes and corners onto the scale; it was run once and deleted. `src/theme.test.js`
+holds the system to its rules, and `src/rebuild.test.jsx` holds the new screens
+and proves that stored data is untouched.
+
 ## THE LOOK AND THE SOUND
 
 **Light or dark.** The app has both. Out of the box it follows the phone: light

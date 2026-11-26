@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useRef } from "react";
-import { C, dsp, bdy, mno, Card } from "./ui.jsx";
+import { C, dsp, bdy, mno, cap, FS, Icon, Card } from "./ui.jsx";
 
 /* ================================================================
    DOCUMENT VIEW — the two source documents, rendered offline with a
@@ -19,7 +19,7 @@ function inline(text, key) {
     }
     if (text[i] === "*" && text[i + 1] !== "*") {
       const e = text.indexOf("*", i + 1);
-      if (e > 0) { push(); out.push(<em key={key + "i" + (n++)} style={{ color: C.brass, fontStyle: "italic" }}>{text.slice(i + 1, e)}</em>); i = e + 1; continue; }
+      if (e > 0) { push(); out.push(<em key={key + "i" + (n++)} style={{ color: C.chalk, fontStyle: "italic" }}>{text.slice(i + 1, e)}</em>); i = e + 1; continue; }
     }
     buf += text[i]; i++;
   }
@@ -53,9 +53,7 @@ function parse(md) {
   return blocks;
 }
 
-export function DocView({ md, accent, big }) {
-  const z = big ? 1.35 : 1;
-  const sz = (n) => Math.round(n * z * 10) / 10;
+export function DocView({ md }) {
   /* two documents joined into one share heading names, so every id is
      made unique in the order it appears */
   const blocks = useMemo(() => { const seen = {};
@@ -65,36 +63,38 @@ export function DocView({ md, accent, big }) {
   const [showToc, setShowToc] = useState(true);
   const wrap = useRef(null);
   const go = (id) => { const el = wrap.current && wrap.current.querySelector("#doc-" + id); if (el && el.scrollIntoView) el.scrollIntoView({ behavior: "smooth", block: "start" }); };
-  const ac = accent || C.brass;
   return (
     <div ref={wrap}>
-      <Card ac={ac} s={{ padding: 0 }}>
-        <button onClick={() => setShowToc(!showToc)} style={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center", background: "transparent", border: "none", padding: "13px 14px", cursor: "pointer", textAlign: "left", minHeight: 44 }}>
-          <span style={Object.assign({}, dsp, { fontSize: sz(17), fontWeight: 700, letterSpacing: 1.2, color: C.chalk })}>CONTENTS</span>
-          <span style={Object.assign({}, mno, { fontSize: 15, color: C.ash })}>{showToc ? "−" : "+"}</span>
+      <Card s={{ padding: 0 }}>
+        <button onClick={() => setShowToc(!showToc)} aria-expanded={showToc} style={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center", background: "transparent", border: "none", padding: "0 16px", cursor: "pointer", textAlign: "left", minHeight: 56 }}>
+          <span style={cap(C.ash)}>Contents</span>
+          <span aria-hidden="true" style={{ color: C.ash, display: "flex", transform: showToc ? "rotate(180deg)" : "none", transition: "transform .2s" }}><Icon n="down" size={18} w={2.2} /></span>
         </button>
-        {showToc ? <div className="rise" style={{ padding: "0 14px 12px" }}>
+        {showToc ? <div className="rise" style={{ padding: "0 16px 4px" }}>
           {toc.map((t) => (
-            <button key={t.id} onClick={() => go(t.id)} style={Object.assign({}, bdy, { display: "block", width: "100%", textAlign: "left", background: "transparent", border: "none", borderBottom: "1px solid " + C.line, color: C.chalk, fontSize: 13, padding: "10px 0", cursor: "pointer", minHeight: 44 })}>{t.s}</button>))}
+            <button key={t.id} onClick={() => go(t.id)} style={Object.assign({}, bdy, { display: "flex", alignItems: "center", gap: 10, width: "100%", textAlign: "left", background: "transparent", border: "none", borderTop: "1px solid " + C.line, color: C.chalk, fontSize: FS.meta, fontWeight: 600, lineHeight: 1.3, padding: "10px 0", cursor: "pointer", minHeight: 48 })}>
+              <span style={{ flex: 1, minWidth: 0 }}>{t.s}</span>
+              <span aria-hidden="true" style={{ color: C.ring, display: "flex", flexShrink: 0 }}><Icon n="right" size={16} w={2.2} /></span>
+            </button>))}
         </div> : null}
       </Card>
 
       <Card>
         {blocks.map((b, k) => {
           if (b.t === "h") {
-            const size = sz(b.lvl === 1 ? 26 : b.lvl === 2 ? 21 : 17);
-            return <div key={k} id={b.lvl === 2 ? "doc-" + b.id : undefined} style={Object.assign({}, dsp, { fontSize: size, fontWeight: 800, letterSpacing: 1.1, color: b.lvl <= 2 ? C.chalk : ac, marginTop: k ? (b.lvl <= 2 ? 26 : 16) : 0, marginBottom: 8, lineHeight: 1.15, scrollMarginTop: 96 })}>{inline(b.s, k)}</div>;
+            const size = b.lvl === 1 ? FS.title : b.lvl === 2 ? FS.lead : FS.body;
+            return <div key={k} role="heading" aria-level={b.lvl} id={b.lvl === 2 ? "doc-" + b.id : undefined} style={Object.assign({}, dsp, { fontSize: size, fontWeight: 800, letterSpacing: b.lvl <= 2 ? .2 : 0, color: C.chalk, marginTop: k ? (b.lvl <= 2 ? 32 : 20) : 0, marginBottom: 8, lineHeight: 1.2, scrollMarginTop: 96 })}>{inline(b.s, k)}</div>;
           }
-          if (b.t === "hr") return <div key={k} style={{ height: 1, background: C.line, margin: "18px 0" }} />;
-          if (b.t === "ul") return <ul key={k} style={{ margin: "6px 0 6px 0", paddingLeft: 18 }}>{b.items.map((it, j) => <li key={j} style={Object.assign({}, bdy, { fontSize: sz(15), color: C.chalk, lineHeight: 1.55, marginBottom: 5 })}>{inline(it, k + "-" + j)}</li>)}</ul>;
+          if (b.t === "hr") return <div key={k} style={{ height: 1, background: C.line, margin: "20px 0" }} />;
+          if (b.t === "ul") return <ul key={k} style={{ margin: "8px 0", paddingLeft: 20 }}>{b.items.map((it, j) => <li key={j} style={Object.assign({}, bdy, { fontSize: FS.body, color: C.chalk, lineHeight: 1.5, marginBottom: 6 })}>{inline(it, k + "-" + j)}</li>)}</ul>;
           if (b.t === "table") return (
-            <div key={k} style={{ overflowX: "auto", margin: "10px 0" }}>
-              <table style={Object.assign({}, bdy, { width: "100%", minWidth: Math.min(640, 110 * b.head.length), borderCollapse: "collapse", fontSize: sz(14) })}>
-                <thead><tr>{b.head.map((h, j) => <th key={j} style={Object.assign({}, mno, { textAlign: "left", color: C.ash, fontSize: sz(12), letterSpacing: 1, padding: "7px 8px 7px 0", borderBottom: "1px solid " + C.line, whiteSpace: "nowrap" })}>{h.toUpperCase()}</th>)}</tr></thead>
-                <tbody>{b.rows.map((r, ri) => <tr key={ri}>{r.map((cel, ci) => <td key={ci} style={{ color: ci === 0 ? ac : C.chalk, padding: "8px 8px 8px 0", borderBottom: "1px solid " + C.line, verticalAlign: "top", lineHeight: 1.4 }}>{inline(cel, k + "-" + ri + "-" + ci)}</td>)}</tr>)}</tbody>
+            <div key={k} className="o8-row" style={{ overflowX: "auto", margin: "12px -16px", padding: "0 16px" }}>
+              <table style={Object.assign({}, bdy, { width: "100%", minWidth: Math.min(640, 120 * b.head.length), borderCollapse: "collapse", fontSize: FS.meta })}>
+                <thead><tr>{b.head.map((h, j) => <th key={j} style={Object.assign({}, mno, { textAlign: "left", color: C.ash, fontSize: FS.micro, fontWeight: 700, letterSpacing: .6, padding: "8px 12px 8px 0", borderBottom: "1px solid " + C.line, whiteSpace: "nowrap" })}>{h.toUpperCase()}</th>)}</tr></thead>
+                <tbody>{b.rows.map((r, ri) => <tr key={ri}>{r.map((cel, ci) => <td key={ci} style={{ color: C.chalk, fontWeight: ci === 0 ? 600 : 400, padding: "10px 12px 10px 0", borderBottom: "1px solid " + C.line, verticalAlign: "top", lineHeight: 1.4 }}>{inline(cel, k + "-" + ri + "-" + ci)}</td>)}</tr>)}</tbody>
               </table>
             </div>);
-          return <div key={k} style={Object.assign({}, bdy, { fontSize: sz(15), color: C.chalk, lineHeight: 1.65, margin: "11px 0" })}>{inline(b.s, k)}</div>;
+          return <div key={k} style={Object.assign({}, bdy, { fontSize: FS.body, color: C.chalk, lineHeight: 1.55, margin: "12px 0" })}>{inline(b.s, k)}</div>;
         })}
       </Card>
     </div>);

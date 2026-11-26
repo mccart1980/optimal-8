@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { C, dsp, bdy, mno, num, fmtDate, addDays, Card, Eye, Lab, Fld, Btn, Chip, Note, Seg } from "./ui.jsx";
+import { C, dsp, bdy, mno, cap, FS, num, fmtDate, addDays, Card, Eye, Lab, Fld, Btn, Chip, Note, Seg, Icon } from "./ui.jsx";
 import { Sheet } from "./sheet.jsx";
 import { DocView } from "./mdview.jsx";
 import { rowDates } from "./builder.js";
@@ -12,13 +12,17 @@ const BLOCK_C = { ACCUMULATE: C.moss, INTENSIFY: C.oxide, CONVERT: C.brass, "TES
   FOUNDATION: C.moss, BUILD: C.oxide, "EASY + TESTS": C.cobalt, PEAK: C.brass, SHARPEN: C.violet, "FIGHT WEEK": C.oxide,
   TRANSITION: C.moss };
 
-const PROG_C = { prep: C.moss, camp: C.brass, transition: C.cobalt, pre: C.violet, spp: C.oxide };
 const PROG_N = { prep: "PREP", camp: "CAMP", transition: "TRANSITION", pre: "BEFORE THE CAMP", spp: "STRENGTH, POWER, PHYSIQUE" };
 /* Strength, Power and Physique's twelve weeks, by block */
 const SPP_BLOCK = (d) => (d <= 3 ? "SIZE" : d === 4 || d === 8 ? "LIGHTER" : d <= 7 ? "STRENGTH" : d <= 11 ? "POWER" : "TEST WEEK");
 const rowBlock = (r) => (r.program === "spp" ? SPP_BLOCK(r.doc) : r.program === "prep" ? (r.doc <= 5 ? "ACCUMULATE" : r.doc <= 10 ? "INTENSIFY" : r.doc <= 13 ? "CONVERT" : "TEST WEEK")
   : r.program === "camp" ? ({ F1: "FOUNDATION", F: "FOUNDATION", B1: "BUILD", B2: "BUILD", B3: "BUILD", E: "EASY + TESTS", P1: "PEAK", P2: "PEAK", P3: "PEAK", E1: "ENGINE", E2: "ENGINE", S: "SHARPEN", FW: "FIGHT WEEK" })[r.id]
   : r.program === "pre" ? "BEFORE WEEK 1" : r.hold ? "THE HEAD CHECK" : "TRANSITION");
+
+/* The plan's line as the season builder wrote it, with a run of Strength,
+   Power and Physique's weeks read in words: "S2 · S3 · S4" is "weeks 2 to 4". */
+export const planWords = (t) => String(t || "").replace(/\bS\d{1,2}(?: · S\d{1,2})*\b/g, (m) => { const n = m.split(" · ").map((x) => Number(x.slice(1)));
+  return n.length === 1 ? "week " + n[0] : n.every((v, i) => !i || v === n[i - 1] + 1) ? "weeks " + n[0] + " to " + n[n.length - 1] : "weeks " + n.join(", "); });
 
 export function SeasonView({ season, st, current, dayIso, openWeek }) {
   const s = st.season || {};
@@ -28,39 +32,43 @@ export function SeasonView({ season, st, current, dayIso, openWeek }) {
   let lastHead = null;
   return (
     <div>
-      <Card ac={C.brass}>
-        <Eye c={C.brass}>The season</Eye>
+      <Card>
         {s.booked && s.fight ? (
-          <div style={Object.assign({}, dsp, { fontSize: 30, fontWeight: 800, letterSpacing: 1.3, color: C.chalk, lineHeight: 1.05 })}>FIGHT · {fmtDate(s.fight).toUpperCase()}</div>
+          <div style={Object.assign({}, dsp, { fontSize: FS.title, fontWeight: 800, letterSpacing: -.4, color: C.chalk, lineHeight: 1.1 })}>FIGHT · {fmtDate(s.fight).toUpperCase()}</div>
         ) : (
-          <div style={Object.assign({}, dsp, { fontSize: 28, fontWeight: 800, letterSpacing: 1.3, color: C.chalk })}>NO FIGHT BOOKED</div>)}
-        <div style={Object.assign({}, bdy, { fontSize: 18, color: C.chalk, marginTop: 10, lineHeight: 1.5 })}>
+          <div>
+            <div style={cap(C.ash)}>NO FIGHT BOOKED</div>
+            <div data-testid="season-runs" style={Object.assign({}, dsp, { fontSize: FS.title, fontWeight: 800, letterSpacing: -.4, color: C.chalk, lineHeight: 1.1, marginTop: 6 })}>{s.spp ? "Strength, Power and Physique" : "Prep"}</div>
+          </div>)}
+        <div style={Object.assign({}, bdy, { fontSize: FS.body, color: C.ash, marginTop: 10, lineHeight: 1.5 })}>
           {s.booked ? s.rounds + " × " + s.mins + " · " + s.rest + " s rest · weigh-in " + (s.weighIn === "day" ? "on the day" : s.weighIn === "am" ? "the day before, morning" : "the day before, afternoon or evening") + (Number(s.limit) > 0 ? " · limit " + s.limit + " kg" : "") + " · " + s.fitness + " fitness · emphasis " + s.emphasis
             : s.spp ? "Strength, Power and Physique's 12-week cycle, on repeat" + (sppFrom && sppFrom > dayIso ? ", from " + fmtDate(sppFrom) + ", after the Prep you're on" : "") + ". Settings → Fight booked? builds a camp."
             : "Prep's 16-week cycle, on repeat. Settings → Fight booked? builds a camp."}
         </div>
-        {st.planNote ? <Note c={C.brass}>{st.planNote}</Note> : null}
+        {st.planNote ? <Note c={C.chalk}>{planWords(st.planNote)}</Note> : null}
       </Card>
 
       {rows.map((r) => {
         const isNow = r.mac === current.macro && r.kw === current.week;
         const head = PROG_N[r.program] + (r.program === "camp" ? " · " + fmtDate(r.camp.fight) : (r.program === "prep" || r.program === "spp") && r.cycle ? " · CYCLE " + r.cycle : "");
         const showHead = head + r.plan !== lastHead ? (lastHead = head + r.plan) : null;
-        const c = PROG_C[r.program] || C.ash;
         return (
           <div key={r.mac + r.kw}>
-            {showHead ? <div style={Object.assign({}, mno, { fontSize: 14, fontWeight: 700, letterSpacing: 2, color: c, padding: "16px 2px 8px" })}>{head}</div> : null}
-            <Card ac={isNow ? c : C.line} s={{ padding: "12px 13px", opacity: isNow ? 1 : r.sun < dayIso ? .7 : .88 }}>
-              <button onClick={() => openWeek && openWeek(r)} style={{ display: "block", width: "100%", textAlign: "left", background: "transparent", border: "none", padding: 0, cursor: "pointer" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10 }}>
-                  <span style={Object.assign({}, dsp, { fontSize: 20, fontWeight: 800, letterSpacing: 1.1, color: C.chalk })}>{r.hold ? "HOLD" : r.program === "transition" ? "T" + r.idx : r.program === "spp" ? "WEEK " + r.doc : r.id} · {rowBlock(r)}</span>
-                  <span style={Object.assign({}, mno, { fontSize: 14, color: c, whiteSpace: "nowrap" })}>{isNow ? "THIS WEEK" : ""}</span>
-                </div>
-                <div style={Object.assign({}, mno, { fontSize: 15, color: C.ash, marginTop: 4 })}>{rowDates(r)}</div>
-                {r.preCamp ? <div style={Object.assign({}, bdy, { fontSize: 16, color: C.violet, marginTop: 6 })}>The pre-camp check — bloods and blood pressure</div> : null}
-                {r.program === "prep" && r.doc === 14 ? <div style={Object.assign({}, bdy, { fontSize: 16, color: C.cobalt, marginTop: 6 })}>Test day {fmtDate(addDays(r.mon, 5))}</div> : null}
-                {r.program === "spp" && r.doc === 12 ? <div style={Object.assign({}, bdy, { fontSize: 16, color: C.cobalt, marginTop: 6 })}>Top triples Monday, Tuesday, Thursday and Saturday; tape and photos Sunday</div> : null}
-                {r.program === "camp" && r.id === "FW" ? <div style={Object.assign({}, bdy, { fontSize: 16, color: C.oxide, marginTop: 6 })}>FIGHT {fmtDate(r.camp.fight)}</div> : null}
+            {showHead ? <div style={Object.assign({}, mno, { fontSize: 13, fontWeight: 700, letterSpacing: 1, color: C.ash, padding: "18px 4px 8px" })}>{head}</div> : null}
+            <Card s={{ padding: 0, marginBottom: 8, opacity: isNow ? 1 : r.sun < dayIso ? .6 : 1, border: "1.5px solid " + (isNow ? C.accent : "transparent") }}>
+              <button onClick={() => openWeek && openWeek(r)} data-season-row={r.mac + r.kw} style={{ display: "flex", width: "100%", alignItems: "center", gap: 10, textAlign: "left", background: "transparent", border: "none", padding: "12px 12px 12px 16px", minHeight: 60, cursor: "pointer" }}>
+                <span style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10 }}>
+                    <span data-season-title="1" style={Object.assign({}, dsp, { fontSize: 18, fontWeight: 800, letterSpacing: .4, color: C.chalk })}>{r.hold ? "HOLD" : r.program === "transition" ? "T" + r.idx : r.program === "spp" ? "WEEK " + r.doc : r.id} · {rowBlock(r)}</span>
+                    {isNow ? <span style={Object.assign({}, mno, { fontSize: 12, fontWeight: 700, letterSpacing: .6, color: C.on, background: C.accent, borderRadius: 999, padding: "3px 10px", whiteSpace: "nowrap" })}>THIS WEEK</span> : null}
+                  </div>
+                  <div style={Object.assign({}, mno, { fontSize: 15, color: C.ash, marginTop: 2 })}>{rowDates(r)}</div>
+                  {r.preCamp ? <div style={Object.assign({}, bdy, { fontSize: 15, color: C.chalk, marginTop: 6 })}>The pre-camp check — bloods and blood pressure</div> : null}
+                  {r.program === "prep" && r.doc === 14 ? <div style={Object.assign({}, bdy, { fontSize: 15, color: C.chalk, marginTop: 6 })}>Test day {fmtDate(addDays(r.mon, 5))}</div> : null}
+                  {r.program === "spp" && r.doc === 12 ? <div style={Object.assign({}, bdy, { fontSize: 15, color: C.chalk, marginTop: 6 })}>Top triples Monday, Tuesday, Thursday and Saturday; tape and photos Sunday</div> : null}
+                  {r.program === "camp" && r.id === "FW" ? <div style={Object.assign({}, bdy, { fontSize: 15, fontWeight: 700, color: C.bad, marginTop: 6 })}>FIGHT {fmtDate(r.camp.fight)}</div> : null}
+                </span>
+                <span aria-hidden="true" style={{ color: C.ring, flexShrink: 0 }}><Icon n="right" size={18} w={2.2} /></span>
               </button>
             </Card>
           </div>); })}
@@ -71,30 +79,30 @@ export function SeasonView({ season, st, current, dayIso, openWeek }) {
    THE GUIDE — the plain-English page, and what this week is
    ================================================================ */
 export function GuideView({ md, md2, blockName, emphasis, tests, after, phase, next }) {
-  const line = { fontSize: 19, color: C.chalk, marginTop: 12, paddingTop: 12, borderTop: "1px solid " + C.line, lineHeight: 1.5 };
+  const line = { fontSize: 18, color: C.chalk, marginTop: 12, paddingTop: 12, borderTop: "1px solid " + C.line, lineHeight: 1.5 };
   return (
     <div>
-      <Card ac={C.brass}>
-        <div data-testid="guide-live" style={Object.assign({}, dsp, { fontSize: 24, fontWeight: 800, letterSpacing: 1.2, color: C.chalk, lineHeight: 1.15 })}>
+      <Card>
+        <div data-testid="guide-live" style={Object.assign({}, dsp, { fontSize: 22, fontWeight: 800, letterSpacing: .4, color: C.chalk, lineHeight: 1.15 })}>
           This week is {blockName}
         </div>
-        {emphasis ? <div style={Object.assign({}, bdy, { fontSize: 19, color: C.chalk, marginTop: 10, lineHeight: 1.5 })}>{emphasis}</div> : null}
-        <div style={Object.assign({}, bdy, { fontSize: 19, color: tests && tests.length ? C.brass : C.ash, marginTop: 12, lineHeight: 1.5 })}>
+        {emphasis ? <div style={Object.assign({}, bdy, { fontSize: 18, color: C.chalk, marginTop: 10, lineHeight: 1.5 })}>{emphasis}</div> : null}
+        <div style={Object.assign({}, bdy, { fontSize: 18, color: tests && tests.length ? C.chalk : C.ash, marginTop: 12, lineHeight: 1.5 })}>
           Tests this week: {tests && tests.length ? tests.join(", ") : "none"}
         </div>
         <div style={Object.assign({}, bdy, line)}>
           <span style={{ color: C.ash }}>The food this week: </span>
-          <span style={{ fontWeight: 600, color: phase ? phase.c : C.chalk }}>{phase ? phase.n : "the day as printed"}</span>
+          <span style={{ fontWeight: 600, color: C.chalk }}>{phase ? phase.n : "the day as printed"}</span>
           {phase ? <span style={{ color: C.ash }}> — {phase.chg || "the day as printed"}</span> : null}
         </div>
         <div style={Object.assign({}, bdy, line)}>
           <span style={{ color: C.ash }}>Next feed: </span>
-          {next ? <span><span style={{ fontWeight: 600 }}>{next.n}</span><span style={{ color: C.ash }}> at </span><span style={Object.assign({}, mno, { fontWeight: 700, color: C.brass })}>{next.t}</span></span>
+          {next ? <span><span style={{ fontWeight: 600 }}>{next.n}</span><span style={{ color: C.ash }}> at </span><span style={Object.assign({}, mno, { fontWeight: 700, color: C.chalk })}>{next.t}</span></span>
             : <span style={{ color: C.ash }}>nothing left today</span>}
         </div>
       </Card>
       {after || null}
-      <DocView md={md2 ? md + "\n\n" + md2 : md} accent={C.brass} big />
+      <DocView md={md2 ? md + "\n\n" + md2 : md} />
     </div>);
 }
 
@@ -150,7 +158,7 @@ export function ProfileTool({ profiles, setProfiles, maxes, dayIso, onClose }) {
       {bal ? (
         <Card ac={peak ? C.moss : C.line}>
           <Eye c={peak ? C.moss : C.ash}>The peak-power load</Eye>
-          <div data-testid="peak-power" style={Object.assign({}, mno, { fontSize: 26, fontWeight: 700, color: peak ? C.moss : C.ash })}>
+          <div data-testid="peak-power" style={Object.assign({}, mno, { fontSize: 28, fontWeight: 700, color: peak ? C.moss : C.ash })}>
             {peak ? peak.pct + "%" + (peak.kg != null ? " · " + peak.kg + " kg" : "") : BALLISTIC_DEFAULT[lift] + "% until a speed is entered"}
           </div>
           <Note>{bal.n} rows load from this until the next profile.</Note>
@@ -165,9 +173,9 @@ export function ProfileTool({ profiles, setProfiles, maxes, dayIso, onClose }) {
             <div key={ph.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "9px 0", borderBottom: "1px solid " + C.line }}>
               <span style={{ flex: 1, minWidth: 0 }}>
                 <div style={Object.assign({}, bdy, { fontSize: 18, fontWeight: 600, color: C.chalk })}>{ph.n}</div>
-                <div style={Object.assign({}, mno, { fontSize: 14, color: C.ash, marginTop: 2 })}>{ph.line}</div>
+                <div style={Object.assign({}, mno, { fontSize: 15, color: C.ash, marginTop: 2 })}>{ph.line}</div>
               </span>
-              <span style={Object.assign({}, mno, { fontSize: 24, fontWeight: 700, color: t.own ? C.moss : C.ash })}>{t.v} <span style={{ fontSize: 13 }}>m/s</span></span>
+              <span style={Object.assign({}, mno, { fontSize: 22, fontWeight: 700, color: t.own ? C.moss : C.ash })}>{t.v} <span style={{ fontSize: 13 }}>m/s</span></span>
             </div>); })}
         <Note c={line ? C.chalk : C.ash}>{line ? "Drawn from your own five points" + (line.r2 != null ? " · fit " + Math.round(line.r2 * 100) + "%" : "") + "." : "Typical numbers, until two or more speeds are entered."}</Note>
         {cur.drawn ? <Note>Last drawn {fmtDate(cur.drawn)}.</Note> : null}

@@ -27,7 +27,7 @@ async function at(y, m, d, st) {
 /* the evening's rows, in order, feeds aside */
 const FEED = /kcal/;
 function evening() {
-  fireEvent.click(screen.getByRole("button", { name: "WHOLE DAY" }));
+  { const wd = screen.queryByRole("button", { name: "WHOLE DAY" }); if (wd) fireEvent.click(wd); }
   const ch = screen.getByText("EVENING").closest("[data-chapter]");
   const closed = ch.querySelector("[aria-expanded=false]");
   if (closed) fireEvent.click(closed);
@@ -37,7 +37,7 @@ const EASY = /^The (easy thirty|Thursday easy session)$/;
 const BEFORE = "500 ml before the sauna", AFTER = "500 ml after the sauna, with a second sachet";
 const easyOf = (rows) => rows.filter((n) => EASY.test(n));
 function water() {
-  fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByText("FOOD"));
+  fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByText("Food"));
   fireEvent.click(screen.getByRole("button", { name: "WATER" }));
   return Number(screen.getByTestId("water-total").textContent.match(/\/ ([\d.]+) L/)[1]);
 }

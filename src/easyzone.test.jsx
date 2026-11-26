@@ -29,7 +29,7 @@ async function at(isoDay, st) {
 }
 /* the whole day, every chapter open */
 function wholeDay() {
-  if (!screen.queryByTestId("whole-day")) fireEvent.click(screen.getByRole("button", { name: "WHOLE DAY" }));
+  if (!screen.queryByTestId("whole-day")) { const wd = screen.queryByRole("button", { name: "WHOLE DAY" }); if (wd) fireEvent.click(wd); }
   for (let k = 0; k < 8; k++) { const b = document.querySelector("[data-chapter] [aria-expanded=false]"); if (!b) break; fireEvent.click(b); }
   return [...document.querySelectorAll("[data-flow-name]")];
 }
@@ -117,20 +117,20 @@ describe("a 20-minute test on file", () => {
 describe("the timer", () => {
   it("an easy timer's label carries the range", async () => {
     await at("2026-10-12", camp({ easyPeak: "175" }));
-    fireEvent.click(within(pick("Easy, nose only")).getByRole("button", { name: "▶ START" }));
+    fireEvent.click(within(pick("Easy, nose only")).getByRole("button", { name: "START" }));
     expect(screen.getByTestId("timer-part").textContent).toBe("EASY — NOSE ONLY · 114–131 BPM");
     cleanup();
     await at("2026-10-15", camp({ easyPeak: "175" }));
-    fireEvent.click(within(pick("The Thursday easy session")).getByRole("button", { name: /▶ START/ }));
+    fireEvent.click(within(pick("The Thursday easy session")).getByRole("button", { name: /START/ }));
     expect(screen.getByTestId("timer-part").textContent).toBe("EASY — NOSE ONLY · 114–131 BPM");
     cleanup();
     await at("2026-01-12", prep({ easyPeak: "175" }));
-    fireEvent.click(within(pick("Base — easy, nose only")).getByRole("button", { name: "▶ START" }));
+    fireEvent.click(within(pick("Base — easy, nose only")).getByRole("button", { name: "START" }));
     expect(screen.getByTestId("timer-part").textContent).toBe("EASY — NOSE ONLY · 114–131 BPM");
   });
   it("the 20-minute test's doesn't", async () => {
     await at("2026-10-11", camp({ easyPeak: "175" }));
-    fireEvent.click(within(pick("The 20-Minute Test")).getByRole("button", { name: "▶ START" }));
+    fireEvent.click(within(pick("The 20-Minute Test")).getByRole("button", { name: "START" }));
     expect(screen.getByTestId("timer-part").textContent).toBe("20-MIN TEST — MAXIMUM DISTANCE");
   });
 });

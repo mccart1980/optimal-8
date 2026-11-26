@@ -31,7 +31,7 @@ async function at(y, m, d, st, store) {
 const title = () => screen.getByTestId("app-title").textContent;
 /* the whole day, every chapter open: the rows' names in order */
 function wholeDay() {
-  if (!screen.queryByTestId("whole-day")) fireEvent.click(screen.getByRole("button", { name: "WHOLE DAY" }));
+  if (!screen.queryByTestId("whole-day")) { const wd = screen.queryByRole("button", { name: "WHOLE DAY" }); if (wd) fireEvent.click(wd); }
   for (let k = 0; k < 8; k++) { const b = document.querySelector("[data-chapter] [aria-expanded=false]"); if (!b) break; fireEvent.click(b); }
   return [...document.querySelectorAll("[data-flow-name]")].map((e) => e.getAttribute("data-flow-name"));
 }
@@ -62,10 +62,10 @@ describe("the week and its main lifts", () => {
     // the easy hour is Saturday's, not Monday's
     expect(rows).not.toContain("The easy hour");
     const card = pick("Back Squat");
-    expect(within(card).getByTestId("lift-ramp").textContent).toBe("RAMP · BAR × 8 · 55 KG × 5 · 77.5 KG × 3 · 90 KG × 2 · A MINUTE BETWEEN");
+    expect(within(card).getByTestId("lift-ramp").textContent).toBe("Ramp · bar × 8 · 55 kg × 5 · 77.5 kg × 3 · 90 kg × 2 · a minute between");
     expect(within(card).getByTestId("card-pres").textContent).toBe("4 × 6 · 105 kg · Rest 3:00");
     // read off the profile at the set's own 75%
-    expect(within(card).getByTestId("bar-speed").textContent).toMatch(/TARGET 0\.75/);
+    expect(within(card).getByTestId("bar-speed").textContent).toMatch(/target 0\.75/);
   });
 
   it("the power block: 4 × 2, the box jumps in the rest, the rest timer runs them", async () => {
@@ -73,7 +73,7 @@ describe("the week and its main lifts", () => {
     expect(title()).toBe("Strength & Power · Week 9 · Power");
     const card = pick("Back Squat");
     expect(within(card).getByTestId("card-pres").textContent).toBe("4 × 2 · 125 kg · Rest 90 s · 3 box jumps · rest 2:00");
-    expect(within(card).getByTestId("lift-ramp").textContent).toMatch(/· 105 KG × 1 · 120 KG × 1 · A MINUTE BETWEEN$/);
+    expect(within(card).getByTestId("lift-ramp").textContent).toMatch(/· 105 kg × 1 · 120 kg × 1 · a minute between$/);
     fireEvent.click(within(card).getByRole("button", { name: "Set 1" }));
     expect(screen.getByTestId("timer-part").textContent).toBe("REST — THEN 3 BOX JUMPS");
   });
@@ -178,16 +178,16 @@ describe("the weight box", () => {
   it("week 2: last time's sets, the box starts at them, the nudge when every set hit the top of the range, and NUMBERS", async () => {
     await at(2026, 11, 9, live(), { "o8s-log": seed });
     let card = pick("Romanian Deadlift");
-    expect(within(card).getByTestId("last-time").textContent).toMatch(/^LAST TIME · MON,? 2 NOV · 60 KG × 8 · 8 · 8$/);
+    expect(within(card).getByTestId("last-time").textContent).toMatch(/^Last time · Mon,? 2 Nov · 60 kg × 8 · 8 · 8$/);
     expect(within(card).getByTestId("weight-box").querySelector("input").value).toBe("60");
     expect(within(card).queryByTestId("step-up")).toBe(null);
     card = pick("Seated Leg Curl");
-    expect(within(card).getByTestId("step-up").textContent).toBe("TOP OF THE RANGE ON EVERY SET LAST TIME — ADD THE SMALLEST STEP TODAY");
-    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "PROGRESS" }));
-    fireEvent.click(screen.getByRole("button", { name: "NUMBERS" }));
+    expect(within(card).getByTestId("step-up").textContent).toBe("Top of the range on every set last time — add the smallest step today");
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "Progress" }));
+    fireEvent.click(screen.getByRole("button", { name: "Lifts" }));
     const rows = [...document.querySelectorAll("[data-lift-history]")].map((e) => e.textContent);
-    expect(rows.some((t) => /^Romanian Deadlift60 kg/.test(t))).toBe(true);
-    expect(rows.some((t) => /^Seated Leg Curl40 kg/.test(t))).toBe(true);
+    expect(rows.some((t) => /^Romanian Deadlift.*60 kg/.test(t))).toBe(true);
+    expect(rows.some((t) => /^Seated Leg Curl.*40 kg/.test(t))).toBe(true);
   });
 });
 
@@ -220,7 +220,7 @@ describe("the sprints' buttons", () => {
   });
   it("a Monday finished before the box jumps had their own card still reads as finished, here and after a backup is loaded", async () => {
     const eight = ["A", "C", "D", "E", "F", "G", "N", "Q"];
-    const week = () => { fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "MORE" })); fireEvent.click(screen.getByRole("button", { name: "PLAN" })); fireEvent.click(screen.getByRole("button", { name: "THIS WEEK" })); return document.body.textContent; };
+    const week = () => { fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "More" })); fireEvent.click(screen.getByRole("button", { name: "This week" })); return document.body.textContent; };
     await at(2026, 11, 12, live(), { "o8s-done": { "mSw2-mon": eight } });
     expect(JSON.parse(localStorage.getItem("o8s-done"))["mSw2-mon"]).toEqual(eight.concat(["K"]));
     expect(JSON.parse(localStorage.getItem("o8s-settings")).v16).toBe(true);
@@ -429,7 +429,7 @@ describe("the pressure rounds and the ab finishes", () => {
     expect(card.querySelectorAll("[data-set-btn]")).toHaveLength(2);
     fireEvent.click(within(card).getByRole("button", { name: "Set 1" }));
     expect(screen.getByTestId("timer-count").textContent).toBe("0:30");
-    fireEvent.click(screen.getByRole("button", { name: "CLOSE TIMER" }));
+    fireEvent.click(screen.getByRole("button", { name: "Close timer" }));
     card = pick("Landmine Rotation");
     expect(modes(card)).toEqual(["add:s_landrot:reps"]);
     expect(within(card).getByTestId("weight-box").textContent).toMatch(/ADDED WEIGHT \(KG\)/);
@@ -570,9 +570,8 @@ describe("the landmine presses, the side neck raise and the medicine-ball drops"
   it("the week's card: Saturday's landmine push press by sets and reps, in the lighter week and test week too; week 2 reads last week's added weight, and NUMBERS keeps the old presses", async () => {
     const week = async (y, m, d) => {
       await at(y, m, d, live());
-      fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "MORE" }));
-      fireEvent.click(screen.getByRole("button", { name: "PLAN" }));
-      fireEvent.click(screen.getByRole("button", { name: "THIS WEEK" }));
+      fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "More" }));
+      fireEvent.click(screen.getByRole("button", { name: "This week" }));
       return document.body.textContent;
     };
     expect(await week(2026, 11, 3)).toMatch(/Landmine push press \(Sat\)4 × 5 each side, every rep fast/);
@@ -586,15 +585,16 @@ describe("the landmine presses, the side neck raise and the medicine-ball drops"
       "mSw1-tue-s_ohp": { sets: [{ ok: true, w: "40", r: "6" }], n: "Standing Overhead Press", d: "2026-11-03" } };
     await at(2026, 11, 10, live(), { "o8s-log": seed });
     const card = pick("One-Arm Landmine Press");
-    expect(within(card).getByTestId("last-time").textContent).toMatch(/^LAST TIME · TUE,? 3 NOV · \+20 KG × 8 · 8 · 8$/);
+    expect(within(card).getByTestId("last-time").textContent).toMatch(/^Last time · Tue,? 3 Nov · \+20 kg × 8 · 8 · 8$/);
     expect(within(card).getByTestId("weight-box").querySelector("input").value).toBe("20");
     expect(within(card).queryByTestId("step-up")).toBe(null);
-    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "PROGRESS" }));
-    fireEvent.click(screen.getByRole("button", { name: "NUMBERS" }));
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "Progress" }));
+    fireEvent.click(screen.getByRole("button", { name: "Lifts" }));
     const hist = [...document.querySelectorAll("[data-lift-history]")].map((e) => e.textContent);
-    expect(hist.some((t) => /^One-Arm Landmine Press\+20 kg/.test(t))).toBe(true);
-    expect(hist.some((t) => /^Push Press50 kg/.test(t))).toBe(true);
-    expect(hist.some((t) => /^Standing Overhead Press40 kg/.test(t))).toBe(true);
+    /* each lift is a row: its name, the day of its last session, and the heaviest set of it */
+    expect(hist.some((t) => /^One-Arm Landmine Press.*\+20 kg/.test(t))).toBe(true);
+    expect(hist.some((t) => /^Push Press.*50 kg/.test(t))).toBe(true);
+    expect(hist.some((t) => /^Standing Overhead Press.*40 kg/.test(t))).toBe(true);
   });
 });
 
@@ -608,7 +608,7 @@ describe("a card added later doesn't count against days trained before it", () =
     "mSw2-mon": ["A", "C", "D", "E", "F", "G", "N", "Q"], "mSw2-tue": ["A", "K", "C", "D", "E", "F", "G", "H", "I"], "mSw2-wed": ["A", "B", "C", "D", "E", "R"],
     "mSw2-thu": ["A", "B", "C", "D", "F", "G", "J", "H", "I", "K"],
   };
-  const week = () => { fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "MORE" })); fireEvent.click(screen.getByRole("button", { name: "PLAN" })); fireEvent.click(screen.getByRole("button", { name: "THIS WEEK" })); };
+  const week = () => { fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "More" })); fireEvent.click(screen.getByRole("button", { name: "This week" })); };
   const counts = () => { const o = {}; document.querySelectorAll("[data-day-count]").forEach((e) => { o[e.getAttribute("data-day-count")] = e.textContent; }); return o; };
   it("week 1, seen on Sunday 8 November: every finished day reads finished, against the cards it had", async () => {
     await at(2026, 11, 8, live(), { "o8s-done": DONE });
@@ -637,7 +637,7 @@ describe("Tuesday's landmine rotation", () => {
   /* the plan in use: Prep from 26 October, Strength, Power and Physique started on Monday 2 November */
   const live = () => base({ plans: [{ from: "2026-10-26", made: "2026-10-25", inputs: PREP }, { from: "2026-11-02", made: "2026-11-01", inputs: Object.assign({}, SPP, { restart: true }) }], season: SPP });
   const modes = (card) => [...card.querySelectorAll("[data-set-mode]")].map((e) => e.getAttribute("data-set-mode") + ":" + e.getAttribute("data-set-id") + ":" + e.getAttribute("data-set-unit"));
-  const week = () => { fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "MORE" })); fireEvent.click(screen.getByRole("button", { name: "PLAN" })); fireEvent.click(screen.getByRole("button", { name: "THIS WEEK" })); };
+  const week = () => { fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "More" })); fireEvent.click(screen.getByRole("button", { name: "This week" })); };
   const counts = () => { const o = {}; document.querySelectorAll("[data-day-count]").forEach((e) => { o[e.getAttribute("data-day-count")] = e.textContent; }); return o; };
   const TUE = ["A", "K", "C", "D", "E", "F", "G", "H", "I"];
   it("Tuesday 17 November: straight after the landmine press, before the rows and dips; 3 sets in added kilos, a set starts 1:00", async () => {
@@ -657,12 +657,12 @@ describe("Tuesday's landmine rotation", () => {
     const set = (w, r) => ({ ok: true, w, r });
     await at(2026, 11, 17, live(), { "o8s-log": { "mSw2-sat-s_landrot": { sets: [set("10", "8"), set("10", "8"), set("10", "7")], n: "Landmine rotation", d: "2026-11-14" } } });
     let card = pick("Landmine Rotation");
-    expect(within(card).getByTestId("last-time").textContent).toMatch(/^LAST TIME · SAT,? 14 NOV · \+10 KG × 8 · 8 · 7$/);
+    expect(within(card).getByTestId("last-time").textContent).toMatch(/^Last time · Sat,? 14 Nov · \+10 kg × 8 · 8 · 7$/);
     expect(within(card).getByTestId("weight-box").querySelector("input").value).toBe("10");
     cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true");
     await at(2026, 11, 21, live(), { "o8s-log": { "mSw3-tue-s_landrot": { sets: [set("12.5", "7"), set("12.5", "7"), set("12.5", "6")], n: "Landmine rotation", d: "2026-11-17" } } });
     card = pick("Landmine Rotation");
-    expect(within(card).getByTestId("last-time").textContent).toMatch(/^LAST TIME · TUE,? 17 NOV · \+12\.5 KG × 7 · 7 · 6$/);
+    expect(within(card).getByTestId("last-time").textContent).toMatch(/^Last time · Tue,? 17 Nov · \+12\.5 kg × 7 · 7 · 6$/);
     expect(within(card).getByTestId("weight-box").querySelector("input").value).toBe("12.5");
   });
   it("a red morning: the landmine press comes off, the rotation stays; two sets in weeks 4, 8 and test week", async () => {
@@ -706,7 +706,7 @@ describe("the tape, the photos and PROGRESS", () => {
 
   it("PROGRESS shows its own dashboard", async () => {
     await at(2027, 2, 17, spp());
-    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "PROGRESS" }));
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "Progress" }));
     const text = document.body.textContent;
     expect(text).toMatch(/the dashboard — the numbers this cycle moves/i);
     expect(text).toMatch(/The 4 × 4 — the total at the end/);
@@ -717,8 +717,8 @@ describe("the tape, the photos and PROGRESS", () => {
 describe("picking it in Settings", () => {
   it("on Thursday 29 October, with Prep running: no fitness question; the Prep carries on to its test day, then the twelve weeks from Monday 15 February", async () => {
     await at(2026, 10, 29, base({ plans: [{ from: "2026-10-26", made: "2026-10-25", inputs: PREP }], season: PREP }));
-    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "MORE" }));
-    fireEvent.click(screen.getByRole("button", { name: "SETTINGS" }));
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "More" }));
+    fireEvent.click(screen.getByRole("button", { name: "Settings" }));
     await screen.findByText("Fight booked?");
     ["PREP · 16-WEEK CYCLE", "STRENGTH, POWER, PHYSIQUE · 12 WEEKS"].forEach((n) => expect(screen.getByRole("button", { name: n })).toBeInTheDocument());
     /* Optimal 8 Fighter was retired on 23 November 2026 */
@@ -749,8 +749,8 @@ describe("repeat the week", () => {
   const PLANS = [{ from: "2026-10-26", made: "2026-10-25", inputs: PREP }, { from: "2026-11-02", made: "2026-11-01", inputs: Object.assign({}, SPP, { restart: true }) }];
   it("on Friday 13 November, in week 2: REPEAT WEEK 2 sits between CARRY ON and START AGAIN; re-planned, week 2 runs again from Monday 16 November and week 3 is on 23 November; the repeat isn't kept as an answer", async () => {
     await at(2026, 11, 13, base({ plans: PLANS, season: SPP }));
-    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "MORE" }));
-    fireEvent.click(screen.getByRole("button", { name: "SETTINGS" }));
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "More" }));
+    fireEvent.click(screen.getByRole("button", { name: "Settings" }));
     await screen.findByText("Fight booked?");
     const run = screen.getByTestId("spp-running");
     ["CARRY ON", "REPEAT WEEK 2", "START AGAIN"].forEach((n) => expect(within(run).getByRole("button", { name: n })).toBeInTheDocument());
@@ -792,7 +792,7 @@ describe("Optimal 8 · Move", () => {
     expect(card.textContent).toMatch(/Pedal easy for two minutes, easy enough to talk\./);
     expect(levelIds(card)).toEqual(["mv_9090", "mv_cossack", "mv_birddog", "mv_spanish"]);
     const cos = card.querySelector("[data-level-id='mv_cossack']");
-    fireEvent.click(within(cos).getByRole("button", { name: "▲ UP" }));
+    fireEvent.click(within(cos).getByRole("button", { name: "UP" }));
     expect(screen.getByTestId("now-card").querySelector("[data-level-id='mv_cossack'] [data-testid='move-level-line']").textContent).toBe("LEVEL 2 OF 5 — No support");
     expect(JSON.parse(localStorage.getItem("o8s-log"))["move-lv"]).toEqual({ lv: { mv_cossack: 2 } });
     expect(within(screen.getByTestId("now-card")).getAllByTestId("row-level")[1].textContent).toBe("LEVEL 2 OF 5 — No support");
@@ -841,7 +841,7 @@ describe("Optimal 8 · Move", () => {
     expect(labels.indexOf("LOWER BACK (0–10)")).toBe(labels.indexOf("HIPS (0–10)") + 1);
     expect(labels).toContain("EVENINGS YOU DID RANGE OR A MOVEMENT SESSION (0–7)");
     const st = pick("The fifteen standards");
-    fireEvent.click(within(st).getByRole("button", { name: "▶ THE STANDARDS" }));
+    fireEvent.click(within(st).getByRole("button", { name: "THE STANDARDS" }));
     expect(screen.getAllByText("THE FIFTEEN STANDARDS").length).toBeGreaterThan(0);
     expect(screen.getByTestId("move-gym-field").textContent).toBe("95 S · FROM SUNDAY'S SESSION");
   });
@@ -860,8 +860,8 @@ describe("Optimal 8 · Move", () => {
   });
   it("PROGRESS: the standards, test week by test week; Settings moves week 1, and the weeks before it keep the warm-up", async () => {
     await at(2026, 12, 15, live(), { "o8s-log": { "mSw3-range-mv1": { w: "8" }, "mSw3-range-mv3": { w: "45" }, "mSw3-sun-mv11": { w: "95" }, "mSw7-range-mv1": { w: "10" }, "mSw7-range-mv3": { w: "80" } } });
-    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "PROGRESS" }));
-    fireEvent.click(screen.getAllByRole("button", { name: "RANGE" })[0]);
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "Progress" }));
+    fireEvent.click(screen.getByRole("button", { name: "Movement" }));
     const t = screen.getByTestId("move-track");
     expect(t.querySelector("[data-track-standard='s1']").textContent).toBe("1. Floor to standing · 10 out of 10WEEK 1 · 8WEEK 5 · 10 ✓");
     expect(t.querySelector("[data-track-standard='s3']").textContent).toBe("3. Deep squat · 2 minWEEK 1 · 45WEEK 5 · 80");
@@ -886,12 +886,13 @@ describe("the engine base", () => {
     expect(within(card).getByTestId("card-pres").textContent).toBe("45 min on the bike · nose only · + 500 ml water");
     expect(card.textContent).toMatch(/Strength, Power and Physique's: 45 minutes on a bike, easy enough to talk in full sentences/);
     expect(screen.getByTestId("easy-zone-range").textContent).toMatch(/^117–135/);
-    fireEvent.click(within(card).getByRole("button", { name: "▶ START · 45 MIN" }));
+    fireEvent.click(within(card).getByRole("button", { name: "START · 45 MIN" }));
     expect(screen.getByTestId("timer-title").textContent).toBe("THE EASY HOUR");
     expect(screen.getByTestId("timer-part").textContent).toMatch(/^EASY — NOSE ONLY/);
     again();
     await at(2026, 11, 21, live());
-    fireEvent.click(within(pick("The easy hour")).getByRole("button", { name: "DONE" }));
+    pick("The easy hour");
+    fireEvent.click(within(screen.getByTestId("action-bar")).getByRole("button", { name: "DONE" }));
     expect(JSON.parse(localStorage.getItem("o8s-log"))["mSw3-easyhour"]).toMatchObject({ ok: true, d: "sat" });
     again();
     await at(2026, 11, 14, live());
@@ -933,13 +934,13 @@ describe("Optimal 8 · Move, put right", () => {
   });
   it("the standards: the neck turn in degrees; no end to mark at the first test; at the second, the toe touch short both times can be marked YOUR END, and it counts for THE KEEP and shows in PROGRESS", async () => {
     await at(2026, 11, 22, live(), { "o8s-log": LOG });
-    fireEvent.click(within(pick("The fifteen standards")).getByRole("button", { name: "▶ THE STANDARDS" }));
+    fireEvent.click(within(pick("The fifteen standards")).getByRole("button", { name: "THE STANDARDS" }));
     expect(screen.queryAllByRole("button", { name: "THIS IS MY END" })).toHaveLength(0);
     expect(sheetCard("s14").querySelectorAll("input")).toHaveLength(2);
     expect(within(sheetCard("s14")).queryAllByRole("button", { name: "YES" })).toHaveLength(0);
     again();
     await at(2026, 12, 20, live(), { "o8s-log": LOG });
-    fireEvent.click(within(pick("The fifteen standards")).getByRole("button", { name: "▶ THE STANDARDS" }));
+    fireEvent.click(within(pick("The fifteen standards")).getByRole("button", { name: "THE STANDARDS" }));
     expect(screen.getAllByRole("button", { name: "THIS IS MY END" })).toHaveLength(1);
     expect(within(sheetCard("s5")).getByTestId("move-end").textContent).toMatch(/^Only if all three are true: this test and the last both fell short with no gain/);
     fireEvent.click(within(sheetCard("s5")).getByRole("button", { name: "THIS IS MY END" }));
@@ -953,8 +954,8 @@ describe("Optimal 8 · Move, put right", () => {
     let rows = wholeDay();
     expect(rows).toContain("THE KEEP");
     expect(rows).not.toContain("RANGE");
-    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "PROGRESS" }));
-    fireEvent.click(screen.getAllByRole("button", { name: "RANGE" })[0]);
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "Progress" }));
+    fireEvent.click(screen.getByRole("button", { name: "Movement" }));
     expect(screen.getByTestId("move-track").querySelector("[data-track-standard='s5']").textContent).toBe("5. Toe touch · Palms flat · YOUR ENDWEEK 1 · NOWEEK 5 · NO");
     again();
     await at(2026, 12, 21, live(), { "o8s-log": LOG });
@@ -1016,7 +1017,7 @@ describe("Optimal 8 · Move · the tendon work, from Monday 23 November", () => 
     expect(btns(card)).toEqual(["SET 14", "SET 24"]);
     fireEvent.click(within(card).getByRole("button", { name: "Set 1" }));
     expect(screen.getByTestId("timer-count").textContent).toBe("0:20");
-    fireEvent.click(screen.getByRole("button", { name: "CLOSE TIMER" }));
+    fireEvent.click(screen.getByRole("button", { name: "Close timer" }));
     card = pick("Star side plank");
     expect(levels(card)).toEqual(["LEVEL 1 OF 3 — From your bottom knee, the top leg straight"]);
     expect(card.textContent).toMatch(/Lift your top leg straight up about 30 cm, toes pointing forward, hold for 3 seconds, and lower for 3/);
@@ -1252,16 +1253,16 @@ describe("the audit's changes, from Monday 23 November", () => {
   it("Thursday 3 December: the trap bar jump has the bar-speed box and Spleeft's rule; Thursday 19 November has neither. Saturday 5 December: the bench throw's and the landmine push press's, the push press's for the arm the watch is on, and its speed is kept", async () => {
     await at(2026, 12, 3, live());
     let card = pick("Trap Bar Jump");
-    expect(within(card).getByTestId("speed-rule").textContent).toBe("SPLEEFT ON YOUR WRIST: READ THE SPEED AFTER EVERY REP. A REP 10% SLOWER THAN THE SET'S FASTEST ENDS THE SET.");
-    expect(within(card).getByTestId("bar-speed").textContent).toMatch(/SET 1 · MEAN OF ITS TWO FASTEST REPS \(M\/S\)$/);
+    expect(within(card).getByTestId("speed-rule").textContent).toBe("Spleeft on your wrist: read the speed after every rep. A rep 10% slower than the set's fastest ends the set.");
+    expect(within(card).getByTestId("bar-speed").textContent).toMatch(/Set 1 · mean of its two fastest reps \(m\/s\)$/);
     again();
     await at(2026, 11, 19, live());
     expect(within(pick("Trap Bar Jump")).queryByTestId("bar-speed")).toBe(null);
     again();
     await at(2026, 12, 5, live());
-    expect(within(pick("Bench Throw (Smith)")).getByTestId("speed-rule").textContent).toMatch(/^SPLEEFT ON YOUR WRIST: READ THE SPEED AFTER EVERY REP\./);
+    expect(within(pick("Bench Throw (Smith)")).getByTestId("speed-rule").textContent).toMatch(/^Spleeft on your wrist: read the speed after every rep\./);
     card = pick("One-Arm Landmine Push Press");
-    expect(within(card).getByTestId("speed-rule").textContent).toBe("SPLEEFT READS THE ARM THE WATCH IS ON: THAT SIDE FIRST, THE SPEED READ AFTER EVERY REP. A REP 10% SLOWER THAN THE SET'S FASTEST ENDS THE SET, AND THE OTHER SIDE DOES THE SAME REPS.");
+    expect(within(card).getByTestId("speed-rule").textContent).toBe("Spleeft reads the arm the watch is on: that side first, the speed read after every rep. A rep 10% slower than the set's fastest ends the set, and the other side does the same reps.");
     fireEvent.change(within(card).getByTestId("bar-speed").querySelector("input"), { target: { value: "1.45" } });
     expect(JSON.parse(localStorage.getItem("o8s-log"))["mSw5-sat-s_lmpush"].bs).toBe("1.45");
   });
@@ -1279,7 +1280,7 @@ describe("the audit's changes, from Monday 23 November", () => {
     expect(JSON.parse(localStorage.getItem("o8s-log"))["mSw5-sat-s_44"]).toMatchObject({ w: "3.2", hr: "172", kind: "vt" });
     again();
     await at(2026, 12, 12, live(), { "o8s-log": { "mSw5-sat-s_44": { w: "3.2", hr: "172", kind: "vt", d: "2026-12-05" } } });
-    expect(within(pick("The 4 × 4 Intervals")).getByTestId("last-run").textContent).toBe("LAST TIME · 3.2 KM · PEAK 172 BPM");
+    expect(within(pick("The 4 × 4 Intervals")).getByTestId("last-run").textContent).toBe("Last time · 3.2 km · peak 172 bpm");
     again();
     await at(2026, 11, 21, live());
     card = pick("The 4 × 4 Intervals");
@@ -1327,17 +1328,16 @@ describe("the audit's changes, from Monday 23 November", () => {
     const seed = { "mSw5-sat-s_44": { w: "3.2", hr: "172", kind: "vt", d: "2026-12-05" }, "mSw4-tue-s_rthrow": { w: "9.5" }, "mSw4-sat-s_ppspeed": { w: "1.9", l: "1.7" },
       "mSw4-tue-s_arm3_erg": { v: ["41"], kind: "arm3", d: "2026-11-24" }, "mSw4-tue-s_arm3": { hr: "165" } };
     await at(2026, 12, 11, live(), { "o8s-log": seed });
-    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "PROGRESS" }));
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "Progress" }));
     const text = document.body.textContent;
-    expect(text).toMatch(/The 4 × 4 on the treadmill — the distanceLAST LOGGED SAT,? 5 DEC.{0,3}3\.2 km/);
-    expect(text).toMatch(/Rotational throw — weeks 4, 8 and 12LAST LOGGED TUE,? 24 NOV.{0,3}9\.5 m/);
-    expect(text).toMatch(/Push press speed — weeks 4, 8 and 12LAST LOGGED SAT,? 28 NOV.{0,3}1\.8 m\/s/);
-    expect(text).toMatch(/The arms-only test — 3 minutesLAST LOGGED TUE,? 24 NOV.{0,3}41 W/);
+    expect(text).toMatch(/The 4 × 4 on the treadmill — the distanceLast logged Sat,? 5 Dec.{0,3}3\.2 km/);
+    expect(text).toMatch(/Rotational throw — weeks 4, 8 and 12Last logged Tue,? 24 Nov.{0,3}9\.5 m/);
+    expect(text).toMatch(/Push press speed — weeks 4, 8 and 12Last logged Sat,? 28 Nov.{0,3}1\.8 m\/s/);
+    expect(text).toMatch(/The arms-only test — 3 minutesLast logged Tue,? 24 Nov.{0,3}41 W/);
     again();
     await at(2026, 11, 24, live());
-    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "MORE" }));
-    fireEvent.click(screen.getByRole("button", { name: "PLAN" }));
-    fireEvent.click(screen.getByRole("button", { name: "THIS WEEK" }));
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "More" }));
+    fireEvent.click(screen.getByRole("button", { name: "This week" }));
     const week = document.body.textContent;
     expect(week).toMatch(/The intervals \(Sat\)3 × 4 on the treadmill at 5%/);
     expect(week).toMatch(/Pressure rounds \(Tue\)1 × 3 minutes, straight after the bursts, the third minute arms only; then the arms-only test/);
@@ -1357,7 +1357,7 @@ describe("the trim, from Monday 30 November", () => {
   const again = () => { cleanup(); localStorage.clear(); localStorage.setItem("o8s-migrated", "true"); };
   const pres = (card) => within(card).getAllByTestId("card-pres").map((e) => e.textContent);
   const from = (rows, name, n) => rows.slice(rows.indexOf(name), rows.indexOf(name) + n);
-  const thisWeek = () => { fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "MORE" })); fireEvent.click(screen.getByRole("button", { name: "PLAN" })); fireEvent.click(screen.getByRole("button", { name: "THIS WEEK" })); return document.body.textContent; };
+  const thisWeek = () => { fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "More" })); fireEvent.click(screen.getByRole("button", { name: "This week" })); return document.body.textContent; };
 
   it("Monday 30 November: the leg curl and the neck pair are off the page and the split squat is two sets; Monday 23 November has them", async () => {
     await at(2026, 11, 30, live());
@@ -1426,7 +1426,7 @@ describe("the trim, from Monday 30 November", () => {
     expect(from(rows, "Medicine-Ball Drops", 3)).toEqual(["Medicine-Ball Drops", "Lying Neck Curl + Lying Neck Extension", "EZ-Bar Curl + Overhead Triceps Extension"]);
     const card = pick("Lying Neck Curl + Lying Neck Extension");
     expect(pres(card)[0]).toBe("back to back · 45 s after each pair");
-    expect(within(card).getAllByTestId("last-time")[0].textContent).toMatch(/^LAST TIME · MON,? 16 NOV · 5 KG × 18 · 16 · 15$/);
+    expect(within(card).getAllByTestId("last-time")[0].textContent).toMatch(/^Last time · Mon,? 16 Nov · 5 kg × 18 · 16 · 15$/);
     expect(within(card).getAllByTestId("weight-box")[0].querySelector("input").value).toBe("5");
     again();
     await at(2026, 11, 29, live());

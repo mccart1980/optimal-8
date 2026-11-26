@@ -19,7 +19,7 @@ async function at(isoDay, st) {
 }
 /* the whole day, every chapter open */
 function wholeDay() {
-  if (!screen.queryByTestId("whole-day")) fireEvent.click(screen.getByRole("button", { name: "WHOLE DAY" }));
+  if (!screen.queryByTestId("whole-day")) { const wd = screen.queryByRole("button", { name: "WHOLE DAY" }); if (wd) fireEvent.click(wd); }
   for (let k = 0; k < 8; k++) { const b = document.querySelector("[data-chapter] [aria-expanded=false]"); if (!b) break; fireEvent.click(b); }
   return [...document.querySelectorAll("[data-flow-name]")];
 }
@@ -30,7 +30,7 @@ function pick(name) {
   fireEvent.click(row.querySelectorAll("button")[1]);
   return screen.getByTestId("now-card");
 }
-const start = (card) => fireEvent.click(within(card).getByRole("button", { name: /▶ START/ }));
+const start = (card) => fireEvent.click(within(card).getByRole("button", { name: /START/ }));
 const part = () => screen.getByTestId("timer-part").textContent;
 
 beforeEach(() => { vi.useFakeTimers({ toFake: ["Date"] }); localStorage.clear(); localStorage.setItem("o8s-migrated", "true"); });

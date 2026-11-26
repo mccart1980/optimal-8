@@ -1,7 +1,7 @@
 # THE GUIDE — PLAIN ENGLISH
 
 ## WHAT TO DO TODAY
-Open the app. It shows one thing at a time. Do it, press NEXT. That's the whole system. If you only ever read this page, read this page.
+Open the app. Today shows the day and what's next: tap it, or START SESSION at the gym. From there it shows one thing at a time. Do it, press NEXT; at the gym, LOG SET after each set. That's the whole system. If you only ever read this page, read this page.
 
 ## THE MORNING, IN ORDER
 1. **A weight limit in?** Toilet, then the scales — before you eat or drink, nothing on. Type the number. No limit, the app doesn't show it.
@@ -19,7 +19,7 @@ The app works out every weight for you. Load the bar to the number it shows.
 - The watch will buzz when a rep gets too slow. **Rack it.** That set is finished, even if the app said five reps.
 - A rep that grinds ends the set. Never fight one.
 - **Top-triple weeks** are marked. You work up to one heavy set of three with a rep or two left in you, safety pins set. Never a true max.
-- **Your four numbers** — PROGRESS → NUMBERS — are working maxes: your heaviest clean set of three with a rep or two left in you, × 1.08. Never a best single.
+- **Your four numbers** — Progress → Lifts — are working maxes: your heaviest clean set of three with a rep or two left in you, × 1.08. Never a best single.
 
 ## THE BIKE, WITHOUT THE JARGON
 - **Easy** — you could talk. Nose breathing. Heart rate in the zone the app shows. The first time, type your peak heart rate into the box on the session: the highest number you've seen on the strap.
@@ -51,7 +51,7 @@ The app builds everything from that. The engine always comes first. Change anyth
 Twelve weeks: three of size, a lighter week, three of strength, a lighter week, three of power, then the test week. Monday and Thursday are the legs, heavy then fast; Tuesday and Saturday the upper body, heavy then fast, with 6-second bursts and the pressure rounds on the assault bike after Tuesday's and the 4 × 4 after Saturday's, on the treadmill at 5% from Monday 23 November; Wednesday and Sunday are size for chest, back, shoulders and arms, then a run breathing through your nose: 30 minutes on Wednesday, 40 on Sunday. Saturday evening is the easy hour: 45 minutes on the bike, nose only, with its own timer. Friday is off. Two exercises on one card are a pair: a set of one, the rest, a set of the other. The ramp to the working sets is on each main lift's card. Every other exercise with a weight has a box for it above the sets, with last time's sets over it; NUMBERS charts them. The food is yours: the app runs the day as printed.
 
 ## OPTIMAL 8 · MOVE
-It runs in every program from Monday 16 November: Strength, Power and Physique, Prep, the camp and the transition. Every gym morning opens with the movement block in the warm-up's place. In the evenings, RANGE runs five nights, Session A is on Wednesday and Session B on Sunday; the morning five and the old movement session go. Sunday has the back extension. Every move with levels shows yours on its card: tap UP when it's been clean twice running, DOWN when the pain rule says. The fifteen standards come up on the Sunday weekly check in Move's weeks 1, 5, 9 and 13, then every eight weeks; PROGRESS → RANGE keeps them. RANGE drops to THE KEEP once the range standards are met. MORE → SETTINGS has the date week 1 began. The whole program is in PLAN → MOVE.
+It runs in every program from Monday 16 November: Strength, Power and Physique, Prep, the camp and the transition. Every gym morning opens with the movement block in the warm-up's place. In the evenings, RANGE runs five nights, Session A is on Wednesday and Session B on Sunday; the morning five and the old movement session go. Sunday has the back extension. Every move with levels shows yours on its card: tap UP when it's been clean twice running, DOWN when the pain rule says. The fifteen standards come up on the Sunday weekly check in Move's weeks 1, 5, 9 and 13, then every eight weeks; Progress → Movement keeps them. RANGE drops to THE KEEP once the range standards are met. MORE → SETTINGS has the date week 1 began. The whole program is in PLAN → MOVE.
 
 **The tendon work**, from Monday 23 November: the lower pushes, for the Achilles and the knee, on three gym mornings, before the heavy lifting; the hip pair, the Copenhagen lifts and the star side plank, twice a week; the towel calf raise in the Achilles hold's place; and the upper pushes, for the shoulders and wrists, on Tuesday and Thursday evenings and in Session B. Every push: ease in over a second, push for 3 seconds, breathing out, then 3 seconds off. The first two weeks at 8 out of 10, then as hard as you can; a red morning at half effort; Achilles or knee at 3 or more on Sunday's check, 7 out of 10. The card always says which. The transition has them on Monday and Thursday at 7 out of 10, and the camp's final week once, on its Tuesday, at half effort. Each program's page in PLAN shows where they go on each day.
 

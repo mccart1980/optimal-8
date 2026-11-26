@@ -118,7 +118,7 @@ describe("how a routine card runs", () => {
     render(<RoutineRunner cards={RANGE_CARDS} sound={false} />);
     const name = () => screen.getByTestId("routine-name").textContent;
     expect(name()).toBe("SETTLE");
-    fireEvent.click(screen.getByRole("button", { name: "▶ START" }));
+    fireEvent.click(screen.getByRole("button", { name: "START" }));
     expect(screen.getByTestId("routine-dose").textContent).toMatch(/^GET SET/);
     expect(screen.getByTestId("routine-clock").textContent).toBe("0:0" + GET_SET);
     tick(GET_SET * 1000 + 500);
@@ -143,7 +143,7 @@ describe("how a routine card runs", () => {
   it("\"at halfway\" buzzes once at halfway", () => {
     const vib = vi.fn(); Object.defineProperty(navigator, "vibrate", { value: vib, configurable: true });
     render(<RoutineRunner cards={RANGE_CARDS} sound={false} at={3} />);
-    fireEvent.click(screen.getByRole("button", { name: "▶ START" }));
+    fireEvent.click(screen.getByRole("button", { name: "START" }));
     tick(GET_SET * 1000 + 500);
     vib.mockClear();
     tick(34 * 1000);
@@ -161,7 +161,7 @@ describe("how a routine card runs", () => {
     fireEvent.click(screen.getByRole("button", { name: "Next card" }));
     expect(onAt).toHaveBeenLastCalledWith(6);
     expect(screen.getByTestId("routine-done").textContent).toBe("DONE");
-    fireEvent.click(screen.getByRole("button", { name: "◀ BACK TO THE LAST CARD" }));
+    fireEvent.click(screen.getByRole("button", { name: "BACK TO THE LAST CARD" }));
     expect(screen.getByTestId("routine-name").textContent).toBe("ARCH HOLD — 2 OF 2");
     fireEvent.click(screen.getByRole("button", { name: "Previous card" }));
     expect(onAt).toHaveBeenLastCalledWith(4);
@@ -183,7 +183,7 @@ async function mount(at) {
   await waitFor(() => expect(screen.queryByText("LOADING…")).not.toBeInTheDocument());
 }
 const openWhole = () => {
-  fireEvent.click(screen.getByRole("button", { name: "WHOLE DAY" }));
+  { const wd = screen.queryByRole("button", { name: "WHOLE DAY" }); if (wd) fireEvent.click(wd); }
   ["MORNING", "GYM", "THE DAY", "EVENING"].forEach((ch) => {
     const el = screen.getByText(ch).closest("[data-chapter]");
     const b = within(el).getAllByRole("button")[0];

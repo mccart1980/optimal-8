@@ -15,7 +15,7 @@ const up = async () => { render(<App />); await waitFor(() => expect(screen.quer
 const title = () => screen.getByTestId("app-title").textContent;
 const theme = () => document.documentElement.getAttribute("data-theme");
 const tabs = () => within(screen.getByRole("navigation", { name: "Tabs" }));
-const openSettings = () => { fireEvent.click(tabs().getByRole("button", { name: "MORE" })); fireEvent.click(screen.getByRole("button", { name: "SETTINGS" })); };
+const openSettings = () => { fireEvent.click(tabs().getByRole("button", { name: "More" })); fireEvent.click(screen.getByRole("button", { name: "Settings" })); };
 /* a phone that has been used: Strength, Power and Physique from 2 November */
 const used = (extra) => localStorage.setItem("o8s-settings", JSON.stringify(Object.assign({ start: "2026-11-02", macroBase: 1, sound: false, autoRest: true, v12: true, v16: true,
   season: { booked: false, classic: false, spp: true }, plans: [{ from: "2026-11-02", made: "2026-10-29", inputs: { booked: false, classic: false, spp: true } }] }, extra || {})));
@@ -120,41 +120,44 @@ describe("the welcome: a phone with nothing saved", () => {
   });
 });
 
-describe("light or dark", () => {
+describe("dark, or light", () => {
   const pick = (name) => fireEvent.click(within(screen.getByTestId("theme-pick")).getByRole("button", { name }));
   let meta;
-  beforeEach(() => { meta = document.createElement("meta"); meta.setAttribute("name", "theme-color"); meta.setAttribute("content", "#F1F4F9"); document.head.appendChild(meta); });
+  beforeEach(() => { meta = document.createElement("meta"); meta.setAttribute("name", "theme-color"); meta.setAttribute("content", "#000000"); document.head.appendChild(meta); });
   afterEach(() => { meta.remove(); });
 
-  it("AUTO to begin with: the app follows the phone, and nothing is held on the page", async () => {
+  it("DARK to begin with, whatever the phone is set to, and the page holds it", async () => {
     used();
     await up();
-    expect(theme()).toBe(null);
+    expect(theme()).toBe("dark");
+    expect(meta.getAttribute("content")).toBe("#000000");
     openSettings();
-    expect(within(screen.getByTestId("theme-pick")).getAllByRole("button").map((b) => b.textContent)).toEqual(["AUTO", "LIGHT", "DARK"]);
+    const picks = within(screen.getByTestId("theme-pick")).getAllByRole("button");
+    expect(picks.map((b) => b.textContent)).toEqual(["DARK", "LIGHT", "AUTO"]);
+    expect(picks.map((b) => b.getAttribute("aria-pressed"))).toEqual(["true", "false", "false"]);
   });
 
-  it("DARK and LIGHT hold one, on the page and in the phone's bar; AUTO lets go again", async () => {
+  it("LIGHT and DARK hold one, on the page and in the phone's bar; AUTO hands it to the phone", async () => {
     used();
     await up();
     openSettings();
-    pick("DARK");
-    expect(theme()).toBe("dark");
-    expect(meta.getAttribute("content")).toBe("#0A0D12");
-    await waitFor(() => expect(saved().theme).toBe("dark"));
     pick("LIGHT");
     expect(theme()).toBe("light");
-    expect(meta.getAttribute("content")).toBe("#F1F4F9");
+    expect(meta.getAttribute("content")).toBe("#F3F4F6");
+    await waitFor(() => expect(saved().theme).toBe("light"));
+    pick("DARK");
+    expect(theme()).toBe("dark");
+    expect(meta.getAttribute("content")).toBe("#000000");
     pick("AUTO");
-    expect(theme()).toBe(null);
+    expect(theme()).toBe("auto");
     await waitFor(() => expect(saved().theme).toBe("auto"));
   });
 
   it("the theme a phone was left on is the one it opens in", async () => {
-    used({ theme: "dark" });
+    used({ theme: "light" });
     await up();
-    expect(theme()).toBe("dark");
-    expect(meta.getAttribute("content")).toBe("#0A0D12");
+    expect(theme()).toBe("light");
+    expect(meta.getAttribute("content")).toBe("#F3F4F6");
   });
 });
 
@@ -177,18 +180,18 @@ describe("the sound, in one place in the settings", () => {
       /* the switch for the bells themselves sits with it */
       fireEvent.click(screen.getByText("Bell sounds and the feed chime"));
       await waitFor(() => expect(saved().sound).toBe(true));
-      fireEvent.click(screen.getByRole("button", { name: "▶ TEST THE BELL" }));
+      fireEvent.click(screen.getByRole("button", { name: "TEST THE BELL" }));
     } finally { delete navigator.audioSession; }
   });
 });
 
 describe("the settings page", () => {
-  it("a row of jumps at the top, and a line for each to land on", async () => {
+  it("a row of jumps at the top, and a named card for each to land on", async () => {
     used();
     await up();
     openSettings();
     const jumps = within(screen.getByTestId("settings-jumps")).getAllByRole("button");
-    expect(jumps.map((b) => b.textContent)).toEqual(["THE DAY", "LOOK", "SOUND", "REST CLOCK", "RANGE AND MOVE", "CALISTHENICS", "BACKUP"]);
+    expect(jumps.map((b) => b.textContent)).toEqual(["The day", "Look", "Sound", "Rest clock", "Range and Move", "Calisthenics", "Backup"]);
     ["day", "look", "sound", "cycle", "range", "calis", "backup"].forEach((k) => expect([k, !!document.getElementById("set-" + k)]).toEqual([k, true]));
     /* a jump is safe to press where the page can't scroll */
     jumps.forEach((b) => fireEvent.click(b));
@@ -200,12 +203,14 @@ describe("the pages of PROGRESS", () => {
   it("one row of pages, the open one marked", async () => {
     used();
     await up();
-    fireEvent.click(tabs().getByRole("button", { name: "PROGRESS" }));
+    fireEvent.click(tabs().getByRole("button", { name: "Progress" }));
     const row = screen.getByTestId("track-pages");
     const on = () => [...row.querySelectorAll("button")].filter((b) => b.getAttribute("data-on")).map((b) => b.textContent);
-    expect(on()).toEqual(["DASH"]);
-    fireEvent.click(within(row).getByRole("button", { name: "NUMBERS" }));
-    expect(on()).toEqual(["NUMBERS"]);
+    /* the pages, in plain words: no DASH, no NUMBERS, no REFEREE */
+    expect([...row.querySelectorAll("button")].map((b) => b.textContent)).toEqual(["Overview", "Lifts", "Sprints", "Fitness", "Body", "Photos", "Weigh-in", "Calisthenics", "Movement"]);
+    expect(on()).toEqual(["Overview"]);
+    fireEvent.click(within(row).getByRole("button", { name: "Lifts" }));
+    expect(on()).toEqual(["Lifts"]);
   });
 });
 
@@ -213,7 +218,7 @@ describe("the pages of PROGRESS", () => {
    off: to the end of a round on a timer of rounds, to the end of a rest,
    and never earlier. The clock is moved by hand; the timer reads it. */
 describe("the timer's last ten seconds", () => {
-  const wholeDay = () => { if (!screen.queryByTestId("whole-day")) fireEvent.click(screen.getByRole("button", { name: "WHOLE DAY" }));
+  const wholeDay = () => { if (!screen.queryByTestId("whole-day")) { const wd = screen.queryByRole("button", { name: "WHOLE DAY" }); if (wd) fireEvent.click(wd); }
     for (let k = 0; k < 8; k++) { const b = document.querySelector("[data-chapter] [aria-expanded=false]"); if (!b) break; fireEvent.click(b); } };
   const pick = (name) => { wholeDay(); const row = [...document.querySelectorAll("[data-flow-name]")].find((e) => e.getAttribute("data-flow-name") === name);
     if (!row) throw new Error("no row " + name); fireEvent.click(row.querySelectorAll("button")[1]); return screen.getByTestId("now-card"); };

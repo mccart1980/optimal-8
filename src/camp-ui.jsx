@@ -14,9 +14,9 @@ import { jumpOf, fadePct } from "./safety.js";
    ================================================================ */
 
 const Head = ({ children, w }) => (
-  <th style={Object.assign({}, mno, { fontSize: 7.5, letterSpacing: 1, color: C.ash, textAlign: "left", padding: "6px 5px", borderBottom: "1px solid " + C.line, whiteSpace: "nowrap", width: w })}>{children}</th>);
+  <th style={Object.assign({}, mno, { fontSize: 12, letterSpacing: 1, color: C.ash, textAlign: "left", padding: "6px 5px", borderBottom: "1px solid " + C.line, whiteSpace: "nowrap", width: w })}>{children}</th>);
 const Cell = ({ children, c, b }) => (
-  <td style={Object.assign({}, bdy, { fontSize: 10.5, color: c || C.chalk, padding: "7px 5px", borderBottom: "1px solid " + C.line, lineHeight: 1.35, verticalAlign: "top", fontWeight: b ? 600 : 400 })}>{children}</td>);
+  <td style={Object.assign({}, bdy, { fontSize: 12, color: c || C.chalk, padding: "7px 5px", borderBottom: "1px solid " + C.line, lineHeight: 1.35, verticalAlign: "top", fontWeight: b ? 600 : 400 })}>{children}</td>);
 
 /* ---------------- the camp's weeks, with dates ---------------- */
 export function CampWeekTable({ rows, week, setWeek }) {
@@ -28,7 +28,7 @@ export function CampWeekTable({ rows, week, setWeek }) {
         <Eye c={C.brass} s={{ marginBottom: 4 }}>The camp — every number, every week, with dates</Eye>
         {first && rows.length === 10 && first.ids.join() === "F,B1,B2,B3,E,P1,P2,P3,S,FW" && first.R === 6 ? (
           <div>
-            <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, lineHeight: 1.5 })}>{CAMP_INTRO}</div>
+            <div style={Object.assign({}, bdy, { fontSize: 13, color: C.chalk, lineHeight: 1.5 })}>{CAMP_INTRO}</div>
             <Note>{CAMP_PHILOSOPHY}</Note>
           </div>) : (
           <Note c={C.chalk} s={{ marginTop: 0 }}>{rows.map((x) => x.row.id).join(" · ")} — {first ? first.R + " × " + first.mins + ", " + first.rest + " s rest, " + first.fitness + " fitness" + (first.emphasis !== "none" ? ", " + first.emphasis : "") + (first.ef ? ", engine-first" : "") : ""}.</Note>)}
@@ -65,7 +65,7 @@ export function CampWeekCard({ rx, dates }) {
   const Row = ({ k, val }) => (
     <div style={{ display: "flex", justifyContent: "space-between", gap: 10, padding: "7px 0", borderBottom: "1px solid " + C.line }}>
       <span style={Object.assign({}, bdy, { fontSize: 13, fontWeight: 600, color: C.chalk, flexShrink: 0 })}>{k}</span>
-      <span style={Object.assign({}, mno, { fontSize: 10.5, color: C.brass, textAlign: "right" })}>{val}</span>
+      <span style={Object.assign({}, mno, { fontSize: 12, color: C.brass, textAlign: "right" })}>{val}</span>
     </div>);
   const bp = campBench(rx);
   return (
@@ -114,7 +114,7 @@ export function FightWeekTable({ rx }) {
     <Card ac={C.oxide} s={{ padding: 0 }}>
       <div style={{ padding: "14px 14px 8px" }}>
         <Eye c={C.oxide} s={{ marginBottom: 4 }}>Fight week — the fight on {DNAME[rx.fightDay || "sat"]} {rx.fightIso}</Eye>
-        <div style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, lineHeight: 1.5 })}>{FIGHT_WEEK_INTRO}</div>
+        <div style={Object.assign({}, bdy, { fontSize: 13, color: C.chalk, lineHeight: 1.5 })}>{FIGHT_WEEK_INTRO}</div>
       </div>
       <div style={{ padding: "0 14px 14px" }}>
         <table style={{ borderCollapse: "collapse", width: "100%" }}>
@@ -146,11 +146,11 @@ export function CampWorkPanel({ id, name, kg, onSet, reset, week }) {
   const [inp, setInp] = useState("");
   const val = num(inp) ? r25(num(inp) * (reset ? 1.08 : 1)) : null;
   return (
-    <div style={{ background: C.ink, border: "1px solid " + C.brass, borderRadius: 5, padding: 12, marginBottom: 11 }}>
+    <div style={{ background: C.ink, border: "1px solid " + C.brass, borderRadius: 10, padding: 12, marginBottom: 11 }}>
       <Eye c={C.brass} s={{ marginBottom: 4 }}>{name} — working weight</Eye>
       <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 8 }}>
-        <span style={Object.assign({}, mno, { fontSize: 26, fontWeight: 700, color: kg ? C.brass : C.ash })}>{kg ? kg + " kg" : "not set"}</span>
-        <span style={Object.assign({}, mno, { fontSize: 9, color: C.ash, letterSpacing: 1 })}>NO MAXES, EVER, IN CAMP</span>
+        <span style={Object.assign({}, mno, { fontSize: 28, fontWeight: 700, color: kg ? C.brass : C.ash })}>{kg ? kg + " kg" : "not set"}</span>
+        <span style={Object.assign({}, mno, { fontSize: 12, color: C.ash, letterSpacing: 1 })}>NO MAXES, EVER, IN CAMP</span>
       </div>
       <div style={{ display: "flex", gap: 8, alignItems: "flex-end", marginTop: 10 }}>
         <div style={{ flex: 1 }}><Lab>{reset ? "Today's set of 3 (kg) — × 1.08 is the working max" : "Set it by hand (kg)"}</Lab><Fld v={inp} on={setInp} ph="kg" /></div>
@@ -180,8 +180,8 @@ export function CampNumbers({ rows, log, maxes, onSetMax }) {
             <div key={m[0]} style={{ padding: "10px 0", borderBottom: "1px solid " + C.line }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                 <span style={{ flex: 1 }}>
-                  <div style={Object.assign({}, bdy, { fontSize: 14.5, fontWeight: 600, color: C.chalk })}>{m[1]}</div>
-                  <div style={Object.assign({}, mno, { fontSize: 8.5, color: C.ash, marginTop: 2 })}>{cur ? "OFF TEST DAY, RESET IN WEEK 5" : "NOT SET — test day's numbers set it"}</div>
+                  <div style={Object.assign({}, bdy, { fontSize: 15, fontWeight: 600, color: C.chalk })}>{m[1]}</div>
+                  <div style={Object.assign({}, mno, { fontSize: 12, color: C.ash, marginTop: 2 })}>{cur ? "OFF TEST DAY, RESET IN WEEK 5" : "NOT SET — test day's numbers set it"}</div>
                 </span>
                 <span style={Object.assign({}, mno, { fontSize: 22, fontWeight: 700, color: cur ? C.brass : C.ash })}>{cur ? cur + " kg" : "—"}</span>
               </div>
@@ -192,7 +192,7 @@ export function CampNumbers({ rows, log, maxes, onSetMax }) {
             </div>);
         })}
         <Note>{WORKING_WEIGHT_RULE}</Note>
-        <Note c={C.ash} s={{ fontStyle: "italic" }}>Your Optimal 8 maxes are untouched by a camp — they're still on the NUMBERS page when the switch goes off.</Note>
+        <Note c={C.ash} s={{ fontStyle: "italic" }}>Your Optimal 8 maxes are untouched by a camp — they're still on the Lifts page when the switch goes off.</Note>
       </Card>
 
       <Card ac={C.cobalt}>
@@ -201,7 +201,7 @@ export function CampNumbers({ rows, log, maxes, onSetMax }) {
           return (
             <div key={w} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid " + C.line }}>
               <span style={Object.assign({}, bdy, { fontSize: 13, color: C.chalk })}>Week {row.idx} · {row.id} · {rowDates(row)}</span>
-              <span style={Object.assign({}, mno, { fontSize: 13, fontWeight: 700, color: f == null ? C.ash : f >= 95 ? C.moss : f >= 90 ? C.brass : C.oxide })}>{f == null ? "—" : f.toFixed(1) + "%"}</span>
+              <span style={Object.assign({}, mno, { fontSize: 13, fontWeight: 700, color: f == null ? C.ash : f >= 95 ? C.accent : f >= 90 ? C.warn : C.bad })}>{f == null ? "—" : f.toFixed(1) + "%"}</span>
             </div>); })}
         <Note>Week 1 is the camp's baseline; the last hard week is the last read before the fight. The first read also checks the fitness you entered: under 75% reads low, 75–84% moderate, 85% or more good.</Note>
       </Card>
@@ -223,7 +223,7 @@ export function CampNumbers({ rows, log, maxes, onSetMax }) {
 
       <Card ac={C.violet}>
         <Eye c={C.violet}>The camp rules — fixed, from day one to the bell</Eye>
-        {CAMP_RULES.map((r, i) => <div key={i} style={Object.assign({}, bdy, { fontSize: 12.5, color: C.chalk, lineHeight: 1.5, padding: "5px 0", borderBottom: "1px solid " + C.line })}>{i + 1}. {r}</div>)}
+        {CAMP_RULES.map((r, i) => <div key={i} style={Object.assign({}, bdy, { fontSize: 13, color: C.chalk, lineHeight: 1.5, padding: "5px 0", borderBottom: "1px solid " + C.line })}>{i + 1}. {r}</div>)}
       </Card>
     </div>);
 }

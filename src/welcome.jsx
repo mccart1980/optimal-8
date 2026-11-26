@@ -10,7 +10,7 @@ import { C, soft, dsp, bdy, mno, RAD, Icon, Btn, Seg, Fld, Note, Lab, CheckDot, 
    the app again for a new icon) is one tap.
 
    It shows only on a phone with nothing saved. Everything it sets can
-   be changed later in MORE → SETTINGS and PROGRESS → NUMBERS.
+   be changed later in More → Settings and Progress → Lifts.
    ================================================================ */
 
 /* the bull: the same shapes as the icon (scripts/generate-icons.mjs), on a 1024 grid */
@@ -54,7 +54,7 @@ export function Welcome({ st, upd, maxes, onMaxes, onRun, onRestore, onDone }) {
   const [msg, setMsg] = useState("");
   const fileRef = useRef(null);
   const next = () => setStep(step + 1);
-  const H = ({ children }) => <h1 style={Object.assign({}, dsp, { margin: "0 0 8px", fontSize: 30, fontWeight: 800, letterSpacing: -.5, lineHeight: 1.12, color: C.chalk })}>{children}</h1>;
+  const H = ({ children }) => <h1 style={Object.assign({}, dsp, { margin: "0 0 8px", fontSize: 28, fontWeight: 800, letterSpacing: -.5, lineHeight: 1.12, color: C.chalk })}>{children}</h1>;
   const P = ({ children }) => <p style={Object.assign({}, bdy, { margin: "0 0 18px", fontSize: 18, lineHeight: 1.45, color: C.ash })}>{children}</p>;
   const saveMaxes = () => { const out = {}; ["squat", "bench", "tbdl"].forEach((k) => { const n = num(String(mx[k]).replace(",", ".")); if (n > 0) out[k] = n; });
     if (Object.keys(out).length) onMaxes(Object.assign({}, maxes || {}, out)); next(); };
@@ -73,8 +73,8 @@ export function Welcome({ st, upd, maxes, onMaxes, onRun, onRestore, onDone }) {
           <div key="s0" className="rise" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", margin: "10px 0 22px" }}>
               <Mark size={132} />
-              <div style={Object.assign({}, dsp, { fontSize: 40, fontWeight: 800, letterSpacing: 3, color: C.chalk, marginTop: 4 })}>FIGHTER</div>
-              <div style={Object.assign({}, bdy, { fontSize: 19, lineHeight: 1.4, color: C.ash, marginTop: 6, maxWidth: 320 })}>Strength, power and engine for the ring. One thing at a time.</div>
+              <div style={Object.assign({}, dsp, { fontSize: 40, fontWeight: 800, letterSpacing: .4, color: C.chalk, marginTop: 4 })}>FIGHTER</div>
+              <div style={Object.assign({}, bdy, { fontSize: 18, lineHeight: 1.4, color: C.ash, marginTop: 6, maxWidth: 320 })}>Strength, power and engine for the ring. One thing at a time.</div>
             </div>
             <div style={{ background: C.card, border: "1px solid " + C.line, borderRadius: RAD.l, boxShadow: C.shadow, padding: "6px 16px", marginBottom: 20 }}>
               {POINTS.map((p, i) => (
@@ -82,12 +82,12 @@ export function Welcome({ st, upd, maxes, onMaxes, onRun, onRestore, onDone }) {
                   <span style={{ width: 40, height: 40, borderRadius: RAD.s, background: soft(C.brass), color: C.brass, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><Icon n={p[0]} size={22} w={2.2} /></span>
                   <span style={{ flex: 1, minWidth: 0 }}>
                     <span style={Object.assign({}, bdy, { display: "block", fontSize: 18, fontWeight: 700, color: C.chalk, lineHeight: 1.3 })}>{p[1]}</span>
-                    <span style={Object.assign({}, bdy, { display: "block", fontSize: 16, color: C.ash, lineHeight: 1.4, marginTop: 2 })}>{p[2]}</span>
+                    <span style={Object.assign({}, bdy, { display: "block", fontSize: 18, color: C.ash, lineHeight: 1.4, marginTop: 2 })}>{p[2]}</span>
                   </span>
                 </div>))}
             </div>
             <div style={{ flex: 1 }} />
-            <Btn c={C.brass} fill s={{ width: "100%", minHeight: 58, fontSize: 19, letterSpacing: 1 }} on={next}>GET STARTED</Btn>
+            <Btn c={C.brass} fill s={{ width: "100%", minHeight: 58, fontSize: 18, letterSpacing: .4 }} on={next}>GET STARTED</Btn>
             <Btn c={C.ash} s={{ width: "100%", marginTop: 10 }} on={() => { setMsg(""); if (fileRef.current) fileRef.current.click(); }}>I HAVE A BACKUP</Btn>
             <input ref={fileRef} data-testid="welcome-file" type="file" accept="application/json,.json" style={{ display: "none" }} aria-hidden="true" tabIndex={-1}
               onChange={(e) => { const f = e.target.files && e.target.files[0]; e.target.value = ""; if (!f) return;
@@ -105,15 +105,15 @@ export function Welcome({ st, upd, maxes, onMaxes, onRun, onRestore, onDone }) {
               <button key={r[0]} onClick={() => setRun(r[0])} aria-pressed={on} data-run={r[0]}
                 style={{ display: "flex", gap: 12, alignItems: "center", width: "100%", textAlign: "left", cursor: "pointer", background: C.card, border: "1.5px solid " + (on ? C.brass : C.line), borderRadius: RAD.l, boxShadow: on ? "0 0 0 3px " + soft(C.brass) : C.shadow, padding: "14px 16px", marginBottom: 10 }}>
                 <span style={{ flex: 1, minWidth: 0 }}>
-                  <span style={Object.assign({}, bdy, { display: "block", fontSize: 19, fontWeight: 800, color: C.chalk, lineHeight: 1.25 })}>{r[1]}</span>
+                  <span style={Object.assign({}, bdy, { display: "block", fontSize: 18, fontWeight: 800, color: C.chalk, lineHeight: 1.25 })}>{r[1]}</span>
                   <span style={Object.assign({}, mno, { display: "block", fontSize: 13, fontWeight: 700, letterSpacing: .6, color: C.brass, textTransform: "uppercase", marginTop: 3 })}>{r[2]}</span>
-                  <span style={Object.assign({}, bdy, { display: "block", fontSize: 16, color: C.ash, lineHeight: 1.4, marginTop: 5 })}>{r[3]}</span>
+                  <span style={Object.assign({}, bdy, { display: "block", fontSize: 18, color: C.ash, lineHeight: 1.4, marginTop: 5 })}>{r[3]}</span>
                 </span>
                 <CheckDot ok={on} c={C.brass} size={28} />
               </button>); })}
-            <Note s={{ marginTop: 4 }}>A fight booked? Put the date in MORE → SETTINGS once you're in, and the app builds the camp back from it.</Note>
+            <Note s={{ marginTop: 4 }}>A fight booked? Put the date in More → Settings once you're in, and the app builds the camp back from it.</Note>
             <div style={{ flex: 1, minHeight: 18 }} />
-            <Btn c={C.brass} fill s={{ width: "100%", minHeight: 58, fontSize: 19, letterSpacing: 1 }} on={() => { onRun(run); next(); }}>CONTINUE</Btn>
+            <Btn c={C.brass} fill s={{ width: "100%", minHeight: 58, fontSize: 18, letterSpacing: .4 }} on={() => { onRun(run); next(); }}>CONTINUE</Btn>
           </div>) : null}
 
         {step === 2 ? (
@@ -127,28 +127,28 @@ export function Welcome({ st, upd, maxes, onMaxes, onRun, onRestore, onDone }) {
                   <Fld v={mx[f[0]]} on={(val) => setMx(Object.assign({}, mx, { [f[0]]: val }))} ph="kg" a="left" s={{ fontSize: 22, minHeight: 56 }} />
                 </label>))}
             </div>
-            <Note>Leave any of them blank and put it in later, in PROGRESS → NUMBERS.</Note>
+            <Note>Leave any of them blank and put it in later, in Progress → Lifts.</Note>
             <div style={{ flex: 1, minHeight: 18 }} />
-            <Btn c={C.brass} fill s={{ width: "100%", minHeight: 58, fontSize: 19, letterSpacing: 1 }} on={saveMaxes}>CONTINUE</Btn>
+            <Btn c={C.brass} fill s={{ width: "100%", minHeight: 58, fontSize: 18, letterSpacing: .4 }} on={saveMaxes}>CONTINUE</Btn>
           </div>) : null}
 
         {step === 3 ? (
           <div key="s3" className="rise" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
             <H>Make it yours</H>
-            <P>How it looks and sounds. All of it is in MORE → SETTINGS afterwards.</P>
+            <P>How it looks and sounds. All of it is in More → Settings afterwards.</P>
             <div style={{ background: C.card, border: "1px solid " + C.line, borderRadius: RAD.l, boxShadow: C.shadow, padding: 16 }}>
               <Lab>Text size</Lab>
               <Seg opts={TEXT_STEPS.map((x) => [x[0], x[1]])} val={st.textSize || "n"} on={(v) => upd({ textSize: v })} />
               <div style={{ height: 16 }} />
               <Lab>Light or dark</Lab>
-              <Seg opts={THEME_STEPS} val={st.theme === "light" || st.theme === "dark" ? st.theme : "auto"} on={(v) => upd({ theme: v })} />
+              <Seg opts={THEME_STEPS} val={st.theme === "light" || st.theme === "auto" ? st.theme : "dark"} on={(v) => upd({ theme: v })} />
               <div style={{ height: 16 }} />
               <Lab>Bells and pips on the timers</Lab>
               <Seg opts={[["on", "ON"], ["off", "OFF"]]} val={st.sound === false ? "off" : "on"} on={(v) => upd({ sound: v === "on" })} />
             </div>
             <Note>AUTO follows the phone: light when the phone is light, dark when it goes dark.</Note>
             <div style={{ flex: 1, minHeight: 18 }} />
-            <Btn c={C.moss} fill s={{ width: "100%", minHeight: 58, fontSize: 19, letterSpacing: 1 }} on={onDone}>OPEN TODAY</Btn>
+            <Btn c={C.moss} fill s={{ width: "100%", minHeight: 58, fontSize: 18, letterSpacing: .4 }} on={onDone}>OPEN TODAY</Btn>
           </div>) : null}
       </div>
     </div>);

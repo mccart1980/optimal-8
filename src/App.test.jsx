@@ -30,7 +30,7 @@ const findHead = (name) => screen.findByText(headMatch(name));
 
 /* a day of the week: the strip is inside the whole day now */
 function pickDay(d) {
-  if (!screen.queryByRole("button", { name: d })) fireEvent.click(screen.getByRole("button", { name: "WHOLE DAY" }));
+  if (!screen.queryByRole("button", { name: d })) { const wd = screen.queryByRole("button", { name: "WHOLE DAY" }); if (wd) fireEvent.click(wd); }
   fireEvent.click(screen.getByRole("button", { name: d }));
 }
 
@@ -39,13 +39,12 @@ function nav(name) {
   const bar = () => within(screen.getByRole("navigation", { name: "Tabs" }));
   const tab = (n) => fireEvent.click(bar().getByRole("button", { name: n }));
   const click = (n) => fireEvent.click(screen.getByRole("button", { name: n }));
-  if (name === "TRACK") return tab("PROGRESS");
-  if (name === "TODAY") return tab("TODAY");
-  if (name === "COOK" || name === "SHOP") { tab("FOOD"); return click(name); }
-  tab("MORE");
-  if (name === "WEEK") { click("PLAN"); return click("THIS WEEK"); }
-  if (name === "PLAN") { click("PLAN"); return click("DOCUMENTS"); }
-  return click(name);
+  if (name === "TRACK") return tab("Progress");
+  if (name === "TODAY") return tab("Today");
+  if (name === "COOK" || name === "SHOP") { tab("Food"); return click(name); }
+  /* MORE is one list of pages */
+  tab("More");
+  return click({ WEEK: "This week", PLAN: "The programmes", SETTINGS: "Settings", GUIDE: "Guide" }[name] || name);
 }
 
 async function mount(extra) {
@@ -68,8 +67,7 @@ describe("Optimal 8", () => {
   const camp = (extra) => mount(Object.assign({ camp: true, campStart: CAMP_START }, extra || {}));
   const season = async (extra) => {
     await mount(extra);
-    nav("WEEK");
-    fireEvent.click(await screen.findByRole("button", { name: "THE SEASON" }));
+    nav("The season");
   };
 
   it("gives the camp a dated week table, and a fight-week table for Saturday 13 March", async () => {
@@ -92,7 +90,7 @@ describe("Optimal 8", () => {
   it("puts the camp document on the PLAN tab", async () => {
     await camp();
     nav("PLAN");
-    expect(await screen.findByRole("button", { name: "CAMP" })).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: "Camp" })).toBeInTheDocument();
     expect(screen.getAllByText("THE TEN WEEKS — EVERY NUMBER, EVERY WEEK, WITH DATES").length).toBeGreaterThan(0);
     expect(screen.getAllByText(/THE EDGE — THE REINS OFF/).length).toBeGreaterThan(0);
   });
@@ -109,8 +107,17 @@ describe("Optimal 8", () => {
     expect(title()).toBe("PREP · WEEK 1 · P1 · BUILD");
     expect(JSON.parse(localStorage.getItem("o8s-settings")).plans).toEqual([{ from: MONDAY_OF_WED, made: MONDAY_OF_WED, inputs: { booked: false, classic: false } }]);
     nav("WEEK");
-    expect(await screen.findByText("P14")).toBeInTheDocument();
-    expect(screen.getByText("P12b")).toBeInTheDocument();
+    /* sixteen weeks to pick from, by number; each week's own card names the document's week it runs */
+    const codes = [];
+    for (let i = 0; i < 16; i++) {
+      fireEvent.click(screen.getByRole("button", { name: "Pick a week" }));
+      const weeks = within(screen.getByTestId("week-picker")).getAllByRole("button");
+      expect(weeks.length).toBe(16);
+      fireEvent.click(weeks[i]);
+      codes.push((screen.getByTestId("week-card").textContent.match(/· (P\d+b?) ·/) || [])[1]);
+    }
+    expect(codes).toContain("P14");
+    expect(codes).toContain("P12b");
     expect(screen.queryByText("HELL WEEK")).not.toBeInTheDocument();
     expect(screen.queryByText("17")).not.toBeInTheDocument();
   });
@@ -119,23 +126,23 @@ describe("Optimal 8", () => {
     await mount();
 
     /* Iron Mind was taken out on 20 November 2026: no IRON page under MORE, no page in TRACK */
-    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "MORE" }));
+    fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: "More" }));
     expect(screen.queryByRole("button", { name: "IRON" })).toBe(null);
     nav("TRACK");
     expect(screen.queryByRole("button", { name: "IRON MIND" })).toBe(null);
 
-    fireEvent.click(screen.getByRole("button", { name: "CALIS" }));
+    fireEvent.click(screen.getByRole("button", { name: "Calisthenics" }));
     expect(await screen.findByText("Calisthenics — where each line stands")).toBeInTheDocument();
     expect(screen.getByText("THE SLOW LANE")).toBeInTheDocument();
     expect(screen.getAllByText("not yet").length).toBe(7);
 
-    fireEvent.click(screen.getByRole("button", { name: "RANGE" }));
+    fireEvent.click(screen.getByRole("button", { name: "Movement" }));
     expect(await screen.findByText("RANGE — the four tests")).toBeInTheDocument();
     expect(screen.getByText("90/90 sit — Back knee off the floor — right leg front")).toBeInTheDocument();
     expect(screen.getByText("The yes-or-nos")).toBeInTheDocument();
 
     nav("PLAN");
-    expect(await screen.findByText("CONTENTS")).toBeInTheDocument();
+    expect(await screen.findByText("Contents")).toBeInTheDocument();
     // both documents are readable offline: once in the contents, once as the heading
     expect(screen.getAllByText("LOADING — THE BAR SPEED IS THE LAW").length).toBe(2);
     expect(screen.queryByRole("button", { name: "IRON MIND v5" })).toBe(null);
@@ -165,17 +172,16 @@ describe("Optimal 8", () => {
     nav("TRACK");
 
     expect(await screen.findByText("The dashboard — the seven numbers")).toBeInTheDocument();
-    expect(screen.getByText("Fade — round six against round one")).toBeInTheDocument();
-    expect(screen.getByText("20-minute test — distance")).toBeInTheDocument();
-    expect(screen.getByText("Burst decrement — first against last")).toBeInTheDocument();
-    expect(screen.getByText("Recovery heart rate — the 60-second drop")).toBeInTheDocument();
-    expect(screen.getByText("Resting heart rate")).toBeInTheDocument();
-    expect(screen.getByText("HRV")).toBeInTheDocument();
-    expect(screen.getByText("Bodyweight")).toBeInTheDocument();
-    expect(screen.getByText("Waist")).toBeInTheDocument();
-    expect(screen.getByText("5200")).toBeInTheDocument();
+    /* a number that has been logged has a row of its own; the ones that haven't are named in one line at the foot */
+    const dash = within(screen.getByTestId("dashboard"));
+    ["20-minute test — distance", "Resting heart rate", "HRV"].forEach((n) => expect(dash.getByText(n)).toBeInTheDocument());
+    expect(dash.getByText("5200")).toBeInTheDocument();
+    const waiting = screen.getByTestId("dash-waiting").textContent;
+    ["Fade — round six against round one", "Burst decrement — first against last", "Recovery heart rate — the 60-second drop", "Bodyweight", "Waist"].forEach((n) => expect(waiting).toContain(n));
+    /* and above it: the tiles, the weight chart and the weeks' sessions */
+    ["stat-weight", "stat-week", "stat-rhr", "stat-hrv", "weight-card", "session-grid"].forEach((t) => expect(screen.getByTestId(t)).toBeInTheDocument());
 
-    fireEvent.click(screen.getByRole("button", { name: "PHOTOS" }));
+    fireEvent.click(screen.getByRole("button", { name: "Photos" }));
     expect(await screen.findByText("Photos — the Sunday of weeks 1, 5, 9 and 13")).toBeInTheDocument();
     expect(screen.getByText(/never leave the phone/)).toBeInTheDocument();
     expect(screen.getByLabelText("Add the front photo")).toBeInTheDocument();
@@ -188,11 +194,11 @@ describe("Optimal 8", () => {
     nav("TRACK");
 
     expect(await screen.findByText("The dashboard — the seven numbers, against the camp's targets")).toBeInTheDocument();
-    expect(screen.getByText("CAMP TARGET · 5–8 POINTS BETTER THAN PREP'S LAST READ")).toBeInTheDocument();
-    expect(screen.getByText("CAMP TARGET · THE DECREMENT DOWN A FURTHER QUARTER")).toBeInTheDocument();
-    expect(screen.getByText("CAMP TARGET · DOWN 4–8 BEATS")).toBeInTheDocument();
+    expect(screen.getByText("Camp target · 5–8 points better than Prep's last read")).toBeInTheDocument();
+    expect(screen.getByText("Camp target · the decrement down a further quarter")).toBeInTheDocument();
+    expect(screen.getByText("Camp target · down 4–8 beats")).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "PHOTOS" }));
+    fireEvent.click(screen.getByRole("button", { name: "Photos" }));
     expect(await screen.findByText("Photos — the Sunday of camp weeks 1, 5 and 9")).toBeInTheDocument();
   });
 
@@ -314,7 +320,7 @@ describe("Optimal 8", () => {
     // ten Prep weeks of room: P3 to P10, P13, P14
     await season({ program: "prep", fightDate: "2027-03-13", start: "2026-10-26" });
     await screen.findAllByText("P3 · ACCUMULATE");
-    const labels = Array.from(document.querySelectorAll("span")).map((e) => e.textContent).filter((t) => /^(P\d+b?|F|F1) · /.test(t));
+    const labels = Array.from(document.querySelectorAll("[data-season-title]")).map((e) => e.textContent).filter((t) => /^(P\d+b?|F|F1) · /.test(t));
     expect(labels.slice(0, labels.indexOf("F · FOUNDATION"))).toEqual(["P3 · ACCUMULATE", "P4 · ACCUMULATE", "P5 · ACCUMULATE", "P6 · INTENSIFY", "P7 · INTENSIFY",
       "P8 · INTENSIFY", "P9 · INTENSIFY", "P10 · INTENSIFY", "P13 · CONVERT", "P14 · TEST WEEK"]);
   });
@@ -351,9 +357,9 @@ describe("Optimal 8", () => {
     expect(await screen.findByText(/This week is ACCUMULATE/)).toBeInTheDocument();
     expect(screen.getByText(/Tests this week: none/)).toBeInTheDocument();
     // and guide.md itself, with its contents
-    expect(screen.getByText("CONTENTS")).toBeInTheDocument();
+    expect(screen.getByText("Contents")).toBeInTheDocument();
     expect(screen.getAllByText("WHAT TO DO TODAY").length).toBeGreaterThan(0);
-    expect(screen.getByText(/Open the app. It shows one thing at a time/)).toBeInTheDocument();
+    expect(screen.getByText(/Open the app\. Today shows the day and what's next/)).toBeInTheDocument();
     // "Setting a fight", as the new guide writes it
     expect(screen.getAllByText("SETTING A FIGHT").length).toBeGreaterThan(0);
     expect(screen.getByText(/The app builds everything from that\. The engine always comes first\./)).toBeInTheDocument();
@@ -393,13 +399,13 @@ describe("Optimal 8", () => {
   it("holds every document on PLAN, and one live panel on GUIDE with the phase and the next feed", async () => {
     await mount();
     nav("PLAN");
-    ["PREP", "CAMP", "STRENGTH & POWER", "FUEL · FIGHTER", "THE MENU", "MENU B + WATER", "FUEL · SEASON"].forEach((n) =>
+    ["Prep", "Camp", "Strength & Power", "Fuel · Fighter", "The menu", "Menu B + water", "Fuel · Season"].forEach((n) =>
       expect(screen.getByRole("button", { name: n })).toBeInTheDocument());
     /* Iron Mind was taken out on 20 November 2026: both its documents are off the shelf */
     ["IRON MIND v5", "IRON MIND v4.2"].forEach((n) => expect(screen.queryByRole("button", { name: n })).toBe(null));
     /* Fighter was retired on 23 November 2026: its document is off the shelf */
     expect(screen.queryByRole("button", { name: "FIGHTER v1.5" })).toBe(null);
-    fireEvent.click(screen.getByRole("button", { name: "THE MENU" }));
+    fireEvent.click(screen.getByRole("button", { name: "The menu" }));
     expect((await screen.findAllByText(/THE FIVE RULES/)).length).toBeGreaterThan(0);
     nav("GUIDE");
     expect(await screen.findByText("The food this week:", { exact: false })).toBeInTheDocument();

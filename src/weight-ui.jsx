@@ -8,15 +8,15 @@ import { kg1, r1, forecastTone, overLine, CHECKPOINT_TEXT, HOLD_WHY, STEP_SAY, S
    card, the Sunday check's weight result, the morning's line under the
    scales, and the FOOD banner. weight-making.md, nothing else.
    ================================================================ */
-const toneC = { red: C.oxide, amber: C.brass, green: C.moss };
+const toneC = { red: C.bad, amber: C.warn, green: C.accent };
 const Row = ({ k, v, c, tid }) => (
   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10, padding: "6px 0", borderTop: "1px solid " + C.line }}>
     <span style={Object.assign({}, mno, { fontSize: T3, color: C.ash, letterSpacing: .6 })}>{k}</span>
     <span data-testid={tid} style={Object.assign({}, mno, { fontSize: T3, fontWeight: 700, color: c || C.chalk, textAlign: "right" })}>{v}</span>
   </div>);
 const P = ({ children, c, bold, s }) => <p style={Object.assign({}, bdy, { margin: "8px 0 0", fontSize: T3, lineHeight: 1.5, color: c || C.chalk, fontWeight: bold ? 700 : 400 }, s)}>{children}</p>;
-const Box = ({ children, c, tid }) => <div data-testid={tid} style={{ background: C.card, border: "2px solid " + (c || C.brass), borderRadius: 10, padding: 14, marginBottom: 12 }}>{children}</div>;
-const Head = ({ children, c }) => <div style={Object.assign({}, dsp, { fontSize: T2, fontWeight: 800, letterSpacing: 1.2, color: c || C.brass, marginBottom: 6 })}>{children}</div>;
+const Box = ({ children, c, tid }) => <div data-testid={tid} style={{ background: C.card, border: "1.5px solid " + (c || C.brass), borderRadius: 10, padding: 14, marginBottom: 12 }}>{children}</div>;
+const Head = ({ children, c }) => <div style={Object.assign({}, dsp, { fontSize: T2, fontWeight: 800, letterSpacing: .4, color: c || C.brass, marginBottom: 6 })}>{children}</div>;
 const short = (s) => fmtDate(s).toUpperCase();
 
 /* THE CHECKPOINT — over the ceiling, said plainly. */
@@ -69,7 +69,7 @@ export function WeightResult({ check, onAsk, asked }) {
       <label style={{ display: "block", marginTop: 8 }}>
         <span style={Object.assign({}, mno, { display: "block", fontSize: T3, color: C.ash, marginBottom: 4 })}>ONE WEIGHT (KG)</span>
         <input data-testid="weight-ask" value={asked == null ? "" : asked} onChange={(e) => onAsk(e.target.value)} inputMode="decimal" placeholder="—"
-          style={Object.assign({}, mno, { width: "100%", background: C.ink, border: "1px solid " + C.line, borderRadius: 6, color: C.chalk, fontSize: T2, padding: "12px 10px", minHeight: 56 })} />
+          style={Object.assign({}, mno, { width: "100%", background: C.ink, border: "1px solid " + C.line, borderRadius: 10, color: C.chalk, fontSize: T2, padding: "12px 10px", minHeight: 56 })} />
       </label>
     </div>);
   if (c.settle) return (
@@ -82,7 +82,7 @@ export function WeightResult({ check, onAsk, asked }) {
       {c.over ? <div style={{ marginTop: 10 }}><OverCard forecast={c.forecast} C={c.line.C} /></div> : null}
     </div>);
   const ch = c.prevA != null ? c.A - c.prevA : null;
-  const verdictC = c.verdict === "ON TRACK" ? C.moss : c.verdict === "BEHIND" || c.verdict === "HOLDING" ? C.oxide : c.verdict === "LAST CHECK" ? C.brass : C.cobalt;
+  const verdictC = c.verdict === "ON TRACK" ? C.moss : c.verdict === "BEHIND" || c.verdict === "HOLDING" ? C.oxide : c.verdict === "LAST CHECK" ? C.warn : C.ash;
   return (
     <div data-testid="weight-result" style={{ marginTop: 12 }}>
       <Row k={c.src === "asked" ? "THIS MORNING" : "SEVEN-MORNING AVERAGE"} v={kg1(c.A)} tid="wr-average" />
@@ -134,8 +134,8 @@ export function WeightBanner({ wd, waiting }) {
     : waiting ? "Step on the scales: the line is drawn from your first weight."
     : wd.step >= 1 ? "No three o'clock this week." : null;
   return (
-    <div data-testid="weight-banner" style={{ background: C.card, border: "2px solid " + C.oxide, borderRadius: 8, padding: "12px 14px", marginBottom: 14 }}>
-      <div style={Object.assign({}, dsp, { fontSize: T2, fontWeight: 800, letterSpacing: 1.2, color: C.oxide })}>{head}</div>
+    <div data-testid="weight-banner" style={{ background: C.card, border: "1.5px solid " + C.oxide, borderRadius: 14, padding: "12px 14px", marginBottom: 14 }}>
+      <div style={Object.assign({}, dsp, { fontSize: T2, fontWeight: 800, letterSpacing: .4, color: C.oxide })}>{head}</div>
       {line ? <div data-testid="weight-banner-line" style={Object.assign({}, bdy, { fontSize: T3, color: C.chalk, marginTop: 4, lineHeight: 1.45 })}>{line}</div> : null}
     </div>);
 }

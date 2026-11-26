@@ -1,6 +1,7 @@
 import React, { useState, useRef, useMemo } from "react";
-import { C, dsp, bdy, mno, num, buzz, fmtDate, addDays, Card, Eye, Lab, Fld, Btn, Note, Seg } from "./ui.jsx";
+import { C, dsp, bdy, mno, big, num, buzz, fmtDate, addDays, Card, Eye, Lab, Fld, Btn, Note, Seg, Icon, Empty, toast } from "./ui.jsx";
 import { Input, T3 } from "./now.jsx";
+import { Trend } from "./charts.jsx";
 import { fadePct } from "./safety.js";
 import {
   MORNING_FIELDS, rolling7, baseline, morningFlag, RHR_OVER, HRV_UNDER,
@@ -15,28 +16,20 @@ import {
    entry: a number, a tap, and back to the session.
    ================================================================ */
 
-/* ---------- a small chart, same grammar as TRACK's bars ---------- */
-export function MiniBars({ data, color, fmt }) {
-  const vals = data.map((d) => d[1]); if (!vals.length) return <Note s={{ fontStyle: "italic" }}>Nothing logged yet.</Note>;
-  const mx = Math.max.apply(null, vals), mn = Math.min.apply(null, vals), span = mx - mn || mx || 1;
-  return (
-    <div style={{ display: "flex", alignItems: "flex-end", gap: 4, height: 80, marginTop: 10 }}>
-      {data.map((d, i) => { const rel = (d[1] - mn) / span, h = 20 + rel * 50, last = i === data.length - 1;
-        return (
-          <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", height: "100%", minWidth: 0 }}>
-            <div style={Object.assign({}, mno, { fontSize: 9, fontWeight: 700, color: last ? (color || C.brass) : C.chalk, marginBottom: 3 })}>{fmt ? fmt(d[1]) : d[1]}</div>
-            <div style={{ width: "100%", height: h, background: last ? (color || C.brass) : C.line, borderRadius: "3px 3px 0 0" }} />
-            <div style={Object.assign({}, mno, { fontSize: 7, color: C.ash, marginTop: 4, whiteSpace: "nowrap" })}>{d[0]}</div>
-          </div>);
-      })}
-    </div>);
+/* ---------- a small chart: the one trend line, with plain labels ---------- */
+const plainLabel = (l) => String(l).replace(/^m(\d+)w(\d+)$/i, "Cycle $1 week $2").replace(/^r?w(\d+)$/i, "Week $1");
+export function MiniBars({ data, fmt }) {
+  const rows = (data || []).map((d) => [plainLabel(d[0]), d[1]]);
+  if (!rows.length) return <Note s={{ fontStyle: "italic" }}>Nothing logged yet.</Note>;
+  if (rows.length === 1) return <Note>{rows[0][0]} · <span style={{ color: C.chalk, fontWeight: 700 }}>{fmt ? fmt(rows[0][1]) : rows[0][1]}</span> · the line starts with the second reading.</Note>;
+  return <Trend data={rows} fmt={fmt} h={120} />;
 }
 
 /* the one-line "against its own average, against week 1" readout */
 const Against = ({ v, avg, base, dir, u }) => {
   if (v == null) return null;
   const d7 = avg == null ? null : v - avg, db = base == null ? null : v - base;
-  const col = (delta) => (delta == null ? C.ash : Math.abs(delta) < 0.05 ? C.ash : (dir === "down" ? delta < 0 : delta > 0) ? C.moss : C.brass);
+  const col = (delta) => (delta == null ? C.ash : Math.abs(delta) < 0.05 ? C.ash : (dir === "down" ? delta < 0 : delta > 0) ? C.accent : C.warn);
   const sign = (n) => (n > 0 ? "+" : "") + r1(n);
   return (
     <div style={{ display: "flex", gap: 12, marginTop: 6, flexWrap: "wrap" }}>
@@ -58,13 +51,13 @@ export function MorningCard({ dayIso, morning, setMorning, st, camp, isToday, sl
   const rec = morning[dayIso] || {};
   const put = (f, v) => setMorning(Object.assign({}, morning, { [dayIso]: Object.assign({}, rec, { [f]: v }) }));
   const flag = morningFlag(rec, morning, st, dayIso);
-  const ac = flag.level === "R" ? C.oxide : flag.level === "Y" ? C.brass : C.cobalt;
-  const Wrap = bare ? ({ children }) => <div>{children}</div> : ({ children }) => <Card ac={ac}>{children}</Card>;
+  const ac = flag.level === "R" ? C.bad : flag.level === "Y" ? C.warn : C.ash;
+  const Wrap = bare ? ({ children }) => <div>{children}</div> : ({ children }) => <Card mark={flag.level === "R" ? "bad" : flag.level === "Y" ? "warn" : undefined}>{children}</Card>;
   return (
     <Wrap>
       <div style={{ marginBottom: 4 }}>
-        <div style={Object.assign({}, dsp, { fontSize: 17, fontWeight: 800, letterSpacing: 1.5, color: ac })}>THE MORNING NUMBERS</div>
-        <div style={Object.assign({}, mno, { fontSize: 8.5, color: isToday === false ? C.brass : C.ash, letterSpacing: 1.2, marginTop: 2 })}>
+        <div style={Object.assign({}, dsp, { fontSize: 18, fontWeight: 800, letterSpacing: .4, color: ac })}>THE MORNING NUMBERS</div>
+        <div style={Object.assign({}, mno, { fontSize: 12, color: isToday === false ? C.brass : C.ash, letterSpacing: 1, marginTop: 2 })}>
           {isToday === false ? fmtDate(dayIso).toUpperCase() : "FROM THE CHEST STRAP"}
         </div>
       </div>
@@ -76,11 +69,11 @@ export function MorningCard({ dayIso, morning, setMorning, st, camp, isToday, sl
           <div key={f.id} style={{ padding: "9px 0", borderBottom: "1px solid " + C.line }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <span style={{ flex: 1 }}>
-                <div style={Object.assign({}, bdy, { fontSize: 14, fontWeight: 600, color: flagged ? C.brass : C.chalk })}>{f.n}</div>
-                <div style={Object.assign({}, mno, { fontSize: 8, color: C.ash, letterSpacing: 1, marginTop: 2 })}>{f.u.toUpperCase()}</div>
+                <div style={Object.assign({}, bdy, { fontSize: 15, fontWeight: 600, color: flagged ? C.brass : C.chalk })}>{f.n}</div>
+                <div style={Object.assign({}, mno, { fontSize: 12, color: C.ash, letterSpacing: 1, marginTop: 2 })}>{f.u.toUpperCase()}</div>
               </span>
               <span style={{ width: 108 }}>
-                <Fld v={rec[f.id]} on={(v) => put(f.id, v)} ph={f.u} s={{ fontSize: 19, fontWeight: 700 }} />
+                <Fld v={rec[f.id]} on={(v) => put(f.id, v)} ph={f.u} s={{ fontSize: 18, fontWeight: 700 }} />
               </span>
             </div>
             <Against v={num(rec[f.id])} avg={r1(avg7)} base={b} dir={f.dir} u={f.u} />
@@ -88,7 +81,7 @@ export function MorningCard({ dayIso, morning, setMorning, st, camp, isToday, sl
 
       {sleep === false ? null : (
         <div style={{ padding: "9px 0", borderBottom: "1px solid " + C.line }}>
-          <div style={Object.assign({}, mno, { fontSize: 8, color: C.ash, letterSpacing: 1.2, marginBottom: 6 })}>SLEEP, LAST NIGHT</div>
+          <div style={Object.assign({}, mno, { fontSize: 12, color: C.ash, letterSpacing: 1, marginBottom: 6 })}>SLEEP, LAST NIGHT</div>
           <div style={{ display: "flex", gap: 8 }}>
             <div style={{ flex: 1 }}><Lab>Hours slept</Lab><Fld v={rec.sleep} on={(v) => put("sleep", v)} ph="hours" /></div>
             <div style={{ flex: 1 }}><Lab>Lights out</Lab><Fld v={rec.lights} on={(v) => put("lights", v)} ph="21:30" type="text" /></div>
@@ -116,8 +109,8 @@ export function MorningFlagLine({ flag }) {
   if (!flag || !flag.level) return null;
   const ac = flag.level === "R" ? C.oxide : C.brass;
   return (
-    <div style={{ background: C.ink, border: "1px solid " + ac, borderRadius: 5, padding: "9px 11px", marginBottom: 8 }}>
-      <div style={Object.assign({}, mno, { fontSize: 9, letterSpacing: 1.2, color: ac })}>
+    <div style={{ background: C.ink, border: "1px solid " + ac, borderRadius: 10, padding: "9px 11px", marginBottom: 8 }}>
+      <div style={Object.assign({}, mno, { fontSize: 12, letterSpacing: 1, color: ac })}>
         {flag.level === "R" ? "THE MORNING NUMBERS SUGGEST RED" : "THE MORNING NUMBERS FLAG THIS YELLOW"}
       </div>
       <div style={Object.assign({}, bdy, { fontSize: 12, color: C.chalk, marginTop: 4, lineHeight: 1.45 })}>{flag.why}</div>
@@ -130,14 +123,14 @@ export function MorningFlagLine({ flag }) {
 export function RecoveryHR({ endHR, hr60, onEnd, on60, prev }) {
   const drop = recoveryDrop(endHR, hr60);
   return (
-    <div data-testid="recovery-hr" style={{ background: C.ink, border: "1px solid " + C.cobalt, borderRadius: 8, padding: 12, marginTop: 14 }}>
+    <div data-testid="recovery-hr" style={{ background: C.ink, border: "1px solid " + C.cobalt, borderRadius: 14, padding: 12, marginTop: 14 }}>
       <Eye c={C.cobalt} s={{ marginBottom: 0 }}>Recovery heart rate — the drop over the minute</Eye>
       <Input label="HEART RATE WHEN YOU STOP (BPM)" v={endHR} on={onEnd} ph="bpm" />
       <Input label="HEART RATE AFTER 60 SECONDS (BPM)" v={hr60} on={on60} ph="bpm" />
       {drop != null ? (
         <div style={{ marginTop: 12 }}>
-          <div style={Object.assign({}, mno, { fontSize: T3, color: C.cobalt, letterSpacing: 1 })}>THE DROP</div>
-          <div data-testid="recovery-drop" style={Object.assign({}, mno, { fontSize: 30, fontWeight: 700, color: drop >= 20 ? C.moss : drop >= 12 ? C.brass : C.oxide })}>{drop} <span style={{ fontSize: T3, color: C.ash }}>BPM</span></div>
+          <div style={Object.assign({}, mno, { fontSize: T3, color: C.cobalt, letterSpacing: .4 })}>THE DROP</div>
+          <div data-testid="recovery-drop" style={Object.assign({}, mno, { fontSize: 28, fontWeight: 700, color: drop >= 20 ? C.moss : drop >= 12 ? C.brass : C.oxide })}>{drop} <span style={{ fontSize: T3, color: C.ash }}>BPM</span></div>
           <div style={Object.assign({}, bdy, { fontSize: T3, color: C.ash, marginTop: 2 })}>{recoveryBand(drop)}</div>
         </div>) : null}
       {prev != null ? <div style={Object.assign({}, mno, { fontSize: T3, color: C.brass, marginTop: 8 })}>LAST TIME: {prev} BPM</div> : null}
@@ -153,11 +146,11 @@ export function EasyZonePanel({ peak, onSave }) {
   const ok = peakOk(typed) != null;
   const save = () => { if (!ok) return; onSave(String(peakOk(typed))); setTyped(""); setOpen(false); buzz(30); };
   return (
-    <div data-testid="easy-zone" style={{ background: C.ink, border: "1px solid " + C.moss, borderRadius: 8, padding: 12, marginTop: 14 }}>
-      <Eye c={C.moss} s={{ marginBottom: 4 }}>The easy zone — 65–75% of your peak heart rate</Eye>
+    <div data-testid="easy-zone" style={{ background: C.raise, borderRadius: 14, padding: 14, marginTop: 16 }}>
+      <Eye s={{ marginBottom: 4 }}>The easy zone — 65–75% of your peak heart rate</Eye>
       {zone ? (
         <div style={{ display: "flex", alignItems: "center", gap: 10, justifyContent: "space-between" }}>
-          <div data-testid="easy-zone-range" style={Object.assign({}, mno, { fontSize: 30, fontWeight: 700, color: C.moss })}>{zone[0]}–{zone[1]} <span style={{ fontSize: 13, color: C.ash, letterSpacing: 1 }}>BPM · FROM A PEAK OF {peak}</span></div>
+          <div data-testid="easy-zone-range" style={Object.assign({}, big, { fontSize: 28, fontWeight: 700, color: C.chalk, lineHeight: 1.15 })}>{zone[0]}–{zone[1]} <span style={Object.assign({}, mno, { fontSize: 13, fontWeight: 600, color: C.ash, letterSpacing: .4 })}>BPM · FROM A PEAK OF {peak}</span></div>
           {open ? null : <Btn on={() => setOpen(true)} c={C.ash} small>CHANGE</Btn>}
         </div>) : null}
       {!zone || open ? (
@@ -183,9 +176,9 @@ export function ErgPanel({ title, slots, vals, onVal, unit, fade, scored, prevTo
   const u = ergUnitLabel(unit);
   const total = ergTotal(vals), mean = ergMean(vals), one = slots.length === 1;
   const stat = (lab, val, c, id) => (
-    <div data-testid={id} style={Object.assign({}, mno, { fontSize: T3, color: c || C.ash, letterSpacing: 1 })}>{lab} <span style={{ color: C.chalk, fontWeight: 700 }}>{val}</span> {u}</div>);
+    <div data-testid={id} style={Object.assign({}, mno, { fontSize: T3, color: c || C.ash, letterSpacing: .4 })}>{lab} <span style={{ color: C.chalk, fontWeight: 700 }}>{val}</span> {u}</div>);
   return (
-    <div data-testid="erg-panel" style={{ background: C.ink, border: "1px solid " + C.brass, borderRadius: 8, padding: 12, marginTop: 14 }}>
+    <div data-testid="erg-panel" style={{ background: C.ink, border: "1px solid " + C.brass, borderRadius: 14, padding: 12, marginTop: 14 }}>
       <Eye c={C.brass} s={{ marginBottom: 0 }}>{title || "Output"} — {u}{slots.length > 1 ? " each" : ""}</Eye>
       <div style={{ display: "flex", flexWrap: "wrap", columnGap: 8 }}>
         {slots.map((s, i) => (
@@ -202,8 +195,8 @@ export function ErgPanel({ title, slots, vals, onVal, unit, fade, scored, prevTo
         </div>) : null}
       {fade ? (
         <div style={{ marginTop: 10, paddingTop: 9, borderTop: "1px solid " + C.line }}>
-          <div style={Object.assign({}, mno, { fontSize: T3, color: C.oxide, letterSpacing: 1 })}>THE FADE — ROUND {fade.idx} AGAINST ROUND 1{scored ? " · SCORED WEEK" : ""}</div>
-          <div style={Object.assign({}, mno, { fontSize: 24, fontWeight: 700, color: fade.held >= 95 ? C.moss : fade.held >= 90 ? C.brass : C.oxide })}>{fade.held}%<span style={{ fontSize: T3, color: C.ash }}> held · {fade.drop}% drop</span></div>
+          <div style={Object.assign({}, mno, { fontSize: T3, color: C.oxide, letterSpacing: .4 })}>THE FADE — ROUND {fade.idx} AGAINST ROUND 1{scored ? " · SCORED WEEK" : ""}</div>
+          <div style={Object.assign({}, mno, { fontSize: 22, fontWeight: 700, color: fade.held >= 95 ? C.accent : fade.held >= 90 ? C.warn : C.bad })}>{fade.held}%<span style={{ fontSize: T3, color: C.ash }}> held · {fade.drop}% drop</span></div>
         </div>) : null}
     </div>);
 }
@@ -215,7 +208,7 @@ export function BarSpeedField({ v, on, prev }) {
   return (
     <div style={{ display: "flex", alignItems: "flex-end", gap: 8, marginTop: 8 }}>
       <div style={{ flex: 1 }}><Lab>Bar speed — top set (m/s) · optional</Lab><Fld v={v} on={on} ph="m/s" /></div>
-      {prev ? <div style={{ flex: 1 }}><div style={Object.assign({}, mno, { fontSize: 9, color: C.brass, paddingBottom: 12 })}>LAST WEEK {prev.speed} m/s{prev.load != null ? " @ " + prev.load + " kg" : ""}</div></div> : null}
+      {prev ? <div style={{ flex: 1 }}><div style={Object.assign({}, mno, { fontSize: 12, color: C.brass, paddingBottom: 12 })}>LAST WEEK {prev.speed} m/s{prev.load != null ? " @ " + prev.load + " kg" : ""}</div></div> : null}
     </div>);
 }
 
@@ -231,31 +224,12 @@ export function BarSpeedTrack({ log, camp }) {
           <div key={l[0]} style={{ marginTop: 12 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
               <span style={Object.assign({}, bdy, { fontSize: 13, fontWeight: 600, color: C.chalk })}>{l[1]}</span>
-              {same ? <span style={Object.assign({}, mno, { fontSize: 9, color: C.ash })}>AT {same.load} KG</span> : null}
+              {same ? <span style={Object.assign({}, mno, { fontSize: 12, color: C.ash })}>AT {same.load} KG</span> : null}
             </div>
             {same && same.rows.length
               ? <MiniBars data={same.rows.map((r) => [r.label, r.speed])} color={C.brass} />
               : <Note s={{ fontStyle: "italic", marginTop: 2 }}>{rows.length ? "Speeds on file, but none yet at a repeated load." : "No bar speeds logged yet."}</Note>}
           </div>); })}
-    </Card>);
-}
-
-/* ================================================================
-   ERG TRACK — by session type, so the same session compares
-   ================================================================ */
-export function ErgTrack({ ergRows, unit }) {
-  const u = ergUnitLabel(unit);
-  const types = Object.keys(ergRows || {});
-  return (
-    <Card ac={C.cobalt}>
-      <Eye c={C.cobalt}>Erg output — by session type, week against week</Eye>
-      <Note c={C.chalk} s={{ marginTop: 0 }}>The session's number, in {u}: its total, or its average watts. Charted by type, so a 4-minute interval session is only ever read against another one.</Note>
-      {!types.length ? <Note s={{ fontStyle: "italic" }}>Nothing logged yet. The output fields are on every conditioning session.</Note>
-        : types.map((t) => (
-          <div key={t} style={{ marginTop: 12 }}>
-            <div style={Object.assign({}, bdy, { fontSize: 13, fontWeight: 600, color: C.chalk })}>{ergRows[t].n}</div>
-            <MiniBars data={ergRows[t].rows.map((r) => [r.label, r.v])} color={C.cobalt} />
-          </div>))}
     </Card>);
 }
 
@@ -291,17 +265,17 @@ function PhotoSlot({ view, src, onFile, onClear }) {
   const ref = useRef(null);
   return (
     <div style={{ flex: 1, minWidth: 0 }}>
-      <div style={Object.assign({}, mno, { fontSize: 8, color: C.ash, letterSpacing: 1.2, marginBottom: 4 })}>{view[1]}</div>
+      <div style={Object.assign({}, mno, { fontSize: 12, color: C.ash, letterSpacing: 1, marginBottom: 4 })}>{view[1]}</div>
       <button onClick={() => ref.current && ref.current.click()} aria-label={"Add the " + view[1].toLowerCase() + " photo"}
-        style={{ width: "100%", minHeight: 96, padding: 0, background: C.ink, border: "1px solid " + (src ? C.violet : C.line), borderRadius: 5, cursor: "pointer", overflow: "hidden", display: "block" }}>
+        style={{ width: "100%", minHeight: 112, padding: 0, background: C.ink, border: "1px " + (src ? "solid " : "dashed ") + (src ? C.line : C.ring), borderRadius: 14, cursor: "pointer", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", color: C.ash }}>
         {src ? <img src={src} alt={view[1] + " photo"} style={{ width: "100%", display: "block" }} />
-          : <span style={Object.assign({}, mno, { fontSize: 20, color: C.ash })}>+</span>}
+          : <Icon n="camera" size={28} />}
       </button>
       <input ref={ref} type="file" accept="image/*" style={{ display: "none" }} aria-hidden="true" tabIndex={-1}
         onChange={async (e) => { const f = e.target.files && e.target.files[0]; e.target.value = ""; if (!f) return;
           try { onFile(await downscale(f, 900)); } catch (err) {} }} />
       {src ? <button onClick={onClear} aria-label={"Remove the " + view[1].toLowerCase() + " photo"}
-        style={Object.assign({}, mno, { width: "100%", minHeight: 32, marginTop: 4, background: "transparent", border: "1px solid " + C.line, borderRadius: 4, color: C.ash, fontSize: 8.5, letterSpacing: 1, cursor: "pointer" })}>REMOVE</button> : null}
+        style={Object.assign({}, mno, { width: "100%", minHeight: 44, marginTop: 4, background: "transparent", border: "none", color: C.ash, fontSize: 13, fontWeight: 700, letterSpacing: .4, cursor: "pointer" })}>REMOVE</button> : null}
     </div>);
 }
 
@@ -320,7 +294,7 @@ export function PhotosView({ photos, setPhotos, camp, week, dayIso, isPhotoDay }
       <Card ac={isPhotoDay ? C.violet : C.line}>
         <Eye c={C.violet}>Photos — {camp ? "the Sunday of camp weeks 1, 5 and 9" : "the Sunday of weeks 1, 5, 9 and 13"}</Eye>
         {isPhotoDay
-          ? <div style={Object.assign({}, dsp, { fontSize: 20, fontWeight: 800, letterSpacing: 1.2, color: C.violet })}>TODAY IS A PHOTO DAY</div>
+          ? <div style={Object.assign({}, dsp, { fontSize: 22, fontWeight: 800, letterSpacing: .4, color: C.violet })}>TODAY IS A PHOTO DAY</div>
           : <Note c={C.chalk} s={{ marginTop: 0 }}>Not today. The next one is {camp ? "camp week " : "week "}{wks.filter((w) => w > week)[0] || wks[0]}.</Note>}
         <Note c={C.chalk}>Front, side and back, same light, same spot, same time of day. Three taps.</Note>
         <div style={{ marginTop: 10 }}>
@@ -328,7 +302,7 @@ export function PhotosView({ photos, setPhotos, camp, week, dayIso, isPhotoDay }
           <Fld type="date" v={openDate} on={(v) => { if (v) setOpenDate(v); }} a="left" />
         </div>
         <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
-          {PHOTO_VIEWS.map((v) => <PhotoSlot key={v[0]} view={v} src={cur[v[0]]} onFile={(d) => { put(v[0], d); buzz(20); }} onClear={() => clear(v[0])} />)}
+          {PHOTO_VIEWS.map((v) => <PhotoSlot key={v[0]} view={v} src={cur[v[0]]} onFile={(d) => { put(v[0], d); buzz(20); toast(v[1].charAt(0) + v[1].slice(1).toLowerCase() + " photo saved"); }} onClear={() => clear(v[0])} />)}
         </div>
         <Note c={C.ash}>{PHOTO_NOTE}</Note>
       </Card>
@@ -336,20 +310,20 @@ export function PhotosView({ photos, setPhotos, camp, week, dayIso, isPhotoDay }
       {dates.map((d) => (
         <Card key={d}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-            <span style={Object.assign({}, bdy, { fontSize: 13.5, fontWeight: 600, color: C.chalk })}>{fmtDate(d)}</span>
-            <span style={Object.assign({}, mno, { fontSize: 9, color: C.ash })}>{PHOTO_VIEWS.filter((v) => photos[d][v[0]]).length} / 3</span>
+            <span style={Object.assign({}, bdy, { fontSize: 13, fontWeight: 600, color: C.chalk })}>{fmtDate(d)}</span>
+            <span style={Object.assign({}, mno, { fontSize: 12, color: C.ash })}>{PHOTO_VIEWS.filter((v) => photos[d][v[0]]).length} / 3</span>
           </div>
           <div style={{ display: "flex", gap: 6, marginTop: 8 }}>
             {PHOTO_VIEWS.map((v) => (
               <div key={v[0]} style={{ flex: 1, minWidth: 0 }}>
                 {photos[d][v[0]]
-                  ? <img src={photos[d][v[0]]} alt={v[1] + " " + d} style={{ width: "100%", display: "block", borderRadius: 4, border: "1px solid " + C.line }} />
-                  : <div style={{ width: "100%", height: 70, borderRadius: 4, border: "1px dashed " + C.line }} />}
-                <div style={Object.assign({}, mno, { fontSize: 7.5, color: C.ash, letterSpacing: 1, marginTop: 3, textAlign: "center" })}>{v[1]}</div>
+                  ? <img src={photos[d][v[0]]} alt={v[1] + " " + d} style={{ width: "100%", display: "block", borderRadius: 10, border: "1px solid " + C.line }} />
+                  : <div style={{ width: "100%", height: 70, borderRadius: 10, border: "1px dashed " + C.line }} />}
+                <div style={Object.assign({}, mno, { fontSize: 12, color: C.ash, letterSpacing: 1, marginTop: 3, textAlign: "center" })}>{v[1]}</div>
               </div>))}
           </div>
         </Card>))}
-      {!dates.length ? <Note s={{ fontStyle: "italic" }}>No photos yet.</Note> : null}
+      {!dates.length ? <Empty icon="camera" title="No photos yet" testid="photos-empty">Each set you take shows here under its date, so week 1 sits beside week 13.</Empty> : null}
     </div>);
 }
 
@@ -358,7 +332,7 @@ export function PhotoPrompt({ onOpen, camp, week, done, future }) {
   return (
     <Card ac={C.violet}>
       <Eye c={C.violet}>{camp ? "Camp week " + week : "Week " + week} · Sunday — the photos</Eye>
-      <div style={Object.assign({}, dsp, { fontSize: 20, fontWeight: 800, letterSpacing: 1.2, color: C.chalk })}>{done ? "PHOTOS DONE" : future ? "THIS SUNDAY" : "FRONT, SIDE, BACK"}</div>
+      <div style={Object.assign({}, dsp, { fontSize: 22, fontWeight: 800, letterSpacing: .4, color: C.chalk })}>{done ? "PHOTOS DONE" : future ? "THIS SUNDAY" : "FRONT, SIDE, BACK"}</div>
       <Btn small c={C.violet} fill={!done && !future} s={{ width: "100%", marginTop: 10 }} on={onOpen}>{done ? "SEE THE PHOTOS" : future ? "THE PHOTOS SCREEN" : "TAKE THEM"}</Btn>
     </Card>);
 }
@@ -367,33 +341,33 @@ export function PhotoPrompt({ onOpen, camp, week, done, future }) {
    THE DASHBOARD — seven numbers at the top of TRACK
    ================================================================ */
 const Arrow = ({ t }) => {
-  if (!t || t.v == null) return <span style={Object.assign({}, mno, { fontSize: 13, color: C.ash })}>—</span>;
+  if (!t || t.v == null) return null;
   const c = t.good === null ? C.ash : t.good ? C.moss : C.oxide;
   return <span style={Object.assign({}, mno, { fontSize: 15, fontWeight: 700, color: c })}>{t.arrow}</span>;
 };
 
 function DashRow({ n, t, u, fmt, date, target, note }) {
+  const has = t && t.v != null;
   return (
-    <div style={{ padding: "11px 0", borderBottom: "1px solid " + C.line }}>
-      <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+    <div data-dash-row={n} style={{ padding: "12px 0", borderTop: "1px solid " + C.line }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
         <span style={{ flex: 1, minWidth: 0 }}>
-          <div style={Object.assign({}, bdy, { fontSize: 13.5, fontWeight: 600, color: C.chalk })}>{n}</div>
-          <div style={Object.assign({}, mno, { fontSize: 8, color: C.ash, letterSpacing: 1, marginTop: 2 })}>{date ? "LAST LOGGED " + date.toUpperCase() : "NEVER LOGGED"}</div>
+          <div style={Object.assign({}, bdy, { fontSize: 15, fontWeight: 600, color: C.chalk, lineHeight: 1.3 })}>{n}</div>
+          <div style={Object.assign({}, bdy, { fontSize: 12, color: C.ash, marginTop: 2 })}>{date ? "Last logged " + date : "Not logged yet"}</div>
         </span>
         <Arrow t={t} />
-        <span style={Object.assign({}, mno, { fontSize: 19, fontWeight: 700, color: t && t.v != null ? C.chalk : C.ash, textAlign: "right", minWidth: 76 })}>
-          {t && t.v != null ? (fmt ? fmt(t.v) : r1(t.v)) : "—"}{t && t.v != null && u ? <span style={{ fontSize: 9, color: C.ash }}> {u}</span> : null}
+        <span style={Object.assign({}, mno, { fontSize: 18, fontWeight: 700, color: has ? C.chalk : C.ash, textAlign: "right", minWidth: 76, whiteSpace: "nowrap" })}>
+          {has ? (fmt ? fmt(t.v) : r1(t.v)) : "—"}{has && u ? <span style={{ fontSize: 12, fontWeight: 600, color: C.ash }}> {u}</span> : null}
         </span>
       </div>
-      {target ? <div style={Object.assign({}, mno, { fontSize: 9, color: C.brass, marginTop: 5, letterSpacing: .6 })}>CAMP TARGET · {target.toUpperCase()}</div> : null}
-      {note ? <Note s={{ marginTop: 5 }}>{note}</Note> : null}
+      {target ? <div style={Object.assign({}, bdy, { fontSize: 12, fontWeight: 600, color: C.ash, marginTop: 5 })}>Camp target · {target}</div> : null}
+      {note ? <Note s={{ marginTop: 5, fontSize: 15 }}>{note}</Note> : null}
     </div>);
 }
 
 /* `camp` is the view: true for the camp, "prep" for Prep, false for the
    classic — each reads its own weeks and its own ids */
-export function Dashboard({ log, morning, st, camp: view, body, fuel, addBody, dateOf, openPhotos }) {
-  const [tape, setTape] = useState({});
+export function Dashboard({ log, morning, st, camp: view, body, fuel, dateOf, weights }) {
   const camp = scopeOf(view) === "camp", spp = scopeOf(view) === "spp", ids = DASH_IDS[scopeOf(view)];
   const D = useMemo(() => {
     const fadeRows = pairEntries(log, ids.rd1, ids.rd6, view, "sun", (a, b) => { const f = fadePct(a, b); return f == null ? null : r1(f); });
@@ -415,50 +389,50 @@ export function Dashboard({ log, morning, st, camp: view, body, fuel, addBody, d
   const dat = (rows) => { const r = rows[rows.length - 1]; return r ? (r.d ? fmtDate(r.d) : dateOf(r.macro, r.week, r.day)) : null; };
   const tg = (k) => (camp ? CAMP_TARGET[k] : null);
 
+  /* body weight: every weight on file, the morning scales among them */
+  const wN = weights && weights.length ? weights[weights.length - 1] : null, wP = weights && weights.length > 1 ? weights[weights.length - 2] : null;
+  const wT = wN ? { v: wN.kg, arrow: wP ? (wN.kg > wP.kg ? "↑" : wN.kg < wP.kg ? "↓" : "→") : "", good: null } : (bn.bw ? { v: bn.bw.v, arrow: bn.bw.prev != null ? (bn.bw.v > bn.bw.prev ? "↑" : bn.bw.v < bn.bw.prev ? "↓" : "→") : "", good: null } : { v: null });
+  const wD = wN ? fmtDate(wN.d) : bn.bw ? fmtDate(bn.bw.d) : null;
+  /* outside a camp, a number nobody has logged yet isn't given a row of its own: they're named in one line at the foot */
+  const waiting = [];
+  const row = (p) => { if (!camp && !(p.t && p.t.v != null)) { waiting.push(p.n); return null; } return <DashRow key={p.n} {...p} />; };
+  const rows = (spp ? [
+    row({ n: "The 4 × 4 — the total at the end", t: trend(D.e44Rows, "up"), u: ergUnitLabel(st.ergUnit), date: dat(D.e44Rows),
+      note: D.e44Rows.length && D.e44Rows[D.e44Rows.length - 1].hr != null ? "At a peak of " + D.e44Rows[D.e44Rows.length - 1].hr + " bpm. More at the same peak, or the same at a lower one, is the engine held." : null }),
+    row({ n: "The 4 × 4 on the treadmill — the distance", t: trend(D.t44Rows, "up"), u: "km", date: dat(D.t44Rows) }),
+    row({ n: "Broad jump — test week", t: trend(D.bjRows, "up"), u: "cm", date: dat(D.bjRows) }),
+    row({ n: "Rotational throw — weeks 4, 8 and 12", t: trend(D.rtRows, "up"), u: "m", date: dat(D.rtRows) }),
+    row({ n: "Push press speed — weeks 4, 8 and 12", t: trend(D.ppsRows, "up"), u: "m/s", date: dat(D.ppsRows) }),
+    row({ n: "The arms-only test — 3 minutes", t: trend(D.arm3Rows, "up"), u: ergUnitLabel(st.ergUnit), date: dat(D.arm3Rows) }),
+    row({ n: "Arm", t: trend(D.armRows, "up"), u: "cm", date: dat(D.armRows) }),
+    row({ n: "Shoulders", t: trend(D.shRows, "up"), u: "cm", date: dat(D.shRows) }),
+  ] : [
+    row({ n: "Fade — round six against round one", t: trend(D.fadeRows, "up"), u: "% held", date: dat(D.fadeRows), target: tg("fade") }),
+    row({ n: "20-minute test — distance", t: trend(D.t20Rows, "up"), u: "m", date: dat(D.t20Rows), target: tg("t20") }),
+    row({ n: "Burst decrement — first against last", t: trend(D.burstRows, "down"), u: "%", date: dat(D.burstRows), target: tg("burst") }),
+    row({ n: "Recovery heart rate — the 60-second drop", t: trend(D.recRows, "up"), u: "bpm", date: dat(D.recRows), target: tg("recovery") }),
+  ]).concat([
+    row({ n: "Resting heart rate", t: trend(D.rhrRows, "down"), u: "bpm", date: dat(D.rhrRows), target: tg("rhr"),
+      note: D.rhrRows.length ? "Seven-day average " + (r1(rolling7(morning, "rhr").avg) || "—") + " bpm · week-1 baseline " + (baseline(morning, st).rhr == null ? "—" : baseline(morning, st).rhr) + " bpm." : null }),
+    row({ n: "HRV", t: trend(D.hrvRows, "up"), u: "ms", date: dat(D.hrvRows), target: tg("hrv"),
+      note: D.hrvRows.length ? "Seven-day average " + (r1(rolling7(morning, "hrv").avg) || "—") + " ms." : null }),
+    row({ n: "Bodyweight", t: wT, u: "kg", date: wD, target: tg("body") }),
+    row({ n: "Waist", t: { v: bn.waist ? bn.waist.v : null, arrow: bn.waist && bn.waist.prev != null ? (bn.waist.v > bn.waist.prev ? "↑" : bn.waist.v < bn.waist.prev ? "↓" : "→") : "", good: bn.waist && bn.waist.prev != null ? bn.waist.v <= bn.waist.prev : null },
+      u: "cm", date: bn.waist ? fmtDate(bn.waist.d) : null }),
+  ]);
   return (
-    <div>
-      <Card ac={C.brass}>
-        <Eye c={C.brass}>{spp ? "The dashboard — the numbers this cycle moves" : "The dashboard — the seven numbers" + (camp ? ", against the camp's targets" : "")}</Eye>
-        <Note c={C.chalk} s={{ marginTop: 0 }}>Everything the whole programme is actually trying to move, on one screen, with the way it is going and the day it was last written down.</Note>
-        {spp ? (
-          <React.Fragment>
-            <DashRow n="The 4 × 4 — the total at the end" t={trend(D.e44Rows, "up")} u={ergUnitLabel(st.ergUnit)} date={dat(D.e44Rows)}
-              note={D.e44Rows.length && D.e44Rows[D.e44Rows.length - 1].hr != null ? "At a peak of " + D.e44Rows[D.e44Rows.length - 1].hr + " bpm. More at the same peak, or the same at a lower one, is the engine held." : null} />
-            {D.t44Rows.length ? <DashRow n="The 4 × 4 on the treadmill — the distance" t={trend(D.t44Rows, "up")} u="km" date={dat(D.t44Rows)} /> : null}
-            <DashRow n="Broad jump — test week" t={trend(D.bjRows, "up")} u="cm" date={dat(D.bjRows)} />
-            {D.rtRows.length ? <DashRow n="Rotational throw — weeks 4, 8 and 12" t={trend(D.rtRows, "up")} u="m" date={dat(D.rtRows)} /> : null}
-            {D.ppsRows.length ? <DashRow n="Push press speed — weeks 4, 8 and 12" t={trend(D.ppsRows, "up")} u="m/s" date={dat(D.ppsRows)} /> : null}
-            {D.arm3Rows.length ? <DashRow n="The arms-only test — 3 minutes" t={trend(D.arm3Rows, "up")} u={ergUnitLabel(st.ergUnit)} date={dat(D.arm3Rows)} /> : null}
-            <DashRow n="Arm" t={trend(D.armRows, "up")} u="cm" date={dat(D.armRows)} />
-            <DashRow n="Shoulders" t={trend(D.shRows, "up")} u="cm" date={dat(D.shRows)} />
-          </React.Fragment>) : (
-          <React.Fragment>
-            <DashRow n="Fade — round six against round one" t={trend(D.fadeRows, "up")} u="% held" date={dat(D.fadeRows)} target={tg("fade")} />
-            <DashRow n="20-minute test — distance" t={trend(D.t20Rows, "up")} u="m" date={dat(D.t20Rows)} target={tg("t20")} />
-            <DashRow n="Burst decrement — first against last" t={trend(D.burstRows, "down")} u="%" date={dat(D.burstRows)} target={tg("burst")} />
-            <DashRow n="Recovery heart rate — the 60-second drop" t={trend(D.recRows, "up")} u="bpm" date={dat(D.recRows)} target={tg("recovery")} />
-          </React.Fragment>)}
-        <DashRow n="Resting heart rate" t={trend(D.rhrRows, "down")} u="bpm" date={dat(D.rhrRows)} target={tg("rhr")}
-          note={D.rhrRows.length ? "Seven-day average " + (r1(rolling7(morning, "rhr").avg) || "—") + " bpm · week-1 baseline " + (baseline(morning, st).rhr == null ? "—" : baseline(morning, st).rhr) + " bpm." : null} />
-        <DashRow n="HRV" t={trend(D.hrvRows, "up")} u="ms" date={dat(D.hrvRows)} target={tg("hrv")}
-          note={D.hrvRows.length ? "Seven-day average " + (r1(rolling7(morning, "hrv").avg) || "—") + " ms." : null} />
-        <DashRow n="Bodyweight" t={{ v: bn.bw ? bn.bw.v : null, arrow: bn.bw && bn.bw.prev != null ? (bn.bw.v > bn.bw.prev ? "↑" : bn.bw.v < bn.bw.prev ? "↓" : "→") : "", good: null }}
-          u="kg" date={bn.bw ? fmtDate(bn.bw.d) : null} target={tg("body")}
-          note={bn.fromFuel ? "From the referee's weigh-ins." : "Nothing on the referee yet — weigh in on TRACK → REFEREE, or type it here."} />
-        <DashRow n="Waist" t={{ v: bn.waist ? bn.waist.v : null, arrow: bn.waist && bn.waist.prev != null ? (bn.waist.v > bn.waist.prev ? "↑" : bn.waist.v < bn.waist.prev ? "↓" : "→") : "", good: bn.waist && bn.waist.prev != null ? bn.waist.v <= bn.waist.prev : null }}
-          u="cm" date={bn.waist ? fmtDate(bn.waist.d) : null} />
-        {!bn.fromFuel ? (
-          <div style={{ marginTop: 10 }}>
-            <Lab>Bodyweight and waist — entered here</Lab>
-            <div style={{ display: "flex", gap: 6 }}>
-              <div style={{ flex: 1 }}><Fld v={tape.bw} on={(v) => setTape(Object.assign({}, tape, { bw: v }))} ph="kg" /></div>
-              <div style={{ flex: 1 }}><Fld v={tape.wa} on={(v) => setTape(Object.assign({}, tape, { wa: v }))} ph="waist cm" /></div>
-              <Btn small c={C.brass} dis={!num(tape.bw) && !num(tape.wa)} on={() => { addBody(tape); setTape({}); }}>SAVE</Btn>
-            </div>
+    <div data-testid="dashboard">
+      <Card>
+        <div style={Object.assign({}, dsp, { fontSize: 18, fontWeight: 700, color: C.chalk, lineHeight: 1.3 })}>{spp ? "The dashboard — the numbers this cycle moves" : "The dashboard — the seven numbers" + (camp ? ", against the camp's targets" : "")}</div>
+        <Note s={{ marginTop: 4, marginBottom: 10, fontSize: 15 }}>Everything the whole programme is actually trying to move, with the way it is going and the day it was last written down.</Note>
+        {rows}
+        {waiting.length ? (
+          <div data-testid="dash-waiting" style={{ padding: "12px 0 2px", borderTop: "1px solid " + C.line }}>
+            <div style={Object.assign({}, bdy, { fontSize: 12, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: C.ash })}>Not logged yet</div>
+            <div style={Object.assign({}, bdy, { fontSize: 15, color: C.ash, lineHeight: 1.5, marginTop: 4 })}>{waiting.join(" · ")}</div>
           </div>) : null}
-        {openPhotos ? <Btn small c={C.violet} s={{ width: "100%", marginTop: 12 }} on={openPhotos}>THE PHOTOS →</Btn> : null}
       </Card>
-      {camp ? <Note c={C.brass} bold>The camp's targets over twelve honest weeks, beside each number. They are targets, not promises — the point of the dashboard is that you can see which of them you are actually on for.</Note> : null}
+      {camp ? <Note bold>The camp's targets over twelve honest weeks, beside each number. They are targets, not promises — the point of the dashboard is that you can see which of them you are actually on for.</Note> : null}
     </div>);
 }
 
@@ -480,8 +454,8 @@ export function MeasureSettings({ st, upd, morning, dayIso, fuel, setFuel, impor
       <Eye c={C.cobalt}>The morning numbers — the baseline</Eye>
       <Note c={C.chalk} s={{ marginTop: 0 }}>Week 1's resting heart rate and HRV are what every morning after it is read against. Until you recalibrate, the baseline is the first seven days you logged.</Note>
       <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
-        <div style={{ flex: 1 }}><Lab>Baseline resting HR</Lab><div style={Object.assign({}, mno, { fontSize: 20, fontWeight: 700, color: b.rhr == null ? C.ash : C.brass })}>{b.rhr == null ? "—" : b.rhr + " bpm"}</div></div>
-        <div style={{ flex: 1 }}><Lab>Baseline HRV</Lab><div style={Object.assign({}, mno, { fontSize: 20, fontWeight: 700, color: b.hrv == null ? C.ash : C.brass })}>{b.hrv == null ? "—" : b.hrv + " ms"}</div></div>
+        <div style={{ flex: 1 }}><Lab>Baseline resting HR</Lab><div style={Object.assign({}, mno, { fontSize: 22, fontWeight: 700, color: b.rhr == null ? C.ash : C.brass })}>{b.rhr == null ? "—" : b.rhr + " bpm"}</div></div>
+        <div style={{ flex: 1 }}><Lab>Baseline HRV</Lab><div style={Object.assign({}, mno, { fontSize: 22, fontWeight: 700, color: b.hrv == null ? C.ash : C.brass })}>{b.hrv == null ? "—" : b.hrv + " ms"}</div></div>
       </div>
       <Btn small c={C.cobalt} s={{ width: "100%", marginTop: 8 }} on={recal}>RECALIBRATE BASELINE</Btn>
       <Note>Sets the week-1 baseline to the last seven days. Do it after a block that genuinely changed you — not after a bad week.</Note>

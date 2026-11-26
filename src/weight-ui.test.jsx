@@ -25,18 +25,21 @@ const MORNINGS = { "2026-10-11": { kg: "83.0" } };
 ["2026-10-13", "2026-10-15", "2026-10-17", "2026-10-18"].forEach((d) => { MORNINGS[d] = { kg: "81.6" }; });
 ["2026-10-20", "2026-10-22", "2026-10-24", "2026-10-25"].forEach((d) => { MORNINGS[d] = { kg: "79.9" }; });
 
+/* TODAY opens on HOME. These tests start from the card the day is on: one tap, on the row that says what's on now, or on the session's own button. */
+const openNow = () => { const b = screen.queryByTestId("now-row") || screen.queryByTestId("hero-go"); if (b) fireEvent.click(b); };
 async function mount(at, season, extra) {
   vi.setSystemTime(at);
   localStorage.setItem("o8s-settings", settings(season, extra));
   localStorage.setItem("o8s-morning", JSON.stringify(MORNINGS));
   render(<App />);
   await waitFor(() => expect(screen.queryByText("LOADING…")).not.toBeInTheDocument());
+  openNow();
 }
 const withLimit = () => Object.assign({}, FIGHT, LIMIT);
 const drawn = () => ({ wdraws: [{ at: "2026-10-11", cfg: weightCfg(withLimit()) }] });
-const tab = (n) => fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: n }));
+const tab = (n) => fireEvent.click(within(screen.getByRole("navigation", { name: "Tabs" })).getByRole("button", { name: n[0] + n.slice(1).toLowerCase() }));
 function pickIn(chapterName, name) {
-  fireEvent.click(screen.getByRole("button", { name: "WHOLE DAY" }));
+  { const wd = screen.queryByRole("button", { name: "WHOLE DAY" }); if (wd) fireEvent.click(wd); }
   const chapter = screen.getByText(chapterName).closest("[data-chapter]");
   if (!within(chapter).queryByText(name)) fireEvent.click(within(chapter).getByRole("button", { expanded: false }));
   fireEvent.click(within(chapter).getByText(name));
@@ -98,14 +101,14 @@ describe("making weight, in the app", () => {
     expect(screen.getByTestId("line-forecast").textContent).toBe("about 76.0");
     expect(screen.queryByTestId("over-card")).not.toBeInTheDocument();
     tab("PROGRESS");
-    fireEvent.click(screen.getByRole("button", { name: /REFEREE/i }));
+    fireEvent.click(screen.getByRole("button", { name: "Weigh-in" }));
     expect(screen.getByTestId("referee-paused")).toBeInTheDocument();
   });
 
   it("asks for the limit, the tolerance and the natural weight, and the three weigh-ins — and sets the plan without re-planning the training", async () => {
     await mount(new Date(2026, 9, 11, 9, 0, 0), FIGHT);
     tab("MORE");
-    fireEvent.click(screen.getByRole("button", { name: "SETTINGS" }));
+    fireEvent.click(screen.getByRole("button", { name: "Settings" }));
     ["DAY BEFORE – MORNING", "DAY BEFORE – AFTERNOON OR EVENING", "ON THE DAY"].forEach((n) => expect(screen.getByRole("button", { name: n })).toBeInTheDocument());
     const box = (lab) => screen.getByText(lab).parentElement.querySelector("input");
     fireEvent.change(box("Limit (kg)"), { target: { value: "76" } });
@@ -147,9 +150,10 @@ describe("making weight — fight week, in the app", () => {
     localStorage.setItem("o8s-settings", settings(withLimit(), drawn()));
     render(<App />);
     await waitFor(() => expect(screen.queryByText("LOADING…")).not.toBeInTheDocument());
+    openNow();
     expect(screen.getByTestId("card-name").textContent).toBe("Every morning — the scales");
     expect(screen.getByTestId("weighin-morning").textContent).toBe("0.4 over the weigh-in morning aim of 76.0. Halve the small feeds and keep sipping.");
-    fireEvent.click(screen.getByRole("button", { name: "WHOLE DAY" }));
+    { const wd = screen.queryByRole("button", { name: "WHOLE DAY" }); if (wd) fireEvent.click(wd); }
     expect(document.body.textContent).toMatch(/The weigh-in/);
     tab("FOOD");
     expect(screen.getByTestId("weight-banner").textContent).toMatch(/^MAKING WEIGHT · WEIGH-IN DAY · MORNING AIM 76\.0/);
@@ -162,6 +166,7 @@ describe("making weight — fight week, in the app", () => {
     localStorage.setItem("o8s-settings", settings(far, { wdraws: [{ at: "2026-10-11", cfg: weightCfg(far) }] }));
     render(<App />);
     await waitFor(() => expect(screen.queryByText("LOADING…")).not.toBeInTheDocument());
+    openNow();
     expect(screen.getByTestId("line-forecast").textContent).toBe("about 73.2");
     expect(screen.getByTestId("over-card").textContent).toMatch(/At this pace you'll be about 73\.2 on the scales — 3\.2 over\./);
   });
@@ -180,7 +185,7 @@ describe("proof 8 — no limit", () => {
     await mount(new Date(2026, 9, 19, 2, 0, 0), FIGHT);
     expect(screen.getByTestId("card-name").textContent).toBe("Resting heart rate and HRV");
     expect(screen.queryByTestId("scales-input")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "WHOLE DAY" }));
+    { const wd = screen.queryByRole("button", { name: "WHOLE DAY" }); if (wd) fireEvent.click(wd); }
     expect(screen.queryByText("Every morning — the scales")).not.toBeInTheDocument();
   });
   it("no weight banner and no step anywhere", async () => {
@@ -190,7 +195,7 @@ describe("proof 8 — no limit", () => {
     expect(document.body.textContent).not.toMatch(/STEP \d|HALF THE CARB|NO HONEY|MAKING WEIGHT/);
     expect(within(screen.getByTestId("food-menu")).getAllByText("TWO BANANAS").length).toBeGreaterThan(0);
     tab("MORE");
-    fireEvent.click(screen.getByRole("button", { name: "SETTINGS" }));
+    fireEvent.click(screen.getByRole("button", { name: "Settings" }));
     expect(screen.queryByTestId("line-card")).not.toBeInTheDocument();
     expect(screen.queryByTestId("weight-waiting")).not.toBeInTheDocument();
   });
@@ -200,7 +205,7 @@ describe("proof 8 — no limit", () => {
     expect(screen.queryByTestId("weight-result")).not.toBeInTheDocument();
     expect(screen.getByLabelText("BODYWEIGHT (KG)")).toBeInTheDocument();
     tab("PROGRESS");
-    fireEvent.click(screen.getByRole("button", { name: /REFEREE/i }));
+    fireEvent.click(screen.getByRole("button", { name: "Weigh-in" }));
     expect(screen.queryByTestId("referee-paused")).not.toBeInTheDocument();
     expect(screen.getByText("Bodyweight falling more than 0.5 kg a week")).toBeInTheDocument();
   });
@@ -255,6 +260,7 @@ async function mountMarch(at, extra) {
   localStorage.setItem("o8s-morning", JSON.stringify(MARCH_MORNINGS));
   render(<App />);
   await waitFor(() => expect(screen.queryByText("LOADING…")).not.toBeInTheDocument());
+  openNow();
 }
 
 describe("the start, boxing tonight and the working maxes, in the app", () => {
@@ -274,7 +280,7 @@ describe("the start, boxing tonight and the working maxes, in the app", () => {
     expect(screen.queryByTestId("weight-banner")).not.toBeInTheDocument();
     expect(within(screen.getByTestId("food-menu")).getAllByText("TWO BANANAS").length).toBeGreaterThan(0);
     tab("MORE");
-    fireEvent.click(screen.getByRole("button", { name: "SETTINGS" }));
+    fireEvent.click(screen.getByRole("button", { name: "Settings" }));
     expect(screen.getByTestId("weight-ahead").textContent).toMatch(/The weight plan starts with the camp, on Mon,? 4 Jan\./);
     expect(screen.queryByTestId("line-card")).not.toBeInTheDocument();
   });
@@ -298,7 +304,7 @@ describe("the start, boxing tonight and the working maxes, in the app", () => {
   it("the boxing evenings ticked in Settings switch it on for that weekday", async () => {
     await mountMarch(new Date(2026, 10, 4, 10, 0, 0));
     tab("MORE");
-    fireEvent.click(screen.getByRole("button", { name: "SETTINGS" }));
+    fireEvent.click(screen.getByRole("button", { name: "Settings" }));
     fireEvent.click(within(screen.getByTestId("boxing-days")).getByRole("button", { name: "WED" }));
     expect(JSON.parse(localStorage.getItem("o8s-settings")).boxDays).toEqual({ wed: 1 });
     tab("FOOD");
@@ -309,7 +315,7 @@ describe("the start, boxing tonight and the working maxes, in the app", () => {
   it("PROGRESS → NUMBERS in Prep asks for working maxes, never a best single", async () => {
     await mountMarch(new Date(2026, 10, 4, 10, 0, 0));
     tab("PROGRESS");
-    fireEvent.click(screen.getByRole("button", { name: "NUMBERS" }));
+    fireEvent.click(screen.getByRole("button", { name: "Lifts" }));
     expect(screen.getByText(/^Every number here is a working max: your heaviest clean set of 3/)).toBeInTheDocument();
     expect(screen.queryByText(/your best single/)).not.toBeInTheDocument();
     expect(screen.getAllByPlaceholderText("set of 3 × 1.08 (kg)")).toHaveLength(4);
